@@ -89,7 +89,6 @@ SPECIE_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="swine",
-        name="swine",
         label="Swine",
         description="Swine",
         parents=["species"],
@@ -115,7 +114,6 @@ SPECIE_NODES: list[InfoNode] = [
         description="Mouse strain. An identifier of a group of mice that is genetically uniform.",
         parents=["strain"],
         dtype=DType.CATEGORICAL,
-        annotations=[],
     ),
     MeasurementType(
         sid="mouse-strain-c57bl",
@@ -132,7 +130,6 @@ SPECIE_NODES: list[InfoNode] = [
         description="C57BL6 Mouse strain.",
         parents=["mouse-strain-c57bl"],
         dtype=DType.CATEGORICAL,
-        annotations=[],
     ),
     MeasurementType(
         sid="mouse-strain-c57bl6j",
@@ -150,7 +147,6 @@ SPECIE_NODES: list[InfoNode] = [
         description="C57BL/6N Mouse strain.",
         parents=["mouse-strain-c57bl"],
         dtype=DType.CATEGORICAL,
-        annotations=[],
     ),
     MeasurementType(
         sid="rat-strain",
@@ -158,6 +154,5 @@ SPECIE_NODES: list[InfoNode] = [
         description="Rat strain. An identifier of a group of rats that is genetically uniform.",
         parents=["strain"],
         dtype=DType.CATEGORICAL,
-        annotations=[],
     ),
 ]

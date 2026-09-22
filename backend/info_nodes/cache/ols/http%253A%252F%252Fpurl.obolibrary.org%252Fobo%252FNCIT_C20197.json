@@ -1,0 +1,181 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C20197",
+  "lang": "en",
+  "description": [
+    "An individual who belongs to the sex that normally produces sperm."
+  ],
+  "synonyms": [
+    "Human, Male",
+    "M",
+    "MALE",
+    "Male",
+    "male"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A person who belongs to the sex that normally produces sperm. The term is used to indicate biological sex distinctions, cultural gender role distinctions, or both. [The NCI Thesaurus contains biomedical terminologies that NCI does not own or control. This concept contains gender-related content that does not comply with Executive Order 14168.]"
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CTDC",
+      "DIPG/DMG",
+      "FDA",
+      "GDC",
+      "NICHD",
+      "OORO",
+      "PCDC",
+      "SeroNet"
+    ],
+    "Is_PCDC_ALL_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C28421"
+    ],
+    "Is_PCDC_AML_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C28421"
+    ],
+    "Is_PCDC_EWS_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C28421"
+    ],
+    "Is_PCDC_GCT_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C28421"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C17357",
+      "http://purl.obolibrary.org/obo/NCIT_C177622"
+    ],
+    "Legacy Concept Name": [
+      "Male"
+    ],
+    "Maps_To": [
+      "male"
+    ],
+    "Preferred_Name": [
+      "Male"
+    ],
+    "Semantic_Type": [
+      "Organism Attribute"
+    ],
+    "UMLS_CUI": [
+      "C0086582"
+    ],
+    "code": [
+      "C20197"
+    ]
+  },
+  "label": "Male",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C20197",
+  "obo_id": "NCIT:C20197",
+  "in_subset": [
+    "NCIT_C113350",
+    "NCIT_C157711",
+    "NCIT_C173073",
+    "NCIT_C173230",
+    "NCIT_C174019",
+    "NCIT_C174237",
+    "NCIT_C174243",
+    "NCIT_C177383",
+    "NCIT_C177390",
+    "NCIT_C177537",
+    "NCIT_C178115",
+    "NCIT_C178122",
+    "NCIT_C179027",
+    "NCIT_C179478",
+    "NCIT_C179533",
+    "NCIT_C183061",
+    "NCIT_C186313",
+    "NCIT_C186341",
+    "NCIT_C189083",
+    "NCIT_C192234",
+    "NCIT_C19752",
+    "NCIT_C209287",
+    "NCIT_C54447",
+    "NCIT_C54452",
+    "NCIT_C61410",
+    "NCIT_C66731",
+    "NCIT_C66732",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C88088",
+    "NCIT_C89506",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Human, Male",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "M",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "MALE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Male",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "male",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C20197?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C20197/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C20197/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C20197/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C20197/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C20197/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C20197/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C20197/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C20197/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C20197/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C20197/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

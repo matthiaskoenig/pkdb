@@ -1,0 +1,284 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6076",
+  "lang": "en",
+  "description": [
+    "An <em>N</em>-arylpiperazine that is <i>cis</i>-ketoconazole in which the imidazol-1-yl group is replaced by a 1,2,4-triazol-1-yl group and in which the actyl group attached to the piperazine moiety is replaced by a <em>p</em>-[(±)1-<em>sec</em>-butyl-5-oxo-1,5-dihydro-4<em>H</em>-1,2,4-triazol-4-yl]phenyl group. A potent P-glycoprotein and CYP3A4 inhibitor, it is used as an antifungal drug for the treatment of various fungal infections, including aspergillosis, blastomycosis, candidiasis, chromoblastomycosis, coccidioidomycosis, cryptococcosis, histoplasmosis, and sporotrichosis."
+  ],
+  "synonyms": [
+    "2-(butan-2-yl)-4-{4-[4-(4-{[(2R,4S)-2-(2,4-dichlorophenyl)-2-(1H-1,2,4-triazol-1-ylmethyl)-1,3-dioxolan-4-yl]methoxy}phenyl)piperazin-1-yl]phenyl}-2,4-dihydro-3H-1,2,4-triazol-3-one",
+    "2-(butan-2-yl)-4-{4-[4-(4-{[(2R,4S)-2-(2,4-dichlorophenyl)-2-(1H-1,2,4-triazol-1-ylmethyl)-1,3-dioxolan-4-yl]methoxy}phenyl)piperazin-1-yl]phenyl}-2,4-dihydro-3H-1,2,4-triazol-3-one",
+    "Itraconazole",
+    "Itrizole (TN)",
+    "Oriconazole",
+    "Sporanox (TN)",
+    "itraconazole"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:84625-61-6",
+      "drugbank:DB01167",
+      "kegg.drug:D00350",
+      "patent:EP6711",
+      "patent:US4267179",
+      "pubmed:11219548",
+      "pubmed:11403818",
+      "pubmed:11422002",
+      "pubmed:15521894",
+      "pubmed:19025521",
+      "pubmed:20400651",
+      "pubmed:25326091",
+      "vsdb:1853",
+      "wikipedia.en:Itraconazole"
+    ],
+    "generalized_empirical_formula": [
+      "C35H38Cl2N8O4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6076"
+    ],
+    "inchi_key_string": [
+      "VHVPQPYKVGDNFY-ZPGVKDDISA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C35H38Cl2N8O4/c1-3-25(2)45-34(46)44(24-40-45)29-7-5-27(6-8-29)41-14-16-42(17-15-41)28-9-11-30(12-10-28)47-19-31-20-48-35(49-31,21-43-23-38-22-39-43)32-13-4-26(36)18-33(32)37/h4-13,18,22-25,31H,3,14-17,19-21H2,1-2H3/t25?,31-,35-/m0/s1"
+    ],
+    "mass": [
+      "705.647"
+    ],
+    "monoisotopic_mass": [
+      "704.23931"
+    ],
+    "smiles_string": [
+      "CCC(C)n1ncn(-c2ccc(N3CCN(c4ccc(OC[C@H]5CO[C@](Cn6cncn6)(c6ccc(Cl)cc6Cl)O5)cc4)CC3)cc2)c1=O"
+    ]
+  },
+  "label": "itraconazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6076",
+  "obo_id": "CHEBI:6076",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "84625-61-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=84625-61-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01167",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01167"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00350",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP6711",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP6711"
+    },
+    {
+      "database": "patent",
+      "id": "US4267179",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4267179"
+    },
+    {
+      "database": "pubmed",
+      "id": "11219548",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11219548/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11403818",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11403818/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11422002",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11422002/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15521894",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15521894/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19025521",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19025521/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20400651",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20400651/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25326091",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25326091/"
+    },
+    {
+      "database": "vsdb",
+      "id": "1853",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1853.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Itraconazole",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-(butan-2-yl)-4-{4-[4-(4-{[(2R,4S)-2-(2,4-dichlorophenyl)-2-(1H-1,2,4-triazol-1-ylmethyl)-1,3-dioxolan-4-yl]methoxy}phenyl)piperazin-1-yl]phenyl}-2,4-dihydro-3H-1,2,4-triazol-3-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(butan-2-yl)-4-{4-[4-(4-{[(2R,4S)-2-(2,4-dichlorophenyl)-2-(1H-1,2,4-triazol-1-ylmethyl)-1,3-dioxolan-4-yl]methoxy}phenyl)piperazin-1-yl]phenyl}-2,4-dihydro-3H-1,2,4-triazol-3-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Itraconazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Itrizole (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Oriconazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sporanox (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "itraconazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

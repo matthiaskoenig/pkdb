@@ -1,0 +1,132 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_169791",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "2-[(4-methoxy-3,5-dimethylpyridin-2-yl)methylsulinyl]-3H-benzimidazol-5-ol",
+    "2-[(4-methoxy-3,5-dimethylpyridin-2-yl)methylsulinyl]-3H-benzimidazol-5-ol"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:151602-49-2",
+      "chemspider:8579886",
+      "hmdb:HMDB0014011"
+    ],
+    "generalized_empirical_formula": [
+      "C16H17N3O3S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:169791"
+    ],
+    "inchi_key_string": [
+      "TWXDTVZNDQKCOS-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C16H17N3O3S/c1-9-7-17-14(10(2)15(9)22-3)8-23(21)16-18-12-5-4-11(20)6-13(12)19-16/h4-7,20H,8H2,1-3H3,(H,18,19)"
+    ],
+    "mass": [
+      "331.397"
+    ],
+    "monoisotopic_mass": [
+      "331.09906"
+    ],
+    "smiles_string": [
+      "COc1c(C)cnc(CS(=O)c2nc3ccc(O)cc3n2)c1C"
+    ]
+  },
+  "label": "5'-O-Desmethyl omeprazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_169791",
+  "obo_id": "CHEBI:169791",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "151602-49-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=151602-49-2"
+    },
+    {
+      "database": "chemspider",
+      "id": "8579886",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.8579886.html"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014011",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014011"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-[(4-methoxy-3,5-dimethylpyridin-2-yl)methylsulinyl]-3H-benzimidazol-5-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "SUBMITTER",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-[(4-methoxy-3,5-dimethylpyridin-2-yl)methylsulinyl]-3H-benzimidazol-5-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "submitter",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

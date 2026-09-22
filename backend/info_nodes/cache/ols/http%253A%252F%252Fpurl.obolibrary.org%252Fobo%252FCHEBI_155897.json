@@ -1,0 +1,266 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_155897",
+  "lang": "en",
+  "description": [
+    "An aromatic primary alcohol resulting from the hydroxylation of the 3'-methyl group of the phenyl ring of torasemide. It is a metabolite of torasemide."
+  ],
+  "synonyms": [
+    "1-[[4-[3-(hydroxymethyl)anilino]-3-pyridyl]sulfonyl]-3-isopropylurea",
+    "4-[3-(hydroxymethyl)anilino]-N-(propan-2-ylcarbamoyl)pyridine-3-sulfonamide",
+    "4-[3-(hydroxymethyl)anilino]-N-(propan-2-ylcarbamoyl)pyridine-3-sulfonamide",
+    "N-(isopropylcarbamoyl)-4-[3-(hydroxymethyl)phenylamino]-3-pyridinesulfonamide",
+    "hydroxy torsemide",
+    "hydroxytorasemide",
+    "hydroxytorsemide",
+    "torasemide M1"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:99300-68-2",
+      "hmdb:HMDB0060982",
+      "pubmed:11136296",
+      "pubmed:1706990",
+      "pubmed:25341854",
+      "pubmed:28649438",
+      "pubmed:28740200",
+      "pubmed:32302808",
+      "pubmed:3370063"
+    ],
+    "generalized_empirical_formula": [
+      "C16H20N4O4S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:155897"
+    ],
+    "inchi_key_string": [
+      "WCYVLAMJCQZUCR-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C16H20N4O4S/c1-11(2)18-16(22)20-25(23,24)15-9-17-7-6-14(15)19-13-5-3-4-12(8-13)10-21/h3-9,11,21H,10H2,1-2H3,(H,17,19)(H2,18,20,22)"
+    ],
+    "mass": [
+      "364.427"
+    ],
+    "monoisotopic_mass": [
+      "364.12053"
+    ],
+    "smiles_string": [
+      "CC(C)NC(=O)NS(=O)(=O)c1cnccc1Nc1cccc(CO)c1"
+    ]
+  },
+  "label": "hydroxy torasemide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_155897",
+  "obo_id": "CHEBI:155897",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "99300-68-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=99300-68-2"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0060982",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0060982"
+    },
+    {
+      "database": "pubmed",
+      "id": "11136296",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11136296/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1706990",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1706990/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25341854",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25341854/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28649438",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28649438/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28740200",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28740200/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32302808",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32302808/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3370063",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3370063/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-[3-(hydroxymethyl)anilino]-N-(propan-2-ylcarbamoyl)pyridine-3-sulfonamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-[[4-[3-(hydroxymethyl)anilino]-3-pyridyl]sulfonyl]-3-isopropylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-[3-(hydroxymethyl)anilino]-N-(propan-2-ylcarbamoyl)pyridine-3-sulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(isopropylcarbamoyl)-4-[3-(hydroxymethyl)phenylamino]-3-pyridinesulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hydroxy torsemide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hydroxytorasemide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hydroxytorsemide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "torasemide M1",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155897?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155897/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155897/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155897/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155897/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155897/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155897/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155897/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155897/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

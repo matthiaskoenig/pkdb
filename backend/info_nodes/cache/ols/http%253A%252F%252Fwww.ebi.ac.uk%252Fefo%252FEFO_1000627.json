@@ -1,0 +1,89 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_1000627",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Thyroiditis"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10:E06",
+      "ICD10:E07",
+      "MedDRA:10043778",
+      "MedDRA:10043785",
+      "Wikipedia:Thyroid_disease"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0003240, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0003240"
+    ],
+    "term editor": [
+      "Sirarat Sarntivijai"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0003240"
+    ]
+  },
+  "label": "obsolete_thyroid disease",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0003240",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_1000627",
+  "obo_id": "EFO:1000627",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD10",
+      "id": "E06",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/E06"
+    },
+    {
+      "database": "ICD10",
+      "id": "E07",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/E07"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10043778",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10043778"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10043785",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10043785"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Thyroid_disease",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Thyroid_disease"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1000627?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1000627/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

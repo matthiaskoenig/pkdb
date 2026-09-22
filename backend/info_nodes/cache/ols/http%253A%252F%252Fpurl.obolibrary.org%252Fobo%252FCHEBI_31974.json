@@ -1,0 +1,314 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_31974",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "AY-6608",
+    "ICI 50,123",
+    "ICI 50123",
+    "ICI-50123",
+    "NSC-367746",
+    "Pentagastrin",
+    "pentagastrina",
+    "pentagastrine",
+    "pentavlon",
+    "peptavlon"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:5534-95-2",
+      "drugcentral:2088",
+      "kegg.drug:D01631",
+      "pubmed:11312913",
+      "pubmed:1635058",
+      "pubmed:1671419",
+      "pubmed:1732532",
+      "pubmed:20014752",
+      "pubmed:26948801",
+      "pubmed:33226806",
+      "pubmed:3560164",
+      "pubmed:37468498",
+      "pubmed:7684452"
+    ],
+    "generalized_empirical_formula": [
+      "C37H49N7O9S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:31974"
+    ],
+    "inchi_key_string": [
+      "NEYNJQRKHLUJRU-DZUOILHNSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C37H49N7O9S/c1-37(2,3)53-36(52)39-16-14-30(45)41-28(19-23-21-40-25-13-9-8-12-24(23)25)34(50)42-26(15-17-54-4)33(49)44-29(20-31(46)47)35(51)43-27(32(38)48)18-22-10-6-5-7-11-22/h5-13,21,26-29,40H,14-20H2,1-4H3,(H2,38,48)(H,39,52)(H,41,45)(H,42,50)(H,43,51)(H,44,49)(H,46,47)/t26-,27-,28-,29-/m0/s1"
+    ],
+    "mass": [
+      "767.906"
+    ],
+    "monoisotopic_mass": [
+      "767.33125"
+    ],
+    "smiles_string": [
+      "CSCC[C@H](NC(=O)[C@H](Cc1cnc2ccccc12)NC(=O)CCNC(=O)OC(C)(C)C)C(=O)N[C@@H](CC(=O)O)C(=O)N[C@@H](Cc1ccccc1)C(N)=O"
+    ]
+  },
+  "label": "Pentagastrin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_31974",
+  "obo_id": "CHEBI:31974",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "5534-95-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=5534-95-2"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2088",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2088"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D01631",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11312913",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11312913/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1635058",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1635058/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1671419",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1671419/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1732532",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1732532/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20014752",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20014752/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26948801",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26948801/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33226806",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33226806/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3560164",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3560164/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37468498",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37468498/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7684452",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7684452/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "AY-6608",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ICI 50,123",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ICI 50123",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ICI-50123",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NSC-367746",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Pentagastrin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentagastrina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentagastrine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentavlon",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "peptavlon",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

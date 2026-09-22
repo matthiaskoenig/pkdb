@@ -1,0 +1,469 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_16243",
+  "lang": "en",
+  "description": [
+    "A pentahydroxyflavone having the five hydroxy groups placed at the 3-, 3'-, 4'-, 5- and 7-positions. It is one of the most abundant flavonoids in edible vegetables, fruit and wine."
+  ],
+  "synonyms": [
+    "2-(3,4-dihydroxyphenyl)-3,5,7-trihydroxy-4H-1-benzopyran-4-one",
+    "2-(3,4-dihydroxyphenyl)-3,5,7-trihydroxy-4H-chromen-4-one",
+    "2-(3,4-dihydroxyphenyl)-3,5,7-trihydroxy-4H-chromen-4-one",
+    "3,3',4',5,7-pentahydroxyflavone",
+    "3,5,7,3',4'-PENTAHYDROXYFLAVONE",
+    "3,5,7,3',4'-Pentahydroxyflavone",
+    "Quercetin",
+    "sophoretin",
+    "xanthaurine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:117-39-5",
+      "drugbank:DB04216",
+      "drugcentral:3514",
+      "foodb.food:FDB011904",
+      "gmelin:579210",
+      "hmdb:HMDB0005794",
+      "kegg.compound:C00389",
+      "knapsack:C00004631",
+      "lincs.smallmolecule:LSM-4199",
+      "lipidmaps:LMPK12110004",
+      "metacyc.compound:CPD-520",
+      "patent:KR20120121684",
+      "patent:US2013012577",
+      "pdb-ccd:QUE",
+      "pubmed:16226777",
+      "pubmed:17015250",
+      "pubmed:17135030",
+      "pubmed:17426744",
+      "pubmed:18096136",
+      "pubmed:18484521",
+      "pubmed:18549926",
+      "pubmed:18564899",
+      "pubmed:18579649",
+      "pubmed:18785622",
+      "pubmed:19043800",
+      "pubmed:19461927",
+      "pubmed:22920589",
+      "pubmed:23342112",
+      "pubmed:23359794",
+      "pubmed:27565033",
+      "pubmed:27589790",
+      "pubmed:27591927",
+      "pubmed:27704720",
+      "reaxys:317313",
+      "wikipedia.en:Quercetin"
+    ],
+    "generalized_empirical_formula": [
+      "C15H10O7"
+    ],
+    "has_alternative_id": [
+      "CHEBI:11704",
+      "CHEBI:14991",
+      "CHEBI:26472",
+      "CHEBI:45280",
+      "CHEBI:8696"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:16243"
+    ],
+    "inchi_key_string": [
+      "REFJWTPEDVJJIY-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C15H10O7/c16-7-4-10(19)12-11(5-7)22-15(14(21)13(12)20)6-1-2-8(17)9(18)3-6/h1-5,16-19,21H"
+    ],
+    "mass": [
+      "302.238"
+    ],
+    "monoisotopic_mass": [
+      "302.04265"
+    ],
+    "smiles_string": [
+      "O=c1c(O)c(-c2ccc(O)c(O)c2)oc2cc(O)cc(O)c12"
+    ]
+  },
+  "label": "quercetin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_16243",
+  "obo_id": "CHEBI:16243",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "117-39-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=117-39-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB04216",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB04216"
+    },
+    {
+      "database": "drugcentral",
+      "id": "3514",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/3514"
+    },
+    {
+      "database": "foodb.food",
+      "id": "FDB011904",
+      "description": "foodb.food",
+      "url": null
+    },
+    {
+      "database": "gmelin",
+      "id": "579210",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0005794",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0005794"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00389",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00004631",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00004631"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-4199",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "lipidmaps",
+      "id": "LMPK12110004",
+      "description": "lipidmaps",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMPK12110004"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-520",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "KR20120121684",
+      "description": "patent",
+      "url": "https://www.google.com/patents/KR20120121684"
+    },
+    {
+      "database": "patent",
+      "id": "US2013012577",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2013012577"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "QUE",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "16226777",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16226777/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17015250",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17015250/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17135030",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17135030/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17426744",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17426744/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18096136",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18096136/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18484521",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18484521/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18549926",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18549926/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18564899",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18564899/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18579649",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18579649/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18785622",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18785622/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19043800",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19043800/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19461927",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19461927/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22920589",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22920589/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23342112",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23342112/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23359794",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23359794/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27565033",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27565033/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27589790",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27589790/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27591927",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27591927/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27704720",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27704720/"
+    },
+    {
+      "database": "reaxys",
+      "id": "317313",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Quercetin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-(3,4-dihydroxyphenyl)-3,5,7-trihydroxy-4H-chromen-4-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(3,4-dihydroxyphenyl)-3,5,7-trihydroxy-4H-1-benzopyran-4-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(3,4-dihydroxyphenyl)-3,5,7-trihydroxy-4H-chromen-4-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,3',4',5,7-pentahydroxyflavone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,5,7,3',4'-PENTAHYDROXYFLAVONE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,5,7,3',4'-Pentahydroxyflavone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Quercetin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sophoretin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "xanthaurine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16243?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16243/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16243/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16243/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16243/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16243/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16243/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16243/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16243/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

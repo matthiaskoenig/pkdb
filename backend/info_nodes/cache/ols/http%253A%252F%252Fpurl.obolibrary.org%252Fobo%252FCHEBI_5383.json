@@ -1,0 +1,303 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_5383",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "1-((p-(2-(3-Ethyl-4-methyl-2-oxo-3-pyrroline-1-carboxamido)ethyl)phenyl)sulfonyl)-3-(trans-4-methylcyclohexyl)urea",
+    "1-{[4-(2-{[(3-ethyl-4-methyl-2-oxo-2,5-dihydro-1H-pyrrol-1-yl)carbonyl]amino}ethyl)phenyl]sulfonyl}-3-(trans-4-methylcyclohexyl)urea",
+    "3-ethyl-4-methyl-N-[2-(4-{[(trans-4-methylcyclohexyl)carbamoyl]sulfamoyl}phenyl)ethyl]-2-oxo-2,5-dihydro-1H-pyrrole-1-carboxamide",
+    "3-ethyl-4-methyl-N-[2-(4-{[(trans-4-methylcyclohexyl)carbamoyl]sulfamoyl}phenyl)ethyl]-2-oxo-2,5-dihydro-1H-pyrrole-1-carboxamide",
+    "Amaryl",
+    "gimepiride",
+    "glimepirida",
+    "glimepiride",
+    "glimepiridum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:93479-97-1",
+      "drugbank:DB00222",
+      "drugcentral:1300",
+      "hmdb:HMDB0014367",
+      "kegg.compound:C07669",
+      "kegg.drug:D00593",
+      "pubmed:11199230",
+      "pubmed:12369756",
+      "pubmed:12852703",
+      "pubmed:22469262",
+      "pubmed:23305037",
+      "pubmed:8141820",
+      "reaxys:7731873"
+    ],
+    "generalized_empirical_formula": [
+      "C24H34N4O5S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:5383"
+    ],
+    "inchi_key_string": [
+      "WIGIZIANZCJQQY-RUCARUNLSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C24H34N4O5S/c1-4-21-17(3)15-28(22(21)29)24(31)25-14-13-18-7-11-20(12-8-18)34(32,33)27-23(30)26-19-9-5-16(2)6-10-19/h7-8,11-12,16,19H,4-6,9-10,13-15H2,1-3H3,(H,25,31)(H2,26,27,30)/t16-,19-"
+    ],
+    "mass": [
+      "490.626"
+    ],
+    "monoisotopic_mass": [
+      "490.22499"
+    ],
+    "smiles_string": [
+      "CCC1=C(C)CN(C(=O)NCCc2ccc(S(=O)(=O)NC(=O)N[C@H]3CC[C@H](C)CC3)cc2)C1=O"
+    ]
+  },
+  "label": "glimepiride",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_5383",
+  "obo_id": "CHEBI:5383",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "93479-97-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=93479-97-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00222",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00222"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1300",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1300"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014367",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014367"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07669",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00593",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11199230",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11199230/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12369756",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12369756/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12852703",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12852703/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22469262",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22469262/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23305037",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23305037/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8141820",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8141820/"
+    },
+    {
+      "database": "reaxys",
+      "id": "7731873",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3-ethyl-4-methyl-N-[2-(4-{[(trans-4-methylcyclohexyl)carbamoyl]sulfamoyl}phenyl)ethyl]-2-oxo-2,5-dihydro-1H-pyrrole-1-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-((p-(2-(3-Ethyl-4-methyl-2-oxo-3-pyrroline-1-carboxamido)ethyl)phenyl)sulfonyl)-3-(trans-4-methylcyclohexyl)urea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-{[4-(2-{[(3-ethyl-4-methyl-2-oxo-2,5-dihydro-1H-pyrrol-1-yl)carbonyl]amino}ethyl)phenyl]sulfonyl}-3-(trans-4-methylcyclohexyl)urea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-ethyl-4-methyl-N-[2-(4-{[(trans-4-methylcyclohexyl)carbamoyl]sulfamoyl}phenyl)ethyl]-2-oxo-2,5-dihydro-1H-pyrrole-1-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Amaryl",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "gimepiride",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glimepirida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glimepiride",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glimepiridum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

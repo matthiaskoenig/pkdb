@@ -1,0 +1,273 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_145332",
+  "lang": "en",
+  "description": [
+    "An imidazobenzodiazepine that is midazolam which is substituted by a hydroxy group at positions 2 and 4. It is the minor metabolite of the anesthetic, midazolam."
+  ],
+  "synonyms": [
+    "1',4'-dihydroxymidazolam",
+    "1',4-dihydroxy midazolam",
+    "1,4-dihydroxy midazolam",
+    "1,4-dihydroxymidazolam",
+    "8-chloro-6-(2-fluorophenyl)-1-(hydroxymethyl)-4H-imidazo[1,5-a][1,4]benzodiazepin-4-ol",
+    "8-chloro-6-(2-fluorophenyl)-1-(hydroxymethyl)-4H-imidazo[1,5-a][1,4]benzodiazepin-4-ol",
+    "8-chloro-6-(2-fluorophenyl)-4-hydroxy-4H-imidazo[1,5-a][1,4]benzodiazepine-1-methanol",
+    "Ro 21-0284",
+    "alpha,4-dihydroxymidazolam"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:64740-68-7",
+      "pubmed:12392582",
+      "pubmed:16472102",
+      "pubmed:17350905",
+      "pubmed:18420532",
+      "pubmed:22642803",
+      "pubmed:6120698",
+      "pubmed:8236371"
+    ],
+    "generalized_empirical_formula": [
+      "C18H13ClFN3O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:145332"
+    ],
+    "inchi_key_string": [
+      "OJDUJEPGFILARE-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C18H13ClFN3O2/c19-10-5-6-14-12(7-10)17(11-3-1-2-4-13(11)20)22-18(25)15-8-21-16(9-24)23(14)15/h1-8,18,24-25H,9H2"
+    ],
+    "mass": [
+      "357.772"
+    ],
+    "monoisotopic_mass": [
+      "357.06803"
+    ],
+    "smiles_string": [
+      "OCc1ncc2n1-c1ccc(Cl)cc1C(c1ccccc1F)=NC2O"
+    ]
+  },
+  "label": "1',4-dihydroxymidazolam",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_145332",
+  "obo_id": "CHEBI:145332",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "64740-68-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=64740-68-7"
+    },
+    {
+      "database": "pubmed",
+      "id": "12392582",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12392582/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16472102",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16472102/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17350905",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17350905/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18420532",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18420532/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22642803",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22642803/"
+    },
+    {
+      "database": "pubmed",
+      "id": "6120698",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6120698/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8236371",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8236371/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "8-chloro-6-(2-fluorophenyl)-1-(hydroxymethyl)-4H-imidazo[1,5-a][1,4]benzodiazepin-4-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1',4'-dihydroxymidazolam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1',4-dihydroxy midazolam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,4-dihydroxy midazolam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,4-dihydroxymidazolam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-chloro-6-(2-fluorophenyl)-1-(hydroxymethyl)-4H-imidazo[1,5-a][1,4]benzodiazepin-4-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-chloro-6-(2-fluorophenyl)-4-hydroxy-4H-imidazo[1,5-a][1,4]benzodiazepine-1-methanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ro 21-0284",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha,4-dihydroxymidazolam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145332?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145332/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145332/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145332/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145332/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145332/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145332/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145332/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145332/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

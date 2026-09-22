@@ -1,0 +1,354 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8499",
+  "lang": "en",
+  "description": [
+    "A propanolamine that is propan-2-ol substituted by a propan-2-ylamino group at position 1 and a naphthalen-1-yloxy group at position 3."
+  ],
+  "synonyms": [
+    "1-((1-Methylethyl)amino)-3-(1-naphthalenyloxy)-2-propanol",
+    "1-(isopropylamino)-3-(1-naphthyloxy)propan-2-ol",
+    "3-(naphthalen-1-yloxy)-1-(propan-2-ylamino)propan-2-ol",
+    "3-(naphthalen-1-yloxy)-1-(propan-2-ylamino)propan-2-ol",
+    "Propanalol",
+    "Propanolol",
+    "Propranolol",
+    "beta-Propranolol",
+    "propranolol",
+    "propranololo",
+    "propranololum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:525-66-6",
+      "drugbank:DB00571",
+      "drugcentral:2303",
+      "hmdb:HMDB0001849",
+      "kegg.compound:C07407",
+      "kegg.drug:D08443",
+      "lincs.smallmolecule:LSM-4329",
+      "pubmed:18259090",
+      "pubmed:24495884",
+      "pubmed:24504055",
+      "reaxys:987417",
+      "wikipedia.en:Propranolol"
+    ],
+    "generalized_empirical_formula": [
+      "C16H21NO2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8499"
+    ],
+    "inchi_key_string": [
+      "AQHHHDLHHXJYJD-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C16H21NO2/c1-12(2)17-10-14(18)11-19-16-9-5-7-13-6-3-4-8-15(13)16/h3-9,12,14,17-18H,10-11H2,1-2H3"
+    ],
+    "mass": [
+      "259.349"
+    ],
+    "monoisotopic_mass": [
+      "259.15723"
+    ],
+    "smiles_string": [
+      "CC(C)NCC(O)COc1cccc2ccccc12"
+    ]
+  },
+  "label": "propranolol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_8499",
+  "obo_id": "CHEBI:8499",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "525-66-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=525-66-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00571",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00571"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2303",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2303"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001849",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001849"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07407",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08443",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-4329",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "18259090",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18259090/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24495884",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24495884/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24504055",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24504055/"
+    },
+    {
+      "database": "reaxys",
+      "id": "987417",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Propranolol",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3-(naphthalen-1-yloxy)-1-(propan-2-ylamino)propan-2-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-((1-Methylethyl)amino)-3-(1-naphthalenyloxy)-2-propanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(isopropylamino)-3-(1-naphthyloxy)propan-2-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-(naphthalen-1-yloxy)-1-(propan-2-ylamino)propan-2-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Propanalol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Propanolol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Propranolol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "beta-Propranolol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "propranolol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "propranolol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "propranololo",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "propranololum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8499/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

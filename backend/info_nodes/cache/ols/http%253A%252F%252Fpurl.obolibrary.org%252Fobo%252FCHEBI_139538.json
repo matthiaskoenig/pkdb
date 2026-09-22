@@ -1,0 +1,221 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_139538",
+  "lang": "en",
+  "description": [
+    "A <small><sup>13</small></sup>C-modified compound that is carbon dioxide in which the carbon is present as its <small><sup>13</small></sup>C isotope."
+  ],
+  "synonyms": [
+    "((13)C)methanedione",
+    "((13)C)methanedione",
+    "(13)CO2",
+    "carbon dioxide((13)C)",
+    "carbon-(13)C dioxide"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "pubmed:11551844",
+      "pubmed:24919663",
+      "pubmed:25960807",
+      "pubmed:26543443",
+      "pubmed:26738199",
+      "pubmed:28644917",
+      "pubmed:28771732",
+      "pubmed:28841262",
+      "reaxys:3087932"
+    ],
+    "generalized_empirical_formula": [
+      "[13C]O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:139538"
+    ],
+    "inchi_key_string": [
+      "CURLTUGMZLYLDI-OUBTZVSYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/CO2/c2-1-3/i1+1"
+    ],
+    "mass": [
+      "45.001"
+    ],
+    "monoisotopic_mass": [
+      "44.99318"
+    ],
+    "smiles_string": [
+      "O=[13C]=O"
+    ]
+  },
+  "label": "((13)C)carbon dioxide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_139538",
+  "obo_id": "CHEBI:139538",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "pubmed",
+      "id": "11551844",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11551844/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24919663",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24919663/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25960807",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25960807/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26543443",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26543443/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26738199",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26738199/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28644917",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28644917/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28771732",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28771732/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28841262",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28841262/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3087932",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "((13)C)methanedione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "((13)C)methanedione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(13)CO2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbon dioxide((13)C)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbon-(13)C dioxide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139538?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139538/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139538/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139538/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139538/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139538/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139538/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139538/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

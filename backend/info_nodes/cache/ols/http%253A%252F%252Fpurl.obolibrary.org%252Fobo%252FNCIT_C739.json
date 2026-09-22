@@ -1,0 +1,145 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C739",
+  "lang": "en",
+  "description": [
+    "A long-acting barbituric acid derivative with antipsychotic property. Phenobarbital binds to and activates the gamma-aminobutyric acid (GABA)-A receptor, thereby mimicking the inhibitory actions of GABA in the brain.  The activation effects of the phenobarbital-receptor-ionophore complex include increased frequency of chloride channel openings, membrane hyperpolarization and ultimately synaptic inhibition and decreased neuronal excitability. In addition, this agent inhibits glutamate induced depolarization."
+  ],
+  "synonyms": [
+    "5-Ethyl-5-phenyl-2,4,6(1H,3H,5H)-pyrimidinetrione",
+    "PHENO",
+    "PHENOBARBITAL",
+    "Phenobarbital",
+    "phenobarbital"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug that is used to treat seizures and as a sedative. It is being studied in the treatment of diarrhea and for its ability to increase the antitumor effect of other therapies. It belongs to the family of drugs called barbiturates."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Epilepsy"
+    ],
+    "CAS_Registry": [
+      "50-06-6"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:8069"
+    ],
+    "Chemical_Formula": [
+      "C12H12N2O3"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "YQE403BP4D"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C76956",
+      "http://purl.obolibrary.org/obo/NCIT_C95059"
+    ],
+    "Legacy Concept Name": [
+      "Phenobarbital"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "42405"
+    ],
+    "NSC Number": [
+      "128143",
+      "9848"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "42405"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "42405"
+    ],
+    "Preferred_Name": [
+      "Phenobarbital"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0031412"
+    ],
+    "code": [
+      "C739"
+    ]
+  },
+  "label": "Phenobarbital",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C739",
+  "obo_id": "NCIT:C739",
+  "in_subset": [
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "5-Ethyl-5-phenyl-2,4,6(1H,3H,5H)-pyrimidinetrione",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "PHENO",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "PHENOBARBITAL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Phenobarbital",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "phenobarbital",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C739?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C739/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C739/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C739/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C739/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C739/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C739/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

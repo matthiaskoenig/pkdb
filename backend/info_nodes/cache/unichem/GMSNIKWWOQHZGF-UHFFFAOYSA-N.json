@@ -1,0 +1,86 @@
+[
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:62207"
+  },
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:62208"
+  },
+  {
+    "src_id": "3",
+    "src_compound_id": "I7U"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL619"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "12013792"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "237146"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "8663339"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "70639"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "WS6X982OEC"
+  },
+  {
+    "src_id": "49",
+    "src_compound_id": "PD001242"
+  },
+  {
+    "src_id": "50",
+    "src_compound_id": "FADCUI"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "112444"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "168682"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "4207"
+  },
+  {
+    "src_id": "5",
+    "src_compound_id": "I7U"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0001886"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID90148107"
+  },
+  {
+    "src_id": "51",
+    "src_compound_id": "FDB022724"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "Molport-000-511-760"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "Molport-001-783-700"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "50001515"
+  }
+]

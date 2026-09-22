@@ -1,0 +1,114 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_14018",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Alcoholic Cirrhosis",
+    "Alcoholic cirrhosis of liver",
+    "Laennec's cirrhosis",
+    "Laennec's cirrhosis, alcoholic",
+    "Portal cirrhosis"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10CM:K70.3",
+      "ICD9CM:571.2",
+      "MESH:D008104",
+      "NCI:C34782",
+      "SNOMEDCT_US_2025_09_01:420054005",
+      "UMLS_CUI:C0023891"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:14018"
+    ]
+  },
+  "label": "alcoholic liver cirrhosis",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "DOID_14018",
+  "obo_id": "DOID:14018",
+  "in_subset": [
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "K70.3",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "571.2",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D008104",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D008104"
+    },
+    {
+      "database": "NCI",
+      "id": "C34782",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C34782"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "420054005",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/420054005"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0023891",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0023891"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_14018?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_14018/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_14018/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_14018/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_14018/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_14018/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_14018/graph"
+    },
+    "disease_has_location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_14018/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0004026"
+    },
+    "has_disease_driver": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_14018/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0007001"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

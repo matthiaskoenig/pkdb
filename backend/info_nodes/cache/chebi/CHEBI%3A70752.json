@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:70752",
+  "name": "dabigatran",
+  "definition": "An aromatic amide obtained by formal condensation of the carboxy group of 2-{[(4-carbamimidoylphenyl)amino]methyl}-1-methyl-1<em>H</em>-benzimidazole-5-carboxylic acid with the secondary amoino group of <em>N</em>-pyridin-2-yl-β-alanine. The active metabolite of the prodrug  dabigatran etexilate, it acts as an anticoagulant which is used for the prevention of stroke and systemic embolism.",
+  "formula": "C25H25N7O3",
+  "charge": 0,
+  "mass": "471.521",
+  "inchikey": "YBSJFWOBGCMAKL-UHFFFAOYSA-N"
+}

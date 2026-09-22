@@ -1,0 +1,472 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_63577",
+  "lang": "en",
+  "description": [
+    "A monothioacetal that consists of cytosine having a (2<i>R</i>,5<i>S</i>)-2-(hydroxymethyl)-1,3-oxathiolan-5-yl moiety attached at position 1. An inhibitor of HIV-1 reverse transcriptase, it is used as an antiviral in the treatment of AIDS and hepatitis B."
+  ],
+  "synonyms": [
+    "(-)-1-((2R,5S)-2-(Hydroxymethyl)-1,3-oxathiolan-5-yl)cytosine",
+    "(-)-2'-Deoxy-3'-thiacytidine",
+    "2',3'-Dideoxy-3'-thiacytidine",
+    "3'-Thia-2',3'-dideoxycytidine",
+    "3TC",
+    "4-amino-1-[(2R,5S)-2-(hydroxymethyl)-1,3-oxathiolan-5-yl]pyrimidin-2(1H)-one",
+    "4-amino-1-[(2R,5S)-2-(hydroxymethyl)-1,3-oxathiolan-5-yl]pyrimidin-2(1H)-one",
+    "Epivir",
+    "Lamivudine",
+    "beta-L-2',3'-Dideoxy-3'-thiacytidine",
+    "beta-L-3'-Thia-2',3'-dideoxycytidine",
+    "lamivudine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:134678-17-4",
+      "drugbank:DB00709",
+      "drugcentral:1539",
+      "kegg.compound:C07065",
+      "kegg.drug:D00353",
+      "lincs.smallmolecule:LSM-5215",
+      "patent:WO9117159",
+      "pdb-ccd:3TC",
+      "pubmed:12135009",
+      "pubmed:19783232",
+      "pubmed:21465499",
+      "pubmed:21721935",
+      "pubmed:21851334",
+      "pubmed:22001270",
+      "pubmed:22028068",
+      "pubmed:22078148",
+      "pubmed:22085635",
+      "pubmed:22097898",
+      "pubmed:22098177",
+      "pubmed:22170540",
+      "pubmed:22211086",
+      "pubmed:22222724",
+      "pubmed:22226087",
+      "pubmed:22231575",
+      "pubmed:22233654",
+      "pubmed:25017682",
+      "pubmed:28166217",
+      "pubmed:29438107",
+      "reaxys:5480511",
+      "wikipedia.en:Lamivudine"
+    ],
+    "generalized_empirical_formula": [
+      "C8H11N3O3S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:6366"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:63577"
+    ],
+    "inchi_key_string": [
+      "JTEGQNOMFQHVDC-NKWVEPMBSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C8H11N3O3S/c9-5-1-2-11(8(13)10-5)6-4-15-7(3-12)14-6/h1-2,6-7,12H,3-4H2,(H2,9,10,13)/t6-,7+/m0/s1"
+    ],
+    "mass": [
+      "229.261"
+    ],
+    "monoisotopic_mass": [
+      "229.05211"
+    ],
+    "smiles_string": [
+      "Nc1ccn([C@@H]2CS[C@H](CO)O2)c(=O)n1"
+    ]
+  },
+  "label": "lamivudine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_63577",
+  "obo_id": "CHEBI:63577",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "134678-17-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=134678-17-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00709",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00709"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1539",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1539"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07065",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00353",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5215",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "WO9117159",
+      "description": "patent",
+      "url": "https://www.google.com/patents/WO9117159"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "3TC",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "12135009",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12135009/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19783232",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19783232/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21465499",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21465499/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21721935",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21721935/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21851334",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21851334/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22001270",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22001270/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22028068",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22028068/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22078148",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22078148/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22085635",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22085635/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22097898",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22097898/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22098177",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22098177/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22170540",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22170540/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22211086",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22211086/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22222724",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22222724/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22226087",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22226087/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22231575",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22231575/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22233654",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22233654/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25017682",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25017682/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28166217",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28166217/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29438107",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29438107/"
+    },
+    {
+      "database": "reaxys",
+      "id": "5480511",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Lamivudine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-amino-1-[(2R,5S)-2-(hydroxymethyl)-1,3-oxathiolan-5-yl]pyrimidin-2(1H)-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-1-((2R,5S)-2-(Hydroxymethyl)-1,3-oxathiolan-5-yl)cytosine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-2'-Deoxy-3'-thiacytidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2',3'-Dideoxy-3'-thiacytidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3'-Thia-2',3'-dideoxycytidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3TC",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-amino-1-[(2R,5S)-2-(hydroxymethyl)-1,3-oxathiolan-5-yl]pyrimidin-2(1H)-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Epivir",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lamivudine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "beta-L-2',3'-Dideoxy-3'-thiacytidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "beta-L-3'-Thia-2',3'-dideoxycytidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lamivudine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63577?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63577/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63577/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63577/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63577/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63577/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63577/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63577/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63577/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

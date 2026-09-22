@@ -1,0 +1,154 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0001068",
+  "lang": "en",
+  "description": [
+    "A protozoan disease caused in humans by four species of the PLASMODIUM genus: PLASMODIUM FALCIPARUM; PLASMODIUM VIVAX; PLASMODIUM OVALE; and PLASMODIUM MALARIAE; and transmitted by the bite of an infected female mosquito of the genus ANOPHELES. Malaria is endemic in parts of Asia, Africa, Central and South America, Oceania, and certain Caribbean islands. It is characterized by extreme exhaustion associated with paroxysms of high FEVER; SWEATING; shaking CHILLS; and ANEMIA. Malaria in ANIMALS is caused by other species of plasmodia.",
+    "A protozoan infection caused by the genus Plasmodium. There are four species of Plasmodium that can infect humans: Plasmodium falciparum, vivax, ovale, and malariae. It is transmitted to humans by infected mosquitoes. Signs and symptoms include paroxysmal high fever, sweating, chills, and anemia.",
+    "An Aconoidasida infectious disease characterized as a vector-borne infectious disease caused by the presence of protozoan parasites of the genus Plasmodium in the red blood cells, transmitted from an infected to an uninfected individual by the bite of anopheline mosquitoes, and characterized by periodic attacks of chills and fever that coincide with mass destruction of blood cells and the release of toxic substances by the parasite at the end of each reproductive cycle.",
+    "Malaria is a parasitic disease characterized as a vector-borne arthropod infectious acute or chronic disease caused by the presence of sporozoan parasites of the genus Plasmodium in the red blood cells, transmitted from an infected to an uninfected individual by the bite of anopheline mosquitoes, and characterized by periodic attacks of chills and fever that coincide with mass destruction of blood cells and the release of toxic substances by the parasite at the end of each reproductive cycle. Occurrance is widespread in tropical and subtropical regions, including parts of the Americas, Asia, and Africa."
+  ],
+  "synonyms": [
+    "Disease due to Plasmodiidae (disorder)",
+    "Disease due to Plasmodiidae",
+    "Fever, Marsh",
+    "Fever, Remittent",
+    "INFECT PLASMODIUM",
+    "Induced malaria (disorder)",
+    "Infection, Plasmodium",
+    "Infections, Plasmodium",
+    "MALARIA COMPLICATED NEC",
+    "MALARIA NEC",
+    "MALARIA NOS",
+    "Malaria (disorder)",
+    "Malaria, NOS",
+    "Malaria, unspecified",
+    "Malarial fever (finding)",
+    "Malarial fever",
+    "Marsh Fever",
+    "Other malaria (disorder)",
+    "Other malaria",
+    "Other pernicious complications of malaria",
+    "PLASMODIUM INFECT",
+    "Paludism",
+    "Plasmodiosis",
+    "Plasmodium Infection",
+    "Plasmodium Infections",
+    "Remittent Fever",
+    "Unspecified malaria (disorder)",
+    "Unspecified malaria",
+    "[X]Unspecified malaria (disorder)",
+    "[X]Unspecified malaria",
+    "induced malaria",
+    "malaria infection"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:12365",
+      "ICD9:084",
+      "MESH:D008288",
+      "MedDRA:10025487",
+      "MedDRA:10025495",
+      "MedDRA:10025496",
+      "MedDRA:10025497",
+      "NCIt:C34797",
+      "SNOMEDCT:61462000"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0005136, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0005136"
+    ],
+    "term editor": [
+      "James Malone",
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005136"
+    ]
+  },
+  "label": "obsolete_malaria",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005136",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0001068",
+  "obo_id": "EFO:0001068",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "12365",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_12365"
+    },
+    {
+      "database": "ICD9",
+      "id": "084",
+      "description": null,
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=084"
+    },
+    {
+      "database": "MESH",
+      "id": "D008288",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D008288"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10025487",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10025487"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10025495",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10025495"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10025496",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10025496"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10025497",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10025497"
+    },
+    {
+      "database": "NCIt",
+      "id": "C34797",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C34797"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "61462000",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/61462000"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0001068?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0001068/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

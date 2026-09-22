@@ -1,0 +1,172 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_32643",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "5-Acetylamino-6-formylamino-3-methyluracil",
+    "AFMU",
+    "N-(6-formamido-3-methyl-2,4-dioxo-1,2,3,4-tetrahydropyrimidin-5-yl)acetamide",
+    "N-(6-formamido-3-methyl-2,4-dioxo-1,2,3,4-tetrahydropyrimidin-5-yl)acetamide"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:85438-96-6",
+      "kegg.compound:C16365"
+    ],
+    "generalized_empirical_formula": [
+      "C8H10N4O4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:32643"
+    ],
+    "inchi_key_string": [
+      "RDZNZFGKEVDNPK-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C8H10N4O4/c1-4(14)10-5-6(9-3-13)11-8(16)12(2)7(5)15/h3H,1-2H3,(H,9,13)(H,10,14)(H,11,16)"
+    ],
+    "mass": [
+      "226.192"
+    ],
+    "monoisotopic_mass": [
+      "226.0702"
+    ],
+    "smiles_string": [
+      "CC(=O)Nc1c(NC=O)nc(=O)n(C)c1=O"
+    ]
+  },
+  "label": "5-acetamido-6-formamido-3-methyluracil",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_32643",
+  "obo_id": "CHEBI:32643",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "85438-96-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=85438-96-6"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C16365",
+      "description": "kegg.compound",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-(6-formamido-3-methyl-2,4-dioxo-1,2,3,4-tetrahydropyrimidin-5-yl)acetamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Acetylamino-6-formylamino-3-methyluracil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AFMU",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AFMU",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(6-formamido-3-methyl-2,4-dioxo-1,2,3,4-tetrahydropyrimidin-5-yl)acetamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32643?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32643/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32643/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32643/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32643/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32643/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32643/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32643/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32643/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

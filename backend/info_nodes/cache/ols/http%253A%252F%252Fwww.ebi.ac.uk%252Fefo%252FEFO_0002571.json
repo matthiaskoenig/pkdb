@@ -1,0 +1,109 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0002571",
+  "lang": "en",
+  "description": [
+    "An activity that produces an effect, or that is intended to alter the course of a disease in a patient or population. This is a general term that encompasses the medical, social, behavioral, and environmental acts that can have preventive, therapeutic, or palliative effects."
+  ],
+  "synonyms": [
+    "Intervention Strategies",
+    "Intervention or Procedure",
+    "Intervention",
+    "Interventional",
+    "Procedure",
+    "SURGICAL AND MEDICAL PROCEDURES",
+    "interventionDescription"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10:Z41",
+      "NCIt:C25218",
+      "NCIt:C79751",
+      "SNOMEDCT:50731006"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "term editor": [
+      "Jie Zheng",
+      "Tomasz Adamusiak"
+    ]
+  },
+  "label": "medical procedure",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "EFO_0002571",
+  "obo_id": "EFO:0002571",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD10",
+      "id": "Z41",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/Z41"
+    },
+    {
+      "database": "NCIt",
+      "id": "C25218",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C25218"
+    },
+    {
+      "database": "NCIt",
+      "id": "C79751",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C79751"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "50731006",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/50731006"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0002571?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0002571/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0002571/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0002571/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0002571/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0002571/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0002571/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0002571/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0002571/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0002571/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0002571/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

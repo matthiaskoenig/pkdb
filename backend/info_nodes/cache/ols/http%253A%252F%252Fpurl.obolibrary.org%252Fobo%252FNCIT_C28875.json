@@ -1,0 +1,139 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C28875",
+  "lang": "en",
+  "description": [
+    "A potent sulfamoylanthranilic acid derivative belonging to the class of loop diuretics. In the brain, bumetanide may prevent seizures in neonates by blocking the bumetanide-sensitive sodium-potassium-chloride cotransporter (NKCC1), thereby inhibiting chloride uptake thus, decreasing the internal chloride concentration in neurons and may block the excitatory effect of GABA in neonates."
+  ],
+  "synonyms": [
+    "BUMETANIDE",
+    "Bumetanide",
+    "Bumex",
+    "Burinex",
+    "Edemex"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "28395-03-1"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:3213"
+    ],
+    "Chemical_Formula": [
+      "C17H20N2O5S"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "HemOnc"
+    ],
+    "Display_Name": [
+      "Bumetanide"
+    ],
+    "FDA_UNII_Code": [
+      "0Y2S3XUQ5H"
+    ],
+    "Legacy Concept Name": [
+      "Bumetanide"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "788832"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "788832"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "788832"
+    ],
+    "Preferred_Name": [
+      "Bumetanide"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0701009"
+    ],
+    "code": [
+      "C28875"
+    ]
+  },
+  "label": "Bumetanide",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C28875",
+  "obo_id": "NCIT:C28875",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "BUMETANIDE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Bumetanide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Bumex",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Burinex",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Edemex",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28875?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28875/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28875/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28875/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28875/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28875/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28875/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

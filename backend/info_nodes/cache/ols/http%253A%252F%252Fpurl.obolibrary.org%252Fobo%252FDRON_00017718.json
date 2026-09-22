@@ -1,0 +1,66 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DRON_00017718",
+  "lang": "en",
+  "description": [],
+  "synonyms": [],
+  "annotation": {
+    "database_cross_reference": [
+      "drugbank:DB13196",
+      "rxnorm:253206"
+    ]
+  },
+  "label": "valerian root extract",
+  "ontology_name": "dron",
+  "ontology_prefix": "DRON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/dron.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "DRON_00017718",
+  "obo_id": "DRON:00017718",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "drugbank",
+      "id": "DB13196",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB13196"
+    },
+    {
+      "database": "rxnorm",
+      "id": "253206",
+      "description": null,
+      "url": "https://mor.nlm.nih.gov/RxNav/search?searchBy=RXCUI&searchTerm=253206"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00017718?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00017718/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00017718/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00017718/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00017718/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00017718/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00017718/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

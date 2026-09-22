@@ -1,0 +1,298 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3766",
+  "lang": "en",
+  "description": [
+    "A benzodiazepine that is 5<em>H</em>-dibenzo[<em>b,e</em>][1,4]diazepine substituted by a chloro group at position 8 and a 4-methylpiperazin-1-yl group at position 11. It is a second generation antipsychotic used in the treatment of psychiatric disorders like  schizophrenia."
+  ],
+  "synonyms": [
+    "8-chloro-11-(4-methylpiperazin-1-yl)-5H-dibenzo[b,e][1,4]diazepine",
+    "8-chloro-11-(4-methylpiperazin-1-yl)-5H-dibenzo[b,e][1,4]diazepine",
+    "Clozapin",
+    "Clozapine",
+    "clozapina",
+    "clozapine",
+    "clozapinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:0764984",
+      "cas:5786-21-0",
+      "drugbank:DB00363",
+      "drugcentral:722",
+      "hmdb:HMDB0014507",
+      "kegg.compound:C06924",
+      "kegg.drug:D00283",
+      "patent:FR1334944",
+      "patent:NL293201",
+      "patent:US3539573",
+      "pubmed:18690109",
+      "pubmed:18766167",
+      "pubmed:20825390",
+      "pubmed:24219174",
+      "reaxys:764984",
+      "wikipedia.en:Clozapine"
+    ],
+    "generalized_empirical_formula": [
+      "C18H19ClN4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3766"
+    ],
+    "inchi_key_string": [
+      "QZUDBNBUXVUHMW-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C18H19ClN4/c1-22-8-10-23(11-9-22)18-14-4-2-3-5-15(14)20-16-7-6-13(19)12-17(16)21-18/h2-7,12,20H,8-11H2,1H3"
+    ],
+    "mass": [
+      "326.831"
+    ],
+    "monoisotopic_mass": [
+      "326.12982"
+    ],
+    "smiles_string": [
+      "CN1CCN(C2=Nc3cc(Cl)ccc3Nc3ccccc32)CC1"
+    ]
+  },
+  "label": "clozapine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3766",
+  "obo_id": "CHEBI:3766",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "0764984",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "5786-21-0",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=5786-21-0"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00363",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00363"
+    },
+    {
+      "database": "drugcentral",
+      "id": "722",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/722"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014507",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014507"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06924",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00283",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "FR1334944",
+      "description": "patent",
+      "url": "https://www.google.com/patents/FR1334944"
+    },
+    {
+      "database": "patent",
+      "id": "NL293201",
+      "description": "patent",
+      "url": "https://www.google.com/patents/NL293201"
+    },
+    {
+      "database": "patent",
+      "id": "US3539573",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3539573"
+    },
+    {
+      "database": "pubmed",
+      "id": "18690109",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18690109/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18766167",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18766167/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20825390",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20825390/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24219174",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24219174/"
+    },
+    {
+      "database": "reaxys",
+      "id": "764984",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Clozapine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "8-chloro-11-(4-methylpiperazin-1-yl)-5H-dibenzo[b,e][1,4]diazepine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-chloro-11-(4-methylpiperazin-1-yl)-5H-dibenzo[b,e][1,4]diazepine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Clozapin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Clozapine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clozapina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clozapine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clozapinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3766?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3766/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3766/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3766/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3766/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3766/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3766/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3766/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

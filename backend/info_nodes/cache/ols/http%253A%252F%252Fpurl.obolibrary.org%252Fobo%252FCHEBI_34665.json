@@ -1,0 +1,268 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_34665",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "3,4-dihydroisoquinoline-2(1H)-carboximidamide",
+    "3,4-dihydroisoquinoline-2(1H)-carboximidamide",
+    "Debrisochinum",
+    "Debrisoquin",
+    "Debrisoquine",
+    "Isocaramidine",
+    "debrisoquina",
+    "debrisoquine",
+    "debrisoquinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:1427619",
+      "cas:1131-64-2",
+      "drugbank:DB04840",
+      "drugcentral:788",
+      "kegg.compound:C13650",
+      "patent:BE629007",
+      "patent:US3157573",
+      "wikipedia.en:Debrisoquine"
+    ],
+    "generalized_empirical_formula": [
+      "C10H13N3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:34665"
+    ],
+    "inchi_key_string": [
+      "JWPGJSVJDAJRLW-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C10H13N3/c11-10(12)13-6-5-8-3-1-2-4-9(8)7-13/h1-4H,5-7H2,(H3,11,12)"
+    ],
+    "mass": [
+      "175.235"
+    ],
+    "monoisotopic_mass": [
+      "175.11095"
+    ],
+    "smiles_string": [
+      "N=C(N)N1CCc2ccccc2C1"
+    ]
+  },
+  "label": "debrisoquin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_34665",
+  "obo_id": "CHEBI:34665",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "1427619",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "1131-64-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=1131-64-2"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB04840",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB04840"
+    },
+    {
+      "database": "drugcentral",
+      "id": "788",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/788"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C13650",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "BE629007",
+      "description": "patent",
+      "url": "https://www.google.com/patents/BE629007"
+    },
+    {
+      "database": "patent",
+      "id": "US3157573",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3157573"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Debrisoquine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3,4-dihydroisoquinoline-2(1H)-carboximidamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,4-dihydroisoquinoline-2(1H)-carboximidamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Debrisochinum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Debrisoquin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Debrisoquine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Isocaramidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "debrisoquina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "debrisoquine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "debrisoquinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_34665?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_34665/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_34665/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_34665/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_34665/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_34665/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_34665/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_34665/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,665 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9637",
+  "lang": "en",
+  "description": [
+    "An <em>N</em>-sulfonylurea obtained by formal condensation of [(3-methylphenyl)amino]pyridine-3-sulfonic acid with the free amino group of <em>N</em>-isopropylurea. It is a potent loop diuretic used for the treatment of hypertension and edema in patients with congestive heart failure."
+  ],
+  "synonyms": [
+    "1-isopropyl-3-((4-m-toluidino-3-pyridyl)sulfonyl)urea",
+    "4-(3-methylanilino)-N-(propan-2-ylcarbamoyl)pyridine-3-sulfonamide",
+    "4-(3-methylanilino)-N-(propan-2-ylcarbamoyl)pyridine-3-sulfonamide",
+    "AC 4464",
+    "AC-4464",
+    "AC4464",
+    "BM 02015",
+    "BM-02.015",
+    "BM-02015",
+    "BM02.015",
+    "BM02015",
+    "Demadex",
+    "JDL 464",
+    "JDL-464",
+    "Luprac",
+    "N-(((1-methylethyl)amino)carbonyl)-4-((3-methylphenyl)amino)-3-pyridinesulfonamide",
+    "N-(isopropylcarbamoyl)-4-[(3-methylphenyl)amino]pyridine-3-sulfonamide",
+    "N-[(propan-2-yl)carbamoyl]-4-[(3-methylphenyl)amino]pyridine-3-sulfonamide",
+    "Torem",
+    "Torsemide",
+    "Unat",
+    "torasemida",
+    "torasemide",
+    "torasemidum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:56211-40-6",
+      "drugbank:DB00214",
+      "drugcentral:2708",
+      "hmdb:HMDB0014359",
+      "kegg.drug:D00382",
+      "lincs.smallmolecule:LSM-2662",
+      "pubmed:21391491",
+      "pubmed:21906812",
+      "pubmed:22030290",
+      "pubmed:22364690",
+      "pubmed:22407343",
+      "pubmed:23013124",
+      "pubmed:23237447",
+      "pubmed:23792294",
+      "pubmed:23837587",
+      "pubmed:23877845",
+      "pubmed:24040049",
+      "pubmed:24243991",
+      "pubmed:24367917",
+      "pubmed:24432564",
+      "pubmed:24554915",
+      "pubmed:28891228",
+      "pubmed:29488197",
+      "pubmed:30649675",
+      "pubmed:30827731",
+      "pubmed:31124957",
+      "pubmed:31436024",
+      "pubmed:31699358",
+      "pubmed:31809955",
+      "pubmed:32098657",
+      "pubmed:32302808",
+      "pubmed:32411731",
+      "reaxys:498515",
+      "wikipedia.en:Torasemide"
+    ],
+    "generalized_empirical_formula": [
+      "C16H20N4O3S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9637"
+    ],
+    "inchi_key_string": [
+      "NGBFQHCMQULJNZ-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C16H20N4O3S/c1-11(2)18-16(21)20-24(22,23)15-10-17-8-7-14(15)19-13-6-4-5-12(3)9-13/h4-11H,1-3H3,(H,17,19)(H2,18,20,21)"
+    ],
+    "mass": [
+      "348.428"
+    ],
+    "monoisotopic_mass": [
+      "348.12561"
+    ],
+    "smiles_string": [
+      "Cc1cccc(Nc2ccncc2S(=O)(=O)NC(=O)NC(C)C)c1"
+    ]
+  },
+  "label": "torasemide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9637",
+  "obo_id": "CHEBI:9637",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "56211-40-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=56211-40-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00214",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00214"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2708",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2708"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014359",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014359"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00382",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-2662",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "21391491",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21391491/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21906812",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21906812/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22030290",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22030290/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22364690",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22364690/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22407343",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22407343/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23013124",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23013124/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23237447",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23237447/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23792294",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23792294/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23837587",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23837587/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23877845",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23877845/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24040049",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24040049/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24243991",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24243991/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24367917",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24367917/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24432564",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24432564/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24554915",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24554915/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28891228",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28891228/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29488197",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29488197/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30649675",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30649675/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30827731",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30827731/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31124957",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31124957/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31436024",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31436024/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31699358",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31699358/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31809955",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31809955/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32098657",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32098657/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32302808",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32302808/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32411731",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32411731/"
+    },
+    {
+      "database": "reaxys",
+      "id": "498515",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Torasemide",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-(3-methylanilino)-N-(propan-2-ylcarbamoyl)pyridine-3-sulfonamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-isopropyl-3-((4-m-toluidino-3-pyridyl)sulfonyl)urea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(3-methylanilino)-N-(propan-2-ylcarbamoyl)pyridine-3-sulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AC 4464",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AC-4464",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AC4464",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BM 02015",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BM-02.015",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BM-02015",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BM02.015",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BM02015",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Demadex",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "JDL 464",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "JDL-464",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Luprac",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(((1-methylethyl)amino)carbonyl)-4-((3-methylphenyl)amino)-3-pyridinesulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(isopropylcarbamoyl)-4-[(3-methylphenyl)amino]pyridine-3-sulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-[(propan-2-yl)carbamoyl]-4-[(3-methylphenyl)amino]pyridine-3-sulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Torem",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Torsemide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Unat",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "torasemida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "torasemide",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "torasemidum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9637?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9637/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9637/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9637/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9637/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9637/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9637/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9637/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9637/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

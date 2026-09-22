@@ -1,0 +1,329 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_157175",
+  "lang": "en",
+  "description": [
+    "A 1,8-naphthyridine derivative that is 1,4-dihydro-1,8-naphthyridine with an ethyl group at the 1 position, a carboxy group at the 3-position, an oxo sustituent at the 4-position, a fluoro substituent at the 5-position and a piperazin-1-yl group at the 7 position. An antibacterial, it is used in the treatment of urinary-tract infections and gonorrhoea."
+  ],
+  "synonyms": [
+    "1-Ethyl-6-fluoro-4-oxo-7-piperazin-1-yl-1,4-dihydro-[1,8]naphthyridine-3-carboxylic acid",
+    "1-ethyl-6-fluoro-1,4-dihydro-4-oxo-7-(1-piperazinyl)-1,8-naphthyridine-3-carboxylic acid",
+    "1-ethyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydro-1,8-naphthyridine-3-carboxylic acid",
+    "1-ethyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydro-1,8-naphthyridine-3-carboxylic acid",
+    "ENOXACIN",
+    "Enoxacin",
+    "enoxacin",
+    "enoxacine",
+    "enoxacino",
+    "enoxacinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:74011-58-8",
+      "drugbank:DB00467",
+      "drugcentral:1013",
+      "kegg.compound:C06979",
+      "kegg.drug:D00310",
+      "lincs.smallmolecule:LSM-5848",
+      "patent:EP9425",
+      "patent:US4352803",
+      "patent:US4359578",
+      "pubmed:16644219",
+      "pubmed:8741236",
+      "reaxys:3628995",
+      "vsdb:1896",
+      "wikipedia.en:Enoxacin"
+    ],
+    "generalized_empirical_formula": [
+      "C15H17FN4O3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:4796"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:157175"
+    ],
+    "inchi_key_string": [
+      "IDYZIJYBMGIQMJ-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C15H17FN4O3/c1-2-19-8-10(15(22)23)12(21)9-7-11(16)14(18-13(9)19)20-5-3-17-4-6-20/h7-8,17H,2-6H2,1H3,(H,22,23)"
+    ],
+    "mass": [
+      "320.324"
+    ],
+    "monoisotopic_mass": [
+      "320.12847"
+    ],
+    "smiles_string": [
+      "CCn1cc(C(=O)O)c(=O)c2cc(F)c(N3CCNCC3)nc21"
+    ]
+  },
+  "label": "enoxacin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_157175",
+  "obo_id": "CHEBI:157175",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "74011-58-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=74011-58-8"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00467",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00467"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1013",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1013"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06979",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00310",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5848",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP9425",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP9425"
+    },
+    {
+      "database": "patent",
+      "id": "US4352803",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4352803"
+    },
+    {
+      "database": "patent",
+      "id": "US4359578",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4359578"
+    },
+    {
+      "database": "pubmed",
+      "id": "16644219",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16644219/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8741236",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8741236/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3628995",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1896",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1896.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Enoxacin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1-ethyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydro-1,8-naphthyridine-3-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Ethyl-6-fluoro-4-oxo-7-piperazin-1-yl-1,4-dihydro-[1,8]naphthyridine-3-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-ethyl-6-fluoro-1,4-dihydro-4-oxo-7-(1-piperazinyl)-1,8-naphthyridine-3-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-ethyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydro-1,8-naphthyridine-3-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ENOXACIN",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Enoxacin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enoxacin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enoxacine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enoxacino",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enoxacinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_157175?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_157175/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_157175/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_157175/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_157175/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_157175/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_157175/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_157175/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

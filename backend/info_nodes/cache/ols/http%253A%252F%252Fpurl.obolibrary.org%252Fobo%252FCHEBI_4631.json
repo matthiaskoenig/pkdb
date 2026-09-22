@@ -1,0 +1,308 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_4631",
+  "lang": "en",
+  "description": [
+    "A disaccharide derivative that consists of  diosmetin substituted by a 6-<em>O</em>-(α-<small>L</small>-rhamnopyranosyl)-β-<small>D</small>-glucopyranosyl moiety at position 7 via a glycosidic linkage."
+  ],
+  "synonyms": [
+    "3',5,7-trihydroxy-4'-methoxyflavone 7-rhamnoglucoside",
+    "3',5,7-trihydroxy-4'-methoxyflavone-7-rutinoside",
+    "5-hydroxy-2-(3-hydroxy-4-methoxyphenyl)-4-oxo-4H-1-benzopyran-7-yl 6-O-(6-deoxy-alpha-L-mannopyranosyl)-beta-D-glucopyranoside",
+    "5-hydroxy-2-(3-hydroxy-4-methoxyphenyl)-4-oxo-4H-1-benzopyran-7-yl 6-O-(6-deoxy-alpha-L-mannopyranosyl)-beta-D-glucopyranoside",
+    "Diosmetin 7-O-rutinoside",
+    "diosmetin 7-neohesperidoside",
+    "diosmin",
+    "diosmine",
+    "diosminum",
+    "neodiosmin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:520-27-4",
+      "drugcentral:3157",
+      "kegg.compound:C10039",
+      "kegg.drug:D07858",
+      "knapsack:C00004362",
+      "lincs.smallmolecule:LSM-5989",
+      "lipidmaps:LMPK12110819",
+      "pubmed:25620156",
+      "pubmed:25821971",
+      "reaxys:74883",
+      "wikipedia.en:Diosmin"
+    ],
+    "generalized_empirical_formula": [
+      "C28H32O15"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:4631"
+    ],
+    "inchi_key_string": [
+      "GZSOSUNBTXMUFQ-YFAPSIMESA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C28H32O15/c1-10-21(32)23(34)25(36)27(40-10)39-9-19-22(33)24(35)26(37)28(43-19)41-12-6-14(30)20-15(31)8-17(42-18(20)7-12)11-3-4-16(38-2)13(29)5-11/h3-8,10,19,21-30,32-37H,9H2,1-2H3/t10-,19+,21-,22+,23+,24-,25+,26+,27+,28+/m0/s1"
+    ],
+    "mass": [
+      "608.549"
+    ],
+    "monoisotopic_mass": [
+      "608.17412"
+    ],
+    "smiles_string": [
+      "COc1ccc(-c2cc(=O)c3c(O)cc(O[C@@H]4O[C@H](CO[C@@H]5O[C@@H](C)[C@H](O)[C@@H](O)[C@H]5O)[C@@H](O)[C@H](O)[C@H]4O)cc3o2)cc1O"
+    ]
+  },
+  "label": "diosmin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_4631",
+  "obo_id": "CHEBI:4631",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "520-27-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=520-27-4"
+    },
+    {
+      "database": "drugcentral",
+      "id": "3157",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/3157"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C10039",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07858",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00004362",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00004362"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5989",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "lipidmaps",
+      "id": "LMPK12110819",
+      "description": "lipidmaps",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMPK12110819"
+    },
+    {
+      "database": "pubmed",
+      "id": "25620156",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25620156/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25821971",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25821971/"
+    },
+    {
+      "database": "reaxys",
+      "id": "74883",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Diosmin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-hydroxy-2-(3-hydroxy-4-methoxyphenyl)-4-oxo-4H-1-benzopyran-7-yl 6-O-(6-deoxy-alpha-L-mannopyranosyl)-beta-D-glucopyranoside",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3',5,7-trihydroxy-4'-methoxyflavone 7-rhamnoglucoside",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3',5,7-trihydroxy-4'-methoxyflavone-7-rutinoside",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-hydroxy-2-(3-hydroxy-4-methoxyphenyl)-4-oxo-4H-1-benzopyran-7-yl 6-O-(6-deoxy-alpha-L-mannopyranosyl)-beta-D-glucopyranoside",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Diosmetin 7-O-rutinoside",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diosmetin 7-neohesperidoside",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "lipidmaps",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diosmin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diosmine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diosminum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "neodiosmin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "lipidmaps",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4631?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4631/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4631/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4631/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4631/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4631/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4631/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4631/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4631/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

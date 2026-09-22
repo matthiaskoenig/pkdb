@@ -1,0 +1,345 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_135533",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(+/-)-Talinolol",
+    "Talinolol",
+    "cordanum",
+    "racemic talinolol"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:57460-41-0",
+      "drugcentral:2557",
+      "hmdb:HMDB0042020",
+      "pubmed:12948010",
+      "pubmed:12948019",
+      "pubmed:15180340",
+      "pubmed:18426954",
+      "pubmed:19445515",
+      "pubmed:20070106",
+      "pubmed:21474681",
+      "pubmed:22096083",
+      "pubmed:24472039",
+      "pubmed:24601604",
+      "pubmed:25489882",
+      "pubmed:26164843",
+      "pubmed:26344593",
+      "pubmed:26363868",
+      "pubmed:26469213",
+      "pubmed:27131065",
+      "pubmed:28249208",
+      "pubmed:28422508",
+      "pubmed:28776992",
+      "pubmed:28820254",
+      "pubmed:28993106",
+      "pubmed:29091437",
+      "pubmed:30099257",
+      "pubmed:30145051",
+      "pubmed:31223445",
+      "pubmed:9862789"
+    ],
+    "generalized_empirical_formula": [
+      "C20H33N3O3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:135533"
+    ],
+    "inchi_key_string": [
+      "MXFWWQICDIZSOA-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C20H33N3O3/c1-20(2,3)21-13-17(24)14-26-18-11-9-16(10-12-18)23-19(25)22-15-7-5-4-6-8-15/h9-12,15,17,21,24H,4-8,13-14H2,1-3H3,(H2,22,23,25)"
+    ],
+    "mass": [
+      "363.502"
+    ],
+    "monoisotopic_mass": [
+      "363.25219"
+    ],
+    "smiles_string": [
+      "CC(C)(C)NCC(O)COc1ccc(NC(=O)NC2CCCCC2)cc1"
+    ]
+  },
+  "label": "talinolol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_135533",
+  "obo_id": "CHEBI:135533",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "57460-41-0",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=57460-41-0"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2557",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2557"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0042020",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0042020"
+    },
+    {
+      "database": "pubmed",
+      "id": "12948010",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12948010/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12948019",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12948019/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15180340",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15180340/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18426954",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18426954/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19445515",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19445515/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20070106",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20070106/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21474681",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21474681/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22096083",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22096083/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24472039",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24472039/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24601604",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24601604/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25489882",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25489882/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26164843",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26164843/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26344593",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26344593/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26363868",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26363868/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26469213",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26469213/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27131065",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27131065/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28249208",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28249208/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28422508",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28422508/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28776992",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28776992/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28820254",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28820254/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28993106",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28993106/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29091437",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29091437/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30099257",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30099257/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30145051",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30145051/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31223445",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31223445/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9862789",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9862789/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(+/-)-Talinolol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Talinolol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cordanum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "racemic talinolol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

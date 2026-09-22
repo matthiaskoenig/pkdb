@@ -1,0 +1,93 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/HP_0012115",
+  "lang": "en",
+  "description": [
+    "Inflammation of the liver."
+  ],
+  "synonyms": [
+    "Liver inflammation"
+  ],
+  "annotation": {
+    "Creator": [
+      "https://orcid.org/0000-0002-6996-5279"
+    ],
+    "Date": [
+      "2012-09-16T05:03:29Z"
+    ],
+    "id": [
+      "HP:0012115"
+    ]
+  },
+  "label": "Hepatitis",
+  "ontology_name": "hp",
+  "ontology_prefix": "HP",
+  "ontology_iri": "http://purl.obolibrary.org/obo/hp/hp-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "HP_0012115",
+  "obo_id": "HP:0012115",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "Inflammation of the liver.",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "https://orcid.org/0000-0002-0736-9199",
+          "description": null,
+          "url": "https://orcid.org/0000-0002-0736-9199"
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Liver inflammation",
+      "scope": "hasExactSynonym",
+      "type": "layperson term",
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012115?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012115/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012115/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012115/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012115/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012115/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012115/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012115/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012115/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012115/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/hp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FHP_0012115/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

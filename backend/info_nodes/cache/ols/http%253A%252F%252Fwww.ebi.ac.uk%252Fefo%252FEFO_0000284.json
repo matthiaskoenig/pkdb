@@ -1,0 +1,166 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000284",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Adenofibromatous hypertrophy of prostate",
+    "Adenofibromatous hypertrophy of prostate, NOS",
+    "Adenoma, Prostatic",
+    "Adenomas, Prostatic",
+    "Adenomyomatous hyperplasia of prostate gland",
+    "BEP - Benign enlargement of prostate",
+    "BPH - Benign prostatic hypertrophy",
+    "BPH",
+    "Benign Hyperplasia of Prostate",
+    "Benign Hyperplasia of the Prostate",
+    "Benign Prostate Hyperplasia",
+    "Benign Prostatic Hyperplasia - BPH",
+    "Benign adenoma of prostate",
+    "Benign enlargement of prostate",
+    "Benign enlargement of prostate, NOS",
+    "Benign fibroma of prostate",
+    "Benign myoma of prostate",
+    "Benign prostatic hyperplasia (disorder)",
+    "Benign prostatic hyperplasia, NOS",
+    "Enlarged prostate - benign",
+    "Fibromuscular hyperplasia of prostate gland",
+    "Glandular, stromal AND/OR muscular hyperplasia of prostate gland",
+    "Glandular, stromal and muscular hyperplasia of prostate gland",
+    "Hyperplasia of prostate (disorder)",
+    "Hyperplasia of prostate",
+    "Hyperplasia of prostate, NOS",
+    "Hyperplasia, Prostatic",
+    "Hypertrophy (benign) of prostate",
+    "Hypertrophy, Benign Prostatic",
+    "Lobular hyperplasia of prostate gland",
+    "Nodular hyperplasia of prostate gland",
+    "Prostatauxe",
+    "Prostatic Adenoma",
+    "Prostatic Adenomas",
+    "Prostatic Hyperplasia",
+    "Prostatic Hyperplasia, Benign",
+    "Prostatic Hypertrophy, Benign",
+    "Prostatic area hypertrophy",
+    "Prostatic hyper -benign",
+    "Prostatic hypertrophy",
+    "benign hypertrophy of prostate NOS",
+    "benign prostatic hypertrophy"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:11132",
+      "DOID:2883",
+      "ICD10:N40",
+      "ICD9:600",
+      "ICD9:600.0",
+      "MESH:D011470",
+      "MedDRA:10004446",
+      "NCIt:C2897",
+      "OMIM:600082",
+      "SNOMEDCT:266569009"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0010811, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0010811"
+    ],
+    "term editor": [
+      "James Malone",
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0010811"
+    ]
+  },
+  "label": "obsolete_benign prostatic hyperplasia",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0010811",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0000284",
+  "obo_id": "EFO:0000284",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "11132",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_11132"
+    },
+    {
+      "database": "DOID",
+      "id": "2883",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_2883"
+    },
+    {
+      "database": "ICD10",
+      "id": "N40",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/N40"
+    },
+    {
+      "database": "ICD9",
+      "id": "600",
+      "description": null,
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=600"
+    },
+    {
+      "database": "ICD9",
+      "id": "600.0",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D011470",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D011470"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10004446",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10004446"
+    },
+    {
+      "database": "NCIt",
+      "id": "C2897",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C2897"
+    },
+    {
+      "database": "OMIM",
+      "id": "600082",
+      "description": null,
+      "url": "https://omim.org/entry/600082"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "266569009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/266569009"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000284?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000284/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

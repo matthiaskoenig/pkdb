@@ -19,7 +19,7 @@ DISEASE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "NCIT:C16669"),
             (BQB.IS, "https://bioregistry.io/OPMI:0000281"),
-            (BQB.IS, "hp/HP:0032319"),
+            (BQB.IS, "HP:0032319"),
         ],
     ),
     MeasurementType(
@@ -39,7 +39,7 @@ DISEASE_NODES: list[InfoNode] = [
     # --- Symptoms -------------------------------------------------------------------------------
     MeasurementType(
         sid="symptom",
-        name="symptom",
+        ## (BQB.IS, "symp/SYMP:0000462"),
         description="Symptom of a disease. A symptom is a perceived change in function, "
         "sensation, loss, disturbance or appearance reported by a patient indicative "
         "of a disease. Symptom of individual or subjects is encoded by 'choice' "
@@ -47,9 +47,6 @@ DISEASE_NODES: list[InfoNode] = [
         "provided via the min/mean numerical fields in combination with unit).",
         dtype=DType.NUMERIC_CATEGORICAL,
         units=["year", NO_UNIT],
-        annotations=[
-            ## (BQB.IS, "symp/SYMP:0000462"),
-        ],
         synonyms=[],
         parents=["health status"],
     ),
@@ -75,17 +72,16 @@ DISEASE_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="ascites",
+        ## (BQB.IS, "symp/SYMP:0000526"),
         description="Ascites. An abdominal symptom consisting of an abnormal accumulation of "
         "serous fluid in the spaces between tissues and organs in the cavity of the "
         "abdomen. The accumulation of fluid in the peritoneal cavity, which may be "
         "serous, hemorrhagic, or the result of tumor metastasis to the peritoneum.",
         parents=["symptom"],
-        annotations=[
-            ## (BQB.IS, "symp/SYMP:0000526"),
-        ],
     ),
     Choice(
         sid="jaundice",
+        ## (BQB.IS, "symp/SYMP:0000539"),
         description="A skin and integumentary tissue symptom that is characterized by a yellowish "
         "pigmentation of the skin, tissues, and certain body fluids is caused by the "
         "deposition of bile pigments that follows interference with normal production "
@@ -93,15 +89,11 @@ DISEASE_NODES: list[InfoNode] = [
         "of red blood cells (as after internal hemorrhage or in various hemolytic "
         "states).",
         parents=["symptom"],
-        annotations=[
-            ## (BQB.IS, "symp/SYMP:0000539"),
-        ],
     ),
     Choice(
         sid="stasis",
         description="Stasis. Cessation of movement of a body fluid or liquid.",
         parents=["symptom"],
-        annotations=[],
     ),
     Choice(
         sid="biliary-stasis",
@@ -109,7 +101,6 @@ DISEASE_NODES: list[InfoNode] = [
         description="Biliary stasis. Cessation of the flow of bile due to bile duct "
         "blockage or overproduction.",
         parents=["stasis"],
-        annotations=[],
         synonyms=["intrahepatic billiary stasis"],
     ),
     Choice(
@@ -117,12 +108,11 @@ DISEASE_NODES: list[InfoNode] = [
         name="liver stasis",
         description="Liver stasis. Cessation of the hepatic blood flow",
         parents=["stasis"],
-        annotations=[],
         synonyms=[],
     ),
     Choice(
         sid="shock",
-        name="shock",
+        ## (BQB.IS, "symp/SYMP:0000450"),
         description="Shock. Shock is the state of insufficient blood flow to the "
         "tissues of the body as a result of problems with the circulatory "
         "system. A life-threatening condition that requires immediate "
@@ -131,14 +121,10 @@ DISEASE_NODES: list[InfoNode] = [
         "include cardiogenic, hemorrhagic, septic, anaphylactic, "
         "and traumatic shock.",
         parents=["symptom"],
-        annotations=[
-            ## (BQB.IS, "symp/SYMP:0000450"),
-        ],
         synonyms=[],
     ),
     Choice(
         sid="macroalbuminuria",
-        name="macroalbuminuria",
         description="An abnormal albumin excretion rate of more than 300 mg/g urine creatinine.",
         parents=["symptom"],
         synonyms=[],
@@ -158,7 +144,7 @@ DISEASE_NODES: list[InfoNode] = [
         dtype=DType.NUMERIC_CATEGORICAL,
         units=["year", NO_UNIT],
         annotations=[
-            (BQB.IS, "doid/DOID:4"),
+            (BQB.IS, "DOID:4"),
             (BQB.IS_VERSION_OF, "NCIT:C2991"),
             (BQB.IS, "efo/0000408"),
         ],
@@ -170,7 +156,7 @@ DISEASE_NODES: list[InfoNode] = [
         "Genetic diseases are diseases in which inherited genes predispose to "
         "increased risk.",
         annotations=[
-            (BQB.IS, "doid/DOID:630"),
+            (BQB.IS, "DOID:630"),
             (BQB.IS, "NCIT:C3101"),
         ],
         synonyms=["genetic disorder"],
@@ -183,7 +169,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="A disease that involves errors in metabolic processes of building or "
         "degradation of molecules.",
         annotations=[
-            (BQB.IS, "doid/DOID:0014667"),
+            (BQB.IS, "DOID:0014667"),
             (BQB.IS, "NCIT:C3235"),
         ],
         synonyms=["metabolic disorder"],
@@ -205,7 +191,6 @@ DISEASE_NODES: list[InfoNode] = [
         name="mixed hypercholesterolemia",
         description="A type of hypercholesterolemia with elevated LDL-C and triglyceride plasma levels.",
         parents=["hypercholesterolemia"],
-        annotations=[],
         synonyms=["combined hypercholesterolemia"],
     ),
     Choice(
@@ -215,7 +200,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="A familial hyperlipidemia characterized by very high levels of "
         "low-density lipoprotein (LDL) and early cardiovascular disease.",
         parents=["hypercholesterolemia"],
-        annotations=[(BQB.IS, "doid/DOID:13810"), (BQB.IS, "efo/0004911")],
+        annotations=[(BQB.IS, "DOID:13810"), (BQB.IS, "efo/0004911")],
     ),
     Choice(
         sid="homozygous-familial-hypercholesterolemia",
@@ -232,7 +217,7 @@ DISEASE_NODES: list[InfoNode] = [
         parents=["familial hypercholesterolemia"],
         synonyms=["autosomal recessive hypercholesterolemia"],
         annotations=[
-            (BQB.IS, "doid/DOID:0090105"),
+            (BQB.IS, "DOID:0090105"),
         ],
     ),
     Choice(
@@ -256,7 +241,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="A disease that is characterized by abnormally rapid cell division.",
         parents=["disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:14566"),
+            (BQB.IS, "DOID:14566"),
         ],
     ),
     Choice(
@@ -266,7 +251,7 @@ DISEASE_NODES: list[InfoNode] = [
         "and metastasis.",
         parents=["disease-of-cellular-proliferation"],
         annotations=[
-            (BQB.IS, "doid/DOID:162"),
+            (BQB.IS, "DOID:162"),
             (BQB.IS_VERSION_OF, "NCIT:C9305"),
             (BQB.IS, "efo/0000311"),
         ],
@@ -279,7 +264,7 @@ DISEASE_NODES: list[InfoNode] = [
         "and lymph nodes.",
         parents=["cancer"],
         annotations=[
-            (BQB.IS, "doid/DOID:2531"),
+            (BQB.IS, "DOID:2531"),
         ],
         synonyms=["blood cancer", "hematologic malignancy"],
     ),
@@ -290,7 +275,7 @@ DISEASE_NODES: list[InfoNode] = [
         "proliferation of blood cells.",
         parents=["cancer"],
         annotations=[
-            (BQB.IS, "doid/DOID:1240"),
+            (BQB.IS, "DOID:1240"),
             (BQB.IS, "NCIT:C3161"),
             (BQB.IS, "omit/0009028"),
         ],
@@ -298,11 +283,10 @@ DISEASE_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="myeloid leukemia",
-        name="myeloid leukemia",
         description="A leukemia that is located_in myeloid tissue.",
         parents=["leukaemia"],
         annotations=[
-            (BQB.IS, "doid/DOID:8692"),
+            (BQB.IS, "DOID:8692"),
         ],
     ),
     Choice(
@@ -315,7 +299,7 @@ DISEASE_NODES: list[InfoNode] = [
         "at any age, but it mostly affects middle aged and older individuals.",
         parents=["myeloid leukemia"],
         annotations=[
-            (BQB.IS, "doid/DOID:0081088"),
+            (BQB.IS, "DOID:0081088"),
         ],
     ),
     # --- hematopoietic system disease ---
@@ -326,7 +310,7 @@ DISEASE_NODES: list[InfoNode] = [
         "cells.",
         parents=["disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:74"),
+            (BQB.IS, "DOID:74"),
         ],
     ),
     Choice(
@@ -335,7 +319,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="A blood disorder characterized by the appearance of sickle-shaped red blood "
         "cells and anemia.",
         parents=["hematopoietic-system-disease"],
-        annotations=[(BQB.IS, "doid/DOID:0081445"), (BQB.IS, "NCIT:C34383")],
+        annotations=[(BQB.IS, "DOID:0081445"), (BQB.IS, "NCIT:C34383")],
     ),
     # --- endocrine system disease ---
     Choice(
@@ -345,7 +329,7 @@ DISEASE_NODES: list[InfoNode] = [
         "which secretes a type of hormone directly into the bloodstream to "
         "regulate the body.",
         parents=["disease"],
-        annotations=[(BQB.IS, "doid/DOID:28")],
+        annotations=[(BQB.IS, "DOID:28")],
     ),
     Choice(
         sid="pancreatic-disease",
@@ -358,18 +342,17 @@ DISEASE_NODES: list[InfoNode] = [
         "lymphomas, and neuroendocrine neoplasms.",
         parents=["endocrine-system-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:26"),
+            (BQB.IS, "DOID:26"),
             (BQB.IS, "efo/0009605"),
         ],
         synonyms=["pancreas disease"],
     ),
     Choice(
         sid="pancreatitis",
-        name="pancreatitis",
         description="A pancreas disease that is characterized by inflammation of the pancreas.",
         parents=["pancreatic-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:4989"),
+            (BQB.IS, "DOID:4989"),
             (BQB.IS, "NCIT:C3306"),
         ],
     ),
@@ -390,7 +373,7 @@ DISEASE_NODES: list[InfoNode] = [
         "intermittent jaundice.",
         parents=["genetic-disease", "disease-of-metabolism"],
         annotations=[
-            (BQB.IS, "doid/DOID:2739"),
+            (BQB.IS, "DOID:2739"),
             (BQB.IS, "NCIT:C84729"),
         ],
     ),
@@ -403,7 +386,7 @@ DISEASE_NODES: list[InfoNode] = [
         "hypothyroidism, thyroiditis, follicular adenoma, and carcinoma.",
         parents=["endocrine system disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:50"),
+            (BQB.IS, "DOID:50"),
             (BQB.IS, "NCIT:C26893"),
             (BQB.IS, "efo/1000627"),
         ],
@@ -420,7 +403,7 @@ DISEASE_NODES: list[InfoNode] = [
         "tachycardia, insomnia, muscle weakness, and tremor.",
         parents=["thyroid-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:7998"),
+            (BQB.IS, "DOID:7998"),
             (BQB.IS, "NCIT:C3123"),
         ],
     ),
@@ -430,7 +413,7 @@ DISEASE_NODES: list[InfoNode] = [
         "Abnormally low levels of thyroid hormone.",
         parents=["thyroid-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:1459"),
+            (BQB.IS, "DOID:1459"),
             (BQB.IS, "NCIT:C26800"),
         ],
     ),
@@ -441,7 +424,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="A disease of anatomical entity that is located_in the gastrointestinal tract.",
         parents=["disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:77"),
+            (BQB.IS, "DOID:77"),
         ],
         synonyms=[],
     ),
@@ -451,7 +434,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="An ulcer in the duodenal wall.",
         parents=["gastrointestinal-system-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:1724"),
+            (BQB.IS, "DOID:1724"),
             (BQB.IS, "NCIT:C26755"),
         ],
         synonyms=["ulceration"],
@@ -467,7 +450,7 @@ DISEASE_NODES: list[InfoNode] = [
         "adenoma, hepatocellular carcinoma, and cholangiocarcinoma.",
         parents=["gastrointestinal-system-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:3118"),
+            (BQB.IS, "DOID:3118"),
             (BQB.IS, "NCIT:C3959"),
         ],
         synonyms=["hepatobiliary disorder"],
@@ -485,7 +468,7 @@ DISEASE_NODES: list[InfoNode] = [
         "lymphoma, and angiosarcoma.",
         parents=["hepatobiliary-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:409"),
+            (BQB.IS, "DOID:409"),
             (BQB.IS, "NCIT:C3196"),  # Liver and Intrahepatic Bile Duct Disorder
             (BQB.IS, "efo/0001421"),
         ],
@@ -497,7 +480,7 @@ DISEASE_NODES: list[InfoNode] = [
         parents=["liver disease"],
         dtype=DType.ABSTRACT,
         annotations=[
-            (BQB.IS_VERSION_OF, "doid/DOID:409"),
+            (BQB.IS_VERSION_OF, "DOID:409"),
             (BQB.IS_VERSION_OF, "NCIT:C3196"),
             (BQB.IS_VERSION_OF, "efo/0001421"),
         ],
@@ -508,7 +491,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="Minimal liver disease",
         parents=["liver-disease-qualitative"],
         annotations=[
-            (BQB.IS_VERSION_OF, "doid/DOID:409"),
+            (BQB.IS_VERSION_OF, "DOID:409"),
             (BQB.IS_VERSION_OF, "NCIT:C3196"),
             (BQB.IS_VERSION_OF, "efo/0001421"),
         ],
@@ -519,7 +502,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="Mild liver disease",
         parents=["liver-disease-qualitative"],
         annotations=[
-            (BQB.IS_VERSION_OF, "doid/DOID:409"),
+            (BQB.IS_VERSION_OF, "DOID:409"),
             (BQB.IS_VERSION_OF, "NCIT:C3196"),
             (BQB.IS_VERSION_OF, "efo/0001421"),
         ],
@@ -530,7 +513,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="Moderate liver disease",
         parents=["liver-disease-qualitative"],
         annotations=[
-            (BQB.IS_VERSION_OF, "doid/DOID:409"),
+            (BQB.IS_VERSION_OF, "DOID:409"),
             (BQB.IS_VERSION_OF, "NCIT:C3196"),
             (BQB.IS_VERSION_OF, "efo/0001421"),
         ],
@@ -541,14 +524,13 @@ DISEASE_NODES: list[InfoNode] = [
         description="Severe or end-stage liver disease",
         parents=["liver-disease-qualitative"],
         annotations=[
-            (BQB.IS_VERSION_OF, "doid/DOID:409"),
+            (BQB.IS_VERSION_OF, "DOID:409"),
             (BQB.IS_VERSION_OF, "NCIT:C3196"),
             (BQB.IS_VERSION_OF, "efo/0001421"),
         ],
     ),
     Choice(
         sid="hemochromatosis",
-        name="hemochromatosis",
         description="A metal metabolism disorder characterized by the accumulation of iron in "
         "various organs of the body. Accumulation of iron in internal organs. "
         "Disorder due to the deposition of hemosiderin in the parenchymal cells, "
@@ -556,7 +538,7 @@ DISEASE_NODES: list[InfoNode] = [
         "and pituitary.",
         parents=["genetic-disease", "disease-of-metabolism"],
         annotations=[
-            (BQB.IS, "doid/DOID:2352"),
+            (BQB.IS, "DOID:2352"),
             (BQB.IS, "NCIT:C82892"),
             (BQB.IS, "efo/1000642"),
         ],
@@ -567,14 +549,11 @@ DISEASE_NODES: list[InfoNode] = [
         name="liver damage",
         description="Damage of the liver, e.g., necrosis due to acetaminophen overdose.",
         parents=["liver disease"],
-        annotations=[],
     ),
     Choice(
         sid="subacute hepatic necrosis",
-        name="subacute hepatic necrosis",
         description="Subacute hepatic necrosis.",
         parents=["liver-damage"],
-        annotations=[],
         synonyms=["SHN"],
     ),
     Choice(
@@ -596,7 +575,7 @@ DISEASE_NODES: list[InfoNode] = [
         label="hepatocellular carcinoma (HCC)",
         description="Hepatocellular carcinoma. A malignant tumor that arises from hepatocytes.",
         parents=["liver disease", "cancer"],
-        annotations=[(BQB.IS, "doid/DOID:684"), (BQB.IS, "NCIT:C3099")],
+        annotations=[(BQB.IS, "DOID:684"), (BQB.IS, "NCIT:C3099")],
         synonyms=["HCC"],
     ),
     Choice(
@@ -607,28 +586,26 @@ DISEASE_NODES: list[InfoNode] = [
         "destroyed and altered with fibrous septa surrounding regenerated "
         "or regenerating parenchymal nodules.",
         parents=["liver disease"],
-        annotations=[(BQB.IS, "doid/DOID:5082"), (BQB.IS, "NCIT:C2951")],
+        annotations=[(BQB.IS, "DOID:5082"), (BQB.IS, "NCIT:C2951")],
     ),
     Choice(
         sid="decompensated-liver-cirrhosis",
         name="decompensated liver cirrhosis",
         description="Decompensated liver cirrhosis",
         parents=["liver cirrhosis"],
-        annotations=[],
     ),
     Choice(
         sid="alcoholic-liver-cirrhosis",
         name="alcoholic liver cirrhosis",
         description="alcoholic liver cirrhosis",
         parents=["liver cirrhosis", "alcoholic liver disease"],
-        annotations=[(BQB.IS, "doid/DOID:14018")],
+        annotations=[(BQB.IS, "DOID:14018")],
     ),
     Choice(
         sid="postnecrotic-liver-cirrhosis",
         name="postnecrotic liver cirrhosis",
         description="Postnecrotic liver cirrhosis",
         parents=["liver cirrhosis"],
-        annotations=[],
     ),
     Choice(
         sid="cryptogenic-liver-cirrhosis",
@@ -649,18 +626,17 @@ DISEASE_NODES: list[InfoNode] = [
         "infection, but sometimes from toxic agents.",
         parents=["liver disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:2237"),
+            (BQB.IS, "DOID:2237"),
             (BQB.IS, "NCIT:C3095"),
-            (BQB.IS, "hp/HP:0012115"),
+            (BQB.IS, "HP:0012115"),
         ],
     ),
     Choice(
         sid="alcoholic-hepatitis",
-        name="alcoholic-hepatitis",
         description="Alcoholic hepatitis.",
         parents=["hepatitis"],
         annotations=[
-            (BQB.IS, "doid/DOID:12351"),
+            (BQB.IS, "DOID:12351"),
         ],
     ),
     Choice(
@@ -669,7 +645,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="Drug-induced hepatitis.",
         parents=["hepatitis"],
         annotations=[
-            (BQB.IS, "doid/DOID:2044"),
+            (BQB.IS, "DOID:2044"),
         ],
     ),
     Choice(
@@ -679,7 +655,7 @@ DISEASE_NODES: list[InfoNode] = [
         "the liver.",
         parents=["hepatitis"],
         annotations=[
-            (BQB.IS, "doid/DOID:1844"),
+            (BQB.IS, "DOID:1844"),
         ],
     ),
     Choice(
@@ -689,7 +665,7 @@ DISEASE_NODES: list[InfoNode] = [
         "inflammation of the liver.",
         parents=["viral-hepatitis"],
         annotations=[
-            (BQB.IS, "doid/DOID:12549"),
+            (BQB.IS, "DOID:12549"),
             (BQB.IS, "NCIT:C3096"),
         ],
         synonyms=["HBV"],
@@ -701,13 +677,12 @@ DISEASE_NODES: list[InfoNode] = [
         "inflammation of the liver.",
         parents=["viral-hepatitis"],
         annotations=[
-            (BQB.IS, "doid/DOID:2043"),
+            (BQB.IS, "DOID:2043"),
         ],
         synonyms=["HBV"],
     ),
     Choice(
         sid="hcv",
-        name="hcv",
         label="Hepatitis C virus (HCV)",
         description="Hepatitis C virus (HCV) infection. A viral infectious disease that results_in "
         "inflammation located_in liver, has_material_basis_in Hepatitis C virus, "
@@ -718,7 +693,7 @@ DISEASE_NODES: list[InfoNode] = [
         "has_symptom joint pain, and has_symptom jaundice.",
         parents=["viral hepatitis"],
         annotations=[
-            (BQB.IS_VERSION_OF, "doid/DOID:1883"),
+            (BQB.IS_VERSION_OF, "DOID:1883"),
             (BQB.IS_VERSION_OF, "NCIT:C14312"),
         ],
         synonyms=["hepatitis C"],
@@ -753,7 +728,7 @@ DISEASE_NODES: list[InfoNode] = [
         "extrahepatic cholangiocarcinoma, and gallbladder carcinoma.",
         parents=["hepatobiliary-disease"],
         annotations=[
-            (BQB.IS_VERSION_OF, "doid/DOID:9741"),
+            (BQB.IS_VERSION_OF, "DOID:9741"),
             (BQB.IS_VERSION_OF, "NCIT:C2899"),
         ],
         synonyms=["biliary tract disease"],
@@ -772,14 +747,13 @@ DISEASE_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="pbc",
-        name="pbc",
         label="PBC",
         description="Primary biliary cholangitis or primary biliary cirrhosis (PBC) "
         "(autoimune disease of the liver). A liver cirrhosis characterized by chronic and slow "
         "progressive destruction of intrahepatic bile ducts.",
         parents=["biliary liver disease", "liver cirrhosis"],
         annotations=[
-            (BQB.IS, "doid/DOID:12236"),
+            (BQB.IS, "DOID:12236"),
             (BQB.IS_VERSION_OF, "NCIT:C26718"),
         ],
     ),
@@ -804,40 +778,37 @@ DISEASE_NODES: list[InfoNode] = [
         "of triglyceride fat accumulate in liver cells via the process "
         "of steatosis. ",
         parents=["non-cirrhotic liver disease"],
-        annotations=[(BQB.IS, "doid/DOID:9452"), (BQB.IS, "mondo/0004790")],
+        annotations=[(BQB.IS, "DOID:9452"), (BQB.IS, "mondo/0004790")],
         synonyms=["steatotic liver disease"],
     ),
     Choice(
         sid="nafld",
-        name="nafld",
         label="non-alcoholic fatty liver disease (NAFLD)",
         description="Non-alcoholic fatty liver disease (NAFLD). "
         "A term referring to fatty replacement of the hepatic parenchyma "
         "which is not related to alcohol use.",
         parents=["fatty-liver-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:0080208"),
+            (BQB.IS, "DOID:0080208"),
             (BQB.IS, "NCIT:C84444"),
             (BQB.IS, "efo/0003095"),
         ],
     ),
     Choice(
         sid="nash",
-        name="nash",
         label="NASH",
         description="Non-alcoholic steato-hepatitis (NASH). Fatty replacement and "
         "damage to the hepatocytes not related to alcohol use. "
         "It may lead to cirrhosis and liver failure.",
         parents=["nafld"],
         annotations=[
-            (BQB.IS, "doid/DOID:0080547"),
+            (BQB.IS, "DOID:0080547"),
             (BQB.IS, "efo/1001249"),
             (BQB.IS, "NCIT:C84445"),
         ],
     ),
     Choice(
         sid="mafld",
-        name="mafld",
         label="metabolic dysfunction-associated steatotic liver disease (MAFLD)",
         description="A steatotic liver disease characterized by at least one of five specified "
         "cardiometabolic risk factors and no other discernible cause with normal to "
@@ -849,19 +820,18 @@ DISEASE_NODES: list[InfoNode] = [
         "normal plasma high-density lipoprotein cholesterol.",
         parents=["fatty-liver-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:0080208"),
+            (BQB.IS, "DOID:0080208"),
         ],
     ),
     Choice(
         sid="mash",
-        name="mash",
         label="metabolic dysfunction-associated steatohepatitis (MASH)",
         description="A metabolic dysfunction-associated steatotic liver disease characterized by "
         "the presence of inflammation with hepatocyte injury such as ballooning, with "
         "or without fibrosis.",
         parents=["mafld"],
         annotations=[
-            (BQB.IS, "doid/DOID:0080547"),
+            (BQB.IS, "DOID:0080547"),
         ],
     ),
     Choice(
@@ -879,7 +849,7 @@ DISEASE_NODES: list[InfoNode] = [
         "liver function.",
         parents=["liver disease"],
         annotations=[
-            (BQB.IS, "hp/HP:0001395"),
+            (BQB.IS, "HP:0001395"),
             (BQB.IS_VERSION_OF, "NCIT:C3044"),  # fibrosis
             (BQB.IS_VERSION_OF, "efo/0006890"),  # fibrosis
         ],
@@ -922,7 +892,7 @@ DISEASE_NODES: list[InfoNode] = [
         parents=["disease"],
         synonyms=["kidney disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:557"),
+            (BQB.IS, "DOID:557"),
             (BQB.IS, "NCIT:C3149"),
             (BQB.IS, "efo/0003086"),
         ],
@@ -960,11 +930,10 @@ DISEASE_NODES: list[InfoNode] = [
         "number of nephrons.",
         parents=["renal-disease"],
         synonyms=[],
-        annotations=[(BQB.IS, "doid/DOID:0080204"), (BQB.IS, "efo/0008678")],
+        annotations=[(BQB.IS, "DOID:0080204"), (BQB.IS, "efo/0008678")],
     ),
     Choice(
         sid="renal carcinoma",
-        name="renal carcinoma",
         description="A carcinoma arising from the epithelium of the renal parenchyma "
         "or the renal pelvis. The majority are renal cell carcinomas. "
         "Kidney carcinomas usually affect middle aged and elderly adults. "
@@ -986,7 +955,7 @@ DISEASE_NODES: list[InfoNode] = [
         "urination, cloudy or bloody urine, and confusion.",
         parents=["renal-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:11400"),
+            (BQB.IS, "DOID:11400"),
             (BQB.IS, "NCIT:C34965"),
             (BQB.IS, "efo/1001141"),
         ],
@@ -997,7 +966,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="Chronic pyelonephritis. Persistent pyelonephritis.",
         parents=["pyelonephritis"],
         annotations=[
-            (BQB.IS, "doid/DOID:1076"),
+            (BQB.IS, "DOID:1076"),
             (BQB.IS, "NCIT:C123216"),
         ],
     ),
@@ -1008,7 +977,7 @@ DISEASE_NODES: list[InfoNode] = [
         "chronic hypertension. Nephrosclerosis leads to renal ischemia.",
         parents=["renal disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:11664"),
+            (BQB.IS, "DOID:11664"),
             (BQB.IS, "efo/1000041"),
         ],
     ),
@@ -1025,7 +994,7 @@ DISEASE_NODES: list[InfoNode] = [
         "characterized by the presence of renal cysts.",
         parents=["renal disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:2975"),
+            (BQB.IS, "DOID:2975"),
             (BQB.IS, "efo/0008615"),
         ],
         synonyms=["cystic degeneration of the kidney", "cystic kidneys"],
@@ -1039,7 +1008,7 @@ DISEASE_NODES: list[InfoNode] = [
         synonyms=["PKD"],
         parents=["cystic kidney disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:0080322"),
+            (BQB.IS, "DOID:0080322"),
             (BQB.IS, "NCIT:C75464"),
         ],
     ),
@@ -1054,7 +1023,7 @@ DISEASE_NODES: list[InfoNode] = [
         "by scarring of the blood vessels.",
         parents=["renal disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:0050851"),
+            (BQB.IS, "DOID:0050851"),
             (BQB.IS, "NCIT:C120888"),
         ],
     ),
@@ -1067,7 +1036,7 @@ DISEASE_NODES: list[InfoNode] = [
         "diabetes, and malignancies.",
         parents=["renal-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:2921"),
+            (BQB.IS, "DOID:2921"),
             (BQB.IS, "NCIT:C26784"),
         ],
     ),
@@ -1114,7 +1083,7 @@ DISEASE_NODES: list[InfoNode] = [
         "help fight diseases and help stabilize body temperature and pH to maintain homeostasis.",
         parents=["disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:1287"),
+            (BQB.IS, "DOID:1287"),
             (BQB.IS, "NCIT:C2931"),
             (BQB.IS, "efo/0000319"),
         ],
@@ -1127,7 +1096,7 @@ DISEASE_NODES: list[InfoNode] = [
         "and functional abnormalities. A cardiovascular system disease that involves the heart.",
         parents=["cardiovascular_disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:114"),
+            (BQB.IS, "DOID:114"),
             (BQB.IS, "efo/0003777"),
         ],
     ),
@@ -1154,7 +1123,7 @@ DISEASE_NODES: list[InfoNode] = [
         "liver, engorged neck veins, and pulmonary rales.",
         parents=["heart-failure"],
         annotations=[
-            (BQB.IS, "doid/DOID:6000"),
+            (BQB.IS, "DOID:6000"),
             (BQB.IS, "efo/0000373"),
             (BQB.IS, "NCIT:C3080"),
         ],
@@ -1195,7 +1164,7 @@ DISEASE_NODES: list[InfoNode] = [
         "blood supply to the area, as in coronary thrombosis.",
         parents=["cardiovascular-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:5844"),
+            (BQB.IS, "DOID:5844"),
             (BQB.IS, "NCIT:C27996"),
         ],
     ),
@@ -1277,7 +1246,7 @@ DISEASE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "NCIT:C34797"),
             (BQB.IS, "efo/0001068"),
-            (BQB.IS, "doid/DOID:12365"),
+            (BQB.IS, "DOID:12365"),
         ],
     ),
     Choice(
@@ -1286,14 +1255,14 @@ DISEASE_NODES: list[InfoNode] = [
         description="A nervous system disease that affects either the spinal cord (myelopathy) or brain "
         "(encephalopathy) of the central nervous system.",
         parents=["disease"],
-        annotations=[(BQB.IS, "doid/DOID:331")],
+        annotations=[(BQB.IS, "DOID:331")],
     ),
     Choice(
         sid="brain-disease",
         name="brain disease",
         description="A central nervous system disease that is located_in the brain.",
         parents=["central-nervous-system-disease"],
-        annotations=[(BQB.IS, "doid/DOID:936")],
+        annotations=[(BQB.IS, "DOID:936")],
     ),
     Choice(
         sid="epilepsy",
@@ -1307,7 +1276,7 @@ DISEASE_NODES: list[InfoNode] = [
         "(5) temporal patterns (e.g., nocturnal epilepsy).",
         parents=["brain-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:1826"),
+            (BQB.IS, "DOID:1826"),
             (BQB.IS, "efo/0000474"),
         ],
     ),
@@ -1321,8 +1290,8 @@ DISEASE_NODES: list[InfoNode] = [
         "slowness of movement and difficulty with walking and gait.",
         parents=["brain-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:0080855"),
-            (BQB.IS, "hp/HP:0001300"),
+            (BQB.IS, "DOID:0080855"),
+            (BQB.IS, "HP:0001300"),
             (BQB.IS, "SNOMEDCT:32798002"),
         ],
     ),
@@ -1336,14 +1305,13 @@ DISEASE_NODES: list[InfoNode] = [
         "classic migraine (with aura or neurological symptoms).",
         parents=["brain-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:6364"),
+            (BQB.IS, "DOID:6364"),
             (BQB.IS, "efo/0003821"),
             (BQB.IS, "NCIT:C89715"),
         ],
     ),
     Choice(
         sid="stroke",
-        name="stroke",
         description="A group of pathological conditions characterized by sudden, non-convulsive "
         "loss of neurological function due to brain ischemia or intracranial "
         "hemorrhages. "
@@ -1352,7 +1320,7 @@ DISEASE_NODES: list[InfoNode] = [
         "in neurological damage.",
         parents=["brain-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:3454"),
+            (BQB.IS, "DOID:3454"),
             (BQB.IS, "NCIT:C143862"),
             (BQB.IS, "efo/0000712"),
         ],
@@ -1365,7 +1333,7 @@ DISEASE_NODES: list[InfoNode] = [
         "associated with subjective distress or disability that occurs in an "
         "individual, and which are not a part of normal development or culture.",
         parents=["disease"],
-        annotations=[(BQB.IS, "doid/DOID:936")],
+        annotations=[(BQB.IS, "DOID:936")],
     ),
     Choice(
         sid="psychatric-disorder",
@@ -1390,7 +1358,7 @@ DISEASE_NODES: list[InfoNode] = [
         "thinking, and retreat from reality.",
         parents=["disease-of-mental-health"],
         annotations=[
-            (BQB.IS, "doid/DOID:5419"),
+            (BQB.IS, "DOID:5419"),
             (BQB.IS, "NCIT:C3362"),
             (BQB.IS, "efo/0000692"),
         ],
@@ -1401,7 +1369,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="Disease of glucose metabolism or abnormality of glucose homeostasis.",
         parents=["disease-of-metabolism"],
         annotations=[
-            (BQB.IS, "doid/DOID:4194"),
+            (BQB.IS, "DOID:4194"),
         ],
         synonyms=["glucose metabolism disease"],
     ),
@@ -1415,9 +1383,9 @@ DISEASE_NODES: list[InfoNode] = [
         "intravenous administration of glucose.",
         parents=["disease of glucose metabolism"],
         annotations=[
-            (BQB.IS, "doid/DOID:11716"),
-            (BQB.IS, "hp/HP:0040270"),
-            (BQB.IS, "mp/MP:0005293"),
+            (BQB.IS, "DOID:11716"),
+            (BQB.IS, "HP:0040270"),
+            (BQB.IS, "MP:0005293"),
             (BQB.IS, "efo/0002546"),
         ],
         synonyms=["prediabetes"],
@@ -1429,7 +1397,7 @@ DISEASE_NODES: list[InfoNode] = [
         "insulin resistance/desensitization.",
         parents=["disease-of-glucose-metabolism"],
         annotations=[
-            (BQB.IS, "doid/DOID:9351"),
+            (BQB.IS, "DOID:9351"),
             (BQB.IS, "NCIT:C2985"),
             (BQB.IS, "efo/0000400"),
         ],
@@ -1443,7 +1411,7 @@ DISEASE_NODES: list[InfoNode] = [
         "cells resulting in absent or extremely low insulin production.",
         parents=["diabetes"],
         annotations=[
-            (BQB.IS, "doid/DOID:9744"),
+            (BQB.IS, "DOID:9744"),
             (BQB.IS, "NCIT:C2986"),
             (BQB.IS, "efo/0001359"),
         ],
@@ -1459,7 +1427,7 @@ DISEASE_NODES: list[InfoNode] = [
         "environmental factors and heredity.",
         parents=["diabetes"],
         annotations=[
-            (BQB.IS, "doid/DOID:9352"),
+            (BQB.IS, "DOID:9352"),
             (BQB.IS, "NCIT:C26747"),
             (BQB.IS, "efo/0001360"),
         ],
@@ -1484,7 +1452,7 @@ DISEASE_NODES: list[InfoNode] = [
         "the body which lack the ability to metastasize.",
         parents=["disease-of-cellular-proliferation"],
         synonyms=[],
-        annotations=[(BQB.IS, "doid/DOID:0060072")],
+        annotations=[(BQB.IS, "DOID:0060072")],
     ),
     Choice(
         sid="prostata-adenoma",
@@ -1511,7 +1479,7 @@ DISEASE_NODES: list[InfoNode] = [
             "prostate adenoma",
         ],
         annotations=[
-            (BQB.IS, "doid/DOID:2883"),
+            (BQB.IS, "DOID:2883"),
             (BQB.IS, "efo/0000284"),
         ],
     ),
@@ -1542,7 +1510,6 @@ DISEASE_NODES: list[InfoNode] = [
         description="An organ system cancer that originates in the bladder.",
         parents=["cancer"],
         synonyms=[],
-        annotations=[],
     ),
     Choice(
         sid="endometrial-cancer",
@@ -1605,12 +1572,11 @@ DISEASE_NODES: list[InfoNode] = [
         parents=["disease"],
         synonyms=[],
         annotations=[
-            (BQB.IS, "doid/DOID:1579"),
+            (BQB.IS, "DOID:1579"),
         ],
     ),
     Choice(
         sid="asthma",
-        name="asthma",
         description="Asthma. A chronic respiratory disease manifested as difficulty "
         "breathing due to the narrowing of bronchial passageways. "
         "Asthma is characterized by increased responsiveness of the "
@@ -1618,21 +1584,20 @@ DISEASE_NODES: list[InfoNode] = [
         "of the air passages with resultant dyspnea, cough, and wheezing.",
         parents=["respiratory-system-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:2841"),
+            (BQB.IS, "DOID:2841"),
             (BQB.IS, "NCIT:C28397"),
             (BQB.IS, "efo/0000270"),
         ],
     ),
     Choice(
         sid="bronchitis",
-        name="bronchitis",
         description="A bronchial disease that is an inflammation of the bronchial tubes. "
         "It is caused by bacteria and viruses. The disease has_symptom cough with "
         "mucus, has_symptom shortness of breath, has_symptom low fever and "
         "has_symptom chest tightness.",
         parents=["respiratory-system-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:6132"),
+            (BQB.IS, "DOID:6132"),
         ],
     ),
     Choice(
@@ -1660,7 +1625,7 @@ DISEASE_NODES: list[InfoNode] = [
         parents=["respiratory-system-disease"],
         synonyms=[],
         annotations=[
-            (BQB.IS, "doid/DOID:850"),
+            (BQB.IS, "DOID:850"),
         ],
     ),
     Choice(
@@ -1674,7 +1639,7 @@ DISEASE_NODES: list[InfoNode] = [
         parents=["lung disease", "cancer"],
         synonyms=["Lung carcinoma", "LNCR"],
         annotations=[
-            (BQB.IS, "doid/DOID:1324"),
+            (BQB.IS, "DOID:1324"),
             (BQB.IS, "NCIT:C2926"),
         ],
     ),
@@ -1694,13 +1659,12 @@ DISEASE_NODES: list[InfoNode] = [
             "lung non-squamous non-small cell carcinoma",
         ],
         annotations=[
-            (BQB.IS, "doid/DOID:0080521"),
+            (BQB.IS, "DOID:0080521"),
             (BQB.IS, "efo/0003060"),
         ],
     ),
     Choice(
         sid="pneumonia",
-        name="pneumonia",
         description="A lung disease that involves lung parenchyma or alveolar "
         "inflammation and abnormal alveolar filling with fluid "
         "(consolidation and exudation). It results from infection with "
@@ -1714,7 +1678,7 @@ DISEASE_NODES: list[InfoNode] = [
         parents=["lung-disease"],
         synonyms=[],
         annotations=[
-            (BQB.IS, "doid/DOID:552"),
+            (BQB.IS, "DOID:552"),
             (BQB.IS, "efo/0003106"),
         ],
     ),
@@ -1724,7 +1688,6 @@ DISEASE_NODES: list[InfoNode] = [
         description="Extrahepatic Portal Obstruction. An obstruction of the "
         "extrahepatic portal vein.",
         parents=["liver disease"],
-        annotations=[],
     ),
     Choice(
         sid="sleep-disorder",
@@ -1732,19 +1695,18 @@ DISEASE_NODES: list[InfoNode] = [
         description="A disease of mental health that involves disruption of sleep patterns.",
         parents=["disease-of-mental-health"],
         annotations=[
-            (BQB.IS, "doid/DOID:535"),
+            (BQB.IS, "DOID:535"),
         ],
     ),
     Choice(
         sid="central sleep apnea",
-        name="central sleep apnea",
         description="Central Sleep Apnea. The periodic cessation of breathing while "
         "asleep that occurs secondary to the decreased responsiveness of "
         "the respiratory center of the brain to carbon dioxide, resulting "
         "in alternating cycles of apnea and hyperpnea.",
         parents=["sleep-disorder"],
         annotations=[
-            (BQB.IS, "doid/DOID:9220"),
+            (BQB.IS, "DOID:9220"),
             (BQB.IS, "NCIT:C116046"),
         ],
     ),
@@ -1759,7 +1721,7 @@ DISEASE_NODES: list[InfoNode] = [
         "See also 'blood pressure'.",
         parents=["cardiovascular_disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:10763"),
+            (BQB.IS, "DOID:10763"),
             (BQB.IS, "NCIT:C3117"),
             (BQB.IS, "efo/0000537"),
         ],
@@ -1770,7 +1732,6 @@ DISEASE_NODES: list[InfoNode] = [
         name="arterial hypertension",
         description="Blood pressure that is abnormally high.",
         parents=["hypertension"],
-        annotations=[],
         synonyms=[],
     ),
     Choice(
@@ -1780,7 +1741,7 @@ DISEASE_NODES: list[InfoNode] = [
         synonyms=[],
         parents=["heart-disease"],
         annotations=[
-            (BQB.IS, "doid/DOID:0050700"),
+            (BQB.IS, "DOID:0050700"),
             (BQB.IS, "NCIT:C34830"),
         ],
     ),
@@ -1793,7 +1754,7 @@ DISEASE_NODES: list[InfoNode] = [
         synonyms=["left ventricular impairment"],
         parents=["cardiomyopathy"],
         annotations=[
-            (BQB.IS_VERSION_OF, "doid/DOID:0060480"),  # left ventricular noncompaction
+            (BQB.IS_VERSION_OF, "DOID:0060480"),  # left ventricular noncompaction
             (BQB.IS, "NCIT:C50629"),
         ],
     ),
@@ -1805,7 +1766,6 @@ DISEASE_NODES: list[InfoNode] = [
         "to either fill or eject adequately.",
         synonyms=["severe left ventricular impairment"],
         parents=["left-ventricular-dysfunction"],
-        annotations=[],
     ),
     # -------------------------------------------------------------------------
     # Disease history
@@ -1818,7 +1778,6 @@ DISEASE_NODES: list[InfoNode] = [
         parents=["health status"],
         dtype=DType.NUMERIC_CATEGORICAL,
         units=["year", NO_UNIT],
-        annotations=[],
     ),
     MeasurementType(
         "family-history-diabetes",

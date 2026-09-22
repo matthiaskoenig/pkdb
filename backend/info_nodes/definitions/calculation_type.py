@@ -10,7 +10,6 @@ CALCULATION_NODES: list[InfoNode] = [
         description="Calculated value.",
         parents=[],
         dtype=DType.ABSTRACT,
-        annotations=[],
     ),
     CalculationType(
         "geometric mean",
@@ -19,7 +18,7 @@ CALCULATION_NODES: list[InfoNode] = [
         parents=["calculation"],
         dtype=DType.CATEGORICAL,
         annotations=[
-            (BQB.IS, "stato/STATO:0000396"),
+            (BQB.IS, "STATO:0000396"),
         ],
     ),
     CalculationType(
@@ -30,7 +29,7 @@ CALCULATION_NODES: list[InfoNode] = [
         parents=["calculation"],
         dtype=DType.CATEGORICAL,
         annotations=[
-            (BQB.IS, "stato/STATO:0000401"),
+            (BQB.IS, "STATO:0000401"),
         ],
     ),
 ]

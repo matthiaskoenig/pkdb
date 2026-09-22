@@ -45,4 +45,4 @@
 5. The original data may be subject to rights claimed by third parties, including but not limited to, patent, copyright, other intellectual property rights, biodiversity-related access and benefit-sharing rights. It is the responsibility of users of PK-DB services to ensure that their exploitation of the data does not infringe any of the rights of such third parties.
 
 
-&copy; 2017-2025 Jan Grzegorzewski & Matthias König; https://livermetabolism.com.
+&copy; 2017-2026 Jan Grzegorzewski & Matthias König; https://livermetabolism.com.

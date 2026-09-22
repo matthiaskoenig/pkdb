@@ -1,0 +1,133 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0003144",
+  "lang": "en",
+  "description": [
+    "Inability of the heart to pump blood at an adequate rate to meet tissue metabolic requirements. Clinical symptoms of heart failure include: unusual dyspnea on light exertion, recurrent dyspnea occurring in the supine position, fluid retention or rales, jugular venous distension, pulmonary edema on physical exam, or pulmonary edema on chest x-ray presumed to be cardiac dysfunction."
+  ],
+  "synonyms": [
+    "Heart failure (disorder)",
+    "Heart failure NOS (disorder)",
+    "Heart failure NOS",
+    "Heart failure, unspecified",
+    "Heart: [weak] or [failure NOS]",
+    "Weak heart",
+    "cardiac dysfunction"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10:I50",
+      "ICD9:428",
+      "MESH:D006333",
+      "MedDRA:10007554",
+      "MedDRA:10007564",
+      "MedDRA:10019279",
+      "MedDRA:10019284",
+      "MedDRA:10019285",
+      "NCIt:C50577",
+      "SNOMEDCT:84114007"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0005252, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0005252"
+    ],
+    "term editor": [
+      "Catherine Leroy",
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005252"
+    ]
+  },
+  "label": "obsolete_heart failure",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005252",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0003144",
+  "obo_id": "EFO:0003144",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD10",
+      "id": "I50",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/I50"
+    },
+    {
+      "database": "ICD9",
+      "id": "428",
+      "description": null,
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=428"
+    },
+    {
+      "database": "MESH",
+      "id": "D006333",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D006333"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10007554",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10007554"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10007564",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10007564"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10019279",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10019279"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10019284",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10019284"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10019285",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10019285"
+    },
+    {
+      "database": "NCIt",
+      "id": "C50577",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C50577"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "84114007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/84114007"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

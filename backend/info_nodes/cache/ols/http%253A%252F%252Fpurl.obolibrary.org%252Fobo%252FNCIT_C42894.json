@@ -1,0 +1,172 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C42894",
+  "lang": "en",
+  "description": [
+    "A semi-solid composed of synthetic, polymerized polysaccharide and flavorings, intended to be chewed to release active and/or inert ingredient(s)."
+  ],
+  "synonyms": [
+    "Chewing Gum Dosage Form",
+    "Chewing Gum Dose Form",
+    "Chewing Gum",
+    "GUM CHEWING",
+    "GUM, CHEWING",
+    "Gum, chewing",
+    "Medicated chewing-gum"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A sweetened and flavored insoluble plastic material of various shapes which when chewed, releases a drug substance into the oral cavity. (NCI)",
+      "Solid single-dose preparation consisting of a basis, mainly composed of gums, intended to be chewed but not swallowed. The active substance(s) is (are) released in saliva by chewing. Medicated chewing gum is intended for local treatment of mouth diseases or systemic delivery after absorption through the oral mucosa or from the gastrointestinal tract."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "EDQM-HC",
+      "FDA",
+      "NCPDP"
+    ],
+    "FDA_Table": [
+      "Dosage Form (C-DRG-00201)"
+    ],
+    "Has_Pharmaceutical_Administration_Method": [
+      "http://purl.obolibrary.org/obo/NCIT_C149370"
+    ],
+    "Has_Pharmaceutical_Basic_Dose_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C154491"
+    ],
+    "Has_Pharmaceutical_Intended_Site": [
+      "http://purl.obolibrary.org/obo/NCIT_C149731",
+      "http://purl.obolibrary.org/obo/NCIT_C25311"
+    ],
+    "Has_Pharmaceutical_Release_Characteristics": [
+      "http://purl.obolibrary.org/obo/NCIT_C149409"
+    ],
+    "Has_Pharmaceutical_State_Of_Matter": [
+      "http://purl.obolibrary.org/obo/NCIT_C45300"
+    ],
+    "Has_Pharmaceutical_Transformation": [
+      "http://purl.obolibrary.org/obo/NCIT_C149700"
+    ],
+    "Legacy Concept Name": [
+      "Chewing_Gum_Dosage_Form"
+    ],
+    "Preferred_Name": [
+      "Chewing Gum Dosage Form"
+    ],
+    "Semantic_Type": [
+      "Biomedical or Dental Material"
+    ],
+    "UMLS_CUI": [
+      "C1321911"
+    ],
+    "code": [
+      "C42894"
+    ]
+  },
+  "label": "Chewing Gum Dosage Form",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C42894",
+  "obo_id": "NCIT:C42894",
+  "in_subset": [
+    "NCIT_C148636",
+    "NCIT_C150103",
+    "NCIT_C175439",
+    "NCIT_C54452",
+    "NCIT_C54456",
+    "NCIT_C61410",
+    "NCIT_C66726",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C89508"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Chewing Gum Dosage Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Chewing Gum Dose Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Chewing Gum",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "GUM CHEWING",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "GUM, CHEWING",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gum, chewing",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Medicated chewing-gum",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42894?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42894/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42894/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42894/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42894/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42894/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42894/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42894/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42894/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42894/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42894/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

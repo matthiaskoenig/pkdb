@@ -1,0 +1,158 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0001421",
+  "lang": "en",
+  "description": [
+    "Any disease or dysfunction of the liver and the intrahepatic bile ducts.",
+    "Pathological processes of the LIVER."
+  ],
+  "synonyms": [
+    "Disease of liver",
+    "Disease, Liver",
+    "Diseases, Liver",
+    "Disorder of liver",
+    "Dysfunction, Liver",
+    "Dysfunctions, Liver",
+    "Hepatopathy",
+    "LD - Liver disease",
+    "LIVER DIS",
+    "Liver Diseases",
+    "Liver Disorder",
+    "Liver Dysfunction",
+    "Liver Dysfunctions",
+    "Liver and Intrahepatic Bile Duct Disorder",
+    "Liver disorder NOS (disorder)",
+    "Liver disorder NOS",
+    "Liver disorder in pregnancy (disorder)",
+    "Liver disorder in pregnancy - delivered (disorder)",
+    "Liver disorder in pregnancy NOS (disorder)",
+    "Liver disorder in pregnancy unspecified (disorder)",
+    "Liver disorder in pregnancy",
+    "Liver disorder in pregnancy, unspecified as to episode of care",
+    "Liver disorder in pregnancy, with delivery",
+    "Unspecified disorder of liver",
+    "[X]Diseases of the liver (disorder)",
+    "[X]Diseases of the liver",
+    "disease of liver [Ambiguous]",
+    "disease of the liver (disorder)",
+    "disorder of liver (disorder)",
+    "hepatic disorder",
+    "liver disorder antepartum",
+    "liver disorder in pregnancy - delivered"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:409",
+      "ICD10:K75",
+      "ICD10:K76",
+      "ICD9:573.9",
+      "MESH:D008107",
+      "NCIt:C3196",
+      "NCIt:C50634",
+      "SNOMEDCT:15230009",
+      "SNOMEDCT:199117000",
+      "SNOMEDCT:235856003"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0005154, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0005154"
+    ],
+    "term editor": [
+      "James Malone"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005154"
+    ]
+  },
+  "label": "obsolete_liver disease",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005154",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0001421",
+  "obo_id": "EFO:0001421",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "409",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_409"
+    },
+    {
+      "database": "ICD10",
+      "id": "K75",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/K75"
+    },
+    {
+      "database": "ICD10",
+      "id": "K76",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/K76"
+    },
+    {
+      "database": "ICD9",
+      "id": "573.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D008107",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D008107"
+    },
+    {
+      "database": "NCIt",
+      "id": "C3196",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3196"
+    },
+    {
+      "database": "NCIt",
+      "id": "C50634",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C50634"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "15230009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/15230009"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "199117000",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/199117000"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "235856003",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/235856003"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0001421?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0001421/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

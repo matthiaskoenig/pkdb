@@ -1,0 +1,287 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6757",
+  "lang": "en",
+  "description": [
+    "An imidazolidine-2,4-dione (hydantoin) in which the imidazolidine nucleus carries a methyl group at N-3 and has ethyl and phenyl substituents at C-5. An anticonvulsant, it is no longer available in the USA or the UK but is still studied largely because of its interesting hydroxylation polymorphism."
+  ],
+  "synonyms": [
+    "5-ethyl-3-methyl-5-phenylimidazolidine-2,4-dione",
+    "5-ethyl-3-methyl-5-phenylimidazolidine-2,4-dione",
+    "DL-Mephenytoin",
+    "mefenitoina",
+    "mephenytoin",
+    "mephenytoine",
+    "mephenytoinum",
+    "methylphenetoin",
+    "phenylethylmethylhydantoin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:50-12-4",
+      "drugcentral:1695",
+      "kegg.drug:D00375",
+      "lincs.smallmolecule:LSM-1852",
+      "pubmed:11422005",
+      "pubmed:15282764",
+      "pubmed:25797720",
+      "pubmed:29438107",
+      "reaxys:17282",
+      "wikipedia.en:Mephenytoin"
+    ],
+    "generalized_empirical_formula": [
+      "C12H14N2O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:91914"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6757"
+    ],
+    "inchi_key_string": [
+      "GMHKMTDVRCWUDX-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C12H14N2O2/c1-3-12(9-7-5-4-6-8-9)10(15)14(2)11(16)13-12/h4-8H,3H2,1-2H3,(H,13,16)"
+    ],
+    "mass": [
+      "218.256"
+    ],
+    "monoisotopic_mass": [
+      "218.10553"
+    ],
+    "smiles_string": [
+      "CCC1(c2ccccc2)NC(=O)N(C)C1=O"
+    ]
+  },
+  "label": "mephenytoin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6757",
+  "obo_id": "CHEBI:6757",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "50-12-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=50-12-4"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1695",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1695"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00375",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1852",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11422005",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11422005/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15282764",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15282764/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25797720",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25797720/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29438107",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29438107/"
+    },
+    {
+      "database": "reaxys",
+      "id": "17282",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Mephenytoin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-ethyl-3-methyl-5-phenylimidazolidine-2,4-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-ethyl-3-methyl-5-phenylimidazolidine-2,4-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DL-Mephenytoin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mefenitoina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mephenytoin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mephenytoine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mephenytoinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methylphenetoin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenylethylmethylhydantoin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6757?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6757/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6757/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6757/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6757/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6757/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6757/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6757/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

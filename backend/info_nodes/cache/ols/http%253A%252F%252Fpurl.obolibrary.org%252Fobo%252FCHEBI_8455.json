@@ -1,0 +1,291 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8455",
+  "lang": "en",
+  "description": [
+    "A biguanide compound which has isopropyl and <em>p</em>-chlorophenyl substituents on the terminal N atoms. A prophylactic antimalarial drug, it works by inhibiting the enzyme dihydrofolate reductase, which is involved in the reproduction of the malaria parasites <em>Plasmodium falciparum</em> and <em>P. vivax</em> within the red blood cells."
+  ],
+  "synonyms": [
+    "1-(p-chlorophenyl)-5-isopropylbiguanide",
+    "Chlorguanide",
+    "Chloroguanide",
+    "N-(4-Chlorophenyl)-N'-(isopropyl)-imidodicarbonimidic diamide",
+    "N-(4-chlorophenyl)-N'-(propan-2-yl)imidodicarbonimidic diamide",
+    "N-(4-chlorophenyl)-N'-(propan-2-yl)imidodicarbonimidic diamide",
+    "proguanil",
+    "proguanilum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:500-92-5",
+      "drugbank:DB01131",
+      "drugcentral:2282",
+      "hmdb:HMDB0015263",
+      "kegg.compound:C07631",
+      "kegg.drug:D08428",
+      "lincs.smallmolecule:LSM-2618",
+      "pubmed:10348748",
+      "pubmed:10848923",
+      "pubmed:15504827",
+      "pubmed:8866915",
+      "reaxys:2811599",
+      "wikipedia.en:Proguanil"
+    ],
+    "generalized_empirical_formula": [
+      "C11H16ClN5"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8455"
+    ],
+    "inchi_key_string": [
+      "SSOLNOMRVKKSON-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C11H16ClN5/c1-7(2)15-10(13)17-11(14)16-9-5-3-8(12)4-6-9/h3-7H,1-2H3,(H5,13,14,15,16,17)"
+    ],
+    "mass": [
+      "253.737"
+    ],
+    "monoisotopic_mass": [
+      "253.10942"
+    ],
+    "smiles_string": [
+      "CC(C)NC(=N)NC(=N)Nc1ccc(Cl)cc1"
+    ]
+  },
+  "label": "proguanil",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8455",
+  "obo_id": "CHEBI:8455",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "500-92-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=500-92-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01131",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01131"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2282",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2282"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015263",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015263"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07631",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08428",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-2618",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10348748",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10348748/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10848923",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10848923/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15504827",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15504827/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8866915",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8866915/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2811599",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Proguanil",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-(4-chlorophenyl)-N'-(propan-2-yl)imidodicarbonimidic diamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(p-chlorophenyl)-5-isopropylbiguanide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Chlorguanide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Chloroguanide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(4-Chlorophenyl)-N'-(isopropyl)-imidodicarbonimidic diamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(4-chlorophenyl)-N'-(propan-2-yl)imidodicarbonimidic diamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "proguanil",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "proguanilum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8455?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8455/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8455/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8455/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8455/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8455/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8455/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8455/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

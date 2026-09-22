@@ -53,7 +53,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         "in different tissue, e.g. urine it must be encoded as output.",
         parents=["measurement"],
         dtype=DType.ABSTRACT,
-        annotations=[],
     ),
     MeasurementType(
         sid="ph",
@@ -125,7 +124,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
         units=CONCENTRATION_UNITS,
         annotations=[
             (BQB.IS, "NCIT:C41185"),
-            (BQB.IS, "chmo/https://bioregistry.io/CHMO:0002820"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0002820"),
         ],
     ),
     MeasurementType(
@@ -152,7 +151,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
         units=[DIMENSIONLESS],
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C41185"),
-            (BQB.IS_VERSION_OF, "chmo/https://bioregistry.io/CHMO:0002820"),
+            (BQB.IS_VERSION_OF, "https://bioregistry.io/CHMO:0002820"),
         ],
     ),
     MeasurementType(
@@ -169,7 +168,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
         units=CONCENTRATION_UNITS,
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C41185"),
-            (BQB.IS_VERSION_OF, "chmo/https://bioregistry.io/CHMO:0002820"),
+            (BQB.IS_VERSION_OF, "https://bioregistry.io/CHMO:0002820"),
         ],
     ),
     MeasurementType(
@@ -181,7 +180,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["concentration"],
         dtype=DType.NUMERIC,
         units=CONCENTRATION_UNITS,
-        annotations=[],
         synonyms=["css", "Css", "steady-state minimal concentration"],
     ),
     MeasurementType(
@@ -193,7 +191,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["concentration"],
         dtype=DType.NUMERIC,
         units=CONCENTRATION_UNITS,
-        annotations=[],
         synonyms=["css", "Css", "steady-state maximal concentration"],
     ),
     MeasurementType(
@@ -208,7 +205,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
         units=CONCENTRATION_UNITS,
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C41185"),
-            (BQB.IS_VERSION_OF, "chmo/https://bioregistry.io/CHMO:0002820"),
+            (BQB.IS_VERSION_OF, "https://bioregistry.io/CHMO:0002820"),
         ],
         synonyms=["css", "Css", "steady-state concentration"],
     ),
@@ -236,7 +233,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
         units=CONCENTRATION_UNITS,
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C41185"),
-            (BQB.IS_VERSION_OF, "chmo/https://bioregistry.io/CHMO:0002820"),
+            (BQB.IS_VERSION_OF, "https://bioregistry.io/CHMO:0002820"),
         ],
     ),
     MeasurementType(
@@ -302,7 +299,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
         units=RATE_UNITS,
-        annotations=[],
     ),
     MeasurementType(
         sid="fractional-excretion",
@@ -326,18 +322,15 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     MeasurementType(
         sid="pdr",
-        name="pdr",
         label="plasma disappearance rate (PDR)",
         description="plasma disappearance rate (PDR). Calculated from backward extrapolation of k from fitted curve. "
         "E.g. ICG-PDR",
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
         units=["percent/min"],
-        annotations=[],
     ),
     MeasurementType(
         sid="gamma-globulin-measurement",
@@ -355,7 +348,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
     # inr
     MeasurementType(
         sid="inr",
-        name="inr",
         label="international normalized ratio (INR)",
         description="International normalized ratio (INR).",
         parents=["chemistry measurement"],
@@ -439,7 +431,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
         units=["percent"],
-        annotations=[],
         synonyms=["Emax PT"],
     ),
     # mPT
@@ -541,7 +532,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
         units=["IU/ml", "ng/ml"],
-        annotations=[],
     ),
     MeasurementType(
         sid="anti_xa_activity",
@@ -550,7 +540,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
         units=["IU/ml", "ng/ml"],
-        annotations=[],
     ),
     MeasurementType(
         sid="xa_inhibition",
@@ -560,7 +549,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     MeasurementType(
         sid="xa_inhibition_max",
@@ -570,7 +558,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     MeasurementType(
         sid="coagulation_factor_x",
@@ -580,7 +567,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     # Thrombin
     MeasurementType(
@@ -632,7 +618,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     MeasurementType(
         sid="tgp_ratio",
@@ -643,7 +628,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     MeasurementType(
         sid="tglt",
@@ -654,7 +638,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=TIME_UNITS,
-        annotations=[],
     ),
     MeasurementType(
         sid="tglt_ratio",
@@ -665,7 +648,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     MeasurementType(
         sid="tptg",
@@ -676,7 +658,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=TIME_UNITS,
-        annotations=[],
     ),
     MeasurementType(
         sid="tptg_ratio",
@@ -687,7 +668,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     # HepTest
     MeasurementType(
@@ -698,7 +678,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=TIME_UNITS,
-        annotations=[],
     ),
     MeasurementType(
         sid="heptest_change_relative",
@@ -708,7 +687,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
         units=["percent"],
-        annotations=[],
         synonyms=[],
     ),
     MeasurementType(
@@ -721,7 +699,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=["Thrombotest"],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     MeasurementType(
         sid="thrombin_activity_change_relative",
@@ -731,7 +708,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
         units=["percent"],
-        annotations=[],
         synonyms=[],
     ),
     MeasurementType(
@@ -742,7 +718,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
         units=["percent"],
-        annotations=[],
         synonyms=[],
     ),
     # ---
@@ -773,7 +748,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=["nmol/ml/min"],
-        annotations=[],
     ),
     MeasurementType(
         sid="renin_activity",
@@ -783,7 +757,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=["nmol/ml/min", "ng/ml/min"],
-        annotations=[],
     ),
     MeasurementType(
         sid="renin_activity_change_absolute",
@@ -796,7 +769,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=["nmol/ml/min", "ng/ml/min", "ng/100/ml"],
-        annotations=[],
     ),
     MeasurementType(
         sid="renin_activity_change_relative",
@@ -809,7 +781,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     MeasurementType(
         sid="ace_activity_relative",
@@ -820,7 +791,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     MeasurementType(
         sid="ace_inhibition",
@@ -831,7 +801,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         synonyms=[],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     # FIXME: this must be handled via formulas
     MeasurementType(
@@ -843,7 +812,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["pdr"],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     MeasurementType(
         "retention ratio",
@@ -851,7 +819,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
         units=["percent"],
-        annotations=[],
     ),
     MeasurementType(
         "biochemistry (categorial)",
@@ -894,12 +861,10 @@ MEASUREMENT_NODES: list[InfoNode] = [
         parents=["liver function test", "breath test"],
         dtype=DType.NUMERIC,
         units=["percent*kg/mmole"],
-        annotations=[],
         synonyms=["ABT"],
     ),
     MeasurementType(
         sid="ermbt",
-        name="ermbt",
         label="Erythromycin breath test (ERMBT)",
         description="Erythromycin breath test. The erythromycin breath test (ERMBT) "
         "is a method used to measure metabolism (oxidation and elimination "
@@ -942,7 +907,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
     ),
     MeasurementType(
         sid="osmolarity",
-        name="osmolarity",
         description="The osmoles of solute per liter of solution.",
         parents=["kidney function test"],
         dtype=DType.NUMERIC,
@@ -953,7 +917,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
     # cancer classification
     MeasurementType(
         sid="ecog",
-        name="ecog",
         label="ECOG performance status (PS)",
         description="A performance status scale designed to assess disease progression and its affect on the daily living abilities of the patient. The ECOG Performance Status is a scale from 0 to 5 used to describe a patient`s level of functioning and ability to perform daily activities. ECOG 0 indicates that the patient is fully active and able to carry on all normal activities without restriction. ECOG 1 indicates some restriction in physically strenuous activities, but the patient remains ambulatory and able to perform light or sedentary work. ECOG 2 means the patient is ambulatory and capable of self-care but is unable to work and is up and about for more than 50% of waking hours. ECOG 3 indicates limited self-care, with the patient confined to a bed or chair for more than 50% of waking hours. ECOG 4 represents complete disability, with the patient unable to perform any self-care and completely confined to a bed or chair. ECOG 5 indicates death.",
         parents=["measurement"],
@@ -966,7 +929,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
     ),
     MeasurementType(
         sid="metastasis",
-        name="metastasis",
         description="Information on the metastatasis status. Does the subject have metastasis?. The spread or migration of cancer cells from one part of the body (the organ in which it first appeared) to another. The secondary tumor contains cells that are like those in the original (primary) tumor.",
         parents=["measurement"],
         dtype=DType.BOOLEAN,
@@ -1092,7 +1054,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
     ),
     MeasurementType(
         "hematocrit",
-        name="hematocrit",
         description="Volume-Percentage of red blood cells in blood. The measurement depends on "
         "number and size of the red blood cells.",
         parents=["blood cell measurement"],
@@ -1136,7 +1097,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         label="cell count normal",
         description="Cell count in normal range.",
         parents=["cell count levels"],
-        annotations=[],
     ),
     Choice(
         sid="cell_count_abnormal",
@@ -1144,7 +1104,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         label="cell count abnormal",
         description="Cell count in abnormal range.",
         parents=["cell count levels"],
-        annotations=[],
     ),
     Choice(
         sid="cell_count_elevated",
@@ -1152,7 +1111,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         label="cell count eleveated",
         description="Cell count in eleveated range.",
         parents=["cell count levels"],
-        annotations=[],
     ),
     Choice(
         sid="cell_count_decreased",
@@ -1160,7 +1118,6 @@ MEASUREMENT_NODES: list[InfoNode] = [
         label="cell count decreased",
         description="Cell count in decreased range.",
         parents=["cell count levels"],
-        annotations=[],
     ),
 ]
 
@@ -1276,7 +1233,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="auc_ratio",
-            name="auc_ratio",
             label="AUC ratio",
             description="Ratio of arithmetic AUC. Use with substance ratios (i.e. derived substances such as px/caf). "
             "Often these ratios are given as geometric ratios and must be encoded accordingly. "
@@ -1477,7 +1433,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             "thalf",
-            name="thalf",
             label="elimination half-life",
             description="Elimination half-life for substance, also called terminal half-life. "
             "The terminal half-life refers to the time it takes for the "
@@ -1560,7 +1515,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="cmax",
-            name="cmax",
             label="maximum concentration (Cmax)",
             description="Maximum concentration for given substance.",
             parents=["pharmacokinetic measurement"],
@@ -1570,7 +1524,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="c0",
-            name="c0",
             label="initial concentration (C0)",
             description="Initial concentration (as if the i.v. dose was a bolus)",
             parents=["pharmacokinetic measurement"],
@@ -1580,7 +1533,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="cmin",
-            name="cmin",
             label="minimal concentration (Cmin)",
             description="Minimal concentration for given substance. Importantly the "
             "minimum is after the peak concentration, and refers mostly to "
@@ -1592,7 +1544,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="cthrough",
-            name="cthrough",
             label="through concentration",
             description="Through concentration. Lowest concentration reached by a drug "
             "before the next dose is administered. See also 'cmin' for "
@@ -1604,7 +1555,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="caverage",
-            name="caverage",
             label="average concentration",
             description="Average concentration. Calculated as AUC_enc/tau with "
             "tau being interval of measurement.",
@@ -1616,7 +1566,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="ptf",
-            name="ptf",
             label="percentage of peak-trough fluctuations (PTF)",
             description="Percentage of peak-trough fluctuations. A measurement of "
             "variability of concentration for Cmin and Cmax between dose time "
@@ -1736,7 +1685,6 @@ MEASUREMENT_NODES.extend(
             parents=["pharmacokinetic measurement"],
             dtype=DType.NUMERIC,
             units=["percent/min"],
-            annotations=[],
         ),
         MeasurementType(
             sid="rate",
@@ -1754,7 +1702,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="egp",
-            name="egp",
             label="endogeneous glucose production (EGP)",
             description="Endogenous glucose production (EGP). Production of glucose by the body, mainly via the liver, but "
             "also under fasting conditions small amounts by the kidneys.",
@@ -1798,7 +1745,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="glucose_index",
-            name="glucose_index",
             label="Glucose index",
             description="Parameter, index based on blood measurements to characterize "
             "glucose metabolism.",
@@ -1910,7 +1856,6 @@ MEASUREMENT_NODES.extend(
             "as 'glucose' and tissue 'urine'.",
             parents=["renal measurement"],
             dtype=DType.NUMERIC,
-            annotations=[],
             units=CONCENTRATION_UNITS,
             synonyms=["RT"],
         ),
@@ -1950,7 +1895,6 @@ MEASUREMENT_NODES.extend(
             "voided per time. Should be used with substance 'h2o'.",
             parents=["renal measurement"],
             dtype=DType.NUMERIC,
-            annotations=[],
             units=["l/min", "l/min/kg", "ml/hr/(1.73*m^2)"],
             synonyms=["urinary flow rate"],
         ),
@@ -1960,7 +1904,6 @@ MEASUREMENT_NODES.extend(
             "or physiological parameter pertaining to the gastrointestinal tract (e.g., gastric juice)",
             parents=["physiological measurement"],
             dtype=DType.ABSTRACT,
-            annotations=[],
             synonyms=[],
         ),
         MeasurementType(
@@ -1971,8 +1914,8 @@ MEASUREMENT_NODES.extend(
             parents=["gastric measurement"],
             dtype=DType.NUMERIC,
             annotations=[
-                (BQB.IS, "bto/BTO:0000501"),
-                (BQB.IS, "fma/FMA:62972"),
+                (BQB.IS, "BTO:0000501"),
+                (BQB.IS, "FMA:62972"),
             ],
             units=["l"],
             synonyms=["stomach acid volume"],
@@ -2021,14 +1964,12 @@ MEASUREMENT_NODES.extend(
             name="normal",
             description="Normal blood pressure.",
             parents=["blood pressure (categorical)"],
-            annotations=[],
         ),
         Choice(
             "blood pressure elevated",
             name="elevated",
             description="Elevated blood pressure.",
             parents=["blood pressure (categorical)"],
-            annotations=[],
         ),
         MeasurementType(
             "blood pressure systolic",
@@ -2084,7 +2025,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="blood pressure diastolic",
-            name="blood pressure diastolic",
             description="The blood pressure during the diastolic phase of the heartbeat. The minimum arterial pressure "
             "within the cardiac cycle, usually at the point at which the heart is in a state of relaxation "
             "and expansion. This is the time when the ventricles fill with blood.",
@@ -2162,7 +2102,6 @@ MEASUREMENT_NODES.extend(
             parents=["cardiovascular measurement"],
             dtype=DType.NUMERIC,
             units=PRESSURE_UNITS,
-            annotations=[],
             synonyms=[],
         ),
         MeasurementType(
@@ -2230,7 +2169,6 @@ MEASUREMENT_NODES.extend(
             parents=["cardiovascular measurement"],
             dtype=DType.NUMERIC,
             units=[DIMENSIONLESS],
-            annotations=[],
             synonyms=[
                 "SVR change",
                 "total peripheral resistance change",
@@ -2259,6 +2197,8 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="cvr",
+            # (BQB.IS, "NCIT:C119247"),
+            # (BQB.IS, "SNOMEDCT:276901002"),
             name="carotid vascular resistance",
             label="carotid vascular resistance (CVR)",
             description="The resistance offered by the carotid circulation.",
@@ -2266,10 +2206,6 @@ MEASUREMENT_NODES.extend(
             dtype=DType.NUMERIC,
             units=[DIMENSIONLESS],
             synonyms=["CVR"],
-            annotations=[
-                # (BQB.IS, "NCIT:C119247"),
-                # (BQB.IS, "SNOMEDCT:276901002"),
-            ],
         ),
         MeasurementType(
             sid="pcwp",
@@ -2280,7 +2216,7 @@ MEASUREMENT_NODES.extend(
             "It estimates the left atrial pressure.",
             parents=["cardiovascular measurement"],
             dtype=DType.NUMERIC,
-            units=[DIMENSIONLESS],  # FIXME: units unclear
+            units=[DIMENSIONLESS],
             annotations=[
                 (BQB.IS, "NCIT:C129955"),
             ],
@@ -2301,7 +2237,7 @@ MEASUREMENT_NODES.extend(
             "artery. See also 'Pulmonary capillary wedge pressure (PCWP)'.",
             parents=["cardiovascular measurement"],
             dtype=DType.NUMERIC,
-            units=[DIMENSIONLESS],  # FIXME: units unclear
+            units=[DIMENSIONLESS],
             annotations=[
                 (BQB.IS, "NCIT:C129958"),
             ],
@@ -2317,7 +2253,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="hbf",
-            name="hbf",
             label="Hepatic blood flow",
             description="(Total) Hepatic blood flow (HBF). The volume of blood flowing "
             "through the liver per unit of time. "
@@ -2330,7 +2265,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="pbf",
-            name="pbf",
             label="portal blood flow (PBF)",
             description="Portal blood flow.",
             parents=["blood flow"],
@@ -2368,7 +2302,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="azygos_blood_flow",
-            name="azygos_blood_flow",
             label="Azygos blood flow",
             description="Blood flow through the vena azygos.",
             parents=["blood flow"],
@@ -2377,7 +2310,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="bile_flow",
-            name="bile_flow",
             label="bile flow",
             description="Bile flow.",
             parents=["physiological measurement"],
@@ -2390,7 +2322,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="thalf_gastric_emptying",
-            name="thalf_gastric_emptying",
             label="gastric emptying half-life",
             description="Gastric emptying half-life.",
             parents=["physiological measurement"],
@@ -2399,7 +2330,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="percent_gastric_emptying",
-            name="percent_gastric_emptying",
             label="gastric emptying percentage",
             description="Gastric emptying percentage. How much of the substance is still "
             "found in the stomach.",
@@ -2409,7 +2339,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="rate_gastric_emptying",
-            name="rate_gastric_emptying",
             label="gastric emptying rate",
             description="Gastric emptying rate.",
             parents=["physiological measurement"],
@@ -2491,14 +2420,12 @@ MEASUREMENT_NODES.extend(
             name="normal",
             description="Normal heart rate.",
             parents=["heart rate (categorical)"],
-            annotations=[],
         ),
         Choice(
             "heart rate elevated",
             name="elevated",
             description="Elevated heart rate.",
             parents=["heart rate (categorical)"],
-            annotations=[],
         ),
         MeasurementType(
             sid="ehr",
@@ -2538,7 +2465,6 @@ MEASUREMENT_NODES.extend(
             parents=["ehr-change"],
             dtype=DType.NUMERIC,
             units=["percent*hr"],
-            annotations=[],
             synonyms=["AUEC"],
         ),
         MeasurementType(
@@ -2549,7 +2475,6 @@ MEASUREMENT_NODES.extend(
             parents=["ehr-change"],
             dtype=DType.NUMERIC,
             units=["percent"],
-            annotations=[],
             synonyms=["AUEC/tau", "average under the effect curve"],
         ),
         MeasurementType(
@@ -2560,11 +2485,9 @@ MEASUREMENT_NODES.extend(
             parents=["ehr-change"],
             dtype=DType.NUMERIC,
             units=["percent"],
-            annotations=[],
         ),
         MeasurementType(
             sid="cardiac output",
-            name="cardiac output",
             label="cardiac output (CO)",
             description="Cardiac output (CO). The amount of blood pumped by the heart per unit of time. "
             "The total volume of blood pumped by the heart over a set period of time, conventionally one "
@@ -2581,7 +2504,6 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             sid="left ventricular mass",
-            name="left ventricular mass",
             label="left ventricular mass (LVM)",
             description="Left ventricular mass (LVM)",
             parents=["heart measurement"],
@@ -2714,7 +2636,6 @@ MEASUREMENT_NODES.extend(
             parents=["organ volume"],
             dtype=DType.NUMERIC,
             units=["ml", "ml/kg"],
-            annotations=[],
         ),
     ]
 )
@@ -2907,7 +2828,6 @@ MEASUREMENT_NODES.extend(
             parents=["measurement"],
             dtype=DType.NUMERIC,
             units=[DIMENSIONLESS],
-            annotations=[],
         ),
     ]
 )
@@ -2920,6 +2840,5 @@ for protein in PROTEINS:
         sid=protein,
         description=f"{protein} was detected during western blotting. ",
         parents=["western-blot"],
-        annotations=[],
     )
     MEASUREMENT_NODES.append(choice_protein)

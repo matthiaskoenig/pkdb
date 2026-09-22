@@ -1,0 +1,112 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CMO_0000001",
+  "lang": "en",
+  "description": [
+    "Any value resulting from the quantification of a morphological or physiological parameter pertaining to the heart and/or blood vessels."
+  ],
+  "synonyms": [
+    "cardiovascular event measurement"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "EFO:0004298",
+      "EFO:0006919"
+    ],
+    "has_obo_namespace": [
+      "clinical_measurement_ontology"
+    ],
+    "id": [
+      "CMO:0000001"
+    ]
+  },
+  "label": "cardiovascular measurement",
+  "ontology_name": "cmo",
+  "ontology_prefix": "CMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/cmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CMO_0000001",
+  "obo_id": "CMO:0000001",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "Any value resulting from the quantification of a morphological or physiological parameter pertaining to the heart and/or blood vessels.",
+      "oboXrefs": [
+        {
+          "database": "American_Heritage",
+          "id": "The_American_Heritage_Dictionary_of_the_English_Language--4th_Ed",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "Dorland",
+          "id": "Dorlands_Illustrated_Medical_Dictionary--31st_Ed",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "ISBN",
+          "id": "978-1416049982",
+          "description": null,
+          "url": "https://www.worldcat.org/search?q=bn%3A978-1416049982"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0004298",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0004298"
+    },
+    {
+      "database": "EFO",
+      "id": "0006919",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0006919"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000001?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000001/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000001/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000001/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000001/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000001/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000001/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000001/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000001/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000001/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000001/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

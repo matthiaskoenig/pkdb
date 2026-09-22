@@ -1,0 +1,125 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C66610",
+  "lang": "en",
+  "description": [
+    "A short-acting, first-generation sulfonylurea with hypoglycemic activity. Compared to second-generation sulfonylureas, tolbutamide is more likely to cause adverse effects, such as jaundice. This agent is rapidly metabolized by CYPC29."
+  ],
+  "synonyms": [
+    "N-[(butylamino)carbonyl]-4-methylbenzenesulfonamide",
+    "TOLBUTAMIDE",
+    "Tolbutamide"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "64-77-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:27999"
+    ],
+    "Chemical_Formula": [
+      "C12H18N2O3S"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Tolbutamide"
+    ],
+    "FDA_UNII_Code": [
+      "982XCM1FOI"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C78130"
+    ],
+    "Legacy Concept Name": [
+      "Tolbutamide"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "684270"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "684270"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "684270"
+    ],
+    "Preferred_Name": [
+      "Tolbutamide"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0040374"
+    ],
+    "code": [
+      "C66610"
+    ]
+  },
+  "label": "Tolbutamide",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C66610",
+  "obo_id": "NCIT:C66610",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "N-[(butylamino)carbonyl]-4-methylbenzenesulfonamide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "TOLBUTAMIDE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Tolbutamide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C66610?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C66610/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C66610/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C66610/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C66610/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C66610/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C66610/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

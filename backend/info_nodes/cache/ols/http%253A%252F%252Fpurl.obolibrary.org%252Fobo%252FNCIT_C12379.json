@@ -1,0 +1,163 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C12379",
+  "lang": "en",
+  "description": [
+    "A muscular tube that extends from the end of the small intestine to the anus."
+  ],
+  "synonyms": [
+    "LARGE INTESTINE",
+    "Large Bowel",
+    "Large Intestine",
+    "Large intestine",
+    "Structure of large intestine (body structure)",
+    "large intestine"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A subdivision of the digestive tract that connects the small intestine to the cloaca or anus. Lacks or has few villi.",
+      "The avillous section of the intestine composed of crypts and extending from the terminal small intestine to the external orifice.",
+      "The long, tube-like organ that is connected to the small intestine at one end and the anus at the other. The large intestine has four parts: cecum, colon, rectum, and anal canal. Partly digested food moves through the cecum into the colon, where water and some nutrients and electrolytes are removed. The remaining material, solid waste called stool, moves through the colon, is stored in the rectum, and leaves the body through the anal canal and anus."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CTDC",
+      "GDC",
+      "UBERON",
+      "mCode"
+    ],
+    "Display_Name": [
+      "Large Intestine"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C171435",
+      "http://purl.obolibrary.org/obo/NCIT_C70729"
+    ],
+    "Legacy Concept Name": [
+      "Large_Intestine"
+    ],
+    "Maps_To": [
+      "Large Bowel",
+      "Large bowel, NOS",
+      "Large intestine"
+    ],
+    "Preferred_Name": [
+      "Large Intestine"
+    ],
+    "Semantic_Type": [
+      "Body Part, Organ, or Organ Component"
+    ],
+    "UMLS_CUI": [
+      "C0021851"
+    ],
+    "code": [
+      "C12379"
+    ],
+    "database_cross_reference": [
+      "UBERON:0000059"
+    ]
+  },
+  "label": "Large Intestine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C12379",
+  "obo_id": "NCIT:C12379",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C168655",
+    "NCIT_C168656",
+    "NCIT_C168659",
+    "NCIT_C168663",
+    "NCIT_C173073",
+    "NCIT_C177537",
+    "NCIT_C193006",
+    "NCIT_C193234",
+    "NCIT_C198975",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C74456",
+    "NCIT_C77526",
+    "NCIT_C77529"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "UBERON",
+      "id": "0000059",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/UBERON_0000059"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "LARGE INTESTINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Large Bowel",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Large Intestine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Large intestine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Structure of large intestine (body structure)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "large intestine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12379?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12379/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12379/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12379/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12379/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12379/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12379/graph"
+    },
+    "Anatomic_Structure_Is_Physical_Part_Of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12379/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R82"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

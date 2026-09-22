@@ -1,0 +1,346 @@
+[
+  {
+    "src_id": "2",
+    "src_compound_id": "DB00936"
+  },
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:16914"
+  },
+  {
+    "src_id": "3",
+    "src_compound_id": "SAL"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL424"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "16880297"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "1967"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "29362663"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "118212070"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "338"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "O414PZ4LPZ"
+  },
+  {
+    "src_id": "4",
+    "src_compound_id": "4306"
+  },
+  {
+    "src_id": "49",
+    "src_compound_id": "PD001758"
+  },
+  {
+    "src_id": "50",
+    "src_compound_id": "SALIAC"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "145569"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "21658"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "24601"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "47420"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "5097"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "617"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "765"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "90999"
+  },
+  {
+    "src_id": "5",
+    "src_compound_id": "SAL"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0001895"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID7026368"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00143819"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00361322"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00425074"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00501059"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00501254"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00616239"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01004705"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01012349"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01033526"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01046942"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01059110"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01062360"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01072604"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01081353"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01139749"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01141153"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01228656"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01229085"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01294462"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01361399"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01362218"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01409616"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01424332"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01446237"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01453400"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01494402"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01552798"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01586819"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01706250"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01706263"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01914627"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02022527"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02052752"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02151630"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02268773"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02273505"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02285153"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02289768"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02313909"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02352987"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02352987"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02524665"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02812719"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03056703"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03447925"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03456154"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03503227"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03710174"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03832647"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04192955"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04490967"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04846348"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05536193"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05588999"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05684484"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT06307223"
+  },
+  {
+    "src_id": "51",
+    "src_compound_id": "FDB031164"
+  },
+  {
+    "src_id": "84",
+    "src_compound_id": "Medical uses of salicylic acid"
+  },
+  {
+    "src_id": "84",
+    "src_compound_id": "Salicylic acid"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "Molport-001-769-476"
+  },
+  {
+    "src_id": "34",
+    "src_compound_id": "2416"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "26193"
+  }
+]

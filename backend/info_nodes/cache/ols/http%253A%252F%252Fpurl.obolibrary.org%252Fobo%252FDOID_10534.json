@@ -1,0 +1,290 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_10534",
+  "lang": "en",
+  "description": [
+    "OMIM mapping confirmed by DO. [SN].",
+    "A gastrointestinal system cancer that is located_in the stomach."
+  ],
+  "synonyms": [
+    "gastric cancer",
+    "gastric neoplasm"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "GARD:7704",
+      "ICD10CM:C16",
+      "ICD10CM:C16.2",
+      "ICD10CM:C16.5",
+      "ICD10CM:C16.6",
+      "ICD9CM:151",
+      "ICD9CM:151.4",
+      "ICD9CM:151.5",
+      "ICD9CM:151.6",
+      "MESH:D013274",
+      "MIM:613659",
+      "NCI:C194067",
+      "NCI:C194069",
+      "NCI:C194070",
+      "NCI:C3387",
+      "NCI:C9331",
+      "SNOMEDCT_US_2025_09_01:126824007",
+      "SNOMEDCT_US_2025_09_01:93717002",
+      "SNOMEDCT_US_2025_09_01:93818001",
+      "SNOMEDCT_US_2025_09_01:93867004",
+      "SNOMEDCT_US_2025_09_01:94074003",
+      "UMLS_CUI:C0024623",
+      "UMLS_CUI:C0038356",
+      "UMLS_CUI:C0153421",
+      "UMLS_CUI:C0153422",
+      "UMLS_CUI:C0153423"
+    ],
+    "has_alternative_id": [
+      "DOID:10539",
+      "DOID:10542",
+      "DOID:10543",
+      "DOID:4713"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:10534"
+    ]
+  },
+  "label": "stomach cancer",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_10534",
+  "obo_id": "DOID:10534",
+  "in_subset": [
+    "DO_CFDE_slim",
+    "DO_FlyBase_slim",
+    "DO_RAD_slim",
+    "DO_cancer_slim",
+    "DO_rare_slim",
+    "NCIthesaurus",
+    "TopNodes_DOcancerslim"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A gastrointestinal system cancer that is located_in the stomach.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "GARD",
+      "id": "7704",
+      "description": null,
+      "url": "https://rarediseases.info.nih.gov/?gard_id=7704"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "C16",
+      "description": null,
+      "url": "https://www.icd10data.com/search?s=C16"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "C16.2",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD10CM",
+      "id": "C16.5",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD10CM",
+      "id": "C16.6",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "151",
+      "description": null,
+      "url": "http://icd9cm.chrisendres.com/index.php?action=search&srchtext=151"
+    },
+    {
+      "database": "ICD9CM",
+      "id": "151.4",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "151.5",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "151.6",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D013274",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D013274"
+    },
+    {
+      "database": "MIM",
+      "id": "613659",
+      "description": null,
+      "url": "https://omim.org/MIM:613659"
+    },
+    {
+      "database": "NCI",
+      "id": "C194067",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C194067"
+    },
+    {
+      "database": "NCI",
+      "id": "C194069",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C194069"
+    },
+    {
+      "database": "NCI",
+      "id": "C194070",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C194070"
+    },
+    {
+      "database": "NCI",
+      "id": "C3387",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3387"
+    },
+    {
+      "database": "NCI",
+      "id": "C9331",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C9331"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "126824007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/126824007"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "93717002",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/93717002"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "93818001",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/93818001"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "93867004",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/93867004"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "94074003",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/94074003"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0024623",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0024623"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0038356",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0038356"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0153421",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0153421"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0153422",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0153422"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0153423",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0153423"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_10534?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_10534/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_10534/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_10534/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_10534/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_10534/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_10534/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_10534/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_10534/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_10534/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_10534/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

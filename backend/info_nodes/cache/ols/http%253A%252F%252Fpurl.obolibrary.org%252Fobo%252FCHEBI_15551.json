@@ -1,0 +1,861 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_15551",
+  "lang": "en",
+  "description": [
+    "Prostaglandin F<small><sub>2α</sub></small> in which the hydroxy group at position 9 has been oxidised to the corresponding ketone. Prostaglandin E<small><sub>2</sub></small> is the most common and most biologically potent of mammalian prostaglandins."
+  ],
+  "synonyms": [
+    "(15S)-prostaglandin E2",
+    "(5Z,11alpha,13E,15S)-11,15-dihydroxy-9-oxoprosta-5,13-dien-1-oic acid",
+    "(5Z,13E)-(15S)-11alpha,15-Dihydroxy-9-oxoprost-13-enoate",
+    "(5Z,13E)-(15S)-11alpha,15-Dihydroxy-9-oxoprosta-5,13-dienoate",
+    "(5Z,13E,15S)-11alpha,15-dihydroxy-9-oxoprosta-5,13-dien-1-oic acid",
+    "(5Z,13E,15S)-11alpha,15-dihydroxy-9-oxoprosta-5,13-dien-1-oic acid",
+    "(E,Z)-(1R,2R,3R)-7-(3-Hydroxy-2-((3S)-(3-hydroxy-1-octenyl))-5-oxocyclopentyl)-5-heptenoic acid",
+    "(Z)-7-((1R,2R,3R)-3-hydroxy-2-((S,E)-3-hydroxyoct-1-enyl)-5-oxocyclopentyl)hept-5-enoic acid",
+    "Cervidil",
+    "Cerviprime",
+    "Cerviprost",
+    "Dinoproston",
+    "Enzaprost E",
+    "Glandin-E2",
+    "Minprositin E2",
+    "Minprostin E2",
+    "PGE2",
+    "Prepidil",
+    "Propess",
+    "Prostaglandin E2",
+    "Prostarmon E",
+    "Prostenone",
+    "Prostin E2",
+    "Prostin",
+    "U 12062",
+    "U-12,062",
+    "U-12062",
+    "dinoprostona",
+    "dinoprostone",
+    "dinoprostonum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:2224724",
+      "cas:363-24-6",
+      "drugbank:DB00917",
+      "drugcentral:913",
+      "foodb.food:FDB022498",
+      "hmdb:HMDB0001220",
+      "kegg.compound:C00584",
+      "kegg.drug:D00079",
+      "lincs.smallmolecule:LSM-42919",
+      "lipidmaps:LMFA03010003",
+      "patent:DE2011969",
+      "patent:GB851827",
+      "patent:NL6505799",
+      "patent:US3598858",
+      "pdb-ccd:P2E",
+      "pubmed:11279302",
+      "pubmed:12746806",
+      "pubmed:12859290",
+      "pubmed:14499495",
+      "pubmed:14535055",
+      "pubmed:14703707",
+      "pubmed:15542928",
+      "pubmed:15661432",
+      "pubmed:16405508",
+      "pubmed:16787416",
+      "pubmed:16978535",
+      "pubmed:20671299",
+      "pubmed:2403792",
+      "pubmed:24501112",
+      "pubmed:32898608",
+      "pubmed:33271839",
+      "pubmed:33559528",
+      "pubmed:33685091",
+      "pubmed:33715333",
+      "pubmed:33782420",
+      "pubmed:33811074",
+      "pubmed:33958485",
+      "pubmed:34065827",
+      "pubmed:34071686",
+      "pubmed:34102274",
+      "pubmed:6317292",
+      "pubmed:7224729",
+      "pubmed:74611",
+      "pubmed:7836930",
+      "pubmed:9276764",
+      "reaxys:2224724",
+      "wikipedia.en:Prostaglandin_E2"
+    ],
+    "generalized_empirical_formula": [
+      "C20H32O5"
+    ],
+    "has_alternative_id": [
+      "CHEBI:10910",
+      "CHEBI:10911",
+      "CHEBI:114125",
+      "CHEBI:26323",
+      "CHEBI:4625",
+      "CHEBI:8512"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:15551"
+    ],
+    "inchi_key_string": [
+      "XEYBRNLFEZDVAW-ARSRFYASSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C20H32O5/c1-2-3-6-9-15(21)12-13-17-16(18(22)14-19(17)23)10-7-4-5-8-11-20(24)25/h4,7,12-13,15-17,19,21,23H,2-3,5-6,8-11,14H2,1H3,(H,24,25)/b7-4-,13-12+/t15-,16+,17+,19+/m0/s1"
+    ],
+    "mass": [
+      "352.471"
+    ],
+    "monoisotopic_mass": [
+      "352.22497"
+    ],
+    "smiles_string": [
+      "CCCCC[C@H](O)/C=C/[C@H]1[C@H](O)CC(=O)[C@@H]1C/C=CCCCC(=O)O"
+    ]
+  },
+  "label": "prostaglandin E2",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_15551",
+  "obo_id": "CHEBI:15551",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "2224724",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "363-24-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=363-24-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00917",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00917"
+    },
+    {
+      "database": "drugcentral",
+      "id": "913",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/913"
+    },
+    {
+      "database": "foodb.food",
+      "id": "FDB022498",
+      "description": "foodb.food",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001220",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001220"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00584",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00079",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-42919",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "lipidmaps",
+      "id": "LMFA03010003",
+      "description": "lipidmaps",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMFA03010003"
+    },
+    {
+      "database": "patent",
+      "id": "DE2011969",
+      "description": "patent",
+      "url": "https://www.google.com/patents/DE2011969"
+    },
+    {
+      "database": "patent",
+      "id": "GB851827",
+      "description": "patent",
+      "url": "https://www.google.com/patents/GB851827"
+    },
+    {
+      "database": "patent",
+      "id": "NL6505799",
+      "description": "patent",
+      "url": "https://www.google.com/patents/NL6505799"
+    },
+    {
+      "database": "patent",
+      "id": "US3598858",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3598858"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "P2E",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11279302",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11279302/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12746806",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12746806/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12859290",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12859290/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14499495",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14499495/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14535055",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14535055/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14703707",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14703707/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15542928",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15542928/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15661432",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15661432/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16405508",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16405508/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16787416",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16787416/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16978535",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16978535/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20671299",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20671299/"
+    },
+    {
+      "database": "pubmed",
+      "id": "2403792",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2403792/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24501112",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24501112/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32898608",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32898608/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33271839",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33271839/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33559528",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33559528/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33685091",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33685091/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33715333",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33715333/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33782420",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33782420/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33811074",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33811074/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33958485",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33958485/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34065827",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34065827/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34071686",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34071686/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34102274",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34102274/"
+    },
+    {
+      "database": "pubmed",
+      "id": "6317292",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6317292/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7224729",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7224729/"
+    },
+    {
+      "database": "pubmed",
+      "id": "74611",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/74611/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7836930",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7836930/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9276764",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9276764/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2224724",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Prostaglandin_E2",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(5Z,13E,15S)-11alpha,15-dihydroxy-9-oxoprosta-5,13-dien-1-oic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(15S)-prostaglandin E2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(5Z,11alpha,13E,15S)-11,15-dihydroxy-9-oxoprosta-5,13-dien-1-oic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(5Z,13E)-(15S)-11alpha,15-Dihydroxy-9-oxoprost-13-enoate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(5Z,13E)-(15S)-11alpha,15-Dihydroxy-9-oxoprosta-5,13-dienoate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(5Z,13E,15S)-11alpha,15-dihydroxy-9-oxoprosta-5,13-dien-1-oic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(E,Z)-(1R,2R,3R)-7-(3-Hydroxy-2-((3S)-(3-hydroxy-1-octenyl))-5-oxocyclopentyl)-5-heptenoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(Z)-7-((1R,2R,3R)-3-hydroxy-2-((S,E)-3-hydroxyoct-1-enyl)-5-oxocyclopentyl)hept-5-enoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cervidil",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cerviprime",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cerviprost",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dinoproston",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Enzaprost E",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glandin-E2",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Minprositin E2",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Minprostin E2",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "PGE2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "PGE2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Prepidil",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Propess",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Prostaglandin E2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Prostarmon E",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Prostenone",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Prostin E2",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Prostin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "U 12062",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "U-12,062",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "U-12062",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dinoprostona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dinoprostone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dinoprostonum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15551?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15551/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15551/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15551/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15551/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15551/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15551/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15551/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15551/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

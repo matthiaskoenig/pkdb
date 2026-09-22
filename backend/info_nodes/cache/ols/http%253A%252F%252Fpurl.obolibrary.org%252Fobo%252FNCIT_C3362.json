@@ -1,0 +1,116 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C3362",
+  "lang": "en",
+  "description": [
+    "A major psychotic disorder characterized by abnormalities in the perception or expression of reality. It affects the cognitive and psychomotor functions. Common clinical signs and symptoms include delusions, hallucinations, disorganized thinking, and retreat from reality."
+  ],
+  "synonyms": [
+    "Schizophrenia",
+    "Schizophrenia, unspecified",
+    "schizophrenia"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A group of severe mental disorders in which a person has trouble telling the difference between real and unreal experiences, thinking logically, having normal emotional responses to others, and behaving normally in social situations. Symptoms include seeing, hearing, feeling things that are not there, having false ideas about what is taking place or who one is, nonsense speech, unusual behavior, lack of emotion, and social withdrawal."
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "Cellosaurus",
+      "mCode"
+    ],
+    "Legacy Concept Name": [
+      "Schizophrenia"
+    ],
+    "Preferred_Name": [
+      "Schizophrenia"
+    ],
+    "Semantic_Type": [
+      "Mental or Behavioral Dysfunction"
+    ],
+    "UMLS_CUI": [
+      "C3553161"
+    ],
+    "code": [
+      "C3362"
+    ]
+  },
+  "label": "Schizophrenia",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C3362",
+  "obo_id": "NCIT:C3362",
+  "in_subset": [
+    "NCIT_C156952",
+    "NCIT_C158035",
+    "NCIT_C158520",
+    "NCIT_C165258",
+    "NCIT_C193006",
+    "NCIT_C193201"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Schizophrenia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Schizophrenia, unspecified",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "schizophrenia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3362?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3362/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3362/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3362/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3362/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3362/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3362/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3362/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3362/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3362/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3362/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

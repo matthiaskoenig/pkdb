@@ -1,0 +1,495 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_17245",
+  "lang": "en",
+  "description": [
+    "A one-carbon compound in which the carbon is joined only to a single oxygen. It is a colourless, odourless, tasteless, toxic gas."
+  ],
+  "synonyms": [
+    "C#O",
+    "CARBON MONOXIDE",
+    "CARBON MONOXIDE",
+    "CO",
+    "Carbon monoxide",
+    "Carbon monoxide",
+    "[CO]",
+    "carbon monooxide",
+    "carbon monooxide",
+    "carbon monoxide",
+    "carbon monoxide",
+    "carbon(II) oxide",
+    "carbon(II) oxide"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:1900508",
+      "beilstein:3535285",
+      "beilstein:3587264",
+      "cas:630-08-0",
+      "gmelin:421",
+      "hmdb:HMDB0001361",
+      "kegg.compound:C00237",
+      "kegg.drug:D09706",
+      "metacyc.compound:CARBON-MONOXIDE",
+      "molbase:753",
+      "pdb-ccd:CMO",
+      "pubmed:10085152",
+      "pubmed:10679539",
+      "pubmed:11572959",
+      "pubmed:14527438",
+      "pubmed:14563665",
+      "pubmed:15127883",
+      "pubmed:15598489",
+      "pubmed:16371440",
+      "pubmed:16520836",
+      "pubmed:17041734",
+      "pubmed:18094356",
+      "pubmed:19909254",
+      "pubmed:23762709",
+      "pubmed:7022476",
+      "pubmed:8240252",
+      "pubmed:8620577",
+      "umbbd.compound:c0369",
+      "wikipedia.en:Carbon_monoxide"
+    ],
+    "generalized_empirical_formula": [
+      "CO"
+    ],
+    "has_alternative_id": [
+      "CHEBI:13281",
+      "CHEBI:23013",
+      "CHEBI:3282",
+      "CHEBI:41526"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:17245"
+    ],
+    "inchi_key_string": [
+      "UGFAIRIUMAVXCW-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/CO/c1-2"
+    ],
+    "mass": [
+      "28.01"
+    ],
+    "monoisotopic_mass": [
+      "27.99491"
+    ],
+    "smiles_string": [
+      "[C-]#[O+]"
+    ]
+  },
+  "label": "carbon monoxide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_17245",
+  "obo_id": "CHEBI:17245",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "1900508",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "beilstein",
+      "id": "3535285",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "beilstein",
+      "id": "3587264",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "630-08-0",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=630-08-0"
+    },
+    {
+      "database": "gmelin",
+      "id": "421",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001361",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001361"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00237",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D09706",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CARBON-MONOXIDE",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "molbase",
+      "id": "753",
+      "description": "molbase",
+      "url": "http://www.molbase.com/en/index.php?app=search&search_keyword=753"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "CMO",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10085152",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10085152/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10679539",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10679539/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11572959",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11572959/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14527438",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14527438/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14563665",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14563665/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15127883",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15127883/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15598489",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15598489/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16371440",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16371440/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16520836",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16520836/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17041734",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17041734/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18094356",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18094356/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19909254",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19909254/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23762709",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23762709/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7022476",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7022476/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8240252",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8240252/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8620577",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8620577/"
+    },
+    {
+      "database": "umbbd.compound",
+      "id": "c0369",
+      "description": "umbbd.compound",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Carbon_monoxide",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "CARBON MONOXIDE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Carbon monoxide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbon monooxide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbon monoxide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbon(II) oxide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "C#O",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CARBON MONOXIDE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CO",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CO",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Carbon monoxide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[CO]",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "molbase",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbon monooxide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbon monoxide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbon(II) oxide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17245?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17245/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17245/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17245/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17245/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17245/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17245/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17245/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17245/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,202 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_29133",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(+)-3-hydroxy-N-methylmorphinan",
+    "17-methyl-9alpha,13alpha,14alpha-morphinan-3-ol",
+    "17-methyl-9alpha,13alpha,14alpha-morphinan-3-ol",
+    "d-3-hydroxy-N-methylmorphinan",
+    "dextrorphan",
+    "dextrorphane",
+    "dextrorphanum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:88093",
+      "cas:125-73-5",
+      "lincs.smallmolecule:LSM-36603"
+    ],
+    "generalized_empirical_formula": [
+      "C17H23NO"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:29133"
+    ],
+    "inchi_key_string": [
+      "JAQUASYNZVUNQP-PVAVHDDUSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C17H23NO/c1-18-9-8-17-7-3-2-4-14(17)16(18)10-12-5-6-13(19)11-15(12)17/h5-6,11,14,16,19H,2-4,7-10H2,1H3/t14-,16+,17+/m1/s1"
+    ],
+    "mass": [
+      "257.377"
+    ],
+    "monoisotopic_mass": [
+      "257.17796"
+    ],
+    "smiles_string": [
+      "[H][C@]12CCCC[C@]13CCN(C)[C@H]2Cc1ccc(O)cc13"
+    ]
+  },
+  "label": "dextrorphan",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_29133",
+  "obo_id": "CHEBI:29133",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "88093",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "125-73-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=125-73-5"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-36603",
+      "description": "lincs.smallmolecule",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "17-methyl-9alpha,13alpha,14alpha-morphinan-3-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-3-hydroxy-N-methylmorphinan",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17-methyl-9alpha,13alpha,14alpha-morphinan-3-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "d-3-hydroxy-N-methylmorphinan",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dextrorphan",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dextrorphane",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dextrorphanum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29133?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29133/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29133/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29133/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29133/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29133/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29133/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

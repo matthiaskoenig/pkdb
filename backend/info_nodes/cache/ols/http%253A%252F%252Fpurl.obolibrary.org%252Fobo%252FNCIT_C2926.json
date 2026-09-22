@@ -1,0 +1,196 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C2926",
+  "lang": "en",
+  "description": [
+    "A group of at least three distinct histological types of lung cancer, including non-small cell squamous cell carcinoma, adenocarcinoma, and large cell carcinoma. Non-small cell lung carcinomas have a poor response to conventional chemotherapy."
+  ],
+  "synonyms": [
+    "Lung Non-Small Cell Carcinoma",
+    "NSCLC - Non-Small Cell Lung Cancer",
+    "NSCLC",
+    "Non Small Cell Lung Cancer NOS",
+    "Non-Small Cell Cancer of Lung",
+    "Non-Small Cell Cancer of the Lung",
+    "Non-Small Cell Carcinoma of Lung",
+    "Non-Small Cell Carcinoma of the Lung",
+    "Non-Small Cell Lung Cancer",
+    "Non-Small Cell Lung Carcinoma",
+    "Non-small cell lung cancer, NOS",
+    "non-small cell lung cancer"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A group of lung cancers that are named for the kinds of cells found in the cancer and how the cells look under a microscope. The three main types of non-small cell lung cancer are squamous cell carcinoma, large cell carcinoma, and adenocarcinoma. Non-small cell lung cancer is the most common kind of lung cancer."
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "CTEP",
+      "CTRP",
+      "Cellosaurus"
+    ],
+    "Display_Name": [
+      "Non-Small Cell Lung Carcinoma"
+    ],
+    "Legacy Concept Name": [
+      "Non-Small_Cell_Lung_Carcinoma"
+    ],
+    "Neoplasm_Has_Special_Category": [
+      "http://purl.obolibrary.org/obo/NCIT_C9292"
+    ],
+    "Neoplastic_Status": [
+      "Malignant"
+    ],
+    "Preferred_Name": [
+      "Lung Non-Small Cell Carcinoma"
+    ],
+    "Semantic_Type": [
+      "Neoplastic Process"
+    ],
+    "UMLS_CUI": [
+      "C0007131"
+    ],
+    "code": [
+      "C2926"
+    ]
+  },
+  "label": "Lung Non-Small Cell Carcinoma",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C2926",
+  "obo_id": "NCIT:C2926",
+  "in_subset": [
+    "NCIT_C102905",
+    "NCIT_C103090",
+    "NCIT_C116977",
+    "NCIT_C118168",
+    "NCIT_C126659",
+    "NCIT_C138188",
+    "NCIT_C138190",
+    "NCIT_C156952",
+    "NCIT_C156966",
+    "NCIT_C158520",
+    "NCIT_C165258",
+    "NCIT_C175325",
+    "oncotree_slim"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Lung Non-Small Cell Carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "NSCLC - Non-Small Cell Lung Cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "NSCLC",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Non Small Cell Lung Cancer NOS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Non-Small Cell Cancer of Lung",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Non-Small Cell Cancer of the Lung",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Non-Small Cell Carcinoma of Lung",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Non-Small Cell Carcinoma of the Lung",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Non-Small Cell Lung Cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Non-Small Cell Lung Carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Non-small cell lung cancer, NOS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "non-small cell lung cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2926?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2926/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2926/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2926/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2926/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2926/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2926/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2926/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2926/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2926/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2926/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

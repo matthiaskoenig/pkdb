@@ -1,0 +1,171 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C38258",
+  "lang": "en",
+  "description": [
+    "Administration of a drug via injection or infusion of a substance into the peritoneum, where it is absorbed by the lining."
+  ],
+  "synonyms": [
+    "I-PERITON",
+    "INTRAPERITONEAL",
+    "IP",
+    "Intraperitoneal Infusion",
+    "Intraperitoneal Route of Administration",
+    "Intraperitoneal use",
+    "Intraperitoneal",
+    "intraperitoneal infusion",
+    "peritoneal infusion"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A method of delivering fluids and drugs directly into the abdominal cavity through a thin tube.",
+      "Administration within the peritoneal cavity. (FDA)",
+      "Injection of a medicinal product into the peritoneal cavity."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CTRP",
+      "EDQM-HC",
+      "FDA",
+      "GDC"
+    ],
+    "Display_Name": [
+      "Intraperitoneal Route of Administration"
+    ],
+    "FDA_Table": [
+      "Route of Administration (C-DRG-00301)"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C38114"
+    ],
+    "Legacy Concept Name": [
+      "Intraperitoneal_Route_of_Drug_Administration"
+    ],
+    "Maps_To": [
+      "Intraperitoneal"
+    ],
+    "Preferred_Name": [
+      "Intraperitoneal Route of Administration"
+    ],
+    "Semantic_Type": [
+      "Functional Concept"
+    ],
+    "UMLS_CUI": [
+      "C1522583"
+    ],
+    "code": [
+      "C38258"
+    ]
+  },
+  "label": "Intraperitoneal Route of Administration",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C38258",
+  "obo_id": "NCIT:C38258",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118169",
+    "NCIT_C148636",
+    "NCIT_C150107",
+    "NCIT_C157711",
+    "NCIT_C177537",
+    "NCIT_C54452",
+    "NCIT_C54455",
+    "NCIT_C61410",
+    "NCIT_C66729",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C77527",
+    "NCIT_C78420",
+    "NCIT_C78425"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "I-PERITON",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "INTRAPERITONEAL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "IP",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intraperitoneal Infusion",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intraperitoneal Route of Administration",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intraperitoneal use",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intraperitoneal",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "intraperitoneal infusion",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "peritoneal infusion",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38258?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38258/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38258/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38258/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38258/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38258/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38258/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

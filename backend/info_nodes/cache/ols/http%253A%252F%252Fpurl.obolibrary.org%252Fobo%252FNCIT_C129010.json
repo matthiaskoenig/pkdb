@@ -1,0 +1,110 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C129010",
+  "lang": "en",
+  "description": [
+    "A pteridine that is a metabolite of guanine triphosphate (GTP) and a precursor for biopterin. Neopterin is released from interferon-gamma (IFNg) stimulated macrophages and dendritic cells (DCs); therefore, urine or serum levels may be used as a marker of immune system activation."
+  ],
+  "synonyms": [
+    "2-Amino-6-(1,2,3-Trihydroxypropyl)-4(3H)-Pteridinone",
+    "4(1H)-Pteridinone, 2-Amino-6-(1,2,3-Trihydroxypropyl)-",
+    "NEOPTERIN",
+    "Neopterin"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "2009-64-5"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Neopterin"
+    ],
+    "FDA_UNII_Code": [
+      "9PLD60N7SO"
+    ],
+    "Preferred_Name": [
+      "Neopterin"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical"
+    ],
+    "UMLS_CUI": [
+      "C0068527"
+    ],
+    "code": [
+      "C129010"
+    ]
+  },
+  "label": "Neopterin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C129010",
+  "obo_id": "NCIT:C129010",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "2-Amino-6-(1,2,3-Trihydroxypropyl)-4(3H)-Pteridinone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "4(1H)-Pteridinone, 2-Amino-6-(1,2,3-Trihydroxypropyl)-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "NEOPTERIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Neopterin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129010?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129010/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129010/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129010/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129010/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129010/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129010/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

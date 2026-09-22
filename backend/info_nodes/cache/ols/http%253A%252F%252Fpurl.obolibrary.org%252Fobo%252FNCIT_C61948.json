@@ -1,0 +1,193 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C61948",
+  "lang": "en",
+  "description": [
+    "A synthetic compound targeting growth signaling and angiogenesis. Sorafenib blocks the enzyme RAF kinase, a critical component of the RAF/MEK/ERK signaling pathway that controls cell division and proliferation; in addition, sorafenib inhibits the VEGFR-2/PDGFR-beta signaling cascade, thereby blocking tumor angiogenesis."
+  ],
+  "synonyms": [
+    "BA4 43 9006",
+    "BAY 43 9006",
+    "BAY 43-9006",
+    "BAY 439006",
+    "BAY-43-9006",
+    "BAY439006",
+    "Bay-439006",
+    "SORAFENIB",
+    "Sorafenib",
+    "sorafenib"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to treat advanced kidney cancer and a type of liver cancer that cannot be removed by surgery. It is also being studied in the treatment of other types of cancer. Sorafenib stops cells from dividing and may prevent the growth of new blood vessels that tumors need to grow. It is a type of kinase inhibitor and a type of antiangiogenesis agent."
+    ],
+    "CAS_Registry": [
+      "284461-73-0"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:50924"
+    ],
+    "Chemical_Formula": [
+      "C21H16ClF3N4O3"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "GDC",
+      "HemOnc",
+      "PCDC"
+    ],
+    "Display_Name": [
+      "Sorafenib"
+    ],
+    "FDA_UNII_Code": [
+      "9ZOQ3TZI87"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C2194"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C17476",
+      "http://purl.obolibrary.org/obo/NCIT_C17484",
+      "http://purl.obolibrary.org/obo/NCIT_C26203",
+      "http://purl.obolibrary.org/obo/NCIT_C28496",
+      "http://purl.obolibrary.org/obo/NCIT_C30164"
+    ],
+    "Is_PCDC_AML_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C274"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Sorafenib"
+    ],
+    "Maps_To": [
+      "Sorafenib"
+    ],
+    "Preferred_Name": [
+      "Sorafenib"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C1516119"
+    ],
+    "code": [
+      "C61948"
+    ]
+  },
+  "label": "Sorafenib",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C61948",
+  "obo_id": "NCIT:C61948",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C173234",
+    "NCIT_C174019",
+    "NCIT_C177537",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "BA4 43 9006",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "BAY 43 9006",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "BAY 43-9006",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "BAY 439006",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "BAY-43-9006",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "BAY439006",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Bay-439006",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SORAFENIB",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sorafenib",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "sorafenib",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61948?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61948/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61948/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61948/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61948/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61948/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61948/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

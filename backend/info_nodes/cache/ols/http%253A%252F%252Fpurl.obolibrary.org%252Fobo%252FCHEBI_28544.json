@@ -1,0 +1,245 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_28544",
+  "lang": "en",
+  "description": [
+    "A cardenolide glycoside in which the 3β-hydroxy group of digitoxigenin carries a 2,6-dideoxy-β-<small>D</small>-<i>ribo</i>-hexopyranosyl-(1→4)-2,6-dideoxy-β-<small>D</small>-<i>ribo</i>-hexopyranosyl-(1→4)-2,6-dideoxy-β-<small>D</small>-<i>ribo</i>-hexopyranosyl trisaccharide chain."
+  ],
+  "synonyms": [
+    "3beta-[2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyloxy]-14-hydroxy-5beta-card-20(22)-enolide",
+    "3beta-[2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyloxy]-14-hydroxy-5beta-card-20(22)-enolide",
+    "Crystodigin (TN)",
+    "Digitoxin",
+    "Digitoxoside"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:71-63-6",
+      "drugbank:DB01396",
+      "drugcentral:881",
+      "kegg.compound:C06955",
+      "kegg.drug:D00297",
+      "knapsack:C00003617",
+      "pubmed:10438974",
+      "pubmed:10687899",
+      "pubmed:26573786",
+      "reaxys:76678",
+      "wikipedia.en:Digitoxin"
+    ],
+    "generalized_empirical_formula": [
+      "C41H64O13"
+    ],
+    "has_alternative_id": [
+      "CHEBI:23728",
+      "CHEBI:4549"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:28544"
+    ],
+    "inchi_key_string": [
+      "WDJUZGPOPHTGOT-XUDUSOBPSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C41H64O13/c1-20-36(46)29(42)16-34(49-20)53-38-22(3)51-35(18-31(38)44)54-37-21(2)50-33(17-30(37)43)52-25-8-11-39(4)24(15-25)6-7-28-27(39)9-12-40(5)26(10-13-41(28,40)47)23-14-32(45)48-19-23/h14,20-22,24-31,33-38,42-44,46-47H,6-13,15-19H2,1-5H3/t20-,21-,22-,24-,25+,26-,27+,28-,29+,30+,31+,33+,34+,35+,36-,37-,38-,39+,40-,41+/m1/s1"
+    ],
+    "mass": [
+      "764.95"
+    ],
+    "monoisotopic_mass": [
+      "764.43469"
+    ],
+    "smiles_string": [
+      "[H][C@]12CC[C@]3([H])[C@]([H])(CC[C@@]4(C)[C@]3(O)CC[C@]4([H])C3=CC(=O)OC3)[C@@]1(C)CC[C@H](O[C@H]1C[C@H](O)[C@H](O[C@H]3C[C@H](O)[C@H](O[C@H]4C[C@H](O)[C@H](O)[C@@H](C)O4)[C@@H](C)O3)[C@@H](C)O1)C2"
+    ]
+  },
+  "label": "digitoxin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_28544",
+  "obo_id": "CHEBI:28544",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "71-63-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=71-63-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01396",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01396"
+    },
+    {
+      "database": "drugcentral",
+      "id": "881",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/881"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06955",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00297",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00003617",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00003617"
+    },
+    {
+      "database": "pubmed",
+      "id": "10438974",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10438974/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10687899",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10687899/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26573786",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26573786/"
+    },
+    {
+      "database": "reaxys",
+      "id": "76678",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Digitoxin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3beta-[2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyloxy]-14-hydroxy-5beta-card-20(22)-enolide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3beta-[2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyloxy]-14-hydroxy-5beta-card-20(22)-enolide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Crystodigin (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Digitoxin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Digitoxoside",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28544?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28544/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28544/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28544/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28544/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28544/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28544/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28544/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28544/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28544/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

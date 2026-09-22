@@ -1,0 +1,114 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000342",
+  "lang": "en",
+  "description": [
+    "INFLAMMATION of the PANCREAS that is characterized by recurring or persistent ABDOMINAL PAIN with or without STEATORRHEA or DIABETES MELLITUS. It is characterized by the irregular destruction of the pancreatic parenchyma which may be focal, segmental, or diffuse."
+  ],
+  "synonyms": [
+    "CP - Chronic pancreatitis",
+    "Chronic pancreatitis (disorder)",
+    "Pancreatitis, Chronic",
+    "Pancreatitis, recurrent",
+    "Recurrent pancreatitis (disorder)",
+    "Recurrent pancreatitis",
+    "Relapsing pancreatitis (disorder)",
+    "Relapsing pancreatitis",
+    "chronic pancreatitis (disorder) [Ambiguous]"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD9:577.1",
+      "MESH:D050500",
+      "MedDRA:10009093",
+      "NCIt:C84637",
+      "OMIM:167800",
+      "OMIM:608189",
+      "SNOMEDCT:235494005"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0005003, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0005003"
+    ],
+    "term editor": [
+      "James Malone",
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005003"
+    ]
+  },
+  "label": "obsolete_chronic pancreatitis",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005003",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0000342",
+  "obo_id": "EFO:0000342",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD9",
+      "id": "577.1",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D050500",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D050500"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10009093",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10009093"
+    },
+    {
+      "database": "NCIt",
+      "id": "C84637",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C84637"
+    },
+    {
+      "database": "OMIM",
+      "id": "167800",
+      "description": null,
+      "url": "https://omim.org/entry/167800"
+    },
+    {
+      "database": "OMIM",
+      "id": "608189",
+      "description": null,
+      "url": "https://omim.org/entry/608189"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "235494005",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/235494005"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000342?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000342/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

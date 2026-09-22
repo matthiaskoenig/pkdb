@@ -1,0 +1,122 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHMO_0000497",
+  "lang": "en",
+  "description": [
+    "A mass spectrometry in which a sample mixture is first separated by gas chromatography."
+  ],
+  "synonyms": [
+    "gas chromatography mass spectrometry",
+    "gas chromatography mass spectroscopy",
+    "gas chromatography with mass spectrometric detection",
+    "gas chromatography-mass spectroscopy",
+    "gas chromatography/mass spectrometry",
+    "GC MS",
+    "GC/MS",
+    "GCMS",
+    "gas chromatography/mass spectrometry (GC/MS)"
+  ],
+  "annotation": {
+    "acronym": [
+      "GC-MS"
+    ],
+    "has_alternative_id": [
+      "FIX:0000921"
+    ],
+    "id": [
+      "CHMO:0000497"
+    ]
+  },
+  "label": "gas chromatography-mass spectrometry",
+  "ontology_name": "chmo",
+  "ontology_prefix": "CHMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHMO_0000497",
+  "obo_id": "CHMO:0000497",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A mass spectrometry in which a sample mixture is first separated by gas chromatography.",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "https://orcid.org/0000-0002-0640-0422",
+          "description": null,
+          "url": "https://orcid.org/0000-0002-0640-0422"
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "GC MS",
+      "scope": "hasExactSynonym",
+      "type": "acronym",
+      "xrefs": []
+    },
+    {
+      "name": "GC/MS",
+      "scope": "hasExactSynonym",
+      "type": "acronym",
+      "xrefs": []
+    },
+    {
+      "name": "GCMS",
+      "scope": "hasExactSynonym",
+      "type": "acronym",
+      "xrefs": []
+    },
+    {
+      "name": "gas chromatography/mass spectrometry (GC/MS)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000497?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000497/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000497/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000497/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000497/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000497/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000497/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000497/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000497/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000497/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000497/graph"
+    },
+    "has_proper_occurrent_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000497/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000118"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

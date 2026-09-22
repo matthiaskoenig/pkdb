@@ -1,0 +1,154 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C38276",
+  "lang": "en",
+  "description": [
+    "Administration of a drug within or into a vein or veins. Introduction of the drug directly into venous circulation results in 100% bioavailability due to an absence of the absorption phase, provides a precise and continuous mode of drug therapy, especially for drugs with a narrow therapeutic index."
+  ],
+  "synonyms": [
+    "INTRAVENOUS",
+    "IV",
+    "Intravenous Route of Administration",
+    "Intravenous use",
+    "Intravenous",
+    "Intravenously"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Administration within or into a vein or veins. (FDA)",
+      "Injection of a medicinal product into a vein."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "EDQM-HC",
+      "FDA",
+      "GDC",
+      "NICHD"
+    ],
+    "FDA_Table": [
+      "Route of Administration (C-DRG-00301)"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C38114"
+    ],
+    "Legacy Concept Name": [
+      "Intravenous_Route_of_Drug_Administration"
+    ],
+    "Maps_To": [
+      "Intravenous Route of Administration"
+    ],
+    "Preferred_Name": [
+      "Intravenous Route of Administration"
+    ],
+    "Semantic_Type": [
+      "Functional Concept"
+    ],
+    "UMLS_CUI": [
+      "C1522726"
+    ],
+    "code": [
+      "C38276"
+    ]
+  },
+  "label": "Intravenous Route of Administration",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C38276",
+  "obo_id": "NCIT:C38276",
+  "in_subset": [
+    "NCIT_C148636",
+    "NCIT_C150107",
+    "NCIT_C157711",
+    "NCIT_C177537",
+    "NCIT_C54452",
+    "NCIT_C54455",
+    "NCIT_C61410",
+    "NCIT_C66729",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "INTRAVENOUS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "IV",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intravenous Route of Administration",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intravenous use",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intravenous",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intravenously",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38276?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38276/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38276/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38276/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38276/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38276/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38276/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38276/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38276/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38276/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38276/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,133 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_1724",
+  "lang": "en",
+  "description": [
+    "Adding UMLS CUI for Curling Ulcer C0013295."
+  ],
+  "synonyms": [
+    "Curling Ulcer",
+    "Curling's ulcers",
+    "Stress Ulcer"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10CM:K26",
+      "ICD9CM:532",
+      "MESH:D004381",
+      "NCI:C26755",
+      "SNOMEDCT_US_2025_09_01:155691003",
+      "SNOMEDCT_US_2025_09_01:39755000",
+      "UMLS_CUI:C0010474",
+      "UMLS_CUI:C0013295"
+    ],
+    "has_alternative_id": [
+      "DOID:10297",
+      "DOID:11480",
+      "DOID:12880",
+      "DOID:13836",
+      "DOID:1723",
+      "DOID:9780",
+      "DOID:9781",
+      "DOID:9782",
+      "DOID:9783"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:1724"
+    ]
+  },
+  "label": "duodenal ulcer",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "DOID_1724",
+  "obo_id": "DOID:1724",
+  "in_subset": [
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "K26",
+      "description": null,
+      "url": "https://www.icd10data.com/search?s=K26"
+    },
+    {
+      "database": "ICD9CM",
+      "id": "532",
+      "description": null,
+      "url": "http://icd9cm.chrisendres.com/index.php?action=search&srchtext=532"
+    },
+    {
+      "database": "MESH",
+      "id": "D004381",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D004381"
+    },
+    {
+      "database": "NCI",
+      "id": "C26755",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C26755"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "155691003",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/155691003"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "39755000",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/39755000"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0010474",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0010474"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0013295",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0013295"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1724?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1724/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1724/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1724/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1724/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1724/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1724/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,91 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0008573",
+  "lang": "en",
+  "description": [
+    "A disorder caused by damage to the liver parenchyma due to alcohol consumption. It may present with an acute onset or follow a chronic course, leading to cirrhosis. [ NCI ]"
+  ],
+  "synonyms": [
+    "Alcoholic Liver Diseases"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10:K70",
+      "MESH:D008108",
+      "MedDRA:10001627",
+      "NCIt:C34783",
+      "UMLS:C0023896"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0043693, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0043693"
+    ],
+    "term editor": [
+      "Zoe May Pendlington"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0043693"
+    ]
+  },
+  "label": "obsolete_alcoholic liver disease",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0043693",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0008573",
+  "obo_id": "EFO:0008573",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD10",
+      "id": "K70",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/K70"
+    },
+    {
+      "database": "MESH",
+      "id": "D008108",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D008108"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10001627",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10001627"
+    },
+    {
+      "database": "NCIt",
+      "id": "C34783",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C34783"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0023896",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0023896"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0008573?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0008573/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

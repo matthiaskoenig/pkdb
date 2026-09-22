@@ -1,0 +1,101 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C102266",
+  "lang": "en",
+  "description": [
+    "The determination of the total concentration of thrombin generated in the presence of a substrate in a plasma or blood sample."
+  ],
+  "synonyms": [
+    "ETP",
+    "Endogenous Thrombin Potential Measurement",
+    "Endogenous Thrombin Potential"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A measurement of the total concentration of thrombin generated in the presence of a substrate in a plasma or blood sample."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "Preferred_Name": [
+      "Endogenous Thrombin Potential Measurement"
+    ],
+    "Related_To_Genetic_Biomarker": [
+      "http://purl.obolibrary.org/obo/NCIT_C82852"
+    ],
+    "Semantic_Type": [
+      "Laboratory Procedure"
+    ],
+    "UMLS_CUI": [
+      "C3640656"
+    ],
+    "code": [
+      "C102266"
+    ]
+  },
+  "label": "Endogenous Thrombin Potential Measurement",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C102266",
+  "obo_id": "NCIT:C102266",
+  "in_subset": [
+    "NCIT_C61410",
+    "NCIT_C65047",
+    "NCIT_C66830",
+    "NCIT_C67154",
+    "NCIT_C77526"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "ETP",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Endogenous Thrombin Potential Measurement",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Endogenous Thrombin Potential",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C102266?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C102266/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C102266/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C102266/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C102266/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C102266/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C102266/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

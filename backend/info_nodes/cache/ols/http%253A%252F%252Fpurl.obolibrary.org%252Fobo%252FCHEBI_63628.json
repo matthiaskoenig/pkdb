@@ -1,0 +1,249 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_63628",
+  "lang": "en",
+  "description": [
+    "A pyridine-2-sulfonamide substituted at C-5 by a trifluoromethyl group and at the sulfonamide nitrogen by a dihydropyrone-containing <em>m</em>-tolyl substituent. It is an HIV-1 protease inhibitor."
+  ],
+  "synonyms": [
+    "3'-((1R)-1-((6R)-5,6-Dihydro-4-hydroxy-2-oxo-6-phenethyl-6-propyl-2H-pyran-3-yl)propyl)-5-(trifluoromethyl)-2-pyridinesulfonanilide",
+    "N-(3-{(1R)-1-[(6R)-4-hydroxy-2-oxo-6-(2-phenylethyl)-6-propyl-5,6-dihydro-2H-pyran-3-yl]propyl}phenyl)-5-(trifluoromethyl)pyridine-2-sulfonamide",
+    "N-(3-{(1R)-1-[(6R)-4-hydroxy-2-oxo-6-(2-phenylethyl)-6-propyl-5,6-dihydro-2H-pyran-3-yl]propyl}phenyl)-5-(trifluoromethyl)pyridine-2-sulfonamide",
+    "tipranavir"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:174484-41-4",
+      "drugbank:DB00932",
+      "kegg.drug:D08605",
+      "pubmed:17620375",
+      "pubmed:20368406",
+      "pubmed:21041916",
+      "pubmed:21571982",
+      "pubmed:21576452",
+      "pubmed:21825300",
+      "pubmed:21871444",
+      "pubmed:22007990",
+      "pubmed:22096044",
+      "pubmed:22258921",
+      "pubmed:25017682",
+      "reaxys:7698323"
+    ],
+    "generalized_empirical_formula": [
+      "C31H33F3N2O5S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:63628"
+    ],
+    "inchi_key_string": [
+      "SUJUHGSWHZTSEU-FYBSXPHGSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C31H33F3N2O5S/c1-3-16-30(17-15-21-9-6-5-7-10-21)19-26(37)28(29(38)41-30)25(4-2)22-11-8-12-24(18-22)36-42(39,40)27-14-13-23(20-35-27)31(32,33)34/h5-14,18,20,25,36-37H,3-4,15-17,19H2,1-2H3/t25-,30-/m1/s1"
+    ],
+    "mass": [
+      "602.675"
+    ],
+    "monoisotopic_mass": [
+      "602.20623"
+    ],
+    "smiles_string": [
+      "CCC[C@@]1(CCc2ccccc2)CC(O)=C([C@H](CC)c2cccc(NS(=O)(=O)c3ccc(C(F)(F)F)cn3)c2)C(=O)O1"
+    ]
+  },
+  "label": "tipranavir",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_63628",
+  "obo_id": "CHEBI:63628",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "174484-41-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=174484-41-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00932",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00932"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08605",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "17620375",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17620375/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20368406",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20368406/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21041916",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21041916/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21571982",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21571982/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21576452",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21576452/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21825300",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21825300/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21871444",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21871444/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22007990",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22007990/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22096044",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22096044/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22258921",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22258921/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25017682",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25017682/"
+    },
+    {
+      "database": "reaxys",
+      "id": "7698323",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-(3-{(1R)-1-[(6R)-4-hydroxy-2-oxo-6-(2-phenylethyl)-6-propyl-5,6-dihydro-2H-pyran-3-yl]propyl}phenyl)-5-(trifluoromethyl)pyridine-2-sulfonamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3'-((1R)-1-((6R)-5,6-Dihydro-4-hydroxy-2-oxo-6-phenethyl-6-propyl-2H-pyran-3-yl)propyl)-5-(trifluoromethyl)-2-pyridinesulfonanilide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(3-{(1R)-1-[(6R)-4-hydroxy-2-oxo-6-(2-phenylethyl)-6-propyl-5,6-dihydro-2H-pyran-3-yl]propyl}phenyl)-5-(trifluoromethyl)pyridine-2-sulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tipranavir",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63628?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63628/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63628/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63628/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63628/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63628/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63628/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63628/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,605 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_15365",
+  "lang": "en",
+  "description": [
+    "A member of the class of benzoic acids that is salicylic acid in which the hydrogen that is attached to the phenolic hydroxy group has been replaced by an acetoxy group. A non-steroidal anti-inflammatory drug with cyclooxygenase inhibitor activity."
+  ],
+  "synonyms": [
+    "2-(ACETYLOXY)BENZOIC ACID",
+    "2-(ACETYLOXY)BENZOIC ACID",
+    "2-(acetyloxy)benzoic acid",
+    "2-(acetyloxy)benzoic acid",
+    "2-Acetoxybenzenecarboxylic acid",
+    "2-acetoxybenzoic acid",
+    "ASA",
+    "Acetylsalicylate",
+    "Acetylsalicylic acid",
+    "Acetylsalicylsaeure",
+    "Aspirin",
+    "Azetylsalizylsaeure",
+    "Easprin",
+    "O-acetylsalicylic acid",
+    "acide 2-(acetyloxy)benzoique",
+    "acide acetylsalicylique",
+    "acido acetilsalicilico",
+    "acidum acetylsalicylicum",
+    "o-acetoxybenzoic acid",
+    "o-carboxyphenyl acetate",
+    "salicylic acid acetate"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:50-78-2",
+      "drugbank:DB00945",
+      "drugcentral:74",
+      "gmelin:218864",
+      "hmdb:HMDB0001879",
+      "kegg.compound:C01405",
+      "kegg.drug:D00109",
+      "lincs.smallmolecule:LSM-5288",
+      "metacyc.compound:CPD-524",
+      "pdb-ccd:AIN",
+      "pubmed:11203441",
+      "pubmed:11402787",
+      "pubmed:11597554",
+      "pubmed:11733186",
+      "pubmed:12852484",
+      "pubmed:14753751",
+      "pubmed:15542410",
+      "pubmed:15590729",
+      "pubmed:1650428",
+      "pubmed:18226435",
+      "pubmed:18335236",
+      "pubmed:18631321",
+      "pubmed:19010312",
+      "pubmed:19386367",
+      "pubmed:19706045",
+      "pubmed:21699808",
+      "pubmed:22866967",
+      "pubmed:445303",
+      "reaxys:779271",
+      "wikipedia.en:Aspirin"
+    ],
+    "generalized_empirical_formula": [
+      "C9H8O4"
+    ],
+    "has_alternative_id": [
+      "CHEBI:22188",
+      "CHEBI:22203",
+      "CHEBI:2890",
+      "CHEBI:40705",
+      "CHEBI:71414"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:15365"
+    ],
+    "inchi_key_string": [
+      "BSYNRYMUTXBXSQ-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C9H8O4/c1-6(10)13-8-5-3-2-4-7(8)9(11)12/h2-5H,1H3,(H,11,12)"
+    ],
+    "mass": [
+      "180.159"
+    ],
+    "monoisotopic_mass": [
+      "180.04226"
+    ],
+    "smiles_string": [
+      "CC(=O)Oc1ccccc1C(=O)O"
+    ]
+  },
+  "label": "acetylsalicylic acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_15365",
+  "obo_id": "CHEBI:15365",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "50-78-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=50-78-2"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00945",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00945"
+    },
+    {
+      "database": "drugcentral",
+      "id": "74",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/74"
+    },
+    {
+      "database": "gmelin",
+      "id": "218864",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001879",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001879"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C01405",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00109",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5288",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-524",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "AIN",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11203441",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11203441/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11402787",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11402787/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11597554",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11597554/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11733186",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11733186/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12852484",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12852484/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14753751",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14753751/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15542410",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15542410/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15590729",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15590729/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1650428",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1650428/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18226435",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18226435/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18335236",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18335236/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18631321",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18631321/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19010312",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19010312/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19386367",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19386367/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19706045",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19706045/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21699808",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21699808/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22866967",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22866967/"
+    },
+    {
+      "database": "pubmed",
+      "id": "445303",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/445303/"
+    },
+    {
+      "database": "reaxys",
+      "id": "779271",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Aspirin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-(ACETYLOXY)BENZOIC ACID",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(acetyloxy)benzoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(ACETYLOXY)BENZOIC ACID",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(acetyloxy)benzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Acetoxybenzenecarboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-acetoxybenzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ASA",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Acetylsalicylate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Acetylsalicylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Acetylsalicylsaeure",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Aspirin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Azetylsalizylsaeure",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Easprin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "O-acetylsalicylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acide 2-(acetyloxy)benzoique",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acide acetylsalicylique",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acido acetilsalicilico",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acidum acetylsalicylicum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "o-acetoxybenzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "o-carboxyphenyl acetate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "salicylic acid acetate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15365?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15365/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15365/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15365/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15365/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15365/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15365/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15365/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15365/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15365/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

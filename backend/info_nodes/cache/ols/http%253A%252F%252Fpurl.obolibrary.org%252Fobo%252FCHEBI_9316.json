@@ -1,0 +1,319 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9316",
+  "lang": "en",
+  "description": [
+    "An anilide resulting from the formal condensation of the aryl amino group of 4-(methoxymethyl)-<em>N</em>-phenyl-1-[2-(2-thienyl)ethyl]piperidin-4-amine with propanoic acid."
+  ],
+  "synonyms": [
+    "N-(4-(Methoxymethyl)-1-(2-(2-thienyl)ethyl)-4-piperidinyl)-N-phenylpropanamide",
+    "N-(4-(Methoxymethyl)-1-(2-(2-thienyl)ethyl)-4-piperidyl)propionanilide",
+    "N-{4-(methoxymethyl)-1-[2-(2-thienyl)ethyl]piperidin-4-yl}-N-phenylpropanamide",
+    "N-{4-(methoxymethyl)-1-[2-(2-thienyl)ethyl]piperidin-4-yl}-N-phenylpropanamide",
+    "Sufentanyl",
+    "sufentanil",
+    "sufentanilum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:56030-54-7",
+      "drugbank:DB00708",
+      "drugcentral:2491",
+      "hmdb:HMDB0014846",
+      "kegg.compound:C08022",
+      "kegg.drug:D05938",
+      "patent:DE2610228",
+      "patent:US3998834",
+      "pubmed:10628901",
+      "pubmed:10945855",
+      "pubmed:11137863",
+      "pubmed:11504823",
+      "pubmed:15475572",
+      "pubmed:15828831",
+      "pubmed:16621415",
+      "pubmed:17118343",
+      "pubmed:9580589",
+      "reaxys:499558",
+      "wikipedia.en:Sufentanil"
+    ],
+    "generalized_empirical_formula": [
+      "C22H30N2O2S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9316"
+    ],
+    "inchi_key_string": [
+      "GGCSSNBKKAUURC-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C22H30N2O2S/c1-3-21(25)24(19-8-5-4-6-9-19)22(18-26-2)12-15-23(16-13-22)14-11-20-10-7-17-27-20/h4-10,17H,3,11-16,18H2,1-2H3"
+    ],
+    "mass": [
+      "386.561"
+    ],
+    "monoisotopic_mass": [
+      "386.2028"
+    ],
+    "smiles_string": [
+      "CCC(=O)N(c1ccccc1)C1(COC)CCN(CCc2cccs2)CC1"
+    ]
+  },
+  "label": "sufentanil",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9316",
+  "obo_id": "CHEBI:9316",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "56030-54-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=56030-54-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00708",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00708"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2491",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2491"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014846",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014846"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C08022",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D05938",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "DE2610228",
+      "description": "patent",
+      "url": "https://www.google.com/patents/DE2610228"
+    },
+    {
+      "database": "patent",
+      "id": "US3998834",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3998834"
+    },
+    {
+      "database": "pubmed",
+      "id": "10628901",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10628901/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10945855",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10945855/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11137863",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11137863/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11504823",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11504823/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15475572",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15475572/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15828831",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15828831/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16621415",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16621415/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17118343",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17118343/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9580589",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9580589/"
+    },
+    {
+      "database": "reaxys",
+      "id": "499558",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Sufentanil",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-{4-(methoxymethyl)-1-[2-(2-thienyl)ethyl]piperidin-4-yl}-N-phenylpropanamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(4-(Methoxymethyl)-1-(2-(2-thienyl)ethyl)-4-piperidinyl)-N-phenylpropanamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(4-(Methoxymethyl)-1-(2-(2-thienyl)ethyl)-4-piperidyl)propionanilide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-{4-(methoxymethyl)-1-[2-(2-thienyl)ethyl]piperidin-4-yl}-N-phenylpropanamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sufentanyl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sufentanil",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sufentanilum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9316?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9316/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9316/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9316/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9316/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9316/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9316/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9316/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,210 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0001359",
+  "lang": "en",
+  "description": [
+    "A subtype of DIABETES MELLITUS that is characterized by INSULIN deficiency. It is manifested by the sudden onset of severe HYPERGLYCEMIA, rapid progression to DIABETIC KETOACIDOSIS, and DEATH unless treated with insulin. The disease may occur at any age, but is most common in childhood or adolescence.",
+    "An autoimmune disease of endocrine system and is_a diabetes mellitus that results from autoimmune destruction of insulin-producing beta cells of the pancreas.",
+    "Diabetes mellitus characterized by insulin deficiency, sudden onset, severe hyperglycemia, rapid progression to ketoacidosis, and death unless treated with insulin. The disease may occur at any age, but is most common in childhood or adolescence."
+  ],
+  "synonyms": [
+    "Autoimmune Diabete",
+    "Autoimmune Diabetes",
+    "Brittle Diabetes Mellitus",
+    "DIABETES MELLITUS TYPE 01",
+    "DMI UNSPF NT ST UNCNTRLD",
+    "DMI UNSPF UNCNTRLD",
+    "Diabete, Autoimmune",
+    "Diabetes Mellitus, Brittle",
+    "Diabetes Mellitus, Insulin Dependent",
+    "Diabetes Mellitus, Insulin-Dependent",
+    "Diabetes Mellitus, Juvenile Onset",
+    "Diabetes Mellitus, Juvenile-Onset",
+    "Diabetes Mellitus, Ketosis Prone",
+    "Diabetes Mellitus, Ketosis-Prone",
+    "Diabetes Mellitus, Sudden Onset",
+    "Diabetes Mellitus, Sudden-Onset",
+    "Diabetes Mellitus, Type 1",
+    "Diabetes Mellitus, Type I",
+    "Diabetes mellitus type 1 (disorder)",
+    "Diabetes mellitus type 1",
+    "Diabetes mellitus type I [insulin dependent type] [IDDM] [juvenile type], not stated as uncontrolled, with unspecified complication",
+    "Diabetes mellitus type I [insulin dependent type] [IDDM] [juvenile type], uncontrolled, with unspecified complication",
+    "Diabetes mellitus type I",
+    "Diabetes, Autoimmune",
+    "IDDM - Insulin-dependent diabetes mellitus",
+    "IDDM",
+    "Insulin Dependent Diabetes",
+    "Insulin dependent diabetes mellitus",
+    "Insulin-Dependent Diabetes Mellitus",
+    "Juvenile Diabetes",
+    "Juvenile onset diabetes mellitus",
+    "Juvenile-Onset Diabetes Mellitus",
+    "Ketosis-Prone Diabetes Mellitus",
+    "Mellitus, Sudden-Onset Diabetes",
+    "Sudden-Onset Diabetes Mellitus",
+    "T1D",
+    "T1DM",
+    "Type 1 Diabetes Mellitus",
+    "Type 1 Diabetes",
+    "Type I Diabetes"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:9744",
+      "ICD10:E10",
+      "MESH:D003922",
+      "MedDRA:10045228",
+      "NCIt:C2986",
+      "OMIM:125852",
+      "OMIM:222100",
+      "OMIM:600320",
+      "OMIM:601388",
+      "OMIM:601942",
+      "OMIM:610155",
+      "OMIM:611895",
+      "OMIM:612520",
+      "OMIM:612522",
+      "SNOMEDCT:11530004",
+      "SNOMEDCT:46635009"
+    ],
+    "obsoleted_in_version": [
+      "3.38.0"
+    ],
+    "organizational_class": [
+      true
+    ],
+    "reason_for_obsolescence": [
+      "Replaced with Mondo term\nsee https://github.com/ebispot/efo/issues/1381"
+    ],
+    "term editor": [
+      "James Malone",
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005147"
+    ]
+  },
+  "label": "obsolete_type I diabetes mellitus",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005147",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0001359",
+  "obo_id": "EFO:0001359",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "9744",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_9744"
+    },
+    {
+      "database": "ICD10",
+      "id": "E10",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/E10"
+    },
+    {
+      "database": "MESH",
+      "id": "D003922",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D003922"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10045228",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10045228"
+    },
+    {
+      "database": "NCIt",
+      "id": "C2986",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C2986"
+    },
+    {
+      "database": "OMIM",
+      "id": "125852",
+      "description": null,
+      "url": "https://omim.org/entry/125852"
+    },
+    {
+      "database": "OMIM",
+      "id": "222100",
+      "description": null,
+      "url": "https://omim.org/entry/222100"
+    },
+    {
+      "database": "OMIM",
+      "id": "600320",
+      "description": null,
+      "url": "https://omim.org/entry/600320"
+    },
+    {
+      "database": "OMIM",
+      "id": "601388",
+      "description": null,
+      "url": "https://omim.org/entry/601388"
+    },
+    {
+      "database": "OMIM",
+      "id": "601942",
+      "description": null,
+      "url": "https://omim.org/entry/601942"
+    },
+    {
+      "database": "OMIM",
+      "id": "610155",
+      "description": null,
+      "url": "https://omim.org/entry/610155"
+    },
+    {
+      "database": "OMIM",
+      "id": "611895",
+      "description": null,
+      "url": "https://omim.org/entry/611895"
+    },
+    {
+      "database": "OMIM",
+      "id": "612520",
+      "description": null,
+      "url": "https://omim.org/entry/612520"
+    },
+    {
+      "database": "OMIM",
+      "id": "612522",
+      "description": null,
+      "url": "https://omim.org/entry/612522"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "11530004",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/11530004"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "46635009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/46635009"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0001359?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0001359/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

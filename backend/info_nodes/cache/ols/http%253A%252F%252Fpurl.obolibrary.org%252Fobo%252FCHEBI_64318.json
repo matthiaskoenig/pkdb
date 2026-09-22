@@ -1,0 +1,504 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_64318",
+  "lang": "en",
+  "description": [
+    "A peptide ergot alkaloid that is dihydroergotamine in which a double bond replaces the single bond between positions 9 and 10."
+  ],
+  "synonyms": [
+    "(5'alpha)-12'-hydroxy-2'-methyl-5'-(phenylmethyl)ergotoman-3',6',18-trione",
+    "(5'alpha)-5'-benzyl-12'-hydroxy-2'-methyl-3',6',18-trioxoergotaman",
+    "(5'alpha)-5'-benzyl-12'-hydroxy-2'-methyl-3',6',18-trioxoergotaman",
+    "12'-Hydroxy-2'-methyl-5'alpha-(phenylmethyl)ergotaman-3',6',18-trione",
+    "12'-hydroxy-2'-methyl-5'alpha-(phenylmethyl)ergotaman-3',6',18-trione",
+    "Ergotamin",
+    "Gynergen",
+    "ergotamina",
+    "ergotamine",
+    "ergotaminum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:113-15-5",
+      "chemspider:7930",
+      "drugbank:DB00696",
+      "drugcentral:1043",
+      "hmdb:HMDB0014834",
+      "kegg.compound:C07544",
+      "kegg.drug:D07906",
+      "knapsack:C00001724",
+      "pdb-ccd:ERM",
+      "pubmed:10560569",
+      "pubmed:10611116",
+      "pubmed:11386387",
+      "pubmed:12463275",
+      "pubmed:12525272",
+      "pubmed:12558771",
+      "pubmed:21181611",
+      "pubmed:21512122",
+      "pubmed:21878097",
+      "pubmed:21879189",
+      "pubmed:22347148",
+      "pubmed:22414189",
+      "pubmed:22417229",
+      "pubmed:22441761",
+      "pubmed:22444161",
+      "pubmed:22446707",
+      "pubmed:23243949",
+      "pubmed:23519210",
+      "pubmed:23519215",
+      "pubmed:24035295",
+      "pubmed:28716900",
+      "pubmed:29168165",
+      "pubmed:29398112",
+      "pubmed:31570294",
+      "pubmed:32310413",
+      "pubmed:8825693",
+      "pubmed:9009470",
+      "pubmed:9032799",
+      "reaxys:78890",
+      "wikipedia.en:Ergotamine"
+    ],
+    "generalized_empirical_formula": [
+      "C33H35N5O5"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:64318"
+    ],
+    "inchi_key_string": [
+      "XCGSFFUVFURLIX-VFGNJEKYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C33H35N5O5/c1-32(35-29(39)21-15-23-22-10-6-11-24-28(22)20(17-34-24)16-25(23)36(2)18-21)31(41)38-26(14-19-8-4-3-5-9-19)30(40)37-13-7-12-27(37)33(38,42)43-32/h3-6,8-11,15,17,21,25-27,34,42H,7,12-14,16,18H2,1-2H3,(H,35,39)/t21-,25-,26+,27+,32-,33+/m1/s1"
+    ],
+    "mass": [
+      "581.673"
+    ],
+    "monoisotopic_mass": [
+      "581.26382"
+    ],
+    "smiles_string": [
+      "[H][C@@]12Cc3cnc4cccc(c34)C1=C[C@@H](C(=O)N[C@]1(C)O[C@]3(O)N(C1=O)[C@@H](Cc1ccccc1)C(=O)N1CCC[C@]13[H])CN2C"
+    ]
+  },
+  "label": "ergotamine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_64318",
+  "obo_id": "CHEBI:64318",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "113-15-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=113-15-5"
+    },
+    {
+      "database": "chemspider",
+      "id": "7930",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.7930.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00696",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00696"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1043",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1043"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014834",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014834"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07544",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07906",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00001724",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00001724"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "ERM",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10560569",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10560569/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10611116",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10611116/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11386387",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11386387/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12463275",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12463275/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12525272",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12525272/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12558771",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12558771/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21181611",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21181611/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21512122",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21512122/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21878097",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21878097/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21879189",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21879189/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22347148",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22347148/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22414189",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22414189/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22417229",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22417229/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22441761",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22441761/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22444161",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22444161/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22446707",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22446707/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23243949",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23243949/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23519210",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23519210/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23519215",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23519215/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24035295",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24035295/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28716900",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28716900/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29168165",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29168165/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29398112",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29398112/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31570294",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31570294/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32310413",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32310413/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8825693",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8825693/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9009470",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9009470/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9032799",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9032799/"
+    },
+    {
+      "database": "reaxys",
+      "id": "78890",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Ergotamine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(5'alpha)-5'-benzyl-12'-hydroxy-2'-methyl-3',6',18-trioxoergotaman",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(5'alpha)-12'-hydroxy-2'-methyl-5'-(phenylmethyl)ergotoman-3',6',18-trione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(5'alpha)-5'-benzyl-12'-hydroxy-2'-methyl-3',6',18-trioxoergotaman",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "12'-Hydroxy-2'-methyl-5'alpha-(phenylmethyl)ergotaman-3',6',18-trione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "12'-hydroxy-2'-methyl-5'alpha-(phenylmethyl)ergotaman-3',6',18-trione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ergotamin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Gynergen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ergotamina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ergotamine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ergotaminum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64318?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64318/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64318/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64318/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64318/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64318/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64318/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64318/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64318/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

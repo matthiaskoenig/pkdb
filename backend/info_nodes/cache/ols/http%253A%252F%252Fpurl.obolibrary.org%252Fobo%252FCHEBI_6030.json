@@ -1,0 +1,343 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6030",
+  "lang": "en",
+  "description": [
+    "A carbohydrazide obtained by formal condensation between pyridine-4-carboxylic acid and hydrazine."
+  ],
+  "synonyms": [
+    "4-pyridinecarbohydrazide",
+    "Isoniazid",
+    "Isonicotinsaeurehydrazid",
+    "isoniazid",
+    "isonicotinic acid hydrazide",
+    "isonicotinic hydrazide",
+    "isonicotinohydrazide",
+    "isonicotinoylhydrazide",
+    "pyridine-4-carbohydrazide",
+    "pyridine-4-carbohydrazide",
+    "pyridine-4-carboxylic acid hydrazide"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:54-85-3",
+      "drugbank:DB00951",
+      "drugcentral:1497",
+      "gmelin:82804",
+      "kegg.compound:C07054",
+      "kegg.drug:D00346",
+      "lincs.smallmolecule:LSM-6682",
+      "metacyc.compound:ISONIAZIDE",
+      "pubmed:15013786",
+      "pubmed:18220565",
+      "pubmed:19183459",
+      "pubmed:445303",
+      "reaxys:119374",
+      "wikipedia.en:Isoniazid"
+    ],
+    "generalized_empirical_formula": [
+      "C6H7N3O"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6030"
+    ],
+    "inchi_key_string": [
+      "QRXWMOHMRWLFEY-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C6H7N3O/c7-9-6(10)5-1-3-8-4-2-5/h1-4H,7H2,(H,9,10)"
+    ],
+    "mass": [
+      "137.142"
+    ],
+    "monoisotopic_mass": [
+      "137.05891"
+    ],
+    "smiles_string": [
+      "NNC(=O)c1ccncc1"
+    ]
+  },
+  "label": "isoniazide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6030",
+  "obo_id": "CHEBI:6030",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "54-85-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=54-85-3"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00951",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00951"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1497",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1497"
+    },
+    {
+      "database": "gmelin",
+      "id": "82804",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07054",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00346",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-6682",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "ISONIAZIDE",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "15013786",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15013786/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18220565",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18220565/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19183459",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19183459/"
+    },
+    {
+      "database": "pubmed",
+      "id": "445303",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/445303/"
+    },
+    {
+      "database": "reaxys",
+      "id": "119374",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Isoniazid",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "pyridine-4-carbohydrazide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-pyridinecarbohydrazide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Isoniazid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Isonicotinsaeurehydrazid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "isoniazid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "isonicotinic acid hydrazide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "isonicotinic hydrazide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "isonicotinohydrazide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "isonicotinoylhydrazide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pyridine-4-carbohydrazide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pyridine-4-carboxylic acid hydrazide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6030?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6030/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6030/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6030/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6030/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6030/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6030/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6030/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6030/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

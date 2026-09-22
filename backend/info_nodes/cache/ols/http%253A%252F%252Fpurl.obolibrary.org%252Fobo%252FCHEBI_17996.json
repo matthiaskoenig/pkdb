@@ -1,0 +1,383 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_17996",
+  "lang": "en",
+  "description": [
+    "A halide anion formed when chlorine picks up an electron to form an an anion."
+  ],
+  "synonyms": [
+    "CHLORIDE ION",
+    "Chloride ion",
+    "Chloride",
+    "Chloride",
+    "Chloride(1-)",
+    "Chlorine anion",
+    "Cl(-)",
+    "Cl-",
+    "chloride",
+    "chloride",
+    "chloride(1-)",
+    "chloride(1-)"
+  ],
+  "annotation": {
+    "charge": [
+      -1.0
+    ],
+    "database_cross_reference": [
+      "beilstein:3587171",
+      "cas:16887-00-6",
+      "foodb.food:FDB006557",
+      "gmelin:14910",
+      "hmdb:HMDB0000492",
+      "kegg.compound:C00698",
+      "metacyc.compound:CL-",
+      "pdb-ccd:CL",
+      "pubmed:38280867",
+      "pubmed:38573803",
+      "pubmed:38604039",
+      "umbbd.compound:c0884",
+      "wikipedia.en:Chloride"
+    ],
+    "generalized_empirical_formula": [
+      "Cl"
+    ],
+    "has_alternative_id": [
+      "CHEBI:13291",
+      "CHEBI:13970",
+      "CHEBI:3616",
+      "CHEBI:3731",
+      "CHEBI:48804"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:17996"
+    ],
+    "inchi_key_string": [
+      "VEXZGXHMUGYJMC-UHFFFAOYSA-M"
+    ],
+    "inchi_string": [
+      "InChI=1S/ClH/h1H/p-1"
+    ],
+    "mass": [
+      "35.453"
+    ],
+    "monoisotopic_mass": [
+      "34.9694"
+    ],
+    "smiles_string": [
+      "[Cl-]"
+    ]
+  },
+  "label": "chloride",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_17996",
+  "obo_id": "CHEBI:17996",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "3587171",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "16887-00-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=16887-00-6"
+    },
+    {
+      "database": "foodb.food",
+      "id": "FDB006557",
+      "description": "foodb.food",
+      "url": null
+    },
+    {
+      "database": "gmelin",
+      "id": "14910",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0000492",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0000492"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00698",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CL-",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "CL",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "38280867",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38280867/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38573803",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38573803/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38604039",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38604039/"
+    },
+    {
+      "database": "umbbd.compound",
+      "id": "c0884",
+      "description": "umbbd.compound",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Chloride",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Chloride",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chloride",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chloride",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chloride(1-)",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CHLORIDE ION",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Chloride ion",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Chloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Chloride(1-)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Chlorine anion",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cl(-)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cl-",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chloride",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chloride(1-)",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17996?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17996/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17996/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17996/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17996/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17996/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17996/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17996/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17996/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

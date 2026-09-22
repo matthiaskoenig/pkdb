@@ -1,0 +1,224 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_155916",
+  "lang": "en",
+  "description": [
+    "A monocarboxylic acid resulting from the replacement of the 3'-methyl group of the phenyl ring of torasemide by a carboxy group. It is a metabolite of torasemide."
+  ],
+  "synonyms": [
+    "3'-carboxy torasemide",
+    "3-({3-[(propan-2-ylcarbamoyl)sulfamoyl]pyridin-4-yl}amino)benzoic acid",
+    "3-({3-[(propan-2-ylcarbamoyl)sulfamoyl]pyridin-4-yl}amino)benzoic acid",
+    "3-[[3-[[[(isopropylamino)carbonyl]amino]sulfonyl]pyridine-4-yl]amino]benzoic acid",
+    "N-(isopropylcarbamoyl)-4-(3-carboxyphenylamino)-3-pyridinesulfonamide",
+    "torasemide M5",
+    "torsemide carboxylic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:113844-99-8",
+      "pubmed:11718311",
+      "pubmed:1706990",
+      "pubmed:32302808",
+      "pubmed:3370063"
+    ],
+    "generalized_empirical_formula": [
+      "C16H18N4O5S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:155916"
+    ],
+    "inchi_key_string": [
+      "PGPRBNDLCZQUST-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C16H18N4O5S/c1-10(2)18-16(23)20-26(24,25)14-9-17-7-6-13(14)19-12-5-3-4-11(8-12)15(21)22/h3-10H,1-2H3,(H,17,19)(H,21,22)(H2,18,20,23)"
+    ],
+    "mass": [
+      "378.41"
+    ],
+    "monoisotopic_mass": [
+      "378.09979"
+    ],
+    "smiles_string": [
+      "CC(C)NC(=O)NS(=O)(=O)c1cnccc1Nc1cccc(C(=O)O)c1"
+    ]
+  },
+  "label": "torasemide carboxylic acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_155916",
+  "obo_id": "CHEBI:155916",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "113844-99-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=113844-99-8"
+    },
+    {
+      "database": "pubmed",
+      "id": "11718311",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11718311/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1706990",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1706990/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32302808",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32302808/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3370063",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3370063/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3-({3-[(propan-2-ylcarbamoyl)sulfamoyl]pyridin-4-yl}amino)benzoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3'-carboxy torasemide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-({3-[(propan-2-ylcarbamoyl)sulfamoyl]pyridin-4-yl}amino)benzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-[[3-[[[(isopropylamino)carbonyl]amino]sulfonyl]pyridine-4-yl]amino]benzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(isopropylcarbamoyl)-4-(3-carboxyphenylamino)-3-pyridinesulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "torasemide M5",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "torsemide carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155916?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155916/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155916/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155916/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155916/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155916/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155916/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155916/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_155916/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

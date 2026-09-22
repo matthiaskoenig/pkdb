@@ -1,0 +1,120 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000537",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(hypertensive disease) or (hypertension)",
+    "Blood Pressure, High",
+    "Blood Pressures, High",
+    "HTN - hypertension",
+    "HTN",
+    "HYPERTENSIVE DISEASE",
+    "High Blood Pressure",
+    "High Blood Pressures",
+    "High blood pressure (& [essential hypertension])",
+    "Hypertensive disease (disorder)",
+    "Hypertensive disease NOS (disorder)",
+    "SURG COMP - HYPERTENSION",
+    "[X]Hypertensive diseases (disorder)",
+    "[X]Hypertensive diseases",
+    "hyperpiesia",
+    "hypertension NOS",
+    "hypertensive disease NOS",
+    "vascular hypertensive disorder"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:10763",
+      "ICD10:I10",
+      "ICD9:401-405.99",
+      "MESH:D006973",
+      "MedDRA:10020772",
+      "NCIt:C3117",
+      "OMIM:145500"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0005044, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0005044"
+    ],
+    "term editor": [
+      "James Malone"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005044"
+    ]
+  },
+  "label": "obsolete_hypertension",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005044",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0000537",
+  "obo_id": "EFO:0000537",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "10763",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_10763"
+    },
+    {
+      "database": "ICD10",
+      "id": "I10",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/I10"
+    },
+    {
+      "database": "ICD9",
+      "id": "401-405.99",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D006973",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D006973"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10020772",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10020772"
+    },
+    {
+      "database": "NCIt",
+      "id": "C3117",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3117"
+    },
+    {
+      "database": "OMIM",
+      "id": "145500",
+      "description": null,
+      "url": "https://omim.org/entry/145500"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

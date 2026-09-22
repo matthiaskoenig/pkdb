@@ -1,0 +1,431 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_2611",
+  "lang": "en",
+  "description": [
+    "A member of the class of triazolobenzodiazepines that is 4<em>H</em>-[1,2,4]triazolo[4,3-<em>a</em>][1,4]benzodiazepine carrying methyl, phenyl and chloro substituents at positions 1, 6 and 8 respectively. Alprazolam is only found in individuals that have taken this drug."
+  ],
+  "synonyms": [
+    "8-Chloro-1-methyl-6-phenyl-4H-s-triazolo(4,3-a)(1,4)benzodiazepine",
+    "8-chloro-1-methyl-6-phenyl-4H-[1,2,4]triazolo[4,3-a][1,4]benzodiazepine",
+    "8-chloro-1-methyl-6-phenyl-4H-[1,2,4]triazolo[4,3-a][1,4]benzodiazepine",
+    "Alprazolam",
+    "Xanax"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:28981-97-7",
+      "drugbank:DB00404",
+      "drugcentral:136",
+      "hmdb:HMDB0014548",
+      "kegg.compound:C06817",
+      "kegg.drug:D00225",
+      "lincs.smallmolecule:LSM-5460",
+      "pubmed:10350361",
+      "pubmed:10443648",
+      "pubmed:10631626",
+      "pubmed:10963939",
+      "pubmed:10997633",
+      "pubmed:11304902",
+      "pubmed:11824768",
+      "pubmed:12035937",
+      "pubmed:15647704",
+      "pubmed:15725773",
+      "pubmed:15830221",
+      "pubmed:16103667",
+      "pubmed:16139113",
+      "pubmed:16572266",
+      "pubmed:17631455",
+      "pubmed:24361783",
+      "pubmed:24464531",
+      "pubmed:24629629",
+      "pubmed:24840273",
+      "pubmed:24977401",
+      "pubmed:25032127",
+      "pubmed:25139178",
+      "pubmed:25199955",
+      "pubmed:25300043",
+      "pubmed:25427652",
+      "pubmed:25581490",
+      "pubmed:25620535",
+      "pubmed:7907366",
+      "pubmed:9050091",
+      "reaxys:1223125",
+      "vsdb:2960",
+      "wikipedia.en:Alprazolam"
+    ],
+    "generalized_empirical_formula": [
+      "C17H13ClN4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:2611"
+    ],
+    "inchi_key_string": [
+      "VREFGVBLTWBCJP-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C17H13ClN4/c1-11-20-21-16-10-19-17(12-5-3-2-4-6-12)14-9-13(18)7-8-15(14)22(11)16/h2-9H,10H2,1H3"
+    ],
+    "mass": [
+      "308.772"
+    ],
+    "monoisotopic_mass": [
+      "308.08287"
+    ],
+    "smiles_string": [
+      "Cc1nnc2n1-c1ccc(Cl)cc1C(c1ccccc1)=NC2"
+    ]
+  },
+  "label": "alprazolam",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_2611",
+  "obo_id": "CHEBI:2611",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "28981-97-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=28981-97-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00404",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00404"
+    },
+    {
+      "database": "drugcentral",
+      "id": "136",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/136"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014548",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014548"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06817",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00225",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5460",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10350361",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10350361/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10443648",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10443648/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10631626",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10631626/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10963939",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10963939/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10997633",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10997633/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11304902",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11304902/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11824768",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11824768/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12035937",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12035937/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15647704",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15647704/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15725773",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15725773/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15830221",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15830221/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16103667",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16103667/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16139113",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16139113/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16572266",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16572266/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17631455",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17631455/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24361783",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24361783/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24464531",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24464531/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24629629",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24629629/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24840273",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24840273/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24977401",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24977401/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25032127",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25032127/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25139178",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25139178/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25199955",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25199955/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25300043",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25300043/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25427652",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25427652/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25581490",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25581490/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25620535",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25620535/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7907366",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7907366/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9050091",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9050091/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1223125",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "2960",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/2960.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Alprazolam",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "8-chloro-1-methyl-6-phenyl-4H-[1,2,4]triazolo[4,3-a][1,4]benzodiazepine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-Chloro-1-methyl-6-phenyl-4H-s-triazolo(4,3-a)(1,4)benzodiazepine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-chloro-1-methyl-6-phenyl-4H-[1,2,4]triazolo[4,3-a][1,4]benzodiazepine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Alprazolam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Xanax",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2611?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2611/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2611/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2611/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2611/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2611/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2611/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2611/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

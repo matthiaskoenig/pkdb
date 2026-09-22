@@ -110,7 +110,7 @@ ANTHROPOMETRY_NODES: list[InfoNode] = [
         parents=["anthropometric measurement"],
         dtype=DType.CATEGORICAL,
         annotations=[
-            (BQB.IS, "NCIT:C16576"),
+            (BQB.IS, "NCIT:C28421"),
             (BQB.IS, "omit/0013619"),
         ],
         synonyms=["gender"],
@@ -269,7 +269,7 @@ ANTHROPOMETRY_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "NCIT:C94250"),
             (BQB.IS, "efo/0005935"),
-            (BQB.IS, "hp/HP:0025502"),
+            (BQB.IS, "HP:0025502"),
         ],
         synonyms=["increased weight"],
     ),
@@ -375,7 +375,6 @@ ANTHROPOMETRY_NODES: list[InfoNode] = [
         dtype=DType.NUMERIC,
         units=["percent"],
         synonyms=["IBW", "ideal body weight"],
-        annotations=[],
     ),
     MeasurementType(
         sid="fat-free-mass-index",

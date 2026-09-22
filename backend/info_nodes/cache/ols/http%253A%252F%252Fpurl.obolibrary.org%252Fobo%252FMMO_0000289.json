@@ -1,0 +1,87 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/MMO_0000289",
+  "lang": "en",
+  "description": [
+    "A method of separating and identifying the components of a complex mixture by differential movement through a two-phase system, in which the movement is effected by a flow of a liquid, mobile phase over a stationary phase composed of a thin layer of adsorbent such as silica gel, alumina, or cellulose on a flat, inert substrate."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "created_by": [
+      "jsmith"
+    ],
+    "creation_date": [
+      "2012-08-08T05:22:48Z"
+    ],
+    "has_obo_namespace": [
+      "measurement_method_ontology"
+    ],
+    "id": [
+      "MMO:0000289"
+    ]
+  },
+  "label": "thin layer chromatography",
+  "ontology_name": "mmo",
+  "ontology_prefix": "MMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/mmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "MMO_0000289",
+  "obo_id": "MMO:0000289",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A method of separating and identifying the components of a complex mixture by differential movement through a two-phase system, in which the movement is effected by a flow of a liquid, mobile phase over a stationary phase composed of a thin layer of adsorbent such as silica gel, alumina, or cellulose on a flat, inert substrate.",
+      "oboXrefs": [
+        {
+          "database": "Dorland",
+          "id": "Dorlands_Illustrated_Medical_Dictionary--31st_Ed",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "ISBN",
+          "id": "978-1416049982",
+          "description": null,
+          "url": "https://www.worldcat.org/search?q=bn%3A978-1416049982"
+        },
+        {
+          "database": null,
+          "id": "http://en.wikipedia.org/wiki/Chromatography#Thin_layer_chromatography",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Chromatography#Thin_layer_chromatography"
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000289?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000289/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000289/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000289/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000289/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000289/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000289/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

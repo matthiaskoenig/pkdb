@@ -1,0 +1,235 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_80579",
+  "lang": "en",
+  "description": [
+    "A morphinane-like compound that is the N-demethylated derivative of codeine."
+  ],
+  "synonyms": [
+    "(-)-N-norcodeine",
+    "3-methoxy-7,8-didehydro-4,5alpha-epoxymorphinan-6alpha-ol",
+    "3-methoxy-7,8-didehydro-4,5alpha-epoxymorphinan-6alpha-ol",
+    "N-Desmethylcodeine",
+    "N-demethylcodeine",
+    "norcodeina",
+    "norcodeine",
+    "norcodeinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:467-15-2",
+      "hmdb:HMDB0060657",
+      "kegg.compound:C16576",
+      "reaxys:93708",
+      "wikipedia.en:Norcodeine"
+    ],
+    "generalized_empirical_formula": [
+      "C17H19NO3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:80579"
+    ],
+    "inchi_key_string": [
+      "HKOIXWVRNLGFOR-KOFBORESSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C17H19NO3/c1-20-13-5-2-9-8-11-10-3-4-12(19)16-17(10,6-7-18-11)14(9)15(13)21-16/h2-5,10-12,16,18-19H,6-8H2,1H3/t10-,11+,12-,16-,17-/m0/s1"
+    ],
+    "mass": [
+      "285.343"
+    ],
+    "monoisotopic_mass": [
+      "285.13649"
+    ],
+    "smiles_string": [
+      "[H][C@@]12C=C[C@H](O)[C@@H]3Oc4c(OC)ccc5c4[C@@]31CCN[C@@H]2C5"
+    ]
+  },
+  "label": "norcodeine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_80579",
+  "obo_id": "CHEBI:80579",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "467-15-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=467-15-2"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0060657",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0060657"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C16576",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "reaxys",
+      "id": "93708",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Norcodeine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3-methoxy-7,8-didehydro-4,5alpha-epoxymorphinan-6alpha-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-N-norcodeine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-methoxy-7,8-didehydro-4,5alpha-epoxymorphinan-6alpha-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-Desmethylcodeine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-demethylcodeine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "norcodeina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "norcodeine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "norcodeinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80579?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80579/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80579/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80579/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80579/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80579/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80579/graph"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80579/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

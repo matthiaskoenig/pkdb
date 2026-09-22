@@ -1,0 +1,102 @@
+[
+  {
+    "src_id": "2",
+    "src_compound_id": "DB12126"
+  },
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:3165"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL406291"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "3047797"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "7949684"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "439201"
+  },
+  {
+    "src_id": "49",
+    "src_compound_id": "PD048303"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "133907"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "134717"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "180461"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "2946"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "466"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "9447"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0004246"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID50893681"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00004575"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00160888"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00166166"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00868855"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01595516"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03738878"
+  },
+  {
+    "src_id": "51",
+    "src_compound_id": "FDB023350"
+  },
+  {
+    "src_id": "84",
+    "src_compound_id": "Bradykinin"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "Molport-003-926-907"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "50049949"
+  }
+]

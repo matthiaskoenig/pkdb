@@ -1,0 +1,612 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6801",
+  "lang": "en",
+  "description": [
+    "A member of the class of guanidines that is biguanide the carrying two methyl substituents at position 1."
+  ],
+  "synonyms": [
+    "1,1-dimethylbiguanide",
+    "LA 6023",
+    "LA-6023",
+    "N(1),N(1)-dimethylbiguanide",
+    "N,N-dimethylbiguanide",
+    "N,N-dimethyldiguanide",
+    "N,N-dimethylguanylguanidine",
+    "N,N-dimethylimidodicarbonimidic diamide",
+    "N,N-dimethyltriimidodicarbonic diamide",
+    "N,N-dimethyltriimidodicarbonic diamide",
+    "dimethylbiguanide",
+    "dimethyldiguanide",
+    "metformin",
+    "metformina",
+    "metformine",
+    "metforminum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:657-24-9",
+      "drugbank:DB00331",
+      "drugcentral:1725",
+      "foodb.food:FDB022739",
+      "hmdb:HMDB0001921",
+      "kegg.compound:C07151",
+      "kegg.drug:D04966",
+      "lincs.smallmolecule:LSM-4730",
+      "pdb-ccd:MF8",
+      "pubmed:10900588",
+      "pubmed:10983737",
+      "pubmed:10999803",
+      "pubmed:11012555",
+      "pubmed:11126815",
+      "pubmed:11192132",
+      "pubmed:11257323",
+      "pubmed:11544610",
+      "pubmed:11772907",
+      "pubmed:12086935",
+      "pubmed:12406042",
+      "pubmed:12436333",
+      "pubmed:12630933",
+      "pubmed:12909816",
+      "pubmed:15261814",
+      "pubmed:15606381",
+      "pubmed:15650645",
+      "pubmed:15717887",
+      "pubmed:15932841",
+      "pubmed:16294070",
+      "pubmed:16520442",
+      "pubmed:16941277",
+      "pubmed:17062558",
+      "pubmed:18212742",
+      "pubmed:18608522",
+      "pubmed:23077661",
+      "pubmed:23540700",
+      "pubmed:24428821",
+      "pubmed:28919040",
+      "pubmed:31208831",
+      "pubmed:33191721",
+      "reaxys:606492",
+      "wikipedia.en:Metformin"
+    ],
+    "generalized_empirical_formula": [
+      "C4H11N5"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6801"
+    ],
+    "inchi_key_string": [
+      "XZWYZXLIPXDOLR-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C4H11N5/c1-9(2)4(7)8-3(5)6/h1-2H3,(H5,5,6,7,8)"
+    ],
+    "mass": [
+      "129.167"
+    ],
+    "monoisotopic_mass": [
+      "129.10145"
+    ],
+    "smiles_string": [
+      "CN(C)C(=N)NC(=N)N"
+    ]
+  },
+  "label": "metformin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6801",
+  "obo_id": "CHEBI:6801",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "657-24-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=657-24-9"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00331",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00331"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1725",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1725"
+    },
+    {
+      "database": "foodb.food",
+      "id": "FDB022739",
+      "description": "foodb.food",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001921",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001921"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07151",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D04966",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-4730",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "MF8",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10900588",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10900588/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10983737",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10983737/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10999803",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10999803/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11012555",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11012555/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11126815",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11126815/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11192132",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11192132/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11257323",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11257323/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11544610",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11544610/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11772907",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11772907/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12086935",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12086935/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12406042",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12406042/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12436333",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12436333/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12630933",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12630933/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12909816",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12909816/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15261814",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15261814/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15606381",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15606381/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15650645",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15650645/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15717887",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15717887/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15932841",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15932841/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16294070",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16294070/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16520442",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16520442/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16941277",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16941277/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17062558",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17062558/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18212742",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18212742/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18608522",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18608522/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23077661",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23077661/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23540700",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23540700/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24428821",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24428821/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28919040",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28919040/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31208831",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31208831/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33191721",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33191721/"
+    },
+    {
+      "database": "reaxys",
+      "id": "606492",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Metformin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N,N-dimethyltriimidodicarbonic diamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,1-dimethylbiguanide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "LA 6023",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "LA-6023",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N(1),N(1)-dimethylbiguanide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N,N-dimethylbiguanide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N,N-dimethyldiguanide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N,N-dimethylguanylguanidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N,N-dimethylimidodicarbonimidic diamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N,N-dimethyltriimidodicarbonic diamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dimethylbiguanide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dimethyldiguanide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "metformin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "metformina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "metformine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "metforminum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6801?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6801/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6801/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6801/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6801/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6801/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6801/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6801/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6801/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6801/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

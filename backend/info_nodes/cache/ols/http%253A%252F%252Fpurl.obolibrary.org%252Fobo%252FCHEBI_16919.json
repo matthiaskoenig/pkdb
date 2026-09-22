@@ -1,0 +1,617 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_16919",
+  "lang": "en",
+  "description": [
+    "A glycine derivative having methyl and amidino groups attached to the nitrogen."
+  ],
+  "synonyms": [
+    "((amino(imino)methyl)(methyl)amino)acetic acid",
+    "(N-methylcarbamimidamido)acetic acid",
+    "(alpha-methylguanido)acetic acid",
+    "Creatin",
+    "Creatine",
+    "Kreatin",
+    "Methylglycocyamine",
+    "N-(aminoiminomethyl)-N-methylglycine",
+    "N-Methyl-N-guanylglycine",
+    "N-[(E)-AMINO(IMINO)METHYL]-N-METHYLGLYCINE",
+    "N-[amino(imino)methyl]-N-methylglycine",
+    "N-[amino(imino)methyl]-N-methylglycine",
+    "N-amidinosarcosine",
+    "N-carbamimidoyl-N-methylglycine",
+    "N-methyl-N-guanylglycine",
+    "alpha-Methylguanidino acetic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:57-00-1",
+      "chemspider:566",
+      "drugbank:DB00148",
+      "drugcentral:4661",
+      "gmelin:240513",
+      "hmdb:HMDB0000064",
+      "kegg.compound:C00300",
+      "metacyc.compound:CREATINE",
+      "pdb-ccd:CRN",
+      "pubmed:11356982",
+      "pubmed:11483809",
+      "pubmed:11867929",
+      "pubmed:12085493",
+      "pubmed:12184144",
+      "pubmed:12878267",
+      "pubmed:16445883",
+      "pubmed:17190852",
+      "pubmed:17253521",
+      "pubmed:17416441",
+      "pubmed:18555535",
+      "pubmed:19082141",
+      "pubmed:19651674",
+      "pubmed:19741514",
+      "pubmed:19968328",
+      "pubmed:21556832",
+      "pubmed:21660517",
+      "pubmed:21698493",
+      "pubmed:22038587",
+      "pubmed:22101931",
+      "pubmed:22196490",
+      "pubmed:22252611",
+      "pubmed:22347384",
+      "pubmed:22386973",
+      "pubmed:22422801",
+      "pubmed:22429992",
+      "pubmed:22465051",
+      "pubmed:22521466",
+      "pubmed:7752905",
+      "reaxys:907175",
+      "wikipedia.en:Creatine"
+    ],
+    "generalized_empirical_formula": [
+      "C4H9N3O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:14028",
+      "CHEBI:23404",
+      "CHEBI:3909",
+      "CHEBI:41678"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:16919"
+    ],
+    "inchi_key_string": [
+      "CVSVTCORWBXHQV-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C4H9N3O2/c1-7(4(5)6)2-3(8)9/h2H2,1H3,(H3,5,6)(H,8,9)"
+    ],
+    "mass": [
+      "131.135"
+    ],
+    "monoisotopic_mass": [
+      "131.06948"
+    ],
+    "smiles_string": [
+      "CN(CC(=O)O)C(=N)N"
+    ]
+  },
+  "label": "creatine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_16919",
+  "obo_id": "CHEBI:16919",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "57-00-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=57-00-1"
+    },
+    {
+      "database": "chemspider",
+      "id": "566",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.566.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00148",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00148"
+    },
+    {
+      "database": "drugcentral",
+      "id": "4661",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/4661"
+    },
+    {
+      "database": "gmelin",
+      "id": "240513",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0000064",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0000064"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00300",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CREATINE",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "CRN",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11356982",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11356982/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11483809",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11483809/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11867929",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11867929/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12085493",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12085493/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12184144",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12184144/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12878267",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12878267/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16445883",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16445883/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17190852",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17190852/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17253521",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17253521/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17416441",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17416441/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18555535",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18555535/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19082141",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19082141/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19651674",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19651674/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19741514",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19741514/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19968328",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19968328/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21556832",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21556832/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21660517",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21660517/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21698493",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21698493/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22038587",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22038587/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22101931",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22101931/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22196490",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22196490/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22252611",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22252611/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22347384",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22347384/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22386973",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22386973/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22422801",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22422801/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22429992",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22429992/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22465051",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22465051/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22521466",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22521466/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7752905",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7752905/"
+    },
+    {
+      "database": "reaxys",
+      "id": "907175",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Creatine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-[amino(imino)methyl]-N-methylglycine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "((amino(imino)methyl)(methyl)amino)acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(N-methylcarbamimidamido)acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(alpha-methylguanido)acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(alpha-methylguanido)acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Creatin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Creatine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Kreatin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Methylglycocyamine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(aminoiminomethyl)-N-methylglycine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-Methyl-N-guanylglycine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-[(E)-AMINO(IMINO)METHYL]-N-METHYLGLYCINE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-[amino(imino)methyl]-N-methylglycine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-amidinosarcosine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-carbamimidoyl-N-methylglycine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-methyl-N-guanylglycine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-Methylguanidino acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16919?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16919/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16919/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16919/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16919/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16919/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16919/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16919/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16919/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "is_tautomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16919/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018036"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,550 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_85078",
+  "lang": "en",
+  "description": [
+    "A <em>C</em>-glycosyl comprising β-<small>D</small>-glucose in which the anomeric hydroxy group is replaced by a 4-chloro-3-(4-ethoxybenzyl)phenyl group. Used (in the form of its propanediol monohydrate) to improve glycemic control, along with diet and exercise, in adults with type 2 diabetes."
+  ],
+  "synonyms": [
+    "(1S)-1,5-anhydro-1-[4-chloro-3-(4-ethoxybenzyl)phenyl]-D-glucitol",
+    "(1S)-1,5-anhydro-1-[4-chloro-3-(4-ethoxybenzyl)phenyl]-D-glucitol",
+    "(2S,3R,4R,5S,6R)-2-(4-Chloro-3-(4-ethoxybenzyl)phenyl)-6- (hydroxymethyl)tetrahydro-2H-pyran-3,4,5-triol",
+    "BMS 512148",
+    "BMS-512148",
+    "dapagliflozin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:461432-26-8",
+      "drugbank:DB06292",
+      "drugcentral:4304",
+      "kegg.drug:D08897",
+      "pmc:PMC10706647",
+      "pubmed:20509715",
+      "pubmed:23724409",
+      "pubmed:24840612",
+      "pubmed:25200570",
+      "pubmed:25351341",
+      "pubmed:25418019",
+      "pubmed:25421015",
+      "pubmed:25438821",
+      "pubmed:25516459",
+      "pubmed:25557661",
+      "pubmed:25560982",
+      "pubmed:25592197",
+      "pubmed:25609661",
+      "pubmed:25648671",
+      "pubmed:25671589",
+      "pubmed:25678954",
+      "pubmed:25688892",
+      "pubmed:25688893",
+      "pubmed:25694411",
+      "pubmed:25710563",
+      "pubmed:30000030",
+      "pubmed:32454718",
+      "pubmed:33859839",
+      "pubmed:35272683",
+      "pubmed:37113469",
+      "pubmed:37549309",
+      "pubmed:37664712",
+      "pubmed:37758208",
+      "pubmed:37895841",
+      "pubmed:37931629",
+      "pubmed:37936747",
+      "pubmed:37979161",
+      "pubmed:38017482",
+      "pubmed:38031729",
+      "pubmed:38044448",
+      "pubmed:38094412",
+      "pubmed:38097862",
+      "pubmed:38117458",
+      "pubmed:38124408",
+      "pubmed:38128857",
+      "pubmed:38133155",
+      "pubmed:38137545",
+      "pubmed:38170280",
+      "pubmed:38171497",
+      "pubmed:38171852",
+      "pubmed:38185119",
+      "pubmed:38220410",
+      "reaxys:11966426",
+      "wikipedia.en:Dapagliflozin"
+    ],
+    "generalized_empirical_formula": [
+      "C21H25ClO6"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:85078"
+    ],
+    "inchi_key_string": [
+      "JVHXJTBJCFBINQ-ADAARDCZSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H25ClO6/c1-2-27-15-6-3-12(4-7-15)9-14-10-13(5-8-16(14)22)21-20(26)19(25)18(24)17(11-23)28-21/h3-8,10,17-21,23-26H,2,9,11H2,1H3/t17-,18-,19+,20-,21+/m1/s1"
+    ],
+    "mass": [
+      "408.878"
+    ],
+    "monoisotopic_mass": [
+      "408.13397"
+    ],
+    "smiles_string": [
+      "CCOc1ccc(Cc2cc([C@@H]3O[C@H](CO)[C@@H](O)[C@H](O)[C@H]3O)ccc2Cl)cc1"
+    ]
+  },
+  "label": "dapagliflozin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_85078",
+  "obo_id": "CHEBI:85078",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "461432-26-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=461432-26-8"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB06292",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB06292"
+    },
+    {
+      "database": "drugcentral",
+      "id": "4304",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/4304"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08897",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pmc",
+      "id": "PMC10706647",
+      "description": "pmc",
+      "url": "http://europepmc.org/articles/PMC10706647"
+    },
+    {
+      "database": "pubmed",
+      "id": "20509715",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20509715/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23724409",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23724409/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24840612",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24840612/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25200570",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25200570/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25351341",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25351341/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25418019",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25418019/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25421015",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25421015/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25438821",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25438821/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25516459",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25516459/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25557661",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25557661/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25560982",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25560982/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25592197",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25592197/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25609661",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25609661/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25648671",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25648671/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25671589",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25671589/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25678954",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25678954/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25688892",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25688892/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25688893",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25688893/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25694411",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25694411/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25710563",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25710563/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30000030",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30000030/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32454718",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32454718/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33859839",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33859839/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35272683",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35272683/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37113469",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37113469/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37549309",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37549309/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37664712",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37664712/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37758208",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37758208/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37895841",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37895841/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37931629",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37931629/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37936747",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37936747/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37979161",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37979161/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38017482",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38017482/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38031729",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38031729/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38044448",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38044448/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38094412",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38094412/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38097862",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38097862/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38117458",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38117458/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38124408",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38124408/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38128857",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38128857/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38133155",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38133155/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38137545",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38137545/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38170280",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38170280/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38171497",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38171497/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38171852",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38171852/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38185119",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38185119/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38220410",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38220410/"
+    },
+    {
+      "database": "reaxys",
+      "id": "11966426",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Dapagliflozin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(1S)-1,5-anhydro-1-[4-chloro-3-(4-ethoxybenzyl)phenyl]-D-glucitol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S)-1,5-anhydro-1-[4-chloro-3-(4-ethoxybenzyl)phenyl]-D-glucitol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S,3R,4R,5S,6R)-2-(4-Chloro-3-(4-ethoxybenzyl)phenyl)-6- (hydroxymethyl)tetrahydro-2H-pyran-3,4,5-triol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BMS 512148",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BMS-512148",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dapagliflozin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85078?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85078/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85078/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85078/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85078/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85078/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85078/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85078/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

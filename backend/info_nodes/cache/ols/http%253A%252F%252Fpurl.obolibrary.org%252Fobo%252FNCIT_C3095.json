@@ -1,0 +1,158 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C3095",
+  "lang": "en",
+  "description": [
+    "Inflammation of the liver; usually from a viral infection, but sometimes from toxic agents."
+  ],
+  "synonyms": [
+    "Hepatitis",
+    "Hepatitis, NOS",
+    "Inflammatory liver disease, unspecified",
+    "hepatitis"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Disease of the liver causing inflammation. Symptoms include an enlarged liver, fever, nausea, vomiting, abdominal pain, and dark urine.",
+      "Inflammation of the liver.",
+      "Inflammation of the liver; usually from a viral infection, but sometimes from toxic agents."
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "FDA",
+      "GDC",
+      "MedDRA",
+      "NICHD",
+      "SeroNet",
+      "mCode"
+    ],
+    "FDA_Table": [
+      "Patient Code (Appendix B)"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C16457",
+      "http://purl.obolibrary.org/obo/NCIT_C17103"
+    ],
+    "Legacy Concept Name": [
+      "Hepatitis"
+    ],
+    "Maps_To": [
+      "Hepatitis",
+      "Hepatitis, NOS"
+    ],
+    "Preferred_Name": [
+      "Hepatitis"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C3806111"
+    ],
+    "code": [
+      "C3095"
+    ],
+    "database_cross_reference": [
+      "IMDRF:E1102"
+    ]
+  },
+  "label": "Hepatitis",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C3095",
+  "obo_id": "NCIT:C3095",
+  "in_subset": [
+    "NCIT_C118464",
+    "NCIT_C128453",
+    "NCIT_C156952",
+    "NCIT_C157711",
+    "NCIT_C158035",
+    "NCIT_C158520",
+    "NCIT_C177537",
+    "NCIT_C179027",
+    "NCIT_C189083",
+    "NCIT_C189762",
+    "NCIT_C193006",
+    "NCIT_C193192",
+    "NCIT_C54450",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "IMDRF",
+      "id": "E1102",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Hepatitis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hepatitis, NOS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Inflammatory liver disease, unspecified",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "hepatitis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3095?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3095/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3095/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3095/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3095/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3095/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3095/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3095/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3095/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3095/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3095/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

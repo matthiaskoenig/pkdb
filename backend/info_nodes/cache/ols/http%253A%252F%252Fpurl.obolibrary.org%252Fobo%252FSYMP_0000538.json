@@ -1,0 +1,107 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/SYMP_0000538",
+  "lang": "en",
+  "description": [
+    "A skin and integumentary tissue symptom that is characterized by an abnormal excess accumulation of serous fluid in connective tissue or in a serous cavity."
+  ],
+  "synonyms": [
+    "dropsy"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD9CM_2005:782.3",
+      "UMLS_CUI:C0013604",
+      "UMLS_ICD9CM_2005_AUI:A0052720"
+    ],
+    "has_obo_namespace": [
+      "symptoms"
+    ],
+    "id": [
+      "SYMP:0000538"
+    ]
+  },
+  "label": "edema",
+  "ontology_name": "symp",
+  "ontology_prefix": "SYMP",
+  "ontology_iri": "http://purl.obolibrary.org/obo/symp.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "SYMP_0000538",
+  "obo_id": "SYMP:0000538",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A skin and integumentary tissue symptom that is characterized by an abnormal excess accumulation of serous fluid in connective tissue or in a serous cavity.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD9CM_2005",
+      "id": "782.3",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0013604",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0013604"
+    },
+    {
+      "database": "UMLS_ICD9CM_2005_AUI",
+      "id": "A0052720",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000538?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000538/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000538/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000538/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000538/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000538/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000538/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000538/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000538/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000538/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000538/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

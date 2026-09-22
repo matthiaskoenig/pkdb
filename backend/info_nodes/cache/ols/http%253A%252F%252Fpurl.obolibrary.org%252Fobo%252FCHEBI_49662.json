@@ -1,0 +1,406 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_49662",
+  "lang": "en",
+  "description": [
+    "A member of the class of indole-3-acetic acids that is indole-3-acetic acid in which the indole ring is substituted at positions 1, 2 and 5 by <em>p</em>-chlorobenzoyl, methyl, and methoxy groups, respectively. A non-steroidal anti-inflammatory drug, it is used in the treatment of musculoskeletal and joint disorders including osteoarthritis, rheumatoid arthritis, gout, bursitis and tendinitis."
+  ],
+  "synonyms": [
+    "1-(p-chlorobenzoyl)-5-methoxy-2-methylindole-3-acetic acid",
+    "Aconip",
+    "Indocin",
+    "Indomethacin",
+    "[1-(4-chlorobenzoyl)-5-methoxy-2-methyl-1H-indol-3-yl]acetic acid",
+    "[1-(4-chlorobenzoyl)-5-methoxy-2-methyl-1H-indol-3-yl]acetic acid",
+    "indometacin",
+    "indometacina",
+    "indometacine",
+    "indometacinum",
+    "{1-[(4-chlorophenyl)carbonyl]-5-methoxy-2-methyl-1H-indol-3-yl}acetic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:497341",
+      "cas:53-86-1",
+      "drugbank:DB00328",
+      "drugcentral:1440",
+      "gmelin:1446006",
+      "hmdb:HMDB0014473",
+      "kegg.compound:C01926",
+      "kegg.drug:D00141",
+      "knapsack:C00030512",
+      "lincs.smallmolecule:LSM-3275",
+      "metacyc.compound:CPD-10545",
+      "patent:BE379378",
+      "patent:US3161654",
+      "pdb-ccd:IMN",
+      "pubmed:22931205",
+      "pubmed:23992308",
+      "pubmed:28166217",
+      "pubmed:5952296",
+      "pubmed:6039425",
+      "reaxys:497341",
+      "wikipedia.en:Indometacin"
+    ],
+    "generalized_empirical_formula": [
+      "C19H16ClNO4"
+    ],
+    "has_alternative_id": [
+      "CHEBI:49660",
+      "CHEBI:5918"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:49662"
+    ],
+    "inchi_key_string": [
+      "CGIGDMFJXJATDK-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C19H16ClNO4/c1-11-15(10-18(22)23)16-9-14(25-2)7-8-17(16)21(11)19(24)12-3-5-13(20)6-4-12/h3-9H,10H2,1-2H3,(H,22,23)"
+    ],
+    "mass": [
+      "357.793"
+    ],
+    "monoisotopic_mass": [
+      "357.07679"
+    ],
+    "smiles_string": [
+      "COc1ccc2c(c1)c(CC(=O)O)c(C)n2C(=O)c1ccc(Cl)cc1"
+    ]
+  },
+  "label": "indometacin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_49662",
+  "obo_id": "CHEBI:49662",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "497341",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "53-86-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=53-86-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00328",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00328"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1440",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1440"
+    },
+    {
+      "database": "gmelin",
+      "id": "1446006",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014473",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014473"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C01926",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00141",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00030512",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00030512"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3275",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-10545",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "BE379378",
+      "description": "patent",
+      "url": "https://www.google.com/patents/BE379378"
+    },
+    {
+      "database": "patent",
+      "id": "US3161654",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3161654"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "IMN",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "22931205",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22931205/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23992308",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23992308/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28166217",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28166217/"
+    },
+    {
+      "database": "pubmed",
+      "id": "5952296",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/5952296/"
+    },
+    {
+      "database": "pubmed",
+      "id": "6039425",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6039425/"
+    },
+    {
+      "database": "reaxys",
+      "id": "497341",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Indometacin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "[1-(4-chlorobenzoyl)-5-methoxy-2-methyl-1H-indol-3-yl]acetic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(p-chlorobenzoyl)-5-methoxy-2-methylindole-3-acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Aconip",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Indocin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Indocin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Indomethacin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[1-(4-chlorobenzoyl)-5-methoxy-2-methyl-1H-indol-3-yl]acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "indometacin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "indometacina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "indometacine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "indometacinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "{1-[(4-chlorophenyl)carbonyl]-5-methoxy-2-methyl-1H-indol-3-yl}acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49662?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49662/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49662/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49662/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49662/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49662/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49662/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49662/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

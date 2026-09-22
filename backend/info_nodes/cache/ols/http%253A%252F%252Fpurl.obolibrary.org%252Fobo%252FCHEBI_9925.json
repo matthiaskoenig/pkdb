@@ -1,0 +1,399 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9925",
+  "lang": "en",
+  "description": [
+    "The sodium salt of valproic acid."
+  ],
+  "synonyms": [
+    "2-Propylvaleric acid sodium salt",
+    "Depakene",
+    "Epilim",
+    "Valproate sodium",
+    "sodium 2-propylpentanoate",
+    "sodium 2-propylpentanoate",
+    "valproic acid sodium salt"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:1069-66-5",
+      "drugbank:DBSALT001257",
+      "kegg.drug:D00710",
+      "pubmed:18248662",
+      "pubmed:18549628",
+      "pubmed:19066961",
+      "pubmed:19892633",
+      "pubmed:36618289",
+      "pubmed:36931694",
+      "pubmed:37088055",
+      "pubmed:37418453",
+      "pubmed:37541425",
+      "pubmed:37637787",
+      "pubmed:37762894",
+      "pubmed:37933420",
+      "pubmed:37961985",
+      "pubmed:37966492",
+      "pubmed:38026105",
+      "pubmed:38035682",
+      "pubmed:38074934",
+      "pubmed:38140056",
+      "pubmed:38170256",
+      "pubmed:38199660",
+      "pubmed:38329604",
+      "pubmed:38438061",
+      "pubmed:38444061",
+      "pubmed:38447300",
+      "pubmed:38497924",
+      "pubmed:38648661",
+      "pubmed:38741923"
+    ],
+    "generalized_empirical_formula": [
+      "C8H15O2.Na"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9925"
+    ],
+    "inchi_key_string": [
+      "AEQFSUDEHCCHBT-UHFFFAOYSA-M"
+    ],
+    "inchi_string": [
+      "InChI=1S/C8H16O2.Na/c1-3-5-7(6-4-2)8(9)10;/h7H,3-6H2,1-2H3,(H,9,10);/q;+1/p-1"
+    ],
+    "mass": [
+      "166.196"
+    ],
+    "monoisotopic_mass": [
+      "166.09697"
+    ],
+    "smiles_string": [
+      "CCCC(CCC)C(=O)[O-].[Na+]"
+    ]
+  },
+  "label": "sodium valproate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9925",
+  "obo_id": "CHEBI:9925",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "1069-66-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=1069-66-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DBSALT001257",
+      "description": "drugbank",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00710",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "18248662",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18248662/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18549628",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18549628/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19066961",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19066961/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19892633",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19892633/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36618289",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36618289/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36931694",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36931694/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37088055",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37088055/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37418453",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37418453/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37541425",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37541425/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37637787",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37637787/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37762894",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37762894/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37933420",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37933420/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37961985",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37961985/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37966492",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37966492/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38026105",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38026105/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38035682",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38035682/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38074934",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38074934/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38140056",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38140056/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38170256",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38170256/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38199660",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38199660/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38329604",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38329604/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38438061",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38438061/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38444061",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38444061/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38447300",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38447300/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38497924",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38497924/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38648661",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38648661/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38741923",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38741923/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "sodium 2-propylpentanoate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Propylvaleric acid sodium salt",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Depakene",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Epilim",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Valproate sodium",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sodium 2-propylpentanoate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "valproic acid sodium salt",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/graph"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

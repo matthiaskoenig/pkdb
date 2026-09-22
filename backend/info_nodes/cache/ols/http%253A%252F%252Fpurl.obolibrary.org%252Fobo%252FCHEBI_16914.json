@@ -1,0 +1,376 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_16914",
+  "lang": "en",
+  "description": [
+    "A monohydroxybenzoic acid that is benzoic acid with a hydroxy group at the <em>ortho</em> position. It is obtained from the bark of the white willow and wintergreen leaves."
+  ],
+  "synonyms": [
+    "2-HYDROXYBENZOIC ACID",
+    "2-HYDROXYBENZOIC ACID",
+    "2-carboxyphenol",
+    "2-hydroxybenzoic acid",
+    "2-hydroxybenzoic acid",
+    "Salicylic acid",
+    "o-Hydroxybenzoic acid",
+    "o-carboxyphenol",
+    "o-hydroxybenzoic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:69-72-7",
+      "drugbank:DB00936",
+      "drugcentral:2416",
+      "gmelin:3418",
+      "hmdb:HMDB0001895",
+      "kegg.compound:C00805",
+      "kegg.drug:D00097",
+      "knapsack:C00000206",
+      "lincs.smallmolecule:LSM-4763",
+      "metacyc.compound:CPD-110",
+      "pdb-ccd:SAL",
+      "pubmed:11016405",
+      "pubmed:12865403",
+      "pubmed:1650428",
+      "pubmed:19400653",
+      "pubmed:19816125",
+      "pubmed:22770225",
+      "pubmed:29079364",
+      "pubmed:32807953",
+      "pubmed:3425858",
+      "reaxys:774890",
+      "wikipedia.en:Salicylic_Acid"
+    ],
+    "generalized_empirical_formula": [
+      "C7H6O3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:26597",
+      "CHEBI:45521",
+      "CHEBI:9006"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:16914"
+    ],
+    "inchi_key_string": [
+      "YGSDEFSMJLZEOE-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C7H6O3/c8-6-4-2-1-3-5(6)7(9)10/h1-4,8H,(H,9,10)"
+    ],
+    "mass": [
+      "138.122"
+    ],
+    "monoisotopic_mass": [
+      "138.03169"
+    ],
+    "smiles_string": [
+      "O=C(O)c1ccccc1O"
+    ]
+  },
+  "label": "salicylic acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_16914",
+  "obo_id": "CHEBI:16914",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "69-72-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=69-72-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00936",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00936"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2416",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2416"
+    },
+    {
+      "database": "gmelin",
+      "id": "3418",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001895",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001895"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00805",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00097",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00000206",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00000206"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-4763",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-110",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "SAL",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11016405",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11016405/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12865403",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12865403/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1650428",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1650428/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19400653",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19400653/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19816125",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19816125/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22770225",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22770225/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29079364",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29079364/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32807953",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32807953/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3425858",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3425858/"
+    },
+    {
+      "database": "reaxys",
+      "id": "774890",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Salicylic_Acid",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-HYDROXYBENZOIC ACID",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-hydroxybenzoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-HYDROXYBENZOIC ACID",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-carboxyphenol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-hydroxybenzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salicylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "o-Hydroxybenzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "o-carboxyphenol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "o-hydroxybenzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16914?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16914/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16914/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16914/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16914/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16914/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16914/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16914/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16914/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

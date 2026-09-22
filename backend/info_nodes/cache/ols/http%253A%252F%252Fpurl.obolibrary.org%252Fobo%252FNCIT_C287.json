@@ -1,0 +1,246 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C287",
+  "lang": "en",
+  "description": [
+    "An orally administered non-steroidal antiinflammatory agent. Acetylsalicylic acid binds to and acetylates serine residues in cyclooxygenases, resulting in decreased synthesis of prostaglandin, platelet aggregation, and inflammation. This agent exhibits analgesic, antipyretic, and anticoagulant properties."
+  ],
+  "synonyms": [
+    "2-(Acetyloxy)benzoic Acid",
+    "ASA",
+    "ASPIRIN",
+    "Acetylsalicylic Acid",
+    "Acetylsalicylic acid",
+    "Aspergum",
+    "Aspirin",
+    "Ecotrin",
+    "Empirin",
+    "Entericin",
+    "Extren",
+    "Measurin",
+    "aspirin"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug that reduces pain, fever, inflammation, and blood clotting. Aspirin belongs to the family of drugs called nonsteroidal anti-inflammatory agents. It is also being studied in cancer prevention.",
+      "Acetylsalicylic acid decreases synthesis of prostaglandin, platelet aggregation, and inflammation. This agent exhibits analgesic, antipyretic, and anticoagulant properties."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Mild to moderate pain; fever; prevention of arterial and venous thrombosis"
+    ],
+    "CAS_Registry": [
+      "50-78-2"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:15365"
+    ],
+    "Chemical_Formula": [
+      "C9H8O4"
+    ],
+    "Contributing_Source": [
+      "ACC/AHA",
+      "CTRP",
+      "FDA",
+      "GDC",
+      "HemOnc"
+    ],
+    "Display_Name": [
+      "Aspirin"
+    ],
+    "FDA_UNII_Code": [
+      "R16CO5Y76E"
+    ],
+    "Has_ACC-AHA_SARS2_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C49487",
+      "http://purl.obolibrary.org/obo/NCIT_C49488"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C200709",
+      "http://purl.obolibrary.org/obo/NCIT_C200710",
+      "http://purl.obolibrary.org/obo/NCIT_C83539"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C17984"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C202155"
+    ],
+    "Legacy Concept Name": [
+      "Acetylsalicylic_Acid"
+    ],
+    "Maps_To": [
+      "Aspirin"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "39152"
+    ],
+    "NSC Number": [
+      "406186"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "39152"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "39152"
+    ],
+    "Preferred_Name": [
+      "Aspirin"
+    ],
+    "Semantic_Type": [
+      "Chemical Viewed Functionally"
+    ],
+    "UMLS_CUI": [
+      "C0004057"
+    ],
+    "code": [
+      "C287"
+    ]
+  },
+  "label": "Aspirin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C287",
+  "obo_id": "NCIT:C287",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C176424",
+    "NCIT_C177537",
+    "NCIT_C191200",
+    "NCIT_C191387",
+    "NCIT_C191405",
+    "NCIT_C191670",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "2-(Acetyloxy)benzoic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ASA",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ASPIRIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Acetylsalicylic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Acetylsalicylic acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Aspergum",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Aspirin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ecotrin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Empirin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Entericin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Extren",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Measurin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "aspirin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C287?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C287/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C287/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C287/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C287/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C287/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C287/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C287/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C287/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C287/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C287/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,1029 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_16236",
+  "lang": "en",
+  "description": [
+    "A primary alcohol that is ethane in which one of the hydrogens is substituted by a hydroxy group."
+  ],
+  "synonyms": [
+    "1-hydroxyethane",
+    "Aethanol",
+    "Aethylalkohol",
+    "Alkohol",
+    "C2H5OH",
+    "Dehydrated ethanol",
+    "ETHANOL",
+    "ETHANOL",
+    "EtOH",
+    "Ethanol",
+    "Ethanol",
+    "Ethyl alcohol",
+    "Methylcarbinol",
+    "[CH2Me(OH)]",
+    "[OEtH]",
+    "alcohol etilico",
+    "alcohol",
+    "alcool ethylique",
+    "etanol",
+    "ethanol",
+    "ethanol",
+    "hydroxyethane",
+    "spiritus vini"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:64-17-5",
+      "drugbank:DB00898",
+      "drugcentral:1076",
+      "gmelin:787",
+      "hmdb:HMDB0000108",
+      "kegg.compound:C00469",
+      "kegg.drug:D00068",
+      "kegg.drug:D06542",
+      "knapsack:C00019560",
+      "metacyc.compound:ETOH",
+      "molbase:858",
+      "molbase:859",
+      "pdb-ccd:EOH",
+      "ppdb:1373",
+      "pubmed:11046114",
+      "pubmed:11090978",
+      "pubmed:11198720",
+      "pubmed:11200745",
+      "pubmed:11262320",
+      "pubmed:11303910",
+      "pubmed:11333032",
+      "pubmed:11505026",
+      "pubmed:11590970",
+      "pubmed:11728426",
+      "pubmed:11750186",
+      "pubmed:11754521",
+      "pubmed:11810019",
+      "pubmed:11826039",
+      "pubmed:11981228",
+      "pubmed:12824058",
+      "pubmed:12829422",
+      "pubmed:12888778",
+      "pubmed:12946583",
+      "pubmed:14674846",
+      "pubmed:15019421",
+      "pubmed:15239123",
+      "pubmed:15285839",
+      "pubmed:15464411",
+      "pubmed:15465973",
+      "pubmed:15749123",
+      "pubmed:15900217",
+      "pubmed:15902919",
+      "pubmed:16084479",
+      "pubmed:16133132",
+      "pubmed:16352430",
+      "pubmed:16390872",
+      "pubmed:16737463",
+      "pubmed:16891664",
+      "pubmed:16934862",
+      "pubmed:17043811",
+      "pubmed:17190852",
+      "pubmed:17663926",
+      "pubmed:17687877",
+      "pubmed:18095657",
+      "pubmed:18249266",
+      "pubmed:18320157",
+      "pubmed:18347649",
+      "pubmed:18408978",
+      "pubmed:18411066",
+      "pubmed:18456322",
+      "pubmed:18513832",
+      "pubmed:18922656",
+      "pubmed:18925476",
+      "pubmed:19280886",
+      "pubmed:19359288",
+      "pubmed:19384566",
+      "pubmed:19458312",
+      "pubmed:19851413",
+      "pubmed:19901811",
+      "pubmed:21600756",
+      "pubmed:21762181",
+      "pubmed:21881875",
+      "pubmed:21967628",
+      "pubmed:22019193",
+      "pubmed:22222864",
+      "pubmed:22261437",
+      "pubmed:22286266",
+      "pubmed:22306018",
+      "pubmed:22331491",
+      "pubmed:22336593",
+      "reaxys:1718733",
+      "umbbd.compound:c0038",
+      "wikipedia.en:Ethanol"
+    ],
+    "generalized_empirical_formula": [
+      "C2H6O"
+    ],
+    "has_alternative_id": [
+      "CHEBI:14222",
+      "CHEBI:23978",
+      "CHEBI:30878",
+      "CHEBI:30880",
+      "CHEBI:42377",
+      "CHEBI:44594",
+      "CHEBI:4879"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:16236"
+    ],
+    "inchi_key_string": [
+      "LFQSCWFLJHTTHZ-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3"
+    ],
+    "mass": [
+      "46.069"
+    ],
+    "monoisotopic_mass": [
+      "46.04186"
+    ],
+    "smiles_string": [
+      "CCO"
+    ]
+  },
+  "label": "ethanol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_16236",
+  "obo_id": "CHEBI:16236",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "64-17-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=64-17-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00898",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00898"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1076",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1076"
+    },
+    {
+      "database": "gmelin",
+      "id": "787",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0000108",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0000108"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00469",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00068",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D06542",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00019560",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00019560"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "ETOH",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "molbase",
+      "id": "858",
+      "description": "molbase",
+      "url": "http://www.molbase.com/en/index.php?app=search&search_keyword=858"
+    },
+    {
+      "database": "molbase",
+      "id": "859",
+      "description": "molbase",
+      "url": "http://www.molbase.com/en/index.php?app=search&search_keyword=859"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "EOH",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "ppdb",
+      "id": "1373",
+      "description": "ppdb",
+      "url": "https://sitem.herts.ac.uk/aeru/ppdb/en/Reports/1373.htm"
+    },
+    {
+      "database": "pubmed",
+      "id": "11046114",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11046114/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11090978",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11090978/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11198720",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11198720/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11200745",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11200745/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11262320",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11262320/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11303910",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11303910/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11333032",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11333032/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11505026",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11505026/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11590970",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11590970/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11728426",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11728426/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11750186",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11750186/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11754521",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11754521/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11810019",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11810019/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11826039",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11826039/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11981228",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11981228/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12824058",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12824058/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12829422",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12829422/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12888778",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12888778/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12946583",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12946583/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14674846",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14674846/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15019421",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15019421/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15239123",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15239123/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15285839",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15285839/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15464411",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15464411/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15465973",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15465973/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15749123",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15749123/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15900217",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15900217/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15902919",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15902919/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16084479",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16084479/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16133132",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16133132/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16352430",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16352430/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16390872",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16390872/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16737463",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16737463/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16891664",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16891664/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16934862",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16934862/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17043811",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17043811/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17190852",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17190852/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17663926",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17663926/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17687877",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17687877/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18095657",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18095657/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18249266",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18249266/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18320157",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18320157/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18347649",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18347649/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18408978",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18408978/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18411066",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18411066/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18456322",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18456322/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18513832",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18513832/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18922656",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18922656/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18925476",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18925476/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19280886",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19280886/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19359288",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19359288/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19384566",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19384566/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19458312",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19458312/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19851413",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19851413/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19901811",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19901811/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21600756",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21600756/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21762181",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21762181/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21881875",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21881875/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21967628",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21967628/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22019193",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22019193/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22222864",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22222864/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22261437",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22261437/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22286266",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22286266/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22306018",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22306018/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22331491",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22331491/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22336593",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22336593/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1718733",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "umbbd.compound",
+      "id": "c0038",
+      "description": "umbbd.compound",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Ethanol",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "ETHANOL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ethanol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ethanol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-hydroxyethane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Aethanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Aethylalkohol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Alkohol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "C2H5OH",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dehydrated ethanol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ETHANOL",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "EtOH",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ethanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ethyl alcohol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Methylcarbinol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[CH2Me(OH)]",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "molbase",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[OEtH]",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "molbase",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alcohol etilico",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alcohol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alcool ethylique",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "etanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ethanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ethanol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ethanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hydroxyethane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "spiritus vini",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16236?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16236/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16236/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16236/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16236/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16236/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16236/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16236/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16236/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

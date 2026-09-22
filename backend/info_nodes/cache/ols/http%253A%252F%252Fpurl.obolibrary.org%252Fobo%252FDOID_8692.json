@@ -1,0 +1,158 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_8692",
+  "lang": "en",
+  "description": [
+    "A leukemia that is located_in myeloid tissue."
+  ],
+  "synonyms": [
+    "Non-Lymphocytic Leukemia",
+    "leukaemia myelogenous",
+    "leukemia myelogenous",
+    "myeloid granulocytic leukaemia",
+    "myeloid granulocytic leukemia",
+    "myeloid leukaemia"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "GARD:8226",
+      "ICD10CM:C92",
+      "ICD9CM:205",
+      "ICDO:9860/3",
+      "MESH:D007951",
+      "NCI:C3172",
+      "SNOMEDCT_US_2025_09_01:269631008",
+      "UMLS_CUI:C0023470"
+    ],
+    "has_alternative_id": [
+      "DOID:8878",
+      "DOID:8879",
+      "DOID:8910",
+      "DOID:9066",
+      "DOID:9126"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:8692"
+    ]
+  },
+  "label": "myeloid leukemia",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_8692",
+  "obo_id": "DOID:8692",
+  "in_subset": [
+    "DO_RAD_slim",
+    "DO_rare_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A leukemia that is located_in myeloid tissue.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "GARD",
+      "id": "8226",
+      "description": null,
+      "url": "https://rarediseases.info.nih.gov/?gard_id=8226"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "C92",
+      "description": null,
+      "url": "https://www.icd10data.com/search?s=C92"
+    },
+    {
+      "database": "ICD9CM",
+      "id": "205",
+      "description": null,
+      "url": "http://icd9cm.chrisendres.com/index.php?action=search&srchtext=205"
+    },
+    {
+      "database": "ICDO",
+      "id": "9860/3",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D007951",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D007951"
+    },
+    {
+      "database": "NCI",
+      "id": "C3172",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3172"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "269631008",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/269631008"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0023470",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0023470"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_8692?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_8692/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_8692/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_8692/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_8692/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_8692/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_8692/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_8692/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_8692/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_8692/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_8692/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

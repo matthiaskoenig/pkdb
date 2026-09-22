@@ -1,0 +1,1036 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7772",
+  "lang": "en",
+  "description": [
+    "A racemate comprising equimolar amounts of (<i>R</i>)- and (<i>S</i>)-omeprazole."
+  ],
+  "synonyms": [
+    "5-methoxy-2-{[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+    "Antra",
+    "Audazol",
+    "Belmazol",
+    "Ceprandal",
+    "Danlox",
+    "Desec",
+    "Elgam",
+    "Emeproton",
+    "Gasec",
+    "Gastrimut",
+    "Indurgan",
+    "Inhibitron",
+    "Losec",
+    "OMEP",
+    "OMP",
+    "OMZ",
+    "Olit",
+    "Omapren",
+    "Omebeta",
+    "Prazidec",
+    "Procelac",
+    "Sanamidol",
+    "Ulceral",
+    "Ulcesep",
+    "Ultop",
+    "omeprazol",
+    "omeprazole",
+    "omeprazolum",
+    "rac-5-methoxy-2-{[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+    "rac-5-methoxy-2-{[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "cas:73590-58-6",
+      "drugbank:DB00338",
+      "kegg.compound:C07324",
+      "kegg.drug:D00455",
+      "patent:EP5129",
+      "patent:US4255431",
+      "patent:US5693818",
+      "pubmed:11060758",
+      "pubmed:11208500",
+      "pubmed:11210716",
+      "pubmed:11304936",
+      "pubmed:11321383",
+      "pubmed:11395292",
+      "pubmed:11404722",
+      "pubmed:11459434",
+      "pubmed:11568514",
+      "pubmed:11700946",
+      "pubmed:11774962",
+      "pubmed:11807212",
+      "pubmed:11851112",
+      "pubmed:11903739",
+      "pubmed:11962536",
+      "pubmed:12072663",
+      "pubmed:12135028",
+      "pubmed:12235248",
+      "pubmed:12495367",
+      "pubmed:12683615",
+      "pubmed:13680386",
+      "pubmed:14616415",
+      "pubmed:14708212",
+      "pubmed:14725575",
+      "pubmed:15004262",
+      "pubmed:15125696",
+      "pubmed:15586641",
+      "pubmed:15598025",
+      "pubmed:15684503",
+      "pubmed:15707461",
+      "pubmed:15774534",
+      "pubmed:16080278",
+      "pubmed:16129922",
+      "pubmed:16259581",
+      "pubmed:16276979",
+      "pubmed:16380990",
+      "pubmed:16386527",
+      "pubmed:16397810",
+      "pubmed:16440530",
+      "pubmed:16998872",
+      "pubmed:17049542",
+      "pubmed:17384694",
+      "pubmed:17532167",
+      "pubmed:18294333",
+      "pubmed:18366242",
+      "pubmed:18416943",
+      "pubmed:18448060",
+      "pubmed:18498918",
+      "pubmed:18520598",
+      "pubmed:18571645",
+      "pubmed:18616070",
+      "pubmed:18793272",
+      "pubmed:18818790",
+      "pubmed:19150046",
+      "pubmed:19166730",
+      "pubmed:19176055",
+      "pubmed:19236757",
+      "pubmed:19327607",
+      "pubmed:19383986",
+      "pubmed:19434360",
+      "pubmed:19470853",
+      "pubmed:19517893",
+      "pubmed:19746659",
+      "pubmed:19796313",
+      "pubmed:19801857",
+      "pubmed:19937171",
+      "reaxys:3628192",
+      "vsdb:1827",
+      "wikipedia.en:Omeprazole"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7772"
+    ]
+  },
+  "label": "omeprazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7772",
+  "obo_id": "CHEBI:7772",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "73590-58-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=73590-58-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00338",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00338"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07324",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00455",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP5129",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP5129"
+    },
+    {
+      "database": "patent",
+      "id": "US4255431",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4255431"
+    },
+    {
+      "database": "patent",
+      "id": "US5693818",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US5693818"
+    },
+    {
+      "database": "pubmed",
+      "id": "11060758",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11060758/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11208500",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11208500/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11210716",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11210716/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11304936",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11304936/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11321383",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11321383/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11395292",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11395292/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11404722",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11404722/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11459434",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11459434/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11568514",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11568514/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11700946",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11700946/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11774962",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11774962/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11807212",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11807212/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11851112",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11851112/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11903739",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11903739/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11962536",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11962536/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12072663",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12072663/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12135028",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12135028/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12235248",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12235248/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12495367",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12495367/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12683615",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12683615/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13680386",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13680386/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14616415",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14616415/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14708212",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14708212/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14725575",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14725575/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15004262",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15004262/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15125696",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15125696/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15586641",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15586641/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15598025",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15598025/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15684503",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15684503/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15707461",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15707461/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15774534",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15774534/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16080278",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16080278/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16129922",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16129922/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16259581",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16259581/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16276979",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16276979/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16380990",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16380990/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16386527",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16386527/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16397810",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16397810/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16440530",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16440530/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16998872",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16998872/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17049542",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17049542/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17384694",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17384694/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17532167",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17532167/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18294333",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18294333/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18366242",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18366242/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18416943",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18416943/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18448060",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18448060/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18498918",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18498918/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18520598",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18520598/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18571645",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18571645/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18616070",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18616070/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18793272",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18793272/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18818790",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18818790/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19150046",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19150046/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19166730",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19166730/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19176055",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19176055/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19236757",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19236757/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19327607",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19327607/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19383986",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19383986/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19434360",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19434360/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19470853",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19470853/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19517893",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19517893/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19746659",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19746659/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19796313",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19796313/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19801857",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19801857/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19937171",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19937171/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3628192",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1827",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1827.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Omeprazole",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "rac-5-methoxy-2-{[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-methoxy-2-{[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Antra",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Audazol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Belmazol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ceprandal",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Danlox",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Desec",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Elgam",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Emeproton",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Gasec",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Gastrimut",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Indurgan",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Inhibitron",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Losec",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "OMEP",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "OMP",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "OMZ",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Olit",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Omapren",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Omebeta",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Prazidec",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Procelac",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sanamidol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ulceral",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ulcesep",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ultop",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "omeprazol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "omeprazole",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "omeprazolum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-5-methoxy-2-{[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7772?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7772/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7772/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7772/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7772/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7772/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7772/graph"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7772/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7772/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,239 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8247",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "11-((4-Methyl-1-piperazinyl)acetyl)-5,11-dihydro-6H-pyrido(2,3-b)(1,4)benzodiazepin-6-one",
+    "11-[(4-methylpiperazin-1-yl)acetyl]-5,11-dihydro-6H-pyrido[2,3-b][1,4]benzodiazepin-6-one",
+    "11-[(4-methylpiperazin-1-yl)acetyl]-5,11-dihydro-6H-pyrido[2,3-b][1,4]benzodiazepin-6-one",
+    "pirenzepina",
+    "pirenzepine",
+    "pirenzepinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:628987",
+      "cas:28797-61-7",
+      "drugbank:DB00670",
+      "drugcentral:2200",
+      "kegg.compound:C07508",
+      "kegg.drug:D08389",
+      "lincs.smallmolecule:LSM-4001",
+      "patent:FR1505795"
+    ],
+    "generalized_empirical_formula": [
+      "C19H21N5O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8247"
+    ],
+    "inchi_key_string": [
+      "RMHMFHUVIITRHF-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C19H21N5O2/c1-22-9-11-23(12-10-22)13-17(25)24-16-7-3-2-5-14(16)19(26)21-15-6-4-8-20-18(15)24/h2-8H,9-13H2,1H3,(H,21,26)"
+    ],
+    "mass": [
+      "351.41"
+    ],
+    "monoisotopic_mass": [
+      "351.16952"
+    ],
+    "smiles_string": [
+      "CN1CCN(CC(=O)N2c3ccccc3C(=O)Nc3cccnc32)CC1"
+    ]
+  },
+  "label": "pirenzepine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8247",
+  "obo_id": "CHEBI:8247",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "628987",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "28797-61-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=28797-61-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00670",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00670"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2200",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2200"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07508",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08389",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-4001",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "FR1505795",
+      "description": "patent",
+      "url": "https://www.google.com/patents/FR1505795"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "11-[(4-methylpiperazin-1-yl)acetyl]-5,11-dihydro-6H-pyrido[2,3-b][1,4]benzodiazepin-6-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "11-((4-Methyl-1-piperazinyl)acetyl)-5,11-dihydro-6H-pyrido(2,3-b)(1,4)benzodiazepin-6-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "11-[(4-methylpiperazin-1-yl)acetyl]-5,11-dihydro-6H-pyrido[2,3-b][1,4]benzodiazepin-6-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pirenzepina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pirenzepine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pirenzepine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pirenzepinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8247?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8247/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8247/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8247/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8247/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8247/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8247/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8247/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

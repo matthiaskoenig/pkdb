@@ -1,0 +1,101 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0008496",
+  "lang": "en",
+  "description": [
+    "An active inflammatory process affecting the liver for more than six months. Causes include viral infections, autoimmune disorders, drugs, and metabolic disorders."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "comment": [
+      "Acute cases of hepatitis are seen to be resolved well within a six-month period. When hepatitis is continued for more than six months it is termed chronic hepatitis."
+    ],
+    "database_cross_reference": [
+      "MedDRA:10008909",
+      "MedDRA:10008915",
+      "NCIt:C82978",
+      "SNOMEDCT:76783007",
+      "UMLS:C0019189"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "term editor": [
+      "Laura Huerta"
+    ]
+  },
+  "label": "chronic hepatitis",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "EFO_0008496",
+  "obo_id": "EFO:0008496",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "MedDRA",
+      "id": "10008909",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10008909"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10008915",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10008915"
+    },
+    {
+      "database": "NCIt",
+      "id": "C82978",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C82978"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "76783007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/76783007"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0019189",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0019189"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0008496?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0008496/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0008496/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0008496/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0008496/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0008496/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0008496/graph"
+    },
+    "has_modifier": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0008496/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002573"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

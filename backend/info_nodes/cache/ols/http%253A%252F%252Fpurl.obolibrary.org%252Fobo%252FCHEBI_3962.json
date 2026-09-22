@@ -1,0 +1,616 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3962",
+  "lang": "en",
+  "description": [
+    "A β-diketone that is methane in which two of the hydrogens are substituted by feruloyl groups. A natural dyestuff found in the root of <em>Curcuma longa</em>."
+  ],
+  "synonyms": [
+    "(1E,6E)-1,7-bis(4-hydroxy-3-methoxyphenyl)hepta-1,6-diene-3,5-dione",
+    "(1E,6E)-1,7-bis(4-hydroxy-3-methoxyphenyl)hepta-1,6-diene-3,5-dione",
+    "C.I. 75300",
+    "C.I. Natural Yellow 3",
+    "Curcumin",
+    "Diferuloylmethane",
+    "E 100",
+    "Kacha haldi",
+    "Natural yellow 3",
+    "Turmeric yellow",
+    "curcumin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:458-37-7",
+      "chemspider:839564",
+      "drugbank:DB11672",
+      "hmdb:HMDB0002269",
+      "kegg.compound:C10443",
+      "knapsack:C00002731",
+      "lincs.smallmolecule:LSM-43083",
+      "metacyc.compound:CPD-6602",
+      "patent:DE859145",
+      "patent:KR20130050834",
+      "pdb-ccd:CC9",
+      "pubmed:10923784",
+      "pubmed:12083767",
+      "pubmed:12450549",
+      "pubmed:12826232",
+      "pubmed:14561543",
+      "pubmed:14634121",
+      "pubmed:15129424",
+      "pubmed:15659840",
+      "pubmed:15753945",
+      "pubmed:15809436",
+      "pubmed:15842781",
+      "pubmed:15879598",
+      "pubmed:16276182",
+      "pubmed:16292655",
+      "pubmed:16413584",
+      "pubmed:16712454",
+      "pubmed:16972983",
+      "pubmed:17182546",
+      "pubmed:18815282",
+      "pubmed:19038979",
+      "pubmed:19204190",
+      "pubmed:19234767",
+      "pubmed:20057137",
+      "pubmed:20645870",
+      "pubmed:21466422",
+      "pubmed:21642934",
+      "pubmed:22044005",
+      "pubmed:22051121",
+      "pubmed:22118895",
+      "pubmed:22122768",
+      "pubmed:22211691",
+      "pubmed:22318308",
+      "pubmed:22753715",
+      "pubmed:23386263",
+      "pubmed:23574161",
+      "pubmed:34299604",
+      "pubmed:34473340",
+      "pubmed:34572272",
+      "pubmed:34572491",
+      "pubmed:9698073",
+      "reaxys:2306965",
+      "wikipedia.en:Curcumin"
+    ],
+    "generalized_empirical_formula": [
+      "C21H20O6"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3962"
+    ],
+    "inchi_key_string": [
+      "VFLDPWHFBUODDF-FCXRPNKRSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H20O6/c1-26-20-11-14(5-9-18(20)24)3-7-16(22)13-17(23)8-4-15-6-10-19(25)21(12-15)27-2/h3-12,24-25H,13H2,1-2H3/b7-3+,8-4+"
+    ],
+    "mass": [
+      "368.385"
+    ],
+    "monoisotopic_mass": [
+      "368.12599"
+    ],
+    "smiles_string": [
+      "COc1cc(/C=C/C(=O)CC(=O)/C=C/c2ccc(O)c(OC)c2)ccc1O"
+    ]
+  },
+  "label": "curcumin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3962",
+  "obo_id": "CHEBI:3962",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "458-37-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=458-37-7"
+    },
+    {
+      "database": "chemspider",
+      "id": "839564",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.839564.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB11672",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB11672"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0002269",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0002269"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C10443",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00002731",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00002731"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-43083",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-6602",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "DE859145",
+      "description": "patent",
+      "url": "https://www.google.com/patents/DE859145"
+    },
+    {
+      "database": "patent",
+      "id": "KR20130050834",
+      "description": "patent",
+      "url": "https://www.google.com/patents/KR20130050834"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "CC9",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10923784",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10923784/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12083767",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12083767/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12450549",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12450549/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12826232",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12826232/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14561543",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14561543/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14634121",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14634121/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15129424",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15129424/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15659840",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15659840/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15753945",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15753945/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15809436",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15809436/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15842781",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15842781/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15879598",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15879598/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16276182",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16276182/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16292655",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16292655/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16413584",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16413584/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16712454",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16712454/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16972983",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16972983/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17182546",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17182546/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18815282",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18815282/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19038979",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19038979/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19204190",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19204190/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19234767",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19234767/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20057137",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20057137/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20645870",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20645870/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21466422",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21466422/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21642934",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21642934/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22044005",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22044005/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22051121",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22051121/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22118895",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22118895/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22122768",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22122768/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22211691",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22211691/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22318308",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22318308/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22753715",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22753715/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23386263",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23386263/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23574161",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23574161/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34299604",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34299604/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34473340",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34473340/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34572272",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34572272/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34572491",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34572491/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9698073",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9698073/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2306965",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Curcumin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(1E,6E)-1,7-bis(4-hydroxy-3-methoxyphenyl)hepta-1,6-diene-3,5-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1E,6E)-1,7-bis(4-hydroxy-3-methoxyphenyl)hepta-1,6-diene-3,5-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "C.I. 75300",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "C.I. Natural Yellow 3",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Curcumin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Diferuloylmethane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E 100",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Kacha haldi",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Natural yellow 3",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Turmeric yellow",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "curcumin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3962?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3962/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3962/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3962/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3962/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3962/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3962/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3962/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3962/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,263 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_37924",
+  "lang": "en",
+  "description": [
+    "A heavily substituted carbohydrazide that is an antiretroviral drug of the protease inhibitor (PI) class used to treat infection of human immunodeficiency virus (HIV)."
+  ],
+  "synonyms": [
+    "ATZ",
+    "atazanavir",
+    "atazanavirum",
+    "dimethyl (3S,8S,9S,12S)-9-benzyl-3,12-di-tert-butyl-8-hydroxy-4,11-dioxo-6-[4-(2-pyridyl)benzyl]-2,5,6,10,13-pentaazatetradecanedioate",
+    "dimethyl (3S,8S,9S,12S)-9-benzyl-3,12-di-tert-butyl-8-hydroxy-4,11-dioxo-6-[4-(2-pyridyl)benzyl]-2,5,6,10,13-pentaazatetradecanedioate"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:198904-31-3",
+      "drugbank:DB01072",
+      "kegg.drug:D07471",
+      "pubmed:15156449",
+      "pubmed:15353575",
+      "pubmed:15645003",
+      "pubmed:15737947",
+      "pubmed:17376023",
+      "pubmed:17619250",
+      "pubmed:18389089",
+      "pubmed:24108452",
+      "pubmed:24314017",
+      "pubmed:25017682",
+      "reaxys:8101951",
+      "wikipedia.en:Atazanavir"
+    ],
+    "generalized_empirical_formula": [
+      "C38H52N6O7"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:37924"
+    ],
+    "inchi_key_string": [
+      "AXRYRYVKAWYZBR-GASGPIRDSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C38H52N6O7/c1-37(2,3)31(41-35(48)50-7)33(46)40-29(22-25-14-10-9-11-15-25)30(45)24-44(43-34(47)32(38(4,5)6)42-36(49)51-8)23-26-17-19-27(20-18-26)28-16-12-13-21-39-28/h9-21,29-32,45H,22-24H2,1-8H3,(H,40,46)(H,41,48)(H,42,49)(H,43,47)/t29-,30-,31+,32+/m0/s1"
+    ],
+    "mass": [
+      "704.869"
+    ],
+    "monoisotopic_mass": [
+      "704.38975"
+    ],
+    "smiles_string": [
+      "COC(=O)N[C@H](C(=O)N[C@@H](Cc1ccccc1)[C@@H](O)CN(Cc1ccc(-c2ccccn2)cc1)NC(=O)[C@@H](NC(=O)OC)C(C)(C)C)C(C)(C)C"
+    ]
+  },
+  "label": "atazanavir",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_37924",
+  "obo_id": "CHEBI:37924",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "198904-31-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=198904-31-3"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01072",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01072"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07471",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "15156449",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15156449/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15353575",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15353575/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15645003",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15645003/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15737947",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15737947/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17376023",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17376023/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17619250",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17619250/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18389089",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18389089/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24108452",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24108452/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24314017",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24314017/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25017682",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25017682/"
+    },
+    {
+      "database": "reaxys",
+      "id": "8101951",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Atazanavir",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "dimethyl (3S,8S,9S,12S)-9-benzyl-3,12-di-tert-butyl-8-hydroxy-4,11-dioxo-6-[4-(2-pyridyl)benzyl]-2,5,6,10,13-pentaazatetradecanedioate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ATZ",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "atazanavir",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "atazanavirum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dimethyl (3S,8S,9S,12S)-9-benzyl-3,12-di-tert-butyl-8-hydroxy-4,11-dioxo-6-[4-(2-pyridyl)benzyl]-2,5,6,10,13-pentaazatetradecanedioate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_37924?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_37924/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_37924/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_37924/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_37924/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_37924/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_37924/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_37924/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,420 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_5001",
+  "lang": "en",
+  "description": [
+    "A chlorobenzophenone that is (4-chlorophenyl)(phenyl)methanone substituted by a [2-methyl-1-oxo-1-(propan-2-yloxy)propan-2-yl]oxy group at position 1 on the phenyl ring."
+  ],
+  "synonyms": [
+    "2-(4-(4-Chlorobenzoyl)phenoxy)-2-methylpropanoic acid 1-methylethyl ester",
+    "Antara",
+    "FNF",
+    "Fenofibrate",
+    "Finofibrate",
+    "Isopropyl (4'-(p-chlorobenzoyl)-2-phenoxy-2-methyl)propionate",
+    "Isopropyl 2-(4-(4-chlorobenzoyl)phenoxy)-2-methylpropionate",
+    "Lipantil",
+    "Lipofen",
+    "Procetofen",
+    "Tricor",
+    "Triglide",
+    "propan-2-yl 2-[4-(4-chlorobenzoyl)phenoxy]-2-methylpropanoate",
+    "propan-2-yl 2-[4-(4-chlorobenzoyl)phenoxy]-2-methylpropanoate"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:49562-28-9",
+      "chemspider:3222",
+      "drugbank:DB01039",
+      "drugcentral:1152",
+      "hmdb:HMDB0015173",
+      "kegg.compound:C07586",
+      "kegg.drug:D00565",
+      "lincs.smallmolecule:LSM-3107",
+      "patent:DE2250327",
+      "patent:US4058552",
+      "pubmed:17449930",
+      "pubmed:18212815",
+      "pubmed:23603800",
+      "pubmed:32675219",
+      "pubmed:33704429",
+      "pubmed:34244236",
+      "pubmed:34515330",
+      "reaxys:2062462",
+      "wikipedia.en:Fenofibrate"
+    ],
+    "generalized_empirical_formula": [
+      "C20H21ClO4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:5001"
+    ],
+    "inchi_key_string": [
+      "YMTINGFKWWXKFG-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C20H21ClO4/c1-13(2)24-19(23)20(3,4)25-17-11-7-15(8-12-17)18(22)14-5-9-16(21)10-6-14/h5-13H,1-4H3"
+    ],
+    "mass": [
+      "360.837"
+    ],
+    "monoisotopic_mass": [
+      "360.11284"
+    ],
+    "smiles_string": [
+      "CC(C)OC(=O)C(C)(C)Oc1ccc(C(=O)c2ccc(Cl)cc2)cc1"
+    ]
+  },
+  "label": "fenofibrate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_5001",
+  "obo_id": "CHEBI:5001",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "49562-28-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=49562-28-9"
+    },
+    {
+      "database": "chemspider",
+      "id": "3222",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.3222.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01039",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01039"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1152",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1152"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015173",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015173"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07586",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00565",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3107",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "DE2250327",
+      "description": "patent",
+      "url": "https://www.google.com/patents/DE2250327"
+    },
+    {
+      "database": "patent",
+      "id": "US4058552",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4058552"
+    },
+    {
+      "database": "pubmed",
+      "id": "17449930",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17449930/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18212815",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18212815/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23603800",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23603800/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32675219",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32675219/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33704429",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33704429/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34244236",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34244236/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34515330",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34515330/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2062462",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Fenofibrate",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "propan-2-yl 2-[4-(4-chlorobenzoyl)phenoxy]-2-methylpropanoate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(4-(4-Chlorobenzoyl)phenoxy)-2-methylpropanoic acid 1-methylethyl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Antara",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "FNF",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Fenofibrate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Finofibrate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Isopropyl (4'-(p-chlorobenzoyl)-2-phenoxy-2-methyl)propionate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Isopropyl 2-(4-(4-chlorobenzoyl)phenoxy)-2-methylpropionate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lipantil",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lipofen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Procetofen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tricor",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Triglide",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "propan-2-yl 2-[4-(4-chlorobenzoyl)phenoxy]-2-methylpropanoate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5001?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5001/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5001/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5001/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5001/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5001/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5001/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5001/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5001/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,351 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_2668",
+  "lang": "en",
+  "description": [
+    "A fully substituted dialkyl 1,4-dihydropyridine-3,5-dicarboxylate derivative, which is used for the treatment of hypertension, chronic stable angina and confirmed or suspected vasospastic angina."
+  ],
+  "synonyms": [
+    "3-Ethyl-5-methyl (+-)-2-(2-aminoethoxymethyl)-4-(o-chlorophenyl)-1,4-dihydro-6-methyl-3,5-pyridinedicarboxylate",
+    "3-ethyl 5-methyl 2-[(2-aminoethoxy)methyl]-4-(2-chlorophenyl)-6-methyl-1,4-dihydropyridine-3,5-dicarboxylate",
+    "3-ethyl 5-methyl 2-[(2-aminoethoxy)methyl]-4-(2-chlorophenyl)-6-methyl-1,4-dihydropyridine-3,5-dicarboxylate",
+    "Amlodipine Free Base",
+    "amlodipine",
+    "amlodipino",
+    "amlodipinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:88150-42-9",
+      "drugbank:DB00381",
+      "drugcentral:183",
+      "kegg.compound:C06825",
+      "kegg.drug:D07450",
+      "lincs.smallmolecule:LSM-1388",
+      "patent:EP89167",
+      "patent:US4572909",
+      "pubmed:1532771",
+      "pubmed:16422032",
+      "pubmed:1834846",
+      "pubmed:19450066",
+      "pubmed:21591999",
+      "pubmed:7522286",
+      "pubmed:8310972",
+      "pubmed:8310973",
+      "pubmed:9156957",
+      "reaxys:3570229",
+      "vsdb:2963",
+      "wikipedia.en:Amlodipine"
+    ],
+    "generalized_empirical_formula": [
+      "C20H25ClN2O5"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:2668"
+    ],
+    "inchi_key_string": [
+      "HTIQEAQVCYTUBX-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C20H25ClN2O5/c1-4-28-20(25)18-15(11-27-10-9-22)23-12(2)16(19(24)26-3)17(18)13-7-5-6-8-14(13)21/h5-8,17,23H,4,9-11,22H2,1-3H3"
+    ],
+    "mass": [
+      "408.882"
+    ],
+    "monoisotopic_mass": [
+      "408.1452"
+    ],
+    "smiles_string": [
+      "CCOC(=O)C1=C(COCCN)NC(C)=C(C(=O)OC)C1c1ccccc1Cl"
+    ]
+  },
+  "label": "amlodipine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_2668",
+  "obo_id": "CHEBI:2668",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "88150-42-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=88150-42-9"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00381",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00381"
+    },
+    {
+      "database": "drugcentral",
+      "id": "183",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/183"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06825",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07450",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1388",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP89167",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP89167"
+    },
+    {
+      "database": "patent",
+      "id": "US4572909",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4572909"
+    },
+    {
+      "database": "pubmed",
+      "id": "1532771",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1532771/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16422032",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16422032/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1834846",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1834846/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19450066",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19450066/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21591999",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21591999/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7522286",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7522286/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8310972",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8310972/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8310973",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8310973/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9156957",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9156957/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3570229",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "2963",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/2963.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Amlodipine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3-ethyl 5-methyl 2-[(2-aminoethoxy)methyl]-4-(2-chlorophenyl)-6-methyl-1,4-dihydropyridine-3,5-dicarboxylate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-Ethyl-5-methyl (+-)-2-(2-aminoethoxymethyl)-4-(o-chlorophenyl)-1,4-dihydro-6-methyl-3,5-pyridinedicarboxylate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-ethyl 5-methyl 2-[(2-aminoethoxy)methyl]-4-(2-chlorophenyl)-6-methyl-1,4-dihydropyridine-3,5-dicarboxylate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Amlodipine Free Base",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amlodipine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amlodipine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amlodipino",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amlodipinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2668?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2668/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2668/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2668/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2668/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2668/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2668/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2668/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2668/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2668/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2668/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2668/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

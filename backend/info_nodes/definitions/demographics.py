@@ -50,7 +50,6 @@ DEMOGRAPHICS_NODES: list[InfoNode] = [
         name="work fulltime",
         description="Fulltime work.",
         parents=["work hours (categorial)"],
-        annotations=[],
         synonyms=[],
     ),
     Choice(
@@ -58,7 +57,6 @@ DEMOGRAPHICS_NODES: list[InfoNode] = [
         name="work no fulltime",
         description="No fulltime work, i.e., part-time or no work.",
         parents=["work hours (categorial)"],
-        annotations=[],
         synonyms=[],
     ),
     Choice(
@@ -66,7 +64,6 @@ DEMOGRAPHICS_NODES: list[InfoNode] = [
         name="work parttime",
         description="Parttime work.",
         parents=["work hours (categorial)"],
-        annotations=[],
         synonyms=[],
     ),
     Choice(
@@ -74,7 +71,6 @@ DEMOGRAPHICS_NODES: list[InfoNode] = [
         name="work notime",
         description="Not working any hours.",
         parents=["work hours (categorial)"],
-        annotations=[],
         synonyms=[],
     ),
 ]

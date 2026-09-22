@@ -1,0 +1,268 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8493",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Detrunorm xl",
+    "Detrunorm",
+    "Mictonetten",
+    "Mictonorm",
+    "NSC-172140",
+    "Propiverine",
+    "propiverina",
+    "propiverine HCl",
+    "propiverine hydrochloride"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:60569-19-9",
+      "drugcentral:2300",
+      "hmdb:HMDB0041999",
+      "kegg.compound:C07852",
+      "kegg.drug:D08441",
+      "pubmed:19586686",
+      "pubmed:20022146",
+      "pubmed:37468498"
+    ],
+    "generalized_empirical_formula": [
+      "C23H29NO3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8493"
+    ],
+    "inchi_key_string": [
+      "QPCVHQBVMYCJOM-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C23H29NO3/c1-3-18-26-23(19-10-6-4-7-11-19,20-12-8-5-9-13-20)22(25)27-21-14-16-24(2)17-15-21/h4-13,21H,3,14-18H2,1-2H3"
+    ],
+    "mass": [
+      "367.489"
+    ],
+    "monoisotopic_mass": [
+      "367.21474"
+    ],
+    "smiles_string": [
+      "CCCOC(C(=O)OC1CCN(C)CC1)(c1ccccc1)c1ccccc1"
+    ]
+  },
+  "label": "Propiverine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8493",
+  "obo_id": "CHEBI:8493",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "60569-19-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=60569-19-9"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2300",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2300"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0041999",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0041999"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07852",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08441",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "19586686",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19586686/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20022146",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20022146/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37468498",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37468498/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Detrunorm xl",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Detrunorm",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mictonetten",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mictonorm",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NSC-172140",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Propiverine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "propiverina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "propiverine HCl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "propiverine hydrochloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8493?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8493/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8493/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8493/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8493/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8493/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8493/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8493/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,395 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_2637",
+  "lang": "en",
+  "description": [
+    "An amino cyclitol glycoside that is kanamycin A acylated at the N-1 position by a 4-amino-2-hydroxybutyryl group."
+  ],
+  "synonyms": [
+    "(2S)-4-amino-N-[(1R,2S,3S,4R,5S)-5-amino-2-(3-amino-3-deoxy-alpha-D-glucopyranosyloxy)-4-(6-amino-6-deoxy-alpha-D-glucopyranosyloxy)-3-hydroxycyclohexyl]-2-hydroxybutanamide",
+    "(2S)-4-amino-N-[(1R,2S,3S,4R,5S)-5-amino-2-(3-amino-3-deoxy-alpha-D-glucopyranosyloxy)-4-(6-amino-6-deoxy-alpha-D-glucopyranosyloxy)-3-hydroxycyclohexyl]-2-hydroxybutanamide",
+    "1-N-(L(-)-gamma-amino-alpha-hydroxybutyryl)kanamycin A",
+    "Amikacin",
+    "O-3-amino-3-deoxy-alpha-D-glucopyranosyl-(1->4)-O-(6-amino-6-deoxy-alpha-D-glucopyranosyl-(1->6))-N(3)-(4-amino-L-2-hydroxybutyryl)-2-deoxy-L-streptamine",
+    "amikacin",
+    "amikacina",
+    "amikacine",
+    "amikacinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:37517-28-5",
+      "drugbank:DB00479",
+      "drugcentral:157",
+      "hmdb:HMDB0014622",
+      "kegg.compound:C06820",
+      "kegg.drug:D02543",
+      "lincs.smallmolecule:LSM-5935",
+      "metacyc.compound:CPD-14197",
+      "patent:DE2234315",
+      "patent:US3781268",
+      "pubmed:11744283",
+      "pubmed:15305513",
+      "pubmed:17365906",
+      "pubmed:19495517",
+      "pubmed:19752274",
+      "pubmed:20195673",
+      "pubmed:25296102",
+      "pubmed:25327505",
+      "pubmed:25339395",
+      "pubmed:25630642",
+      "pubmed:8622103",
+      "pubmed:8622117",
+      "pubmed:9327246",
+      "reaxys:5915117",
+      "wikipedia.en:Amikacin"
+    ],
+    "generalized_empirical_formula": [
+      "C22H43N5O13"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:2637"
+    ],
+    "inchi_key_string": [
+      "LKCWBDHBTVXHDL-RMDFUYIESA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C22H43N5O13/c23-2-1-8(29)20(36)27-7-3-6(25)18(39-22-16(34)15(33)13(31)9(4-24)37-22)17(35)19(7)40-21-14(32)11(26)12(30)10(5-28)38-21/h6-19,21-22,28-35H,1-5,23-26H2,(H,27,36)/t6-,7+,8-,9+,10+,11-,12+,13+,14+,15-,16+,17-,18+,19-,21+,22+/m0/s1"
+    ],
+    "mass": [
+      "585.608"
+    ],
+    "monoisotopic_mass": [
+      "585.28574"
+    ],
+    "smiles_string": [
+      "NCC[C@H](O)C(=O)N[C@@H]1C[C@H](N)[C@@H](O[C@H]2O[C@H](CN)[C@@H](O)[C@H](O)[C@H]2O)[C@H](O)[C@H]1O[C@H]1O[C@H](CO)[C@@H](O)[C@H](N)[C@H]1O"
+    ]
+  },
+  "label": "amikacin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_2637",
+  "obo_id": "CHEBI:2637",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "37517-28-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=37517-28-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00479",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00479"
+    },
+    {
+      "database": "drugcentral",
+      "id": "157",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/157"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014622",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014622"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06820",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D02543",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5935",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-14197",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "DE2234315",
+      "description": "patent",
+      "url": "https://www.google.com/patents/DE2234315"
+    },
+    {
+      "database": "patent",
+      "id": "US3781268",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3781268"
+    },
+    {
+      "database": "pubmed",
+      "id": "11744283",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11744283/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15305513",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15305513/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17365906",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17365906/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19495517",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19495517/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19752274",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19752274/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20195673",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20195673/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25296102",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25296102/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25327505",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25327505/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25339395",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25339395/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25630642",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25630642/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8622103",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8622103/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8622117",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8622117/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9327246",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9327246/"
+    },
+    {
+      "database": "reaxys",
+      "id": "5915117",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Amikacin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2S)-4-amino-N-[(1R,2S,3S,4R,5S)-5-amino-2-(3-amino-3-deoxy-alpha-D-glucopyranosyloxy)-4-(6-amino-6-deoxy-alpha-D-glucopyranosyloxy)-3-hydroxycyclohexyl]-2-hydroxybutanamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S)-4-amino-N-[(1R,2S,3S,4R,5S)-5-amino-2-(3-amino-3-deoxy-alpha-D-glucopyranosyloxy)-4-(6-amino-6-deoxy-alpha-D-glucopyranosyloxy)-3-hydroxycyclohexyl]-2-hydroxybutanamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-N-(L(-)-gamma-amino-alpha-hydroxybutyryl)kanamycin A",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Amikacin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "O-3-amino-3-deoxy-alpha-D-glucopyranosyl-(1->4)-O-(6-amino-6-deoxy-alpha-D-glucopyranosyl-(1->6))-N(3)-(4-amino-L-2-hydroxybutyryl)-2-deoxy-L-streptamine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amikacin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amikacina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amikacine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amikacinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2637?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2637/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2637/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2637/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2637/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2637/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2637/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2637/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2637/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2637/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

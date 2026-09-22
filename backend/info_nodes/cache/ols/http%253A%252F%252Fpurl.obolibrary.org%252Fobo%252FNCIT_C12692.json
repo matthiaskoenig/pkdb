@@ -1,0 +1,185 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C12692",
+  "lang": "en",
+  "description": [
+    "The fluid that is contained within the brain ventricles, the subarachnoid space and the central canal of the spinal cord."
+  ],
+  "synonyms": [
+    "CEREBROSPINAL FLUID",
+    "CSF",
+    "Cerebral Spinal Fluid",
+    "Cerebral spinal fluid",
+    "Cerebrospinal Fluid",
+    "Cerebrospinal fluid",
+    "FLUID, CEREBROSPINAL",
+    "cerebral spinal fluid",
+    "cerebrospinal fluid"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A clear, colorless, bodily fluid, that occupies the subarachnoid space and the ventricular system around and inside the brain and spinal cord.",
+      "The fluid that flows in and around the hollow spaces of the brain and spinal cord, and between two of the meninges (the thin layers of tissue that cover and protect the brain and spinal cord). CSF is made by tissue called the choroid plexus in the ventricles (hollow spaces) in the brain.",
+      "The fluid that is contained within the brain ventricles, the subarachnoid space and the central canal of the spinal cord. (NCI)"
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "GDC",
+      "PCDC",
+      "UBERON",
+      "mCode"
+    ],
+    "Display_Name": [
+      "Cerebrospinal Fluid"
+    ],
+    "Is_PCDC_GCT_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C157120"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C171435",
+      "http://purl.obolibrary.org/obo/NCIT_C173263",
+      "http://purl.obolibrary.org/obo/NCIT_C70729",
+      "http://purl.obolibrary.org/obo/NCIT_C83315"
+    ],
+    "Legacy Concept Name": [
+      "Cerebrospinal_Fluid"
+    ],
+    "Maps_To": [
+      "Cerebrospinal Fluid",
+      "Cerebrospinal fluid"
+    ],
+    "Preferred_Name": [
+      "Cerebrospinal Fluid"
+    ],
+    "Semantic_Type": [
+      "Body Substance"
+    ],
+    "UMLS_CUI": [
+      "C0007806"
+    ],
+    "code": [
+      "C12692"
+    ],
+    "database_cross_reference": [
+      "UBERON:0001359"
+    ]
+  },
+  "label": "Cerebrospinal Fluid",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C12692",
+  "obo_id": "NCIT:C12692",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C177383",
+    "NCIT_C177394",
+    "NCIT_C177537",
+    "NCIT_C193006",
+    "NCIT_C193221",
+    "NCIT_C198975",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C77529",
+    "NCIT_C78734"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "UBERON",
+      "id": "0001359",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/UBERON_0001359"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "CEREBROSPINAL FLUID",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CSF",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cerebral Spinal Fluid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cerebral spinal fluid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cerebrospinal Fluid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cerebrospinal fluid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "FLUID, CEREBROSPINAL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "cerebral spinal fluid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "cerebrospinal fluid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12692?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12692/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12692/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12692/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12692/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12692/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12692/graph"
+    },
+    "Anatomic_Structure_Has_Location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12692/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R81"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

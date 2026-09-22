@@ -1,0 +1,162 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_132933",
+  "lang": "en",
+  "description": [
+    "A class of lipoproteins with a density between that of low-density and very-low-density lipoproteins. They are formed by the degradatiion of very-low-density lipoproteins."
+  ],
+  "synonyms": [
+    "IDL",
+    "intermediate density lipoprotein",
+    "intermediate density lipoproteins",
+    "intermediate-density lipoproteins"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "pubmed:15698598",
+      "pubmed:24353240",
+      "pubmed:24680982",
+      "pubmed:9133510",
+      "pubmed:9740500",
+      "wikipedia.en:Intermediate-density_lipoprotein"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:132933"
+    ]
+  },
+  "label": "intermediate-density lipoprotein",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_132933",
+  "obo_id": "CHEBI:132933",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "pubmed",
+      "id": "15698598",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15698598/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24353240",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24353240/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24680982",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24680982/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9133510",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9133510/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9740500",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9740500/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Intermediate-density_lipoprotein",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "IDL",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "intermediate density lipoprotein",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "intermediate density lipoproteins",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "intermediate-density lipoproteins",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132933?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132933/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132933/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132933/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132933/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132933/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132933/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

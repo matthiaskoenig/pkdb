@@ -1,0 +1,718 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_5384",
+  "lang": "en",
+  "description": [
+    "An <em>N</em>-sulfonylurea that is glyburide in which the (5-chloro-2-methoxybenzoyl group is replaced by a (5-methylpyrazin-2-yl)carbonyl group. An oral hypoglycemic agent, it is used in the treatment of type 2 diabetes mellitus."
+  ],
+  "synonyms": [
+    "1-cyclohexyl-3-({p-[2-(5-methylpyrazinecarboxamido)ethyl]phenyl}sulfonyl)urea",
+    "Aldiab",
+    "CP 28,720",
+    "CP 28720",
+    "CP-28,720",
+    "Digrin",
+    "Dipazide",
+    "Glibenese",
+    "Glibetin",
+    "Glican",
+    "Glidiab",
+    "Glipid",
+    "Gluco-Rite",
+    "Glucolip",
+    "Glucotrol",
+    "Glucozide",
+    "Glupitel",
+    "Glupizide",
+    "Glyde",
+    "Glydiazinamide",
+    "K 4024",
+    "Melizide",
+    "Mindiab",
+    "Minidab",
+    "Minidiab",
+    "Minodiab",
+    "N-(2-{4-[(cyclohexylcarbamoyl)sulfamoyl]phenyl}ethyl)-5-methylpyrazine-2-carboxamide",
+    "N-(2-{4-[(cyclohexylcarbamoyl)sulfamoyl]phenyl}ethyl)-5-methylpyrazine-2-carboxamide",
+    "N-{4-[beta-(5-methylpyrazine-2-carboxamido)ethyl]benzenesulphonyl}-N'-cyclohexylurea",
+    "Napizide",
+    "Ozidia",
+    "Sucrazide",
+    "glipizida",
+    "glipizide",
+    "glipizidum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:29094-61-9",
+      "drugbank:DB01067",
+      "drugcentral:1301",
+      "hmdb:HMDB0015200",
+      "kegg.drug:D00335",
+      "lincs.smallmolecule:LSM-2251",
+      "patent:DE2012138",
+      "patent:US3669966",
+      "pubmed:11147395",
+      "pubmed:20797618",
+      "pubmed:23230096",
+      "pubmed:24418334",
+      "pubmed:24444583",
+      "pubmed:2665487",
+      "pubmed:3143256",
+      "pubmed:389600",
+      "pubmed:3923454",
+      "pubmed:7660535",
+      "reaxys:903495",
+      "wikipedia.en:Glipizide"
+    ],
+    "generalized_empirical_formula": [
+      "C21H27N5O4S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:5384"
+    ],
+    "inchi_key_string": [
+      "ZJJXGWJIGJFDTL-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H27N5O4S/c1-15-13-24-19(14-23-15)20(27)22-12-11-16-7-9-18(10-8-16)31(29,30)26-21(28)25-17-5-3-2-4-6-17/h7-10,13-14,17H,2-6,11-12H2,1H3,(H,22,27)(H2,25,26,28)"
+    ],
+    "mass": [
+      "445.545"
+    ],
+    "monoisotopic_mass": [
+      "445.17838"
+    ],
+    "smiles_string": [
+      "Cc1cnc(C(=O)NCCc2ccc(S(=O)(=O)NC(=O)NC3CCCCC3)cc2)cn1"
+    ]
+  },
+  "label": "glipizide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_5384",
+  "obo_id": "CHEBI:5384",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "29094-61-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=29094-61-9"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01067",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01067"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1301",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1301"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015200",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015200"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00335",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-2251",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "DE2012138",
+      "description": "patent",
+      "url": "https://www.google.com/patents/DE2012138"
+    },
+    {
+      "database": "patent",
+      "id": "US3669966",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3669966"
+    },
+    {
+      "database": "pubmed",
+      "id": "11147395",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11147395/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20797618",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20797618/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23230096",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23230096/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24418334",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24418334/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24444583",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24444583/"
+    },
+    {
+      "database": "pubmed",
+      "id": "2665487",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2665487/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3143256",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3143256/"
+    },
+    {
+      "database": "pubmed",
+      "id": "389600",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/389600/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3923454",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3923454/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7660535",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7660535/"
+    },
+    {
+      "database": "reaxys",
+      "id": "903495",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Glipizide",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-(2-{4-[(cyclohexylcarbamoyl)sulfamoyl]phenyl}ethyl)-5-methylpyrazine-2-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-cyclohexyl-3-({p-[2-(5-methylpyrazinecarboxamido)ethyl]phenyl}sulfonyl)urea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Aldiab",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CP 28,720",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CP 28720",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CP-28,720",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Digrin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dipazide",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glibenese",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glibetin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glican",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glidiab",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glipid",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Gluco-Rite",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glucolip",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glucotrol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glucozide",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glupitel",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glupizide",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glyde",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glydiazinamide",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "K 4024",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Melizide",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mindiab",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Minidab",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Minidiab",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Minodiab",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(2-{4-[(cyclohexylcarbamoyl)sulfamoyl]phenyl}ethyl)-5-methylpyrazine-2-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-{4-[beta-(5-methylpyrazine-2-carboxamido)ethyl]benzenesulphonyl}-N'-cyclohexylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Napizide",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ozidia",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sucrazide",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glipizida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glipizide",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glipizidum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5384?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5384/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5384/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5384/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5384/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5384/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5384/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5384/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

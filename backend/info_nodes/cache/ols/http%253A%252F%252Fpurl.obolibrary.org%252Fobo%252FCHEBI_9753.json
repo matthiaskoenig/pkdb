@@ -1,0 +1,289 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9753",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(+-)-all-rac-5-(p-((6-Hydroxy-2,5,7,8-tetramethyl-2-chromanyl)methoxy)benzyl)-2,4-thiazolidinedione",
+    "5-(4-(6-Hydroxy-2,5,7,8-tetramethylchroman-2-ylmethoxy)benzyl)thiazolidine-2,4-dione",
+    "5-{4-[(6-hydroxy-2,5,7,8-tetramethyl-3,4-dihydro-2H-chromen-2-yl)methoxy]benzyl}-1,3-thiazolidine-2,4-dione",
+    "5-{4-[(6-hydroxy-2,5,7,8-tetramethyl-3,4-dihydro-2H-chromen-2-yl)methoxy]benzyl}-1,3-thiazolidine-2,4-dione",
+    "Rezulin (TN)",
+    "Romglizone",
+    "Troglitazone",
+    "troglitazona",
+    "troglitazone",
+    "troglitazonum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:4338399",
+      "cas:97322-87-7",
+      "drugbank:DB00197",
+      "drugcentral:2767",
+      "kegg.drug:D00395",
+      "lincs.smallmolecule:LSM-4890",
+      "metacyc.compound:CPD-11439",
+      "patent:US4572912",
+      "wikipedia.en:Troglitazone"
+    ],
+    "generalized_empirical_formula": [
+      "C24H27NO5S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9753"
+    ],
+    "inchi_key_string": [
+      "GXPHKUHSUJUWKP-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C24H27NO5S/c1-13-14(2)21-18(15(3)20(13)26)9-10-24(4,30-21)12-29-17-7-5-16(6-8-17)11-19-22(27)25-23(28)31-19/h5-8,19,26H,9-12H2,1-4H3,(H,25,27,28)"
+    ],
+    "mass": [
+      "441.549"
+    ],
+    "monoisotopic_mass": [
+      "441.16099"
+    ],
+    "smiles_string": [
+      "Cc1c(C)c2c(c(C)c1O)CCC(C)(COc1ccc(CC3SC(=O)NC3=O)cc1)O2"
+    ]
+  },
+  "label": "troglitazone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9753",
+  "obo_id": "CHEBI:9753",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "4338399",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "97322-87-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=97322-87-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00197",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00197"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2767",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2767"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00395",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-4890",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-11439",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US4572912",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4572912"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Troglitazone",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-{4-[(6-hydroxy-2,5,7,8-tetramethyl-3,4-dihydro-2H-chromen-2-yl)methoxy]benzyl}-1,3-thiazolidine-2,4-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-all-rac-5-(p-((6-Hydroxy-2,5,7,8-tetramethyl-2-chromanyl)methoxy)benzyl)-2,4-thiazolidinedione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-(4-(6-Hydroxy-2,5,7,8-tetramethylchroman-2-ylmethoxy)benzyl)thiazolidine-2,4-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-{4-[(6-hydroxy-2,5,7,8-tetramethyl-3,4-dihydro-2H-chromen-2-yl)methoxy]benzyl}-1,3-thiazolidine-2,4-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Rezulin (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Romglizone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Troglitazone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "troglitazona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "troglitazone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "troglitazonum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9753?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9753/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9753/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9753/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9753/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9753/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9753/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9753/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

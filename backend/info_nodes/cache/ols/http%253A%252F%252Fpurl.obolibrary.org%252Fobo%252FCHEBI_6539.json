@@ -1,0 +1,516 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6539",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Abbloraz",
+    "Loraz",
+    "Lorazepam civ",
+    "Lorazepam intensol",
+    "Lorazepam preservative free",
+    "Lorazepam",
+    "Loreev xr",
+    "NSC-289758",
+    "Temesta",
+    "Wy 4036",
+    "Wy-4036",
+    "ativan"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:846-49-1",
+      "drugcentral:1606",
+      "hmdb:HMDB0014332",
+      "kegg.drug:D00365",
+      "lincs.smallmolecule:LSM-4970",
+      "pubmed:10602692",
+      "pubmed:10836148",
+      "pubmed:10866370",
+      "pubmed:10891117",
+      "pubmed:10956200",
+      "pubmed:11448232",
+      "pubmed:12061889",
+      "pubmed:14971904",
+      "pubmed:15646539",
+      "pubmed:15781124",
+      "pubmed:17544548",
+      "pubmed:18396854",
+      "pubmed:18426954",
+      "pubmed:18533710",
+      "pubmed:18768239",
+      "pubmed:19445515",
+      "pubmed:20020916",
+      "pubmed:20070106",
+      "pubmed:20185316",
+      "pubmed:21055935",
+      "pubmed:21282406",
+      "pubmed:22194678",
+      "pubmed:25556095",
+      "pubmed:26550826",
+      "pubmed:26948801",
+      "pubmed:32648758",
+      "pubmed:34722",
+      "pubmed:37468498",
+      "pubmed:6094812",
+      "pubmed:7359533",
+      "pubmed:7861419",
+      "pubmed:8978853"
+    ],
+    "generalized_empirical_formula": [
+      "C15H10Cl2N2O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:94326"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6539"
+    ],
+    "inchi_key_string": [
+      "DIWRORZWFLOCLC-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C15H10Cl2N2O2/c16-8-5-6-12-10(7-8)13(19-15(21)14(20)18-12)9-3-1-2-4-11(9)17/h1-7,15,21H,(H,18,20)"
+    ],
+    "mass": [
+      "321.163"
+    ],
+    "monoisotopic_mass": [
+      "320.01193"
+    ],
+    "smiles_string": [
+      "O=C1Nc2ccc(Cl)cc2C(c2ccccc2Cl)=NC1O"
+    ]
+  },
+  "label": "Lorazepam",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6539",
+  "obo_id": "CHEBI:6539",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "846-49-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=846-49-1"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1606",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1606"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014332",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014332"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00365",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-4970",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10602692",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10602692/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10836148",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10836148/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10866370",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10866370/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10891117",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10891117/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10956200",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10956200/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11448232",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11448232/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12061889",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12061889/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14971904",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14971904/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15646539",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15646539/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15781124",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15781124/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17544548",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17544548/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18396854",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18396854/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18426954",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18426954/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18533710",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18533710/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18768239",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18768239/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19445515",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19445515/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20020916",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20020916/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20070106",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20070106/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20185316",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20185316/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21055935",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21055935/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21282406",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21282406/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22194678",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22194678/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25556095",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25556095/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26550826",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26550826/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26948801",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26948801/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32648758",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32648758/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34722",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34722/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37468498",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37468498/"
+    },
+    {
+      "database": "pubmed",
+      "id": "6094812",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6094812/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7359533",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7359533/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7861419",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7861419/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8978853",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8978853/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Abbloraz",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Loraz",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lorazepam civ",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lorazepam intensol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lorazepam preservative free",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lorazepam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Loreev xr",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NSC-289758",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Temesta",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Wy 4036",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Wy-4036",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ativan",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6539?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6539/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6539/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6539/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6539/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6539/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6539/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6539/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

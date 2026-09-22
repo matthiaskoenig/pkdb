@@ -1,0 +1,320 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_38940",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "N-[2-(diethylamino)ethyl]-5-[(Z)-(5-fluoro-2-oxo-1,2-dihydro-3H-indol-3-ylidene)methyl]-2,4-dimethyl-1H-pyrrole-3-carboxamide",
+    "N-[2-(diethylamino)ethyl]-5-[(Z)-(5-fluoro-2-oxo-1,2-dihydro-3H-indol-3-ylidene)methyl]-2,4-dimethyl-1H-pyrrole-3-carboxamide",
+    "SU-11248",
+    "Sunitinib",
+    "Sutent",
+    "sunitinib",
+    "sunitinibum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:557795-19-4",
+      "drugbank:DB01268",
+      "drugcentral:2544",
+      "hmdb:HMDB0015397",
+      "pubmed:12531805",
+      "pubmed:16845442",
+      "pubmed:16916320",
+      "pubmed:17327610",
+      "pubmed:17962201",
+      "pubmed:18971320",
+      "pubmed:19830602",
+      "pubmed:20406969",
+      "pubmed:21792888",
+      "pubmed:24188025",
+      "pubmed:24393200",
+      "pubmed:24402960",
+      "pubmed:24403097",
+      "pubmed:24521256",
+      "wikipedia.en:Sunitinib"
+    ],
+    "generalized_empirical_formula": [
+      "C22H27FN4O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:38940"
+    ],
+    "inchi_key_string": [
+      "WINHZLLDWRZWRT-ATVHPVEESA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C22H27FN4O2/c1-5-27(6-2)10-9-24-22(29)20-13(3)19(25-14(20)4)12-17-16-11-15(23)7-8-18(16)26-21(17)28/h7-8,11-12,25H,5-6,9-10H2,1-4H3,(H,24,29)(H,26,28)/b17-12-"
+    ],
+    "mass": [
+      "398.482"
+    ],
+    "monoisotopic_mass": [
+      "398.2118"
+    ],
+    "smiles_string": [
+      "CCN(CC)CCNC(=O)c1c(C)nc(/C=C2C(=O)Nc3ccc(F)cc32)c1C"
+    ]
+  },
+  "label": "sunitinib",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_38940",
+  "obo_id": "CHEBI:38940",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "557795-19-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=557795-19-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01268",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01268"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2544",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2544"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015397",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015397"
+    },
+    {
+      "database": "pubmed",
+      "id": "12531805",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12531805/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16845442",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16845442/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16916320",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16916320/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17327610",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17327610/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17962201",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17962201/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18971320",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18971320/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19830602",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19830602/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20406969",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20406969/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21792888",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21792888/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24188025",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24188025/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24393200",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24393200/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24402960",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24402960/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24403097",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24403097/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24521256",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24521256/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Sunitinib",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-[2-(diethylamino)ethyl]-5-[(Z)-(5-fluoro-2-oxo-1,2-dihydro-3H-indol-3-ylidene)methyl]-2,4-dimethyl-1H-pyrrole-3-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-[2-(diethylamino)ethyl]-5-[(Z)-(5-fluoro-2-oxo-1,2-dihydro-3H-indol-3-ylidene)methyl]-2,4-dimethyl-1H-pyrrole-3-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "SU-11248",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sunitinib",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sutent",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sunitinib",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sunitinibum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_38940?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_38940/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_38940/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_38940/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_38940/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_38940/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_38940/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_38940/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_38940/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,98 @@
+{
+  "iri": "http://purl.org/sig/ont/fma/fma10951",
+  "lang": "en",
+  "description": [],
+  "synonyms": [],
+  "annotation": {
+    "FMAID": [
+      10951.0
+    ],
+    "definition": [
+      "Trunk of systemic vein which is formed by the union of the right common iliac vein and the left common iliac vein and  terminates in  the right atrium."
+    ],
+    "non-English equivalent": [
+      "Veine cave inférieure",
+      "Vena cava inferior"
+    ],
+    "preferred name": [
+      "Inferior vena cava"
+    ],
+    "synonym": [
+      "Posterior vena cava"
+    ]
+  },
+  "label": "Inferior vena cava",
+  "ontology_name": "fma",
+  "ontology_prefix": "FMA",
+  "ontology_iri": "http://purl.org/sig/ont/fma.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": false,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "fma10951",
+  "obo_id": "fma10951",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/graph"
+    },
+    "constitutional_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fconstitutional_part"
+    },
+    "continuous_distally_with": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fcontinuous_distally_with"
+    },
+    "continuous_proximally_with": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fcontinuous_proximally_with"
+    },
+    "continuous_with": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fcontinuous_with"
+    },
+    "inferior_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Finferior_to"
+    },
+    "member_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fmember_of"
+    },
+    "receives_attachment_from": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Freceives_attachment_from"
+    },
+    "receives_drainage_from": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Freceives_drainage_from"
+    },
+    "regional_part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fregional_part_of"
+    },
+    "surrounded_by": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fsurrounded_by"
+    },
+    "tributary": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma10951/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ftributary"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

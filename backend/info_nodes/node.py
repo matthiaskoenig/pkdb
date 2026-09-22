@@ -17,9 +17,9 @@ from pymetadata.webservices.registry import get_registry
 from pymetadata.webservices.unichem import UnichemQuery
 from slugify import slugify
 
+from info_nodes import CACHE_PATH, CACHE_USE
 from info_nodes.graph import NodeIndex
 from info_nodes.units import ureg
-from pkdb_data import CACHE_PATH, CACHE_USE
 
 logger = logging.getLogger(__name__)
 

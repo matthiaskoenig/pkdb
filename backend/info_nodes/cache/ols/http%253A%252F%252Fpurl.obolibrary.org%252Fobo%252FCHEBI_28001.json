@@ -1,0 +1,687 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_28001",
+  "lang": "en",
+  "description": [
+    "A complex glycopeptide from <em>Streptomyces orientalis</em>. It inhibits a specific step in the synthesis of the peptidoglycan layer in the Gram-positive bacteria <em>Staphylococcus aureus</em> and <em>Clostridium difficile</em>."
+  ],
+  "synonyms": [
+    "(1S,2R,18R,22S,25R,28R,40S)-22-(2-amino-2-oxoethyl)-48-[2-O-(3-amino-2,3,6-trideoxy-3-methyl-alpha-L-lyxo-hexopyranosyl)-beta-D-glucopyranosyloxy]-5,15-dichloro-2,18,32,35,37-pentahydroxy-19-[(N-methyl-D-leucyl)amino]-20,23,26,42,44-pentaoxo-7,13-dioxa-21,24,27,41,43-pentaazaoctacyclo[26.14.2.2(3,6).2(14,17).1(8,12).1(29,33).0(10,25).0(34,39)]pentaconta-3,5,8(48),9,11,14,16,29(45),30,32,34,36,38,46,49-pentadecaene-40-carboxylic acid",
+    "(2.2Sp,3.5Sa,2.6Sp)-O(4.2),C(3.4):C(5.4),O(4.6):C(3.5),C(2.7)-tricyclo[N-methyl-D-leucyl-3-chloro-(R)-beta-hydroxy-D-tyrosyl-L-asparaginyl-D-2-(4-{[2-O-(3-amino-2,3,6-trideoxy-3-C-methyl-alpha-L-lyxo-hexopyranosyl)-beta-D-glucopyranosyl]oxy}phenyl)glycyl-D-2-(4-hydroxyphenyl)glycyl-3-chloro-(R)-beta-hydroxy-L-tyrosyl-L-2-(3,5-dihydroxyphenyl)glycine]",
+    "(3S,6R,7R,11R,23S,26S,30aS,36R,38aR)-44-[2-O-(3-amino-2,3,6-trideoxy-3-C-methyl-alpha-L-lyxo-hexopyranosyl)-beta-D-glucopyranosyloxy]-3-(carbamoylmethyl)-10,19-dichloro-2,3,4,5,6,7,23,25,26,36,37,38,38a-tetradecahydro-7,22,28,30,32-pentahydroxy-6-(N-methyl-D-leucyl)-2,5,24,38,39-pentaoxo-1H,22H-23,36-(epiminomethano)-8,11:18,21-dietheno-13,16:31,35-di(metheno)[1,6,9]oxadiazacyclohexadecino[4,5-m][10,2,16]benzoxadiazacyclotetracosine-26-carboxylic acid",
+    "(3S,6R,7R,11R,23S,26S,30aS,36R,38aR)-44-[2-O-(3-amino-2,3,6-trideoxy-3-C-methyl-alpha-L-lyxo-hexopyranosyl)-beta-D-glucopyranosyloxy]-3-(carbamoylmethyl)-10,19-dichloro-2,3,4,5,6,7,23,25,26,36,37,38,38a-tetradecahydro-7,22,28,30,32-pentahydroxy-6-(N-methyl-D-leucyl)-2,5,24,38,39-pentaoxo-1H,22H-23,36-(epiminomethano)-8,11:18,21-dietheno-13,16:31,35-di(metheno)[1,6,9]oxadiazacyclohexadecino[4,5-m][10,2,16]benzoxadiazacyclotetracosine-26-carboxylic acid",
+    "VANCOMYCIN",
+    "Vancocin",
+    "Vancomycin",
+    "vancomicin",
+    "vancomicina",
+    "vancomycin",
+    "vancomycine",
+    "vancomycinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:1404-90-6",
+      "drugbank:DB00512",
+      "drugcentral:2807",
+      "kegg.compound:C06689",
+      "kegg.drug:D00212",
+      "knapsack:C00016052",
+      "metacyc.compound:CPD-12245",
+      "patent:US3067099",
+      "pdb-ccd:VAN",
+      "pubmed:11028184",
+      "pubmed:11408222",
+      "pubmed:11688538",
+      "pubmed:11864951",
+      "pubmed:11886013",
+      "pubmed:11980329",
+      "pubmed:12019070",
+      "pubmed:12541895",
+      "pubmed:12852813",
+      "pubmed:13370625",
+      "pubmed:13521912",
+      "pubmed:14605050",
+      "pubmed:14702667",
+      "pubmed:15047516",
+      "pubmed:15081082",
+      "pubmed:15465645",
+      "pubmed:15590714",
+      "pubmed:15792257",
+      "pubmed:16183423",
+      "pubmed:16184232",
+      "pubmed:16420976",
+      "pubmed:16596002",
+      "pubmed:16720708",
+      "pubmed:17027219",
+      "pubmed:17184835",
+      "pubmed:17299012",
+      "pubmed:17594206",
+      "pubmed:18030187",
+      "pubmed:18159039",
+      "pubmed:18162343",
+      "pubmed:18260149",
+      "pubmed:18361944",
+      "pubmed:18462092",
+      "pubmed:18582342",
+      "pubmed:18817166",
+      "pubmed:18983037",
+      "pubmed:19107100",
+      "pubmed:19830166",
+      "pubmed:20956604",
+      "pubmed:21109901",
+      "pubmed:21458937",
+      "pubmed:21466775",
+      "pubmed:21664803",
+      "pubmed:21719238",
+      "pubmed:21951032",
+      "pubmed:22011388",
+      "pubmed:22015328",
+      "pubmed:22027450",
+      "pubmed:22124537",
+      "reaxys:3132",
+      "wikipedia.en:Vancomycin"
+    ],
+    "generalized_empirical_formula": [
+      "C66H75Cl2N9O24"
+    ],
+    "has_alternative_id": [
+      "CHEBI:27276",
+      "CHEBI:49941",
+      "CHEBI:9931"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:28001"
+    ],
+    "inchi_key_string": [
+      "MYPYJXKWCTUITO-LYRMYLQWSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C66H75Cl2N9O24/c1-23(2)12-34(71-5)58(88)76-49-51(83)26-7-10-38(32(67)14-26)97-40-16-28-17-41(55(40)101-65-56(54(86)53(85)42(22-78)99-65)100-44-21-66(4,70)57(87)24(3)96-44)98-39-11-8-27(15-33(39)68)52(84)50-63(93)75-48(64(94)95)31-18-29(79)19-37(81)45(31)30-13-25(6-9-36(30)80)46(60(90)77-50)74-61(91)47(28)73-59(89)35(20-43(69)82)72-62(49)92/h6-11,13-19,23-24,34-35,42,44,46-54,56-57,65,71,78-81,83-87H,12,20-22,70H2,1-5H3,(H2,69,82)(H,72,92)(H,73,89)(H,74,91)(H,75,93)(H,76,88)(H,77,90)(H,94,95)/t24-,34+,35-,42+,44-,46+,47+,48-,49+,50-,51+,52+,53+,54-,56+,57+,65-,66-/m0/s1"
+    ],
+    "mass": [
+      "1449.271"
+    ],
+    "monoisotopic_mass": [
+      "1447.4302"
+    ],
+    "smiles_string": [
+      "CN[C@H](CC(C)C)C(=O)N[C@H]1C(=O)N[C@@H](CC(N)=O)C(=O)N[C@H]2C(=O)N[C@H]3C(=O)N[C@H](C(=O)N[C@H](C(=O)O)c4cc(O)cc(O)c4-c4cc3ccc4O)[C@H](O)c3ccc(c(Cl)c3)Oc3cc2cc(c3O[C@@H]2O[C@H](CO)[C@@H](O)[C@H](O)[C@H]2O[C@H]2C[C@](C)(N)[C@H](O)[C@H](C)O2)Oc2ccc(cc2Cl)[C@H]1O"
+    ]
+  },
+  "label": "vancomycin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_28001",
+  "obo_id": "CHEBI:28001",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "1404-90-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=1404-90-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00512",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00512"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2807",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2807"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06689",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00212",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00016052",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00016052"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-12245",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US3067099",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3067099"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "VAN",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11028184",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11028184/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11408222",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11408222/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11688538",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11688538/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11864951",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11864951/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11886013",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11886013/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11980329",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11980329/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12019070",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12019070/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12541895",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12541895/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12852813",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12852813/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13370625",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13370625/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13521912",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13521912/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14605050",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14605050/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14702667",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14702667/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15047516",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15047516/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15081082",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15081082/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15465645",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15465645/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15590714",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15590714/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15792257",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15792257/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16183423",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16183423/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16184232",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16184232/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16420976",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16420976/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16596002",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16596002/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16720708",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16720708/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17027219",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17027219/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17184835",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17184835/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17299012",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17299012/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17594206",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17594206/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18030187",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18030187/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18159039",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18159039/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18162343",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18162343/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18260149",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18260149/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18361944",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18361944/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18462092",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18462092/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18582342",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18582342/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18817166",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18817166/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18983037",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18983037/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19107100",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19107100/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19830166",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19830166/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20956604",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20956604/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21109901",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21109901/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21458937",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21458937/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21466775",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21466775/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21664803",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21664803/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21719238",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21719238/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21951032",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21951032/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22011388",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22011388/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22015328",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22015328/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22027450",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22027450/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22124537",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22124537/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3132",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Vancomycin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3S,6R,7R,11R,23S,26S,30aS,36R,38aR)-44-[2-O-(3-amino-2,3,6-trideoxy-3-C-methyl-alpha-L-lyxo-hexopyranosyl)-beta-D-glucopyranosyloxy]-3-(carbamoylmethyl)-10,19-dichloro-2,3,4,5,6,7,23,25,26,36,37,38,38a-tetradecahydro-7,22,28,30,32-pentahydroxy-6-(N-methyl-D-leucyl)-2,5,24,38,39-pentaoxo-1H,22H-23,36-(epiminomethano)-8,11:18,21-dietheno-13,16:31,35-di(metheno)[1,6,9]oxadiazacyclohexadecino[4,5-m][10,2,16]benzoxadiazacyclotetracosine-26-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S,2R,18R,22S,25R,28R,40S)-22-(2-amino-2-oxoethyl)-48-[2-O-(3-amino-2,3,6-trideoxy-3-methyl-alpha-L-lyxo-hexopyranosyl)-beta-D-glucopyranosyloxy]-5,15-dichloro-2,18,32,35,37-pentahydroxy-19-[(N-methyl-D-leucyl)amino]-20,23,26,42,44-pentaoxo-7,13-dioxa-21,24,27,41,43-pentaazaoctacyclo[26.14.2.2(3,6).2(14,17).1(8,12).1(29,33).0(10,25).0(34,39)]pentaconta-3,5,8(48),9,11,14,16,29(45),30,32,34,36,38,46,49-pentadecaene-40-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2.2Sp,3.5Sa,2.6Sp)-O(4.2),C(3.4):C(5.4),O(4.6):C(3.5),C(2.7)-tricyclo[N-methyl-D-leucyl-3-chloro-(R)-beta-hydroxy-D-tyrosyl-L-asparaginyl-D-2-(4-{[2-O-(3-amino-2,3,6-trideoxy-3-C-methyl-alpha-L-lyxo-hexopyranosyl)-beta-D-glucopyranosyl]oxy}phenyl)glycyl-D-2-(4-hydroxyphenyl)glycyl-3-chloro-(R)-beta-hydroxy-L-tyrosyl-L-2-(3,5-dihydroxyphenyl)glycine]",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "jcbn",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3S,6R,7R,11R,23S,26S,30aS,36R,38aR)-44-[2-O-(3-amino-2,3,6-trideoxy-3-C-methyl-alpha-L-lyxo-hexopyranosyl)-beta-D-glucopyranosyloxy]-3-(carbamoylmethyl)-10,19-dichloro-2,3,4,5,6,7,23,25,26,36,37,38,38a-tetradecahydro-7,22,28,30,32-pentahydroxy-6-(N-methyl-D-leucyl)-2,5,24,38,39-pentaoxo-1H,22H-23,36-(epiminomethano)-8,11:18,21-dietheno-13,16:31,35-di(metheno)[1,6,9]oxadiazacyclohexadecino[4,5-m][10,2,16]benzoxadiazacyclotetracosine-26-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "VANCOMYCIN",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Vancocin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Vancomycin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vancomicin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vancomicina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vancomycin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vancomycine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vancomycinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28001?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28001/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28001/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28001/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28001/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28001/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28001/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28001/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28001/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28001/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

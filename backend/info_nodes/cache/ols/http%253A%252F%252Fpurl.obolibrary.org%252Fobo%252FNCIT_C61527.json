@@ -1,0 +1,144 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C61527",
+  "lang": "en",
+  "description": [
+    "A synthetic lipid-lowering agent. Atorvastatin competitively inhibits hepatic hydroxymethyl-glutaryl coenzyme A (HMG-CoA) reductase, the enzyme which catalyzes the conversion of HMG-CoA to mevalonate, a key step in cholesterol synthesis. Atorvastatin also increases the number of LDL receptors on hepatic cell surfaces to enhance uptake and catabolism of LDL and reduces LDL production and the number of LDL particles. This agent lowers plasma cholesterol and lipoprotein levels and modulates immune responses by suppressing MHC II (major histocompatibility complex II) on interferon gamma-stimulated, antigen-presenting cells such as human vascular endothelial cells. (NCI04)"
+  ],
+  "synonyms": [
+    "(betaR,deltaR)-2-(4-Fluorophenyl)-beta,delta-dihydroxy-5-(1-methylethyl)-3-phenyl-4-[(phenylamino)carbonyl]-1H-pyrrole-1-heptanoic Acid",
+    "(betaR,deltaR)-2-(p-Fluorophenyl)-beta,delta-dihydroxy-5-isopropyl-3-phenyl-4-(phenylcarbamoyl)-pyrrole-1-heptanoic Acid",
+    "ATORVASTATIN",
+    "Atorvastatin",
+    "atorvastatin"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "The active ingredient in a drug used to lower the amount of cholesterol in the blood and to prevent stroke, heart attack, and angina (chest pain). It is also being studied in the prevention and treatment of some types of cancer and other conditions. Atorvastatin blocks an enzyme that helps make cholesterol in the body. It also causes an increase in the breakdown of cholesterol. It is a type of HMG-CoA reductase inhibitor and a type of statin."
+    ],
+    "CAS_Registry": [
+      "134523-00-5"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:39548"
+    ],
+    "Chemical_Formula": [
+      "C33H35FN2O5"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "A0JWA85V8F"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C28837",
+      "http://purl.obolibrary.org/obo/NCIT_C78676"
+    ],
+    "Legacy Concept Name": [
+      "Atorvastatin_Base"
+    ],
+    "Preferred_Name": [
+      "Atorvastatin"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0286651"
+    ],
+    "code": [
+      "C61527"
+    ]
+  },
+  "label": "Atorvastatin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C61527",
+  "obo_id": "NCIT:C61527",
+  "in_subset": [
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(betaR,deltaR)-2-(4-Fluorophenyl)-beta,delta-dihydroxy-5-(1-methylethyl)-3-phenyl-4-[(phenylamino)carbonyl]-1H-pyrrole-1-heptanoic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "(betaR,deltaR)-2-(p-Fluorophenyl)-beta,delta-dihydroxy-5-isopropyl-3-phenyl-4-(phenylcarbamoyl)-pyrrole-1-heptanoic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ATORVASTATIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Atorvastatin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "atorvastatin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61527?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61527/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61527/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61527/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61527/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61527/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61527/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61527/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    },
+    "Chemical_Or_Drug_Has_Mechanism_Of_Action": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61527/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R124"
+    },
+    "Chemical_Or_Drug_Has_Physiologic_Effect": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61527/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R125"
+    },
+    "Chemical_Or_Drug_Affects_Gene_Product": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61527/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R146"
+    },
+    "Chemical_Or_Drug_Plays_Role_In_Biological_Process": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61527/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R66"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

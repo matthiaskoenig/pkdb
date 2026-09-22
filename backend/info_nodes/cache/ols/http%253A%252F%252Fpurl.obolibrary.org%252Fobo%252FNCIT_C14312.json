@@ -1,0 +1,122 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C14312",
+  "lang": "en",
+  "description": [
+    "A small, enveloped, positive sense single strand RNA virus in the family Flaviviridae. The genome consists of a single RNA molecule with a single open reading frame."
+  ],
+  "synonyms": [
+    "HCV",
+    "HEPATITIS C VIRUS",
+    "Hepatitis C Virus",
+    "Hepatitis C",
+    "Virus-Hepatitis C"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Any viral organism that can be assigned to the species Hepatitis C virus."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CTRP"
+    ],
+    "Display_Name": [
+      "Hepatitis C Virus"
+    ],
+    "Legacy Concept Name": [
+      "Hepatitis_C_Virus"
+    ],
+    "NCBI_Taxon_ID": [
+      "11103"
+    ],
+    "Preferred_Name": [
+      "Hepatitis C Virus"
+    ],
+    "Semantic_Type": [
+      "Virus"
+    ],
+    "UMLS_CUI": [
+      "C0220847"
+    ],
+    "code": [
+      "C14312"
+    ]
+  },
+  "label": "Hepatitis C Virus",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C14312",
+  "obo_id": "NCIT:C14312",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C85491"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "HCV",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "HEPATITIS C VIRUS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hepatitis C Virus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hepatitis C",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Virus-Hepatitis C",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14312?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14312/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14312/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14312/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14312/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14312/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14312/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

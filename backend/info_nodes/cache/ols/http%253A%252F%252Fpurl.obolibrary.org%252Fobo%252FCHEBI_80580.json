@@ -1,0 +1,237 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_80580",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(2S,3S,4S,5R,6R)-3,4,5-trihydroxy-6-{[(1S,5R,13R,14S,17R)-10-methoxy-4-methyl-12-oxa-4-azapentacyclo[9.6.1.0¹,¹³.0⁵,¹⁷.0⁷,¹⁸]octadeca-7,9,11(18),15-tetraen-14-yl]oxy}oxane-2-carboxylic acid",
+    "C16577",
+    "Codeine glucuronide",
+    "Glucopyranosiduronic acid, codeine, b-D- (6CI)",
+    "Glucopyranosiduronicacid, 7,8-didehydro-4,5a-epoxy-3-methoxy-17-methylmorphinan-6a-yl, b-D- (8CI)",
+    "Morphinan, 7,8-didehydro-4,5a-epoxy-6a-(b-D-glucopyranuronosyloxy)-3-methoxy-17-methyl- (8CI)"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:20736-11-2",
+      "hmdb:HMDB0060464",
+      "kegg.compound:C16577",
+      "pubmed:11092114",
+      "pubmed:15102399",
+      "pubmed:16258895",
+      "pubmed:20484152",
+      "pubmed:21447597",
+      "pubmed:9448068",
+      "wikipedia.en:Codeine-6-glucuronide"
+    ],
+    "generalized_empirical_formula": [
+      "C24H29NO9"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:80580"
+    ],
+    "inchi_key_string": [
+      "CRWVOYRJXPDBPM-HSCJLHHPSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C24H29NO9/c1-25-8-7-24-11-4-6-14(32-23-18(28)16(26)17(27)20(34-23)22(29)30)21(24)33-19-13(31-2)5-3-10(15(19)24)9-12(11)25/h3-6,11-12,14,16-18,20-21,23,26-28H,7-9H2,1-2H3,(H,29,30)/t11-,12+,14-,16-,17-,18+,20-,21-,23+,24-/m0/s1"
+    ],
+    "mass": [
+      "475.494"
+    ],
+    "monoisotopic_mass": [
+      "475.18423"
+    ],
+    "smiles_string": [
+      "[H][C@@]12C=C[C@H](O[C@@H]3O[C@H](C(=O)O)[C@@H](O)[C@H](O)[C@H]3O)[C@@H]3Oc4c(OC)ccc5c4[C@@]31CCN(C)[C@@H]2C5"
+    ]
+  },
+  "label": "Codeine-6-glucuronide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_80580",
+  "obo_id": "CHEBI:80580",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "20736-11-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=20736-11-2"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0060464",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0060464"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C16577",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11092114",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11092114/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15102399",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15102399/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16258895",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16258895/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20484152",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20484152/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21447597",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21447597/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9448068",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9448068/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Codeine-6-glucuronide",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2S,3S,4S,5R,6R)-3,4,5-trihydroxy-6-{[(1S,5R,13R,14S,17R)-10-methoxy-4-methyl-12-oxa-4-azapentacyclo[9.6.1.0¹,¹³.0⁵,¹⁷.0⁷,¹⁸]octadeca-7,9,11(18),15-tetraen-14-yl]oxy}oxane-2-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "C16577",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Codeine glucuronide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glucopyranosiduronic acid, codeine, b-D- (6CI)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glucopyranosiduronicacid, 7,8-didehydro-4,5a-epoxy-3-methoxy-17-methylmorphinan-6a-yl, b-D- (8CI)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Morphinan, 7,8-didehydro-4,5a-epoxy-6a-(b-D-glucopyranuronosyloxy)-3-methoxy-17-methyl- (8CI)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80580?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80580/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80580/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80580/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80580/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80580/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80580/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

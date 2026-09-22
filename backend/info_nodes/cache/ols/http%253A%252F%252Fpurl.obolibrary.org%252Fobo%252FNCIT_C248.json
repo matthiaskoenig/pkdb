@@ -1,0 +1,120 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C248",
+  "lang": "en",
+  "description": [
+    "Angiotensin-1 (10 aa, ~1 kDa) is encoded by the human AGT gene. This protein is involved in the response to lowered renal blood pressure."
+  ],
+  "synonyms": [
+    "AGT",
+    "Ang I",
+    "Angiotensin 1-10",
+    "Angiotensin I",
+    "Angiotensin",
+    "Angiotensin-1"
+  ],
+  "annotation": {
+    "DesignNote": [
+      "Angiotensinogen is cleaved by renin to form Angiotensin-1 (Angiotensin 1-10; Angiotensin I; Ang I). The removal of two C-terminal amino acids from Ang I by angiotensin-converting enzyme (ACE) releases the active peptide Angiotensin-2 (Angiotensin 1-8; Angiotensin II; Ang II). The removal of one C-terminal amino acid from Ang I by angiotensin-converting enzyme 2 (ACE) releases the active peptide Angiotensin 1-9."
+    ],
+    "Legacy Concept Name": [
+      "Angiotensin"
+    ],
+    "OMIM_Number": [
+      "106150"
+    ],
+    "Preferred_Name": [
+      "Angiotensin-1"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein",
+      "Hormone"
+    ],
+    "Swiss_Prot": [
+      "P01019"
+    ],
+    "UMLS_CUI": [
+      "C0003018"
+    ],
+    "code": [
+      "C248"
+    ]
+  },
+  "label": "Angiotensin-1",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C248",
+  "obo_id": "NCIT:C248",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "AGT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ang I",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Angiotensin 1-10",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Angiotensin I",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Angiotensin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Angiotensin-1",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C248?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C248/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C248/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C248/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C248/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C248/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C248/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,296 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_119486",
+  "lang": "en",
+  "description": [
+    "1,4-Dihydro-2<em>H</em>-3,1-benzoxazin-2-one substituted at the 4 position by cyclopropylethynyl and trifluoromethyl groups (<i>S</i> configuration) and at the 6 position by chlorine. A non-nucleoside reverse transcriptase inhibitor with activity against HIV, it is used with other antiretrovirals for combination therapy of HIV infection."
+  ],
+  "synonyms": [
+    "(-)-6-CHLORO-4-CYCLOPROPYLETHYNYL-4-TRIFLUOROMETHYL-1,4-DIHYDRO-2H-3,1-BENZOXAZIN-2-ONE",
+    "(4S)-6-chloro-4-(cyclopropylethynyl)-4-(trifluoromethyl)-1,4-dihydro-2H-3,1-benzoxazin-2-one",
+    "(4S)-6-chloro-4-(cyclopropylethynyl)-4-(trifluoromethyl)-1,4-dihydro-2H-3,1-benzoxazin-2-one",
+    "(S)-6-chloro-4-(cyclopropylethynyl)-1,4-dihydro-4-(trifluoromethyl)-2H-3,1-benzoxazin-2-one",
+    "(S)-6-chloro-4-cyclopropylethynyl-4-trifluoromethyl-1,4-dihydro-benzo[d][1,3]oxazin-2-one",
+    "6-chloro-4-(2-cyclopropyl-1-ethynyl)-4-trifluoromethyl-(4S)-1,4-dihydro-2H-benzo[d][1,3]oxazin-2-one",
+    "Efavirenz"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:154598-52-4",
+      "drugbank:DB00625",
+      "drugcentral:989",
+      "hmdb:HMDB0014763",
+      "kegg.compound:C08088",
+      "kegg.drug:D00896",
+      "lincs.smallmolecule:LSM-5526",
+      "patent:EP582455",
+      "patent:US5519021",
+      "pdb-ccd:EFZ",
+      "pubmed:10576692",
+      "pubmed:10673109",
+      "pubmed:25017682",
+      "reaxys:7387333",
+      "wikipedia.en:Efavirenz"
+    ],
+    "generalized_empirical_formula": [
+      "C14H9ClF3NO2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:190461",
+      "CHEBI:47396",
+      "CHEBI:4760"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:119486"
+    ],
+    "inchi_key_string": [
+      "XPOQHMRABVBWPR-ZDUSSCGKSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C14H9ClF3NO2/c15-9-3-4-11-10(7-9)13(14(16,17)18,21-12(20)19-11)6-5-8-1-2-8/h3-4,7-8H,1-2H2,(H,19,20)/t13-/m0/s1"
+    ],
+    "mass": [
+      "315.678"
+    ],
+    "monoisotopic_mass": [
+      "315.02739"
+    ],
+    "smiles_string": [
+      "O=C1Nc2ccc(Cl)cc2[C@@](C#CC2CC2)(C(F)(F)F)O1"
+    ]
+  },
+  "label": "efavirenz",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_119486",
+  "obo_id": "CHEBI:119486",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "154598-52-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=154598-52-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00625",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00625"
+    },
+    {
+      "database": "drugcentral",
+      "id": "989",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/989"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014763",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014763"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C08088",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00896",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5526",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP582455",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP582455"
+    },
+    {
+      "database": "patent",
+      "id": "US5519021",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US5519021"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "EFZ",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10576692",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10576692/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10673109",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10673109/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25017682",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25017682/"
+    },
+    {
+      "database": "reaxys",
+      "id": "7387333",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Efavirenz",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(4S)-6-chloro-4-(cyclopropylethynyl)-4-(trifluoromethyl)-1,4-dihydro-2H-3,1-benzoxazin-2-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-6-CHLORO-4-CYCLOPROPYLETHYNYL-4-TRIFLUOROMETHYL-1,4-DIHYDRO-2H-3,1-BENZOXAZIN-2-ONE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(4S)-6-chloro-4-(cyclopropylethynyl)-4-(trifluoromethyl)-1,4-dihydro-2H-3,1-benzoxazin-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-6-chloro-4-(cyclopropylethynyl)-1,4-dihydro-4-(trifluoromethyl)-2H-3,1-benzoxazin-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-6-chloro-4-cyclopropylethynyl-4-trifluoromethyl-1,4-dihydro-benzo[d][1,3]oxazin-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-chloro-4-(2-cyclopropyl-1-ethynyl)-4-trifluoromethyl-(4S)-1,4-dihydro-2H-benzo[d][1,3]oxazin-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Efavirenz",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_119486?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_119486/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_119486/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_119486/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_119486/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_119486/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_119486/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_119486/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

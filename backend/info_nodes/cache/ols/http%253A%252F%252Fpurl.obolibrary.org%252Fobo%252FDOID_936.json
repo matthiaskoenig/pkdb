@@ -1,0 +1,161 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_936",
+  "lang": "en",
+  "description": [
+    "A central nervous system disease that is located_in the brain."
+  ],
+  "synonyms": [
+    "encephalopathy"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10CM:G93.40",
+      "ICD10CM:G93.9",
+      "ICD9CM:348.30",
+      "ICD9CM:348.9",
+      "MESH:D001927",
+      "NCI:C26920",
+      "NCI:C96413",
+      "SNOMEDCT_US_2025_09_01:81308009",
+      "UMLS_CUI:C0006111",
+      "UMLS_CUI:C0085584"
+    ],
+    "has_alternative_id": [
+      "DOID:8510"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:936"
+    ]
+  },
+  "label": "brain disease",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_936",
+  "obo_id": "DOID:936",
+  "in_subset": [
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A central nervous system disease that is located_in the brain.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "G93.40",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD10CM",
+      "id": "G93.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "348.30",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "348.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D001927",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D001927"
+    },
+    {
+      "database": "NCI",
+      "id": "C26920",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C26920"
+    },
+    {
+      "database": "NCI",
+      "id": "C96413",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C96413"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "81308009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/81308009"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0006111",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0006111"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0085584",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0085584"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_936?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_936/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_936/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_936/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_936/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_936/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_936/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_936/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_936/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_936/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_936/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,308 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_10110",
+  "lang": "en",
+  "description": [
+    "A pyrimidine 2',3'-dideoxyribonucleoside compound having a 3'-azido substituent and thymine as the nucleobase."
+  ],
+  "synonyms": [
+    "3'-azido-3'-deoxythymidine",
+    "3'-azido-3'-deoxythymidine",
+    "AZT",
+    "Azidothymidine",
+    "Retrovir",
+    "Zidovudin",
+    "Zidovudinum",
+    "zidovudine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:763034",
+      "cas:30516-87-1",
+      "drugbank:DB00495",
+      "drugcentral:2861",
+      "kegg.compound:C07210",
+      "kegg.drug:D00413",
+      "lincs.smallmolecule:LSM-5806",
+      "metacyc.compound:CPD-15110",
+      "patent:US4724232",
+      "pdb-ccd:AZZ",
+      "pubmed:19112024",
+      "pubmed:26859826",
+      "pubmed:29438107",
+      "pubmed:9203666",
+      "wikipedia.en:Zidovudine"
+    ],
+    "generalized_empirical_formula": [
+      "C10H13N5O4"
+    ],
+    "has_alternative_id": [
+      "CHEBI:619601"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:10110"
+    ],
+    "inchi_key_string": [
+      "HBOMLICNUCNMMY-XLPZGREQSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C10H13N5O4/c1-5-3-15(10(18)12-9(5)17)8-2-6(13-14-11)7(4-16)19-8/h3,6-8,16H,2,4H2,1H3,(H,12,17,18)/t6-,7+,8+/m0/s1"
+    ],
+    "mass": [
+      "267.245"
+    ],
+    "monoisotopic_mass": [
+      "267.09675"
+    ],
+    "smiles_string": [
+      "Cc1cn([C@H]2C[C@H](N=[N+]=[N-])[C@@H](CO)O2)c(=O)nc1=O"
+    ]
+  },
+  "label": "zidovudine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_10110",
+  "obo_id": "CHEBI:10110",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "763034",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "30516-87-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=30516-87-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00495",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00495"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2861",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2861"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07210",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00413",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5806",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-15110",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US4724232",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4724232"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "AZZ",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "19112024",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19112024/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26859826",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26859826/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29438107",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29438107/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9203666",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9203666/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Zidovudine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3'-azido-3'-deoxythymidine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3'-azido-3'-deoxythymidine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AZT",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Azidothymidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Retrovir",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Zidovudin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Zidovudinum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "zidovudine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10110?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10110/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10110/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10110/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10110/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10110/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10110/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10110/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

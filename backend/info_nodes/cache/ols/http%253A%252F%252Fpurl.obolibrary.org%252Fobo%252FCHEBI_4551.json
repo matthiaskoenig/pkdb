@@ -1,0 +1,250 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_4551",
+  "lang": "en",
+  "description": [
+    "A  cardenolide glycoside that is digitoxin β-hydroxylated at C-12. A cardiac glycoside extracted from the foxglove plant, <em>Digitalis lanata</em>, it is used to control ventricular rate in atrial fibrillation and in the management of congestive heart failure with atrial fibrillation, but the margin between toxic and therapeutic doses is small."
+  ],
+  "synonyms": [
+    "(3beta,5beta,12beta)-3-{[2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyl]oxy}-12,14-dihydroxycard-20(22)-enolide",
+    "(3beta,5beta,12beta)-3-{[2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyl]oxy}-12,14-dihydroxycard-20(22)-enolide",
+    "12beta-hydroxydigitoxin",
+    "digoxin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:20830-75-5",
+      "drugbank:DB00390",
+      "drugcentral:882",
+      "kegg.compound:C06956",
+      "kegg.drug:D00298",
+      "knapsack:C00003618",
+      "pdb-ccd:DGX",
+      "pdb:1IGJ",
+      "pubmed:10438974",
+      "pubmed:16970134",
+      "pubmed:7739045",
+      "pubmed:8234291",
+      "reaxys:77011",
+      "wikipedia.en:Digoxin"
+    ],
+    "generalized_empirical_formula": [
+      "C41H64O14"
+    ],
+    "has_alternative_id": [
+      "CHEBI:41856",
+      "CHEBI:569365",
+      "CHEBI:616935"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:4551"
+    ],
+    "inchi_key_string": [
+      "LTMHDMANZUZIPE-PUGKRICDSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C41H64O14/c1-19-36(47)28(42)15-34(50-19)54-38-21(3)52-35(17-30(38)44)55-37-20(2)51-33(16-29(37)43)53-24-8-10-39(4)23(13-24)6-7-26-27(39)14-31(45)40(5)25(9-11-41(26,40)48)22-12-32(46)49-18-22/h12,19-21,23-31,33-38,42-45,47-48H,6-11,13-18H2,1-5H3/t19-,20-,21-,23-,24+,25-,26-,27+,28+,29+,30+,31-,33+,34+,35+,36-,37-,38-,39+,40+,41+/m1/s1"
+    ],
+    "mass": [
+      "780.949"
+    ],
+    "monoisotopic_mass": [
+      "780.42961"
+    ],
+    "smiles_string": [
+      "[H][C@]12CC[C@]3([H])[C@]([H])(C[C@@H](O)[C@]4(C)[C@@H](C5=CC(=O)OC5)CC[C@@]43O)[C@@]1(C)CC[C@H](O[C@H]1C[C@H](O)[C@H](O[C@H]3C[C@H](O)[C@H](O[C@H]4C[C@H](O)[C@H](O)[C@@H](C)O4)[C@@H](C)O3)[C@@H](C)O1)C2"
+    ]
+  },
+  "label": "digoxin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_4551",
+  "obo_id": "CHEBI:4551",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "20830-75-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=20830-75-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00390",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00390"
+    },
+    {
+      "database": "drugcentral",
+      "id": "882",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/882"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06956",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00298",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00003618",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00003618"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "DGX",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pdb",
+      "id": "1IGJ",
+      "description": "pdb",
+      "url": "https://www.wwpdb.org/pdb?id=pdb_00001IGJ"
+    },
+    {
+      "database": "pubmed",
+      "id": "10438974",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10438974/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16970134",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16970134/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7739045",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7739045/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8234291",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8234291/"
+    },
+    {
+      "database": "reaxys",
+      "id": "77011",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Digoxin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3beta,5beta,12beta)-3-{[2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyl]oxy}-12,14-dihydroxycard-20(22)-enolide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3beta,5beta,12beta)-3-{[2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyl-(1->4)-2,6-dideoxy-beta-D-ribo-hexopyranosyl]oxy}-12,14-dihydroxycard-20(22)-enolide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "12beta-hydroxydigitoxin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "digoxin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4551?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4551/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4551/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4551/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4551/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4551/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4551/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4551/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4551/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

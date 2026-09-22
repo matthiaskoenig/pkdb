@@ -1,0 +1,162 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C712",
+  "lang": "en",
+  "description": [
+    "A fluoroquinolone antibacterial antibiotic. Ofloxacin binds to and inhibits bacterial topoisomerase II (DNA gyrase) and topoisomerase IV, enzymes involved in DNA replication and repair, resulting in cell death in sensitive bacterial species. (NCI04)"
+  ],
+  "synonyms": [
+    "9-Fluoro-2,3-Dihydro-3-Methyl-10-(4-Methyl-1-Piperazinyl)-7-Oxo-7H-Pyrido(1,2,3-de)(1,4)benzoxazine-6-Carboxylic Acid, DL-",
+    "DL-8280",
+    "Floxin",
+    "HOE 280",
+    "OFLOXACIN",
+    "Ocuflox",
+    "Ofloxacin",
+    "ofloxacin"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "An antibiotic drug used to treat infection. It belongs to the family of drugs called quinolone antibiotics."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Various bacterial infections"
+    ],
+    "CAS_Registry": [
+      "82419-36-1"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:7731"
+    ],
+    "Chemical_Formula": [
+      "C18H20FN3O4"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "A4P49JAZ9H"
+    ],
+    "Legacy Concept Name": [
+      "Ofloxacin"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "42865"
+    ],
+    "NSC Number": [
+      "727071"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "42865"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "42865"
+    ],
+    "Preferred_Name": [
+      "Ofloxacin"
+    ],
+    "Semantic_Type": [
+      "Antibiotic",
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0028902"
+    ],
+    "code": [
+      "C712"
+    ]
+  },
+  "label": "Ofloxacin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C712",
+  "obo_id": "NCIT:C712",
+  "in_subset": [
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "9-Fluoro-2,3-Dihydro-3-Methyl-10-(4-Methyl-1-Piperazinyl)-7-Oxo-7H-Pyrido(1,2,3-de)(1,4)benzoxazine-6-Carboxylic Acid, DL-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "DL-8280",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Floxin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "HOE 280",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "OFLOXACIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ocuflox",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ofloxacin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ofloxacin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C712?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C712/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C712/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C712/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C712/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C712/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C712/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

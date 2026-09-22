@@ -1,0 +1,125 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_183883",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "2-ethoxy-4-[2-[[1-[2-(3-hydroxypiperidin-1-yl)phenyl]-3-methylbutyl]amino]-2-oxoethyl]benzoic acid",
+    "2-ethoxy-4-[2-[[1-[2-(3-hydroxypiperidin-1-yl)phenyl]-3-methylbutyl]amino]-2-oxoethyl]benzoic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "chemspider:22547080",
+      "hmdb:HMDB0060979"
+    ],
+    "generalized_empirical_formula": [
+      "C27H36N2O5"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:183883"
+    ],
+    "inchi_key_string": [
+      "OBMAZJVHPAVADF-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C27H36N2O5/c1-4-34-25-15-19(11-12-22(25)27(32)33)16-26(31)28-23(14-18(2)3)21-9-5-6-10-24(21)29-13-7-8-20(30)17-29/h5-6,9-12,15,18,20,23,30H,4,7-8,13-14,16-17H2,1-3H3,(H,28,31)(H,32,33)"
+    ],
+    "mass": [
+      "468.594"
+    ],
+    "monoisotopic_mass": [
+      "468.26242"
+    ],
+    "smiles_string": [
+      "CCOc1cc(CC(=O)NC(CC(C)C)c2ccccc2N2CCCC(O)C2)ccc1C(=O)O"
+    ]
+  },
+  "label": "3'-Hydroxy Repaglinide(Mixture of Diastereomers)",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_183883",
+  "obo_id": "CHEBI:183883",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "chemspider",
+      "id": "22547080",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.22547080.html"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0060979",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0060979"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-ethoxy-4-[2-[[1-[2-(3-hydroxypiperidin-1-yl)phenyl]-3-methylbutyl]amino]-2-oxoethyl]benzoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "SUBMITTER",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-ethoxy-4-[2-[[1-[2-(3-hydroxypiperidin-1-yl)phenyl]-3-methylbutyl]amino]-2-oxoethyl]benzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "submitter",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_183883?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_183883/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_183883/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_183883/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_183883/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_183883/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_183883/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

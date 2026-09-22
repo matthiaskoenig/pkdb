@@ -1,0 +1,95 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/SYMP_0000526",
+  "lang": "en",
+  "description": [
+    "An abdominal symptom consisting of an abnormal accumulation of serous fluid in the spaces between tissues and organs in the cavity of the abdomen."
+  ],
+  "synonyms": [
+    "hydroperitoneum"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD9CM_2005:789.5",
+      "UMLS_CUI:C0003962",
+      "UMLS_ICD9CM_2005_AUI:A0026882"
+    ],
+    "has_obo_namespace": [
+      "symptoms"
+    ],
+    "id": [
+      "SYMP:0000526"
+    ]
+  },
+  "label": "ascites",
+  "ontology_name": "symp",
+  "ontology_prefix": "SYMP",
+  "ontology_iri": "http://purl.obolibrary.org/obo/symp.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "SYMP_0000526",
+  "obo_id": "SYMP:0000526",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "An abdominal symptom consisting of an abnormal accumulation of serous fluid in the spaces between tissues and organs in the cavity of the abdomen.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD9CM_2005",
+      "id": "789.5",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0003962",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0003962"
+    },
+    {
+      "database": "UMLS_ICD9CM_2005_AUI",
+      "id": "A0026882",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000526?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000526/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000526/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000526/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000526/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000526/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000526/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

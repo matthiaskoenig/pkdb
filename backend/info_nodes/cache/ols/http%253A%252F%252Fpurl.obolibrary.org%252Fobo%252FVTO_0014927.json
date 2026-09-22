@@ -1,0 +1,84 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/VTO_0014927",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Rattus norvegicus albus"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "NCBITaxon:10116"
+    ],
+    "has_obo_namespace": [
+      "vto-namespace"
+    ],
+    "has_rank": [
+      "http://purl.obolibrary.org/obo/TAXRANK_0000006"
+    ],
+    "id": [
+      "VTO:0014927"
+    ]
+  },
+  "label": "Rattus norvegicus",
+  "ontology_name": "vto",
+  "ontology_prefix": "VTO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/vto.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "VTO_0014927",
+  "obo_id": "VTO:0014927",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "NCBITaxon",
+      "id": "10116",
+      "description": null,
+      "url": "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=10116"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Rattus norvegicus albus",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCBITaxon",
+          "id": "947987",
+          "description": null,
+          "url": "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=947987"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0014927?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0014927/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0014927/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0014927/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0014927/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0014927/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0014927/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

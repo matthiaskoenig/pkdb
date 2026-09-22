@@ -1,0 +1,346 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_107736",
+  "lang": "en",
+  "description": [
+    "A member of the class of  benzamides resulting from the formal condensation of 4-amino-5-chloro-2-methoxybenzoic acid with the primary amino group of <em>N</em>,<em>N</em>-diethylethane-1,2-diamine."
+  ],
+  "synonyms": [
+    "2-methoxy-4-amino-5-chloro-N,N-(dimethylaminoethyl)benzamide",
+    "2-methoxy-5-chloroprocainamide",
+    "4-amino-5-chloro-2-methoxy-N-(beta-diethylaminoethyl)benzamide",
+    "4-amino-5-chloro-N-(2-(diethylamino)ethyl)-2-methoxybenzamide",
+    "4-amino-5-chloro-N-(2-(diethylamino)ethyl)-o-anisamide",
+    "4-amino-5-chloro-N-[2-(diethylamino)ethyl]-2-methoxybenzamide",
+    "4-amino-5-chloro-N-[2-(diethylamino)ethyl]-2-methoxybenzamide",
+    "Elieten",
+    "Reliveran",
+    "metoclopramida",
+    "metoclopramide",
+    "metoclopramidum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:364-62-5",
+      "drugbank:DB01233",
+      "drugcentral:1782",
+      "hmdb:HMDB0015363",
+      "kegg.compound:C07868",
+      "kegg.drug:D00726",
+      "lincs.smallmolecule:LSM-3689",
+      "patent:BE620543",
+      "patent:US3177252",
+      "reaxys:1884366",
+      "vsdb:1821",
+      "wikipedia.en:Metoclopramide"
+    ],
+    "generalized_empirical_formula": [
+      "C14H22ClN3O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:6898"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:107736"
+    ],
+    "inchi_key_string": [
+      "TTWJBBZEZQICBI-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C14H22ClN3O2/c1-4-18(5-2)7-6-17-14(19)10-8-11(15)12(16)9-13(10)20-3/h8-9H,4-7,16H2,1-3H3,(H,17,19)"
+    ],
+    "mass": [
+      "299.802"
+    ],
+    "monoisotopic_mass": [
+      "299.14005"
+    ],
+    "smiles_string": [
+      "CCN(CC)CCNC(=O)c1cc(Cl)c(N)cc1OC"
+    ]
+  },
+  "label": "metoclopramide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_107736",
+  "obo_id": "CHEBI:107736",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "364-62-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=364-62-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01233",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01233"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1782",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1782"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015363",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015363"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07868",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00726",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3689",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "BE620543",
+      "description": "patent",
+      "url": "https://www.google.com/patents/BE620543"
+    },
+    {
+      "database": "patent",
+      "id": "US3177252",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3177252"
+    },
+    {
+      "database": "reaxys",
+      "id": "1884366",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1821",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1821.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Metoclopramide",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-amino-5-chloro-N-[2-(diethylamino)ethyl]-2-methoxybenzamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-methoxy-4-amino-5-chloro-N,N-(dimethylaminoethyl)benzamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-methoxy-5-chloroprocainamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-amino-5-chloro-2-methoxy-N-(beta-diethylaminoethyl)benzamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-amino-5-chloro-N-(2-(diethylamino)ethyl)-2-methoxybenzamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-amino-5-chloro-N-(2-(diethylamino)ethyl)-o-anisamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-amino-5-chloro-N-[2-(diethylamino)ethyl]-2-methoxybenzamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Elieten",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Reliveran",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "metoclopramida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "metoclopramide",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "metoclopramidum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_107736?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_107736/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_107736/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_107736/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_107736/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_107736/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_107736/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_107736/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_107736/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

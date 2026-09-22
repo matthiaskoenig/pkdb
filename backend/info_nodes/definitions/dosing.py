@@ -97,7 +97,6 @@ ADMINISTRATION_ROUTE_NODES: list[InfoNode] = [
     ),
     Route(
         sid="iv",
-        name="iv",
         label="intravenous (iv)",
         description="Intravascular intra-venous administration. Administration of a drug "
         "within or into a vein or veins. Introduction of the drug directly "
@@ -182,7 +181,6 @@ ADMINISTRATION_ROUTE_NODES: list[InfoNode] = [
     ),
     Route(
         sid="oral",
-        name="oral",
         label="oral (po)",
         description="Extravascular oral route of administration of substance. "
         "The introduction of a substance to the mouth or into the "
@@ -322,7 +320,6 @@ ADMINISTRATION_ROUTE_NODES: list[InfoNode] = [
         "enter the bloodstream and exert effects throughout the body. "
         "Also see 'cutaneous'.",
         parents=["administration route"],
-        annotations=[],
         synonyms=[],
     ),
     Route(
@@ -415,7 +412,6 @@ ADMINISTRATION_ROUTE_NODES: list[InfoNode] = [
         label="Not reported (route)",
         description="Route not reported.",
         parents=["administration route"],
-        annotations=[],
     ),
 ]
 
@@ -426,7 +422,6 @@ APPLICATION_NODES: list[InfoNode] = [
         description="Method of applying the given substance or drug.",
         parents=[],
         dtype=DType.ABSTRACT,
-        annotations=[],
     ),
     Application(
         sid="constant-infusion",
@@ -443,7 +438,6 @@ APPLICATION_NODES: list[InfoNode] = [
         name="variable infusion",
         description="Variable infusion of substance. Substance is infused with a variable rate.",
         parents=["administration method"],
-        annotations=[],
     ),
     Application(
         sid="clamp-infusion",
@@ -452,7 +446,6 @@ APPLICATION_NODES: list[InfoNode] = [
         "For instance hyperglycemic clamps to clamp plasma glucose. See also "
         "'variable infusion'.",
         parents=["variable-infusion"],
-        annotations=[],
     ),
     Application(
         sid="single-dose",
@@ -461,7 +454,6 @@ APPLICATION_NODES: list[InfoNode] = [
         "a bolus injection. In case of oral route this is a single dose "
         "taken orally (often as tablet or solution).",
         parents=["administration method"],
-        annotations=[],
     ),
     Application(
         sid="multiple-dose",
@@ -469,7 +461,6 @@ APPLICATION_NODES: list[InfoNode] = [
         description="Multiple dosing of substance. More then one dose is applied at "
         "multiple time points.",
         parents=["administration method"],
-        annotations=[],
     ),
     Application(
         sid="nr-application",
@@ -477,7 +468,6 @@ APPLICATION_NODES: list[InfoNode] = [
         label="Not reported (application)",
         description="Application not reported.",
         parents=["administration method"],
-        annotations=[],
     ),
 ]
 
@@ -507,7 +497,6 @@ ADMINISTRATION_FORM_NODES: list[InfoNode] = [
         label="Not reported (administration form)",
         description="Administration form not reported.",
         parents=["administration form"],
-        annotations=[],
     ),
     Form(
         sid="capsule",
@@ -587,7 +576,6 @@ ADMINISTRATION_FORM_NODES: list[InfoNode] = [
     ),
     Form(
         sid="inhaler",
-        name="inhaler",
         description="A device by means of which a medicinal product can be administered by inspiration through the nose or the mouth.",
         parents=["administration form"],
         annotations=[
@@ -598,10 +586,8 @@ ADMINISTRATION_FORM_NODES: list[InfoNode] = [
     ),
     Form(
         sid="film",
-        name="film",
         description="A film application form is a drug dosage form in which the active compound is incorporated into a thin film that is applied to a body surface, such as the oral mucosa or skin, where the drug is released and absorbed locally or systemically.",
         parents=["administration form"],
-        annotations=[],
         synonyms=[],
     ),
     Form(
@@ -609,7 +595,6 @@ ADMINISTRATION_FORM_NODES: list[InfoNode] = [
         name="transdermal film",
         description="A transdermal film is a thin drug-containing layer applied to the skin that releases the active compound for absorption through the skin into the systemic circulation.",
         parents=["film"],
-        annotations=[],
         synonyms=[],
     ),
     Form(
@@ -617,7 +602,6 @@ ADMINISTRATION_FORM_NODES: list[InfoNode] = [
         name="oral soluble film",
         description="An oral soluble film is a thin drug-containing film placed in the mouth that rapidly dissolves or disintegrates in saliva, releasing the active compound for local or systemic absorption.",
         parents=["film"],
-        annotations=[],
         synonyms=[],
     ),
     Form(
@@ -640,7 +624,6 @@ ADMINISTRATION_FORM_NODES: list[InfoNode] = [
         name="eye drops",
         description="Drops applied to the eye.",
         parents=["administration form"],
-        annotations=[],
         synonyms=[],
     ),
     Form(
@@ -728,7 +711,7 @@ ADMINISTRATION_FORM_NODES: list[InfoNode] = [
         parents=["administration form"],
         annotations=[
             (BQB.IS, "NCIT:C192577"),
-            (BQB.IS, "gsso/GSSO:003371"),
+            (BQB.IS, "GSSO:003371"),
         ],
         synonyms=[
             "Vaginal Ring Dosage Form",
@@ -772,7 +755,6 @@ ADMINISTRATION_FORM_NODES: list[InfoNode] = [
         label="food",
         description="As part of food or a meal.",
         parents=["administration form"],
-        annotations=[],
         synonyms=[],
     ),
 ]

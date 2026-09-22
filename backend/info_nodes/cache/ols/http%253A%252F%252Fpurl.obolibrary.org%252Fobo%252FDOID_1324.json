@@ -1,0 +1,243 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_1324",
+  "lang": "en",
+  "description": [
+    "A respiratory system cancer that is located_in the lung."
+  ],
+  "synonyms": [
+    "lung neoplasm"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10CM:C34.1",
+      "ICD10CM:C34.2",
+      "ICD10CM:C34.3",
+      "ICD9CM:162.3",
+      "ICD9CM:162.4",
+      "ICD9CM:162.5",
+      "ICD9CM:162.8",
+      "MIM:211980",
+      "MIM:608935",
+      "MIM:612571",
+      "MIM:612593",
+      "MIM:614210",
+      "NCI:C194105",
+      "SNOMEDCT_US_2025_09_01:187860004",
+      "SNOMEDCT_US_2025_09_01:187864008",
+      "SNOMEDCT_US_2025_09_01:187868006",
+      "SNOMEDCT_US_2025_09_01:187874006",
+      "UMLS_CUI:C0024624",
+      "UMLS_CUI:C0153491",
+      "UMLS_CUI:C0153492",
+      "UMLS_CUI:C0153493"
+    ],
+    "has_alternative_id": [
+      "DOID:13075",
+      "DOID:1322",
+      "DOID:9881"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:1324"
+    ]
+  },
+  "label": "lung cancer",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_1324",
+  "obo_id": "DOID:1324",
+  "in_subset": [
+    "DO_CFDE_slim",
+    "DO_cancer_slim",
+    "NCIthesaurus",
+    "TopNodes_DOcancerslim"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A respiratory system cancer that is located_in the lung.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "C34.1",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD10CM",
+      "id": "C34.2",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD10CM",
+      "id": "C34.3",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "162.3",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "162.4",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "162.5",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "162.8",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MIM",
+      "id": "211980",
+      "description": null,
+      "url": "https://omim.org/MIM:211980"
+    },
+    {
+      "database": "MIM",
+      "id": "608935",
+      "description": null,
+      "url": "https://omim.org/MIM:608935"
+    },
+    {
+      "database": "MIM",
+      "id": "612571",
+      "description": null,
+      "url": "https://omim.org/MIM:612571"
+    },
+    {
+      "database": "MIM",
+      "id": "612593",
+      "description": null,
+      "url": "https://omim.org/MIM:612593"
+    },
+    {
+      "database": "MIM",
+      "id": "614210",
+      "description": null,
+      "url": "https://omim.org/MIM:614210"
+    },
+    {
+      "database": "NCI",
+      "id": "C194105",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C194105"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "187860004",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/187860004"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "187864008",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/187864008"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "187868006",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/187868006"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "187874006",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/187874006"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0024624",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0024624"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0153491",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0153491"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0153492",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0153492"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0153493",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0153493"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1324?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1324/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1324/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1324/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1324/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1324/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1324/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1324/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1324/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1324/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1324/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,297 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_28827",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(-)-Sparteine",
+    "(7S,7aS,14S,14aR)-dodecahydro-7,14-methano-2H,6H-dipyrido[1,2-a:1',2'-e][1,5]diazocine",
+    "6beta,7alpha,9alpha,11alpha-pachycarpine",
+    "Sparteine",
+    "Sparteine",
+    "[7S-(7alpha,7aalpha,14alpha,14abeta)]-dodecahydro-7,14-methano-2H,6H-dipyrido[1,2-a:1',2'-e][1,5]diazocine",
+    "l-sparteine",
+    "lupinidine",
+    "sparteine",
+    "sparteine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:5253541",
+      "beilstein:7744881",
+      "beilstein:82447",
+      "cas:90-39-1",
+      "drugbank:DB06727",
+      "drugcentral:2467",
+      "gmelin:218976",
+      "kegg.compound:C10783",
+      "kegg.drug:D01041",
+      "knapsack:C00002236"
+    ],
+    "generalized_empirical_formula": [
+      "C15H26N2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:117",
+      "CHEBI:26730"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:28827"
+    ],
+    "inchi_key_string": [
+      "SLRCCWJSBJZJBV-ZQDZILKHSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C15H26N2/c1-3-7-16-11-13-9-12(14(16)5-1)10-17-8-4-2-6-15(13)17/h12-15H,1-11H2/t12-,13-,14-,15+/m0/s1"
+    ],
+    "mass": [
+      "234.387"
+    ],
+    "monoisotopic_mass": [
+      "234.2096"
+    ],
+    "smiles_string": [
+      "[H][C@@]12CCCCN1C[C@@H]1C[C@H]2CN2CCCC[C@]12[H]"
+    ]
+  },
+  "label": "sparteine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_28827",
+  "obo_id": "CHEBI:28827",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "5253541",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "beilstein",
+      "id": "7744881",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "beilstein",
+      "id": "82447",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "90-39-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=90-39-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB06727",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB06727"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2467",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2467"
+    },
+    {
+      "database": "gmelin",
+      "id": "218976",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C10783",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D01041",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00002236",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00002236"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Sparteine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sparteine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-Sparteine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(7S,7aS,14S,14aR)-dodecahydro-7,14-methano-2H,6H-dipyrido[1,2-a:1',2'-e][1,5]diazocine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6beta,7alpha,9alpha,11alpha-pachycarpine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sparteine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[7S-(7alpha,7aalpha,14alpha,14abeta)]-dodecahydro-7,14-methano-2H,6H-dipyrido[1,2-a:1',2'-e][1,5]diazocine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "l-sparteine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lupinidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sparteine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28827?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28827/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28827/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28827/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28827/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28827/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28827/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

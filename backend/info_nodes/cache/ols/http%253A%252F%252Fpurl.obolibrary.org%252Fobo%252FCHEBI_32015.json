@@ -1,0 +1,306 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_32015",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "HOE 118",
+    "HOE-118",
+    "Piretanide",
+    "S 73 4118",
+    "S-73-4118",
+    "S-734118",
+    "arelix",
+    "diumax",
+    "eurelix",
+    "piretanida"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:55837-27-9",
+      "drugcentral:2201",
+      "kegg.drug:D01634",
+      "lincs.smallmolecule:LSM-3959",
+      "pubmed:15646539",
+      "pubmed:18426954",
+      "pubmed:19445515",
+      "pubmed:22961681",
+      "pubmed:37468498",
+      "pubmed:38318365",
+      "pubmed:3989818"
+    ],
+    "generalized_empirical_formula": [
+      "C17H18N2O5S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:93532"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:32015"
+    ],
+    "inchi_key_string": [
+      "UJEWTUDSLQGTOA-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C17H18N2O5S/c18-25(22,23)15-11-12(17(20)21)10-14(19-8-4-5-9-19)16(15)24-13-6-2-1-3-7-13/h1-3,6-7,10-11H,4-5,8-9H2,(H,20,21)(H2,18,22,23)"
+    ],
+    "mass": [
+      "362.407"
+    ],
+    "monoisotopic_mass": [
+      "362.09364"
+    ],
+    "smiles_string": [
+      "NS(=O)(=O)c1cc(C(=O)O)cc(N2CCCC2)c1Oc1ccccc1"
+    ]
+  },
+  "label": "Piretanide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_32015",
+  "obo_id": "CHEBI:32015",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "55837-27-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=55837-27-9"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2201",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2201"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D01634",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3959",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "15646539",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15646539/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18426954",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18426954/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19445515",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19445515/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22961681",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22961681/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37468498",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37468498/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38318365",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38318365/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3989818",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3989818/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "HOE 118",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "HOE-118",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Piretanide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "S 73 4118",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "S-73-4118",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "S-734118",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "arelix",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diumax",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "eurelix",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "piretanida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,102 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_80631",
+  "lang": "en",
+  "description": [],
+  "synonyms": [],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:20290-09-9",
+      "hmdb:HMDB0041936",
+      "kegg.compound:C16643"
+    ],
+    "generalized_empirical_formula": [
+      "C23H27NO9"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:80631"
+    ],
+    "inchi_key_string": [
+      "WAEXKFONHRHFBZ-ZXDZBKESSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C23H27NO9/c1-24-7-6-23-10-3-4-12(25)20(23)32-18-13(5-2-9(14(18)23)8-11(10)24)31-22-17(28)15(26)16(27)19(33-22)21(29)30/h2-5,10-12,15-17,19-20,22,25-28H,6-8H2,1H3,(H,29,30)/t10-,11+,12-,15-,16-,17+,19-,20-,22+,23-/m0/s1"
+    ],
+    "mass": [
+      "461.467"
+    ],
+    "monoisotopic_mass": [
+      "461.16858"
+    ],
+    "smiles_string": [
+      "[H][C@@]12C=C[C@H](O)[C@@H]3Oc4c(O[C@@H]5O[C@H](C(=O)O)[C@@H](O)[C@H](O)[C@H]5O)ccc5c4[C@@]31CCN(C)[C@@H]2C5"
+    ]
+  },
+  "label": "Morphine-3-glucuronide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_80631",
+  "obo_id": "CHEBI:80631",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "20290-09-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=20290-09-9"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0041936",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0041936"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C16643",
+      "description": "kegg.compound",
+      "url": null
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80631?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80631/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80631/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80631/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80631/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80631/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80631/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,286 @@
+[
+  {
+    "src_id": "2",
+    "src_compound_id": "DB00363"
+  },
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:3766"
+  },
+  {
+    "src_id": "3",
+    "src_compound_id": "VBU"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL42"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "29360001"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "29433929"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "29590817"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "8397"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "135398737"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "J60AR2IKIC"
+  },
+  {
+    "src_id": "5",
+    "src_compound_id": "VBU"
+  },
+  {
+    "src_id": "4",
+    "src_compound_id": "38"
+  },
+  {
+    "src_id": "49",
+    "src_compound_id": "PD001633"
+  },
+  {
+    "src_id": "50",
+    "src_compound_id": "NDNHCL"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "4685"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0014507"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID5022855"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00000372"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00001656"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00014001"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00029458"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00031317"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00036582"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00042224"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00048828"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00065273"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00154258"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00169026"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00169039"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00169065"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00169091"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00189995"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00216281"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00250575"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00498550"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00501618"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00649844"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00654576"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00981526"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01248195"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01279213"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01401491"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01639872"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01654601"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01663077"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02286206"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02374567"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02562287"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02625103"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02639702"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02640300"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02751307"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03652974"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03652974"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03652974"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03772951"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03807882"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03857581"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04528095"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04529226"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04580134"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04849026"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05208190"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05316883"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05603104"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05741502"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05958875"
+  },
+  {
+    "src_id": "84",
+    "src_compound_id": "Clozapine"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "Molport-001-728-041"
+  },
+  {
+    "src_id": "34",
+    "src_compound_id": "722"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "50001884"
+  }
+]

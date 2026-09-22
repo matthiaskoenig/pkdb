@@ -1,0 +1,183 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_9452",
+  "lang": "en",
+  "description": [
+    "PRISM.",
+    "A lipid storage disease characterized by the accumulation of large vacuoles of triglyceride fat in at least 5% of hepatocytes."
+  ],
+  "synonyms": [
+    "Fatty change of liver",
+    "Steatosis of liver",
+    "alcoholic fatty liver",
+    "cryptogenic steatotic liver disease",
+    "fatty liver disease",
+    "hepatic lipidosis",
+    "hepatic steatosis",
+    "SLD"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10CM:K70.0",
+      "ICD9CM:571.0",
+      "MESH:D005234",
+      "MESH:D005235",
+      "MIM:228100",
+      "NCI:C197833",
+      "SNOMEDCT_US_2025_09_01:371330000",
+      "SNOMEDCT_US_2025_09_01:50325005",
+      "UMLS_CUI:C0015695",
+      "UMLS_CUI:C0015696"
+    ],
+    "has_alternative_id": [
+      "DOID:9451"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:9452"
+    ]
+  },
+  "label": "steatotic liver disease",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_9452",
+  "obo_id": "DOID:9452",
+  "in_subset": [
+    "DO_FlyBase_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A lipid storage disease characterized by the accumulation of large vacuoles of triglyceride fat in at least 5% of hepatocytes.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "K70.0",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "571.0",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D005234",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D005234"
+    },
+    {
+      "database": "MESH",
+      "id": "D005235",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D005235"
+    },
+    {
+      "database": "MIM",
+      "id": "228100",
+      "description": null,
+      "url": "https://omim.org/MIM:228100"
+    },
+    {
+      "database": "NCI",
+      "id": "C197833",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C197833"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "371330000",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/371330000"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "50325005",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/50325005"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0015695",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0015695"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0015696",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0015696"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "SLD",
+      "scope": "hasExactSynonym",
+      "type": "acronym",
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9452?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9452/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9452/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9452/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9452/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9452/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9452/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9452/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9452/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9452/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9452/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

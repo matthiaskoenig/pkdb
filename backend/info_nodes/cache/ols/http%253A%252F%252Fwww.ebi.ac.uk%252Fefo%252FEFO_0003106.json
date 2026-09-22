@@ -1,0 +1,130 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0003106",
+  "lang": "en",
+  "description": [
+    "A lung disease that involves lung parenchyma or alveolar inflammation and abnormal alveolar filling with fluid (consolidation and exudation). It results from infection with bacteria, viruses, fungi or parasites. It is accompanied by fever, chills, cough, and difficulty in breathing."
+  ],
+  "synonyms": [
+    "Pneumonia (disorder) [Ambiguous]",
+    "Pneumonia (disorder)",
+    "Pneumonia NOS (disorder)",
+    "Pneumonia NOS",
+    "Pneumonia due to other specified organism",
+    "Pneumonia due to other specified organisms (disorder)",
+    "Pneumonia due to other specified organisms",
+    "Pneumonitis (disorder)",
+    "Pneumonitis",
+    "acute pneumonia",
+    "chest infection due to pneumonia",
+    "pneumonia with infectious disease"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:552",
+      "ICD10:J18",
+      "ICD9:483",
+      "ICD9:483.8",
+      "MESH:D011014",
+      "MedDRA:10035664",
+      "MedDRA:10035739",
+      "NCIt:C3333",
+      "SNOMEDCT:233604007"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0005249, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0005249"
+    ],
+    "term editor": [
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005249"
+    ]
+  },
+  "label": "obsolete_pneumonia",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005249",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0003106",
+  "obo_id": "EFO:0003106",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "552",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_552"
+    },
+    {
+      "database": "ICD10",
+      "id": "J18",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/J18"
+    },
+    {
+      "database": "ICD9",
+      "id": "483",
+      "description": null,
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=483"
+    },
+    {
+      "database": "ICD9",
+      "id": "483.8",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D011014",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D011014"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10035664",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10035664"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10035739",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10035739"
+    },
+    {
+      "database": "NCIt",
+      "id": "C3333",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3333"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "233604007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/233604007"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

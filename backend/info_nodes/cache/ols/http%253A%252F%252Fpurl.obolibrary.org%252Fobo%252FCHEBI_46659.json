@@ -1,0 +1,301 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_46659",
+  "lang": "en",
+  "description": [
+    "The anhydrous form of the bromide salt of ipratropium. An anticholinergic drug, ipratropium bromide blocks the muscarinic cholinergic receptors in the smooth muscles of the bronchi in the lungs. This opens the bronchi, so providing relief in chronic obstructive pulmonary disease and acute asthma."
+  ],
+  "synonyms": [
+    "(3-endo,8-syn)-3-[(3-hydroxy-2-phenylpropanoyl)oxy]-8-isopropyl-8-methyl-8-azoniabicyclo[3.2.1]octane bromide",
+    "(3-endo,8-syn)-3-[(3-hydroxy-2-phenylpropanoyl)oxy]-8-isopropyl-8-methyl-8-azoniabicyclo[3.2.1]octane bromide",
+    "(endo,syn)-(+-)-3-(3-hydroxy-1-oxo-2-phenylpropoxy)-8-methyl-8-(1-methylethyl)-8-azoniabicyclo[3.2.1]octane bromide",
+    "3alpha-hydroxy-8-isopropyl-1alphaH,5alphaH-tropanium bromide (+-)-tropate",
+    "8-isopropylnoratropine methobromide",
+    "Ipratropiumbromid",
+    "N-isopropylnoratropinium bromomethylate",
+    "bromure d'ipratropium",
+    "bromuro de ipratropio",
+    "ipratropii bromidum",
+    "ipratropium bromide (anhydrous)",
+    "ipratropium bromide anhydrous",
+    "ipratropium bromide"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:10404264",
+      "cas:22254-24-6",
+      "drugbank:DB00332",
+      "patent:US3505337"
+    ],
+    "generalized_empirical_formula": [
+      "Br.C20H30NO3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:46659"
+    ],
+    "inchi_key_string": [
+      "LHLMOSXCXGLMMN-VVQPYUEFSA-M"
+    ],
+    "inchi_string": [
+      "InChI=1S/C20H30NO3.BrH/c1-14(2)21(3)16-9-10-17(21)12-18(11-16)24-20(23)19(13-22)15-7-5-4-6-8-15;/h4-8,14,16-19,22H,9-13H2,1-3H3;1H/q+1;/p-1/t16-,17+,18+,19?,21+;"
+    ],
+    "mass": [
+      "412.368"
+    ],
+    "monoisotopic_mass": [
+      "411.14091"
+    ],
+    "smiles_string": [
+      "[Br-].[H][C@]12CC[C@]([H])(C[C@H](OC(=O)C(CO)c3ccccc3)C1)[N@+]2(C)C(C)C"
+    ]
+  },
+  "label": "ipratropium bromide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_46659",
+  "obo_id": "CHEBI:46659",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "10404264",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "22254-24-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=22254-24-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00332",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00332"
+    },
+    {
+      "database": "patent",
+      "id": "US3505337",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3505337"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3-endo,8-syn)-3-[(3-hydroxy-2-phenylpropanoyl)oxy]-8-isopropyl-8-methyl-8-azoniabicyclo[3.2.1]octane bromide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3-endo,8-syn)-3-[(3-hydroxy-2-phenylpropanoyl)oxy]-8-isopropyl-8-methyl-8-azoniabicyclo[3.2.1]octane bromide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(endo,syn)-(+-)-3-(3-hydroxy-1-oxo-2-phenylpropoxy)-8-methyl-8-(1-methylethyl)-8-azoniabicyclo[3.2.1]octane bromide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3alpha-hydroxy-8-isopropyl-1alphaH,5alphaH-tropanium bromide (+-)-tropate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-isopropylnoratropine methobromide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ipratropiumbromid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-isopropylnoratropinium bromomethylate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "bromure d'ipratropium",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "bromuro de ipratropio",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ipratropii bromidum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ipratropium bromide (anhydrous)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ipratropium bromide anhydrous",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ipratropium bromide",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46659?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46659/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46659/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46659/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46659/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46659/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46659/graph"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46659/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46659/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:26216"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL1201290"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "29354961"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "5462222"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "RWP5GA015D"
+  },
+  {
+    "src_id": "49",
+    "src_compound_id": "PD202143"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID9049748"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00000501"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00461448"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00721721"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00801034"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00839501"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02824718"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03195647"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03519347"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03833089"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04021381"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04053816"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05411991"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05593055"
+  }
+]

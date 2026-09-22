@@ -1,0 +1,140 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C2831",
+  "lang": "en",
+  "description": [
+    "A simple sugar monosaccharide having two isoforms, alpha and beta, with a chemical structure of C6H12O6 that acts as an energy source for both plants and animals by reacting with oxygen, generating carbon dioxide and water, and releasing energy."
+  ],
+  "synonyms": [
+    "6-(hydroxymethyl)oxane-2,3,4,5-tetrol",
+    "DEXTROSE, UNSPECIFIED FORM",
+    "Glucose",
+    "glucose"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A hexose with an aldehyde group; in which each of the 5 remaining carbons other than the aldehyde group has one hydroxyl group in the R,S,R, and R configuration counting from the first hydroxyl containing carbon next to the aldehyde in the straight chain (Fisher) projection; otherwise all carbons have exclusively hydrogens. Occurs mostly as pyran (6-membered oxygen containing ring or oxane) and rarely as furan (5-membered oxygen containing ring) or straight chain. When glucose forms a ring an additional \"\"anomeric\"\" asymmetric carbon is created which is denoted as \"\"alpha\"\" or \"\"beta\"\". For isomers see http://en.wikipedia.org/wiki/Glucose.",
+      "A type of sugar; the chief source of energy for living organisms."
+    ],
+    "CHEBI_ID": [
+      "CHEBI:17234",
+      "CHEBI:17634"
+    ],
+    "Chemical_Formula": [
+      "C6H12O6"
+    ],
+    "Contributing_Source": [
+      "CRCH",
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "IY9XDZ35W2"
+    ],
+    "INFOODS": [
+      "GLUS"
+    ],
+    "Legacy Concept Name": [
+      "Glucose"
+    ],
+    "NSC Number": [
+      "406891"
+    ],
+    "Preferred_Name": [
+      "Glucose"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical"
+    ],
+    "UMLS_CUI": [
+      "C0017725"
+    ],
+    "USDA_ID": [
+      "211"
+    ],
+    "Unit": [
+      "g"
+    ],
+    "code": [
+      "C2831"
+    ]
+  },
+  "label": "Glucose",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C2831",
+  "obo_id": "NCIT:C2831",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "6-(hydroxymethyl)oxane-2,3,4,5-tetrol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "DEXTROSE, UNSPECIFIED FORM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Glucose",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "glucose",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2831?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2831/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2831/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2831/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2831/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2831/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2831/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2831/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2831/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2831/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2831/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

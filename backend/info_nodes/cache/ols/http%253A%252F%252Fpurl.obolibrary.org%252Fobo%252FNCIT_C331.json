@@ -1,0 +1,130 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C331",
+  "lang": "en",
+  "description": [
+    "An element with atomic symbol Ca, atomic number 20, and atomic weight 40.08."
+  ],
+  "synonyms": [
+    "CALCIUM",
+    "Ca",
+    "Calcium (NOS)",
+    "Calcium",
+    "calcium"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A mineral needed for healthy teeth, bones, and other body tissues. It is the most common mineral in the body. A deposit of calcium in body tissues, such as breast tissue, may be a sign of disease."
+    ],
+    "CAS_Registry": [
+      "7440-70-2"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:22984",
+      "CHEBI:29320"
+    ],
+    "Chemical_Formula": [
+      "Ca"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Calcium"
+    ],
+    "FDA_UNII_Code": [
+      "SY7Q814VUP"
+    ],
+    "Legacy Concept Name": [
+      "Calcium"
+    ],
+    "Preferred_Name": [
+      "Calcium"
+    ],
+    "Semantic_Type": [
+      "Element, Ion, or Isotope"
+    ],
+    "UMLS_CUI": [
+      "C0006675"
+    ],
+    "code": [
+      "C331"
+    ]
+  },
+  "label": "Calcium",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C331",
+  "obo_id": "NCIT:C331",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CALCIUM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ca",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Calcium (NOS)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Calcium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "calcium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C331?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C331/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C331/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C331/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C331/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C331/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C331/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

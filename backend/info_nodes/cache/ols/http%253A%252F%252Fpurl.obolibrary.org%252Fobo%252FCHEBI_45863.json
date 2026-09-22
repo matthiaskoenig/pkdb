@@ -1,0 +1,263 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_45863",
+  "lang": "en",
+  "description": [
+    "A tetracyclic diterpenoid isolated originally from the bark of the Pacific yew tree, <em>Taxus brevifolia</em>. It is a mitotic inhibitor used in cancer chemotherapy. Note that the use of the former generic name 'taxol' is now limited, as Taxol is a registered trade mark."
+  ],
+  "synonyms": [
+    "(2aR-(2aalpha,4beta,4abeta,6beta,9alpha(alpha R*,betaS*),11alpha,12alpha,12balpha))-beta-(Benzoylamino)-alpha-hydroxybenzenepropanoic acid 6,12b-bis(acetyloxy)-12-(benzoyloxy)-2a,3,4,4a,5,6,9,10,11,12,12a,12b-dodecahydro-4,11-dihydroxy-4a,8,13,13-tetramethyl-5-oxo-7,11-methano-1H-cyclodeca(3,4)benz(1,2-b)oxet-9-yl ester",
+    "4alpha,10beta-bis(acetyloxy)-13alpha-[(2S,3S)-3-benzamido-2-hydroxy-3-phenylpropanoyloxy]-1,7beta-dihydroxy-9-oxo-5beta,20-epoxytax-11-en-2alpha-yl benzoate",
+    "4alpha,10beta-bis(acetyloxy)-13alpha-[(2S,3S)-3-benzamido-2-hydroxy-3-phenylpropanoyloxy]-1,7beta-dihydroxy-9-oxo-5beta,20-epoxytax-11-en-2alpha-yl benzoate",
+    "5beta,20-Epoxy-1,2-alpha,4,7beta,10beta,13alpha-hexahydroxytax-11-en-9-one 4,10-diacetate 2-benzoate 13-ester with (2R,3S)-N-benzoyl-3-phenylisoserine",
+    "Paclitaxel",
+    "TAXOL",
+    "Taxol A",
+    "paclitaxel"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:33069-62-4",
+      "drugbank:DB01229",
+      "drugcentral:2044",
+      "kegg.compound:C07394",
+      "kegg.drug:D00491",
+      "knapsack:C00002365",
+      "pdb-ccd:TA1",
+      "wikipedia.en:Paclitaxel"
+    ],
+    "generalized_empirical_formula": [
+      "C47H51NO14"
+    ],
+    "has_alternative_id": [
+      "CHEBI:45862",
+      "CHEBI:7887"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:45863"
+    ],
+    "inchi_key_string": [
+      "RCINICONZNJXQF-MZXODVADSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C47H51NO14/c1-25-31(60-43(56)36(52)35(28-16-10-7-11-17-28)48-41(54)29-18-12-8-13-19-29)23-47(57)40(61-42(55)30-20-14-9-15-21-30)38-45(6,32(51)22-33-46(38,24-58-33)62-27(3)50)39(53)37(59-26(2)49)34(25)44(47,4)5/h7-21,31-33,35-38,40,51-52,57H,22-24H2,1-6H3,(H,48,54)/t31-,32-,33+,35-,36+,37+,38-,40-,45+,46-,47+/m0/s1"
+    ],
+    "mass": [
+      "853.918"
+    ],
+    "monoisotopic_mass": [
+      "853.33096"
+    ],
+    "smiles_string": [
+      "[H][C@]12[C@H](OC(=O)c3ccccc3)[C@]3(O)C[C@H](OC(=O)[C@H](O)[C@@H](NC(=O)c4ccccc4)c4ccccc4)C(C)=C([C@@H](OC(C)=O)C(=O)[C@]1(C)[C@@H](O)C[C@H]1OC[C@]12OC(C)=O)C3(C)C"
+    ]
+  },
+  "label": "paclitaxel",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_45863",
+  "obo_id": "CHEBI:45863",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "33069-62-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=33069-62-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01229",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01229"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2044",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2044"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07394",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00491",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00002365",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00002365"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "TA1",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Paclitaxel",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4alpha,10beta-bis(acetyloxy)-13alpha-[(2S,3S)-3-benzamido-2-hydroxy-3-phenylpropanoyloxy]-1,7beta-dihydroxy-9-oxo-5beta,20-epoxytax-11-en-2alpha-yl benzoate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2aR-(2aalpha,4beta,4abeta,6beta,9alpha(alpha R*,betaS*),11alpha,12alpha,12balpha))-beta-(Benzoylamino)-alpha-hydroxybenzenepropanoic acid 6,12b-bis(acetyloxy)-12-(benzoyloxy)-2a,3,4,4a,5,6,9,10,11,12,12a,12b-dodecahydro-4,11-dihydroxy-4a,8,13,13-tetramethyl-5-oxo-7,11-methano-1H-cyclodeca(3,4)benz(1,2-b)oxet-9-yl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4alpha,10beta-bis(acetyloxy)-13alpha-[(2S,3S)-3-benzamido-2-hydroxy-3-phenylpropanoyloxy]-1,7beta-dihydroxy-9-oxo-5beta,20-epoxytax-11-en-2alpha-yl benzoate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5beta,20-Epoxy-1,2-alpha,4,7beta,10beta,13alpha-hexahydroxytax-11-en-9-one 4,10-diacetate 2-benzoate 13-ester with (2R,3S)-N-benzoyl-3-phenylisoserine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Paclitaxel",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "TAXOL",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Taxol A",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "paclitaxel",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45863?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45863/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45863/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45863/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45863/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45863/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45863/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45863/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45863/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

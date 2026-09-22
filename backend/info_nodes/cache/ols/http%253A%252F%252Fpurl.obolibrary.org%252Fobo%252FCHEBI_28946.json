@@ -1,0 +1,442 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_28946",
+  "lang": "en",
+  "description": [
+    "A dimethylxanthine having the two methyl groups located at positions 3 and 7. A purine alkaloid derived from the cacao plant, it is found in chocolate, as well as in a number of other foods, and is a vasodilator, diuretic and heart stimulator."
+  ],
+  "synonyms": [
+    "3,7-Dimethylxanthine",
+    "3,7-dihydro-3,7-dimethyl-1H-purine-2,6-dione",
+    "3,7-dimethyl-3,7-dihydro-1H-purine-2,6-dione",
+    "3,7-dimethyl-3,7-dihydro-1H-purine-2,6-dione",
+    "3,7-dimethylpurine-2,6-dione",
+    "3,7-dimethylxanthine",
+    "THEOBROMINE",
+    "Theobromin",
+    "Theobromine",
+    "theobromine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:83-67-0",
+      "drugbank:DB01412",
+      "drugcentral:2618",
+      "gmelin:143367",
+      "hmdb:HMDB0002825",
+      "kegg.compound:C07480",
+      "knapsack:C00001509",
+      "lincs.smallmolecule:LSM-5483",
+      "metacyc.compound:3-7-DIMETHYLXANTHINE",
+      "pdb-ccd:37T",
+      "pubmed:10456233",
+      "pubmed:11600064",
+      "pubmed:16979558",
+      "pubmed:18632476",
+      "pubmed:18964243",
+      "pubmed:19018565",
+      "pubmed:21839757",
+      "pubmed:21871761",
+      "pubmed:22751681",
+      "pubmed:22770225",
+      "pubmed:22824731",
+      "pubmed:22866022",
+      "pubmed:23094271",
+      "pubmed:23236361",
+      "pubmed:28166217",
+      "pubmed:9468592",
+      "reaxys:16464",
+      "wikipedia.en:Theobromine"
+    ],
+    "generalized_empirical_formula": [
+      "C7H8N4O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:26939",
+      "CHEBI:39914",
+      "CHEBI:9521"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:28946"
+    ],
+    "inchi_key_string": [
+      "YAPQBXQYLJRXSA-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C7H8N4O2/c1-10-3-8-5-4(10)6(12)9-7(13)11(5)2/h3H,1-2H3,(H,9,12,13)"
+    ],
+    "mass": [
+      "180.167"
+    ],
+    "monoisotopic_mass": [
+      "180.06473"
+    ],
+    "smiles_string": [
+      "Cn1cnc2c1c(=O)nc(=O)n2C"
+    ]
+  },
+  "label": "theobromine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_28946",
+  "obo_id": "CHEBI:28946",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "83-67-0",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=83-67-0"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01412",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01412"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2618",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2618"
+    },
+    {
+      "database": "gmelin",
+      "id": "143367",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0002825",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0002825"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07480",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00001509",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00001509"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5483",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "3-7-DIMETHYLXANTHINE",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "37T",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10456233",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10456233/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11600064",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11600064/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16979558",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16979558/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18632476",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18632476/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18964243",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18964243/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19018565",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19018565/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21839757",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21839757/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21871761",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21871761/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22751681",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22751681/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22770225",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22770225/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22824731",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22824731/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22866022",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22866022/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23094271",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23094271/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23236361",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23236361/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28166217",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28166217/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9468592",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9468592/"
+    },
+    {
+      "database": "reaxys",
+      "id": "16464",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Theobromine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3,7-dimethyl-3,7-dihydro-1H-purine-2,6-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,7-Dimethylxanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,7-dihydro-3,7-dimethyl-1H-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,7-dimethyl-3,7-dihydro-1H-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,7-dimethylpurine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,7-dimethylxanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "THEOBROMINE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Theobromin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Theobromine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "theobromine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "theobromine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28946?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28946/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28946/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28946/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28946/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28946/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28946/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28946/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

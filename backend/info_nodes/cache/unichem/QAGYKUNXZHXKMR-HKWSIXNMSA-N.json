@@ -1,0 +1,254 @@
+[
+  {
+    "src_id": "2",
+    "src_compound_id": "DB00220"
+  },
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:7496"
+  },
+  {
+    "src_id": "3",
+    "src_compound_id": "1UN"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL584"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "29359793"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "38218"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "64143"
+  },
+  {
+    "src_id": "49",
+    "src_compound_id": "PD008635"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "1193"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "229722"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "229723"
+  },
+  {
+    "src_id": "5",
+    "src_compound_id": "1UN"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "HO3OGH5D7I"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0014365"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID5035080"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00001766"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00023400"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00099359"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00141284"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00146380"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00192660"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00234091"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00251030"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00307502"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00312182"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00336778"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00346580"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00346619"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00385450"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00433056"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00457665"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00624195"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00650637"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00694837"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00704600"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00791336"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01020292"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01065844"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01079286"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01086332"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01108666"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01445106"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01447589"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01485731"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01555281"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01728779"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01925378"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02024009"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02066311"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02080416"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02188537"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02257008"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02363829"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03256916"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03422874"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04169763"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05036226"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05036226"
+  },
+  {
+    "src_id": "84",
+    "src_compound_id": "Nelfinavir"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "Molport-000-883-833"
+  },
+  {
+    "src_id": "34",
+    "src_compound_id": "1893"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "50061306"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "518"
+  }
+]

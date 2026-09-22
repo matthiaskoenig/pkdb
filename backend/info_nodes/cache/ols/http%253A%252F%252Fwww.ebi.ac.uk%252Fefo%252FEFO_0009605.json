@@ -1,0 +1,81 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0009605",
+  "lang": "en",
+  "description": [
+    "A non-neoplastic or neoplastic disorder that affects the pancreas. Representative examples of non-neoplastic disorders include pancreatitis and pancreatic insufficiency. Representative examples of neoplastic disorders include cystadenomas, carcinomas, lymphomas, and neuroendocrine neoplasms. [ NCIt:C26842 ]"
+  ],
+  "synonyms": [
+    "pancreas problem"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10:E16",
+      "ICD10:K86",
+      "MONDO:0002356",
+      "MedDRA:10033616"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0002356, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0002356"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0002356"
+    ]
+  },
+  "label": "obsolete_pancreas disease",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0002356",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0009605",
+  "obo_id": "EFO:0009605",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD10",
+      "id": "E16",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/E16"
+    },
+    {
+      "database": "ICD10",
+      "id": "K86",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/K86"
+    },
+    {
+      "database": "MONDO",
+      "id": "0002356",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MONDO_0002356"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10033616",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10033616"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

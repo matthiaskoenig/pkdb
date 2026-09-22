@@ -1,0 +1,191 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_28670",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "1-(2-amino-4-hydroxy-6-pteridinyl)-1,2,3-propanetriol",
+    "2-amino-6-(1,2,3-trihydroxypropyl)-4(3H)-pteridinone",
+    "2-amino-6-(1,2,3-trihydroxypropyl)pteridin-4(3H)-one",
+    "2-amino-6-(1,2,3-trihydroxypropyl)pteridin-4(3H)-one",
+    "6-(1',2',3'-trihydroxy)pterin",
+    "neopterine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "wikipedia.en:Neopterin"
+    ],
+    "generalized_empirical_formula": [
+      "C9H11N5O4"
+    ],
+    "has_alternative_id": [
+      "CHEBI:25499",
+      "CHEBI:44294",
+      "CHEBI:7511"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:28670"
+    ],
+    "inchi_key_string": [
+      "BMQYVXCPAOLZOK-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C9H11N5O4/c10-9-13-7-5(8(18)14-9)12-3(1-11-7)6(17)4(16)2-15/h1,4,6,15-17H,2H2,(H3,10,11,13,14,18)"
+    ],
+    "mass": [
+      "253.218"
+    ],
+    "monoisotopic_mass": [
+      "253.0811"
+    ],
+    "smiles_string": [
+      "Nc1nc(=O)c2nc(C(O)C(O)CO)cnc2n1"
+    ]
+  },
+  "label": "neopterin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_28670",
+  "obo_id": "CHEBI:28670",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "wikipedia.en",
+      "id": "Neopterin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-amino-6-(1,2,3-trihydroxypropyl)pteridin-4(3H)-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(2-amino-4-hydroxy-6-pteridinyl)-1,2,3-propanetriol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-amino-6-(1,2,3-trihydroxypropyl)-4(3H)-pteridinone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-amino-6-(1,2,3-trihydroxypropyl)pteridin-4(3H)-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-(1',2',3'-trihydroxy)pterin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "neopterine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28670?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28670/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28670/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28670/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28670/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28670/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28670/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28670/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28670/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28670/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28670/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

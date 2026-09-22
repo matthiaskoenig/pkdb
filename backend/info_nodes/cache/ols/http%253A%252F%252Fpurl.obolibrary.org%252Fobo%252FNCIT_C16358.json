@@ -1,0 +1,178 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C16358",
+  "lang": "en",
+  "description": [
+    "An individual's weight in kilograms divided by the square of the height in meters."
+  ],
+  "synonyms": [
+    "BMI",
+    "Body Mass Index",
+    "Body mass index (BMI) [Ratio]",
+    "Body mass index",
+    "Quetelet Index",
+    "Vital Signs – BMI",
+    "bmi",
+    "body mass index"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A general indicator of the body fat an individual is carrying based upon the ratio of weight to height. (NCI)",
+      "A measure that relates body weight to height. BMI is sometimes used to measure total body fat and whether a person is a healthy weight. Excess body fat is linked to an increased risk of some diseases including heart disease and some cancers.",
+      "A measurement that is used to indicate the body fat an individual is carrying based on the ratio of weight to height as measured in kilograms per square meters."
+    ],
+    "Contributing_Source": [
+      "ACC/AHA",
+      "CDISC",
+      "CPTAC",
+      "GDC",
+      "PCDC"
+    ],
+    "Has_ACC-AHA_SARS2_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C49671"
+    ],
+    "Is_PCDC_AML_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C49672"
+    ],
+    "Is_PCDC_EWS_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C49672"
+    ],
+    "Legacy Concept Name": [
+      "Body_Mass_Index"
+    ],
+    "Preferred_Name": [
+      "Body Mass Index"
+    ],
+    "Semantic_Type": [
+      "Clinical Attribute"
+    ],
+    "UMLS_CUI": [
+      "C1305855"
+    ],
+    "code": [
+      "C16358"
+    ]
+  },
+  "label": "Body Mass Index",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C16358",
+  "obo_id": "NCIT:C16358",
+  "in_subset": [
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C156954",
+    "NCIT_C157711",
+    "NCIT_C167409",
+    "NCIT_C173209",
+    "NCIT_C174019",
+    "NCIT_C174237",
+    "NCIT_C174262",
+    "NCIT_C177536",
+    "NCIT_C191200",
+    "NCIT_C191385",
+    "NCIT_C191402",
+    "NCIT_C191670",
+    "NCIT_C61410",
+    "NCIT_C66741",
+    "NCIT_C66830",
+    "NCIT_C67153",
+    "NCIT_C77526"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "BMI",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Body Mass Index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Body mass index (BMI) [Ratio]",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Body mass index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Quetelet Index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Vital Signs – BMI",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "bmi",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "body mass index",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16358?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16358/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16358/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16358/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16358/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16358/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16358/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16358/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16358/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16358/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16358/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,132 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_169833",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(2S,3S)-5-[2-(dimethylamino)ethyl]-3-hydroxy-2-(4-methoxyphenyl)-2,3-dihydro-1,5-benzothiazepin-4-one",
+    "(2S,3S)-5-[2-(dimethylamino)ethyl]-3-hydroxy-2-(4-methoxyphenyl)-2,3-dihydro-1,5-benzothiazepin-4-one"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:42399-40-6",
+      "chemspider:82743",
+      "hmdb:HMDB0002873"
+    ],
+    "generalized_empirical_formula": [
+      "C20H24N2O3S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:169833"
+    ],
+    "inchi_key_string": [
+      "NZHUXMZTSSZXSB-MOPGFXCFSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C20H24N2O3S/c1-21(2)12-13-22-16-6-4-5-7-17(16)26-19(18(23)20(22)24)14-8-10-15(25-3)11-9-14/h4-11,18-19,23H,12-13H2,1-3H3/t18-,19+/m1/s1"
+    ],
+    "mass": [
+      "372.49"
+    ],
+    "monoisotopic_mass": [
+      "372.15076"
+    ],
+    "smiles_string": [
+      "COc1ccc([C@@H]2Sc3ccccc3N(CCN(C)C)C(=O)[C@@H]2O)cc1"
+    ]
+  },
+  "label": "Deacetyldiltiazem",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_169833",
+  "obo_id": "CHEBI:169833",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "42399-40-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=42399-40-6"
+    },
+    {
+      "database": "chemspider",
+      "id": "82743",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.82743.html"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0002873",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0002873"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2S,3S)-5-[2-(dimethylamino)ethyl]-3-hydroxy-2-(4-methoxyphenyl)-2,3-dihydro-1,5-benzothiazepin-4-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "SUBMITTER",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S,3S)-5-[2-(dimethylamino)ethyl]-3-hydroxy-2-(4-methoxyphenyl)-2,3-dihydro-1,5-benzothiazepin-4-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "submitter",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169833?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169833/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169833/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169833/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169833/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169833/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169833/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

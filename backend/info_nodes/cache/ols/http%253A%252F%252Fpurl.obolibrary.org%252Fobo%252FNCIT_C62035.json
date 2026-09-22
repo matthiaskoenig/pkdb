@@ -1,0 +1,136 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C62035",
+  "lang": "en",
+  "description": [
+    "An antineoplastic agent that inhibits the Bcr-Abl fusion protein tyrosine kinase, an abnormal enzyme produced by chronic myeloid leukemia cells that contain the Philadelphia chromosome.  Imatinib also inhibits the receptor tyrosine kinases for platelet-derived growth factor (PDGF) and stem cell factor (SCF)/c-kit; the SCF/c-kit receptor tyrosine kinase is activated in gastrointestinal stromal tumor (GIST).  This agent inhibits proliferation and induces apoptosis in cells that overexpress these oncoproteins."
+  ],
+  "synonyms": [
+    "4-[(4-Methyl-1-piperazinyl)methyl]-N-[4-methyl-3-[[4-(3-pyridinyl)-2-pyrimidinyl]amino]phenyl]benzamide",
+    "IMATINIB",
+    "Imatinib"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "152459-95-5"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:45783"
+    ],
+    "Chemical_Formula": [
+      "C29H31N7O"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "GDC",
+      "HemOnc"
+    ],
+    "Display_Name": [
+      "Imatinib"
+    ],
+    "FDA_UNII_Code": [
+      "BKJ8M8G5HI"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C1687"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C16325",
+      "http://purl.obolibrary.org/obo/NCIT_C17322",
+      "http://purl.obolibrary.org/obo/NCIT_C17328"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Imatinib_Base"
+    ],
+    "Maps_To": [
+      "Imatinib"
+    ],
+    "Preferred_Name": [
+      "Imatinib"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0935989"
+    ],
+    "code": [
+      "C62035"
+    ]
+  },
+  "label": "Imatinib",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C62035",
+  "obo_id": "NCIT:C62035",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C177537",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "4-[(4-Methyl-1-piperazinyl)methyl]-N-[4-methyl-3-[[4-(3-pyridinyl)-2-pyrimidinyl]amino]phenyl]benzamide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "IMATINIB",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Imatinib",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62035?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62035/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62035/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62035/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62035/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62035/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62035/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

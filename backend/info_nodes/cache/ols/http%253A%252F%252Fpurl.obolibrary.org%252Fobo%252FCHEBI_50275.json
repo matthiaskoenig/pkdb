@@ -1,0 +1,366 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_50275",
+  "lang": "en",
+  "description": [
+    "A 5-methoxy-2-{[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1<em>H</em>-benzimidazole that has <i>S</i> configuration at the sulfur atom. An inhibitor of gastric acid secretion, it is used (generally as its sodium or magnesium salt) for the treatment of gastro-oesophageal reflux disease, dyspepsia, peptic ulcer disease, and Zollinger-Ellison syndrome."
+  ],
+  "synonyms": [
+    "(-)-omeprazole",
+    "(S)-(-)-omeprazole",
+    "(S)-omeprazole",
+    "5-methoxy-2-{(S)-[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+    "5-methoxy-2-{(S)-[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+    "Alenia",
+    "Escz",
+    "Esofag",
+    "Inexium paranova",
+    "esomeprazol",
+    "esomeprazole",
+    "esomeprazolum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:119141-88-7",
+      "drugbank:DB00736",
+      "drugcentral:1055",
+      "hmdb:HMDB0005009",
+      "hmdb:HMDB0014874",
+      "kegg.drug:D07917",
+      "pubmed:10983736",
+      "pubmed:15080761",
+      "pubmed:18407713",
+      "pubmed:18472988",
+      "pubmed:23677700",
+      "reaxys:12060639",
+      "wikipedia.en:Esomeprazole"
+    ],
+    "generalized_empirical_formula": [
+      "C17H19N3O3S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:50275"
+    ],
+    "inchi_key_string": [
+      "SUBDBMMJDZJVOS-DEOSSOPVSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C17H19N3O3S/c1-10-8-18-15(11(2)16(10)23-4)9-24(21)17-19-13-6-5-12(22-3)7-14(13)20-17/h5-8H,9H2,1-4H3,(H,19,20)/t24-/m0/s1"
+    ],
+    "mass": [
+      "345.424"
+    ],
+    "monoisotopic_mass": [
+      "345.11471"
+    ],
+    "smiles_string": [
+      "COc1ccc2nc([S@@](=O)Cc3ncc(C)c(OC)c3C)nc2c1"
+    ]
+  },
+  "label": "esomeprazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_50275",
+  "obo_id": "CHEBI:50275",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "119141-88-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=119141-88-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00736",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00736"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1055",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1055"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0005009",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0005009"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014874",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014874"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07917",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10983736",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10983736/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15080761",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15080761/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18407713",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18407713/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18472988",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18472988/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23677700",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23677700/"
+    },
+    {
+      "database": "reaxys",
+      "id": "12060639",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Esomeprazole",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-methoxy-2-{(S)-[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-omeprazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-(-)-omeprazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-omeprazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-methoxy-2-{(S)-[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Alenia",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Escz",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Esofag",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Inexium paranova",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "esomeprazol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "esomeprazole",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "esomeprazole",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "esomeprazolum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50275?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50275/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50275/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50275/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50275/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50275/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50275/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50275/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50275/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "is_enantiomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50275/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018039"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

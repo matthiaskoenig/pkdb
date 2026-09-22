@@ -1,0 +1,419 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_223316",
+  "lang": "en",
+  "description": [
+    "A sesquiterpene lactone obtained from sweet wormwood, <em>Artemisia annua</em>, which is used as an antimalarial for the treatment of multi-drug resistant strains of <em>falciparum</em> malaria."
+  ],
+  "synonyms": [
+    "(3R,5aS,6R,8aS,9R,12S,12aR)-3,6,9-trimethyloctahydro-3,12-epoxypyrano[4,3-j][1,2]benzodioxepin-10(3H)-one",
+    "(3R,5aS,6R,8aS,9R,12S,12aR)-3,6,9-trimethyloctahydro-3,12-epoxypyrano[4,3-j][1,2]benzodioxepin-10(3H)-one",
+    "1,5,9-trimethyl-(1R,4S,5R,9R,12S,13R)-11,14,15,16-tetraoxatetracyclo[10.3.1.04,13.08,13]hexadecan-10-one",
+    "Octahydro-3,6,9-trimethyl-3,12-epoxy-12H-pyrano(4,3-j)-1,2-benzodioxepin-10(3H)-one",
+    "QHS",
+    "Qing Hau Sau",
+    "Qinghaosu",
+    "Quing Hau Sau",
+    "arteannuin",
+    "artemisinin",
+    "artemisinina",
+    "artemisinine",
+    "artemisininum",
+    "huanghuahaosu"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:63968-64-9",
+      "drugcentral:3871",
+      "gmelin:1755493",
+      "kegg.compound:C09538",
+      "kegg.drug:D02481",
+      "knapsack:C00003359",
+      "lincs.smallmolecule:LSM-6546",
+      "lipidmaps:LMPR0103190003",
+      "metacyc.compound:CPD-7561",
+      "pubmed:15330155",
+      "pubmed:18008167",
+      "pubmed:19090980",
+      "pubmed:22174561",
+      "pubmed:7877142",
+      "pubmed:8544181",
+      "reaxys:4194670",
+      "wikipedia.en:Artemisinin"
+    ],
+    "generalized_empirical_formula": [
+      "C15H22O5"
+    ],
+    "has_alternative_id": [
+      "CHEBI:8718"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:223316"
+    ],
+    "inchi_key_string": [
+      "BLUAFEHZUWYNDE-NNWCWBAJSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C15H22O5/c1-8-4-5-11-9(2)12(16)17-13-15(11)10(8)6-7-14(3,18-13)19-20-15/h8-11,13H,4-7H2,1-3H3/t8-,9-,10+,11+,13-,14-,15-/m1/s1"
+    ],
+    "mass": [
+      "282.336"
+    ],
+    "monoisotopic_mass": [
+      "282.14672"
+    ],
+    "smiles_string": [
+      "[H][C@]12OC(=O)[C@H](C)[C@]3([H])CC[C@@H](C)[C@]4([H])CC[C@@](C)(OO[C@]143)O2"
+    ]
+  },
+  "label": "(+)-artemisinin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_223316",
+  "obo_id": "CHEBI:223316",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "63968-64-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=63968-64-9"
+    },
+    {
+      "database": "drugcentral",
+      "id": "3871",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/3871"
+    },
+    {
+      "database": "gmelin",
+      "id": "1755493",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C09538",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D02481",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00003359",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00003359"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-6546",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "lipidmaps",
+      "id": "LMPR0103190003",
+      "description": "lipidmaps",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMPR0103190003"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-7561",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "15330155",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15330155/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18008167",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18008167/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19090980",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19090980/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22174561",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22174561/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7877142",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7877142/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8544181",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8544181/"
+    },
+    {
+      "database": "reaxys",
+      "id": "4194670",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Artemisinin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3R,5aS,6R,8aS,9R,12S,12aR)-3,6,9-trimethyloctahydro-3,12-epoxypyrano[4,3-j][1,2]benzodioxepin-10(3H)-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3R,5aS,6R,8aS,9R,12S,12aR)-3,6,9-trimethyloctahydro-3,12-epoxypyrano[4,3-j][1,2]benzodioxepin-10(3H)-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,5,9-trimethyl-(1R,4S,5R,9R,12S,13R)-11,14,15,16-tetraoxatetracyclo[10.3.1.04,13.08,13]hexadecan-10-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Octahydro-3,6,9-trimethyl-3,12-epoxy-12H-pyrano(4,3-j)-1,2-benzodioxepin-10(3H)-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "QHS",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Qing Hau Sau",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Qinghaosu",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Qinghaosu",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Quing Hau Sau",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "arteannuin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "artemisinin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "artemisinina",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "artemisinine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "artemisininum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "huanghuahaosu",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_223316?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_223316/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_223316/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_223316/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_223316/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_223316/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_223316/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_223316/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

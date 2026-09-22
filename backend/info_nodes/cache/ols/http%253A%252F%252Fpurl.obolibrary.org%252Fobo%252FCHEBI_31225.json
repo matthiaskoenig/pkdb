@@ -1,0 +1,345 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_31225",
+  "lang": "en",
+  "description": [
+    "A  pyrazolone derivative that is 1,2-dihydropyrazol-3-one substituted with methyl groups at N-1 and C-5 and with a phenyl group at N-2."
+  ],
+  "synonyms": [
+    "1,2-Dihydro-1,5-dimethyl-2-phenyl-3H-pyrazol-3-one",
+    "1,5-dimethyl-2-phenyl-1,2-dihydro-3H-pyrazol-3-one",
+    "1,5-dimethyl-2-phenyl-1,2-dihydro-3H-pyrazol-3-one",
+    "2,3-Dimethyl-1-phenyl-5-pyrazolone",
+    "Antipyrine",
+    "Phenazone",
+    "fenazona",
+    "phenazone",
+    "phenazonum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:60-80-0",
+      "drugbank:DB01435",
+      "drugcentral:861",
+      "hmdb:HMDB0015503",
+      "kegg.compound:C13244",
+      "kegg.drug:D01776",
+      "lincs.smallmolecule:LSM-3038",
+      "pubmed:24345239",
+      "pubmed:25038548",
+      "pubmed:25435228",
+      "pubmed:25631541",
+      "pubmed:26703262",
+      "pubmed:3425858",
+      "reaxys:157775",
+      "wikipedia.en:Antipyrine"
+    ],
+    "generalized_empirical_formula": [
+      "C11H12N2O"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:31225"
+    ],
+    "inchi_key_string": [
+      "VEQOALNAAJBPNY-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C11H12N2O/c1-9-8-11(14)13(12(9)2)10-6-4-3-5-7-10/h3-8H,1-2H3"
+    ],
+    "mass": [
+      "188.23"
+    ],
+    "monoisotopic_mass": [
+      "188.09496"
+    ],
+    "smiles_string": [
+      "Cc1cc(=O)n(-c2ccccc2)n1C"
+    ]
+  },
+  "label": "antipyrine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_31225",
+  "obo_id": "CHEBI:31225",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "60-80-0",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=60-80-0"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01435",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01435"
+    },
+    {
+      "database": "drugcentral",
+      "id": "861",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/861"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015503",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015503"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C13244",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D01776",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3038",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "24345239",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24345239/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25038548",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25038548/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25435228",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25435228/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25631541",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25631541/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26703262",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26703262/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3425858",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3425858/"
+    },
+    {
+      "database": "reaxys",
+      "id": "157775",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Antipyrine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1,5-dimethyl-2-phenyl-1,2-dihydro-3H-pyrazol-3-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,2-Dihydro-1,5-dimethyl-2-phenyl-3H-pyrazol-3-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,5-dimethyl-2-phenyl-1,2-dihydro-3H-pyrazol-3-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2,3-Dimethyl-1-phenyl-5-pyrazolone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Antipyrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Antipyrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenazone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fenazona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenazone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenazone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenazonum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31225?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31225/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31225/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31225/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31225/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31225/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31225/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31225/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

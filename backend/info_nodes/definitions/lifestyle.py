@@ -11,7 +11,6 @@ LIFESTYLE_NODES: list[InfoNode] = [
     # -------------------------------------------------------------------------
     MeasurementType(
         sid="lifestyle measurement",
-        name="lifestyle measurement",
         description="lifestyle measurement",
         parents=["measurement"],
         dtype=DType.ABSTRACT,
@@ -59,7 +58,6 @@ LIFESTYLE_NODES: list[InfoNode] = [
     ),
     MeasurementType(
         sid="smoking",
-        name="smoking",
         description="Information on the smoking status. Does subject or group smoke?",
         parents=["smoking status"],
         dtype=DType.BOOLEAN,
@@ -273,7 +271,6 @@ LIFESTYLE_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="vegetarian",
-        name="vegetarian",
         description="Vegetarian diet. A person who eats no meat; some may eat fish, "
         "eggs, or dairy products.",
         parents=["diet"],
@@ -287,21 +284,18 @@ LIFESTYLE_NODES: list[InfoNode] = [
         description="Feeding protocol (animal experiments). For human studies see 'diet'.",
         parents=["lifestyle measurement"],
         dtype=DType.CATEGORICAL,
-        annotations=[],
     ),
     Choice(
         sid="feeding-ad-libitum",
         name="ad libitum",
         description="Ad libitum feeding. Continuous access to food.",
         parents=["feeding protocol"],
-        annotations=[],
     ),
     Choice(
         sid="feeding-time-restricted",
         name="time restricted",
         description="Time restricted access to food.",
         parents=["feeding protocol"],
-        annotations=[],
     ),
     MeasurementType(
         "fasting status",
@@ -349,7 +343,6 @@ LIFESTYLE_NODES: list[InfoNode] = [
         description="Appetite rating (assessed by visual analog scale, VAS).",
         parents=["lifestyle measurement"],
         dtype=DType.ABSTRACT,
-        annotations=[],
     ),
     MeasurementType(
         "satiety",
@@ -367,7 +360,6 @@ LIFESTYLE_NODES: list[InfoNode] = [
         parents=["appetite rating"],
         dtype=DType.NUMERIC,
         units=["mm"],
-        annotations=[],
     ),
     MeasurementType(
         "fullness",
@@ -375,7 +367,6 @@ LIFESTYLE_NODES: list[InfoNode] = [
         parents=["appetite rating"],
         dtype=DType.NUMERIC,
         units=["mm"],
-        annotations=[],
     ),
     MeasurementType(
         "prospective-food-consumption",
@@ -384,7 +375,6 @@ LIFESTYLE_NODES: list[InfoNode] = [
         parents=["appetite rating"],
         dtype=DType.NUMERIC,
         units=["mm"],
-        annotations=[],
     ),
     MeasurementType(
         "overall-appetite-score",
@@ -395,7 +385,6 @@ LIFESTYLE_NODES: list[InfoNode] = [
         parents=["appetite rating"],
         dtype=DType.NUMERIC,
         units=["mm"],
-        annotations=[],
     ),
     MeasurementType(
         "metabolic challenge",
@@ -439,7 +428,7 @@ LIFESTYLE_NODES: list[InfoNode] = [
         "cereal-based component packaged to be served after heating, "
         "either as separate items or courses or mixed as recipe components",
         parents=["meal"],
-        annotations=[(BQB.IS, "foodon/FOODON:03400139")],
+        annotations=[(BQB.IS, "FOODON:03400139")],
     ),
     Choice(
         "single component meal",
@@ -508,7 +497,6 @@ LIFESTYLE_NODES: list[InfoNode] = [
     # -------------------------------------------------------------------------
     MeasurementType(
         sid="exercise",
-        name="exercise",
         description="Exercise performed or not? "
         "Activity that requires physical or mental exertion, especially when "
         "performed to develop or maintain fitness.",
@@ -685,7 +673,6 @@ LIFESTYLE_NODES: list[InfoNode] = [
     # -------------------------------------------------------------------------
     MeasurementType(
         sid="housing",
-        name="housing",
         description="Housing conditions (for animal experiments)",
         parents=["lifestyle measurement"],
         dtype=DType.ABSTRACT,

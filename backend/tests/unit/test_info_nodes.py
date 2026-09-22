@@ -3,6 +3,30 @@
 import pytest
 
 
+def test_audit_reports_curation_and_unknown_policy(monkeypatch):
+    from info_nodes import audit
+    from info_nodes.graph import NodeIndex
+    from info_nodes.node import InfoNode
+
+    nodes = NodeIndex([InfoNode("review-example", "A curated example.", [])])
+    monkeypatch.setattr(audit, "CURATION_REVIEW", {"review-example": "Check identity."})
+    issues = audit.audit_nodes(
+        nodes, policies={"can_negative": ["missing-measurement"]}
+    )
+    assert issues == [
+        {
+            "sid": "missing-measurement",
+            "code": "unknown_policy_measurement",
+            "message": "can_negative references an unknown measurement name.",
+        },
+        {
+            "sid": "review-example",
+            "code": "curation_review",
+            "message": "Check identity.",
+        },
+    ]
+
+
 def test_index_preserves_children_and_deduplicates_diamond_choices():
     from info_nodes.graph import NodeIndex
     from info_nodes.node import Choice, DType, InfoNode, MeasurementType

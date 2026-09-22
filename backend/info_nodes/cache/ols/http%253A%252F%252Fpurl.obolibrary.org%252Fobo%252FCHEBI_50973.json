@@ -1,0 +1,188 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_50973",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "1,2,3,4-Tetrahydro-isoquinoline-2-carboxamidine sulfate",
+    "2(1H)-Isoquinolinecarboximidamide, 3,4-dihydro-, sulfate(2:1)",
+    "Debrisoquin hemisulfate",
+    "Isocaramidine sulfate",
+    "bis(3,4-dihydroisoquinoline-2(1H)-carboximidamide) sulfate",
+    "bis(3,4-dihydroisoquinoline-2(1H)-carboximidamide) sulfate"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:581-88-4",
+      "drugbank:DB04840",
+      "kegg.drug:D03664"
+    ],
+    "generalized_empirical_formula": [
+      "2H.2C10H13N3.O4S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:50973"
+    ],
+    "inchi_key_string": [
+      "CAYGYVYWRIHZCQ-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/2C10H13N3.H2O4S/c2*11-10(12)13-6-5-8-3-1-2-4-9(8)7-13;1-5(2,3)4/h2*1-4H,5-7H2,(H3,11,12);(H2,1,2,3,4)"
+    ],
+    "mass": [
+      "448.549"
+    ],
+    "monoisotopic_mass": [
+      "448.18927"
+    ],
+    "smiles_string": [
+      "N=C(N)N1CCc2ccccc2C1.N=C(N)N1CCc2ccccc2C1.O=S(=O)([O-])[O-].[H+].[H+]"
+    ]
+  },
+  "label": "debrisoquin sulfate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_50973",
+  "obo_id": "CHEBI:50973",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "581-88-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=581-88-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB04840",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB04840"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D03664",
+      "description": "kegg.drug",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "bis(3,4-dihydroisoquinoline-2(1H)-carboximidamide) sulfate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,2,3,4-Tetrahydro-isoquinoline-2-carboxamidine sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2(1H)-Isoquinolinecarboximidamide, 3,4-dihydro-, sulfate(2:1)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Debrisoquin hemisulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Isocaramidine sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "bis(3,4-dihydroisoquinoline-2(1H)-carboximidamide) sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50973?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50973/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50973/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50973/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50973/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50973/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50973/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

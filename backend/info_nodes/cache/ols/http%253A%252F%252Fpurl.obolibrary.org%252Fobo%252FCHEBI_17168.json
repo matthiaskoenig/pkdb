@@ -1,0 +1,226 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_17168",
+  "lang": "en",
+  "description": [
+    "A cholestanoid that is (5α)-cholest-7-ene substituted by a β-hydroxy group at position 3."
+  ],
+  "synonyms": [
+    "5alpha-Cholest-7-en-3beta-ol",
+    "5alpha-cholest-7-en-3beta-ol",
+    "Lathosterol",
+    "gamma-Cholesterol",
+    "lathosterol"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:80-99-9",
+      "hmdb:HMDB0001170",
+      "kegg.compound:C01189",
+      "knapsack:C00023744",
+      "lipidmaps:LMST01010089",
+      "pubmed:12812989",
+      "pubmed:14511438",
+      "reaxys:3215566",
+      "wikipedia.en:Lathosterol"
+    ],
+    "generalized_empirical_formula": [
+      "C27H46O"
+    ],
+    "has_alternative_id": [
+      "CHEBI:12169",
+      "CHEBI:20643",
+      "CHEBI:2138"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:17168"
+    ],
+    "inchi_key_string": [
+      "IZVFFXVYBHFIHY-SKCNUYALSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C27H46O/c1-18(2)7-6-8-19(3)23-11-12-24-22-10-9-20-17-21(28)13-15-26(20,4)25(22)14-16-27(23,24)5/h10,18-21,23-25,28H,6-9,11-17H2,1-5H3/t19-,20+,21+,23-,24+,25+,26+,27-/m1/s1"
+    ],
+    "mass": [
+      "386.664"
+    ],
+    "monoisotopic_mass": [
+      "386.35487"
+    ],
+    "smiles_string": [
+      "[H][C@@]12CC=C3[C@]([H])(CC[C@@]4(C)[C@@]3([H])CC[C@]4([H])[C@H](C)CCCC(C)C)[C@@]1(C)CC[C@H](O)C2"
+    ]
+  },
+  "label": "5alpha-cholest-7-en-3beta-ol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_17168",
+  "obo_id": "CHEBI:17168",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "80-99-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=80-99-9"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001170",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001170"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C01189",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00023744",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00023744"
+    },
+    {
+      "database": "lipidmaps",
+      "id": "LMST01010089",
+      "description": "lipidmaps",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMST01010089"
+    },
+    {
+      "database": "pubmed",
+      "id": "12812989",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12812989/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14511438",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14511438/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3215566",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Lathosterol",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5alpha-Cholest-7-en-3beta-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5alpha-cholest-7-en-3beta-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lathosterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "gamma-Cholesterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lathosterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17168?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17168/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17168/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17168/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17168/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17168/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17168/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17168/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,244 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9436",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "RNH-5139",
+    "RS 5139",
+    "RS-5139",
+    "Temocapril diacid",
+    "Temocaprilat",
+    "temocaprilate",
+    "temocaprilato"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:110221-53-9",
+      "hmdb:HMDB0061721",
+      "kegg.compound:C11373",
+      "pubmed:11895100",
+      "pubmed:15618677",
+      "pubmed:21474683",
+      "pubmed:3669006",
+      "pubmed:9067317",
+      "pubmed:9765319"
+    ],
+    "generalized_empirical_formula": [
+      "C21H24N2O5S2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9436"
+    ],
+    "inchi_key_string": [
+      "KZVWEOXAPZXAFB-BQFCYCMXSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H24N2O5S2/c24-19(25)12-23-11-18(17-7-4-10-29-17)30-13-16(20(23)26)22-15(21(27)28)9-8-14-5-2-1-3-6-14/h1-7,10,15-16,18,22H,8-9,11-13H2,(H,24,25)(H,27,28)/t15-,16-,18-/m0/s1"
+    ],
+    "mass": [
+      "448.566"
+    ],
+    "monoisotopic_mass": [
+      "448.11266"
+    ],
+    "smiles_string": [
+      "O=C(O)CN1C[C@@H](c2cccs2)SC[C@H](N[C@@H](CCc2ccccc2)C(=O)O)C1=O"
+    ]
+  },
+  "label": "Temocaprilat",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9436",
+  "obo_id": "CHEBI:9436",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "110221-53-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=110221-53-9"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0061721",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0061721"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C11373",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11895100",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11895100/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15618677",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15618677/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21474683",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21474683/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3669006",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3669006/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9067317",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9067317/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9765319",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9765319/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "RNH-5139",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "RS 5139",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "RS-5139",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Temocapril diacid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Temocaprilat",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "temocaprilate",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "temocaprilato",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

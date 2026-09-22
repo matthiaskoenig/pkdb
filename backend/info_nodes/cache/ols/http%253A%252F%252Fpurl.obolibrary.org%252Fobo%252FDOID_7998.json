@@ -1,0 +1,141 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_7998",
+  "lang": "en",
+  "description": [
+    "Xref MGI.",
+    "A thyroid gland disease that involves an over production of thyroid hormone."
+  ],
+  "synonyms": [
+    "overactive thyroid"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10CM:E05.9",
+      "MESH:D006980",
+      "NCI:C113145",
+      "NCI:C3123",
+      "SNOMEDCT_US_2025_09_01:190239004",
+      "UMLS_CUI:C0020550",
+      "UMLS_CUI:C3714618"
+    ],
+    "has exact match": [
+      "MESH:D006980"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:7998"
+    ]
+  },
+  "label": "hyperthyroidism",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_7998",
+  "obo_id": "DOID:7998",
+  "in_subset": [
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A thyroid gland disease that involves an over production of thyroid hormone.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "E05.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D006980",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D006980"
+    },
+    {
+      "database": "NCI",
+      "id": "C113145",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C113145"
+    },
+    {
+      "database": "NCI",
+      "id": "C3123",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3123"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "190239004",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/190239004"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0020550",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0020550"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C3714618",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C3714618"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_7998?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_7998/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_7998/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_7998/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_7998/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_7998/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_7998/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_7998/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_7998/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_7998/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_7998/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

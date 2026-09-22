@@ -1,0 +1,181 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_31696",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Cardio-Green",
+    "Fox Green",
+    "indocyanine green",
+    "sodium 4-(2-{7-[1,1-dimethyl-3-(4-sulfonatobutyl)-1H-benzo[e]indolium-2-yl]hepta-2,4,6-trien-1-ylidene}-1,1-dimethyl-1,2-dihydro-3H-benzo[e]indol-3-yl)butane-1-sulfonate",
+    "sodium 4-(2-{7-[1,1-dimethyl-3-(4-sulfonatobutyl)-1H-benzo[e]indolium-2-yl]hepta-2,4,6-trien-1-ylidene}-1,1-dimethyl-1,2-dihydro-3H-benzo[e]indol-3-yl)butane-1-sulfonate"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:4115884",
+      "cas:3599-32-4",
+      "kegg.drug:D01342",
+      "wikipedia.en:Indocyanine_Green"
+    ],
+    "generalized_empirical_formula": [
+      "C43H47N2O6S2.Na"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:31696"
+    ],
+    "inchi_key_string": [
+      "MOFVSTNWEDAEEK-UHFFFAOYSA-M"
+    ],
+    "inchi_string": [
+      "InChI=1S/C43H48N2O6S2.Na/c1-42(2)38(44(28-14-16-30-52(46,47)48)36-26-24-32-18-10-12-20-34(32)40(36)42)22-8-6-5-7-9-23-39-43(3,4)41-35-21-13-11-19-33(35)25-27-37(41)45(39)29-15-17-31-53(49,50)51;/h5-13,18-27H,14-17,28-31H2,1-4H3,(H-,46,47,48,49,50,51);/q;+1/p-1"
+    ],
+    "mass": [
+      "774.981"
+    ],
+    "monoisotopic_mass": [
+      "774.27732"
+    ],
+    "smiles_string": [
+      "[H]C(=C([H])C([H])=C([H])C1=[N+](CCCCS(=O)(=O)[O-])c2ccc3ccccc3c2C1(C)C)C([H])=C([H])C([H])=C1N(CCCCS(=O)(=O)[O-])c2ccc3ccccc3c2C1(C)C.[Na+]"
+    ]
+  },
+  "label": "indocyanine green",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_31696",
+  "obo_id": "CHEBI:31696",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "4115884",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "3599-32-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=3599-32-4"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D01342",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Indocyanine_Green",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "sodium 4-(2-{7-[1,1-dimethyl-3-(4-sulfonatobutyl)-1H-benzo[e]indolium-2-yl]hepta-2,4,6-trien-1-ylidene}-1,1-dimethyl-1,2-dihydro-3H-benzo[e]indol-3-yl)butane-1-sulfonate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cardio-Green",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Fox Green",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "indocyanine green",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sodium 4-(2-{7-[1,1-dimethyl-3-(4-sulfonatobutyl)-1H-benzo[e]indolium-2-yl]hepta-2,4,6-trien-1-ylidene}-1,1-dimethyl-1,2-dihydro-3H-benzo[e]indol-3-yl)butane-1-sulfonate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31696?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31696/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31696/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31696/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31696/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31696/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31696/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

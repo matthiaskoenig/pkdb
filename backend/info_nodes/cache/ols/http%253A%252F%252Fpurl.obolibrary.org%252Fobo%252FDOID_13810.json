@@ -1,0 +1,151 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_13810",
+  "lang": "en",
+  "description": [
+    "Xref MGI. OMIM mapping confirmed by DO. [SN].",
+    "A familial hyperlipidemia characterized by very high levels of low-density lipoprotein (LDL) and early cardiovascular disease."
+  ],
+  "synonyms": [
+    "Fredrickson type IIa hyperlipoproteinemia",
+    "Fredrickson type IIa lipidaemia",
+    "familial hyperbetalipoproteinaemia",
+    "familial hypercholesteremia",
+    "hyperbetalipoproteinemia",
+    "type II hyperlipidemia"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "GARD:10416",
+      "ICD10CM:E78.01",
+      "MESH:D006938",
+      "MIM:143890",
+      "NCI:C34704",
+      "ORDO:406",
+      "SNOMEDCT_US_2025_09_01:190772003",
+      "UMLS_CUI:C0020445"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:13810"
+    ]
+  },
+  "label": "familial hypercholesterolemia",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_13810",
+  "obo_id": "DOID:13810",
+  "in_subset": [
+    "DO_rare_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A familial hyperlipidemia characterized by very high levels of low-density lipoprotein (LDL) and early cardiovascular disease.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "GARD",
+      "id": "10416",
+      "description": null,
+      "url": "https://rarediseases.info.nih.gov/?gard_id=10416"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "E78.01",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D006938",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D006938"
+    },
+    {
+      "database": "MIM",
+      "id": "143890",
+      "description": null,
+      "url": "https://omim.org/MIM:143890"
+    },
+    {
+      "database": "NCI",
+      "id": "C34704",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C34704"
+    },
+    {
+      "database": "ORDO",
+      "id": "406",
+      "description": null,
+      "url": "http://www.orpha.net/ORDO/Orphanet_406"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "190772003",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/190772003"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0020445",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0020445"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_13810?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_13810/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_13810/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_13810/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_13810/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_13810/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_13810/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_13810/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_13810/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_13810/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_13810/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

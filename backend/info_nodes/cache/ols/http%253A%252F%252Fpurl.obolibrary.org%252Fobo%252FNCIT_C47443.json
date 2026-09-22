@@ -1,0 +1,123 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C47443",
+  "lang": "en",
+  "description": [
+    "A long-acting benzodiazepine with anxiolytic, sedative and hypnotic activity. Chlordiazepoxide exerts its effect by binding to the benzodiazepine site at the gamma-aminobutyric acid (GABA) receptor-chloride ionophore complex in the central nervous system (CNS). This leads to an increase in the opening of chloride channels, membrane hyperpolarization and increases the inhibitory effect of GABA on the CNS."
+  ],
+  "synonyms": [
+    "3H-1,4-Benzodiazepin-2-amine, 7-chloro-N-methyl-5-phenyl, 4-oxide",
+    "CHLORDIAZEPOXIDE",
+    "Chlordiazepoxide",
+    "Librelease",
+    "Libritabs"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "58-25-3"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:3611"
+    ],
+    "Chemical_Formula": [
+      "C16H14ClN3O"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "6RZ6XEZ3CR"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C47973"
+    ],
+    "Legacy Concept Name": [
+      "Chlordiazepoxide"
+    ],
+    "Preferred_Name": [
+      "Chlordiazepoxide"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0008188"
+    ],
+    "code": [
+      "C47443"
+    ]
+  },
+  "label": "Chlordiazepoxide",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C47443",
+  "obo_id": "NCIT:C47443",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "3H-1,4-Benzodiazepin-2-amine, 7-chloro-N-methyl-5-phenyl, 4-oxide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CHLORDIAZEPOXIDE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Chlordiazepoxide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Librelease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Libritabs",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47443?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47443/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47443/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47443/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47443/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47443/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47443/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,259 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_50924",
+  "lang": "en",
+  "description": [
+    "A member of the class of phenylureas that is urea in which one of the nitrogens is substituted by a 4-chloro-3-trifluorophenyl group while the other is substituted by a phenyl group which, in turn, is substituted at the <em>para</em> position by a [2-(methylcarbamoyl)pyridin-4-yl]oxy group."
+  ],
+  "synonyms": [
+    "4-(4-((((4-Chloro-3-(trifluoromethyl)phenyl)amino)carbonyl)amino)phenoxy)-N-methyl-2-pyridinecarboxamide",
+    "4-[4-({[4-chloro-3-(trifluoromethyl)phenyl]carbamoyl}amino)phenoxy]-N-methylpyridine-2-carboxamide",
+    "4-[4-({[4-chloro-3-(trifluoromethyl)phenyl]carbamoyl}amino)phenoxy]-N-methylpyridine-2-carboxamide",
+    "N-(4-Chloro-3-(trifluoromethyl)phenyl)-N'-(4-(2-(N-methylcarbamoyl)-4-pyridyloxy)phenyl)urea",
+    "sorafenib",
+    "sorafenibum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:284461-73-0",
+      "drugbank:DB00398",
+      "drugcentral:2459",
+      "kegg.drug:D08524",
+      "lincs.smallmolecule:LSM-1008",
+      "pdb-ccd:BAX",
+      "pubmed:18520294",
+      "pubmed:19568496",
+      "pubmed:19633425",
+      "pubmed:19821497",
+      "pubmed:36029544",
+      "wikipedia.en:Sorafenib"
+    ],
+    "generalized_empirical_formula": [
+      "C21H16ClF3N4O3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:47228"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:50924"
+    ],
+    "inchi_key_string": [
+      "MLDQJTXFUGDVEO-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H16ClF3N4O3/c1-26-19(30)18-11-15(8-9-27-18)32-14-5-2-12(3-6-14)28-20(31)29-13-4-7-17(22)16(10-13)21(23,24)25/h2-11H,1H3,(H,26,30)(H2,28,29,31)"
+    ],
+    "mass": [
+      "464.831"
+    ],
+    "monoisotopic_mass": [
+      "464.0863"
+    ],
+    "smiles_string": [
+      "CNC(=O)c1cc(Oc2ccc(NC(=O)Nc3ccc(Cl)c(C(F)(F)F)c3)cc2)ccn1"
+    ]
+  },
+  "label": "sorafenib",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_50924",
+  "obo_id": "CHEBI:50924",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "284461-73-0",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=284461-73-0"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00398",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00398"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2459",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2459"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08524",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1008",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "BAX",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "18520294",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18520294/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19568496",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19568496/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19633425",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19633425/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19821497",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19821497/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36029544",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36029544/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Sorafenib",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-[4-({[4-chloro-3-(trifluoromethyl)phenyl]carbamoyl}amino)phenoxy]-N-methylpyridine-2-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(4-((((4-Chloro-3-(trifluoromethyl)phenyl)amino)carbonyl)amino)phenoxy)-N-methyl-2-pyridinecarboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-[4-({[4-chloro-3-(trifluoromethyl)phenyl]carbamoyl}amino)phenoxy]-N-methylpyridine-2-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(4-Chloro-3-(trifluoromethyl)phenyl)-N'-(4-(2-(N-methylcarbamoyl)-4-pyridyloxy)phenyl)urea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sorafenib",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sorafenibum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50924?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50924/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50924/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50924/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50924/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50924/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50924/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50924/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

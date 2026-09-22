@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:7731",
+  "name": "ofloxacin",
+  "definition": "A racemate comprising equimolar amounts of levofloxacin and dextrofloxacin. It is a synthetic fluoroquinolone antibacterial agent which inhibits the supercoiling activity of bacterial DNA gyrase, halting DNA replication.",
+  "formula": "C18H20FN3O4",
+  "charge": 0,
+  "mass": "361.373",
+  "inchikey": null
+}

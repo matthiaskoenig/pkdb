@@ -1,0 +1,591 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_28593",
+  "lang": "en",
+  "description": [
+    "A cinchona alkaloid consisting of cinchonine with the hydrogen at the 6-position of the quinoline ring substituted by methoxy."
+  ],
+  "synonyms": [
+    "(+)-Quinidine",
+    "(+)-quinidine",
+    "(8R,9S)-quinidine",
+    "(9S)-6'-methoxycinchonan-9-ol",
+    "(9S)-6'-methoxycinchonan-9-ol",
+    "(R)-(6-methoxyquinolin-4-yl)((3S,4R,7S)-3-vinylquinuclidin-7-yl)methanol",
+    "(S)-(6-Methoxy-quinolin-4-yl)-((2R,5R)-5-vinyl-1-aza-bicyclo[2.2.2]oct-2-yl)-methanol",
+    "(S)-(6-methoxyquinolin-4-yl)((2R,5R)-5-vinylquinuclidin-2-yl)methanol",
+    "6-methoxy-alpha-(5-vinyl-2-quinuclidinyl)-4-quinolinemethanol",
+    "CIN-QUIN",
+    "Chinidin",
+    "Conchinin",
+    "Kinidin",
+    "Quinidine",
+    "alpha-(6-methoxy-4-quinolyl)-5-vinyl-2-quinuclidinemethanol",
+    "beta-quinine",
+    "chinidinum",
+    "conquinine",
+    "pitayine",
+    "quinidina",
+    "quinidine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:56-54-2",
+      "drugbank:DB00908",
+      "drugcentral:2346",
+      "kegg.compound:C06527",
+      "kegg.drug:D08458",
+      "lincs.smallmolecule:LSM-3325",
+      "pubmed:12477351",
+      "pubmed:12699389",
+      "pubmed:14971904",
+      "pubmed:14973303",
+      "pubmed:15089813",
+      "pubmed:15225721",
+      "pubmed:15270556",
+      "pubmed:15328252",
+      "pubmed:16570918",
+      "pubmed:17132069",
+      "pubmed:17228875",
+      "pubmed:17249648",
+      "pubmed:17870541",
+      "pubmed:18324762",
+      "pubmed:18395298",
+      "pubmed:18788725",
+      "pubmed:23861085",
+      "pubmed:24130427",
+      "pubmed:445303",
+      "pubmed:8337232",
+      "pubmed:9864343",
+      "reaxys:91866"
+    ],
+    "generalized_empirical_formula": [
+      "C20H24N2O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:127150",
+      "CHEBI:26494",
+      "CHEBI:355477",
+      "CHEBI:529982",
+      "CHEBI:595841",
+      "CHEBI:597286",
+      "CHEBI:604323",
+      "CHEBI:8719"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:28593"
+    ],
+    "inchi_key_string": [
+      "LOUPRKONTZGTKE-LHHVKLHASA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C20H24N2O2/c1-3-13-12-22-9-7-14(13)10-19(22)20(23)16-6-8-21-18-5-4-15(24-2)11-17(16)18/h3-6,8,11,13-14,19-20,23H,1,7,9-10,12H2,2H3/t13-,14-,19+,20-/m0/s1"
+    ],
+    "mass": [
+      "324.424"
+    ],
+    "monoisotopic_mass": [
+      "324.18378"
+    ],
+    "smiles_string": [
+      "[H][C@]1([C@@H](O)c2ccnc3ccc(OC)cc23)C[C@@H]2CC[N@@]1C[C@@H]2C=C"
+    ]
+  },
+  "label": "quinidine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_28593",
+  "obo_id": "CHEBI:28593",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "56-54-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=56-54-2"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00908",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00908"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2346",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2346"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06527",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08458",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3325",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "12477351",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12477351/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12699389",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12699389/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14971904",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14971904/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14973303",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14973303/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15089813",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15089813/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15225721",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15225721/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15270556",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15270556/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15328252",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15328252/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16570918",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16570918/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17132069",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17132069/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17228875",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17228875/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17249648",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17249648/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17870541",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17870541/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18324762",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18324762/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18395298",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18395298/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18788725",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18788725/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23861085",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23861085/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24130427",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24130427/"
+    },
+    {
+      "database": "pubmed",
+      "id": "445303",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/445303/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8337232",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8337232/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9864343",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9864343/"
+    },
+    {
+      "database": "reaxys",
+      "id": "91866",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(9S)-6'-methoxycinchonan-9-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-Quinidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-quinidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(8R,9S)-quinidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(9S)-6'-methoxycinchonan-9-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-(6-methoxyquinolin-4-yl)((3S,4R,7S)-3-vinylquinuclidin-7-yl)methanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-(6-Methoxy-quinolin-4-yl)-((2R,5R)-5-vinyl-1-aza-bicyclo[2.2.2]oct-2-yl)-methanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-(6-methoxyquinolin-4-yl)((2R,5R)-5-vinylquinuclidin-2-yl)methanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-methoxy-alpha-(5-vinyl-2-quinuclidinyl)-4-quinolinemethanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CIN-QUIN",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Chinidin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Conchinin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Kinidin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Quinidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-(6-methoxy-4-quinolyl)-5-vinyl-2-quinuclidinemethanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "beta-quinine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chinidinum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "conquinine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pitayine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "quinidina",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "quinidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28593?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28593/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28593/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28593/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28593/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28593/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28593/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28593/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_parent_hydride": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28593/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018040"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

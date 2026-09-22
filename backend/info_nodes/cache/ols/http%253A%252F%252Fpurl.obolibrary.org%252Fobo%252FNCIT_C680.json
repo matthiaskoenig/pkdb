@@ -1,0 +1,162 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C680",
+  "lang": "en",
+  "description": [
+    "A propionic acid derivative and a non-steroidal anti-inflammatory drug (NSAID) with anti-inflammatory, antipyretic and analgesic activities. Naproxen inhibits the activity of the enzymes cyclo-oxygenase I and II, resulting in a decreased formation of precursors of prostaglandins and thromboxanes. The resulting decrease in prostaglandin synthesis is responsible for the therapeutic effects of naproxen. Naproxen also causes a decrease in the formation of thromboxane A2 synthesis, by thromboxane synthase, thereby inhibiting platelet aggregation."
+  ],
+  "synonyms": [
+    "6-Methoxy-alpha-methyl-2-naphthaleneacetic Acid",
+    "NAPROXEN",
+    "Naprosyn",
+    "Naproxen",
+    "RS-3540",
+    "d-2-(6-Methoxy-2-naphthyl)propionic Acid",
+    "naproxen"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to treat mild pain and the symptoms of arthritis and several other conditions. It is also being studied in the treatment of bone pain in patients with cancer. Naprosyn stops the body from making substances that cause pain and inflammation. It is a type of nonsteroidal anti-inflammatory drug (NSAID) and a type of cyclooxygenase inhibitor."
+    ],
+    "CAS_Registry": [
+      "22204-53-1"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:7476"
+    ],
+    "Chemical_Formula": [
+      "C14H14O3"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Naproxen"
+    ],
+    "FDA_UNII_Code": [
+      "57Y76R9ATQ"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C48006"
+    ],
+    "Legacy Concept Name": [
+      "Naproxen"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "40222"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "40222"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "40222"
+    ],
+    "Preferred_Name": [
+      "Naproxen"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0700017"
+    ],
+    "code": [
+      "C680"
+    ]
+  },
+  "label": "Naproxen",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C680",
+  "obo_id": "NCIT:C680",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "6-Methoxy-alpha-methyl-2-naphthaleneacetic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "NAPROXEN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Naprosyn",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Naproxen",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "RS-3540",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "d-2-(6-Methoxy-2-naphthyl)propionic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "naproxen",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C680?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C680/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C680/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C680/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C680/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C680/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C680/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C680/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

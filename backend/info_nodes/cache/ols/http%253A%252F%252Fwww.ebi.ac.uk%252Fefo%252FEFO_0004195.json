@@ -1,0 +1,84 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0004195",
+  "lang": "en",
+  "description": [
+    "Cholesterol which is contained in or bound to low density lipoproteins (LDL), including CHOLESTEROL ESTERS and free cholesterol."
+  ],
+  "synonyms": [
+    "High-density lipoprotein cholesterol",
+    "High-density lipoproteins",
+    "LDL lipoproteins",
+    "cholesterol, LDL",
+    "lipoproteins, LDL"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "MESH:D008077",
+      "MESH:D008078",
+      "SNOMEDCT:102739008"
+    ],
+    "term editor": [
+      "Dani Welter"
+    ]
+  },
+  "label": "LDL cholesterol",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "EFO_0004195",
+  "obo_id": "EFO:0004195",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "MESH",
+      "id": "D008077",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D008077"
+    },
+    {
+      "database": "MESH",
+      "id": "D008078",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D008078"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "102739008",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/102739008"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004195?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004195/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004195/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004195/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004195/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004195/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004195/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

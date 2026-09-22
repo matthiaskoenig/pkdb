@@ -1,0 +1,338 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3348",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Amias",
+    "Atacand",
+    "Candesartan 1-(((cyclohexyloxy)carbonyl)oxy)ethyl ester",
+    "Candesartan cilexetil",
+    "NSC-758697",
+    "Ratacand",
+    "TCV 116",
+    "TCV-116"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:145040-37-5",
+      "drugcentral:475",
+      "kegg.compound:C07709",
+      "kegg.drug:D00626",
+      "lincs.smallmolecule:LSM-1716",
+      "pubmed:11895100",
+      "pubmed:12773029",
+      "pubmed:20014752",
+      "pubmed:20426472",
+      "pubmed:21071232",
+      "pubmed:23571415",
+      "pubmed:23608107",
+      "pubmed:27362876",
+      "pubmed:31732254",
+      "pubmed:32272420",
+      "pubmed:33129593",
+      "pubmed:35483322",
+      "pubmed:37468498",
+      "pubmed:8360879",
+      "pubmed:8576904"
+    ],
+    "generalized_empirical_formula": [
+      "C33H34N6O6"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3348"
+    ],
+    "inchi_key_string": [
+      "GHOSNRCGJFBJIB-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C33H34N6O6/c1-3-42-32-34-28-15-9-14-27(31(40)43-21(2)44-33(41)45-24-10-5-4-6-11-24)29(28)39(32)20-22-16-18-23(19-17-22)25-12-7-8-13-26(25)30-35-37-38-36-30/h7-9,12-19,21,24H,3-6,10-11,20H2,1-2H3,(H,35,36,37,38)"
+    ],
+    "mass": [
+      "610.671"
+    ],
+    "monoisotopic_mass": [
+      "610.25398"
+    ],
+    "smiles_string": [
+      "CCOc1nc2cccc(C(=O)OC(C)OC(=O)OC3CCCCC3)c2n1Cc1ccc(-c2ccccc2-c2nnnn2)cc1"
+    ]
+  },
+  "label": "Candesartan cilexetil",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3348",
+  "obo_id": "CHEBI:3348",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "145040-37-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=145040-37-5"
+    },
+    {
+      "database": "drugcentral",
+      "id": "475",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/475"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07709",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00626",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1716",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11895100",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11895100/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12773029",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12773029/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20014752",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20014752/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20426472",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20426472/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21071232",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21071232/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23571415",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23571415/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23608107",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23608107/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27362876",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27362876/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31732254",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31732254/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32272420",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32272420/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33129593",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33129593/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35483322",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35483322/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37468498",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37468498/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8360879",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8360879/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8576904",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8576904/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Amias",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Atacand",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Candesartan 1-(((cyclohexyloxy)carbonyl)oxy)ethyl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Candesartan cilexetil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NSC-758697",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ratacand",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "TCV 116",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "TCV-116",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

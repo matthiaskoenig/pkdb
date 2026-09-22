@@ -1,0 +1,450 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7982",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "NIH-7958",
+    "NSC-107430",
+    "Pentazocine civ",
+    "Pentazocine",
+    "WIN 20,228",
+    "WIN-20228",
+    "cis-(+/-)-Pentazocine",
+    "dl-Pentazocine",
+    "pentazocin",
+    "pentazocina",
+    "pentazocine HCl",
+    "pentazocine hydrochloride",
+    "pentazocine lactate"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:359-83-1",
+      "drugcentral:3424",
+      "hmdb:HMDB0014790",
+      "kegg.compound:C07421",
+      "kegg.drug:D00498",
+      "pubmed:28288109",
+      "pubmed:30025348",
+      "pubmed:30143421",
+      "pubmed:30350997",
+      "pubmed:30543421",
+      "pubmed:31129453",
+      "pubmed:32435401",
+      "pubmed:33111525",
+      "pubmed:33148494",
+      "pubmed:33372782",
+      "pubmed:33901806",
+      "pubmed:34046612",
+      "pubmed:34902734",
+      "pubmed:35016113",
+      "pubmed:35033825",
+      "pubmed:35065412",
+      "pubmed:35468513",
+      "pubmed:35724925",
+      "pubmed:36179400",
+      "pubmed:36919956",
+      "pubmed:37418295"
+    ],
+    "generalized_empirical_formula": [
+      "C19H27NO"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7982"
+    ],
+    "inchi_key_string": [
+      "VOKSWYLNZZRQPF-GDIGMMSISA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C19H27NO/c1-13(2)7-9-20-10-8-19(4)14(3)18(20)11-15-5-6-16(21)12-17(15)19/h5-7,12,14,18,21H,8-11H2,1-4H3/t14-,18+,19+/m0/s1"
+    ],
+    "mass": [
+      "285.431"
+    ],
+    "monoisotopic_mass": [
+      "285.20926"
+    ],
+    "smiles_string": [
+      "CC(C)=CCN1CC[C@@]2(C)c3cc(O)ccc3C[C@@H]1[C@@H]2C"
+    ]
+  },
+  "label": "pentazocine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7982",
+  "obo_id": "CHEBI:7982",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "359-83-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=359-83-1"
+    },
+    {
+      "database": "drugcentral",
+      "id": "3424",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/3424"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014790",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014790"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07421",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00498",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "28288109",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28288109/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30025348",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30025348/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30143421",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30143421/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30350997",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30350997/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30543421",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30543421/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31129453",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31129453/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32435401",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32435401/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33111525",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33111525/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33148494",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33148494/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33372782",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33372782/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33901806",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33901806/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34046612",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34046612/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34902734",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34902734/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35016113",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35016113/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35033825",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35033825/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35065412",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35065412/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35468513",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35468513/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35724925",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35724925/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36179400",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36179400/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36919956",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36919956/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37418295",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37418295/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "NIH-7958",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NSC-107430",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Pentazocine civ",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Pentazocine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "WIN 20,228",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "WIN-20228",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cis-(+/-)-Pentazocine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dl-Pentazocine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentazocin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentazocina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentazocine HCl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentazocine hydrochloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentazocine lactate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

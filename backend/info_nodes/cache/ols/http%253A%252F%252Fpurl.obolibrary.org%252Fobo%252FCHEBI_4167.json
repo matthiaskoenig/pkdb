@@ -1,0 +1,425 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_4167",
+  "lang": "en",
+  "description": [
+    "A glucopyranose having <small>D</small>-configuration."
+  ],
+  "synonyms": [
+    "D-Glc",
+    "D-Glcp",
+    "D-Glucose",
+    "D-glucopyranose",
+    "D-glucopyranose",
+    "D-glucose",
+    "Dextrose",
+    "Glc-OH",
+    "Glucose",
+    "Grape sugar",
+    "glucose"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:2280-44-6",
+      "glygen:G15021LG",
+      "glytoucan:G15021LG",
+      "gmelin:83256",
+      "hmdb:HMDB0000122",
+      "kegg.compound:C00031",
+      "kegg.drug:D00009",
+      "knapsack:C00001122",
+      "metacyc.compound:D-Glucose",
+      "pubmed:15987845",
+      "pubmed:16901854",
+      "pubmed:17336832",
+      "pubmed:17439666",
+      "pubmed:17928662",
+      "pubmed:19913595",
+      "pubmed:26812026",
+      "pubmed:32619908",
+      "pubmed:7524207",
+      "pubmed:9140037",
+      "pubmed:9501190",
+      "pubmed:9506998",
+      "pubmed:9545565",
+      "reaxys:1281604",
+      "wikipedia.en:Glucose"
+    ],
+    "generalized_empirical_formula": [
+      "C6H12O6"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:4167"
+    ],
+    "inchi_key_string": [
+      "WQZGKKKJIJFFOK-GASJEMHNSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C6H12O6/c7-1-2-3(8)4(9)5(10)6(11)12-2/h2-11H,1H2/t2-,3-,4+,5-,6?/m1/s1"
+    ],
+    "mass": [
+      "180.156"
+    ],
+    "monoisotopic_mass": [
+      "180.06339"
+    ],
+    "smiles_string": [
+      "OC[C@H]1OC(O)[C@H](O)[C@@H](O)[C@@H]1O"
+    ],
+    "wurcs_representation": [
+      "WURCS=2.0/1,1,0/[a2122h-1x_1-5]/1/"
+    ]
+  },
+  "label": "D-glucopyranose",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_4167",
+  "obo_id": "CHEBI:4167",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "2280-44-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=2280-44-6"
+    },
+    {
+      "database": "glygen",
+      "id": "G15021LG",
+      "description": "glygen",
+      "url": "https://glytoucan.org/Structures/Glycans/G15021LG"
+    },
+    {
+      "database": "glytoucan",
+      "id": "G15021LG",
+      "description": "glytoucan",
+      "url": "https://glytoucan.org/Structures/Glycans/G15021LG"
+    },
+    {
+      "database": "gmelin",
+      "id": "83256",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0000122",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0000122"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00031",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00009",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00001122",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00001122"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "D-Glucose",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "15987845",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15987845/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16901854",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16901854/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17336832",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17336832/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17439666",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17439666/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17928662",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17928662/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19913595",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19913595/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26812026",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26812026/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32619908",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32619908/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7524207",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7524207/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9140037",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9140037/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9501190",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9501190/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9506998",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9506998/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9545565",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9545565/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1281604",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Glucose",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "D-glucopyranose",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "D-Glc",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "D-Glcp",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "D-Glucose",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "D-glucopyranose",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "D-glucose",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dextrose",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glc-OH",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glucose",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Grape sugar",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glucose",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4167?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4167/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4167/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4167/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4167/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4167/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4167/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4167/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4167/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4167/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4167/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4167/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

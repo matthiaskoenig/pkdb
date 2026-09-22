@@ -1,0 +1,128 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7003",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "17-methyl-7,8-didehydro-4,5alpha-epoxymorphinan-3,6-diol sulfate (2:1)",
+    "17-methyl-7,8-didehydro-4,5alpha-epoxymorphinan-3,6-diol sulfate (2:1)"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:64-31-3",
+      "drugbank:DB00295"
+    ],
+    "generalized_empirical_formula": [
+      "2C17H19NO3.H2O4S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7003"
+    ],
+    "inchi_key_string": [
+      "USAHOPJHPJHUNS-IFCNUISUSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/2C17H19NO3.H2O4S/c2*1-18-7-6-17-10-3-5-13(20)16(17)21-15-12(19)4-2-9(14(15)17)8-11(10)18;1-5(2,3)4/h2*2-5,10-11,13,16,19-20H,6-8H2,1H3;(H2,1,2,3,4)/t2*10-,11+,13-,16-,17-;/m00./s1"
+    ],
+    "mass": [
+      "668.765"
+    ],
+    "monoisotopic_mass": [
+      "668.24037"
+    ],
+    "smiles_string": [
+      "O=S(=O)(O)O.[H][C@@]12C=C[C@H](O)[C@@H]3Oc4c(O)ccc5c4[C@@]31CCN(C)[C@@H]2C5.[H][C@@]12C=C[C@H](O)[C@@H]3Oc4c(O)ccc5c4[C@@]31CCN(C)[C@@H]2C5"
+    ]
+  },
+  "label": "morphine sulfate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7003",
+  "obo_id": "CHEBI:7003",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "64-31-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=64-31-3"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00295",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00295"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "17-methyl-7,8-didehydro-4,5alpha-epoxymorphinan-3,6-diol sulfate (2:1)",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17-methyl-7,8-didehydro-4,5alpha-epoxymorphinan-3,6-diol sulfate (2:1)",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7003?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7003/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7003/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7003/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7003/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7003/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7003/graph"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7003/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,391 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9448",
+  "lang": "en",
+  "description": [
+    "A tertiary amine that is <em>N</em>-methyl-1-naphthalenemethylamine in which the amino hydrogen is replaced by a 3-(<em>tert</em>butylethynyl)allyl group. An antifungal agent administered orally (generally as the hydrochloride salt) for the treatment of skin and nail infections."
+  ],
+  "synonyms": [
+    "(2E)-N,6,6-trimethyl-N-(1-naphthylmethyl)hept-2-en-4-yn-1-amine",
+    "(2E)-N,6,6-trimethyl-N-(1-naphthylmethyl)hept-2-en-4-yn-1-amine",
+    "(E)-N-(6,6-Dimethyl-2-hepten-4-ynyl)-N-methyl-1-naphthalene methanamine",
+    "(E)-N-(6,6-Dimethyl-2-hepten-4-ynyl)-N-methyl-1-naphthalenemethylamine",
+    "terbinafina",
+    "terbinafine",
+    "terbinafinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:91161-71-6",
+      "drugbank:DB00857",
+      "drugcentral:2597",
+      "hmdb:HMDB0014995",
+      "kegg.compound:C08079",
+      "kegg.drug:D02375",
+      "metacyc.compound:CPD-10571",
+      "pubmed:23750489",
+      "pubmed:23802806",
+      "pubmed:23841559",
+      "pubmed:23895037",
+      "pubmed:24126579",
+      "pubmed:24352873",
+      "pubmed:24389279",
+      "pubmed:24410098",
+      "pubmed:24447130",
+      "pubmed:24452843",
+      "pubmed:24477462",
+      "pubmed:24490976",
+      "pubmed:24497012",
+      "pubmed:24533442",
+      "pubmed:24563892",
+      "pubmed:24576265",
+      "pubmed:24581620",
+      "pubmed:24588014",
+      "reaxys:4256376",
+      "wikipedia.en:Terbinafine"
+    ],
+    "generalized_empirical_formula": [
+      "C21H25N"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9448"
+    ],
+    "inchi_key_string": [
+      "DOMXUEMWDBAQBQ-WEVVVXLNSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H25N/c1-21(2,3)15-8-5-9-16-22(4)17-19-13-10-12-18-11-6-7-14-20(18)19/h5-7,9-14H,16-17H2,1-4H3/b9-5+"
+    ],
+    "mass": [
+      "291.438"
+    ],
+    "monoisotopic_mass": [
+      "291.1987"
+    ],
+    "smiles_string": [
+      "CN(C/C=C/C#CC(C)(C)C)Cc1cccc2ccccc12"
+    ]
+  },
+  "label": "terbinafine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9448",
+  "obo_id": "CHEBI:9448",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "91161-71-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=91161-71-6"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00857",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00857"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2597",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2597"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014995",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014995"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C08079",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D02375",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-10571",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "23750489",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23750489/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23802806",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23802806/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23841559",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23841559/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23895037",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23895037/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24126579",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24126579/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24352873",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24352873/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24389279",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24389279/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24410098",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24410098/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24447130",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24447130/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24452843",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24452843/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24477462",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24477462/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24490976",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24490976/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24497012",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24497012/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24533442",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24533442/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24563892",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24563892/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24576265",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24576265/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24581620",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24581620/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24588014",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24588014/"
+    },
+    {
+      "database": "reaxys",
+      "id": "4256376",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Terbinafine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2E)-N,6,6-trimethyl-N-(1-naphthylmethyl)hept-2-en-4-yn-1-amine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2E)-N,6,6-trimethyl-N-(1-naphthylmethyl)hept-2-en-4-yn-1-amine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(E)-N-(6,6-Dimethyl-2-hepten-4-ynyl)-N-methyl-1-naphthalene methanamine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(E)-N-(6,6-Dimethyl-2-hepten-4-ynyl)-N-methyl-1-naphthalenemethylamine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "terbinafina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "terbinafine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "terbinafine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "terbinafinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9448?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9448/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9448/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9448/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9448/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9448/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9448/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9448/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9448/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

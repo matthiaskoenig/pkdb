@@ -1,0 +1,259 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6932",
+  "lang": "en",
+  "description": [
+    "The hydrochloride salt of midazolam."
+  ],
+  "synonyms": [
+    "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepine hydrochloride",
+    "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepine hydrochloride",
+    "Buccolam",
+    "Dormicum",
+    "Hypnovel",
+    "Versed",
+    "midazolam HCl",
+    "midazolam hydrochloride"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:59467-96-8",
+      "drugbank:DB00683",
+      "hmdb:HMDB0014821",
+      "kegg.drug:D00696",
+      "pubmed:21817086",
+      "pubmed:28577272",
+      "pubmed:29287157",
+      "reaxys:6580691"
+    ],
+    "generalized_empirical_formula": [
+      "C18H13ClFN3.HCl"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6932"
+    ],
+    "inchi_key_string": [
+      "PLYSCVSCYOQVRP-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C18H13ClFN3.ClH/c1-11-21-9-13-10-22-18(14-4-2-3-5-16(14)20)15-8-12(19)6-7-17(15)23(11)13;/h2-9H,10H2,1H3;1H"
+    ],
+    "mass": [
+      "362.235"
+    ],
+    "monoisotopic_mass": [
+      "361.05488"
+    ],
+    "smiles_string": [
+      "Cc1ncc2n1-c1ccc(Cl)cc1C(c1ccccc1F)=NC2.Cl"
+    ]
+  },
+  "label": "midazolam hydrochloride",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6932",
+  "obo_id": "CHEBI:6932",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "59467-96-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=59467-96-8"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00683",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00683"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014821",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014821"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00696",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "21817086",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21817086/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28577272",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28577272/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29287157",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29287157/"
+    },
+    {
+      "database": "reaxys",
+      "id": "6580691",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepine hydrochloride",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepine hydrochloride",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Buccolam",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dormicum",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Hypnovel",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Versed",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "midazolam HCl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "midazolam hydrochloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6932?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6932/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6932/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6932/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6932/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6932/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6932/graph"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6932/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6932/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

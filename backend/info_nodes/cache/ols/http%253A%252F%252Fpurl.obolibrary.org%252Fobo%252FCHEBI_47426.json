@@ -1,0 +1,295 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_47426",
+  "lang": "en",
+  "description": [
+    "A  chlorobenzoic acid that is 4-chlorobenzoic acid substituted by a (furan-2-ylmethyl)amino and a sulfamoyl group at position 2 and 5 respectively. It is a diuretic used in the treatment of congestive heart failure."
+  ],
+  "synonyms": [
+    "2-Furfurylamino-4-chloro-5-sulfamoylbenzoic acid",
+    "4-Chloro-5-sulfamoyl-N-furfuryl-anthranilic acid",
+    "4-Chloro-N-(2-furylmethyl)-5-sulfamoylanthranilic acid",
+    "4-Chloro-N-furfuryl-5-sulfamoylanthranilic acid",
+    "4-chloro-2-{[(furan-2-yl)methyl]amino}-5-sulfamoylbenzoic acid",
+    "4-chloro-2-{[(furan-2-yl)methyl]amino}-5-sulfamoylbenzoic acid",
+    "Frusemide",
+    "Furosemide",
+    "Lasix (TN)"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:54-31-9",
+      "drugbank:DB00695",
+      "drugcentral:1258",
+      "hmdb:HMDB0001933",
+      "kegg.drug:D00331",
+      "lincs.smallmolecule:LSM-5847",
+      "pubmed:15286542",
+      "pubmed:18701232",
+      "reaxys:1399731",
+      "vsdb:1770",
+      "wikipedia.en:Furosemide"
+    ],
+    "generalized_empirical_formula": [
+      "C12H11ClN2O5S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:47425",
+      "CHEBI:5198"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:47426"
+    ],
+    "inchi_key_string": [
+      "ZZUFCTLCJUWOSV-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C12H11ClN2O5S/c13-9-5-10(15-6-7-2-1-3-20-7)8(12(16)17)4-11(9)21(14,18)19/h1-5,15H,6H2,(H,16,17)(H2,14,18,19)"
+    ],
+    "mass": [
+      "330.749"
+    ],
+    "monoisotopic_mass": [
+      "330.00772"
+    ],
+    "smiles_string": [
+      "NS(=O)(=O)c1cc(C(=O)O)c(NCc2ccco2)cc1Cl"
+    ]
+  },
+  "label": "furosemide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_47426",
+  "obo_id": "CHEBI:47426",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "54-31-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=54-31-9"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00695",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00695"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1258",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1258"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001933",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001933"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00331",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5847",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "15286542",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15286542/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18701232",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18701232/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1399731",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1770",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1770.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Furosemide",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-chloro-2-{[(furan-2-yl)methyl]amino}-5-sulfamoylbenzoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Furfurylamino-4-chloro-5-sulfamoylbenzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-Chloro-5-sulfamoyl-N-furfuryl-anthranilic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-Chloro-N-(2-furylmethyl)-5-sulfamoylanthranilic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-Chloro-N-furfuryl-5-sulfamoylanthranilic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-chloro-2-{[(furan-2-yl)methyl]amino}-5-sulfamoylbenzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Frusemide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Furosemide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lasix (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47426?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47426/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47426/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47426/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47426/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47426/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47426/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47426/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

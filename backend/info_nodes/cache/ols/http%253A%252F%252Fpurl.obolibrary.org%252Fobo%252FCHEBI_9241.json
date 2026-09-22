@@ -1,0 +1,266 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9241",
+  "lang": "en",
+  "description": [
+    "A  steroid lactone that is 17α-pregn-4-ene-21,17-carbolactone substituted by an oxo group at position 3 and an α-acetylsulfanyl group at position 7."
+  ],
+  "synonyms": [
+    "7alpha-(acetylsulfanyl)-3-oxo-17alpha-pregn-4-ene-21,17-carbolactone",
+    "7alpha-(acetylsulfanyl)-3-oxo-17alpha-pregn-4-ene-21,17-carbolactone",
+    "Spironolactone",
+    "espironolactona",
+    "spironolactone",
+    "spironolactonum",
+    "spironolattone"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:52-01-7",
+      "drugbank:DB00421",
+      "drugcentral:2475",
+      "hmdb:HMDB0014565",
+      "kegg.compound:C07310",
+      "kegg.drug:D00443",
+      "patent:US3013012",
+      "pdb-ccd:SNL",
+      "pubmed:11300427",
+      "reaxys:57767",
+      "wikipedia.en:Spironolactone"
+    ],
+    "generalized_empirical_formula": [
+      "C24H32O4S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:45692"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9241"
+    ],
+    "inchi_key_string": [
+      "LXMSZDCAJNLERA-ZHYRCANASA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C24H32O4S/c1-14(25)29-19-13-15-12-16(26)4-8-22(15,2)17-5-9-23(3)18(21(17)19)6-10-24(23)11-7-20(27)28-24/h12,17-19,21H,4-11,13H2,1-3H3/t17-,18-,19+,21+,22-,23-,24+/m0/s1"
+    ],
+    "mass": [
+      "416.583"
+    ],
+    "monoisotopic_mass": [
+      "416.20213"
+    ],
+    "smiles_string": [
+      "[H][C@]12CC[C@]3(C)[C@]4(CCC(=O)O4)CC[C@@]3([H])[C@]1([H])[C@H](SC(C)=O)CC1=CC(=O)CC[C@@]12C"
+    ]
+  },
+  "label": "spironolactone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9241",
+  "obo_id": "CHEBI:9241",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "52-01-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=52-01-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00421",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00421"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2475",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2475"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014565",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014565"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07310",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00443",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US3013012",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3013012"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "SNL",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11300427",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11300427/"
+    },
+    {
+      "database": "reaxys",
+      "id": "57767",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Spironolactone",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "7alpha-(acetylsulfanyl)-3-oxo-17alpha-pregn-4-ene-21,17-carbolactone",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7alpha-(acetylsulfanyl)-3-oxo-17alpha-pregn-4-ene-21,17-carbolactone",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Spironolactone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "espironolactona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "spironolactone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "spironolactonum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "spironolattone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9241?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9241/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9241/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9241/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9241/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9241/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9241/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9241/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

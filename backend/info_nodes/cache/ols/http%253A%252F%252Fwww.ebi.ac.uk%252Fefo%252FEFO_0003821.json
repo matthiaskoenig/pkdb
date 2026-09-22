@@ -1,0 +1,187 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0003821",
+  "lang": "en",
+  "description": [
+    "A class of disabling primary headache disorders, characterized by recurrent unilateral pulsatile headaches. The two major subtypes are common migraine (without aura) and classic migraine (with aura or neurological symptoms). (International Classification of Headache Disorders, 2nd ed. Cephalalgia 2004: suppl 1)"
+  ],
+  "synonyms": [
+    "Abdominal Migraine",
+    "Abdominal Migraines",
+    "Acute Confusional Migraine",
+    "Acute Confusional Migraines",
+    "Cervical Migraine Syndrome",
+    "Cervical Migraine Syndromes",
+    "Disorder, Migraine",
+    "Disorders, Migraine",
+    "Headache, Migraine",
+    "Headache, Sick",
+    "Headaches, Migraine",
+    "Headaches, Sick",
+    "Hemicrania Migraine",
+    "Hemicrania Migraines",
+    "Migraine Disorders",
+    "Migraine Headache",
+    "Migraine Headaches",
+    "Migraine Syndrome, Cervical",
+    "Migraine Syndromes, Cervical",
+    "Migraine Variant",
+    "Migraine Variants",
+    "Migraine",
+    "Migraine, Abdominal",
+    "Migraine, Acute Confusional",
+    "Migraine, Hemicrania",
+    "Migraines",
+    "Migraines, Abdominal",
+    "Migraines, Acute Confusional",
+    "Migraines, Hemicrania",
+    "Sick Headache",
+    "Sick Headaches",
+    "Status Migrainosus",
+    "Variant, Migraine",
+    "Variants, Migraine"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:6364",
+      "ICD10:G43",
+      "ICD9:346",
+      "MESH:D008881",
+      "NCIt:C113482",
+      "NCIt:C89715",
+      "OMIM:157300",
+      "OMIM:613656",
+      "SNOMEDCT:193028008",
+      "SNOMEDCT:193030005",
+      "SNOMEDCT:230467008",
+      "SNOMEDCT:37796009",
+      "SNOMEDCT:75879005",
+      "SNOMEDCT:95653008"
+    ],
+    "obsoleted_in_version": [
+      "3.38.0"
+    ],
+    "organizational_class": [
+      true
+    ],
+    "reason_for_obsolescence": [
+      "Replaced with Mondo term\nsee https://github.com/ebispot/efo/issues/1381"
+    ],
+    "term editor": [
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005277"
+    ]
+  },
+  "label": "obsolete_migraine disorder",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005277",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0003821",
+  "obo_id": "EFO:0003821",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "6364",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_6364"
+    },
+    {
+      "database": "ICD10",
+      "id": "G43",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/G43"
+    },
+    {
+      "database": "ICD9",
+      "id": "346",
+      "description": null,
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=346"
+    },
+    {
+      "database": "MESH",
+      "id": "D008881",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D008881"
+    },
+    {
+      "database": "NCIt",
+      "id": "C113482",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C113482"
+    },
+    {
+      "database": "NCIt",
+      "id": "C89715",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C89715"
+    },
+    {
+      "database": "OMIM",
+      "id": "157300",
+      "description": null,
+      "url": "https://omim.org/entry/157300"
+    },
+    {
+      "database": "OMIM",
+      "id": "613656",
+      "description": null,
+      "url": "https://omim.org/entry/613656"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "193028008",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/193028008"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "193030005",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/193030005"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "230467008",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/230467008"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "37796009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/37796009"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "75879005",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/75879005"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "95653008",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/95653008"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003821?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003821/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

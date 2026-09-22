@@ -1,0 +1,397 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_101278",
+  "lang": "en",
+  "description": [
+    "A 5-[2-(dimethylamino)ethyl]-2-(4-methoxyphenyl)-4-oxo-2,3,4,5-tetrahydro-1,5-benzothiazepin-3-yl acetate in which both stereocentres have <i>S</i> configuration. A calcium-channel blocker and vasodilator, it is used as the hydrochloride in the management of angina pectoris and hypertension."
+  ],
+  "synonyms": [
+    "(+)-cis-5-[2-(dimethylamino)ethyl]-2,3-dihydro-3-hydroxy-2-(p-methoxyphenyl)-1,5-benzothiazepin-4(5H)-one acetate ester",
+    "(2S,3S)-5-(2-(dimethylamino)ethyl)-2-(4-methoxyphenyl)-4-oxo-2,3,4,5-tetrahydrobenzo[b][1,4]thiazepin-3-yl acetate",
+    "(2S,3S)-5-[2-(dimethylamino)ethyl]-2-(4-methoxyphenyl)-4-oxo-2,3,4,5-tetrahydro-1,5-benzothiazepin-3-yl acetate",
+    "(2S,3S)-5-[2-(dimethylamino)ethyl]-2-(4-methoxyphenyl)-4-oxo-2,3,4,5-tetrahydro-1,5-benzothiazepin-3-yl acetate",
+    "(2S-cis)-3-(acetyloxy)-5-[2-(dimethylamino)ethyl]-2,3-dihydro-2-(4-methoxyphenyl)-1,5-benzothiazepin-4(5H)-one",
+    "Acetic acid (2S,3S)-5-(2-dimethylamino-ethyl)-2-(4-methoxy-phenyl)-4-oxo-2,3,4,5-tetrahydro-benzo[b][1,4]thiazepin-3-yl ester",
+    "D-cis-diltiazem",
+    "d-cis-diltiazem",
+    "diltiazem",
+    "diltiazemum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:42399-41-7",
+      "drugbank:DB00343",
+      "drugcentral:897",
+      "hmdb:HMDB0014487",
+      "kegg.compound:C06958",
+      "kegg.drug:D07845",
+      "lincs.smallmolecule:LSM-2523",
+      "patent:DE1805714",
+      "patent:DE3415035",
+      "patent:US3562257",
+      "patent:US4552695",
+      "pubmed:11937779",
+      "pubmed:16651034",
+      "pubmed:19167257",
+      "pubmed:23687551",
+      "pubmed:24261918",
+      "pubmed:25122162",
+      "pubmed:8369596",
+      "reaxys:3573079",
+      "vsdb:1863",
+      "wikipedia.en:Diltiazem"
+    ],
+    "generalized_empirical_formula": [
+      "C22H26N2O4S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:4602"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:101278"
+    ],
+    "inchi_key_string": [
+      "HSUGRBWQSSZJOP-RTWAWAEBSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C22H26N2O4S/c1-15(25)28-20-21(16-9-11-17(27-4)12-10-16)29-19-8-6-5-7-18(19)24(22(20)26)14-13-23(2)3/h5-12,20-21H,13-14H2,1-4H3/t20-,21+/m1/s1"
+    ],
+    "mass": [
+      "414.527"
+    ],
+    "monoisotopic_mass": [
+      "414.16133"
+    ],
+    "smiles_string": [
+      "COc1ccc([C@@H]2Sc3ccccc3N(CCN(C)C)C(=O)[C@@H]2OC(C)=O)cc1"
+    ]
+  },
+  "label": "diltiazem",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_101278",
+  "obo_id": "CHEBI:101278",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "42399-41-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=42399-41-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00343",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00343"
+    },
+    {
+      "database": "drugcentral",
+      "id": "897",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/897"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014487",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014487"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06958",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07845",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-2523",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "DE1805714",
+      "description": "patent",
+      "url": "https://www.google.com/patents/DE1805714"
+    },
+    {
+      "database": "patent",
+      "id": "DE3415035",
+      "description": "patent",
+      "url": "https://www.google.com/patents/DE3415035"
+    },
+    {
+      "database": "patent",
+      "id": "US3562257",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3562257"
+    },
+    {
+      "database": "patent",
+      "id": "US4552695",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4552695"
+    },
+    {
+      "database": "pubmed",
+      "id": "11937779",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11937779/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16651034",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16651034/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19167257",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19167257/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23687551",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23687551/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24261918",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24261918/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25122162",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25122162/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8369596",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8369596/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3573079",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1863",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1863.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Diltiazem",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2S,3S)-5-[2-(dimethylamino)ethyl]-2-(4-methoxyphenyl)-4-oxo-2,3,4,5-tetrahydro-1,5-benzothiazepin-3-yl acetate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-cis-5-[2-(dimethylamino)ethyl]-2,3-dihydro-3-hydroxy-2-(p-methoxyphenyl)-1,5-benzothiazepin-4(5H)-one acetate ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S,3S)-5-(2-(dimethylamino)ethyl)-2-(4-methoxyphenyl)-4-oxo-2,3,4,5-tetrahydrobenzo[b][1,4]thiazepin-3-yl acetate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S,3S)-5-[2-(dimethylamino)ethyl]-2-(4-methoxyphenyl)-4-oxo-2,3,4,5-tetrahydro-1,5-benzothiazepin-3-yl acetate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S-cis)-3-(acetyloxy)-5-[2-(dimethylamino)ethyl]-2,3-dihydro-2-(4-methoxyphenyl)-1,5-benzothiazepin-4(5H)-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Acetic acid (2S,3S)-5-(2-dimethylamino-ethyl)-2-(4-methoxy-phenyl)-4-oxo-2,3,4,5-tetrahydro-benzo[b][1,4]thiazepin-3-yl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "D-cis-diltiazem",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "d-cis-diltiazem",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diltiazem",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diltiazem",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diltiazemum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_101278?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_101278/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_101278/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_101278/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_101278/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_101278/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_101278/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_101278/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_101278/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    },
+    "is_enantiomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_101278/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018039"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

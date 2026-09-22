@@ -1,0 +1,360 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7601",
+  "lang": "en",
+  "description": [
+    "A member of the class of 1,3-thiazoles having a dimethylaminomethyl substituent at position 2 and an alkylthiomethyl moiety at position 4."
+  ],
+  "synonyms": [
+    "Acinon",
+    "Axid",
+    "N-(4-(6-Methylamino-7-nitro-2-thia-5-aza-6-hepten-1-yl)-2-thiazolylmethyl)-N,N-dimethylamine",
+    "N-{2-[({2-[(dimethylamino)methyl]-1,3-thiazol-4-yl}methyl)sulfanyl]ethyl}-N'-methyl-2-nitroethene-1,1-diamine",
+    "N-{2-[({2-[(dimethylamino)methyl]-1,3-thiazol-4-yl}methyl)sulfanyl]ethyl}-N'-methyl-2-nitroethene-1,1-diamine",
+    "nizatidina",
+    "nizatidine",
+    "nizatidinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:76963-41-2",
+      "drugbank:DB00585",
+      "drugcentral:1955",
+      "hmdb:HMDB0014723",
+      "kegg.compound:C07270",
+      "kegg.drug:D00440",
+      "lincs.smallmolecule:LSM-3031",
+      "pubmed:12520631",
+      "pubmed:20435237",
+      "pubmed:20881754",
+      "pubmed:21858296",
+      "pubmed:22374468",
+      "pubmed:22846371",
+      "pubmed:23556039",
+      "pubmed:23611167",
+      "pubmed:23836529",
+      "pubmed:24253609",
+      "pubmed:24375669",
+      "pubmed:24601855",
+      "reaxys:4846056",
+      "wikipedia.en:Nizatidine"
+    ],
+    "generalized_empirical_formula": [
+      "C12H21N5O2S2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7601"
+    ],
+    "inchi_key_string": [
+      "SGXXNSQHWDMGGP-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C12H21N5O2S2/c1-13-11(6-17(18)19)14-4-5-20-8-10-9-21-12(15-10)7-16(2)3/h6,9,13-14H,4-5,7-8H2,1-3H3"
+    ],
+    "mass": [
+      "331.467"
+    ],
+    "monoisotopic_mass": [
+      "331.11367"
+    ],
+    "smiles_string": [
+      "CNC(=C[N+](=O)[O-])NCCSCc1csc(CN(C)C)n1"
+    ]
+  },
+  "label": "nizatidine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7601",
+  "obo_id": "CHEBI:7601",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "76963-41-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=76963-41-2"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00585",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00585"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1955",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1955"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014723",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014723"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07270",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00440",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3031",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "12520631",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12520631/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20435237",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20435237/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20881754",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20881754/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21858296",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21858296/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22374468",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22374468/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22846371",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22846371/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23556039",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23556039/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23611167",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23611167/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23836529",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23836529/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24253609",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24253609/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24375669",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24375669/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24601855",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24601855/"
+    },
+    {
+      "database": "reaxys",
+      "id": "4846056",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Nizatidine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-{2-[({2-[(dimethylamino)methyl]-1,3-thiazol-4-yl}methyl)sulfanyl]ethyl}-N'-methyl-2-nitroethene-1,1-diamine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Acinon",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Axid",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(4-(6-Methylamino-7-nitro-2-thia-5-aza-6-hepten-1-yl)-2-thiazolylmethyl)-N,N-dimethylamine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-{2-[({2-[(dimethylamino)methyl]-1,3-thiazol-4-yl}methyl)sulfanyl]ethyl}-N'-methyl-2-nitroethene-1,1-diamine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "nizatidina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "nizatidine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "nizatidine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "nizatidinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7601?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7601/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7601/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7601/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7601/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7601/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7601/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7601/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

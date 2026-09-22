@@ -1,0 +1,381 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9150",
+  "lang": "en",
+  "description": [
+    "A member of the class of hexahydronaphthalenes that is lovastatin in which the 2-methylbutyrate ester moiety has been replaced by a 2,2-dimethylbutyrate ester group. It is used as a cholesterol-lowering and anti-cardiovascular disease drug."
+  ],
+  "synonyms": [
+    "(1S,3R,7S,8S,8aR)-8-{2-[(2R,4R)-4-hydroxy-6-oxotetrahydro-2H-pyran-2-yl]ethyl}-3,7-dimethyl-1,2,3,7,8,8a-hexahydronaphthalen-1-yl 2,2-dimethylbutanoate",
+    "(1S,3R,7S,8S,8aR)-8-{2-[(2R,4R)-4-hydroxy-6-oxotetrahydro-2H-pyran-2-yl]ethyl}-3,7-dimethyl-1,2,3,7,8,8a-hexahydronaphthalen-1-yl 2,2-dimethylbutanoate",
+    "2,2-dimethylbutyric acid, 8-ester with (4R,6R)-6-(2-((1S,2S,6R,8S,8aR)-1,2,6,7,8,8a-hexahydro-8-hydroxy-2,6-dimethyl-1-naphthyl)ethyl)tetrahydro-4-hydroxy-2H-pyran-2-one",
+    "MK-733",
+    "Simvastatin",
+    "Simvastatina",
+    "Simvastatine",
+    "Simvastatinum",
+    "Zocor",
+    "simvastatin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:4768037",
+      "cas:79902-63-9",
+      "drugbank:DB00641",
+      "drugcentral:2445",
+      "hmdb:HMDB0005007",
+      "kegg.drug:D00434",
+      "lincs.smallmolecule:LSM-2492",
+      "patent:EP33538",
+      "patent:US4444784",
+      "pubmed:11336576",
+      "pubmed:12827636",
+      "pubmed:14561068",
+      "pubmed:14691614",
+      "pubmed:14973129",
+      "pubmed:16144183",
+      "pubmed:17640385",
+      "pubmed:18199328",
+      "pubmed:18688862",
+      "pubmed:18936176",
+      "pubmed:22737247",
+      "wikipedia.en:Simvastatin"
+    ],
+    "generalized_empirical_formula": [
+      "C25H38O5"
+    ],
+    "has_alternative_id": [
+      "CHEBI:45577"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9150"
+    ],
+    "inchi_key_string": [
+      "RYMZZMVNJRMUDD-HGQWONQESA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C25H38O5/c1-6-25(4,5)24(28)30-21-12-15(2)11-17-8-7-16(3)20(23(17)21)10-9-19-13-18(26)14-22(27)29-19/h7-8,11,15-16,18-21,23,26H,6,9-10,12-14H2,1-5H3/t15-,16-,18+,19+,20-,21-,23-/m0/s1"
+    ],
+    "mass": [
+      "418.574"
+    ],
+    "monoisotopic_mass": [
+      "418.27192"
+    ],
+    "smiles_string": [
+      "[H][C@@]12C(=C[C@H](C)C[C@@H]1OC(=O)C(C)(C)CC)C=C[C@H](C)[C@@H]2CC[C@@H]1C[C@@H](O)CC(=O)O1"
+    ]
+  },
+  "label": "simvastatin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9150",
+  "obo_id": "CHEBI:9150",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "4768037",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "79902-63-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=79902-63-9"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00641",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00641"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2445",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2445"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0005007",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0005007"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00434",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-2492",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP33538",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP33538"
+    },
+    {
+      "database": "patent",
+      "id": "US4444784",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4444784"
+    },
+    {
+      "database": "pubmed",
+      "id": "11336576",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11336576/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12827636",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12827636/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14561068",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14561068/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14691614",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14691614/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14973129",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14973129/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16144183",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16144183/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17640385",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17640385/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18199328",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18199328/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18688862",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18688862/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18936176",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18936176/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22737247",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22737247/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Simvastatin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(1S,3R,7S,8S,8aR)-8-{2-[(2R,4R)-4-hydroxy-6-oxotetrahydro-2H-pyran-2-yl]ethyl}-3,7-dimethyl-1,2,3,7,8,8a-hexahydronaphthalen-1-yl 2,2-dimethylbutanoate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S,3R,7S,8S,8aR)-8-{2-[(2R,4R)-4-hydroxy-6-oxotetrahydro-2H-pyran-2-yl]ethyl}-3,7-dimethyl-1,2,3,7,8,8a-hexahydronaphthalen-1-yl 2,2-dimethylbutanoate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2,2-dimethylbutyric acid, 8-ester with (4R,6R)-6-(2-((1S,2S,6R,8S,8aR)-1,2,6,7,8,8a-hexahydro-8-hydroxy-2,6-dimethyl-1-naphthyl)ethyl)tetrahydro-4-hydroxy-2H-pyran-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "MK-733",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Simvastatin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Simvastatina",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Simvastatine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Simvastatinum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Zocor",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "simvastatin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9150?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9150/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9150/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9150/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9150/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9150/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9150/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9150/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9150/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,667 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_135285",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Equa",
+    "LAF 237",
+    "LAF-237",
+    "LAF237",
+    "NVP-LAF 237",
+    "NVP-LAF237",
+    "Vildagliptin",
+    "Vitagliptin",
+    "galvus",
+    "jalra",
+    "vildagliptin HCl",
+    "vildagliptin hydrochloride",
+    "vildagliptina",
+    "vildagliptine",
+    "xiliarx"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:274901-16-5",
+      "drugcentral:3642",
+      "hmdb:HMDB0015596",
+      "pubmed:14684294",
+      "pubmed:15293982",
+      "pubmed:15664838",
+      "pubmed:15927466",
+      "pubmed:16392822",
+      "pubmed:17034148",
+      "pubmed:18556199",
+      "pubmed:18602260",
+      "pubmed:19217790",
+      "pubmed:19261480",
+      "pubmed:19269819",
+      "pubmed:19375196",
+      "pubmed:19482472",
+      "pubmed:19603833",
+      "pubmed:20483603",
+      "pubmed:20488702",
+      "pubmed:20488704",
+      "pubmed:20718420",
+      "pubmed:21711053",
+      "pubmed:21865048",
+      "pubmed:22503246",
+      "pubmed:22525314",
+      "pubmed:22938786",
+      "pubmed:23214471",
+      "pubmed:23623674",
+      "pubmed:23938053",
+      "pubmed:23956101",
+      "pubmed:24015910",
+      "pubmed:24099035",
+      "pubmed:24153396",
+      "pubmed:24439847",
+      "pubmed:24531224",
+      "pubmed:25164763",
+      "pubmed:27438064",
+      "pubmed:28666735",
+      "pubmed:28826083",
+      "pubmed:29341607",
+      "pubmed:29609120",
+      "pubmed:30056037",
+      "pubmed:30119011",
+      "pubmed:30642693",
+      "pubmed:30902399",
+      "pubmed:31336309",
+      "pubmed:31683103",
+      "pubmed:32008883",
+      "pubmed:32527554",
+      "pubmed:34399391",
+      "pubmed:34428715",
+      "pubmed:34780899",
+      "pubmed:36209967"
+    ],
+    "generalized_empirical_formula": [
+      "C17H25N3O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:135285"
+    ],
+    "inchi_key_string": [
+      "SYOKIDBDQMKNDQ-XWTIBIIYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C17H25N3O2/c18-9-14-2-1-3-20(14)15(21)10-19-16-5-12-4-13(6-16)8-17(22,7-12)11-16/h12-14,19,22H,1-8,10-11H2/t12?,13?,14-,16?,17?/m0/s1"
+    ],
+    "mass": [
+      "303.406"
+    ],
+    "monoisotopic_mass": [
+      "303.19468"
+    ],
+    "smiles_string": [
+      "N#C[C@@H]1CCCN1C(=O)CNC12CC3CC(CC(O)(C3)C1)C2"
+    ]
+  },
+  "label": "vildagliptin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_135285",
+  "obo_id": "CHEBI:135285",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "274901-16-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=274901-16-5"
+    },
+    {
+      "database": "drugcentral",
+      "id": "3642",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/3642"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015596",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015596"
+    },
+    {
+      "database": "pubmed",
+      "id": "14684294",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14684294/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15293982",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15293982/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15664838",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15664838/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15927466",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15927466/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16392822",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16392822/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17034148",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17034148/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18556199",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18556199/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18602260",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18602260/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19217790",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19217790/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19261480",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19261480/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19269819",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19269819/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19375196",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19375196/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19482472",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19482472/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19603833",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19603833/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20483603",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20483603/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20488702",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20488702/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20488704",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20488704/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20718420",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20718420/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21711053",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21711053/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21865048",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21865048/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22503246",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22503246/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22525314",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22525314/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22938786",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22938786/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23214471",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23214471/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23623674",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23623674/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23938053",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23938053/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23956101",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23956101/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24015910",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24015910/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24099035",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24099035/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24153396",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24153396/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24439847",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24439847/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24531224",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24531224/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25164763",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25164763/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27438064",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27438064/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28666735",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28666735/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28826083",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28826083/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29341607",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29341607/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29609120",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29609120/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30056037",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30056037/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30119011",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30119011/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30642693",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30642693/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30902399",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30902399/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31336309",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31336309/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31683103",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31683103/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32008883",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32008883/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32527554",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32527554/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34399391",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34399391/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34428715",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34428715/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34780899",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34780899/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36209967",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36209967/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Equa",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "LAF 237",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "LAF-237",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "LAF237",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NVP-LAF 237",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NVP-LAF237",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Vildagliptin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Vitagliptin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "galvus",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "jalra",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vildagliptin HCl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vildagliptin hydrochloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vildagliptina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vildagliptine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "xiliarx",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135285?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135285/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135285/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135285/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135285/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135285/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135285/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135285/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

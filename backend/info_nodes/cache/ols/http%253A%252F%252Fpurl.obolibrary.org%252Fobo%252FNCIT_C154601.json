@@ -1,0 +1,91 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C154601",
+  "lang": "en",
+  "description": [
+    "A type of solid pharmaceutical dose form consisting of a material that is usually formed by moulding, of a suitable shape, volume and consistency for insertion into the rectum where it dissolves, disperses or melts."
+  ],
+  "synonyms": [
+    "Suppository Dosage Form Category",
+    "Suppository"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A type of solid pharmaceutical dose form consisting of a material that is usually formed by moulding, of a suitable shape, volume and consistency for insertion into the rectum where it dissolves, disperses or melts."
+    ],
+    "Contributing_Source": [
+      "EDQM-HC"
+    ],
+    "Legacy Concept Name": [
+      "Suppository_Dosage_Form"
+    ],
+    "NCI_META_CUI": [
+      "CL556414"
+    ],
+    "Preferred_Name": [
+      "Suppository Dosage Form Category"
+    ],
+    "Semantic_Type": [
+      "Classification"
+    ],
+    "code": [
+      "C154601"
+    ]
+  },
+  "label": "Suppository Dosage Form Category",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C154601",
+  "obo_id": "NCIT:C154601",
+  "in_subset": [
+    "NCIT_C148636",
+    "NCIT_C150113"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Suppository Dosage Form Category",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Suppository",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154601?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154601/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154601/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154601/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154601/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154601/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154601/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,434 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_32020",
+  "lang": "en",
+  "description": [
+    "A dihydroxy monocarboxylic acid that is (6<i>E</i>)-7-[2-cyclopropyl-4-(4-fluorophenyl)quinolin-3-yl]hept-6-enoic acid in which the two hydroxy groups are located at positions 3 and 5 (the 3<i>R</i>,5<i>S</i>-stereoisomer). Used as its calcium salt for treatment of hypercholesterolemia (elevated levels of cholesterol in the blood) on patients unable to sufficiently lower their cholesterol levels by diet and exercise."
+  ],
+  "synonyms": [
+    "(3R,5S,6E)-7-[2-cyclopropyl-4-(4-fluorophenyl)quinolin-3-yl]-3,5-dihydroxyhept-6-enoic acid",
+    "(3R,5S,6E)-7-[2-cyclopropyl-4-(4-fluorophenyl)quinolin-3-yl]-3,5-dihydroxyhept-6-enoic acid",
+    "NK 104",
+    "NK-104",
+    "pitavastatia",
+    "pitavastatin",
+    "pitavastatine",
+    "pitavastatinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:147511-69-1",
+      "drugcentral:2214",
+      "hmdb:HMDB0041991",
+      "kegg.compound:C13334",
+      "patent:EP2141155",
+      "patent:US2011269962",
+      "patent:US2012016129",
+      "pubmed:21075465",
+      "pubmed:21585411",
+      "pubmed:21884024",
+      "pubmed:22053916",
+      "pubmed:22077103",
+      "pubmed:22133277",
+      "pubmed:22149769",
+      "pubmed:22268518",
+      "pubmed:22332608",
+      "pubmed:22345687",
+      "pubmed:22356292",
+      "pubmed:22361916",
+      "pubmed:22410289",
+      "pubmed:22472908",
+      "pubmed:22520230",
+      "pubmed:22627182",
+      "pubmed:22679249",
+      "pubmed:22807641",
+      "pubmed:22850760",
+      "pubmed:22878405",
+      "pubmed:22884685",
+      "pubmed:22948417",
+      "pubmed:23007012",
+      "pubmed:23161429",
+      "reaxys:7257773",
+      "wikipedia.en:Pitavastatin"
+    ],
+    "generalized_empirical_formula": [
+      "C25H24FNO4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:32020"
+    ],
+    "inchi_key_string": [
+      "VGYFMXBACGZSIL-MCBHFWOFSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C25H24FNO4/c26-17-9-7-15(8-10-17)24-20-3-1-2-4-22(20)27-25(16-5-6-16)21(24)12-11-18(28)13-19(29)14-23(30)31/h1-4,7-12,16,18-19,28-29H,5-6,13-14H2,(H,30,31)/b12-11+/t18-,19-/m1/s1"
+    ],
+    "mass": [
+      "421.468"
+    ],
+    "monoisotopic_mass": [
+      "421.16894"
+    ],
+    "smiles_string": [
+      "O=C(O)C[C@H](O)C[C@H](O)/C=C/c1c(C2CC2)nc2ccccc2c1-c1ccc(F)cc1"
+    ]
+  },
+  "label": "pitavastatin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_32020",
+  "obo_id": "CHEBI:32020",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "147511-69-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=147511-69-1"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2214",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2214"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0041991",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0041991"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C13334",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP2141155",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP2141155"
+    },
+    {
+      "database": "patent",
+      "id": "US2011269962",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2011269962"
+    },
+    {
+      "database": "patent",
+      "id": "US2012016129",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2012016129"
+    },
+    {
+      "database": "pubmed",
+      "id": "21075465",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21075465/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21585411",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21585411/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21884024",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21884024/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22053916",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22053916/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22077103",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22077103/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22133277",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22133277/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22149769",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22149769/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22268518",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22268518/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22332608",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22332608/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22345687",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22345687/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22356292",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22356292/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22361916",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22361916/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22410289",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22410289/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22472908",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22472908/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22520230",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22520230/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22627182",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22627182/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22679249",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22679249/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22807641",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22807641/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22850760",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22850760/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22878405",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22878405/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22884685",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22884685/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22948417",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22948417/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23007012",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23007012/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23161429",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23161429/"
+    },
+    {
+      "database": "reaxys",
+      "id": "7257773",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Pitavastatin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3R,5S,6E)-7-[2-cyclopropyl-4-(4-fluorophenyl)quinolin-3-yl]-3,5-dihydroxyhept-6-enoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3R,5S,6E)-7-[2-cyclopropyl-4-(4-fluorophenyl)quinolin-3-yl]-3,5-dihydroxyhept-6-enoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NK 104",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NK-104",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pitavastatia",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pitavastatin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pitavastatine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pitavastatinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32020?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32020/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32020/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32020/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32020/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32020/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32020/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32020/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32020/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

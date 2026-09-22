@@ -1,0 +1,786 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_17754",
+  "lang": "en",
+  "description": [
+    "A triol with a structure of propane substituted at positions 1, 2 and 3 by hydroxy groups."
+  ],
+  "synonyms": [
+    "1,2,3-Propanetriol",
+    "1,2,3-Trihydroxypropane",
+    "GLYCEROL",
+    "Glycerin",
+    "Glyceritol",
+    "Glycerol",
+    "Glyzerin",
+    "Gro",
+    "Oelsuess",
+    "Propanetriol",
+    "Trihydroxypropane",
+    "glycerine",
+    "glycerol",
+    "glycerolum",
+    "glycyl alcohol",
+    "propane-1,2,3-triol",
+    "propane-1,2,3-triol"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:56-81-5",
+      "chemspider:733",
+      "drugbank:DB04077",
+      "drugcentral:1316",
+      "ecmdb:ECMDB00131",
+      "foodb.food:FDB000756",
+      "gmelin:26279",
+      "hmdb:HMDB0000131",
+      "kegg.compound:C00116",
+      "kegg.drug:D00028",
+      "knapsack:C00001163",
+      "lincs.smallmolecule:LSM-37180",
+      "metacyc.compound:GLYCEROL",
+      "pdb-ccd:GOL",
+      "pdb:2AJS",
+      "pdb:2D03",
+      "ppdb:1317",
+      "pubmed:11302662",
+      "pubmed:11958517",
+      "pubmed:11994365",
+      "pubmed:12672239",
+      "pubmed:12687625",
+      "pubmed:12689633",
+      "pubmed:12713573",
+      "pubmed:14559393",
+      "pubmed:14563847",
+      "pubmed:15026783",
+      "pubmed:15342117",
+      "pubmed:15786693",
+      "pubmed:15983192",
+      "pubmed:16244855",
+      "pubmed:16258193",
+      "pubmed:16319039",
+      "pubmed:16349488",
+      "pubmed:16475911",
+      "pubmed:16651733",
+      "pubmed:16664750",
+      "pubmed:16901854",
+      "pubmed:17336832",
+      "pubmed:17439666",
+      "pubmed:17979222",
+      "pubmed:19184438",
+      "pubmed:19231894",
+      "pubmed:19460032",
+      "pubmed:19548674",
+      "pubmed:19795216",
+      "pubmed:19956799",
+      "pubmed:22705534",
+      "pubmed:23562176",
+      "pubmed:23747440",
+      "pubmed:24643482",
+      "pubmed:24835191",
+      "pubmed:25108762",
+      "pubmed:558160",
+      "pubmed:6299616",
+      "pubmed:7031247",
+      "pubmed:7392035",
+      "reaxys:635685",
+      "umbbd.compound:c0066",
+      "wikipedia.en:Glycerol",
+      "ymdb:YMDB00283"
+    ],
+    "generalized_empirical_formula": [
+      "C3H8O3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:131422",
+      "CHEBI:14334",
+      "CHEBI:24351",
+      "CHEBI:42998",
+      "CHEBI:5448"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:17754"
+    ],
+    "inchi_key_string": [
+      "PEDCQBHIVMGVHV-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C3H8O3/c4-1-3(6)2-5/h3-6H,1-2H2"
+    ],
+    "mass": [
+      "92.094"
+    ],
+    "monoisotopic_mass": [
+      "92.04734"
+    ],
+    "smiles_string": [
+      "OCC(O)CO"
+    ]
+  },
+  "label": "glycerol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_17754",
+  "obo_id": "CHEBI:17754",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "56-81-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=56-81-5"
+    },
+    {
+      "database": "chemspider",
+      "id": "733",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.733.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB04077",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB04077"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1316",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1316"
+    },
+    {
+      "database": "ecmdb",
+      "id": "ECMDB00131",
+      "description": "ecmdb",
+      "url": "http://ecmdb.ca/compounds/ECMDB00131"
+    },
+    {
+      "database": "foodb.food",
+      "id": "FDB000756",
+      "description": "foodb.food",
+      "url": null
+    },
+    {
+      "database": "gmelin",
+      "id": "26279",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0000131",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0000131"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00116",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00028",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00001163",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00001163"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-37180",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "GLYCEROL",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "GOL",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pdb",
+      "id": "2AJS",
+      "description": "pdb",
+      "url": "https://www.wwpdb.org/pdb?id=pdb_00002AJS"
+    },
+    {
+      "database": "pdb",
+      "id": "2D03",
+      "description": "pdb",
+      "url": "https://www.wwpdb.org/pdb?id=pdb_00002D03"
+    },
+    {
+      "database": "ppdb",
+      "id": "1317",
+      "description": "ppdb",
+      "url": "https://sitem.herts.ac.uk/aeru/ppdb/en/Reports/1317.htm"
+    },
+    {
+      "database": "pubmed",
+      "id": "11302662",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11302662/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11958517",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11958517/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11994365",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11994365/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12672239",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12672239/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12687625",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12687625/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12689633",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12689633/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12713573",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12713573/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14559393",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14559393/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14563847",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14563847/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15026783",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15026783/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15342117",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15342117/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15786693",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15786693/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15983192",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15983192/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16244855",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16244855/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16258193",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16258193/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16319039",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16319039/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16349488",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16349488/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16475911",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16475911/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16651733",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16651733/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16664750",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16664750/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16901854",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16901854/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17336832",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17336832/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17439666",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17439666/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17979222",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17979222/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19184438",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19184438/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19231894",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19231894/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19460032",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19460032/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19548674",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19548674/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19795216",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19795216/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19956799",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19956799/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22705534",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22705534/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23562176",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23562176/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23747440",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23747440/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24643482",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24643482/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24835191",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24835191/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25108762",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25108762/"
+    },
+    {
+      "database": "pubmed",
+      "id": "558160",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/558160/"
+    },
+    {
+      "database": "pubmed",
+      "id": "6299616",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6299616/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7031247",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7031247/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7392035",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7392035/"
+    },
+    {
+      "database": "reaxys",
+      "id": "635685",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "umbbd.compound",
+      "id": "c0066",
+      "description": "umbbd.compound",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Glycerol",
+      "description": "wikipedia.en",
+      "url": null
+    },
+    {
+      "database": "ymdb",
+      "id": "YMDB00283",
+      "description": "ymdb",
+      "url": "http://www.ymdb.ca/compounds/YMDB00283"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "propane-1,2,3-triol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,2,3-Propanetriol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,2,3-Trihydroxypropane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "GLYCEROL",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glycerin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glyceritol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glycerol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glyzerin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Gro",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "jcbn",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Oelsuess",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Propanetriol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Trihydroxypropane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glycerine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glycerol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glycerol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glycerol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glycerolum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glycyl alcohol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "propane-1,2,3-triol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17754?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17754/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17754/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17754/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17754/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17754/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17754/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17754/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

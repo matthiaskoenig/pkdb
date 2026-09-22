@@ -1,0 +1,62 @@
+[
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:68447"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL795"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "3194191"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "438597"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "70346"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "C222JTI9I3"
+  },
+  {
+    "src_id": "49",
+    "src_compound_id": "PD099473"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "126009"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "265534"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "39967"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0001857"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID50241466"
+  },
+  {
+    "src_id": "51",
+    "src_compound_id": "FDB022712"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "Molport-001-002-575"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "Molport-003-928-475"
+  }
+]

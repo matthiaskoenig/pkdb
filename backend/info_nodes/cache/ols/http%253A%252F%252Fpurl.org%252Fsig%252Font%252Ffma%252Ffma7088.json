@@ -1,0 +1,125 @@
+{
+  "iri": "http://purl.org/sig/ont/fma/fma7088",
+  "lang": "en",
+  "description": [
+    "Old definition: Organ with cavitated organ parts, which is continuous with the systemic and \npulmonary arterial and venous trees. Examples: There is only one heart."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "FMAID": [
+      7088.0
+    ],
+    "definition": [
+      "Organ with cavitated organ parts, each instance of which is continuous with some systemic and pulmonary arterial and venous trees. Examples: There is only one heart."
+    ],
+    "non-English equivalent": [
+      "Coeur",
+      "Cor",
+      "Corazon",
+      "Cuore",
+      "Herz",
+      "Puso"
+    ],
+    "preferred name": [
+      "Heart"
+    ]
+  },
+  "label": "Heart",
+  "ontology_name": "fma",
+  "ontology_prefix": "FMA",
+  "ontology_iri": "http://purl.org/sig/ont/fma.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": false,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "fma7088",
+  "obo_id": "fma7088",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/graph"
+    },
+    "anterior_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fanterior_to"
+    },
+    "arterial_supply": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Farterial_supply"
+    },
+    "attaches_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fattaches_to"
+    },
+    "bounded_by": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fbounded_by"
+    },
+    "constitutional_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fconstitutional_part"
+    },
+    "constitutional_part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fconstitutional_part_of"
+    },
+    "contained_in": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fcontained_in"
+    },
+    "direct_left_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fdirect_left_of"
+    },
+    "direct_right_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fdirect_right_of"
+    },
+    "inferior_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Finferior_to"
+    },
+    "lymphatic_drainage": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Flymphatic_drainage"
+    },
+    "medial_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fmedial_to"
+    },
+    "member_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fmember_of"
+    },
+    "nerve_supply": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fnerve_supply"
+    },
+    "regional_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fregional_part"
+    },
+    "regional_part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fregional_part_of"
+    },
+    "superior_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fsuperior_to"
+    },
+    "surrounded_by": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fsurrounded_by"
+    },
+    "venous_drainage": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7088/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fvenous_drainage"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,175 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C38216",
+  "lang": "en",
+  "description": [
+    "Administration of medication via the respiratory tract, usually by oral or nasal inhalation, for local or systemic effect."
+  ],
+  "synonyms": [
+    "INH",
+    "INHALATION",
+    "Inhalation Route of Administration",
+    "Inhalation use",
+    "Inhalation",
+    "RESPIR",
+    "RESPIRATORY (INHALATION)",
+    "Respiratory (Inhalation)",
+    "Respiratory tract route of adminstration",
+    "inhalation"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Administration of a medicinal product to the respiratory system by inhalation to obtain a systemic or a local effect in the lower respiratory tract. Nasal use and endotracheopulmonary use are excluded",
+      "Administration within the respiratory tract by inhaling orally or nasally for local or systemic effect. (FDA)",
+      "In medicine, refers to the act of taking a substance into the body by breathing."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "EDQM-HC",
+      "FDA"
+    ],
+    "FDA_Table": [
+      "Route of Administration (C-DRG-00301)"
+    ],
+    "Legacy Concept Name": [
+      "Inhalation_Route_of_Drug_Administration"
+    ],
+    "Preferred_Name": [
+      "Inhalation Route of Administration"
+    ],
+    "Semantic_Type": [
+      "Functional Concept"
+    ],
+    "UMLS_CUI": [
+      "C0205535"
+    ],
+    "code": [
+      "C38216"
+    ]
+  },
+  "label": "Inhalation Route of Administration",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C38216",
+  "obo_id": "NCIT:C38216",
+  "in_subset": [
+    "NCIT_C148636",
+    "NCIT_C150107",
+    "NCIT_C54452",
+    "NCIT_C54455",
+    "NCIT_C61410",
+    "NCIT_C66729",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C77527",
+    "NCIT_C78420",
+    "NCIT_C78425"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "INH",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "INHALATION",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Inhalation Route of Administration",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Inhalation use",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Inhalation",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "RESPIR",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "RESPIRATORY (INHALATION)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Respiratory (Inhalation)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Respiratory tract route of adminstration",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "inhalation",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38216?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38216/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38216/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38216/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38216/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38216/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38216/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38216/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38216/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38216/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38216/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

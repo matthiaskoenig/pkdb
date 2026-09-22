@@ -1,0 +1,451 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_4784",
+  "lang": "en",
+  "description": [
+    "A dicarboxylic acid monoester that is ethyl 4-phenylbutanoate in which a hydrogen α to the carboxy group is substituted by the amino group of <small>L</small>-alanyl-<small>L</small>-proline (<i>S</i>-configuration)."
+  ],
+  "synonyms": [
+    "(S)-1-(N-(1-(ethoxycarbonyl)-3-phenylpropyl)-L-alanyl)-L-proline",
+    "(S)-1-{(S)-2-[1-((S)-Ethoxycarbonyl)-3-phenyl-propylamino]-propionyl}-pyrrolidine-2-carboxylic acid",
+    "1-(N-((S)-1-carboxy-3-phenylpropyl)-L-alanyl)-L-proline 1'-ethyl ester",
+    "ENALAPRIL",
+    "Enalapril",
+    "N-[(2S)-1-ethoxy-1-oxo-4-phenylbutan-2-yl]-L-alanyl-L-proline",
+    "N-[(2S)-1-ethoxy-1-oxo-4-phenylbutan-2-yl]-L-alanyl-L-proline",
+    "analapril",
+    "enalapril",
+    "enalaprila",
+    "enalaprilum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:3657467",
+      "cas:75847-73-3",
+      "chemspider:4534998",
+      "drugbank:DB00584",
+      "drugcentral:1005",
+      "hmdb:HMDB0014722",
+      "kegg.compound:C06977",
+      "kegg.drug:D07892",
+      "lincs.smallmolecule:LSM-3282",
+      "metacyc.compound:CPD0-2065",
+      "patent:EP12401",
+      "patent:US4374829",
+      "pubmed:10669559",
+      "pubmed:11523315",
+      "pubmed:12725609",
+      "pubmed:19019755",
+      "pubmed:19549507",
+      "pubmed:23030053",
+      "pubmed:23413003",
+      "pubmed:32835726",
+      "pubmed:33643971",
+      "pubmed:33881639",
+      "pubmed:33963573",
+      "pubmed:34020248",
+      "pubmed:34101308",
+      "pubmed:34412508",
+      "pubmed:34440064",
+      "pubmed:34533783",
+      "wikipedia.en:Enalapril"
+    ],
+    "generalized_empirical_formula": [
+      "C20H28N2O5"
+    ],
+    "has_alternative_id": [
+      "CHEBI:116847"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:4784"
+    ],
+    "inchi_key_string": [
+      "GBXSMTUPTTWBMN-XIRDDKMYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C20H28N2O5/c1-3-27-20(26)16(12-11-15-8-5-4-6-9-15)21-14(2)18(23)22-13-7-10-17(22)19(24)25/h4-6,8-9,14,16-17,21H,3,7,10-13H2,1-2H3,(H,24,25)/t14-,16-,17-/m0/s1"
+    ],
+    "mass": [
+      "376.453"
+    ],
+    "monoisotopic_mass": [
+      "376.19982"
+    ],
+    "smiles_string": [
+      "CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1CCC[C@H]1C(=O)O"
+    ]
+  },
+  "label": "enalapril",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_4784",
+  "obo_id": "CHEBI:4784",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "3657467",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "75847-73-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=75847-73-3"
+    },
+    {
+      "database": "chemspider",
+      "id": "4534998",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.4534998.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00584",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00584"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1005",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1005"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014722",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014722"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06977",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07892",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3282",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD0-2065",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP12401",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP12401"
+    },
+    {
+      "database": "patent",
+      "id": "US4374829",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4374829"
+    },
+    {
+      "database": "pubmed",
+      "id": "10669559",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10669559/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11523315",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11523315/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12725609",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12725609/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19019755",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19019755/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19549507",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19549507/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23030053",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23030053/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23413003",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23413003/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32835726",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32835726/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33643971",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33643971/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33881639",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33881639/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33963573",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33963573/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34020248",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34020248/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34101308",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34101308/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34412508",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34412508/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34440064",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34440064/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34533783",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34533783/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Enalapril",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-[(2S)-1-ethoxy-1-oxo-4-phenylbutan-2-yl]-L-alanyl-L-proline",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-1-(N-(1-(ethoxycarbonyl)-3-phenylpropyl)-L-alanyl)-L-proline",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-1-{(S)-2-[1-((S)-Ethoxycarbonyl)-3-phenyl-propylamino]-propionyl}-pyrrolidine-2-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(N-((S)-1-carboxy-3-phenylpropyl)-L-alanyl)-L-proline 1'-ethyl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ENALAPRIL",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Enalapril",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-[(2S)-1-ethoxy-1-oxo-4-phenylbutan-2-yl]-L-alanyl-L-proline",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "analapril",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enalapril",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enalaprila",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enalaprilum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4784?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4784/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4784/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4784/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4784/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4784/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4784/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4784/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4784/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

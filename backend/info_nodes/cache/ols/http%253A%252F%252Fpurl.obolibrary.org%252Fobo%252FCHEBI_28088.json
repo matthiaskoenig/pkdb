@@ -1,0 +1,557 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_28088",
+  "lang": "en",
+  "description": [
+    "A 7-hydroxyisoflavone with additional hydroxy groups at positions 5 and 4'. It is a phytoestrogenic isoflavone with antioxidant properties."
+  ],
+  "synonyms": [
+    "4',5,7-trihydroxyisoflavone",
+    "5,7,4'-Trihydroxyisoflavone",
+    "5,7-dihydroxy-3-(4-hydroxyphenyl)-4H-1-benzopyran-4-one",
+    "5,7-dihydroxy-3-(4-hydroxyphenyl)-4H-chromen-4-one",
+    "5,7-dihydroxy-3-(4-hydroxyphenyl)-4H-chromen-4-one",
+    "GENISTEIN",
+    "Genistein",
+    "Prunetol",
+    "Sophoricol"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:446-72-0",
+      "chemspider:4444448",
+      "drugbank:DB01645",
+      "foodb.food:FDB011828",
+      "hmdb:HMDB0003217",
+      "kegg.compound:C06563",
+      "kegg.drug:D11680",
+      "knapsack:C00002526",
+      "lincs.smallmolecule:LSM-5549",
+      "lipidmaps:LMPK12050218",
+      "metacyc.compound:CPD-3141",
+      "pdb-ccd:GEN",
+      "pubmed:10469641",
+      "pubmed:10741415",
+      "pubmed:10912792",
+      "pubmed:11564287",
+      "pubmed:12629420",
+      "pubmed:14654166",
+      "pubmed:15196699",
+      "pubmed:15288519",
+      "pubmed:15576033",
+      "pubmed:15772566",
+      "pubmed:15833883",
+      "pubmed:15853412",
+      "pubmed:16061678",
+      "pubmed:16166295",
+      "pubmed:17004897",
+      "pubmed:17979711",
+      "pubmed:18344977",
+      "pubmed:18413741",
+      "pubmed:18490856",
+      "pubmed:18815740",
+      "pubmed:19107852",
+      "pubmed:19402570",
+      "pubmed:20211733",
+      "pubmed:22303062",
+      "pubmed:24023812",
+      "pubmed:24297371",
+      "pubmed:24379139",
+      "pubmed:25593647",
+      "pubmed:26322379",
+      "pubmed:28166217",
+      "pubmed:28259640",
+      "pubmed:34314575",
+      "reaxys:263823",
+      "wikipedia.en:Genistein"
+    ],
+    "generalized_empirical_formula": [
+      "C15H10O5"
+    ],
+    "has_alternative_id": [
+      "CHEBI:24204",
+      "CHEBI:42763",
+      "CHEBI:5302"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:28088"
+    ],
+    "inchi_key_string": [
+      "TZBJGXHYKVUXJN-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C15H10O5/c16-9-3-1-8(2-4-9)11-7-20-13-6-10(17)5-12(18)14(13)15(11)19/h1-7,16-18H"
+    ],
+    "mass": [
+      "270.24"
+    ],
+    "monoisotopic_mass": [
+      "270.05282"
+    ],
+    "smiles_string": [
+      "O=c1c(-c2ccc(O)cc2)coc2cc(O)cc(O)c12"
+    ]
+  },
+  "label": "genistein",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_28088",
+  "obo_id": "CHEBI:28088",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "446-72-0",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=446-72-0"
+    },
+    {
+      "database": "chemspider",
+      "id": "4444448",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.4444448.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01645",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01645"
+    },
+    {
+      "database": "foodb.food",
+      "id": "FDB011828",
+      "description": "foodb.food",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0003217",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0003217"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06563",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D11680",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00002526",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00002526"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5549",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "lipidmaps",
+      "id": "LMPK12050218",
+      "description": "lipidmaps",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMPK12050218"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-3141",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "GEN",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10469641",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10469641/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10741415",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10741415/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10912792",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10912792/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11564287",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11564287/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12629420",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12629420/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14654166",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14654166/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15196699",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15196699/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15288519",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15288519/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15576033",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15576033/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15772566",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15772566/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15833883",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15833883/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15853412",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15853412/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16061678",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16061678/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16166295",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16166295/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17004897",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17004897/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17979711",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17979711/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18344977",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18344977/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18413741",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18413741/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18490856",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18490856/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18815740",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18815740/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19107852",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19107852/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19402570",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19402570/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20211733",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20211733/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22303062",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22303062/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24023812",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24023812/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24297371",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24297371/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24379139",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24379139/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25593647",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25593647/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26322379",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26322379/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28166217",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28166217/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28259640",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28259640/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34314575",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34314575/"
+    },
+    {
+      "database": "reaxys",
+      "id": "263823",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Genistein",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5,7-dihydroxy-3-(4-hydroxyphenyl)-4H-chromen-4-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4',5,7-trihydroxyisoflavone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4',5,7-trihydroxyisoflavone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5,7,4'-Trihydroxyisoflavone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5,7-dihydroxy-3-(4-hydroxyphenyl)-4H-1-benzopyran-4-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5,7-dihydroxy-3-(4-hydroxyphenyl)-4H-chromen-4-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "GENISTEIN",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Genistein",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Prunetol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sophoricol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28088?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28088/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28088/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28088/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28088/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28088/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28088/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28088/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28088/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

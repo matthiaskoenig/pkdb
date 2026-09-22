@@ -1,0 +1,206 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000474",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "EF - Epileptic fit",
+    "EP - Epilepsy",
+    "EPILEP NEC W/O INTR EPIL",
+    "EPILEP NOS W/O INTR EPIL",
+    "EPILEPSY NEC W INTR EPIL",
+    "EPILEPSY NOS W INTR EPIL",
+    "Epilectic attack, NOS",
+    "Epilepsy (disorder)",
+    "Epilepsy NOS (disorder)",
+    "Epilepsy NOS",
+    "Epilepsy and recurrent seizures",
+    "Epilepsy, NOS",
+    "Epilepsy, unspecified",
+    "Epilepsy, unspecified, with intractable epilepsy",
+    "Epilepsy, unspecified, without mention of intractable epilepsy",
+    "Epileptic Seizure",
+    "Epileptic attack",
+    "Epileptic attack, NOS",
+    "Epileptic convulsions",
+    "Epileptic convulsions, NOS",
+    "Epileptic disorder",
+    "Epileptic disorder, NOS",
+    "Epileptic fit",
+    "Epileptic fits",
+    "Epileptic fits, NOS",
+    "Epileptic seizure (finding)",
+    "Epileptic seizures",
+    "Epileptic seizures, NOS",
+    "Epileptic",
+    "Generalised convulsion",
+    "Generalised fit",
+    "Generalised seizure",
+    "Generalized convulsion",
+    "Generalized fit",
+    "Generalized seizure (finding)",
+    "Generalized seizure",
+    "Other forms of epilepsy (disorder)",
+    "Other forms of epilepsy NOS (disorder)",
+    "Other forms of epilepsy NOS",
+    "Other forms of epilepsy and recurrent seizures",
+    "Other forms of epilepsy",
+    "Other forms of epilepsy, with intractable epilepsy",
+    "Other forms of epilepsy, without mention of intractable epilepsy",
+    "Seizure disorder (disorder)",
+    "Seizure disorder",
+    "[X]Other epilepsy (disorder)",
+    "[X]Other epilepsy"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10:G40",
+      "ICD9:345",
+      "ICD9:345.8",
+      "ICD9:345.9",
+      "ICD9:345.90",
+      "ICD9:345.91",
+      "MESH:D004827",
+      "MedDRA:10015037",
+      "MedDRA:10015046",
+      "MedDRA:10015047",
+      "MedDRA:10015048",
+      "MedDRA:10015052",
+      "NCIt:C3020",
+      "NIFSTD:birnlex_12718",
+      "SNOMEDCT:84757009"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0005027, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0005027"
+    ],
+    "term editor": [
+      "James Malone",
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005027"
+    ]
+  },
+  "label": "obsolete_epilepsy",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005027",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0000474",
+  "obo_id": "EFO:0000474",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD10",
+      "id": "G40",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/G40"
+    },
+    {
+      "database": "ICD9",
+      "id": "345",
+      "description": null,
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=345"
+    },
+    {
+      "database": "ICD9",
+      "id": "345.8",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "345.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "345.90",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "345.91",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D004827",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D004827"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10015037",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10015037"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10015046",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10015046"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10015047",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10015047"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10015048",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10015048"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10015052",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10015052"
+    },
+    {
+      "database": "NCIt",
+      "id": "C3020",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3020"
+    },
+    {
+      "database": "NIFSTD",
+      "id": "birnlex_12718",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "84757009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/84757009"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000474?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000474/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

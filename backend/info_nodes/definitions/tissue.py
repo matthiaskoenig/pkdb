@@ -18,7 +18,6 @@ TISSUE_NODES: list[InfoNode] = [
         label="Not reported (tissue)",
         description="Tissue not reported.",
         parents=["tissue"],
-        annotations=[],
     ),
     Tissue(
         sid="blood",
@@ -30,7 +29,7 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12434"),
-            (BQB.IS, "bto/BTO:0000089"),
+            (BQB.IS, "BTO:0000089"),
         ],
     ),
     Tissue(
@@ -51,7 +50,7 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["blood"],
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C12434"),
-            (BQB.IS_VERSION_OF, "bto/BTO:0000089"),
+            (BQB.IS_VERSION_OF, "BTO:0000089"),
         ],
     ),
     Tissue(
@@ -67,18 +66,17 @@ TISSUE_NODES: list[InfoNode] = [
         "common iliac vein and the left common iliac vein and terminates "
         "in the right atrium.",
         parents=["tissue"],
-        annotations=[(BQB.IS, "fma/FMA:10951")],
+        annotations=[(BQB.IS, "FMA:10951")],
     ),
     Tissue(
         sid="aorta",
-        name="aorta",
         description="The main artery of the circulatory system which carries "
         "oxygenated blood from the heart to all the arteries of the body "
         "except those of the lungs.",
         parents=["tissue"],
         annotations=[
-            (BQB.IS, "uberon/UBERON:0000947"),
-            (BQB.IS, "bto/BTO:0000135"),
+            (BQB.IS, "UBERON:0000947"),
+            (BQB.IS, "BTO:0000135"),
         ],
     ),
     Tissue(
@@ -89,8 +87,8 @@ TISSUE_NODES: list[InfoNode] = [
         "wall of the carotid artery can lead to stroke.",
         parents=["tissue"],
         annotations=[
-            (BQB.IS, "uberon/UBERON:0005396"),
-            (BQB.IS, "bto/BTO:0000168"),
+            (BQB.IS, "UBERON:0005396"),
+            (BQB.IS, "BTO:0000168"),
         ],
     ),
     Tissue(
@@ -102,7 +100,7 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12692"),
-            (BQB.IS, "bto/BTO:0000237"),
+            (BQB.IS, "BTO:0000237"),
         ],
     ),
     Tissue(
@@ -114,7 +112,7 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C13356"),
-            (BQB.IS, "bto/BTO:0000131"),
+            (BQB.IS, "BTO:0000131"),
         ],
         synonyms=["blood plasma"],
     ),
@@ -125,7 +123,7 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["plasma"],
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C13356"),
-            (BQB.IS_VERSION_OF, "bto/BTO:0000131"),
+            (BQB.IS_VERSION_OF, "BTO:0000131"),
         ],
         synonyms=["blood plasma"],
     ),
@@ -137,16 +135,14 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C13275"),
-            (BQB.IS, "bto/BTO:0001202"),
-            (BQB.IS, "fma/FMA:59862"),
+            (BQB.IS, "BTO:0001202"),
+            (BQB.IS, "FMA:59862"),
         ],
     ),
     Tissue(
         sid="saliva/plasma",
-        name="saliva/plasma",
         description="helper tissue for a ratios between saliva and plasma measurements.",
         parents=["tissue"],
-        annotations=[],
         deprecated=True,  # FIXME better encoding of ratios between tissues
     ),
     Tissue(
@@ -157,7 +153,7 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C13325"),
-            (BQB.IS, "bto/BTO:0001239"),
+            (BQB.IS, "BTO:0001239"),
         ],
         synonyms=["blood serum"],
     ),
@@ -169,7 +165,7 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["cerebrospinal fluid"],
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C12692"),
-            (BQB.IS_VERSION_OF, "bto/BTO:0000237"),
+            (BQB.IS_VERSION_OF, "BTO:0000237"),
         ],
     ),
     Tissue(
@@ -179,8 +175,8 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C13283"),
-            (BQB.IS, "bto/BTO:0001419"),
-            (BQB.IS, "fma/FMA:12274"),
+            (BQB.IS, "BTO:0001419"),
+            (BQB.IS, "FMA:12274"),
         ],
     ),
     Tissue(
@@ -191,7 +187,7 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12376"),
-            (BQB.IS, "bto/BTO:0001419"),
+            (BQB.IS, "BTO:0001419"),
         ],
     ),
     Tissue(
@@ -207,13 +203,12 @@ TISSUE_NODES: list[InfoNode] = [
     ),
     Tissue(
         sid="gallbladder",
-        name="gallbladder",
         description="Organ with organ cavity which is continuous proximally with the "
         "cystic duct and distally terminates in the fundus of the "
         "gallbladder.",
         parents=["tissue"],
         annotations=[
-            (BQB.IS, "fma/FMA:7202"),
+            (BQB.IS, "FMA:7202"),
         ],
     ),
     Tissue(
@@ -224,8 +219,8 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12391"),
-            (BQB.IS, "bto/BTO:0001307"),
-            (BQB.IS, "fma/FMA:7148"),
+            (BQB.IS, "BTO:0001307"),
+            (BQB.IS, "FMA:7148"),
         ],
         synonyms=["intragastric"],
     ),
@@ -239,9 +234,9 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12432"),
-            (BQB.IS, "bto/BTO:0001281"),
-            (BQB.IS, "uberon/UBERON:0002106"),
-            (BQB.IS, "fma/FMA:7196"),
+            (BQB.IS, "BTO:0001281"),
+            (BQB.IS, "UBERON:0002106"),
+            (BQB.IS, "FMA:7196"),
         ],
     ),
     Tissue(
@@ -252,8 +247,8 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12736"),
-            (BQB.IS, "bto/BTO:0000648"),
-            (BQB.IS, "fma/FMA:7199"),
+            (BQB.IS, "BTO:0000648"),
+            (BQB.IS, "FMA:7199"),
         ],
         synonyms=["intestines", "bowel"],
     ),
@@ -266,7 +261,7 @@ TISSUE_NODES: list[InfoNode] = [
         "function is to absorb nutrients from food as the food is "
         "transported to the large intestine.",
         parents=["intestine"],
-        annotations=[(BQB.IS, "NCIT:C12386"), (BQB.IS, "fma/FMA:7200")],
+        annotations=[(BQB.IS, "NCIT:C12386"), (BQB.IS, "FMA:7200")],
         synonyms=[],
     ),
     Tissue(
@@ -275,19 +270,18 @@ TISSUE_NODES: list[InfoNode] = [
         description="Large intestine. A muscular tube that extends from the end of the "
         "small intestine to the anus.",
         parents=["intestine"],
-        annotations=[(BQB.IS, "NCIT:C12379"), (BQB.IS, "fma/FMA:7201")],
+        annotations=[(BQB.IS, "NCIT:C12379"), (BQB.IS, "FMA:7201")],
         synonyms=[],
     ),
     Tissue(
         sid="cecum",
-        name="cecum",
         description="Cecum. A blind pouch-like commencement of the colon in the right "
         "lower quadrant of the abdomen at the end of the small intestine "
         "and the start of the large intestine.",
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12381"),
-            (BQB.IS, "fma/FMA:14541"),
+            (BQB.IS, "FMA:14541"),
         ],
         synonyms=["caecum"],
     ),
@@ -297,8 +291,8 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C13056"),
-            (BQB.IS, "bto/BTO:0000887"),
-            (BQB.IS, "fma/FMA:30316"),
+            (BQB.IS, "BTO:0000887"),
+            (BQB.IS, "FMA:30316"),
         ],
         synonyms=["muscles", "muscle tissue"],
     ),
@@ -310,8 +304,8 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12393"),
-            (BQB.IS, "bto/BTO:0000988"),
-            (BQB.IS, "fma/FMA:7198"),
+            (BQB.IS, "BTO:0000988"),
+            (BQB.IS, "FMA:7198"),
         ],
     ),
     Tissue(
@@ -324,8 +318,8 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12392"),
-            (BQB.IS, "bto/BTO:0000759"),
-            (BQB.IS, "fma/FMA:7197"),
+            (BQB.IS, "BTO:0000759"),
+            (BQB.IS, "FMA:7197"),
         ],
     ),
     Tissue(
@@ -333,7 +327,6 @@ TISSUE_NODES: list[InfoNode] = [
         name="liver homogenate",
         description="Liver homogenate. Mainly for in vitro experiments.",
         parents=["tissue"],
-        annotations=[],
     ),
     Tissue(
         "adipose",
@@ -343,8 +336,8 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12472"),
-            (BQB.IS, "bto/BTO:0001487"),
-            (BQB.IS, "fma/FMA:20110"),
+            (BQB.IS, "BTO:0001487"),
+            (BQB.IS, "FMA:20110"),
         ],
         synonyms=["adipose tissue"],
     ),
@@ -359,8 +352,8 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12727"),
-            (BQB.IS, "bto/BTO:0000562"),
-            (BQB.IS, "fma/FMA:7088"),
+            (BQB.IS, "BTO:0000562"),
+            (BQB.IS, "FMA:7088"),
         ],
         synonyms=["heart tissue"],
     ),
@@ -374,8 +367,8 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12415"),
-            (BQB.IS, "bto/BTO:0000671"),
-            (BQB.IS, "fma/FMA:7203"),
+            (BQB.IS, "BTO:0000671"),
+            (BQB.IS, "FMA:7203"),
         ],
         synonyms=["kidneys"],
     ),
@@ -387,7 +380,7 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C13234"),
-            (BQB.IS, "bto/BTO:0000440"),
+            (BQB.IS, "BTO:0000440"),
         ],
         synonyms=["faeces", "Faeces"],
     ),
@@ -397,10 +390,10 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.HAS_PART, "NCIT:C13234"),
-            (BQB.HAS_PART, "bto/BTO:0000440"),
+            (BQB.HAS_PART, "BTO:0000440"),
             (BQB.HAS_PART, "NCIT:C13283"),
-            (BQB.HAS_PART, "bto/BTO:0001419"),
-            (BQB.HAS_PART, "fma/FMA:12274"),
+            (BQB.HAS_PART, "BTO:0001419"),
+            (BQB.HAS_PART, "FMA:12274"),
         ],
         synonyms=["faeces and urine"],
     ),
@@ -410,10 +403,10 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.HAS_PART, "NCIT:C13234"),
-            (BQB.HAS_PART, "bto/BTO:0000440"),
+            (BQB.HAS_PART, "BTO:0000440"),
             (BQB.HAS_PART, "NCIT:C13283"),
-            (BQB.HAS_PART, "bto/BTO:0001419"),
-            (BQB.HAS_PART, "fma/FMA:12274"),
+            (BQB.HAS_PART, "BTO:0001419"),
+            (BQB.HAS_PART, "FMA:12274"),
         ],
         synonyms=["faeces and urine and bile"],
     ),
@@ -424,7 +417,7 @@ TISSUE_NODES: list[InfoNode] = [
         parents=["tissue"],
         annotations=[
             (BQB.IS, "NCIT:C12521"),
-            (BQB.IS, "bto/BTO:0000424"),
+            (BQB.IS, "BTO:0000424"),
         ],
         synonyms=["red blood cell"],
     ),

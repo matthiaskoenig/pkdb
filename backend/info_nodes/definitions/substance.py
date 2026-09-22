@@ -23,7 +23,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="Not reported (substance)",
         name="NR",
         description="Substance was not reported.",
-        annotations=[],
     ),
     Substance(
         sid="beta-blocker",
@@ -31,7 +30,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "used to manage abnormal heart rhythms, and to protect the heart "
         "from a second heart attack (myocardial infarction) after a first "
         "heart attack (secondary prevention).",
-        annotations=[],
     ),
     Substance(
         sid="atazanavir",
@@ -41,7 +39,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "elevate serum lipids, a common problem with other protease "
         "inhibitors.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:37924"),
+            (BQB.IS, "CHEBI:37924"),
             (BQB.IS, "NCIT:C66872"),
         ],
         synonyms=["Atazanavir"],
@@ -54,7 +52,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "chemically and pharmacologically unrelated to benzodiazepines, "
         "barbiturates, or other sedative/hypnotic drugs.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3223"),
+            (BQB.IS, "CHEBI:3223"),
             (BQB.IS, "NCIT:C62013"),
         ],
         synonyms=["Buspirone"],
@@ -69,7 +67,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "causes a decrease in the level of blood cholesterol or an "
         "increase in the clearance of cholesterol from the bloodstream.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:49040"),
+            (BQB.IS, "CHEBI:49040"),
             (BQB.IS, "NCIT:C47529"),
         ],
         synonyms=["Ezetimibe"],
@@ -81,7 +79,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "with hypoglycemic activity. Saxagliptin is metabolized into an, "
         "although less potent, active mono-hydroxy metabolite.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:71272"),
+            (BQB.IS, "CHEBI:71272"),
             (BQB.IS, "NCIT:C75983"),
         ],
         synonyms=[],
@@ -94,7 +92,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "reduce body weight and has a low risk for hypoglycemia.",
         annotations=[
             (BQB.IS, "pubchem.compound/24812758"),
-            (BQB.IS, "chebi/CHEBI:73274"),
+            (BQB.IS, "CHEBI:73274"),
             (BQB.IS, "NCIT:C91018"),
         ],
         synonyms=["Capagliflozin"],
@@ -135,7 +133,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Sum of unchanged canagliflozin, M5, M7, M9 "
         "and other metabolites. "
         "Used for comparison with total radioactivity.",
-        annotations=[],
         synonyms=["canagliflozin total"],
     ),
     Substance(
@@ -144,7 +141,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "pyrrolidine-based inhibitor of dipeptidyl peptidase 4 (DPP-4), "
         "with hypoglycemic activity. Teneligliptin may also reduce plasma triglyceride "
         "levels through a sustained increase in GLP-1 levels.",
-        annotations=[(BQB.IS, "chebi/CHEBI:136042"), (BQB.IS, "NCIT:C87623")],
+        annotations=[(BQB.IS, "CHEBI:136042"), (BQB.IS, "NCIT:C87623")],
         synonyms=["Teneligliptin"],
     ),
     Substance(
@@ -154,7 +151,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "Dapagliflozin selectively and potently inhibits SGLT2 compared "
         "to SGLT1, which is the cotransporter of glucose in the gut.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:85078"),
+            (BQB.IS, "CHEBI:85078"),
             (BQB.IS, "NCIT:C78126"),
         ],
         synonyms=["Dapagliflozin"],
@@ -178,9 +175,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="dapagliflozin + dapagliflozin-3-o-glucuronide",
-        name="dapagliflozin + dapagliflozin-3-o-glucuronide",
         description="Sum of dapagliflozin and dapagliflozin-3-o-glucuronide.",
-        annotations=[],
     ),
     Substance(
         sid="total-dapagliflozin",
@@ -188,7 +183,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Sum of unchanged dapagliflozin, dapagliflozin-3-o-glucuronide, "
         "dapagliflozin-2-o-glucuronide and other metabolites. "
         "Used for comparison with total radioactivity.",
-        annotations=[],
         synonyms=["dapagliflozin total"],
     ),
     Substance(
@@ -198,7 +192,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "inhibitor that blocks the integration of the viral genome into "
         "the host DNA, a critical step in the pathogenesis of HIV.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:82960"),
+            (BQB.IS, "CHEBI:82960"),
             (BQB.IS, "NCIT:C72837"),
         ],
         synonyms=["Raltegravir"],
@@ -265,7 +259,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="A seed from an opium poppy plant (Papaver somniferum)",
         annotations=[
             (BQB.IS, "SNOMEDCT:227409002"),
-            (BQB.IS, "foodon/FOODON:03000025"),
+            (BQB.IS, "FOODON:03000025"),
             (BQB.IS, "NCIT:C73910"),
         ],
     ),
@@ -279,7 +273,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "junctions, and in the adrenal medulla and the brain.",
         annotations=[
             (BQB.IS, "NCIT:C691"),
-            (BQB.IS, "chebi/CHEBI:18723"),
+            (BQB.IS, "CHEBI:18723"),
         ],
     ),
     Substance(
@@ -314,7 +308,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="grapefruit",
-        name="grapefruit",
         description="The sour to semi-sweet fruit of Citrus x paradisi. Grapefruit "
         "can have interactions with drugs, often increasing the effective "
         "potency of compounds. See also 'grapefruit juice'.",
@@ -338,7 +331,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="apple juice",
         description="Apple juice is the juice from apples. Apple juice is a fruit juice made by the maceration and pressing of an apple.",
         annotations=[
-            (BQB.IS, "foodon/FOODON:00001059"),
+            (BQB.IS, "FOODON:00001059"),
             (BQB.IS, "SNOMEDCT:226491003"),
         ],
     ),
@@ -346,7 +339,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="apple-sauce",
         name="apple sauce",
         description="Apple sauce is the sauce from apples.",
-        annotations=[],
     ),
     Substance(
         sid="orange-juice",
@@ -362,7 +354,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Citrus juice is the juice from citrus fruits.",
         annotations=[
             (BQB.IS, "NCIT:C71962"),
-            (BQB.IS, "foodon/FOODON:03305742"),
+            (BQB.IS, "FOODON:03305742"),
         ],
     ),
     Substance(
@@ -418,7 +410,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="A straight-chain saturated fatty acid anion that is the conjugate base of octanoic acid "
         "(caprylic acid); believed to block adipogenesis. Used for breath tests.",
         annotations=[
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:25646"),
+            (BQB.IS_VERSION_OF, "CHEBI:25646"),
         ],
     ),
     Substance(
@@ -427,7 +419,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "the hydrogen of phenolic "
         "hydroxy group has been replaced by a methyl group.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:139354"),
+            (BQB.IS, "CHEBI:139354"),
         ],
     ),
     Substance(
@@ -439,7 +431,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "dealkylated by hepatic CYP1A2 to give paracetamol (acetaminophen),"
         " the methyl of the methoxy group is eliminated as CO2.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:139355"),
+            (BQB.IS, "CHEBI:139355"),
         ],
     ),
     Substance(
@@ -451,7 +443,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "respiration by all animals, fungi and microorganisms that depend directly or indirectly on "
         "living or decaying plants for food.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:16526"),
+            (BQB.IS, "CHEBI:16526"),
             (BQB.IS, "NCIT:C65288"),
         ],
     ),
@@ -461,7 +453,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="13C-carbon dioxide",
         description="13C carbon dioxide is a (13)C-modified compound that is carbon dioxide in which the carbon "
         "is present as its (13)C isotope. It has a role as a diagnostic agent.",
-        annotations=[(BQB.IS, "chebi/CHEBI:139538")],
+        annotations=[(BQB.IS, "CHEBI:139538")],
         synonyms=["13C-hydrogencarbonate"],
     ),
     Substance(
@@ -505,7 +497,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "NCIT:C906"),
             (BQB.IS, "omit/0015118"),
-            (BQB.IS, "chebi/CHEBI:17855"),
+            (BQB.IS, "CHEBI:17855"),
         ],
     ),
     Substance(
@@ -516,7 +508,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C906"),
             (BQB.IS_VERSION_OF, "omit/0015118"),
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:17855"),
+            (BQB.IS_VERSION_OF, "CHEBI:17855"),
         ],
     ),
     Substance(
@@ -527,7 +519,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C906"),
             (BQB.IS_VERSION_OF, "omit/0015118"),
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:17855"),
+            (BQB.IS_VERSION_OF, "CHEBI:17855"),
         ],
     ),
     Substance(
@@ -538,7 +530,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C906"),
             (BQB.IS_VERSION_OF, "omit/0015118"),
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:17855"),
+            (BQB.IS_VERSION_OF, "CHEBI:17855"),
         ],
     ),
     Substance(
@@ -546,7 +538,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Total cholesterol",
         synonyms=["Total cholesterol"],
         annotations=[
-            (BQB.IS, "chebi/CHEBI:16113"),
+            (BQB.IS, "CHEBI:16113"),
             (BQB.IS, "NCIT:C369"),
         ],
     ),
@@ -556,14 +548,13 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="Non-Esterified Fatty Acid (NEFA)",
         description="Non-Esterified Fatty Acid (NEFA)",
         synonyms=["NEFAs"],
-        annotations=[],
     ),
     Substance(
         sid="lathosterol",
         description="lathosterol",
         synonyms=[],
         annotations=[
-            (BQB.IS, "chebi/CHEBI:17168"),
+            (BQB.IS, "CHEBI:17168"),
             (BQB.IS, "pubchem.compound/65728"),
             (BQB.IS, "inchikey/IZVFFXVYBHFIHY-SKCNUYALSA-N"),
         ],
@@ -573,7 +564,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="CRP",
         description="c-reactive-protein",
         synonyms=["CRP"],
-        annotations=[],
     ),
     # Lipoproteins
     Substance(
@@ -635,7 +625,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         synonyms=["APOB", "apoB", "apo-B"],
         description="Apolipoprotein B100 and B48 come from the same gene, while B48 "
         "is truncated; some immunological assays may quantify the sum (FlorBar)",
-        annotations=[],
     ),
     Substance(
         sid="apolipoprotein C-II",
@@ -704,13 +693,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="idrocilamide",
-        name="idrocilamide",
         description="This compound belongs to the class of organic compounds known as "
         "cinnamic acid amides. These are amides of cinnamic acids. "
         "Cinnamic acid is an aromatic compound containing a benzene and "
         "a carboxylic acid group forming 3-phenylprop-2-enoic acid.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:134842"),
+            (BQB.IS, "CHEBI:134842"),
             (BQB.IS, "inchikey/OSCTXCOERRNGLW-VOTSOKGWSA-N"),
         ],
     ),
@@ -724,82 +712,71 @@ SUBSTANCE_NODES: list[InfoNode] = [
         synonyms=["LDL-Cholesterin", "LDL cholesterol"],
         annotations=[
             (BQB.IS, "efo/0004195"),
-            (BQB.IS, "chebi/CHEBI:47774"),
+            (BQB.IS, "CHEBI:47774"),
         ],
     ),
     Substance(
         sid="ldl",
-        name="ldl",
         description="A class of lipoproteins of small size (18-25 nm) and low density (1.019-1.063 g/ml) particles with a core composed mainly of cholesterol esters and smaller amounts of triglycerides. The surface monolayer consists mostly of phospholipids, a single copy of apolipoprotein B-100, and free cholesterol molecules. The main function of LDL is to transport cholesterol and cholesterol esters from the liver. Excessive levels are associated with cardiovascular disease.",
         annotations=[
             (BQB.IS, "omit/0009160"),
-            (BQB.IS, "chebi/CHEBI:39026"),
+            (BQB.IS, "CHEBI:39026"),
         ],
     ),
     Substance(
         sid="ldl1",
-        name="ldl1",
         description="ldl subfraction based on density measurements "
         "density interval: LDL-1, 1.020-1.024 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="ldl2",
-        name="ldl2",
         description="ldl subfraction based on density measurements "
         "density interval: LDL-2, 1.025±1.029 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="ldl3",
-        name="ldl3",
         description="ldl subfraction based on density measurements "
         "density interval: LDL-3, 1.030±1.034 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="ldl4",
-        name="ldl4",
         description="ldl subfraction based on density measurements "
         "density interval: LDL-4, 1.035±1.040 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="ldl5",
-        name="ldl5",
         description="ldl subfraction based on density measurements "
         "density interval: LDL-5, 1.041±1.047 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="ldl6",
-        name="ldl6",
         description="ldl subfraction based on density measurements "
         "density interval: LDL-6, 1.048±1.057 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="ldl7",
-        name="ldl7",
         description="ldl subfraction based on density measurements "
         "density interval: LDL-7, 1.058±1.066 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="large-buoyant-ldl",
-        name="large-buoyant-ldl",
         description="ldl1 and ldl2density interval: 1.020±1.029 g/mL",
         parents=["ldl1", "ldl2"],
     ),
     Substance(
         sid="intermediate-buoyant-ldl",
-        name="intermediate-buoyant-ldl",
         description="ldl3 and ldl4density interval: 1.030±1.040 g/mL",
         parents=["ldl3", "ldl4"],
     ),
     Substance(
         sid="small-buoyant-ldl",
-        name="small-buoyant-ldl",
         description="ldl5, ldl6 and ldl7density interval: 1.041±1.066 g/mL",
         parents=["ldl5", "ldl6", "ldl7"],
     ),
@@ -811,7 +788,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         synonyms=["IDL-Cholesterin", "IDL cholesterol"],
         annotations=[
             (BQB.IS, "efo/0008595"),
-            (BQB.IS, "chebi/CHEBI:132933"),
+            (BQB.IS, "CHEBI:132933"),
         ],
     ),
     Substance(
@@ -824,7 +801,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         synonyms=["HDL-Cholesterin", "HDL cholesterol"],
         annotations=[
             (BQB.IS, "omit/0009159"),
-            (BQB.IS, "chebi/CHEBI:47775"),
+            (BQB.IS, "CHEBI:47775"),
         ],
     ),
     Substance(
@@ -837,26 +814,21 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="hdl",
-        name="hdl",
         description="A class of lipoproteins of small size (4-13 nm) and dense (greater than 1.063 g/ml) particles. They are synthesized in the liver without a lipid core, accumulate cholesterol esters from peripheral tissues and transport them to the liver for re-utilization or elimination from the body (the reverse cholesterol transport).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:39025"),
+            (BQB.IS, "CHEBI:39025"),
             (BQB.IS, "omit/0009158"),
         ],
     ),
     Substance(
         sid="hdl2-c",
-        name="hdl2-c",
         description="class of HDL-cholesterol; subfraction of HDL-cholesterol based on density into the large buoyant HDL2-c",
         parents=["hdlc"],
-        annotations=[],
     ),
     Substance(
         sid="hdl3-c",
-        name="hdl3-c",
         description="class of HDL-cholesterol; subfraction of HDL-cholesterol based on density into the small dense HDL3-c",
         parents=["hdlc"],
-        annotations=[],
     ),
     Substance(
         sid="vldlc",
@@ -869,12 +841,11 @@ SUBSTANCE_NODES: list[InfoNode] = [
         synonyms=["VLDL cholesterol"],
         annotations=[
             (BQB.IS, "omit/0016033"),
-            (BQB.IS, "chebi/CHEBI:47773"),
+            (BQB.IS, "CHEBI:47773"),
         ],
     ),
     Substance(
         sid="vldl",
-        name="vldl",
         description="VLDL - very low density lipoproteins (consisting of cholesterol and lipoproteins).",
         synonyms=["VLDL"],
         annotations=[
@@ -890,19 +861,16 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="ldl/hdl-c",
-        name="ldl/hdl-c",
         description="ratio of LDL-cholesterol and HDL-cholesterol",
         parents=["ldlc", "hdlc"],
     ),
     Substance(
         sid="total/hdl-c",
-        name="total/hdl-c",
         description="ratio of total cholesterol and HDL-cholesterol",
         parents=["cholesterol", "hdlc"],
     ),
     Substance(
         sid="ldl-esterified/free-cholesterol",
-        name="ldl-esterified/free-cholesterol",
         description="ratio of esterified LDL-cholesterol and free-cholesterol",
         parents=["ldlc", "cholesterol"],
     ),
@@ -926,13 +894,11 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="vldl-apoB100+48",
-        name="vldl-apoB100+48",
         description="fraction of apoB100+48 in the VLDL particle",
         parents=["VLDL", "apolipoprotein B100+B48"],
     ),
     Substance(
         sid="ldl-apoB100+48",
-        name="ldl-apoB100+48",
         description="fraction of apoB100+48 in the LDL particle",
         parents=["LDL", "apolipoprotein B100+B48"],
     ),
@@ -942,7 +908,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "The term encompasses phosphatidic acids and phosphoglycerides.",
         synonyms=["phospholipid"],
         annotations=[
-            (BQB.IS, "chebi/CHEBI:16247"),
+            (BQB.IS, "CHEBI:16247"),
         ],
     ),
     # ------------------
@@ -951,7 +917,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="A protein composed of four globin chains and heme that gives red blood cells their "
         "characteristic color; its function is primarily to transport oxygen.",
         annotations=[
-            (BQB.IS, "fma/FMA:62293"),
+            (BQB.IS, "FMA:62293"),
         ],
         synonyms=["human haemoglobin", "hemoglobin"],
     ),
@@ -959,7 +925,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="fructosamine",
         description="Fructosamine, the compound that results from glycation reactions between a sugar and a primary "
         "amine, followed by isomerization via the Amadori rearrangement.",
-        annotations=[(BQB.IS, "chebi/CHEBI:24103")],
+        annotations=[(BQB.IS, "CHEBI:24103")],
     ),
     Substance(
         sid="hba1c",
@@ -984,7 +950,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "of low chemotoxicity and low osmolality.",
         annotations=[
             (BQB.IS, "pubchem.compound/3730"),
-            (BQB.IS, "chebi/CHEBI:31709"),
+            (BQB.IS, "CHEBI:31709"),
             (BQB.IS, "SNOMEDCT:395751002"),
             (BQB.IS, "NCIT:C65939"),
         ],
@@ -994,7 +960,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Creatinine. The breakdown product of creatine, a constituent of muscle tissue, that "
         "is excreted by the kidney and whose serum level is used to evaluate kidney function.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:16737"),
+            (BQB.IS, "CHEBI:16737"),
             (BQB.IS, "NCIT:C399"),
         ],
     ),
@@ -1008,7 +974,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "Dietary supplementation with creatine may improve muscle "
         "wasting associated with cancer and other chronic diseases.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:16919"),
+            (BQB.IS, "CHEBI:16919"),
             (BQB.IS, "NCIT:C37937"),
         ],
     ),
@@ -1020,7 +986,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "mouse metabolite. It is a phosphoamino acid and a phosphagen. "
         "It is functionally related to a creatine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:17287"),
+            (BQB.IS, "CHEBI:17287"),
             (BQB.IS, "pubchem.compound/9548602"),
             (BQB.IS, "inchikey/DRBBFCLWYRJSJZ-UHFFFAOYSA-N"),
         ],
@@ -1041,7 +1007,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "control pathogenic bacteria growth and may contribute to "
         "inulin's cancer protective properties.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:15443"),
+            (BQB.IS, "CHEBI:15443"),
             (BQB.IS, "NCIT:C61506"),
         ],
     ),
@@ -1051,7 +1017,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "used as a diagnostic aid to measure effective renal plasma flow "
         "(ERPF) and excretory capacity.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:64703"),
+            (BQB.IS, "CHEBI:64703"),
             (BQB.IS, "pubchem.compound/3249988"),
             (BQB.IS, "inchikey/HSMNQINEKMPTIC-UHFFFAOYSA-M"),
         ],
@@ -1065,7 +1031,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "dendritic cells (DCs); therefore, urine or serum levels may be "
         "used as a marker of immune system activation.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28670"),
+            (BQB.IS, "CHEBI:28670"),
             (BQB.IS, "pubchem.compound/135398721"),
             (BQB.IS, "SNOMEDCT:102694005"),
             (BQB.IS, "NCIT:C129010"),
@@ -1080,7 +1046,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "Gentamicin is an antibiotic complex consisting of four major "
         "(C1, C1a, C2, and C2a) and several minor components.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:17833"),
+            (BQB.IS, "CHEBI:17833"),
             (BQB.IS, "NCIT:C519"),
             (BQB.IS, "pubchem.compound/3467"),
             (BQB.IS, "inchikey/CEAZRRDELHUEMR-UHFFFAOYSA-N"),
@@ -1088,7 +1054,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="iothalamate",
-        name="iothalamate",
         description="The sodium salt form of iothalamate, an organic iodine compound "
         "and a radiographic contrast medium. Iothalamate sodium blocks "
         "x-rays as they pass through the body, thereby allowing "
@@ -1108,7 +1073,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "enzyme cyclooxygenase, thereby preventing cyclooxygenase-mediated "
         "DNA adduct formation by heterocyclic aromatic amines.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:49662"),
+            (BQB.IS, "CHEBI:49662"),
             (BQB.IS, "NCIT:C576"),
             (BQB.IS, "pubchem.compound/3715"),
             (BQB.IS, "inchikey/CGIGDMFJXJATDK-UHFFFAOYSA-N"),
@@ -1128,7 +1093,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "diuretic activity. In vivo, urea is formed in the liver via the urea cycle from ammonia and is "
         "the final end product of protein metabolism.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:16199"),
+            (BQB.IS, "CHEBI:16199"),
             (BQB.IS, "NCIT:C29531"),
         ],
     ),
@@ -1139,17 +1104,16 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "urine, as well as trace amounts found in the various organs of the body. It can build up and "
         "form stones or crystals in various disease states.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:27226"),
+            (BQB.IS, "CHEBI:27226"),
             (BQB.IS, "NCIT:C62652"),
         ],
     ),
     Substance(
         sid="h2o",
-        name="h2o",
         label="water",
         description="H2O. An oxygen hydride consisting of an oxygen atom that is covalently bonded to two hydrogen atoms.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:15377"),
+            (BQB.IS, "CHEBI:15377"),
         ],
         synonyms=["water"],
     ),
@@ -1157,7 +1121,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="sodium",
         description="Sodium. An element with atomic symbol Na, atomic number 11, and atomic weight 23.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:26708"),
+            (BQB.IS, "CHEBI:26708"),
             (BQB.IS, "NCIT:C830"),
         ],
         synonyms=["Na"],
@@ -1166,7 +1130,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="calcium",
         description="Calcium. An element with atomic symbol Ca, atomic number 20, and atomic weight 40.08.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:22984"),
+            (BQB.IS, "CHEBI:22984"),
             (BQB.IS, "NCIT:C331"),
         ],
         synonyms=["Ca", "Ca2"],
@@ -1175,7 +1139,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="potassium",
         description="Potassium. An element with atomic symbol K, atomic number 19, and atomic weight 39.10.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:26216"),
+            (BQB.IS, "CHEBI:26216"),
             (BQB.IS, "NCIT:C765"),
         ],
         synonyms=["K", "K+"],
@@ -1185,14 +1149,14 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="potassium dihydrogen phosphate",
         description="A potassium salt in which dihydrogen phosphate(1−) is the counterion.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:63036"),
+            (BQB.IS, "CHEBI:63036"),
         ],
     ),
     Substance(
         sid="chloride",
         description="Chloride. A halide anion formed when chlorine picks up an electron to form an an anion.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:17996"),
+            (BQB.IS, "CHEBI:17996"),
         ],
         synonyms=["Cl", "Cl-"],
     ),
@@ -1203,7 +1167,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "in its natural abundance or where it is not desired to "
         "distinguish between the isotopes).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:15378"),
+            (BQB.IS, "CHEBI:15378"),
             (BQB.IS, "pubchem.compound/1038"),
             (BQB.IS, "inchikey/GPRLSGONYQIRFK-UHFFFAOYSA-N"),
         ],
@@ -1213,7 +1177,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="phosphate",
         description="Phosphate (3-). A phosphate ion that is the conjugate base of hydrogenphosphate.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:18367"),
+            (BQB.IS, "CHEBI:18367"),
         ],
     ),
     Substance(
@@ -1246,7 +1210,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "it is conjugated in the liver and excreted in the bile.",
         annotations=[
             (BQB.IS, "NCIT:C305"),
-            (BQB.IS, "chebi/CHEBI:16990"),
+            (BQB.IS, "CHEBI:16990"),
             (BQB.IS, "inchikey/BPYKTIZUTYGOLE-IFADSCNNSA-N"),
         ],
     ),
@@ -1256,7 +1220,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Unconjugated bilirubin. For total bilirubin see 'bilirubin'.",
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C305"),
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:16990"),
+            (BQB.IS_VERSION_OF, "CHEBI:16990"),
             (BQB.IS_VERSION_OF, "inchikey/BPYKTIZUTYGOLE-IFADSCNNSA-N"),
         ],
     ),
@@ -1267,35 +1231,19 @@ SUBSTANCE_NODES: list[InfoNode] = [
         synonyms=["Afos", "Alkaline phosphatase"],
     ),
     Substance(
-        sid="got",
-        label="Glutamic oxaloacetic transaminase (GOT, SGOT)",
-        description="Glutamic oxaloacetic transaminase (GOT, SGOT). "
-        "Activity measured as a test of liver function, "
-        "46/47-kDa homodimeric human Aspartate Aminotransferases "
-        "(Class-I Pyridoxal-Phosphate-Dependent Aminotransferase Family) "
-        "are pyridoxal phosphate-dependent enzymes involved in amino acid "
-        "metabolism and in the urea and tricarboxylic acid cycles.",
-        synonyms=["SGOT", "GOT"],
-        annotations=[
-            (BQB.IS, "NCIT:C25202"),
-        ],
-        deprecated=True,
-        # FIXME: duplicate entry ast & got, remove got and merge with AST
-    ),
-    Substance(
         sid="ast",
-        label="Aspartate aminotransferase (AST)",
+        label="Aspartate aminotransferase (AST) / Glutamic oxaloacetic transaminase (GOT, SGOT)",
         description="Aspartate aminotransferase, also known as "
         "AspAT/ASAT/AAT or (serum) "
-        "glutamic oxaloacetic transaminase (GOT, SGOT).",
-        synonyms=["AST"],
+        "glutamic oxaloacetic transaminase (GOT, SGOT). Activity measured as a test of liver function.",
+        synonyms=["AST", "GOT"],
         annotations=[
             (BQB.IS, "NCIT:C64467"),
+            (BQB.IS, "NCIT:C25202"),
         ],
     ),
     Substance(
         sid="ggt",
-        name="ggt",
         label="Gamma glutamate transaminase (GGT)",
         description="Gamma glutamate transaminase.",
         synonyms=["GGT", "g-Gt"],
@@ -1305,7 +1253,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="alt",
-        name="alt",
         label="Alanine aminotransferase (ALT)",
         description="Alanine aminotransferase, formerly called serum "
         "glutamate-pyruvate transaminase (SGPT) or "
@@ -1320,7 +1267,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="ldh",
-        name="ldh",
         label="Lacate dehydrogenase (LDH)",
         description="Lactate dehydrogenase (LDH). A family of "
         "homotetrameric cytoplasmic enzymes involved in the "
@@ -1333,7 +1279,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="alpha-fetoprotein",
-        name="alpha-fetoprotein",
         label="alpha-fetoprotein (AFP)",
         description="Alpha-fetoprotein (609 aa, ~69 kDa) is encoded by the human AFP gene. This protein plays a role in the binding to copper, nickel, bilirubin and fatty acids in the fetal circulation.",
         synonyms=["AFP"],
@@ -1348,7 +1293,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="An agent belonging to the biguanide class of antidiabetics with antihyperglycemic activity. "
         "Metformin is associated with a very low incidence of lactic acidosis.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6801"),
+            (BQB.IS, "CHEBI:6801"),
             (BQB.IS, "NCIT:C61612"),
         ],
     ),
@@ -1359,7 +1304,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "extensively metabolized in the liver and the metabolites as well as the unchanged form are "
         "excreted in the urine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:5384"),
+            (BQB.IS, "CHEBI:5384"),
             (BQB.IS, "NCIT:C29074"),
         ],
     ),
@@ -1380,7 +1325,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="C14 labeled hydrochlorothiazide (HCTZ or HCT).",
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C29098"),
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:5778"),
+            (BQB.IS_VERSION_OF, "CHEBI:5778"),
         ],
     ),
     Substance(
@@ -1390,37 +1335,27 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "cardiac output, hepatic function, liver and gastric blood flow, and for ophthalmic angiography.",
         annotations=[
             (BQB.IS, "inchikey/MOFVSTNWEDAEEK-UHFFFAOYSA-M"),
-            (BQB.IS, "chebi/CHEBI:31696"),
+            (BQB.IS, "CHEBI:31696"),
             (BQB.IS, "NCIT:C65913"),
         ],
     ),
     Substance(
         sid="glycocholic acid",
-        name="glycocholic acid",
         description="A bile acid glycine conjugate having cholic acid as the bile acid component.",
-        annotations=[(BQB.IS, "chebi/CHEBI:17687")],
+        annotations=[(BQB.IS, "CHEBI:17687")],
     ),
     Substance(
         sid="[14C]glycocholic acid",
-        name="[14C]glycocholic acid",
         description="A bile acid glycine conjugate having cholic acid as the bile acid component.",
-        annotations=[(BQB.IS_VERSION_OF, "chebi/CHEBI:17687")],
+        annotations=[(BQB.IS_VERSION_OF, "CHEBI:17687")],
     ),
     Substance(
         sid="ergotamine",
         description="A naturally occurring ergot alkaloid with vasoconstrictor and analgesic property.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:64318"),
+            (BQB.IS, "CHEBI:64318"),
             (BQB.IS, "NCIT:C61751"),
         ],
-    ),
-    Substance(
-        sid="bile",
-        description="Fluid composed of waste products, bile acids, salts, cholesterol, and electrolytes. "
-        "It is secreted by the liver parenchyma and stored in the gallbladder.",
-        annotations=[(BQB.IS, "NCIT:C13192")],
-        deprecated=True,
-        # FIXME: remove; this is a tissue, not a substance, probably incorrect encoding
     ),
     Substance(
         sid="fentanyl",
@@ -1428,7 +1363,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "Fentanyl selectively binds to and activates the mu-receptor in the central nervous system (CNS) "
         "thereby mimicking the effects of endogenous opiates.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:310077"),
+            (BQB.IS, "CHEBI:310077"),
             (BQB.IS, "NCIT:C494"),
         ],
     ),
@@ -1436,7 +1371,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="galactose",
         description="Galactose is a monosaccharide sugar that is about as sweet as glucose.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28260"),
+            (BQB.IS, "CHEBI:28260"),
             (BQB.IS, "NCIT:C68482"),
         ],
     ),
@@ -1447,7 +1382,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "channels, thereby inhibiting the ionic fluxes required for the initiation and conduction of "
         "impulses and effecting local anesthesia.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6456"),
+            (BQB.IS, "CHEBI:6456"),
             (BQB.IS, "NCIT:C614"),
         ],
         synonyms=["lignocaine"],
@@ -1459,7 +1394,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "it probably acts on nerve cell membranes to disrupt neuronal transmission in "
         "the brain, probably via an action at the lipid matrix of the neuronal membrane.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:4792"),
+            (BQB.IS, "CHEBI:4792"),
             (BQB.IS, "NCIT:C47511"),
         ],
     ),
@@ -1469,7 +1404,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="The bromide salt form of vecuronium, a synthetic steroid derivative of the naturally "
         "occurring alkaloids of curare with a muscle relaxant property.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9940"),
+            (BQB.IS, "CHEBI:9940"),
             (BQB.IS, "NCIT:C47782"),
         ],
     ),
@@ -1479,7 +1414,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "anesthetic properties. Etomidate appears to have gamma-aminobutyric acid "
         "(GABA) like effects, mediated through GABA-A receptor.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:4910"),
+            (BQB.IS, "CHEBI:4910"),
             (BQB.IS, "NCIT:C47527"),
         ],
     ),
@@ -1490,7 +1425,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "isoflurane, appears to act on the lipid matrix of the neuronal cell membrane, "
         "which results in disruption of neuronal transmission.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6015"),
+            (BQB.IS, "CHEBI:6015"),
             (BQB.IS, "NCIT:C65978"),
         ],
     ),
@@ -1501,7 +1436,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "neuromuscular junction and opening the ligand-gated channels in the same way "
         "as acetylcholine, resulting in depolarization and inhibition of neuromuscular transmission.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:45652"),
+            (BQB.IS, "CHEBI:45652"),
             (BQB.IS, "NCIT:C61955"),
         ],
     ),
@@ -1512,7 +1447,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "Estradiol binds to a specific intracellular estrogen receptor located in "
         "female organs, breasts, hypothalamus and pituitary.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:23965"),
+            (BQB.IS, "CHEBI:23965"),
             (BQB.IS, "NCIT:C2295"),
         ],
     ),
@@ -1522,7 +1457,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "chemical structure 6α-ethyl-chenodeoxycholic acid. It is used as a medication "
         "used to treat primary biliary cholangitis.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:43602"),
+            (BQB.IS, "CHEBI:43602"),
         ],
         synonyms=["obeticholic acid", "OCA"],
     ),
@@ -1532,7 +1467,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "of estrogens. Promotes proliferation of uterine mucosa and the "
         "implantation of the blastocyst, prevents further follicular development.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:17026"),
+            (BQB.IS, "CHEBI:17026"),
             (BQB.IS, "NCIT:C2297"),
         ],
     ),
@@ -1543,18 +1478,18 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "the calcium ion channels of coronary and peripheral vascular smooth "
         "muscle, thereby dilating coronary arteries and peripheral arterioles.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6073"),
+            (BQB.IS, "CHEBI:6073"),
             (BQB.IS, "NCIT:C47577"),
         ],
     ),
     Substance(
-        sid="phenobarbitone",
+        sid="phenobarbital",
         label="phenobarbital",
         description="A long-acting barbituric acid derivative with antipsychotic property. "
         "Phenobarbital binds to and activates the gamma-aminobutyric acid "
         "(GABA)-A receptor, thereby mimicking the inhibitory actions of GABA in the brain.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8069"),
+            (BQB.IS, "CHEBI:8069"),
             (BQB.IS, "NCIT:C739"),
         ],
         synonyms=["phenobarbitol", "phenobarbital"],
@@ -1567,7 +1502,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "It is sometimes used as a counterstain, especially in fluorescent methods to suppress "
         "background autofluorescence.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:82467"),
+            (BQB.IS, "CHEBI:82467"),
             (BQB.IS, "NCIT:C65605"),
         ],
     ),
@@ -1583,7 +1518,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "and the inhibition of serotonin reuptake by serotonergic nerve "
         "endings in the brain.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:1391"),
+            (BQB.IS, "CHEBI:1391"),
             (BQB.IS, "pubchem.compound/1615"),
         ],
         synonyms=[
@@ -1601,7 +1536,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "determined, acetaminophen may inhibit the nitric oxide (NO) pathway mediated by a "
         "variety of neurotransmitter receptors including N-methyl-D-aspartate (NMDA) "
         "and substance P, resulting in elevation of the pain threshold.",
-        annotations=[(BQB.IS, "chebi/CHEBI:46195"), (BQB.IS, "NCIT:C198")],
+        annotations=[(BQB.IS, "CHEBI:46195"), (BQB.IS, "NCIT:C198")],
         synonyms=["acetaminophen", "APAP"],
     ),
     Substance(
@@ -1615,7 +1550,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="apapglu",
         name="paracetamol glucuronide",
         description="Paracetamol glucuronide. A metabolite of paracetamol.",
-        annotations=[(BQB.IS, "chebi/CHEBI:32636")],
+        annotations=[(BQB.IS, "CHEBI:32636")],
         synonyms=[
             "acetaminophen O-β-D-glucosiduronic acid",
             "acetaminophen glucuronide",
@@ -1626,14 +1561,14 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="paracetamol sulfate",
         description="Paracetamol sulfate. A metabolite of paracetamol. An aryl sulfate that is paracetamol in which "
         "the hydroxy group has been replaced by a sulfooxy group.",
-        annotations=[(BQB.IS, "chebi/CHEBI:32635")],
+        annotations=[(BQB.IS, "CHEBI:32635")],
         synonyms=["4-acetaminophen sulfate"],
     ),
     Substance(
         sid="apapcys",
         name="paracetamol cysteine",
         description="Paracetamol cysteine. A metabolite of paracetamol.",
-        annotations=[(BQB.IS, "chebi/CHEBI:133066")],
+        annotations=[(BQB.IS, "CHEBI:133066")],
         synonyms=["S-(5-acetamido-2-hydroxyphenyl)cysteine", "acetaminophen cysteine"],
     ),
     Substance(
@@ -1641,8 +1576,8 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="paracetamol glutathione",
         description="Paracetamol glutathione. A metabolite of paracetamol. Acetaminophen glutathione conjugate.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:32639"),
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:24337"),
+            (BQB.IS, "CHEBI:32639"),
+            (BQB.IS_VERSION_OF, "CHEBI:24337"),
         ],
         synonyms=["AA-GSH", "acetaminophen glutathione"],
     ),
@@ -1664,7 +1599,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "soluble in acetone and very soluble in pyrimidine. It is used in research as the "
         "preferred marker for detecting CYP1A2-based inhibition potential in vitro.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8050"),
+            (BQB.IS, "CHEBI:8050"),
             (BQB.IS, "NCIT:C44432"),
         ],
     ),
@@ -1675,7 +1610,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "activities. Upon intravenous administration, propacetamol is hydrolyzed by plasma esterases "
         "into its active form acetaminophen.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:135089"),
+            (BQB.IS, "CHEBI:135089"),
             (BQB.IS, "NCIT:C75081"),
         ],
         synonyms=["proparacetamol"],
@@ -1686,7 +1621,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "blocker class. It is used to treat high blood pressure, a number of types of irregular "
         "heart rate, thyrotoxicosis, capillary hemangiomas, performance anxiety, and essential tremors.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8499"),
+            (BQB.IS, "CHEBI:8499"),
         ],
         synonyms=["Inderal"],
     ),
@@ -1724,7 +1659,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="diethyldithiocarbamic acid",
         description="diethyldithiocarbamic acid",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8987"),
+            (BQB.IS, "CHEBI:8987"),
         ],
         synonyms=["Ditiocarb"],
     ),
@@ -1748,7 +1683,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="caffeine monohydrate",
         description="Caffeine monohydrate.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:31332"),
+            (BQB.IS, "CHEBI:31332"),
             (BQB.IS, "NCIT:C83572"),
         ],
         synonyms=["3,7-Dihydro-1,3,7-trimethyl-1H-purine-2,6-dione monohydrate"],
@@ -1761,7 +1696,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "South America and East Asia that is structurally related to adenosine and acts primarily as an "
         "adenosine receptor antagonist with psychotropic and anti-inflammatory activities.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:27732"),
+            (BQB.IS, "CHEBI:27732"),
             (BQB.IS, "NCIT:C328"),
         ],
         synonyms=["137TMX", "1,3,7-TMX", "137MX", "137X"],
@@ -1778,7 +1713,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "mouse metabolite. It is a conjugate acid of a "
         "1,3,7-trimethylurate.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:691622"),
+            (BQB.IS, "CHEBI:691622"),
             (BQB.IS, "pubchem.compound/79437"),
         ],
         synonyms=[
@@ -1796,7 +1731,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="paraxanthine (17X)",
         description="A dimethylxanthine having the two methyl groups located at "
         "positions 1 and 7. It is a metabolite of caffeine and theobromine in animals.",
-        annotations=[(BQB.IS, "chebi/CHEBI:25858")],
+        annotations=[(BQB.IS, "CHEBI:25858")],
         synonyms=["17DMX", "1,7-dimethylxanthine", "1,7-DMX", "17X", "17MX"],
     ),
     Substance(
@@ -1804,7 +1739,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="17U",
         label="1,7-dimethyluric acid (17U)",
         description="Metabolite of caffeine.",
-        annotations=[(BQB.IS, "chebi/CHEBI:68449")],
+        annotations=[(BQB.IS, "CHEBI:68449")],
         synonyms=[
             "17DMU",
             "1,7-dimethyluric acid",
@@ -1824,7 +1759,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "intracellular calcium distribution, and antagonize adenosine. "
         "Metabolite of caffeine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28177"),
+            (BQB.IS, "CHEBI:28177"),
             (BQB.IS, "NCIT:C872"),
         ],
         synonyms=["13DMX", "1,3-dimethylxanthine", "1,3-DMX", "13X", "13MX"],
@@ -1839,7 +1774,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "It derives from a 7,9-dihydro-1H-purine-2,6,8(3H)-trione. It is "
         "a conjugate acid of a 1,3-dimethylurate anion.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:68447"),
+            (BQB.IS, "CHEBI:68447"),
             (BQB.IS, "pubchem.compound/70346"),
         ],
         synonyms=["13DMU", "13MU", "13U"],
@@ -1852,7 +1787,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "A purine alkaloid derived from the cacao plant, it is found in chocolate, as well as in a "
         "number of other foods, and is a vasodilator, diuretic and heart stimulator. Metabolite of caffeine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28946"),
+            (BQB.IS, "CHEBI:28946"),
             (BQB.IS, "NCIT:C87684"),
         ],
         synonyms=["37DMX", "3,7-dimethylxanthine", "3,7-DMX", "37X", "37MX"],
@@ -1866,7 +1801,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "It has a role as a metabolite and a mouse metabolite. It derives from a "
         "7,9-dihydro-1H-purine-2,6,8(3H)-trione. It is a conjugate acid of a 3,7-dimethylurate anion.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:68531"),
+            (BQB.IS, "CHEBI:68531"),
             (BQB.IS, "pubchem.compound/83126"),
         ],
         synonyms=["37DMU", "37MU", "37U"],
@@ -1877,7 +1812,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="1-methylxanthine (1X)",
         description="Metabolite of caffeine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:68444"),
+            (BQB.IS, "CHEBI:68444"),
             (BQB.IS, "pubchem.compound/80220"),
         ],
         synonyms=["1MX", "1-MX", "1-X"],
@@ -1893,7 +1828,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "mouse metabolite.",
         annotations=[
             (BQB.IS, "pubchem.compound/69726"),
-            (BQB.IS, "chebi/CHEBI:68441"),
+            (BQB.IS, "CHEBI:68441"),
         ],
         synonyms=[
             "1MU",
@@ -1908,7 +1843,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Metabolite of caffeine.",
         annotations=[
             (BQB.IS, "pubchem.compound/70639"),
-            (BQB.IS, "chebi/CHEBI:62207"),
+            (BQB.IS, "CHEBI:62207"),
         ],
         synonyms=[
             "3MX",
@@ -1947,7 +1882,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "7H-xanthine.",
         annotations=[
             (BQB.IS, "pubchem.compound/68374"),
-            (BQB.IS, "chebi/CHEBI:48991"),
+            (BQB.IS, "CHEBI:48991"),
         ],
         synonyms=[
             "7MX",
@@ -1962,7 +1897,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Metabolite of caffeine.",
         annotations=[
             (BQB.IS, "pubchem.compound/69160"),
-            (BQB.IS, "chebi/CHEBI:80470"),
+            (BQB.IS, "CHEBI:80470"),
         ],
         synonyms=["7MU", "7-MU", "7-U"],
     ),
@@ -1974,7 +1909,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "a formamidopyrimidine. It has a role as a mouse metabolite. "
         "It derives from a uracil.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:32643"),
+            (BQB.IS, "CHEBI:32643"),
             (BQB.IS, "pubchem.compound/108214"),
         ],
         synonyms=["5-Acetylamino-6-formylamino-3-methyluracil"],
@@ -1985,7 +1920,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="5-Acetylamino-6-amino-3-methyluracil (AAMU)",
         description="Metabolite of caffeine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:80473"),
+            (BQB.IS, "CHEBI:80473"),
             (BQB.IS, "pubchem.compound/88299"),
         ],
         synonyms=["A1", "5-Acetylamino-6-amino-3-methyluracil", "5-Ammu"],
@@ -2011,7 +1946,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="A1U",
         label="6-Amino-5-(formyl-N-methylamino)-1-methyluracil (A1U)",
         description="Metabolite of caffeine.",
-        annotations=[],
         synonyms=[
             "6-Amino-5-(formyl-N-methylamino)-1-methyluracil",
             "6-Amino-5 (N-formylmethylamino) 1-methyluracil",
@@ -2022,7 +1956,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="A3U",
         label="6-Amino-5-(formyl-N-methylamino)-1-methyluracil (A3U)",
         description="Metabolite of caffeine.",
-        annotations=[],
         synonyms=[
             "6-Amino-5-(formyl-N-methylamino)-3-methyluracil",
             "6-Amino-5 (N-formylmethylamino) 3-methyluracil",
@@ -2033,7 +1966,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="mx",
         name="methylxanthine",
         description="Metabolite of caffeine.",
-        annotations=[(BQB.IS, "chebi/CHEBI:25348")],
+        annotations=[(BQB.IS, "CHEBI:25348")],
     ),
     # caffeine derived
     Substance(
@@ -2083,20 +2016,17 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="px/tp",
-        name="px/tp",
         label="paraxanthine/theophylline",
         description="paraxanthine/theophylline ratio",
         parents=["tp", "px"],
     ),
     Substance(
         sid="1X/37U",
-        name="1X/37U",
         description="1X/37U ratio",
         parents=["1X", "37U"],
     ),
     Substance(
         sid="1U/(3X+7X)",
-        name="1U/(3X+7X)",
         description="Caffeine metabolic ratio.",
         parents=["1U", "3X", "7X"],
     ),
@@ -2222,12 +2152,10 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="all_14c_caffeine_equivalents",
-        name="all_14c_caffeine_equivalents",
         description="sum of all 14C-modified caffeine equivalents",
     ),
     Substance(
         sid="tp+tb+px+caf",
-        name="tp+tb+px+caf",
         description="Sum of caffeine metabolites: tp+tb+px+caf",
         parents=["tp", "tb", "px", "caf"],
     ),
@@ -2246,7 +2174,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "a 4-cyanophenyl substituent attached to the 2-amino group. NNRTI of HIV-1, "
         "binds directly to RT and blocks RNA-dependent and DNA-dependent DNA polymerase activities",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:63589"),
+            (BQB.IS, "CHEBI:63589"),
         ],
         synonyms=[],
     ),
@@ -2258,7 +2186,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "in detoxifying reactions, and in the formation of collagen in fibrous tissue, "
         "teeth, bones, connective tissue, skin, and capillaries.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:29073"),
+            (BQB.IS, "CHEBI:29073"),
             (BQB.IS, "NCIT:C285"),
         ],
         synonyms=["vitamin c"],
@@ -2269,7 +2197,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "cimetidine blocks histamine's ability to stimulate suppressor T lymphocyte activity "
         "and to inhibit natural killer (NK) cell activity and interleukin-2 production.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3699"),
+            (BQB.IS, "CHEBI:3699"),
             (BQB.IS, "NCIT:C374"),
         ],
     ),
@@ -2280,7 +2208,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "reuptake inhibitors, selectively blocks serotonin reuptake by inhibiting the serotonin reuptake "
         "pump at the presynaptic neuronal membrane.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:5138"),
+            (BQB.IS, "CHEBI:5138"),
             (BQB.IS, "NCIT:C61769"),
         ],
     ),
@@ -2292,7 +2220,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "receptor complex located in the limbic, thalamic and hypothalamic regions of the central nervous "
         "system (CNS).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:2611"),
+            (BQB.IS, "CHEBI:2611"),
             (BQB.IS, "NCIT:C227"),
         ],
     ),
@@ -2304,7 +2232,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "acetaldehyde dehydrogenase, an enzyme that oxidizes the ethanol metabolite acetaldehyde into "
         "acetic acid.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:4659"),
+            (BQB.IS, "CHEBI:4659"),
             (BQB.IS, "NCIT:C447"),
         ],
     ),
@@ -2312,7 +2240,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="naringenin",
         description="A trihydroxyflavanone that is flavanone substituted by hydroxy groups at positions 5, 6 and 4'.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:50202"),
+            (BQB.IS, "CHEBI:50202"),
             (BQB.IS, "NCIT:C68463"),
         ],
     ),
@@ -2339,7 +2267,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Mucolytics are a class of drugs used to break up and thin mucus "
         "and make it easier to clear from the airways by coughing it up. "
         "Mucinex (guaifenesin) is a common example of a mucolytic.",
-        annotations=[(BQB.IS, "NCIT:C74536"), (BQB.IS, "chebi/CHEBI:77034")],
+        annotations=[(BQB.IS, "NCIT:C74536"), (BQB.IS, "CHEBI:77034")],
         synonyms=["mucolytic", "mucolytic medication"],
     ),
     Substance(
@@ -2352,7 +2280,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "targeting components of the microbial cell absent from human "
         "cells, including bacterial cell walls, cell membrane, and "
         "30S or 50S ribosomal subunits.",
-        annotations=[(BQB.IS, "NCIT:C258"), (BQB.IS, "chebi/CHEBI:22582")],
+        annotations=[(BQB.IS, "NCIT:C258"), (BQB.IS, "CHEBI:22582")],
         synonyms=["antibiotic", "antibiotic medication"],
     ),
     Substance(
@@ -2360,7 +2288,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="A quinolone antibiotic is a member of a large group of broad-spectrum bacteriocidals that "
         "share a bicyclic core structure related to the substance 4-quinolone.[1] They are used in human "
         "and veterinary medicine to treat bacterial infections, as well as in animal husbandry.",
-        annotations=[(BQB.IS, "chebi/CHEBI:23765")],
+        annotations=[(BQB.IS, "CHEBI:23765")],
         synonyms=["quinolone antibiotic"],
     ),
     Substance(
@@ -2369,7 +2297,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "bacterial DNA gyrase, an enzyme essential for DNA replication. This agent is more active against "
         "Gram-negative bacteria than Gram-positive bacteria.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:100241"),
+            (BQB.IS, "CHEBI:100241"),
             (BQB.IS, "NCIT:C375"),
         ],
     ),
@@ -2380,7 +2308,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "This agent acts on the organic anion transport exchanger, thereby increasing uric acid "
         "excretion and decreasing serum uric acid levels resulting in the prevention of urate deposition.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9342"),
+            (BQB.IS, "CHEBI:9342"),
             (BQB.IS, "NCIT:C47739"),
         ],
     ),
@@ -2391,7 +2319,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "enzyme fumarate reductase, thereby inhibiting the citric acid cycle, mitochondrial respiration "
         "and subsequent production of ATP, ultimately leading to helminth's death.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:45979"),
+            (BQB.IS, "CHEBI:45979"),
             (BQB.IS, "NCIT:C873"),
         ],
     ),
@@ -2400,7 +2328,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="A sesquiterpene lactone obtained from sweet wormwood, Artemisia annua, which is used as an "
         "antimalarial for the treatment of multi-drug resistant strains of falciparum malaria.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:223316"),
+            (BQB.IS, "CHEBI:223316"),
             (BQB.IS, "NCIT:C78093"),
         ],
         synonyms=["(+)-artemisinin"],
@@ -2411,7 +2339,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "inhibits 14-alpha-lanosterol demethylation in fungi, preventing the production of ergosterol, "
         "an essential constituent of the fungal cell membrane, and resulting in fungal cell lysis.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:10023"),
+            (BQB.IS, "CHEBI:10023"),
             (BQB.IS, "NCIT:C1707"),
             (BQB.IS, "omit/0028746"),
         ],
@@ -2421,7 +2349,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Zolpidem. A drug used to treat insomnia (inability to sleep), and anxiety."
         " It is a type of imidazopyridine (sedative hypnotic).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:10125"),
+            (BQB.IS, "CHEBI:10125"),
             (BQB.IS, "NCIT:C62000"),
         ],
     ),
@@ -2429,7 +2357,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="theacrine",
         description="Theacrine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:139388"),
+            (BQB.IS, "CHEBI:139388"),
         ],
     ),
     Substance(
@@ -2440,7 +2368,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "raising the threshold for repetitive activities in the thalamus "
         "and inhibiting corticothalamic transmission.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9727"),
+            (BQB.IS, "CHEBI:9727"),
             (BQB.IS, "NCIT:C47772"),
         ],
     ),
@@ -2449,7 +2377,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Dimethadione.",
         annotations=[
             (BQB.IS, "pubchem.compound/3081"),
-            (BQB.IS, "chebi/CHEBI:94613"),
+            (BQB.IS, "CHEBI:94613"),
             (BQB.IS, "NCIT:C171703"),
         ],
         synonyms=[
@@ -2467,7 +2395,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "of luteinizing hormone (LH) activity and an inhibition of ovulation, as well as an alteration in "
         "the cervical mucus and endometrium.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6443"),
+            (BQB.IS, "CHEBI:6443"),
             (BQB.IS, "NCIT:C47585"),
         ],
     ),
@@ -2477,7 +2405,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "the active progestin responsible for the progestational activity "
         "that occurs in women after application of ORTHO EVRA patch.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:135398"),
+            (BQB.IS, "CHEBI:135398"),
             (BQB.IS, "NCIT:C66243"),
             (BQB.IS, "pubchem.compound/62930"),
             (BQB.IS, "inchikey/ISHXLNHNDMZNMC-XUDSTZEESA-N"),
@@ -2493,7 +2421,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "release is inhibited, which leads to an inhibition of ovulation "
         "and an alteration in the cervical mucus and endometrium.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:50777"),
+            (BQB.IS, "CHEBI:50777"),
             (BQB.IS, "NCIT:C47528"),
             (BQB.IS, "SNOMEDCT:396050000"),
             (BQB.IS, "pubchem.compound/6917715"),
@@ -2505,14 +2433,13 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Gestodene, sold under the brand names Femodene and Minulet among others, is a progestin "
         "medication which is used in birth control pills for women.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:135323"),
+            (BQB.IS, "CHEBI:135323"),
             (BQB.IS, "NCIT:C87240"),
         ],
         synonyms=["Femodene", "Minulet"],
     ),
     Substance(
         sid="lamivudine",
-        name="lamivudine",
         description="A synthetic nucleoside analogue with activity against hepatitis "
         "B virus (HBV) and HIV. Intracellularly, lamivudine is "
         "phosphorylated to its active metabolites, lamiduvine "
@@ -2525,7 +2452,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "polymerases alpha and beta, and mitochondrial DNA polymerase.",
         annotations=[
             (BQB.IS, "pubchem.compound/60825"),
-            (BQB.IS, "chebi/CHEBI:63577"),
+            (BQB.IS, "CHEBI:63577"),
             (BQB.IS, "inchikey/JTEGQNOMFQHVDC-NKWVEPMBSA-N"),
             (BQB.IS, "SNOMEDCT:386897000"),
             (BQB.IS, "NCIT:C1471"),
@@ -2558,20 +2485,18 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="maraviroc",
-        name="maraviroc",
         description="A C-C Chemokine Receptor Type 5 (CCR5) antagonist with activity "
         "against human immunodeficiency virus (HIV). Maraviroc inhibits "
         "HIV-1 entry via CCR5 coreceptor interaction.",
         annotations=[
             (BQB.IS, "NCIT:C73144"),
-            (BQB.IS, "chebi/CHEBI:63608"),
+            (BQB.IS, "CHEBI:63608"),
             (BQB.IS, "SNOMEDCT:429603001"),
         ],
         synonyms=[],
     ),
     Substance(
         sid="zidovudine",
-        name="zidovudine",
         description="A synthetic dideoxynucleoside. After intracellular phosphorylation "
         "to its active metabolite, zidovudine inhibits DNA polymerase, "
         "resulting in the inhibition of DNA replication and cell death. "
@@ -2585,7 +2510,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="flibanserine",
-        name="flibanserine",
         description="An orally bioavailable, non-hormonal, multifunctional serotonin "
         "agonist and antagonist (MSAA) that may improve sexual desire "
         "and arousal in women. Upon oral administration, flibanserin "
@@ -2594,30 +2518,28 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "antagonist on 5-HT2A receptors.",
         annotations=[
             (BQB.IS, "NCIT:C80769"),
-            (BQB.IS, "chebi/CHEBI:90865"),
+            (BQB.IS, "CHEBI:90865"),
             (BQB.IS, "SNOMEDCT:715253002"),
         ],
         synonyms=[],
     ),
     Substance(
         sid="atogepant",
-        name="atogepant",
         description="It is a selective oral, small-molecule antagonist of calcitonin "
         "gene-related peptide (CGRP) receptor that has been approved for "
         "the treatment of migraine.",
-        annotations=[(BQB.IS, "NCIT:C167018"), (BQB.IS, "chebi/CHEBI:196955")],
+        annotations=[(BQB.IS, "NCIT:C167018"), (BQB.IS, "CHEBI:196955")],
         synonyms=[],
     ),
     Substance(
         sid="cabotegravir",
-        name="cabotegravir",
         description="A human immunodeficiency virus type 1 (HIV-1) integrase strand "
         "transfer inhibitor (INSTI), that is used for pre-exposure "
         "prophylaxis (PrEP) to reduce the risk of sexually acquired "
         "HIV-1 infection.",
         annotations=[
             (BQB.IS, "NCIT:C169820"),
-            (BQB.IS, "chebi/CHEBI:172944"),
+            (BQB.IS, "CHEBI:172944"),
             (BQB.IS, "pubchem.compound/54713659"),
             (BQB.IS, "inchikey/WCWSTNLSLKSJPK-LKFCYVNXSA-N"),
         ],
@@ -2638,7 +2560,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "Stimulation of mu-subtype opioid receptors results in a decrease in the release of "
         "nociceptive neurotransmitters such as substance P, GABA, dopamine, acetylcholine and "
         "noradrenaline;",
-        annotations=[(BQB.IS, "chebi/CHEBI:16714"), (BQB.IS, "NCIT:C383")],
+        annotations=[(BQB.IS, "CHEBI:16714"), (BQB.IS, "NCIT:C383")],
     ),
     Substance(
         sid="cod-p",
@@ -2681,7 +2603,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "six-member rings forming a partially hydrogenated phenanthrene moiety, one of which is aromatic "
         "while the two others are alicyclic.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:80580"),
+            (BQB.IS, "CHEBI:80580"),
             (BQB.IS, "pubchem.compound/5489029"),
             (BQB.IS, "inchikey/CRWVOYRJXPDBPM-HSCJLHHPSA-N"),
         ],
@@ -2691,7 +2613,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="norcodeine",
         description="A morphinane-like compound that is the N-demethylated derivative of codeine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:80579"),
+            (BQB.IS, "CHEBI:80579"),
             (BQB.IS, "NCIT:C166634"),
             (BQB.IS, "pubchem.compound/9925873"),
         ],
@@ -2726,7 +2648,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "anxiolysis, euphoria, sedation, respiratory depression, and gastrointestinal system "
         "smooth muscle contraction.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:17303"),
+            (BQB.IS, "CHEBI:17303"),
             (BQB.IS, "NCIT:C62051"),
             (BQB.IS, "pubchem.compound/5288826"),
             (BQB.IS, "inchikey/BQJCRHHNABKAKU-KBQPJGBKSA-N"),
@@ -2759,7 +2681,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "including analgesia, anxiolysis, euphoria, sedation, respiratory depression, and "
         "gastrointestinal system smooth muscle contraction.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:7003"),
+            (BQB.IS, "CHEBI:7003"),
             (BQB.IS, "NCIT:C669"),
             (BQB.IS, "pubchem.compound/16051935"),
             (BQB.IS, "inchikey/USAHOPJHPJHUNS-IFCNUISUSA-N"),
@@ -2772,7 +2694,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="morphine hydrochloride",
         description="Morphine hydrochloride is the hydrochloride salt of morphine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:55340"),
+            (BQB.IS, "CHEBI:55340"),
             (BQB.IS, "NCIT:C83973"),
             (BQB.IS, "pubchem.compound/5464110"),
         ],
@@ -2784,7 +2706,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Metabolite of morphine. Morphine-3-glucuronide belongs to the class of organic compounds known "
         "as morphinans.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:80631"),
+            (BQB.IS, "CHEBI:80631"),
             (BQB.IS, "pubchem.compound/5484731"),
             (BQB.IS, "inchikey/WAEXKFONHRHFBZ-ZXDZBKESSA-N"),
         ],
@@ -2796,7 +2718,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Metabolite of morphine. Morphine-6-glucuronide belongs to the class of organic compounds known "
         "as morphinans.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:80581"),
+            (BQB.IS, "CHEBI:80581"),
             (BQB.IS, "pubchem.compound/5360621"),
             (BQB.IS, "inchikey/GNJCUHZOSOYIEC-GAROZEBRSA-N"),
             (BQB.IS_VERSION_OF, "NCIT:C166899"),
@@ -2818,7 +2740,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="normorphine",
         description="Normorphine is a morphinane alkaloid.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:7633"),
+            (BQB.IS, "CHEBI:7633"),
             (BQB.IS, "NCIT:C170234"),
             (BQB.IS, "pubchem.compound/5462508"),
         ],
@@ -2831,7 +2753,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         mass=447.4,
         formula="C22H25NO9",
         description="Metabolite of normorphine.",
-        annotations=[],
     ),
     # codeine/morphine derived
     Substance(
@@ -2914,20 +2835,18 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="pholcodine",
-        name="pholcodine",
         description="A morphinane alkaloid that is a derivative of morphine with a 2-morpholinoethyl group at "
         "the 3-position. Pholcodine is a drug which is an opioid cough suppressant (antitussive). "
         "It helps suppress unproductive coughs and also has a mild sedative effect, but has little or no "
         "analgesic effects.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:53579"),
+            (BQB.IS, "CHEBI:53579"),
             (BQB.IS, "NCIT:C87365"),
         ],
         synonyms=["homocodein", "morpholinylethylmorphine"],
     ),
     Substance(
         sid="guaifenesin",
-        name="guaifenesin",
         description="Guaifenesin is thought to act as an expectorant by increasing the volume and reducing the "
         "viscosity of secretions in the trachea and bronchi. It has been said to aid in the flow of "
         "respiratory tract secretions, allowing ciliary movement to carry the loosened secretions upward "
@@ -2935,32 +2854,30 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "removal of the secretions. "
         "Guaifenesin has muscle relaxant and anticonvulsant properties and may act as an NMDA receptor antagonist.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:5551"),
+            (BQB.IS, "CHEBI:5551"),
         ],
         synonyms=["guaifenesin", "mucinex"],
     ),
     Substance(
         sid="cilazapril",
-        name="cilazapril",
         description="A pyridazinodiazepine resulting from the formal condensation of "
         "the carboxy group of cilazaprilat with ethanol. It is a drug used "
         "in the treatment of hypertension and heart failure.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3698"),
+            (BQB.IS, "CHEBI:3698"),
             (BQB.IS, "NCIT:C76134"),
         ],
         synonyms=[],
     ),
     Substance(
         sid="cilazaprilat",
-        name="cilazaprilat",
         description="The active metabolite of cilazapril, a pyridazine angiotensin-converting "
         "enzyme (ACE) inhibitor with antihypertensive activity. As a prodrug, "
         "cilazapril is rapidly metabolized in the liver to cilazaprilat; "
         "cilazaprilat competitively binds to and inhibits ACE, thereby blocking the "
         "conversion of angiotensin I to angiotensin II.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:81005"),
+            (BQB.IS, "CHEBI:81005"),
             (BQB.IS, "NCIT:C75927"),
         ],
         synonyms=[],
@@ -2975,7 +2892,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "and conduction of impulses resulting in an increase of the threshold for excitation and "
         "decreased depolarization during phase 0 of the action potential.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28593"),
+            (BQB.IS, "CHEBI:28593"),
             (BQB.IS, "NCIT:C793"),
         ],
     ),
@@ -2984,7 +2901,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="quinidine sulphate",
         description="quinidine sulphate",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28593"),
+            (BQB.IS, "CHEBI:28593"),
             (BQB.IS, "NCIT:C793"),
         ],
     ),
@@ -2994,7 +2911,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Debrisoquine is a derivative of guanidine. It is an antihypertensive drug similar to "
         "guanethidine. Debrisoquine is frequently used for phenotyping the CYP2D6 enzyme, "
         "a drug-metabolizing enzyme.",
-        annotations=[(BQB.IS, "chebi/CHEBI:34665")],
+        annotations=[(BQB.IS, "CHEBI:34665")],
     ),
     Substance(
         sid="deb-sul",
@@ -3002,7 +2919,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Debrisoquine is a derivative of guanidine. It is an antihypertensive drug similar to "
         "guanethidine. Debrisoquine is frequently used for phenotyping the CYP2D6 enzyme, "
         "a drug-metabolizing enzyme.",
-        annotations=[(BQB.IS, "chebi/CHEBI:50973")],
+        annotations=[(BQB.IS, "CHEBI:50973")],
     ),
     Substance(
         sid="4hdeb",
@@ -3010,7 +2927,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Metabolite of debrisoquine. A patient's CYP2D6 phenotype is often clinically determined via "
         "the administration of debrisoquine (a selective CYP2D6 substrate) and subsequent plasma "
         "concentration assay of the debrisoquine metabolite (4-hydroxydebrisoquine).",
-        annotations=[(BQB.IS, "chebi/CHEBI:63800")],
+        annotations=[(BQB.IS, "CHEBI:63800")],
     ),
     Substance(
         sid="deb/4hdeb",
@@ -3025,18 +2942,17 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "in motor cortex, and stabilizes the threshold against hyperexcitability caused by excessive "
         "stimulation.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6757"),
+            (BQB.IS, "CHEBI:6757"),
             (BQB.IS, "NCIT:C66091"),
         ],
     ),
     Substance(
         sid="phenytoin",
-        name="phenytoin",
         description="A hydantoin derivative and a non-sedative antiepileptic agent with anticonvulsant activity. "
         "Phenytoin potentially acts by promoting sodium efflux from neurons located in the motor cortex "
         "reducing post-tetanic potentiation at synapses.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8107"),
+            (BQB.IS, "CHEBI:8107"),
             (BQB.IS, "NCIT:C741"),
         ],
     ),
@@ -3048,7 +2964,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "complex, which leads to prolonged and increased frequency of opening of the chloride channel "
         "within the receptor complex.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8412"),
+            (BQB.IS, "CHEBI:8412"),
             (BQB.IS, "NCIT:C47686"),
         ],
     ),
@@ -3061,7 +2977,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "(GABA) in the brain, probably due to inhibition of the enzymes responsible for the catabolism "
         "of GABA.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9925"),
+            (BQB.IS, "CHEBI:9925"),
             (BQB.IS, "NCIT:C48029"),
         ],
     ),
@@ -3075,7 +2991,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "endothelium, monocyte and neutrophil aggregation, increased airway edema, increased capillary "
         "permeability, and bronchoconstriction.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:50730"),
+            (BQB.IS, "CHEBI:50730"),
             (BQB.IS, "NCIT:C66189"),
             (BQB.IS, "inchikey/UCHDWCPVSPXUMX-TZIWLTJVSA-N"),
             (BQB.IS, "pubchem.compound/5281040"),
@@ -3144,9 +3060,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="montelukast-metabolites",
-        name="montelukast-metabolites",
         description="Sum of montelukast and all metabolites for radioactive tracing studies.",
-        annotations=[],
     ),
     Substance(
         sid="clonazepam",
@@ -3154,16 +3068,15 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "and photosensitive epilepsy, anticonvulsant Clonazepam appears to enhance gamma-aminobutyric "
         "acid receptor responses, although its mechanism of action is not clearly understood.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3756"),
+            (BQB.IS, "CHEBI:3756"),
             (BQB.IS, "NCIT:C28935"),
         ],
     ),
     Substance(
         sid="amenamevir",
-        name="amenamevir",
         description="A novel helicase-primase inhibitor that is active against varicella-zoster virus and herpes simplex virus types 1 and 2. Amenamenir stabilizes the interaction between the helicase-primase and its DNA substrates, preventing the progression through helicase or primase catalytic cycles, thus interfering with viral DNA replication and viral growth.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:757067"),
+            (BQB.IS, "CHEBI:757067"),
             (BQB.IS, "NCIT:C90782"),
             (BQB.IS, "pubchem.compound/11397521"),
             (BQB.IS, "inchikey/MNHNIVNAFBSLLX-UHFFFAOYSA-N"),
@@ -3172,12 +3085,11 @@ SUBSTANCE_NODES: list[InfoNode] = [
     # sparteine
     Substance(
         sid="sparteine",
-        name="sparteine",
         description="Sparteine is a quinolizidine alkaloid and a quinolizidine alkaloid fundamental parent. "
         "Sparteine is a plant alkaloid derived from Cytisus scoparius and Lupinus mutabilis which may "
         "chelate calcium and magnesium. Often applied in CYP2D6 phenotyping.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28827"),
+            (BQB.IS, "CHEBI:28827"),
             (BQB.IS, "NCIT:C152414"),
             (BQB.IS, "pubchem.compound/644020"),
         ],
@@ -3199,7 +3111,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="2,3-didehydrosparteine is a quinolizidine alkaloid obtained by formal dehydrogenation at the "
         "2,3-position of sparteine. It derives from a sparteine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:29130"),
+            (BQB.IS, "CHEBI:29130"),
             (BQB.IS, "pubchem.compound/3035890"),
             (BQB.IS, "inchikey/BWKNRAAXVUYXAH-XQLPTFJDSA-N"),
         ],
@@ -3213,7 +3125,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "It has a role as a human xenobiotic metabolite. It is a quinolizidine alkaloid, a "
         "tertiary amino compound and an organic heterotetracyclic compound.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:143195"),
+            (BQB.IS, "CHEBI:143195"),
             (BQB.IS, "pubchem.compound/160614"),
         ],
         synonyms=["5,6-didehydrosparteine"],
@@ -3239,7 +3151,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     # regorafenib
     Substance(
         sid="regorafenib",
-        name="regorafenib",
         description="Regorafenib is an orally-administered inhibitor of multiple kinases. It is used for the treatment of metastatic colorectal cancer, advanced gastrointestinal stromal tumours, and hepatocellular carcinoma.",
         annotations=[
             (BQB.IS, "pubchem.compound/11167602"),
@@ -3263,7 +3174,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="regorafenib-m3",
         name="regorafenib-M3",
         description="Regorafenib metabolite M3.",
-        annotations=[],
         synonyms=[],
     ),
     Substance(
@@ -3318,7 +3228,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="regorafenib-metabolites",
-        name="regorafenib-metabolites",
         description="Regorafenib and regorafenib metabolites for radioactive studies.",
         annotations=[
             (BQB.IS, "pubchem.compound/145996739"),
@@ -3328,7 +3237,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="pemetrexed",
-        name="pemetrexed",
         description="Pemetrexed is a chemotherapy drug that is manufactured and marketed by Eli Lilly and Company under the brand name Alimta. It is indicated for use in combination with cisplatin for the treatment of patients with malignant pleural mesothelioma whose disease is either unresectable or who are otherwise not candidates for curative surgery. Its use in non-small cell lung cancer has also been investigated.",
         annotations=[
             (BQB.IS, "pubchem.compound/135410875"),
@@ -3340,7 +3248,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="cisplatin",
-        name="cisplatin",
         description="A diamminedichloroplatinum compound in which the two ammine ligands and two chloro ligands are oriented in a <i>cis</i> planar configuration around the central platinum ion. An anticancer drug that interacts with, and forms cross-links between, DNA and proteins, it is used as a neoplasm inhibitor to treat solid tumours, primarily of the testis and ovary.",
         annotations=[
             (BQB.IS, "pubchem.compound/5702198"),
@@ -3351,7 +3258,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="platinum",
-        name="platinum",
         description="Platinum is a nickel group element atom and a platinum group metal atom.",
         annotations=[
             (BQB.IS, "pubchem.compound/23939"),
@@ -3363,7 +3269,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     # lenvatinib
     Substance(
         sid="lenvatinib",
-        name="lenvatinib",
         description="Lenvatinib is a receptor tyrosine kinase (RTK) inhibitor that inhibits the kinase activities of vascular endothelial growth factor (VEGF) receptors VEGFR1 (FLT1), VEGFR2 (KDR), and VEGFR3 (FLT4). Lenvatinib also inhibits other RTKs that have been implicated in pathogenic angiogenesis, tumor growth, and cancer progression in addition to their normal cellular functions, including fibroblast growth factor (FGF) receptors FGFR1, 2, 3, and 4; the platelet derived growth factor receptor alpha (PDGFRα), KIT, and RET.",
         annotations=[
             (BQB.IS, "pubchem.compound/9823820"),
@@ -3407,19 +3312,15 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="lenvatinib-m5",
         name="lenvatinib-M5",
         description="Lenvatinib metabolite M5.",
-        annotations=[],
         synonyms=[],
     ),
     Substance(
         sid="lenvatinib-metabolites",
-        name="lenvatinib-metabolites",
         description="lenvatinib and lenvatinib metabolites. Used for total radioactivity "
         "measurements.",
-        annotations=[],
     ),
     Substance(
         sid="cetuximab",
-        name="cetuximab",
         description="A recombinant, chimeric monoclonal antibody directed against the epidermal growth factor (EGFR) with antineoplastic activity. Cetuximab binds to the extracellular domain of the EGFR, thereby preventing the activation and subsequent dimerization of the receptor; the decrease in receptor activation and dimerization may result in an inhibition in signal transduction and anti-proliferative effects. This agent may inhibit EGFR-dependent primary tumor growth and metastasis. EGFR is overexpressed on the cell surfaces of various solid tumors.",
         annotations=[
             (BQB.IS, "NCIT:C1723"),
@@ -3428,7 +3329,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="pembrolizumab",
-        name="pembrolizumab",
         description="A humanized monoclonal immunoglobulin (Ig) G4 antibody directed against human cell surface receptor PD-1 (programmed death-1 or programmed cell death-1) with potential immune checkpoint inhibitory and antineoplastic activities. Upon administration, pembrolizumab binds to PD-1, an inhibitory signaling receptor expressed on the surface of activated T cells, and blocks the binding to and activation of PD-1 by its ligands, which results in the activation of T-cell-mediated immune responses against tumor cells. The ligands for PD-1 include programmed cell death ligand 1 (PD-L1), overexpressed on certain cancer cells, and programmed cell death ligand 2 (PD-L2), which is primarily expressed on APCs. Activated PD-1 negatively regulates T-cell activation and plays a key role in in tumor evasion from host immunity.",
         annotations=[
             (BQB.IS, "pubchem.compound/168009853"),
@@ -3466,7 +3366,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="R-salbutamol sulphate",
         label="(R)-salbutamol sulphate",
         description="(R)-salbutamol sulphate",
-        annotations=[],
         synonyms=["R-albuterol sulphate", "R-salbutamol 4-O-sulphate"],
     ),
     Substance(
@@ -3476,7 +3375,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "β2 adrenergic receptor agonist which works by causing relaxation of airway smooth muscle.",
         annotations=[
             (BQB.IS, "pubchem.compound/39859"),
-            (BQB.IS, "chebi/CHEBI:2549"),
+            (BQB.IS, "CHEBI:2549"),
             (BQB.IS, "inchikey/NDAUXUAQIAJITI-UHFFFAOYSA-N"),
         ],
         synonyms=["albuterol", "ventolin"],
@@ -3488,7 +3387,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="(+)S-salbutamol",
         annotations=[
             (BQB.IS_VERSION_OF, "pubchem.compound/39859"),
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:2549"),
+            (BQB.IS_VERSION_OF, "CHEBI:2549"),
         ],
         synonyms=["S-albuterol"],
     ),
@@ -3499,13 +3398,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="(-)R-salbutamol",
         annotations=[
             (BQB.IS_VERSION_OF, "pubchem.compound/39859"),
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:2549"),
+            (BQB.IS_VERSION_OF, "CHEBI:2549"),
         ],
         synonyms=["R-albuterol"],
     ),
     Substance(
         sid="r-salbutamol/s-salbutamol",
-        name="r-salbutamol/s-salbutamol",
         label="R-salbutamol/S-salbutamol",
         description="r-salbutamol/s-salbutamol",
         parents=["r-salbutamol", "s-salbutamol"],
@@ -3516,7 +3414,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "among others, is a steroid medication. It is available as an inhaler, cream, pills, and nasal spray. "
         "A 17alpha-hydroxy steroid that is prednisolone in which the hydrogens at the 9alpha and 16beta "
         "positions are substituted by a chlorine and a methyl group, respectively.",
-        annotations=[(BQB.IS, "chebi/CHEBI:3001")],
+        annotations=[(BQB.IS, "CHEBI:3001")],
         synonyms=["beclometasone dipropionate", "Qvar"],
     ),
     Substance(
@@ -3530,7 +3428,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="captopril",
-        name="captopril",
         label="captopril",
         description="A sulfhydryl-containing analog of proline with antihypertensive "
         "activity and potential antineoplastic activity. Captopril "
@@ -3538,7 +3435,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "thereby decreasing levels of angiotensin II, increasing plasma "
         "renin activity, and decreasing aldosterone secretion.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3380"),
+            (BQB.IS, "CHEBI:3380"),
             (BQB.IS, "NCIT:C340"),
             (BQB.IS, "pubchem.compound/44093"),
             (BQB.IS, "inchikey/FAKRSMQSSFJEIM-RQJHMYQMSA-N"),
@@ -3557,7 +3454,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="One of metabolites of captopril. Is formed in reaction "
         "of captopril or captopril disulfide with methyltransferase "
         "enzyme in human red blood cells, liver, etc. ",
-        annotations=[],
         synonyms=[
             "S methyl captopril",
             "S-methyl metabolite of captopril",
@@ -3569,7 +3465,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="captopril mixed disulfide",
         label="captopril mixed disulfide",
         description="Mixed captopril disulfides (not dimer). Can dissolve to unchanged captopril.",
-        annotations=[],
     ),
     Substance(
         sid="captopril-dimer",
@@ -3587,7 +3482,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="captopril disulfide",
         description="Inactive disulfides of captopril (captopril mixed disulfide and captopril dimer). "
         "Can dissolve to unchanged captopril. ",
-        annotations=[],
         synonyms=["disulfide conjugates of captopril"],
     ),
     Substance(
@@ -3595,22 +3489,18 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="total captopril",
         label="total captopril",
         description="Sum of unchanged captopril and captopril disulfide.",
-        annotations=[],
         synonyms=["captopril total"],
     ),
     Substance(
         sid="captopril substances",
-        name="captopril substances",
         label="captopril substances",
         description="All captopril substances: free captopril, captopril disulfide, s-methyl-captopril",
-        annotations=[],
     ),
     Substance(
         sid="protein-bound-captopril",
         name="protein bound captopril",
         label="protein bound captopril",
         description="Captopril that is bound to albumin.",
-        annotations=[],
     ),
     Substance(
         sid="enalapril maleate",
@@ -3621,7 +3511,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "competitively binds to and inhibits ACE, thereby blocking the "
         "conversion of angiotensin I to angiotensin II.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:4785"),
+            (BQB.IS, "CHEBI:4785"),
             (BQB.IS, "SNOMEDCT:387165009"),
             (BQB.IS, "NCIT:C468"),
         ],
@@ -3633,7 +3523,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "active form enalaprilat. Enalaprilat competitively binds to and inhibits ACE, thereby blocking "
         "the conversion of angiotensin I to angiotensin II. ",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:4784"),
+            (BQB.IS, "CHEBI:4784"),
             (BQB.IS, "NCIT:C62027"),
             (BQB.IS, "pubchem.compound/5388962"),
             (BQB.IS, "inchikey/GBXSMTUPTTWBMN-XIRDDKMYSA-N"),
@@ -3653,7 +3543,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/5462501"),
             (BQB.IS, "inchikey/LZFZMUMEGBBDTC-QEJZJMRPSA-N"),
-            (BQB.IS, "chebi/CHEBI:4786"),
+            (BQB.IS, "CHEBI:4786"),
             (BQB.IS, "NCIT:C47510"),
         ],
         synonyms=["MK-422"],
@@ -3686,7 +3576,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "NPPA gene. This protein is involved in both cardiac "
         "homeostasis and pregnancy.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:80233"),
+            (BQB.IS, "CHEBI:80233"),
             (BQB.IS, "NCIT:C139911"),
         ],
         synonyms=[
@@ -3708,7 +3598,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "replaced by the amino group of (2S)-2-amino-4-phenylbutanoic "
         "acid.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:88200"),
+            (BQB.IS, "CHEBI:88200"),
         ],
         synonyms=[],
     ),
@@ -3722,7 +3612,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "the conversion of angiotensin I to angiotensin II. This "
         "prevents the potent vasoconstrictive actions of "
         "angiotensin II, resulting in vasodilation.",
-        annotations=[(BQB.IS, "chebi/CHEBI:3012"), (BQB.IS, "NCIT:C28862")],
+        annotations=[(BQB.IS, "CHEBI:3012"), (BQB.IS, "NCIT:C28862")],
         synonyms=[],
     ),
     Substance(
@@ -3734,7 +3624,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "It reduces exercise heart rates and delays atrioventricular "
         "conduction, with overall oxygen requirements decreasing.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:2904"),
+            (BQB.IS, "CHEBI:2904"),
             (BQB.IS, "NCIT:C28836"),
         ],
     ),
@@ -3744,7 +3634,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "blocks voltage-sensitive calcium channels in the blood vessels, by inhibiting the ion-control "
         "gating mechanisms, thereby preventing calcium levels increase by other revenues.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:101278"),
+            (BQB.IS, "CHEBI:101278"),
             (BQB.IS, "NCIT:C61725"),
         ],
     ),
@@ -3752,7 +3642,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="desacetyldiltiazem",
         description="Metabolite of diltiazem. Deacetyldiltiazem is a benzothiazepine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:169833"),
+            (BQB.IS, "CHEBI:169833"),
             (BQB.IS, "pubchem.compound/91638"),
             (BQB.IS, "inchikey/NZHUXMZTSSZXSB-MOPGFXCFSA-N"),
         ],
@@ -3767,29 +3657,26 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="anticonvulsants",
-        name="anticonvulsants",
         description="Medicine to stop, prevent, or control seizures (convulsions).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:35623"),
+            (BQB.IS, "CHEBI:35623"),
             (BQB.IS, "NCIT:C264"),
         ],
         synonyms=["Anticonvulsant Agent"],
     ),
     Substance(
         sid="ranitidine",
-        name="ranitidine",
         description="A member of the class of histamine H2-receptor antagonists with antacid activity. Ranitidine is "
         "a competitive and reversible inhibitor of the action of histamine, released by "
         "enterochromaffin-like (ECL) cells, at the histamine H2-receptors on parietal cells in the "
         "stomach, thereby inhibiting the normal and meal-stimulated secretion of stomach acid.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8776"),
+            (BQB.IS, "CHEBI:8776"),
             (BQB.IS, "NCIT:C29412"),
         ],
     ),
     Substance(
         sid="analgesics",
-        name="analgesics",
         description="Compounds that alleviate pain without loss of consciousness. Analgesics act by various mechanisms "
         "including binding with opioid receptors and decreasing inflammation. Choice of analgesic may be "
         "determined by the type of pain. These compounds include opioid, non-opioid and adjuvant "
@@ -3801,21 +3688,19 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="isoniazid",
-        name="isoniazid",
         description="Isoniazid, also known as isonicotinic acid hydrazide (INH), is an antibiotic used "
         "for the treatment of tuberculosis.A carbohydrazide obtained by formal condensation between "
         "pyridine-4-carboxylic acid and hydrazine.",
-        annotations=[(BQB.IS, "chebi/CHEBI:6030")],
+        annotations=[(BQB.IS, "CHEBI:6030")],
         synonyms=["isonicotinic acid hydrazide", "INH"],
     ),
     Substance(
         sid="sunitinib",
-        name="sunitinib",
         description="An indolinone derivative and tyrosine kinase inhibitor with potential antineoplastic activity. "
         "Sunitinib blocks the tyrosine kinase activities of vascular endothelial growth factor receptor "
         "2 (VEGFR2), platelet-derived growth factor receptor b (PDGFRb), and c-kit, thereby inhibiting "
         "angiogenesis and cell proliferation.",
-        annotations=[(BQB.IS, "chebi/CHEBI:38940"), (BQB.IS, "NCIT:C71622")],
+        annotations=[(BQB.IS, "CHEBI:38940"), (BQB.IS, "NCIT:C71622")],
     ),
     Substance(
         sid="armodafinil",
@@ -3825,13 +3710,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "the dopamine-reuptake pump, which leads to an increase in extracellular dopamine levels in some "
         "brain regions.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:77590"),
+            (BQB.IS, "CHEBI:77590"),
             (BQB.IS, "NCIT:C65241"),
         ],
     ),
     Substance(
         sid="modafinil sulfone",
-        name="modafinil sulfone",
         mass=289.4,
         formula="C15H15NO3S",
         description="Modafinil sulfone (code name CRL-41056) is an achiral, oxidized metabolite of modafinil, "
@@ -3849,18 +3733,8 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="An antineoplastic agent that inhibits the Bcr-Abl fusion protein tyrosine kinase, an abnormal "
         "enzyme produced by chronic myeloid leukemia cells that contain the Philadelphia chromosome.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:45783"),
+            (BQB.IS, "CHEBI:45783"),
             (BQB.IS, "NCIT:C62035"),
-        ],
-    ),
-    Substance(
-        sid="phenobarbital",
-        description="A long-acting barbituric acid derivative with antipsychotic property. Phenobarbital binds to "
-        "and activates the gamma-aminobutyric acid (GABA)-A receptor, thereby mimicking the inhibitory "
-        "actions of GABA in the brain.",
-        annotations=[
-            (BQB.IS, "chebi/CHEBI:8069"),
-            (BQB.IS, "NCIT:C739"),
         ],
     ),
     Substance(
@@ -3870,7 +3744,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "gamma-aminobutyric acid (GABA) receptor-chloride ionophore complex in the central "
         "nervous system (CNS).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3611"),
+            (BQB.IS, "CHEBI:3611"),
             (BQB.IS, "NCIT:C47443"),
         ],
         synonyms=["Librium"],
@@ -3884,7 +3758,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "of prostaglandin, platelet aggregation, and inflammation. This agent exhibits analgesic, "
         "antipyretic, and anticoagulant properties.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:15365"),
+            (BQB.IS, "CHEBI:15365"),
             (BQB.IS, "NCIT:C287"),
         ],
         synonyms=["aspirin"],
@@ -3894,7 +3768,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Salicylamide. Metabolite of acetylsalicylic acid. The simplest member of the class of "
         "salicylamides derived from salicylic acid.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:32114"),
+            (BQB.IS, "CHEBI:32114"),
             (BQB.IS, "NCIT:C80566"),
         ],
     ),
@@ -3928,7 +3802,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "compound in plants. It has direct activity as an anti-inflammatory agent and acts as a topical "
         "antibacterial agent due to its ability to promote exfoliation.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:16914"),
+            (BQB.IS, "CHEBI:16914"),
             (BQB.IS, "NCIT:C61934"),
         ],
     ),
@@ -3937,14 +3811,14 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="1-salicylate glucuronide",
         description="1-salicylate glucuronide. Metabolite of acetylsalicylic acid. A beta-D-glucosiduronic acid that "
         "is the glucuronide conjugate of salicyclic acid.",
-        annotations=[(BQB.IS, "chebi/CHEBI:73961")],
+        annotations=[(BQB.IS, "CHEBI:73961")],
     ),
     Substance(
         sid="salicyluric-acid",
         name="salicyluric acid",
         description="Salicyluric acid. Metabolite of acetylsalicylic acid. An N-acylglycine in which the acyl group "
         "is specified as 2-hydroxybenzoyl.",
-        annotations=[(BQB.IS, "chebi/CHEBI:9008")],
+        annotations=[(BQB.IS, "CHEBI:9008")],
     ),
     Substance(
         sid="prostaglandin_e2",
@@ -3955,9 +3829,9 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "is the most common and most biologically potent of mammalian "
         "prostaglandins.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:15551"),
+            (BQB.IS, "CHEBI:15551"),
             (BQB.IS, "NCIT:C112043"),
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:26333"),  # prostaglandin
+            (BQB.IS_VERSION_OF, "CHEBI:26333"),  # prostaglandin
             (BQB.IS_VERSION_OF, "NCIT:C782"),  # prostaglandin
         ],
         synonyms=["PGE2"],
@@ -3971,7 +3845,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "on central and peripheral neurons and involved in pain "
         "transmission.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:80308"),
+            (BQB.IS, "CHEBI:80308"),
             (BQB.IS, "SNOMEDCT:585007"),
             (BQB.IS, "NCIT:C847"),
         ],
@@ -3982,7 +3856,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="spironolactone",
         description="A steroid lactone that is 17α-pregn-4-ene-21,17-carbolactone substituted by an oxo group at "
         "position 3 and an α-acetylsulfanyl group at position 7.",
-        annotations=[(BQB.IS, "chebi/CHEBI:9241")],
+        annotations=[(BQB.IS, "CHEBI:9241")],
     ),
     Substance(
         sid="mefenamic acid",
@@ -3991,20 +3865,19 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "cyclo-oxygenase I and II, resulting in a decreased formation of precursors of prostaglandins "
         "and thromboxanes.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6717"),
+            (BQB.IS, "CHEBI:6717"),
             (BQB.IS, "NCIT:C47599"),
         ],
     ),
     Substance(
         sid="amiloride",
-        annotations=[(BQB.IS, "chebi/CHEBI:2639")],
+        annotations=[(BQB.IS, "CHEBI:2639")],
         description="A member of the class of pyrazines resulting from the formal "
         "monoacylation of guanidine with the carboxy group of "
         "3,5-diamino-6-chloropyrazine-2-carboxylic acid.",
     ),
     Substance(
         sid="glibenclamide",
-        name="glibenclamide",
         label="glibenclamide (glyburide)",
         description="Glyburide is a sulfonamide urea derivative with antihyperglycemic activity that can potentially "
         "be used to decrease cerebral edema. Upon administration, glyburide binds to and blocks the "
@@ -4020,91 +3893,83 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="tizanidine",
-        name="tizanidine",
         description="Tizanidine, sold under the brand name Zanaflex among others, is a medication that is used to "
         "treat muscle spasticity due to spinal cord injury or multiple sclerosis. Effectiveness appears "
         "similar to baclofen or diazepam. It is taken by mouth.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:63629"),
+            (BQB.IS, "CHEBI:63629"),
             (BQB.IS, "NCIT:C61976"),
         ],
     ),
     Substance(
         sid="venlafaxine",
-        name="venlafaxine",
         description="A synthetic phenethylamine bicyclic derivative with antidepressant activity. Venlafaxine and "
         "its active metabolite, O-desmethylvenlafaxine (ODV), are potent inhibitors of neuronal serotonin "
         "and norepinephrine reuptake and weak dopamine reuptake inhibitors.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9943"),
+            (BQB.IS, "CHEBI:9943"),
             (BQB.IS, "NCIT:C1278"),
         ],
     ),
     Substance(
         sid="lomefloxacin",
-        name="lomefloxacin",
         description="A fluoroquinolone antibiotic, used (generally as the hydrochloride salt) to treat bacterial "
         "infections including bronchitis and urinary tract infections. A synthetic broad-spectrum "
         "fluoroquinolone with antibacterial activity. Lomefloxacin inhibits "
         "DNA gyrase, a type II topoisomerase involved in the induction or relaxation of supercoiling "
         "during DNA replication.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:116278"),
+            (BQB.IS, "CHEBI:116278"),
             (BQB.IS, "NCIT:C61814"),
         ],
     ),
     Substance(
         sid="ephedrine",
-        name="ephedrine",
         description="An alkaloid that is an hydroxylated form of phenethylamineand sympathomimetic amine, with "
         "potential bronchodilatory and anti-hypotensive activities. Following administration, "
         "ephedrine activates post-synaptic noradrenergic receptors.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:15407"),
+            (BQB.IS, "CHEBI:15407"),
             (BQB.IS, "NCIT:C472"),
         ],
     ),
     Substance(
         sid="pseudoephedrine",
-        name="pseudoephedrine",
         description="A phenethylamine and a diastereomer of ephedrine with sympathomimetic property. "
         "Pseudoephedrine displaces norepinephrine from storage vesicles in presynaptic neurones, "
         "thereby releasing norepinephrine into the neuronal synapses where it stimulates primarily "
         "alpha-adrenergic receptors.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:51209"),
+            (BQB.IS, "CHEBI:51209"),
             (BQB.IS, "NCIT:C61914"),
         ],
     ),
     Substance(
         sid="ibuprofen",
-        name="ibuprofen",
         description="A propionic acid derivate and nonsteroidal anti-inflammatory drug (NSAID) with "
         "anti-inflammatory, analgesic, and antipyretic effects. Ibuprofen inhibits the activity of "
         "cyclo-oxygenase I and II, resulting in a decreased formation of precursors of prostaglandins "
         "and thromboxanes. This leads to decreased prostaglandin synthesis, by prostaglandin synthase, "
         "the main physiologic effect of ibuprofen.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:5855"),
+            (BQB.IS, "CHEBI:5855"),
             (BQB.IS, "NCIT:C561"),
         ],
     ),
     Substance(
         sid="flurbiprofen",
-        name="flurbiprofen",
         description="A derivative of propionic acid, and a phenylalkanoic acid derivative of non-steroidal "
         "antiinflammatory drugs (NSAIDs) with analgesic, antiinflammatory and antipyretic effects. "
         "Flurbiprofen non-selectively binds to and inhibits cyclooxygenase (COX). This results in a "
         "reduction of arachidonic acid conversion into prostaglandins that are involved in the regulation "
         "of pain, inflammation and fever.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:5130"),
+            (BQB.IS, "CHEBI:5130"),
             (BQB.IS, "NCIT:C508"),
         ],
     ),
     Substance(
         sid="4-hydroxyflurbiprofen",
-        name="4-hydroxyflurbiprofen",
         description="Metabolite of flurbiprofen. 4'-Hydroxyflurbiprofen belongs to the class of organic compounds "
         "known as biphenyls and derivatives. These are organic compounds containing to benzene rings "
         "linked together by a C-C bond. 4'-Hydroxyflurbiprofen is considered to be a practically "
@@ -4118,12 +3983,11 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="enoxacin",
-        name="enoxacin",
         description="Enoxacin belongs to a group called fluoroquinolones. Its mode of action depends upon blocking "
         "bacterial DNA replication by binding itself to DNA gyrase and causing double-stranded breaks in "
         "the bacterial chromosome.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:157175"),
+            (BQB.IS, "CHEBI:157175"),
             (BQB.IS, "NCIT:C65512"),
         ],
     ),
@@ -4134,36 +3998,33 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "bacteria, as well as some gram-positive bacteria. Pipemidic acid exhibits greater activity than "
         "piromidic acid or nalidixic acid.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:75250"),
+            (BQB.IS, "CHEBI:75250"),
             (BQB.IS, "NCIT:C66394"),
         ],
     ),
     Substance(
         sid="norfloxacin",
-        name="norfloxacin",
         description="A synthetic, broad-spectrum fluoroquinolone with antibacterial activity. Norfloxacin inhibits "
         "activity of DNA gyrase, thereby blocking bacterial DNA replication. Norfloxacin concentrates in "
         "the renal tubules and bladder and is bactericidal against a wide range of aerobic gram-positive "
         "and gram-negative organisms.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:100246"),
+            (BQB.IS, "CHEBI:100246"),
             (BQB.IS, "NCIT:C47638"),
         ],
     ),
     Substance(
         sid="ofloxacin",
-        name="ofloxacin",
         description="A fluoroquinolone antibacterial antibiotic. Ofloxacin binds to and inhibits bacterial "
         "topoisomerase II (DNA gyrase) and topoisomerase IV, enzymes involved in DNA replication and "
         "repair, resulting in cell death in sensitive bacterial species.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:7731"),
+            (BQB.IS, "CHEBI:7731"),
             (BQB.IS, "NCIT:C712"),
         ],
     ),
     Substance(
         sid="ethanol",
-        name="ethanol",
         description="A primary alcohol that is ethane in which one of the hydrogens is substituted by a hydroxy group. "
         "A volatile liquid prepared by fermentation of certain carbohydrates. Alcohol acts as a central "
         "nervous system (CNS) depressant, a diuretic, and a disinfectant. Although the exact mechanism of "
@@ -4172,19 +4033,18 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "to GABA-A receptors, or through inhibitory actions at N-methyl-D-aspartate (NMDA)-type glutamate "
         "receptors.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:16236"),
+            (BQB.IS, "CHEBI:16236"),
             (BQB.IS, "NCIT:C2190"),
         ],
         synonyms=["alcohol"],
     ),
     Substance(
         sid="capsaicin",
-        name="capsaicin",
         description="Capsaicin an active component of chili peppers, which are plants belonging to the genus Capsicum. "
         "It is a chemical irritant for mammals, including humans, and produces a sensation of burning in "
         "any tissue with which it comes into contact.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3374"),
+            (BQB.IS, "CHEBI:3374"),
         ],
         synonyms=["capsaicin"],
     ),
@@ -4197,7 +4057,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "(anti-progression activity), thereby exhibiting activities in three major steps of carcinogenesis.",
         annotations=[
             (BQB.IS, "pubchem.compound/445154"),
-            (BQB.IS, "chebi/CHEBI:27881"),
+            (BQB.IS, "CHEBI:27881"),
             (BQB.IS, "NCIT:C1215"),
             (BQB.IS, "inchikey/LUKBXSAWLPMMSZ-OWOJBTEDSA-N"),
         ],
@@ -4212,7 +4072,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "It derives from a diosmetin.",
         annotations=[
             (BQB.IS, "pubchem.compound/5281613"),
-            (BQB.IS, "chebi/CHEBI:4631"),
+            (BQB.IS, "CHEBI:4631"),
             (BQB.IS, "NCIT:C81663"),
             (BQB.IS, "inchikey/GZSOSUNBTXMUFQ-YFAPSIMESA-N"),
         ],
@@ -4227,7 +4087,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "CYP2E1.",
         annotations=[
             (BQB.IS, "pubchem.compound/2733"),
-            (BQB.IS, "chebi/CHEBI:3655"),
+            (BQB.IS, "CHEBI:3655"),
             (BQB.IS, "NCIT:C28926"),
             (BQB.IS, "inchikey/TZFWDZFKRBELIQ-UHFFFAOYSA-N"),
         ],
@@ -4240,7 +4100,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "oxazole ring (a five-member aliphatic ring with three carbon atoms, one oxygen atom, and one "
         "nitrogen atom) bearing a ketone group.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:184399"),
+            (BQB.IS, "CHEBI:184399"),
             (BQB.IS, "pubchem.compound/2734"),
             (BQB.IS, "inchikey/AGLXDWOTVQZHIQ-UHFFFAOYSA-N"),
         ],
@@ -4260,13 +4120,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="temocapril",
-        name="temocapril",
         description="Temocapril is a prodrug-type angiotensin-I converting enzyme (ACE) "
         "inhibitor not approved for use in the United States, but is "
         "approved in Japan and South Korea. Temocapril can also be used in "
         "hemodialysis patients without risk of serious accumulation.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:135771"),
+            (BQB.IS, "CHEBI:135771"),
             (BQB.IS, "inchikey/FIQOFIRCTOWDOW-BJLQDIEVSA-N"),
             (BQB.IS, "pubchem.compound/443874"),
         ],
@@ -4274,13 +4133,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="temocaprilat",
-        name="temocaprilat",
         description="Temocaprilat is an angiotensin-converting enzyme (ACE) inhibitor "
         "with antihypertensive activity. Temocaprilat competitively binds "
         "to and inhibits ACE, thereby blocking the conversion of "
         "angiotensin I to angiotensin II.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9436"),
+            (BQB.IS, "CHEBI:9436"),
             (BQB.IS, "inchikey/KZVWEOXAPZXAFB-BQFCYCMXSA-N"),
             (BQB.IS, "pubchem.compound/443151"),
         ],
@@ -4288,25 +4146,23 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="valsartan",
-        name="valsartan",
         description="Valsartan is an angiotensin II receptor blocker used alone or "
         "in combination with other agents to treat hypertension and reduce "
         "cardiovascular mortality after myocardial infarction.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:60846"),
+            (BQB.IS, "CHEBI:60846"),
             (BQB.IS, "inchikey/ACWBQPMHZXGDFX-QFIPXVFZSA-N"),
         ],
         synonyms=["137862-53-4"],
     ),
     Substance(
         sid="vildagliptin",
-        name="vildagliptin",
         description="A cyanopyrrolidine-based, orally bioavailable inhibitor of "
         "dipeptidyl peptidase 4 (DPP-4), with hypoglycemic activity. "
         "Vildagliptin's cyano moiety undergoes hydrolysis and this "
         "inactive metabolite is excreted mainly via the urine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:135285"),
+            (BQB.IS, "CHEBI:135285"),
             (BQB.IS, "NCIT:C66653"),
             (BQB.IS, "pubchem.compound/6918537"),
             (BQB.IS, "inchikey/SYOKIDBDQMKNDQ-XWTIBIIYSA-N"),
@@ -4322,7 +4178,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         " II for the binding of the angiotensin II receptor subtype 1 (AT1) in vascular smooth muscle, "
         "blocking angiotensin II-mediated vasoconstriction and inducing vasodilatation.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3348"),
+            (BQB.IS, "CHEBI:3348"),
             (BQB.IS, "NCIT:C28903"),
             (BQB.IS, "pubchem.compound/2540"),
             (BQB.IS, "inchikey/GHOSNRCGJFBJIB-UHFFFAOYSA-N"),
@@ -4331,14 +4187,13 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="candesartan",
-        name="candesartan",
         description="A synthetic, benzimidazole-derived angiotensin II receptor "
         "antagonist prodrug with antihypertensive activity. Candesartan selectively "
         "competes with angiotensin II for the binding of the angiotensin II receptor "
         "subtype 1 (AT1) in vascular smooth muscle, blocking angiotensin II-mediated "
         "vasoconstriction and inducing vasodilatation.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3347"),
+            (BQB.IS, "CHEBI:3347"),
             (BQB.IS, "NCIT:C65284"),
             (BQB.IS, "pubchem.compound/2541"),
             (BQB.IS, "inchikey/HTQMVQVXFRQIKW-UHFFFAOYSA-N"),
@@ -4347,7 +4202,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="silymarin",
-        name="silymarin",
         description="A mixture of flavonoids extracted from seeds of the MILK THISTLE, "
         "Silybum marianum. It consists primarily of silybin and its isomers, "
         "silicristin and silidianin. Silymarin displays antioxidant and "
@@ -4355,7 +4209,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "organs against chemical injury, and shows potential as an "
         "antihepatoxic agent.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:125451"),
+            (BQB.IS, "CHEBI:125451"),
             (BQB.IS, "pubchem.compound/5213"),
             (BQB.IS, "inchikey/ACWBQPMHZXGDFX-QFIPXVFZSA-N"),
         ],
@@ -4363,14 +4217,13 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="aminopyrine",
-        name="aminopyrine",
         description="Aminophenazone, also known as amidophen or aminopyrine, belongs to the class of organic "
         "compounds known as phenylpyrazoles. Phenylpyrazoles are compounds containing a phenylpyrazole "
         "skeleton, which consists of a pyrazole bound to a phenyl group. Aminophenazone is a drug which "
         "is used formerly widely used as an antipyretic and analgesic in rheumatism, neuritis, and common "
         "colds.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:160246"),
+            (BQB.IS, "CHEBI:160246"),
             (BQB.IS, "NCIT:C76792"),
             (BQB.IS, "pubchem.compound/6009"),
         ],
@@ -4380,17 +4233,16 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="14c_aminopyrine",
         name="[14C] aminopyrine",
         description="14C modified aminopyrine.",
-        annotations=[(BQB.IS_VERSION_OF, "chebi/CHEBI:160246")],
+        annotations=[(BQB.IS_VERSION_OF, "CHEBI:160246")],
         synonyms=["aminophenazone"],
     ),
     Substance(
         sid="antipyrine",
-        name="antipyrine",
         description="Antipyrine, also known as phenazone or anodynin, belongs to the class of organic compounds known "
         "as phenylpyrazoles. Phenylpyrazoles are compounds containing a phenylpyrazole skeleton, which "
         "consists of a pyrazole bound to a phenyl group.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:31225"),
+            (BQB.IS, "CHEBI:31225"),
             (BQB.IS, "NCIT:C76794"),
             (BQB.IS, "pubchem.compound/2206"),
         ],
@@ -4401,41 +4253,38 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="bromsulpthalein",
         description="An organosulfonic acid that consists of phthalide bearing four bromo substituents at positions "
         "4, 5, 6 and 7 as well as two 4-hydroxy-3-sulfophenyl groups both located at position 1.",
-        annotations=[(BQB.IS, "chebi/CHEBI:63836")],
+        annotations=[(BQB.IS, "CHEBI:63836")],
         synonyms=["bromosulfophthalein"],
     ),
     Substance(
         sid="phenylalanine",
-        name="phenylalanine",
         description="An essential aromatic amino acid in humans (provided by food). Phenylalanine plays a key role "
         "in the biosynthesis of other amino acids and is important in the structure and function of "
         "many proteins and enzymes. Phenylalanine is converted to tyrosine, used in the biosynthesis of "
         "dopamine and norepinephrine neurotransmitters.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28044"),
+            (BQB.IS, "CHEBI:28044"),
             (BQB.IS, "NCIT:C29601"),
         ],
     ),
     Substance(
         sid="diclofenac",
-        name="diclofenac",
         description="A nonsteroidal benzeneacetic acid derivative with anti-inflammatory activity. "
         "As a nonsteroidal anti-inflammatory drug (NSAID), diclofenac binds and chelates both isoforms "
         "of cyclooxygenase (COX-1 and-2), thereby blocking the conversion of arachidonic acid to "
         "pro-inflammatory-proprostaglandins.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:47381"),
+            (BQB.IS, "CHEBI:47381"),
             (BQB.IS, "NCIT:C28985"),
         ],
     ),
     Substance(
         sid="glycerol",
-        name="glycerol",
         description="A trihydroxyalcohol with localized osmotic diuretic and laxative effects. Glycerin elevates "
         "the blood plasma osmolality thereby extracting water from tissues into interstitial fluid and "
         "plasma. This agent also prevents water reabsorption in the proximal tubule in the kidney "
         "leading to an increase in water and sodium excretion and a reduction in blood volume.",
-        annotations=[(BQB.IS, "chebi/CHEBI:17754"), (BQB.IS, "NCIT:C29077")],
+        annotations=[(BQB.IS, "CHEBI:17754"), (BQB.IS, "NCIT:C29077")],
         synonyms=["glycerin"],
     ),
     Substance(
@@ -4447,83 +4296,76 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="carbamazepine",
-        name="carbamazepine",
         description="A tricyclic compound chemically related to tricyclic antidepressants (TCA) with "
         "anticonvulsant and analgesic properties. Carbamazepine exerts its anticonvulsant activity by "
         "reducing polysynaptic responses and blocking post-tetanic potentiation.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3387"),
+            (BQB.IS, "CHEBI:3387"),
             (BQB.IS, "NCIT:C341"),
         ],
     ),
     Substance(
         sid="nizatidine",
-        name="nizatidine",
         description="A competitive and reversible histamine H2-receptor antagonist with antacid activity. "
         "Nizatidine inhibits the histamine H2-receptors located on the basolateral membrane of the "
         "gastric parietal cell, thereby reducing basal and nocturnal gastric acid secretion, resulting in "
         "a reduction in gastric volume, acidity, and amount of gastric acid released.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:7601"),
+            (BQB.IS, "CHEBI:7601"),
             (BQB.IS, "NCIT:C29295"),
         ],
     ),
     Substance(
         sid="piperine",
-        name="piperine",
         description="A N-acylpiperidine that is piperidine substituted by a (1E,3E)-1-(1,"
         "3-benzodioxol-5-yl)-5-oxopenta-1,3-dien-5-yl group at the nitrogen atom. It is an "
         "alkaloid isolated from the plant Piper nigrum.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:93043"),
+            (BQB.IS, "CHEBI:93043"),
             (BQB.IS, "NCIT:C72629"),
         ],
     ),
     Substance(
         sid="probenecid",
-        name="probenecid",
         description="A benzoic acid derivative with antihyperuricemic property. Probenecid competitively "
         "inhibits the active reabsorption of urate at the proximal tubule in the kidney thereby "
         "increasing urinary excretion of uric acid and lowering serum urate concentrations. This prevents "
         "urate deposition and promotes resolution of existing urate deposits.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8426"),
+            (BQB.IS, "CHEBI:8426"),
             (BQB.IS, "NCIT:C772"),
         ],
     ),
     Substance(
         sid="sorbitol",
-        name="sorbitol",
         description="A sugar alcohol found in fruits and plants with diuretic, laxative and cathartic property. "
         "Unabsorbed sorbitol retains water in the large intestine through osmotic pressure thereby "
         "stimulating peristalsis of the intestine and exerting its diuretic, laxative and cathartic "
         "effect. ",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:30911"),
+            (BQB.IS, "CHEBI:30911"),
             (BQB.IS, "NCIT:C29462"),
         ],
     ),
     Substance(
         sid="cisapride",
-        name="cisapride",
         description="A substituted piperidinyl benzamide prokinetic agent. Cisapride facilitates release of "
         "acetylcholine from the myenteric plexus, resulting in increased gastrointestinal motility. "
         "In addition, cisapride has been found to act as a serotonin agonist, stimulating type 4 "
         "receptors, and a serotonin 5-HT3 receptor antagonist.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3720"),
+            (BQB.IS, "CHEBI:3720"),
             (BQB.IS, "NCIT:C1210"),
         ],
     ),
     Substance(
         sid="sulfamethizole",
-        name="sulfamethizole",
         description="A broad-spectrum sulfanilamide and a synthetic analog of para-aminobenzoic acid (PABA) with "
         "antibacterial property. Sulfamethizole competes with PABA for the bacterial enzyme "
         "dihydropteroate synthase, thereby preventing the incorporation of PABA into dihydrofolic acid, "
         "the immediate precursor of folic acid.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9331"),
+            (BQB.IS, "CHEBI:9331"),
             (BQB.IS, "NCIT:C47736"),
         ],
     ),
@@ -4534,77 +4376,70 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="phenylbutazone",
-        name="phenylbutazone",
         description="A member of the class of pyrazolidines that is 1,2-diphenylpyrazolidine-3,5-dione "
         "carrying a butyl group at the 4-position. Phenylbutazone, often referred to as 'bute', "
         "is a nonsteroidal anti-inflammatory drug (NSAID) for the short-term treatment of "
         "pain and fever in animals. ",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:48574"),
+            (BQB.IS, "CHEBI:48574"),
             (BQB.IS, "NCIT:C66377"),
         ],
     ),
     Substance(
         sid="l-cysteine",
-        name="l-cysteine",
         label="L-cysteine",
         description="An optically active form of cysteine having L-configuration.",
-        annotations=[(BQB.IS, "chebi/CHEBI:17561")],
+        annotations=[(BQB.IS, "CHEBI:17561")],
     ),
     Substance(
         sid="atropine",
-        name="atropine",
         description="A synthetically-derived form of the endogenous alkaloid isolated from the plant Atropa "
         "belladonna. Atropine functions as a sympathetic, competitive antagonist of muscarinic cholinergic "
         "receptors, thereby abolishing the effects of parasympathetic stimulation. This agent may induce "
         "tachycardia, inhibit secretions, and relax smooth muscles.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:16684"),
+            (BQB.IS, "CHEBI:16684"),
             (BQB.IS, "NCIT:C28840"),
         ],
     ),
     Substance(
         sid="meperidine",
-        name="meperidine",
         description="A synthetic piperidine ester with opioid analgesic activity. Meperidine mimics the actions of "
         "endogenous neuropeptides via opioid receptors, thereby producing the characteristic "
         "morphine-like effects on the mu-opioid receptor, including analgesia, euphoria, sedation, "
         "respiratory depression, miosis, bradycardia and physical dependence.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6754"),
+            (BQB.IS, "CHEBI:6754"),
             (BQB.IS, "NCIT:C71632"),
         ],
     ),
     Substance(
         sid="pentazocine",
-        name="pentazocine",
         description="Pentazocine, sold under the brand name Talwin among others, is a painkiller used to treat "
         "moderate to severe pain. It is believed to work by activating (agonizing) κ-opioid receptors "
         "(KOR) and blocking (antagonizing) μ-opioid receptors (MOR)",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:7982"),
+            (BQB.IS, "CHEBI:7982"),
             (BQB.IS, "NCIT:C61884"),
         ],
         synonyms=["Talwin"],
     ),
     Substance(
         sid="naloxone",
-        name="naloxone",
         description="A thebaine derivate with competitive opioid antagonistic properties. Naloxone reverses the "
         "effects of opioid analgesics by binding to the opioid receptors in the CNS, and inhibiting the "
         "typical actions of opioid analgesics, including analgesia, euphoria, sedation, respiratory "
         "depression, miosis, bradycardia, and physical dependence.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:7459"),
+            (BQB.IS, "CHEBI:7459"),
             (BQB.IS, "NCIT:C62054"),
         ],
     ),
     Substance(
         sid="clopidogrel",
-        name="clopidogrel",
         description="A thienopyridine, with antiplatelet activity. Clopidogrel targets, irreversibly binds to and alters the platelet receptor for adenosine diphosphate (ADP), thereby blocking the binding of ADP to its receptor, inhibiting ADP-mediated activation of the glycoprotein complex GPIIb/IIIa, and inhibiting fibrinogen binding to platelets and platelet adhesion and aggregation. This results in increased bleeding time.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:37941"),
+            (BQB.IS, "CHEBI:37941"),
             (BQB.IS, "NCIT:C61686"),
             (BQB.IS, "pubchem.compound/60606"),
             (BQB.IS, "inchikey/GKTWGGQPFAXNFI-HNNXBMFYSA-N"),
@@ -4639,10 +4474,9 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="prasugrel",
-        name="prasugrel",
         description="An orally bioavailable thienopyridine, with antiplatelet activity. Upon oral administration, the active metabolite of prasugrel targets and irreversibly binds to the platelet receptor for adenosine diphosphate (ADP), thereby blocking the binding of ADP to its receptor. This inhibits ADP-mediated activation of the glycoprotein complex GPIIb/IIIa, fibrinogen binding to platelets and platelet adhesion and aggregation. This results in increased bleeding time.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:87723"),
+            (BQB.IS, "CHEBI:87723"),
             (BQB.IS, "NCIT:C81566"),
             (BQB.IS, "pubchem.compound/6918456"),
             (BQB.IS, "inchikey/DTGLZDAWLRGWQN-UHFFFAOYSA-N"),
@@ -4653,7 +4487,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="prasugrel active metabolite",
         description="Metabolite of prasugrel.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:172573"),
+            (BQB.IS, "CHEBI:172573"),
             (BQB.IS, "pubchem.compound/10405534"),
             (BQB.IS, "inchikey/CWUDNVCEAAXNQA-VLODSAPTSA-N"),
         ],
@@ -4668,33 +4502,30 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="pirenzepine",
-        name="pirenzepine",
         description="Pirenzepine (Gastrozepin), an M1 selective antagonist, is used in the treatment of peptic "
         "ulcers, as it reduces gastric acid secretion and reduces muscle spasm. It is in a class of drugs "
         "known as muscarinic receptor antagonists - acetylcholine being the neurotransmitter of the "
         "parasympathetic nervous system which initiates the rest-and-digest state "
         "(as opposed to fight-or-flight), resulting in an increase in gastric motility and digestion.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8247"),
+            (BQB.IS, "CHEBI:8247"),
             (BQB.IS, "NCIT:C76002"),
         ],
         synonyms=["gastrozepin"],
     ),
     Substance(
         sid="desipramine",
-        name="desipramine",
         description="An active metabolite of imipramine, a tertiary amine and a synthetic tricyclic derivative of "
         "the antidepressant. Desipramine enhances monoamine neurotransmission in certain areas of the "
         "brain by inhibiting the re-uptake of noradrenaline and serotonin at the noradrenergic and "
         "serotoninergic nerve endings, respectively.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:47781"),
+            (BQB.IS, "CHEBI:47781"),
             (BQB.IS, "NCIT:C61700"),
         ],
     ),
     Substance(
         sid="metoclopramide",
-        name="metoclopramide",
         description="A substituted benzamide and a derivative of para-aminobenzoic acid (PABA) that is "
         "structurally related to procainamide, with gastroprokinetic and antiemetic effects. "
         "Metoclopramide exerts its prokinetic effect by antagonizing dopamine mediated relaxation effect "
@@ -4702,62 +4533,55 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "muscle to cholinergic stimulation, thereby leading to an increase of gastric emptying into "
         "the intestines.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:107736"),
+            (BQB.IS, "CHEBI:107736"),
             (BQB.IS, "NCIT:C62046"),
         ],
     ),
     Substance(
         sid="propantheline",
-        name="propantheline",
         description="Propantheline (INN) is an antimuscarinic agent used for the treatment of excessive sweating "
         "(hyperhidrosis), cramps or spasms of the stomach, intestines (gut) or bladder, and involuntary "
         "urination (enuresis). It can also be used to control the symptoms of irritable bowel syndrome "
         "and similar conditions.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8481"),
+            (BQB.IS, "CHEBI:8481"),
             (BQB.IS, "NCIT:C78077"),
         ],
     ),
     Substance(
         sid="chloroquine",
-        name="chloroquine",
         description="A 4-aminoquinoline with antimalarial, anti-inflammatory, and potential chemosensitization "
         "and radiosensitization activities. Although the mechanism is not well understood, chloroquine "
         "is shown to inhibit the parasitic enzyme heme polymerase that converts the toxic heme into "
         "non-toxic hemazoin, thereby resulting in the accumulation of toxic heme within the parasite.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3638"),
+            (BQB.IS, "CHEBI:3638"),
             (BQB.IS, "NCIT:C61671"),
         ],
     ),
     Substance(
         sid="halothane",
-        name="halothane",
         description="A nonflammable, halogenated, hydrocarbon and general inhalation anesthetic. Although the exact "
         "mechanism of action is unknown, halothane provides relatively rapid induction of anesthesia "
         "by depressing the central nervous system, thereby producing a reversible loss of consciousness "
         "and sensation.",
-        annotations=[(BQB.IS, "chebi/CHEBI:5615"), (BQB.IS, "NCIT:C47554")],
+        annotations=[(BQB.IS, "CHEBI:5615"), (BQB.IS, "NCIT:C47554")],
     ),
     Substance(
         sid="tetrachloromethane",
-        name="tetrachloromethane",
         description="Carbon tetrachloride is an organic compound with the chemical formula CCl4.",
-        annotations=[(BQB.IS, "chebi/CHEBI:27385")],
+        annotations=[(BQB.IS, "CHEBI:27385")],
     ),
     # FIXME: check and update as protons; used in acid output secretion rate (acid)
     Substance(
         sid="acid",
-        name="acid",
         description="Protons determined by titration to pH with base.",
-        annotations=[],
     ),
     # ----------------------
     # tirzepatide
     # ----------------------
     Substance(
         sid="tirzepatide",
-        name="tirzepatide",
         description="Tirzepatide is a novel dual glucose-dependent insulinotropic "
         "polypeptide (GIP) and glucagon-like peptide-1 (GLP-1) receptor "
         "agonist. Dual GIP/GLP-1 agonists gained increasing attention as "
@@ -4766,7 +4590,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "selective GLP-1 receptor agonists in preclinical and clinical "
         "trials.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:194186"),
+            (BQB.IS, "CHEBI:194186"),
             (BQB.IS, "NCIT:C174817"),
             (BQB.IS, "pubchem.compound/163285897"),
             (BQB.IS, "inchikey/BTSOGEDATSQOAF-SMAAHMJQSA-N"),
@@ -4775,10 +4599,9 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="tirzepatide_c14",
-        name="tirzepatide_c14",
         description="Radioactive tirzapetide",
         annotations=[
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:194186"),
+            (BQB.IS_VERSION_OF, "CHEBI:194186"),
             (BQB.IS_VERSION_OF, "NCIT:C174817"),
             (BQB.IS_VERSION_OF, "pubchem.compound/163285897"),
             (BQB.IS_VERSION_OF, "inchikey/BTSOGEDATSQOAF-SMAAHMJQSA-N"),
@@ -4787,10 +4610,9 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="tirzepatide_and_metabolites_c14",
-        name="tirzepatide_and_metabolites_c14",
         description="Radioactive tirzapetide and tirzepatide metabolites",
         annotations=[
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:194186"),
+            (BQB.IS_VERSION_OF, "CHEBI:194186"),
             (BQB.IS_VERSION_OF, "NCIT:C174817"),
             (BQB.IS_VERSION_OF, "pubchem.compound/163285897"),
             (BQB.IS_VERSION_OF, "inchikey/BTSOGEDATSQOAF-SMAAHMJQSA-N"),
@@ -4802,7 +4624,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     # ----------------------
     Substance(
         sid="aliskiren",
-        name="aliskiren",
         description="An orally active nonpeptide renin inhibitor with antihypertensive "
         "activity. Aliskiren selectively binds to the S3 sub-pocket of "
         "renin, an enzyme in the renin-angiotensin-aldosterone system "
@@ -4816,7 +4637,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "volume, aliskiren is able to prevent the effects that "
         "contribute to an increase in blood pressure.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:601027"),
+            (BQB.IS, "CHEBI:601027"),
             (BQB.IS, "SNOMEDCT:426725002"),
             (BQB.IS, "NCIT:C65222"),
             (BQB.IS, "pubchem.compound/5493444"),
@@ -4829,18 +4650,15 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="aliskiren+metabolites",
         description="Sum of all aliskiren metabolites including aliskiren. Used for "
         "total radioactivity measurements.",
-        annotations=[],
     ),
     Substance(
         sid="aliskiren-metabolite",
         name="aliskiren metabolite",
         description="Aliskiren metabolites without aliskiren. Used for "
         "total radioactivity measurements.",
-        annotations=[],
     ),
     Substance(
         sid="cyclosporine",
-        name="cyclosporine",
         description="A natural cyclic polypeptide immunosuppressant isolated from the "
         "fungus Beauveria nivea. The exact mechanism of action of "
         "cyclosporine is not known but may involve binding to the "
@@ -4851,7 +4669,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "inhibited with T-helper cells as the primary target. "
         "Cyclosporine also inhibits lymphokine production and release.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:4031"),
+            (BQB.IS, "CHEBI:4031"),
             (BQB.IS, "pubchem.compound/5284373"),
             (BQB.IS, "inchikey/PMATZTZNYRCHOR-CGLBZJNRSA-N"),
             (BQB.IS, "NCIT:C406"),
@@ -4863,7 +4681,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     # ----------------------
     Substance(
         sid="lisinopril",
-        name="lisinopril",
         description="An orally bioavailable, long-acting angiotensin-converting enzyme "
         "(ACE) inhibitor with antihypertensive activity. Lisinopril, "
         "a synthetic peptide derivative, specifically and competitively "
@@ -4874,7 +4691,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "decreased which results in a decrease in sodium and water "
         "retention and an increase in serum potassium.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:43755"),
+            (BQB.IS, "CHEBI:43755"),
             (BQB.IS, "pubchem.compound/5362119"),
             (BQB.IS, "inchikey/RLAWWYSOJDYHDC-BZSNNMDCSA-N"),
             (BQB.IS, "NCIT:C29159"),
@@ -4886,7 +4703,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     # ----------------------
     Substance(
         sid="ramipril",
-        name="ramipril",
         description="A prodrug and nonsulfhydryl angiotensin converting enzyme (ACE) "
         "inhibitor with antihypertensive activity. Ramipril is converted "
         "in the liver by de-esterification into its active form ramiprilat, "
@@ -4896,7 +4712,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "also causes an increase in bradykinin levels and a decrease in "
         "angiotensin II-induced aldosterone secretion.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8774"),
+            (BQB.IS, "CHEBI:8774"),
             (BQB.IS, "pubchem.compound/5362129"),
             (BQB.IS, "inchikey/HDACQVRGBOVJII-JBDAPHQKSA-N"),
             (BQB.IS, "NCIT:C29411"),
@@ -4908,7 +4724,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="ramiprilat",
-        name="ramiprilat",
         description="A non-sulfhydryl angiotensin-converting enzyme (ACE) inhibitor "
         "with antihypertensive activity. Ramiprilat inhibits ACE, thereby "
         "blocking the conversion of angiotensin I to angiotensin II. "
@@ -4918,7 +4733,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "aldosterone secretion by the adrenal cortex, thereby promoting"
         " diuresis and natriuresis.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:77363"),
+            (BQB.IS, "CHEBI:77363"),
             (BQB.IS, "pubchem.compound/5464096"),
             (BQB.IS, "inchikey/KEDYTOTWMPBSLG-HILJTLORSA-N"),
             (BQB.IS, "NCIT:C72911"),
@@ -4994,7 +4809,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="aldosterone",
-        name="aldosterone",
         description="A pregnane-based steroidal hormone produced by the outer-section "
         "(zona glomerulosa) of the adrenal cortex in the adrenal gland, "
         "and acts on the distal tubules and collecting ducts of the kidney "
@@ -5005,20 +4819,17 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/5839"),
             (BQB.IS, "inchikey/PQSUYGKTWSAVDQ-ZVIOFETBSA-N"),
-            (BQB.IS, "chebi/CHEBI:27584"),
+            (BQB.IS, "CHEBI:27584"),
             (BQB.IS, "NCIT:C219"),
         ],
     ),
     Substance(
         sid="angiotensinogen",
-        name="angiotensinogen",
-        description="Angiotensin-1 (10 aa, ~1 kDa) is encoded by the human AGT gene. "
-        "This protein is involved in the response to lowered renal blood "
-        "pressure.",
+        description="Angiotensinogen (485 aa, ~53 kDa) is encoded by the human AGT gene. This protein plays a role in the regulation of blood pressure, body fluid and electrolyte homeostasis.",
         annotations=[
             (BQB.IS, "pubchem.compound/16133225"),
             (BQB.IS, "inchikey/XJFQCYIFOWHHFN-UHFFFAOYSA-N"),
-            (BQB.IS, "chebi/CHEBI:2720"),
+            (BQB.IS, "CHEBI:2720"),
             (BQB.IS, "NCIT:C136723"),
         ],
     ),
@@ -5031,7 +4842,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/3081372"),
             (BQB.IS, "inchikey/ORWYRWWVDCYOMK-HBZPZAIKSA-N"),
-            (BQB.IS, "chebi/CHEBI:2718"),
+            (BQB.IS, "CHEBI:2718"),
             (BQB.IS, "NCIT:C248"),
         ],
     ),
@@ -5044,7 +4855,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/172198"),
             (BQB.IS, "inchikey/CZGUSIXMZVURDU-JZXHSEFVSA-N"),
-            (BQB.IS, "chebi/CHEBI:48432"),
+            (BQB.IS, "CHEBI:48432"),
             (BQB.IS, "NCIT:C107562"),
         ],
     ),
@@ -5055,14 +4866,13 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/5839"),
             (BQB.IS, "inchikey/PQSUYGKTWSAVDQ-ZVIOFETBSA-N"),
-            (BQB.IS, "chebi/CHEBI:27584"),
+            (BQB.IS, "CHEBI:27584"),
             (BQB.IS, "NCIT:C219"),
         ],
         synonyms=["AI/AII", "A1/A2"],
     ),
     Substance(
         sid="felodipine",
-        name="felodipine",
         description="A dihydropyridine calcium channel blocking agent. Felodipine "
         "inhibits the influx of extracellular calcium ions into myocardial "
         "and vascular smooth muscle cells, causing dilatation of the "
@@ -5074,25 +4884,23 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/3333"),
             (BQB.IS, "inchikey/RZTAMFZIAATZDJ-UHFFFAOYSA-N"),
-            (BQB.IS, "chebi/CHEBI:585948"),
+            (BQB.IS, "CHEBI:585948"),
             (BQB.IS, "NCIT:C29046"),
         ],
     ),
     Substance(
         sid="piretanide",
-        name="piretanide",
         description="A sulfamoylbenzoic acid belonging to the class of loop diuretics. "
         "Piretanide is structurally related to furosemide and bumetanide.",
         annotations=[
             (BQB.IS, "pubchem.compound/4849"),
             (BQB.IS, "inchikey/UJEWTUDSLQGTOA-UHFFFAOYSA-N"),
-            (BQB.IS, "chebi/CHEBI:32015"),
+            (BQB.IS, "CHEBI:32015"),
             (BQB.IS, "NCIT:C66419"),
         ],
     ),
     Substance(
         sid="zofenopril",
-        name="zofenopril",
         description="Zofenopril is a sulfhydryl angiotensin-converting enzyme (ACE) "
         "inhibitor with antihypertensive activity. As a prodrug, zofenopril is "
         "hydrolyzed in vivo into its active form zofenoprilat. Zofenoprilat "
@@ -5102,13 +4910,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/92400"),
             (BQB.IS, "inchikey/IAIDUHCBNLFXEF-MNEFBYGVSA-N"),
-            (BQB.IS, "chebi/CHEBI:78539"),
+            (BQB.IS, "CHEBI:78539"),
             (BQB.IS, "NCIT:C82219"),
         ],
     ),
     Substance(
         sid="zofenoprilat",
-        name="zofenoprilat",
         description="The active metabolite of zofenopril. It has a role as an "
         "anticonvulsant, an apoptosis inhibitor, a cardioprotective "
         "agent, an EC 3.4.15.1 (peptidyl-dipeptidase A) inhibitor, a "
@@ -5116,13 +4923,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/3034048"),
             (BQB.IS, "inchikey/UQWLOWFDKAFKAP-WXHSDQCUSA-N"),
-            (BQB.IS, "chebi/CHEBI:82602"),
+            (BQB.IS, "CHEBI:82602"),
             (BQB.IS, "NCIT:C95293"),
         ],
     ),
     Substance(
         sid="sitagliptin",
-        name="sitagliptin",
         description="An orally available, competitive, beta-amino acid-derived inhibitor of dipeptidyl peptidase 4 (DDP-4) "
         "with hypoglycemic activity. Sitagliptin may cause an increased risk in the development of pancreatitis. "
         "Sitagliptin is a triazolopyrazine that exhibits hypoglycemic activity. "
@@ -5130,7 +4936,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "a hypoglycemic agent, an EC 3.4.14.5 (dipeptidyl-peptidase IV) inhibitor, an environmental contaminant and a xenobiotic. "
         "It is a triazolopyrazine and a trifluorobenzene.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:40237"),
+            (BQB.IS, "CHEBI:40237"),
             (BQB.IS, "pubchem.compound/4369359"),
             (BQB.IS, "inchikey/MFFMDFFZMYYVKS-SECBINFHSA-N"),
             (BQB.IS, "NCIT:C73838"),
@@ -5139,7 +4945,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="isosorbide-5-mononitrate",
-        name="isosorbide-5-mononitrate",
         label="isosorbide-5-mononitrate (ISMN)",
         description="Isosorbide mononitrate is an organic nitrate with vasodilating "
         "properties. It is an anti-anginal agent that works by relaxing "
@@ -5148,20 +4953,19 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/27661"),
             (BQB.IS, "inchikey/YWXYYJSYQOXTPL-SLPGGIOYSA-N"),
-            (BQB.IS, "chebi/CHEBI:6062"),
+            (BQB.IS, "CHEBI:6062"),
         ],
         synonyms=["ISMN"],
     ),
     Substance(
         sid="celecoxib",
-        name="celecoxib",
         description="A nonsteroidal anti-inflammatory drug (NSAID) with a "
         "diaryl-substituted pyrazole structure. Celecoxib selectively "
         " cyclo-oxygenase-2 activity (COX-2); COX-2 inhibition may "
         "result in apoptosis and a reduction in tumor angiogenesis "
         "and metastasis.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:41423"),
+            (BQB.IS, "CHEBI:41423"),
             (BQB.IS, "pubchem.compound/2662"),
             (BQB.IS, "inchikey/RZEKVGVHFLEQIL-UHFFFAOYSA-N"),
             (BQB.IS, "NCIT:C1728"),
@@ -5170,7 +4974,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="empagliflozin",
-        name="empagliflozin",
         description="An orally available competitive inhibitor of sodium-glucose "
         "co-transporter 2 (SGLT2; SLC5A2) with antihyperglycemic activity. "
         "Upon oral administration, empagliflozin selectively and "
@@ -5180,7 +4983,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "kidneys, resulting in a reduction of plasma glucose levels in "
         "an insulin-independent manner.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:82720"),
+            (BQB.IS, "CHEBI:82720"),
             (BQB.IS, "pubchem.compound/11949646"),
             (BQB.IS, "inchikey/OBWASQILIWPZMG-QZMOQZSNSA-N"),
             (BQB.IS, "NCIT:C158136"),
@@ -5190,17 +4993,13 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="empagliflozin-metabolites",
-        name="empagliflozin-metabolites",
         description="empagliflozin and empagliflozin metabolites. Used for total radioactivity "
         "measurements.",
-        annotations=[],
     ),
     Substance(
         sid="empagliflozin-metabolites-no-empagliflozin",
-        name="empagliflozin-metabolites-no-empagliflozin",
         description="empagliflozin metabolites without empagliflozin. "
         "Used in radioactivity measurements.",
-        annotations=[],
     ),
     Substance(
         sid="M626-3",
@@ -5236,28 +5035,23 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="C14-empagliflozin",
-        name="C14-empagliflozin",
         description="C14 labeled empagliflozin.",
         annotations=[
             (BQB.IS_VERSION_OF, "NCIT:C158136"),
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:82720"),
+            (BQB.IS_VERSION_OF, "CHEBI:82720"),
         ],
     ),
     Substance(
         sid="C14-empagliflozin-metabolites",
-        name="C14-empagliflozin-metabolites",
         description="C14 labeled empagliflozin and corresponding C14 labeled "
         "empagliflozin metabolites. Used for total radioactivity "
         "measurements.",
-        annotations=[],
     ),
     Substance(
         sid="C14-empagliflozin-metabolites-no-empagliflozin",
-        name="C14-empagliflozin-metabolites-no-empagliflozin",
         description="C14 labeled "
         "empagliflozin metabolites without empagliflozin. Used in radioactivity "
         "measurements.",
-        annotations=[],
     ),
     Substance(
         sid="C14-M626-3",
@@ -5306,12 +5100,11 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="bradykinin",
-        name="bradykinin",
         description="Bradykinin (9 aa, ~1 kDa) is encoded by the human KNG1 gene. "
         "This protein is involved in blood pressure regulation and pain "
         "receptor stimulation.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3165"),
+            (BQB.IS, "CHEBI:3165"),
             (BQB.IS, "NCIT:C316"),
             (BQB.IS, "pubchem.compound/439201"),
             (BQB.IS, "inchikey/QXZGBUJJYSLZLT-FDISYFBBSA-N"),
@@ -5319,7 +5112,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="prorenin",
-        name="prorenin",
         description="Prorenin is a precursor protein that is converted into renin, "
         "a crucial enzyme in the renin-angiotensin system (RAS), which "
         "regulates blood pressure and fluid balance in the body.",
@@ -5329,7 +5121,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="renin",
-        name="renin",
         description="Renin (406 aa, ~45 kDa) is encoded by the human REN gene. "
         "This protein plays a role in activation of angiotensin.",
         annotations=[
@@ -5343,30 +5134,27 @@ SUBSTANCE_NODES: list[InfoNode] = [
     # ----------------------
     Substance(
         sid="hydrogencarbonate",
-        name="hydrogencarbonate",
         description="The carbon oxoanion resulting from the removal of a proton from carbonic acid.",
-        annotations=[(BQB.IS, "chebi/CHEBI:17544")],
+        annotations=[(BQB.IS, "CHEBI:17544")],
     ),
     Substance(
         sid="sodium hydrogencarbonate",
-        name="sodium hydrogencarbonate",
         description="Sodium bicarbonate (IUPAC name: sodium hydrogen carbonate), commonly known as baking soda "
         "(especially in North America and New Zealand) or bicarbonate of soda, is a chemical compound "
         "with the formula NaHCO3.",
-        annotations=[(BQB.IS, "chebi/CHEBI:32139")],
+        annotations=[(BQB.IS, "CHEBI:32139")],
     ),
     # ----------------------
     # benzodiazepenes
     # ----------------------
     Substance(
         sid="lorazepam",
-        name="lorazepam",
         description="A benzodiazepine with anxiolytic, anti-anxiety, anticonvulsant, anti-emetic and sedative "
         "properties. Lorazepam enhances the effect of the inhibitory neurotransmitter gamma-aminobutyric "
         "acid on the GABA receptors by binding to a site that is distinct from the GABA binding site in "
         "the central nervous system.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6539"),
+            (BQB.IS, "CHEBI:6539"),
             (BQB.IS, "NCIT:C619"),
         ],
     ),
@@ -5388,7 +5176,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "medication used for anesthesia, procedural sedation, trouble sleeping, and severe agitation.",
         annotations=[
             (BQB.IS, "pubchem.compound/4192"),
-            (BQB.IS, "chebi/CHEBI:6931"),
+            (BQB.IS, "CHEBI:6931"),
             (BQB.IS, "NCIT:C62049"),
             (BQB.IS, "inchikey/DDLIGBOFAVUZHB-UHFFFAOYSA-N"),
         ],
@@ -5399,7 +5187,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Midazolam, marketed under the trade name Versed, among others, is a benzodiazepine "
         "medication used for anesthesia, procedural sedation, trouble sleeping, and severe agitation.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6932"),
+            (BQB.IS, "CHEBI:6932"),
         ],
     ),
     Substance(
@@ -5409,48 +5197,42 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="1-hydroxymidazolam",
-        name="1-hydroxymidazolam",
         description="1-hydroxymidazolam. Metabolite of midazolam.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:145330"),
+            (BQB.IS, "CHEBI:145330"),
             (BQB.IS, "pubchem.compound/107917"),
             (BQB.IS, "inchikey/QHSMEGADRFZVNE-UHFFFAOYSA-N"),
         ],
     ),
     Substance(
         sid="1-hydroxymidazolam/midazolam",
-        name="1-hydroxymidazolam/midazolam",
         description="Midazolam metabolic ratio.",
         parents=["1-hydroxymidazolam", "midazolam"],
     ),
     Substance(
         sid="midazolam/1-hydroxymidazolam",
-        name="midazolam/1-hydroxymidazolam",
         description="Midazolam metabolic ratio.",
         parents=["1-hydroxymidazolam", "midazolam"],
     ),
     Substance(
         sid="4-hydroxymidazolam",
-        name="4-hydroxymidazolam",
         description="Metabolite of midazolam.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:145331"),
+            (BQB.IS, "CHEBI:145331"),
             (BQB.IS, "pubchem.compound/124449"),
             (BQB.IS, "inchikey/ZYISITHKPKHPKG-UHFFFAOYSA-N"),
         ],
     ),
     Substance(
         sid="1,4-dihydroxymidazolam",
-        name="1,4-dihydroxymidazolam",
         description="Metabolite of midazolam.",
-        annotations=[(BQB.IS, "chebi/CHEBI:145332")],
+        annotations=[(BQB.IS, "CHEBI:145332")],
     ),
     Substance(
         sid="1-hydroxymidazolam glucuronide",
-        name="1-hydroxymidazolam glucuronide",
         description="Metabolite of midazolam.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:145334"),
+            (BQB.IS, "CHEBI:145334"),
             (BQB.IS, "pubchem.compound/133640"),
             (BQB.IS, "inchikey/ICIUMXQTLQXWGL-QMDPOKHVSA-N"),
         ],
@@ -5458,22 +5240,19 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="4-hydroxymidazolam glucuronide",
-        name="4-hydroxymidazolam glucuronide",
         description="Metabolite of midazolam.",
-        annotations=[(BQB.IS, "chebi/CHEBI:145335")],
+        annotations=[(BQB.IS, "CHEBI:145335")],
         synonyms=["4-hydroxymidazolam beta-D-glucuronide"],
     ),
     Substance(
         sid="diazepam",
-        name="diazepam",
         description="A benzodiazepine derivative with anti-anxiety, sedative, hypnotic and anticonvulsant properties. "
         "Diazepam potentiates the inhibitory activities of gamma-aminobutyric acid (GABA) by binding to "
         "the GABA receptor, located in the limbic system and the hypothalamus.",
-        annotations=[(BQB.IS, "chebi/CHEBI:49575")],
+        annotations=[(BQB.IS, "CHEBI:49575")],
     ),
     Substance(
         sid="nordazepam",
-        name="nordazepam",
         description="Nordazepam (INN; marketed under brand names Nordaz, Stilny, Madar, Vegesan, and Calmday; also "
         "known as nordiazepam, desoxydemoxepam, and desmethyldiazepam) is a 1,4-benzodiazepine derivative. "
         "Like other benzodiazepine derivatives, it has amnesic, anticonvulsant, anxiolytic, "
@@ -5481,20 +5260,19 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "anxiety disorders. It is an active metabolite of diazepam, chlordiazepoxide, clorazepate, "
         "prazepam, pinazepam, and medazepam.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:111762"),
+            (BQB.IS, "CHEBI:111762"),
             (BQB.IS, "NCIT:C87675"),
         ],
         synonyms=["desmethyldiazepam"],
     ),
     Substance(
         sid="oxazepam",
-        name="oxazepam",
         description="A synthetic benzodiazepine derivative with anxiolytic and sedative hypnotic properties. "
         "Although the mechanism of action has not been fully elucidated, oxazepam appears to "
         "enhance gamma-aminobutyric acid (GABA) receptor affinity for GABA, thereby prolonging "
         "synaptic actions of GABA.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:7823"),
+            (BQB.IS, "CHEBI:7823"),
             (BQB.IS, "NCIT:C47642"),
         ],
     ),
@@ -5525,7 +5303,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Temazepam is a benzodiazepine derivative with antidepressant, sedative, hypnotic and "
         "anticonvulsant properties.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9435"),
+            (BQB.IS, "CHEBI:9435"),
             (BQB.IS, "pubchem.compound/5391"),
         ],
         synonyms=["methyloxazepam"],
@@ -5554,7 +5332,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "directly with a specific site on the gamma-aminobutyric acid (GABA)-A-chloride-ionophore receptor "
         "complex located on the neuronal membrane.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9674"),
+            (BQB.IS, "CHEBI:9674"),
             (BQB.IS, "NCIT:C29520"),
             (BQB.IS, "omit/0015068"),
         ],
@@ -5564,7 +5342,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="A difluorophenyl derivate of salicylic acid and a nonsteroidal anti-inflammatory drug (NSAID) "
         "with antipyretic, analgesic and anti-inflammatory properties.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:39669"),
+            (BQB.IS, "CHEBI:39669"),
             (BQB.IS, "NCIT:C47489"),
         ],
     ),
@@ -5573,7 +5351,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Metoprolol, marketed under the tradename Lopressor among others, "
         "is a selective β1 receptor blocker medication.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6904"),
+            (BQB.IS, "CHEBI:6904"),
             (BQB.IS, "inchikey/IUBSYMUCCVWXPE-UHFFFAOYSA-N"),
         ],
         synonyms=["Lopressor"],
@@ -5588,7 +5366,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         formula="C15H25NO3",
         charge=0,
         annotations=[
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:6904"),
+            (BQB.IS_VERSION_OF, "CHEBI:6904"),
             (BQB.IS, "pubchem.compound/157716"),
             (BQB.IS, "inchikey/IUBSYMUCCVWXPE-AWEZNQCLSA-N"),
         ],
@@ -5604,7 +5382,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         formula="C15H25NO3",
         charge=0,
         annotations=[
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:6904"),
+            (BQB.IS_VERSION_OF, "CHEBI:6904"),
             (BQB.IS, "pubchem.compound/157717"),
             (BQB.IS, "inchikey/IUBSYMUCCVWXPE-CQSZACIVSA-N"),
         ],
@@ -5614,7 +5392,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="alpha-hydroxymetoprolol",
         description="Main metabolite of metoprolol.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:165230"),
+            (BQB.IS, "CHEBI:165230"),
             (BQB.IS, "inchikey/OFRYBPCSEMMZHR-UHFFFAOYSA-N"),
         ],
         synonyms=["HM", "H119/66", "H119-66H 119/66", "OH-metoprolol"],
@@ -5624,7 +5402,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="metoprolol acidic metabolite",
         description="Metabolite of metoprolol.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:83478"),
+            (BQB.IS, "CHEBI:83478"),
             (BQB.IS, "pubchem.compound/62936"),
         ],
         synonyms=["MAM", "H117-04", "H117/04", "metoprolol acid", "atenolol acid"],
@@ -5633,14 +5411,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="s-metoprolol-acidic-metabolite",
         name="(S)-metoprolol acidic metabolite",
         description="Metabolite of metoprolol.",
-        annotations=[],
         synonyms=["S-MAM", "(S)-MAM"],
     ),
     Substance(
         sid="r-metoprolol-acidic-metabolite",
         name="(R)-metoprolol acidic metabolite",
         description="Metabolite of metoprolol.",
-        annotations=[],
         synonyms=["R-MAM", "(R)-MAM"],
     ),
     Substance(
@@ -5648,36 +5424,36 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="(1S,2R)-alpha-hydroxymetoprolol",
         description="Main metabolite of metoprolol.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:165230"),  # FIXME: not correct, but mass is identical
+            (BQB.IS_VERSION_OF, "CHEBI:165230"),
         ],
-        synonyms=["HM", "H 119/66"],
+        synonyms=[],
     ),
     Substance(
         sid="1s-2s-alpha-hydroxymetoprolol",
         name="(1S,2S)-alpha-hydroxymetoprolol",
         description="Main metabolite of metoprolol.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:165230"),  # FIXME: not correct, but mass is identical
+            (BQB.IS_VERSION_OF, "CHEBI:165230"),
         ],
-        synonyms=["HM", "H 119/66"],
+        synonyms=[],
     ),
     Substance(
         sid="1r-2r-alpha-hydroxymetoprolol",
         name="(1R,2R)-alpha-hydroxymetoprolol",
         description="Main metabolite of metoprolol.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:165230"),  # FIXME: not correct, but mass is identical
+            (BQB.IS_VERSION_OF, "CHEBI:165230"),
         ],
-        synonyms=["HM", "H 119/66"],
+        synonyms=[],
     ),
     Substance(
         sid="1r-2s-alpha-hydroxymetoprolol",
         name="(1R,2S)-alpha-hydroxymetoprolol",
         description="Main metabolite of metoprolol.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:165230"),  # FIXME: not correct, but mass is identical
+            (BQB.IS_VERSION_OF, "CHEBI:165230"),
         ],
-        synonyms=["HM", "H 119/66"],
+        synonyms=[],
     ),
     # metoprolol metabolites sum
     Substance(
@@ -5756,52 +5532,48 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "the rate and force of myocardial contraction, and consequently "
         "a diminished cardiac output.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6906"),
+            (BQB.IS, "CHEBI:6906"),
             (BQB.IS, "NCIT:C29255"),
         ],
         synonyms=[],
     ),
     Substance(
         sid="warfarin",
-        name="warfarin",
         description="A synthetic anticoagulant. Warfarin inhibits the regeneration of "
         "vitamin K1 epoxide and so the synthesis of vitamin K dependent clotting "
         "factors, which include Factors II, VII, IX and X, and the anticoagulant "
         "proteins C and S.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:10033"),
+            (BQB.IS, "CHEBI:10033"),
             (BQB.IS, "NCIT:C945"),
         ],
     ),
     Substance(
         sid="r-warfarin",
-        name="r-warfarin",
         description="A synthetic anticoagulant. Warfarin inhibits the regeneration of "
         "vitamin K1 epoxide and so the synthesis of vitamin K dependent clotting "
         "factors, which include Factors II, VII, IX and X, and the anticoagulant "
         "proteins C and S.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:87737"),
+            (BQB.IS, "CHEBI:87737"),
         ],
     ),
     Substance(
         sid="s-warfarin",
-        name="s-warfarin",
         description="A synthetic anticoagulant. Warfarin inhibits the regeneration of "
         "vitamin K1 epoxide and so the synthesis of vitamin K dependent clotting "
         "factors, which include Factors II, VII, IX and X, and the anticoagulant "
         "proteins C and S.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:87738"),
+            (BQB.IS, "CHEBI:87738"),
         ],
     ),
     Substance(
         sid="rifampicin",
-        name="rifampicin",
         description="A member of the class of rifamycins that is a a semisynthetic "
         "antibiotic derived from Amycolatopsis rifamycinica (previously known as "
         "Amycolatopsis mediterranei and Streptomyces mediterranei).",
-        annotations=[(BQB.IS, "chebi/CHEBI:28077")],
+        annotations=[(BQB.IS, "CHEBI:28077")],
         synonyms=["rifampin", "Rifampicin"],
     ),
     Substance(
@@ -5811,7 +5583,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "beta-subunit of bacterial DNA-dependent RNA polymerase, inhibiting "
         "bacterial RNA synthesis and bacterial cell growth.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:75246"),
+            (BQB.IS, "CHEBI:75246"),
             (BQB.IS, "NCIT:C61926"),
         ],
     ),
@@ -5820,7 +5592,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Ketoconazole. A synthetic derivative of phenylpiperazine with broad antifungal properties and "
         "potential antineoplastic activity.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:47519"),
+            (BQB.IS, "CHEBI:47519"),
             (BQB.IS, "NCIT:C605"),
         ],
     ),
@@ -5831,7 +5603,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "It is an analogue of fentanyl with around 1/4 to 1/10 the potency of fentanyl and "
         "around 1/3 of the duration of action, but with an onset of effects 4x faster than fentanyl.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:2569"),
+            (BQB.IS, "CHEBI:2569"),
         ],
         synonyms=["Alfentanil", "R-39209", "Alfenta", "Rapifen"],
     ),
@@ -5842,7 +5614,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "and sublingual routes.",
         annotations=[
             (BQB.IS, "pubchem.compound/41693"),
-            (BQB.IS, "chebi/CHEBI:9316"),
+            (BQB.IS, "CHEBI:9316"),
         ],
         synonyms=["Sufentanil"],
     ),
@@ -5853,7 +5625,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "RNA-dependent DNA polymerase, blocking its function in viral DNA replication.",
         annotations=[
             (BQB.IS, "NCIT:C29027"),
-            (BQB.IS, "chebi/CHEBI:119486"),
+            (BQB.IS, "CHEBI:119486"),
         ],
         synonyms=["Efavirenz"],
     ),
@@ -5885,7 +5657,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "Paclitaxel binds to tubulin and inhibits the disassembly of microtubules, thereby resulting "
         "in the inhibition of cell division.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:45863"),
+            (BQB.IS, "CHEBI:45863"),
             (BQB.IS, "NCIT:C1411"),
         ],
         synonyms=["Paclitaxel"],
@@ -5895,7 +5667,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Troleandomycin (TAO) is a macrolide antibiotic. It was sold in Italy (branded Triocetin) and "
         "Turkey (branded Tekmisin).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:45735"),
+            (BQB.IS, "CHEBI:45735"),
             (BQB.IS, "NCIT:C66643"),
         ],
         synonyms=["TAO"],
@@ -5903,24 +5675,24 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="erythromycin",
         description="Erythromycin is an antibiotic used for the treatment of a number of bacterial infections.",
-        annotations=[(BQB.IS, "chebi/CHEBI:48923")],
+        annotations=[(BQB.IS, "CHEBI:48923")],
         synonyms=["Erythromycin"],
     ),
     Substance(
         sid="[14C N-methyl] erythromycin",
         description="14C modified erythromycin.",
-        annotations=[(BQB.IS_VERSION_OF, "chebi/CHEBI:48923")],
+        annotations=[(BQB.IS_VERSION_OF, "CHEBI:48923")],
     ),
     Substance(
         sid="amikacin",
         description="Amikacin is an antibiotic used for a number of bacterial infections.",
-        annotations=[(BQB.IS, "chebi/CHEBI:2637")],
+        annotations=[(BQB.IS, "CHEBI:2637")],
         synonyms=["Amikacin"],
     ),
     Substance(
         sid="vancomycin",
         description="Vancomycin is an antibiotic used to treat a number of bacterial infections.",
-        annotations=[(BQB.IS, "chebi/CHEBI:28001")],
+        annotations=[(BQB.IS, "CHEBI:28001")],
         synonyms=["Vancomycin"],
     ),
     Substance(
@@ -5930,7 +5702,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "a decrease in fungal ergosterol synthesis.",
         annotations=[
             (BQB.IS, "NCIT:C1138"),
-            (BQB.IS, "chebi/CHEBI:6076"),
+            (BQB.IS, "CHEBI:6076"),
         ],
         synonyms=["Itraconazole"],
     ),
@@ -5976,7 +5748,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/84029"),
             (BQB.IS, "inchikey/AGOYDEPGAOXOCK-KCBOHYOISA-N"),
-            (BQB.IS, "chebi/CHEBI:3732"),
+            (BQB.IS, "CHEBI:3732"),
             (BQB.IS, "NCIT:C1054"),
         ],
     ),
@@ -5989,7 +5761,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/33613"),
             (BQB.IS, "inchikey/LSQZJLSUYDQPKJ-NJBDSQKTSA-N"),
-            (BQB.IS, "chebi/CHEBI:2676"),
+            (BQB.IS, "CHEBI:2676"),
             (BQB.IS, "NCIT:C237"),
         ],
     ),
@@ -6026,7 +5798,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "biosynthesis of sterols, particularly ergosterol, an essential component of the fungal cell "
         "membrane, thereby damaging and affecting the permeability of the cell membrane.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3764"),
+            (BQB.IS, "CHEBI:3764"),
             (BQB.IS, "NCIT:C381"),
             (BQB.IS, "omit/0004332"),
         ],
@@ -6034,7 +5806,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="xanthine",
         description="A purine nucleobase found in humans and other organisms.",
-        annotations=[(BQB.IS, "chebi/CHEBI:15318")],
+        annotations=[(BQB.IS, "CHEBI:15318")],
     ),
     # rivaroxaban
     Substance(
@@ -6045,7 +5817,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "conversion of prothrombin (factor II) to thrombin and eventually prevents the formation of "
         "cross-linked fibrin clots. Rivaroxaban does not affect existing thrombin levels.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:68579"),
+            (BQB.IS, "CHEBI:68579"),
             (BQB.IS, "pubchem.compound/9875401"),
             (BQB.IS, "inchikey/KGFYHTZWPPHNLQ-AWEZNQCLSA-N"),
             (BQB.IS, "NCIT:C77995"),
@@ -6056,10 +5828,8 @@ SUBSTANCE_NODES: list[InfoNode] = [
     # rivaroxaban+metabolites
     Substance(
         sid="rivaroxaban+metabolites",
-        name="rivaroxaban+metabolites",
         label="rivaroxaban+metabolites",
         description="All rivaroxaban substances.",
-        annotations=[],
     ),
     # apixaban
     Substance(
@@ -6111,7 +5881,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="apixaban-M4",
         label="apixaban-M4",
         description="Apixaban metabolite M4.",
-        annotations=[],
         synonyms=[],
     ),
     Substance(
@@ -6119,7 +5888,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="apixaban-M7",
         label="apixaban-M7",
         description="Apixaban metabolite M7.",
-        annotations=[],
         synonyms=[],
     ),
     Substance(
@@ -6127,7 +5895,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="apixaban-M10",
         label="apixaban-M10",
         description="Apixaban metabolite M10.",
-        annotations=[],
         synonyms=[],
     ),
     Substance(
@@ -6135,7 +5902,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="apixaban-M13",
         label="apixaban-M13",
         description="Apixaban metabolite M13.",
-        annotations=[],
         synonyms=[],
     ),
     Substance(
@@ -6143,7 +5909,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="apixaban and metabolites",
         description="Apixaban and all metabolites including M1, M2 and M7. Used for total "
         "radioactivity comparison.",
-        annotations=[],
     ),
     Substance(
         sid="thrombin",
@@ -6174,7 +5939,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="dabigatran",
         description="Dabigatran is the active form of the orally bioavailable prodrug dabigatran etexilate.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:70752"),
+            (BQB.IS, "CHEBI:70752"),
             (BQB.IS, "pubchem.compound/216210"),
             (BQB.IS, "inchikey/YBSJFWOBGCMAKL-UHFFFAOYSA-N"),
         ],
@@ -6202,7 +5967,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "monomeric sugar units that can be isolated after either chemical or enzymatic "
         "cleavage of the polymeric glycosaminoglycans heparin and heparan sulfate.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:61033"),
+            (BQB.IS, "CHEBI:61033"),
             (BQB.IS, "SNOMEDCT:708189008"),
             (BQB.IS, "pubchem.compound/5282448"),
         ],
@@ -6217,7 +5982,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "conversion of prothrombin (factor II) to thrombin and eventually prevents the formation of "
         "cross-linked fibrin clots. Rivaroxaban does not affect existing thrombin levels.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:85973"),
+            (BQB.IS, "CHEBI:85973"),
             (BQB.IS, "pubchem.compound/10280735"),
             (BQB.IS, "inchikey/HGVDHZBSSITLCT-JLJPHGGASA-N"),
             (BQB.IS, "NCIT:C96539"),
@@ -6281,17 +6046,14 @@ SUBSTANCE_NODES: list[InfoNode] = [
     # edoxaban+metabolites
     Substance(
         sid="edoxaban+metabolites",
-        name="edoxaban+metabolites",
         label="edoxaban+metabolites",
         description="All edoxaban substances.",
-        annotations=[],
     ),
     Substance(
         sid="edoxaban_edoxaban_m4",
         name="edoxaban+edoxaban-M4",
         label="edoxaban+edoxaban-M4",
         description="Sum of edoxaban metabolites.",
-        annotations=[],
     ),
     Substance(
         sid="gabapentin",
@@ -6330,7 +6092,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "proliferator-activated receptor gamma (PPARgamma) agonistic "
         "activity.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:5383"),
+            (BQB.IS, "CHEBI:5383"),
             (BQB.IS, "NCIT:C29073"),
             (BQB.IS, "SNOMEDCT:386966003"),
             (BQB.IS, "pubchem.compound/3476"),
@@ -6343,7 +6105,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="hydroxyglimepiride (M1)",
         description="Metabolite of glimepiride.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:180533"),
+            (BQB.IS, "CHEBI:180533"),
             (BQB.IS, "pubchem.compound/130939"),
             (BQB.IS, "inchikey/YUNQMQLWOOVHKI-UHFFFAOYSA-N"),
         ],
@@ -6379,7 +6141,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="glimepiride-metabolites",
-        name="glimepiride-metabolites",
         label="glimeperide+glimepiride-M1+glimepiride-M2",
         description="Sum of glimepiride and main metabolites metabolites",
         parents=[],
@@ -6394,7 +6155,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "peptide-1 (GLP-1) and glucose-dependent insulinotropic "
         "polypeptide (GIP).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:134731"),
+            (BQB.IS, "CHEBI:134731"),
             (BQB.IS, "NCIT:C118446"),
             (BQB.IS, "pubchem.compound/11953153"),
             (BQB.IS, "inchikey/ZWPRRQZNBDYKLH-VIFPVBQESA-N"),
@@ -6434,7 +6195,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "second-generation sulfonylureas, tolbutamide is more likely to cause adverse effects, such as "
         "jaundice. This agent is rapidly metabolized by CYPC29.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:27999"),
+            (BQB.IS, "CHEBI:27999"),
             (BQB.IS, "NCIT:C66610"),
         ],
     ),
@@ -6443,12 +6204,11 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Metabolite of tolbutamide. A urea that consists of 1-butylurea having a "
         "4-hydroxymethylbenzenesulfonyl group attached at the 3-position.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:63799"),
+            (BQB.IS, "CHEBI:63799"),
         ],
     ),
     Substance(
         sid="rapamycin",
-        name="rapamycin",
         label="rapamycin (sirolimus)",
         description="A natural macrocyclic lactone produced by the bacterium Streptomyces "
         "hygroscopicus, with immunosuppressant properties. In cells, sirolimus binds "
@@ -6461,14 +6221,13 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/5284616"),
             (BQB.IS, "inchikey/QFJCIRLUMZQUOT-HPLJOQBZSA-N"),
-            (BQB.IS, "chebi/CHEBI:9168"),
+            (BQB.IS, "CHEBI:9168"),
             (BQB.IS, "NCIT:C1212"),
         ],
         synonyms=["sirolimus"],
     ),
     Substance(
         sid="fujimycin",
-        name="fujimycin",
         label="fujimycin (tacrolimus)",
         description="A macrolide isolated from Streptomyces tsukubaensis. Tacrolimus binds to "
         "the FKBP-12 protein and forms a complex with calcium-dependent proteins, "
@@ -6480,14 +6239,13 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/445643"),
             (BQB.IS, "inchikey/QJJXYPPXXYFBGM-LFZNUXCKSA-N"),
-            (BQB.IS, "chebi/CHEBI:61049"),
+            (BQB.IS, "CHEBI:61049"),
             (BQB.IS, "NCIT:C1311"),
         ],
         synonyms=["tacrolimus"],
     ),
     Substance(
         sid="voglibose",
-        name="voglibose",
         description="A valiolamine derivative and inhibitor of alpha-glucosidase "
         "with antihyperglycemic activity. Voglibose binds to and inhibits "
         "alpha-glucosidase, an enteric enzyme found in the brush border "
@@ -6496,7 +6254,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/444020"),
             (BQB.IS, "inchikey/FZNCGRZWXLXZSZ-CIQUZCHMSA-N"),
-            (BQB.IS, "chebi/CHEBI:32300"),
+            (BQB.IS, "CHEBI:32300"),
             (BQB.IS, "NCIT:C95221"),
         ],
         synonyms=[],
@@ -6516,7 +6274,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="rosiglitazone",
-        name="rosiglitazone",
         description="An agent belonging to the glitazone class of antidiabetic agents "
         "with antihyperglycemic and anti-inflammatory activities. In addition "
         "to its selective affinity for peroxisome proliferator-activated "
@@ -6529,14 +6286,13 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/77999"),
             (BQB.IS, "inchikey/YASAKCUCGLMORW-UHFFFAOYSA-N"),
-            (BQB.IS, "chebi/CHEBI:50122"),
+            (BQB.IS, "CHEBI:50122"),
             (BQB.IS, "NCIT:C62076"),
         ],
         synonyms=[],
     ),
     Substance(
         sid="lobeglitazone",
-        name="lobeglitazone",
         description="An agent belonging to the glitazone class of antidiabetic agents "
         "with antihyperglycemic activity. Besides its activation of "
         "peroxisome proliferator-activated receptor (PPAR) gamma, "
@@ -6544,14 +6300,13 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/9826451"),
             (BQB.IS, "inchikey/CHHXEZSCHQVSRE-UHFFFAOYSA-N"),
-            (BQB.IS, "chebi/CHEBI:136052"),
+            (BQB.IS, "CHEBI:136052"),
             (BQB.IS, "NCIT:C91021"),
         ],
         synonyms=[],
     ),
     Substance(
         sid="linagliptin",
-        name="linagliptin",
         description="A potent, orally bioavailable dihydropurinedione-based inhibitor "
         "of dipeptidyl peptidase 4 (DPP-4), with hypoglycemic activity. "
         "The inhibition of DPP-4 by linagliptin appears to be longer "
@@ -6559,14 +6314,13 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/10096344"),
             (BQB.IS, "inchikey/LTXREWYXXSTFRX-QGZVFWFLSA-N"),
-            (BQB.IS, "chebi/CHEBI:68610"),
+            (BQB.IS, "CHEBI:68610"),
             (BQB.IS, "NCIT:C83887"),
         ],
         synonyms=[],
     ),
     Substance(
         sid="breviscapine",
-        name="breviscapine",
         description="Breviscapine.",
         annotations=[
             (BQB.IS, "pubchem.compound/6426802"),
@@ -6581,7 +6335,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "be safe when administered with hydrochlorothiazide (a diuretic) in clinical "
         "trials.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:136044"),
+            (BQB.IS, "CHEBI:136044"),
             (BQB.IS, "pubchem.compound/9870652"),
             (BQB.IS, "inchikey/AMEROGPZOLAFBN-UHFFFAOYSA-N"),
         ],
@@ -6611,16 +6365,15 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "losartan and its active metabolite selectively and competitively blocks the binding of "
         "angiotensin II to the angiotensin I (AT1) receptor.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6541"),
+            (BQB.IS, "CHEBI:6541"),
             (BQB.IS, "NCIT:C66869"),
         ],
     ),
     Substance(
         sid="14C-losartan",
-        name="14C-losartan",
         description="14C-labeled losartan.",
         annotations=[
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:6541"),
+            (BQB.IS_VERSION_OF, "CHEBI:6541"),
             (BQB.IS_VERSION_OF, "NCIT:C66869"),
         ],
     ),
@@ -6629,11 +6382,9 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="losartan and metabolites",
         description="Losartan and all metabolites including E3174 and L158. Used for total "
         "radioactivity comparison.",
-        annotations=[],
     ),
     Substance(
         sid="exp3174",
-        name="exp3174",
         label="Losartan carboxylic acid (E3174)",
         description="Metabolite of losartan. Losartan carboxylic acid is a biphenylyltetrazole "
         "that is losartan with the hydroxymethyl group at position 5 on the imidazole "
@@ -6641,7 +6392,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         synonyms=["E3174", "Losartan carboxylic acid"],
         annotations=[
             (BQB.IS, "pubchem.compound/108185"),
-            (BQB.IS, "chebi/CHEBI:74125"),
+            (BQB.IS, "CHEBI:74125"),
         ],
     ),
     Substance(
@@ -6699,7 +6450,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "leads to blockage of bacterial cell growth.",
         annotations=[
             (BQB.IS, "pubchem.compound/149096"),
-            (BQB.IS, "chebi/CHEBI:63598"),
+            (BQB.IS, "CHEBI:63598"),
             (BQB.IS, "NCIT:C1586"),
             (BQB.IS, "SNOMEDCT:387552007"),
             (BQB.IS, "inchikey/GSDSWSVVBLHKDQ-JTQLQIEISA-N"),
@@ -6753,11 +6504,11 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "suppressing gastric acid secretion.",
         annotations=[
             (BQB.IS, "pubchem.compound/4594"),
-            (BQB.IS, "chebi/CHEBI:7772"),
+            (BQB.IS, "CHEBI:7772"),
             (BQB.IS, "NCIT:C716"),
             (BQB.IS, "inchikey/SUBDBMMJDZJVOS-UHFFFAOYSA-N"),
             (BQB.IS_VERSION_OF, "NCIT:C29723"),  # Proton Pump Inhibitor
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:49200"),  # proton pump inhibitor
+            (BQB.IS_VERSION_OF, "CHEBI:49200"),  # proton pump inhibitor
         ],
         formula="C17H19N3O3S",
         mass=345.4,
@@ -6774,10 +6525,10 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "Syndrome",
         annotations=[
             (BQB.IS, "pubchem.compound/9568614"),
-            (BQB.IS, "chebi/CHEBI:50275"),
+            (BQB.IS, "CHEBI:50275"),
             (BQB.IS, "inchikey/SUBDBMMJDZJVOS-DEOSSOPVSA-N"),
             (BQB.IS_VERSION_OF, "NCIT:C29723"),  # Proton Pump Inhibitor
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:49200"),  # proton pump inhibitor
+            (BQB.IS_VERSION_OF, "CHEBI:49200"),  # proton pump inhibitor
         ],
         synonyms=["esomeprazole", "(S)-omeprazole", "S-omeprazole"],
     ),
@@ -6789,10 +6540,10 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "of an esomeprazole.",
         annotations=[
             (BQB.IS, "pubchem.compound/9579578"),
-            (BQB.IS, "chebi/CHEBI:77262"),
+            (BQB.IS, "CHEBI:77262"),
             (BQB.IS, "inchikey/SUBDBMMJDZJVOS-XMMPIXPASA-N"),
             (BQB.IS_VERSION_OF, "NCIT:C29723"),  # Proton Pump Inhibitor
-            (BQB.IS_VERSION_OF, "chebi/CHEBI:49200"),  # proton pump inhibitor
+            (BQB.IS_VERSION_OF, "CHEBI:49200"),  # proton pump inhibitor
         ],
         synonyms=[
             "(R)-omeprazole",
@@ -6805,7 +6556,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/119560"),
             (BQB.IS, "inchikey/CMZHQFXXAAIBKE-UHFFFAOYSA-N"),
-            (BQB.IS, "chebi/CHEBI:63840"),
+            (BQB.IS, "CHEBI:63840"),
         ],
     ),
     Substance(
@@ -6815,16 +6566,15 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/145900"),
             (BQB.IS, "inchikey/IXEQEYRTSRFZEO-UHFFFAOYSA-N"),
-            (BQB.IS, "chebi/CHEBI:166518"),
+            (BQB.IS, "CHEBI:166518"),
         ],
         synonyms=["omeprazole sulphone"],
     ),
     Substance(
         sid="5‐O‐desmethylomeprazole",
-        name="5‐O‐desmethylomeprazole",
         description="5'-O-Desmethyl omeprazole is a sulfoxide and a member of benzimidazoles.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:169791"),
+            (BQB.IS, "CHEBI:169791"),
             (BQB.IS, "inchikey/TWXDTVZNDQKCOS-UHFFFAOYSA-N"),
         ],
         synonyms=["5-OH-omeprazole-sulfone"],
@@ -6854,7 +6604,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "antacid activity.",
         annotations=[
             (BQB.IS, "NCIT:C29346"),
-            (BQB.IS, "chebi/CHEBI:7915"),
+            (BQB.IS, "CHEBI:7915"),
         ],
     ),
     Substance(
@@ -6872,7 +6622,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "pyloric antrum of the stomach, duodenum, and the pancreas.",
         parents=[],
         annotations=[
-            (BQB.IS, "chebi/CHEBI:75436"),
+            (BQB.IS, "CHEBI:75436"),
             (BQB.IS, "SNOMEDCT:62854002"),
             (BQB.IS, "NCIT:C94668"),
         ],
@@ -6883,11 +6633,10 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "It stimulates the secretion of gastric acid, pepsin, and intrinsic factor, and has been used as a"
         " diagnostic aid as the pentagastrin-stimulated calcitonin test.",
         parents=[],
-        annotations=[(BQB.IS, "chebi/CHEBI:31974")],
+        annotations=[(BQB.IS, "CHEBI:31974")],
     ),
     Substance(
         sid="fexofenadine",
-        name="fexofenadine",
         description="Fexofenadine is an antihistamine pharmaceutical drug used in the treatment of allergy symptoms, "
         "such as hay fever and urticaria. "
         "Fexofenadine is a selective peripheral H1 receptor antagonist. Blockage prevents the activation of the H1 receptors "
@@ -6896,13 +6645,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "but this increase does not influence the QT interval. The reason for this effect is likely due to transport-related effects, "
         "specifically involving p-glycoprotein (p-gp).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:5050"),
+            (BQB.IS, "CHEBI:5050"),
         ],
     ),
     # sorafenib
     Substance(
         sid="sorafenib",
-        name="sorafenib",
         description="A synthetic compound targeting growth signaling and angiogenesis. "
         "Sorafenib blocks the enzyme RAF kinase, a critical component of "
         "the RAF/MEK/ERK signaling pathway that controls cell division and "
@@ -6911,7 +6659,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "tumor angiogenesis.",
         annotations=[
             (BQB.IS, "pubchem.compound/216239"),
-            (BQB.IS, "chebi/CHEBI:50924"),
+            (BQB.IS, "CHEBI:50924"),
             (BQB.IS, "NCIT:C61948"),
             (BQB.IS, "inchikey/MLDQJTXFUGDVEO-UHFFFAOYSA-N"),
         ],
@@ -6979,7 +6727,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "treatment of type 2 diabetes.",
         annotations=[
             (BQB.IS, "pubchem.compound/56843331"),
-            (BQB.IS, "chebi/CHEBI:167574"),
+            (BQB.IS, "CHEBI:167574"),
             (BQB.IS, "NCIT:C152328"),
             (BQB.IS, "inchikey/DLSWIYLPEUIQAV-CCUURXOWSA-N"),
         ],
@@ -7025,7 +6773,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "suppressing the cough reflex.",
         # mass=271.4,
         annotations=[
-            (BQB.IS, "chebi/CHEBI:4470"),
+            (BQB.IS, "CHEBI:4470"),
             (BQB.IS, "NCIT:C62022"),
         ],
         synonyms=["DEX", "dex"],
@@ -7035,7 +6783,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="dextrorphan",
         description="Metabolite of dextromethorphan. Often used in metabolic ratios with dextromethorphan.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:29133"),
+            (BQB.IS, "CHEBI:29133"),
             (BQB.IS, "NCIT:C171857"),
         ],
         synonyms=["DOR", "dor"],
@@ -7046,7 +6794,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="dextrorphan O-glucuronide",
         description="Metabolite of dextromethorphan. Glucuronidation of dextrorphan.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:32645"),
+            (BQB.IS, "CHEBI:32645"),
             (BQB.IS, "pubchem.compound/24883428"),
             (BQB.IS, "inchikey/YQAUTKINOXBFCA-DCWOAAMISA-N"),
         ],
@@ -7069,7 +6817,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="3-hydroxymorphinan O-glucuronide",
         description="Metabolite of 3-hydroxymorphinan. Glucuronidation of 3-hydroxymorphinan.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:32645"),
+            (BQB.IS, "CHEBI:32645"),
             (BQB.IS, "pubchem.compound/24883428"),
             (BQB.IS, "inchikey/YQAUTKINOXBFCA-DCWOAAMISA-N"),
         ],
@@ -7191,7 +6939,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Propiverine is an antimuscarinic agent used to treat urinary incontinence or"
         " increased urinary frequency or urgency.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8493"),
+            (BQB.IS, "CHEBI:8493"),
         ],
         synonyms=[],
     ),
@@ -7202,7 +6950,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "or atovaquone. It is taken by mouth. When used alone, proguanil functions as "
         "a prodrug. Its active metabolite, cycloguanil, is an inhibitor of dihydrofolate reductase (DHFR)",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8455"),
+            (BQB.IS, "CHEBI:8455"),
         ],
         synonyms=["Proguanil", "Chlorguanide", "Chloroguanide"],
     ),
@@ -7227,7 +6975,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "This agent also acts directly on the atrioventricular node to suppress conduction, thereby "
         "slowing conduction velocity.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:4551"),
+            (BQB.IS, "CHEBI:4551"),
             (BQB.IS, "NCIT:C28990"),
             (BQB.IS, "omit/0005346"),
             (BQB.IS, "pubchem.compound/2724385"),
@@ -7243,7 +6991,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "human organ tissues. "
         "Cinacalcet is a strong inhibitor of the liver enzyme CYP2D6 and is partially metabolized by CYP3A4 and CYP1A2.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:48391"),
+            (BQB.IS, "CHEBI:48391"),
         ],
         synonyms=["cinacalcet hydrochloride"],
     ),
@@ -7256,7 +7004,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "human organ tissues. "
         "Cinacalcet is a strong inhibitor of the liver enzyme CYP2D6 and is partially metabolized by CYP3A4 and CYP1A2.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:48390"),
+            (BQB.IS, "CHEBI:48390"),
         ],
         synonyms=["cinacalcet"],
     ),
@@ -7266,7 +7014,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "and hypnosis during anesthesia, propofol facilitates inhibitory neurotransmission mediated by "
         "gamma-aminobutyric acid (GABA).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:44915"),
+            (BQB.IS, "CHEBI:44915"),
             (BQB.IS, "NCIT:C29384"),
             (BQB.IS, "omit/0016393"),
         ],
@@ -7279,7 +7027,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "Like other allylamines, terbinafine inhibits ergosterol synthesis by inhibiting squalene epoxidase, an enzyme that catalyzes the conversion of squalene to lanosterol. "
         "In fungi, lanosterol is then converted to ergosterol; in humans, lanosterol becomes cholesterol. ",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9448"),
+            (BQB.IS, "CHEBI:9448"),
         ],
         synonyms=["Terbinafine"],
     ),
@@ -7295,7 +7043,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "(under the trade name Viekira Pak) for treatment of chronic hepatitis C virus genotype 1 "
         "infection as well as cirrhosis of the liver.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:45409"),
+            (BQB.IS, "CHEBI:45409"),
         ],
         synonyms=["RTV", "Norvir"],
     ),
@@ -7314,7 +7062,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "CYP2C9 (weak) inhibitor. "
         "CYP2C19 (weak) inhibitor.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:7936"),
+            (BQB.IS, "CHEBI:7936"),
         ],
         synonyms=["paroxetine"],
     ),
@@ -7323,7 +7071,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="A pyridine-2-sulfonamide substituted at C-5 by a trifluoromethyl group and at the sulfonamide "
         "nitrogen by a dihydropyrone-containing m-tolyl substituent. It is an HIV-1 protease inhibitor.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:63628"),
+            (BQB.IS, "CHEBI:63628"),
         ],
     ),
     Substance(
@@ -7333,7 +7081,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="A fat-soluble vitamin required for the synthesis of "
         "prothrombin and certain other blood coagulation factors.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28384"),
+            (BQB.IS, "CHEBI:28384"),
         ],
     ),
     Substance(
@@ -7345,7 +7093,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "it weakly blocks dopamine type 2 receptors. It relieves schizophrenic "
         "symptoms (hallucinations, delusions, dementia).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3766"),
+            (BQB.IS, "CHEBI:3766"),
             (BQB.IS, "NCIT:C28936"),
         ],
     ),
@@ -7356,7 +7104,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "combustion of carbon. Inhalation causes central nervous system damage and "
         "asphyxiation.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:17245"),
+            (BQB.IS, "CHEBI:17245"),
             (BQB.IS, "NCIT:C76742"),
         ],
     ),
@@ -7364,7 +7112,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="dihydrogen",
         label="dihydrogen (H2)",
         description="An elemental molecule consisting of two hydrogens joined by a single bond.",
-        annotations=[(BQB.IS, "chebi/CHEBI:18276")],
+        annotations=[(BQB.IS, "CHEBI:18276")],
     ),
     Substance(
         sid="sulfasalazine",
@@ -7376,7 +7124,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "inhibit cyclooxygenase and prostaglandin production and is used in the "
         "management of inflammatory bowel diseases.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9334"),
+            (BQB.IS, "CHEBI:9334"),
             (BQB.IS, "NCIT:C29469"),
         ],
     ),
@@ -7386,7 +7134,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "anti-inflammatory drug sulfasalazine. Its manufacture and use were "
         "discontinued in 1990.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:132842"),
+            (BQB.IS, "CHEBI:132842"),
             (BQB.IS, "NCIT:C66570"),
         ],
     ),
@@ -7405,26 +7153,24 @@ SUBSTANCE_NODES: list[InfoNode] = [
     # ----------------------
     Substance(
         sid="glucose",
-        name="glucose",
         label="D-glucose",
         description="A simple sugar monosaccharide having two isoforms, alpha and beta, with a chemical structure "
         "of C6H12O6 that acts as an energy source for both plants and animals by reacting with oxygen, "
         "generating carbon dioxide and water, and releasing energy.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:4167"),
+            (BQB.IS, "CHEBI:4167"),
             (BQB.IS, "NCIT:C2831"),
         ],
         synonyms=["D-glucopyranose"],
     ),
     Substance(
         sid="lactate",
-        name="lactate",
         label="L-lactate",
         description="Lactic acid is an organic acid. In animals, L-lactate is constantly "
         "produced from pyruvate via the enzyme lactate dehydrogenase (LDH) in "
         "a process of fermentation during normal metabolism and exercise.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:24996"),
+            (BQB.IS, "CHEBI:24996"),
             (BQB.IS, "NCIT:C76926"),
         ],
         synonyms=["lactic acid"],
@@ -7467,7 +7213,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="proinsulin",
-        name="proinsulin",
         description="Proinsulin (110 aa, ~12 kDa) is encoded by the human INS gene. "
         "This protein plays a role in the modulation of glucose "
         "metabolism.",
@@ -7478,7 +7223,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="insulin",
-        name="insulin",
         description="A protein hormone formed from proinsulin in the beta cells of the pancreatic "
         "islets of Langerhans. The major fuel-regulating hormone, it is secreted into the blood "
         "in response to a rise in concentration of blood glucose or amino acids. Insulin promotes "
@@ -7526,17 +7270,16 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "blood serum levels can be used to distinguish between different conditions with similar "
         "clinical features.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:80332"),
+            (BQB.IS, "CHEBI:80332"),
             (BQB.IS, "NCIT:C94608"),
         ],
     ),
     Substance(
         sid="cortisol",
-        name="cortisol",
         description="Cortisol is a steroid hormone, in the glucocorticoid class of hormones. "
         "When used as a medication, it is known as hydrocortisone.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:17650"),
+            (BQB.IS, "CHEBI:17650"),
             (BQB.IS, "NCIT:C2290"),
         ],
         synonyms=["hydrocortisone"],
@@ -7548,7 +7291,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "cytochrome p450-3A4 (CYP3A4, an important enzyme involved in the metabolism of a variety of "
         "exogenous and endogenous compounds) and can be used to detect moderate and potent CYP3A4 "
         "inhibition in vivo.",
-        annotations=[(BQB.IS, "chebi/CHEBI:139271")],
+        annotations=[(BQB.IS, "CHEBI:139271")],
     ),
     Substance(
         sid="6beta-hydroxycortisol/cortisol",
@@ -7557,36 +7300,33 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="epinephrine",
-        name="epinephrine",
         description="Adrenaline, also known as epinephrine, is a hormone and medication. Adrenaline is normally produced by "
         "both the adrenal glands and a small number of neurons in the medulla oblongata, where it acts as a "
         "neurotransmitter involved in regulating visceral functions (e.g., respiration).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:33568"),
+            (BQB.IS, "CHEBI:33568"),
             (BQB.IS, "NCIT:C2292"),
         ],
         synonyms=["adrenaline"],
     ),
     Substance(
         sid="somatostatin",
-        name="somatostatin",
         description="Somatostatin, also known as growth hormone-inhibiting hormone (GHIH) or by several other names, "
         "is a peptide hormone that regulates the endocrine system and affects neurotransmission and "
         "cell proliferation via interaction with G protein-coupled somatostatin receptors and "
         "inhibition of the release of numerous secondary hormones.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:64628"),
+            (BQB.IS, "CHEBI:64628"),
             (BQB.IS, "NCIT:C28418"),
         ],
     ),
     Substance(
         sid="rosuvastatin",
-        name="rosuvastatin",
         description="Rosuvastatin is a statin with antilipidemic and potential antineoplastic activities. "
         "Rosuvastatin selectively and competitively binds to and inhibits hepatic hydroxymethyl-glutaryl "
         "coenzyme A (HMG-CoA) reductase",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:38545"),
+            (BQB.IS, "CHEBI:38545"),
             (BQB.IS, "pubchem.compound/446157"),
         ],
         synonyms=["Crestor"],
@@ -7597,20 +7337,19 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="N-Desmethylrosuvastatin is a metabolite of rosuvastatin and a "
         "member of pyrimidines.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:175669"),
+            (BQB.IS, "CHEBI:175669"),
             (BQB.IS, "pubchem.compound/9956224"),
         ],
         synonyms=[],
     ),
     Substance(
         sid="pitavastatin",
-        name="pitavastatin",
         description="Pitavastatin, also known as the brand name product Livalo, is a lipid-lowering drug belonging to "
         "the statin class of medications. By inhibiting the endogenous production of cholesterol within the "
         "liver, statins lower abnormal cholesterol and lipid levels and ultimately reduce the risk of "
         "cardiovascular disease.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:32020"),
+            (BQB.IS, "CHEBI:32020"),
             (BQB.IS, "pubchem.compound/5282452"),
             (BQB.IS, "inchikey/VGYFMXBACGZSIL-MCBHFWOFSA-N"),
         ],
@@ -7620,7 +7359,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="norepinephrine",
         description="Norepinephrine (NE), also called noradrenaline (NA) or noradrenalin, is an organic chemical in "
         "the catecholamine family that functions in the brain and body as a hormone and neurotransmitter.",
-        annotations=[(BQB.IS, "chebi/CHEBI:33569")],
+        annotations=[(BQB.IS, "CHEBI:33569")],
         synonyms=["noradrenaline"],
     ),
     Substance(
@@ -7628,26 +7367,24 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="growth hormone",
         description="A hormone that specifically regulates growth.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:37845"),
+            (BQB.IS, "CHEBI:37845"),
         ],
     ),
     Substance(
         sid="charcoal",
-        name="charcoal",
         description="A mixture that is the black porous residue, consisting of carbon and any remaining ash, obtained "
         "by pyrolysis of animal or vegetable matter in a limited supply of air.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:91090"),
+            (BQB.IS, "CHEBI:91090"),
         ],
     ),
     Substance(
         sid="glucagon",
-        name="glucagon",
         description="Glucagon is a peptide hormone, produced by alpha cells of the pancreas. It works to raise the "
         "concentration of glucose and fatty acids in the bloodstream, and is considered to be the main "
         "catabolic hormone of the body.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:5391"),
+            (BQB.IS, "CHEBI:5391"),
             (BQB.IS, "NCIT:C2268"),
         ],
     ),
@@ -7682,7 +7419,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="Branch-chained amino acids (BCAA)",
         description="Any amino acid in which the parent hydrocarbon chain has one or more alkyl substituents.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:22918"),
+            (BQB.IS, "CHEBI:22918"),
             (BQB.IS, "omit/0002014"),
         ],
     ),
@@ -7694,7 +7431,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "insulinotropic polypeptide (also abbreviated as GIP), is an inhibiting hormone of the secretin "
         "family of hormones.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:80165"),
+            (BQB.IS, "CHEBI:80165"),
             (BQB.IS, "uniprot/P09681"),
         ],
         synonyms=[
@@ -7736,7 +7473,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "the enzyme which catalyzes the conversion of HMG-CoA to mevalonate, "
         "a key step in cholesterol synthesis.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:63618"),
+            (BQB.IS, "CHEBI:63618"),
             (BQB.IS, "pubchem.compound/54687"),
             (BQB.IS, "NCIT:C62070"),
         ],
@@ -7788,7 +7525,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="cholestyramine",
-        name="cholestyramine",
         label="Cholestyramine",
         description=" is a bile acid sequestrant, which binds bile in the gastrointestinal tract to prevent its reabsorption. It is a strong ion exchange resin, which means it can exchange its chloride anions with anionic bile acids in the gastrointestinal tract and bind them strongly in the resin matrix. The functional group of the anion exchange resin is a quaternary ammonium group attached to an inert styrene-divinylbenzene copolymer.",
         synonyms=[
@@ -7806,7 +7542,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "which competitively inhibits 3-hydroxyl-3-methylgutarylcoenzyme A "
         "(HMG-CoA) reductase, an enzyme involved in cholesterol biosynthesis.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:40303"),
+            (BQB.IS, "CHEBI:40303"),
             (BQB.IS, "NCIT:C620"),
         ],
     ),
@@ -7816,7 +7552,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Lovastatin Acid is the active, acid form of lovastatin. "
         "In the body lovastatin is hydrolysed to its beta-hydroxy acid active form.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:82985"),
+            (BQB.IS, "CHEBI:82985"),
             (BQB.IS, "inchikey/QLJODMDSTUBWDW-BXMDZJJMSA-N"),
         ],
     ),
@@ -7838,24 +7574,22 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="fluvastatin",
-        name="fluvastatin",
         description="A racemate comprising equimolar amounts of (3R,5S)- and (3S,5R)-fluvastatin. "
         "An HMG-CoA reductase inhibitor, it is used (often as the corresponding "
         "sodium salt) to reduce triglycerides and LDL-cholesterol, "
         "and increase HDL-chloesterol, in the treatment of hyperlipidaemia.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:38561"),
+            (BQB.IS, "CHEBI:38561"),
             (BQB.IS, "NCIT:C61768"),
         ],
     ),
     Substance(
         sid="atorvastatin",
-        name="atorvastatin",
         description="A synthetic lipid-lowering agent. Atorvastatin competitively inhibits "
         "hepatic hydroxymethyl-glutaryl coenzyme A (HMG-CoA) reductase, the enzyme "
         "which catalyzes the conversion of HMG-CoA to mevalonate, a key step in "
         "cholesterol synthesis.",
-        annotations=[(BQB.IS, "chebi/CHEBI:39548"), (BQB.IS, "NCIT:C61527")],
+        annotations=[(BQB.IS, "CHEBI:39548"), (BQB.IS, "NCIT:C61527")],
         synonyms=["DIHYDROXY-HEPTANOIC ACID"],
     ),
     Substance(
@@ -7887,7 +7621,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="Metabolite of atorvastatin.",
         synonyms=["ortho-hydroxyatorvastatin acid"],
         mass=574.6,
-        annotations=[],
     ),
     Substance(
         sid="4-hydroxyatorvastatin-acid",
@@ -7934,7 +7667,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "inhibits hepatic hydroxymethyl-glutaryl coenzyme A (HMG-CoA) reductase.",
         annotations=[
             (BQB.IS, "NCIT:C29454"),
-            (BQB.IS, "chebi/CHEBI:9150"),
+            (BQB.IS, "CHEBI:9150"),
             (BQB.IS, "omit/0019802"),
         ],
         synonyms=["MK-733", "synvinolin"],
@@ -7998,7 +7731,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "when exposed to a particular wavelength and intensity of light, may induce tumor "
         "cell apoptosis.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:83161"),
+            (BQB.IS, "CHEBI:83161"),
             (BQB.IS, "NCIT:C2589"),
         ],
     ),
@@ -8019,7 +7752,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "system.",
         annotations=[
             (BQB.IS, "NCIT:C63652"),
-            (BQB.IS, "foodon/FOODON:03309417"),
+            (BQB.IS, "FOODON:03309417"),
         ],
     ),
     Substance(
@@ -8079,7 +7812,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="lacidipine",
         description="Lacidipine (tradenames Lacipil or Motens) is a calcium channel blocker.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:135737"),
+            (BQB.IS, "CHEBI:135737"),
             (BQB.IS, "NCIT:C80881"),
         ],
         synonyms=["Lacipil", "Motens"],
@@ -8092,7 +7825,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "pubchem.compound/3463"),
             (BQB.IS, "inchikey/HEMJJKBWTPKOJG-UHFFFAOYSA-N"),
-            (BQB.IS, "chebi/CHEBI:5296"),
+            (BQB.IS, "CHEBI:5296"),
             (BQB.IS, "NCIT:C29071"),
         ],
         synonyms=["2,2-Dimethyl-5-(2,5-xylyloxy)valeric acid"],
@@ -8114,7 +7847,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "causing dilatation of the main coronary and systemic arteries and decreasing myocardial "
         "contractility.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9948"),
+            (BQB.IS, "CHEBI:9948"),
             (BQB.IS, "NCIT:C928"),
             (BQB.IS, "omit/0015532"),
         ],
@@ -8123,7 +7856,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="norverapamil",
         description="A racemate comprising equimolar amounts of (R)- and (S)-norverapamil. The major active metabolite of verapamil.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:132050"),
+            (BQB.IS, "CHEBI:132050"),
         ],
     ),
     Substance(
@@ -8136,7 +7869,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
             "r-verapamil",
         ],
         annotations=[
-            (BQB.IS, "chebi/CHEBI:77734"),
+            (BQB.IS, "CHEBI:77734"),
             (BQB.IS, "NCIT:C1563"),
             (BQB.IS, "omit/0015532"),
         ],
@@ -8147,7 +7880,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "(T-type) calcium channels over long-lasting, high-voltage-activated (L-type) calcium channels, which is probably "
         "responsible for many of its unique properties.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6920"),
+            (BQB.IS, "CHEBI:6920"),
             (BQB.IS, "pubchem.compound/60663"),
             (BQB.IS, "inchikey/HBNPJJILLOYFJU-VMPREFPWSA-N"),
         ],
@@ -8172,7 +7905,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "cilostazol and its metabolites appears to inhibit PDE III activity, thereby suppressing cyclic "
         "adenosine monophosphate (cAMP) degradation.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:31401"),
+            (BQB.IS, "CHEBI:31401"),
             (BQB.IS, "NCIT:C1051"),
         ],
     ),
@@ -8181,7 +7914,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="A synthetic antiviral agent that selectively binds to and inhibits human immunodeficiency virus "
         "(HIV) protease. Nelfinavir has activity against HIV 1 and 2.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:7496"),
+            (BQB.IS, "CHEBI:7496"),
             (BQB.IS, "NCIT:C29285"),
         ],
     ),
@@ -8189,7 +7922,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="fenofibrate",
         description="A synthetic phenoxy-isobutyric acid derivate and prodrug with antihyperlipidemic activity.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:5001"),
+            (BQB.IS, "CHEBI:5001"),
             (BQB.IS, "NCIT:C29047"),
         ],
     ),
@@ -8198,7 +7931,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="A third-generation, orally available, irreversible, mutant-selective, epidermal growth factor "
         "receptor (EGFR) inhibitor, with potential antineoplastic activity.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:90943"),
+            (BQB.IS, "CHEBI:90943"),
             (BQB.IS, "NCIT:C116377"),
         ],
     ),
@@ -8207,7 +7940,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="A biphenylyltetrazole that is an angiotensin II receptor antagonist used mainly for the "
         "treatment of hypertension.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:5959"),
+            (BQB.IS, "CHEBI:5959"),
             (BQB.IS, "NCIT:C29130"),
         ],
     ),
@@ -8216,7 +7949,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="antidiabetic agent",
         description="Any kind of antidiabetic medication such as metformin, "
         "troglitazone, ...",
-        annotations=[],
         synonyms=["antidiabetic", "antidiabetic medication"],
     ),
     Substance(
@@ -8226,7 +7958,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "gamma (PPAR-gamma), a ligand-activated transcription factor, thereby inducing cell "
         "differentiation and inhibiting cell growth and angiogenesis.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:9753"),
+            (BQB.IS, "CHEBI:9753"),
             (BQB.IS, "NCIT:C1522"),
         ],
     ),
@@ -8237,7 +7969,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "a ligand-activated transcription factor, thereby inducing cell differentiation and inhibiting "
         "cell growth and angiogenesis.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8228"),
+            (BQB.IS, "CHEBI:8228"),
             (BQB.IS, "NCIT:C71633"),
         ],
     ),
@@ -8247,7 +7979,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "with the active serine site in gastric and pancreatic lipases, thereby inhibiting their activity "
         "and preventing dietary fat from being hydrolyzed and absorbed.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:94686"),
+            (BQB.IS, "CHEBI:94686"),
             (BQB.IS, "NCIT:C29303"),
         ],
     ),
@@ -8257,19 +7989,18 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "properties. Amlodipine inhibits the influx of extracellular calcium ions into myocardial and "
         "peripheral vascular smooth muscle cells, thereby preventing vascular and myocardial contraction.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:2668"),
+            (BQB.IS, "CHEBI:2668"),
             (BQB.IS, "NCIT:C61635"),
         ],
     ),
     Substance(
         sid="bile acids",
-        name="bile acids",
         description="Any member of a group of hydroxy steroids occuring in bile, "
         "where they are present as the sodium salts of their amides with glycine or taurine. "
         "In mammals bile acids almost invariably have 5beta-configuration, while in lower vertebrates, some bile acids, "
         "known as allo-bile acids, have 5alpha-configuration.",
         synonyms=["BA"],
-        annotations=[(BQB.IS, "chebi/CHEBI:138366")],
+        annotations=[(BQB.IS, "CHEBI:138366")],
     ),
     Substance(
         sid="campesterol",
@@ -8277,7 +8008,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "position C-3 of the steroid skeleton, and saturated bonds throughout the sterol structure, "
         "with the exception of the 5-6 double bond in the B ring. Marker of cholesterol absorption.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28623"),
+            (BQB.IS, "CHEBI:28623"),
             (BQB.IS, "NCIT:C68328"),
         ],
     ),
@@ -8287,7 +8018,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "skeleton, and unsaturated bonds in position 5-6 of the B ring, and position 22-23 in the alkyl "
         "substituent. Marker of cholesterol absorption.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28824"),
+            (BQB.IS, "CHEBI:28824"),
             (BQB.IS, "NCIT:C68427"),
         ],
     ),
@@ -8296,7 +8027,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="A member of the class of phytosterols that is stigmast-5-ene substituted by a beta-hydroxy group "
         "at position 3. Marker of cholesterol absorption.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:27693"),
+            (BQB.IS, "CHEBI:27693"),
         ],
     ),
     # --- talinolol ---
@@ -8306,7 +8037,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "Talinolol contains a stereocenter and consists of two enantiomers. "
         "This is a racemate, i.e. a 1: 1 mixture of (R)- and the (S)-forms.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:135533"),
+            (BQB.IS, "CHEBI:135533"),
             (BQB.IS, "pubchem.compound/68770"),
         ],
         synonyms=["57460-41-0", "Cordanum"],
@@ -8325,7 +8056,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="stalinolol",
         name="S-talinolol",
         description="S enantiomer of talinolol.",
-        annotations=[],
         synonyms=["(-)-Talinolol", "(-)-talinolol, (S)-talinolol"],
     ),
     Substance(
@@ -8342,7 +8072,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="talinolol2cisoh",
         name="2-cis hydroxytalinolol",
         description="2-cis hydroxytalinolol, metabolite of talinolol.",
-        annotations=[],
         synonyms=[],
     ),
     Substance(
@@ -8359,14 +8088,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="talinolol3transoh",
         name="3-trans hydroxytalinolol",
         description="3-trans hydroxytalinolol, metabolite of talinolol.",
-        annotations=[],
         synonyms=[],
     ),
     Substance(
         sid="talinolol4cisoh",
         name="4-cis hydroxytalinolol",
         description="4-cis hydroxytalinolol, metabolite of talinolol.",
-        annotations=[],
         synonyms=[],
     ),
     Substance(
@@ -8408,7 +8135,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="bifendate",
-        name="bifendate",
         description="Bifendate is a synthetic intermediate of schizandrin. "
         "Bifendate has known human metabolites that include Mono-O-demethylated bdd and methyl "
         "4-(2,3-dihydroxy-4-methoxy-6-methoxycarbonylphenyl)-7-methoxy-1,3-benzodioxole-5-carboxylate.",
@@ -8426,19 +8152,16 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="TPGS",
         label="D-alpha-tocopheryl polyethylene glycol 1000 succinate (TPGS)",
         description="D-alpha-tocopheryl polyethylene glycol 1000 succinate (TPGS), a surfactant.",
-        annotations=[],
         synonyms=[],
     ),
     Substance(
         sid="poloxamer188",
         name="Poloxamer 188",
         description="Poloxamer 188, a surfactant that does not interact with P-gp.",
-        annotations=[],
         synonyms=["synperonic F68"],
     ),
     Substance(
         sid="glycyrrhizin",
-        name="glycyrrhizin",
         description="A saponin-like compound that provides the main sweet flavor for "
         "Glycyrrhiza glabra (licorice), with potential immunomodulating, "
         "anti-inflammatory, hepato- and neuro-protective, and "
@@ -8452,47 +8175,42 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="duloxetine",
-        name="duloxetine",
         description="Duloxetine is a selective serotonin and norepinephrine reuptake "
         "inhibitor widely used as an antidepressant and for neuropathic "
         "pain.",
         annotations=[
             (BQB.IS, "NCIT:C65495"),
             (BQB.IS, "pubchem.compound/60835"),
-            (BQB.IS, "chebi/CHEBI:36795"),
+            (BQB.IS, "CHEBI:36795"),
             (BQB.IS, "inchikey/ZEUITGRIYCTCEM-KRWDZBQOSA-N"),
         ],
         synonyms=[],
     ),
     Substance(
         sid="schizandra chinensis",
-        name="schizandra chinensis",
         description="Schisandra (magnolia vine) is a genus of twining shrub native to "
         "East Asia, and its dried fruit is sometimes used medicinally.",
-        annotations=[],
         synonyms=["magnolia vine", "schizandra"],
     ),
     Substance(
         sid="deoxyschizandrin",
-        name="deoxyschizandrin",
         description="Deoxyschizandrin is a bio-active isolate of Schisandra chinensis. "
         "Deoxyschizandrin has been found to act as an agonist of the "
         "adiponectin receptor 2 (AdipoR2).",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:80818"),
+            (BQB.IS, "CHEBI:80818"),
         ],
         synonyms=[],
     ),
     Substance(
         sid="genistein",
-        name="genistein",
         description="A soy-derived isoflavone and phytoestrogen with antineoplastic "
         "activity. Genistein binds to and inhibits protein-tyrosine "
         "kinase, thereby disrupting signal transduction and inducing "
         "cell differentiation.",
         annotations=[
             (BQB.IS, "NCIT:C1113"),
-            (BQB.IS, "chebi/CHEBI:28088"),
+            (BQB.IS, "CHEBI:28088"),
             (BQB.IS, "pubchem.compound/5280961"),
         ],
         synonyms=["genisterin", "prunetol"],
@@ -8500,51 +8218,46 @@ SUBSTANCE_NODES: list[InfoNode] = [
     # --- torasemide ---
     Substance(
         sid="torasemide",
-        name="torasemide",
         description="An anilinopyridine sulfonylurea belonging to the class of loop diuretics. Torsemide has a "
         "prolonged duration of action compared to other loop diuretics, is extensively protein bound "
         "in plasma and has a relatively long half-life.",
         annotations=[
             (BQB.IS, "NCIT:C29506"),
-            (BQB.IS, "chebi/CHEBI:9637"),
+            (BQB.IS, "CHEBI:9637"),
         ],
     ),
     Substance(
         sid="torasemide-M1",
-        name="torasemide-M1",
         description="An aromatic primary alcohol resulting from the hydroxylation of the 3'-methyl group of the "
         "phenyl ring of torasemide. It is a metabolite of torasemide.",
         synonyms=["hydroxytorsemide"],
         annotations=[
-            (BQB.IS, "chebi/CHEBI:155897"),
+            (BQB.IS, "CHEBI:155897"),
             (BQB.IS, "inchikey/WCYVLAMJCQZUCR-UHFFFAOYSA-N"),
         ],
     ),
     Substance(
         sid="torasemide-M3",
-        name="torasemide-M3",
         description="A member of the class of phenols that is torasemide which carries a hydroxy group at position "
         "4' of the phenyl ring. It is a metabolite of torasemide.",
         synonyms=["4'-hydroxy torasemide"],
         annotations=[
-            (BQB.IS, "chebi/CHEBI:155915"),
+            (BQB.IS, "CHEBI:155915"),
             (BQB.IS, "inchikey/BJCCDWZGWOVSPR-UHFFFAOYSA-N"),
         ],
     ),
     Substance(
         sid="torasemide-M5",
-        name="torasemide-M5",
         description="A monocarboxylic acid resulting from the replacement of the 3'-methyl group of the "
         "phenyl ring of torasemide by a carboxy group. It is a metabolite of torasemide.",
         synonyms=["torasemide carboxylic acid"],
         annotations=[
-            (BQB.IS, "chebi/CHEBI:155916"),
+            (BQB.IS, "CHEBI:155916"),
             (BQB.IS, "inchikey/PGPRBNDLCZQUST-UHFFFAOYSA-N"),
         ],
     ),
     Substance(
         sid="furosemide",
-        name="furosemide",
         synonyms=[
             "Lasix (TN)",
             "Frusemide",
@@ -8554,43 +8267,39 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "congestive heart failure.",
         annotations=[
             (BQB.IS, "inchikey/ZZUFCTLCJUWOSV-UHFFFAOYSA-N"),
-            (BQB.IS, "chebi/CHEBI:47426"),
+            (BQB.IS, "CHEBI:47426"),
         ],
     ),
     Substance(
         sid="THC",
-        name="THC",
         synonyms=[
             "Delta(9)-tetrahydrocannabinol",
         ],
         description="The principal psychoactive constituent of the cannabis plant, it is used for treatment of anorexia associated with AIDS as well as nausea and vomiting associated with cancer chemotherapy.",
         annotations=[
             (BQB.IS, "inchikey/CYQFCXCEBYINGO-IAGOWNOFSA-N"),
-            (BQB.IS, "chebi/CHEBI:66964"),
+            (BQB.IS, "CHEBI:66964"),
         ],
     ),
     Substance(
         sid="cocaine",
-        name="cocaine",
         synonyms=[],
         description="A tropane alkaloid obtained from leaves of the South American shrub Erythroxylon coca.",
         annotations=[
             (BQB.IS, "inchikey/ZPUCINDJVBIVPJ-LJISPDSOSA-N"),
-            (BQB.IS, "chebi/CHEBI:27958"),
+            (BQB.IS, "CHEBI:27958"),
         ],
     ),
     Substance(
         sid="amphetamine",
-        name="amphetamine",
         synonyms=[],
         description="A racemate comprising equimolar amounts of (R)-amphetamine (also known as levamphetamine or levoamphetamine) and (S)-amphetamine (also known as dexamfetamine or dextroamphetamine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:2679"),
+            (BQB.IS, "CHEBI:2679"),
         ],
     ),
     Substance(
         sid="probucol",
-        name="probucol",
         synonyms=["Lorelco", "Biphenabid", "Bisphenabid"],
         description="Probucol is a dithioketal that is propane-2,2-dithiol in which the "
         "hydrogens attached to both sulfur atoms are replaced by 3,5-di-tert-butyl-4-"
@@ -8600,12 +8309,11 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "and an antilipemic drug. It is a dithioketal and a polyphenol.",
         annotations=[
             (BQB.IS, "inchikey/FYPMFJGVHOHGLL-UHFFFAOYSA-N"),
-            (BQB.IS, "chebi/CHEBI:8427"),
+            (BQB.IS, "CHEBI:8427"),
         ],
     ),
     Substance(
         sid="bucolome",
-        name="bucolome",
         description="Bucolome (Paramidine) is a barbiturate derivative. Unlike most "
         "barbiturates it does not have any significant sedative or "
         "hypnotic effects, but instead acts as an analgesic and "
@@ -8618,13 +8326,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="butylscopolamine",
-        name="butylscopolamine",
         description="Hyoscine butylbromide, also known as scopolamine butylbromide and "
         "sold under the brandname Buscopan among others, is an anticholinergic "
         "medication used to treat crampy abdominal pain, esophageal spasms, "
         "renal colic, and bladder spasms.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:145701"),
+            (BQB.IS, "CHEBI:145701"),
             (BQB.IS, "NCIT:C83571"),
         ],
         synonyms=[
@@ -8636,13 +8343,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="bromazepam",
-        name="bromazepam",
         description="Bromazepam, sold under many brand names, is a benzodiazepine. "
         "It is mainly an anti-anxiety agent with similar side effects to "
         "diazepam (Valium). In addition to being used to treat anxiety or "
         "panic states, bromazepam may be used as a premedicant prior to "
         "minor surgery.",
-        annotations=[(BQB.IS, "chebi/CHEBI:31302"), (BQB.IS, "NCIT:C87454")],
+        annotations=[(BQB.IS, "CHEBI:31302"), (BQB.IS, "NCIT:C87454")],
         synonyms=[],
     ),
     Substance(
@@ -8652,13 +8358,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
         annotations=[
             (BQB.IS, "NCIT:C74425"),
             (BQB.IS, "pubchem.compound/66261"),
-            (BQB.IS, "chebi/CHEBI:135104"),
+            (BQB.IS, "CHEBI:135104"),
         ],
         synonyms=["propatylnitrate"],
     ),
     Substance(
         sid="osilodostrat",
-        name="osilodostrat",
         description="Osilodrostat is an orally bioavailable inhibitor of both steroid 11beta-hydroxylase (cytochrome P450 (CYP) 11B1) and aldosterone synthase (CYP11B2; steroid 18-hydroxylase), "
         "with potential anti-adrenal activity and ability to treat Cushing disease (CD). Upon administration, osilodrostat binds to and inhibits the activity of CYP11B1, the enzyme that "
         "catalyzes the final step of cortisol synthesis from the precursor 11-deoxycortisol, and CYP11B2, the enzyme that catalyzes aldosterone synthesis from corticosterone and "
@@ -8670,7 +8375,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="quercetin",
-        name="quercetin",
         description="A polyphenolic flavonoid with potential chemopreventive activity. "
         "Quercetin, ubiquitous in plant food sources and a major "
         "bioflavonoid in the human diet, may produce antiproliferative "
@@ -8679,7 +8383,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "It is one of the most "
         "abundant flavonoids in edible vegetables, fruit and wine",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:16243"),
+            (BQB.IS, "CHEBI:16243"),
             (BQB.IS, "NCIT:C792"),
             (BQB.IS, "SNOMEDCT:52130006"),
         ],
@@ -8687,27 +8391,24 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="mexiletine",
-        name="mexiletine",
         description="Mexiletine (INN) (sold under the brand names Mexitil and NaMuscla) is a medication used to treat abnormal heart rhythms, chronic pain, and some causes of muscle stiffness. "
         "Common side effects include abdominal pain, chest discomfort, drowsiness, headache, and nausea. It works as a non-selective voltage-gated sodium channel blocker and belongs "
         "to the Class IB group of anti-arrhythmic medications.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6916"),
+            (BQB.IS, "CHEBI:6916"),
         ],
     ),
     Substance(
         sid="curcumin",
-        name="curcumin",
         description="A β-diketone that is methane in which two of the hydrogens are substituted by feruloyl groups. "
         "A natural dyestuff found in the root of Curcuma longa.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3962"),
+            (BQB.IS, "CHEBI:3962"),
             (BQB.IS, "pubchem.compound/969516"),
         ],
     ),
     Substance(
         sid="bupropion",
-        name="bupropion",
         description="Bupropion is an aminoketone antidepressant that is widely used in "
         "therapy of depression and smoking cessation. Bupropion therapy can be "
         "associated with transient, usually asymptomatic elevations in serum "
@@ -8716,7 +8417,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "carrying a tert-butylamino group at position 2 "
         "and a chloro substituent at position 3 on the phenyl ring.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3219"),
+            (BQB.IS, "CHEBI:3219"),
             (BQB.IS, "pubchem.compound/444"),
             (BQB.IS, "inchikey/SNPPWIUOZRMYNY-UHFFFAOYSA-N"),
         ],
@@ -8724,34 +8425,31 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="hydroxybupropion",
-        name="hydroxybupropion",
         description="Hydroxybupropion (code name BW 306U), or 6-hydroxybupropion, "
         "is the major active metabolite of the antidepressant and smoking "
         "cessation drug bupropion.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:166487"),
+            (BQB.IS, "CHEBI:166487"),
             (BQB.IS, "pubchem.compound/446"),
             (BQB.IS, "inchikey/AKOAEVOSDHIVFX-UHFFFAOYSA-N"),
         ],
     ),
     Substance(
         sid="isavuconazole",
-        name="isavuconazole",
         description="A 1,3-thiazole that is butan-2-ol which is substituted at positions 1, 2, and "
         "3 by 1,2,4-triazol-1-yl, 2,5-difluorophenyl, and 4-(p-cyanophenyl)-1,3-thiazol-2-yl "
         "groups, respectively. It is an antifungal drug used for the treatment of invasive "
         "aspergillosis and invasive mucormycosis.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:85979"),
+            (BQB.IS, "CHEBI:85979"),
         ],
     ),
     Substance(
         sid="5-MeO-DALT",
-        name="5-MeO-DALT",
         description="5-MeO-DALT or N,N-di allyl-5-methoxy tryptamine is a psychedelic tryptamine "
         "first synthesized by Alexander Shulgin. ",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8805"),
+            (BQB.IS, "CHEBI:8805"),
         ],
     ),
     Substance(
@@ -8765,13 +8463,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "euphoria, sedation, respiratory depression, miosis, bradycardia "
         "and physical dependence.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:50140"),
+            (BQB.IS, "CHEBI:50140"),
             (BQB.IS, "NCIT:C638"),
         ],
     ),
     Substance(
         sid="dextromethadone",
-        name="dextromethadone",
         description="A 6-(dimethylamino)-4,4-diphenylheptan-3-one that has "
         "(S)-configuration. It is the less active enantiomer of methadone "
         "and has very little activity on opioid receptors and mainly "
@@ -8779,18 +8476,17 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "cardiac toxicity. The drug is currently under clinical "
         "development for the treatment of major depressive disorder.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:167308"),
+            (BQB.IS, "CHEBI:167308"),
         ],
         synonyms=["s-methadone"],
     ),
     Substance(
         sid="levomethadone",
-        name="levomethadone",
         description="A 6-(dimethylamino)-4,4-diphenylheptan-3-one that has (R)-configuration. "
         "It is the active enantiomer of methadone and its hydrochloride salt is used to "
         "treat adults who are addicted to drugs such as heroin and morphine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:136003"),
+            (BQB.IS, "CHEBI:136003"),
         ],
         synonyms=["l-methadone"],
     ),
@@ -8799,7 +8495,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="Sodium tanshinone II A sulfonate",
         description="Sodium tanshinone II A sulfonate",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:108595"),
+            (BQB.IS, "CHEBI:108595"),
         ],
         synonyms=[
             "1,6,6-trimethyl-8,9-dihydro-7H-naphtho[1,2-g]benzofuran-10,11-dione"
@@ -8807,11 +8503,10 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="pefloxacin",
-        name="pefloxacin",
         description="A quinolone that is 4-oxo-1,4-dihydroquinoline which is substituted at positions "
         "1, 3, 6 and 7 by ethyl, carboxy, fluorine, and 4-methylpiperazin-1-yl groups, respectively.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:50199"),
+            (BQB.IS, "CHEBI:50199"),
         ],
     ),
     Substance(
@@ -8819,44 +8514,40 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="isosorbide dinitrate",
         description="Isosorbide dinitrate",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:6061"),
+            (BQB.IS, "CHEBI:6061"),
         ],
     ),
     Substance(
         sid="acetylcysteine",
-        name="acetylcysteine",
         description="Acetylcysteine",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:22198"),
+            (BQB.IS, "CHEBI:22198"),
         ],
     ),
     Substance(
         sid="digitoxin",
-        name="digitoxin",
         description="A cardenolide glycoside in which the 3β-hydroxy group of digitoxigenin carries a "
         "2,6-dideoxy-β-D-ribo-hexopyranosyl-(1→4)-2,6-dideoxy-β-D-ribo-hexopyranosyl-(1→4)-2,"
         "6-dideoxy-β-D-ribo-hexopyranosyl trisaccharide chain.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28544"),
+            (BQB.IS, "CHEBI:28544"),
         ],
     ),
     Substance(
         sid="heparin",
-        name="heparin",
         description="A highly sulfated linear glycosaminoglycan comprising complex patterns of "
         "uronic acid-(1→4)-D-glucosamine repeating subunits. Used as an injectable anticoagulant, "
         "it has the highest negative charge density of any known biological molecule.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:28304"),
+            (BQB.IS, "CHEBI:28304"),
         ],
     ),
     Substance(
         sid="nifedipine",
-        name="nifedipine",
         description="Nifedipine, sold under the brand name Adalat among others, is a calcium channel blocker "
         "medication used to manage angina, high blood pressure, Raynaud's phenomenon, and premature labor",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:7565"),
+            (BQB.IS, "CHEBI:7565"),
         ],
     ),
     Substance(
@@ -8866,32 +8557,29 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "(also known as hydrargillite) and its three much rarer polymorphs: "
         "bayerite, doyleite, and nordstrandite.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:33130"),
+            (BQB.IS, "CHEBI:33130"),
         ],
     ),
     Substance(
         sid="allopurinol",
-        name="allopurinol",
         description="Allopurinol, sold under the brand name Zyloprim among others, is a medication used to decrease "
         "high blood uric acid levels.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:33130"),
+            (BQB.IS, "CHEBI:33130"),
         ],
     ),
     Substance(
         sid="ipratropium bromide",
-        name="ipratropium bromide",
         description="The anhydrous form of the bromide salt of ipratropium. An anticholinergic drug, "
         "ipratropium bromide blocks the muscarinic cholinergic receptors in the smooth muscles of "
         "the bronchi in the lungs. This opens the bronchi, so providing relief in chronic obstructive "
         "pulmonary disease and acute asthma.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:46659"),
+            (BQB.IS, "CHEBI:46659"),
         ],
     ),
     Substance(
         sid="repaglinide",
-        name="repaglinide",
         description="Repaglinide is a benzoic acid derivative that stimulates insulin "
         "secretion from the pancreas and is used in the therapy of type 2 diabetes. "
         "Repaglinide has been linked to rare instances of clinically apparent acute "
@@ -8901,7 +8589,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "metabolized in the liver by CYP2C8 and CYP3A4 and its metabolites are "
         "excreted in the bile. Repaglinide has a half-life of one hour.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:8805"),
+            (BQB.IS, "CHEBI:8805"),
             (BQB.IS, "NCIT:C47703"),
             (BQB.IS, "pubchem.compound/65981"),
             (BQB.IS, "inchikey/FAEKWTJYAYMJKF-QHCPKHFHSA-N"),
@@ -8914,13 +8602,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
         description="3'-Hydroxy Repaglinide(Mixture of Diastereomers). "
         "3'-Hydroxy Repaglinide(Mixture of Diastereomers) is a member of piperidines.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:183883"),
+            (BQB.IS, "CHEBI:183883"),
             (BQB.IS, "pubchem.compound/46781896"),
         ],
     ),
     Substance(
         sid="memantine",
-        name="memantine",
         description="Memantine is a medication used to slow the progression of "
         "moderate-to-severe Alzheimer's disease. It is taken by mouth. "
         "Common side effects include headache, constipation, "
@@ -8928,14 +8615,13 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "blood clots, psychosis, and heart failure. "
         "It is believed to work by blocking NMDA receptors.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:64312"),
+            (BQB.IS, "CHEBI:64312"),
             (BQB.IS, "pubchem.compound/4054"),
             (BQB.IS, "inchikey/BUGYDGFZZOZRHP-UHFFFAOYSA-N"),
         ],
     ),
     Substance(
         sid="melatonin",
-        name="melatonin",
         description="Melatonin is a hormone produced by the pineal gland that has "
         "multiple effects including somnolence, and is believed to play "
         "a role in regulation of the sleep-wake cycle. Melatonin is available "
@@ -8943,7 +8629,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "wellbeing and sleep. Melatonin has not been implicated in causing "
         "serum enzyme elevations or clinically apparent liver injury.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:16796"),
+            (BQB.IS, "CHEBI:16796"),
             (BQB.IS, "NCIT:C632"),
             (BQB.IS, "inchikey/DRLFMBDRBRZALE-UHFFFAOYSA-N"),
             (BQB.IS, "pubchem.compound/896"),
@@ -8958,20 +8644,19 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "It is a member of acetamides and a member "
         "of tryptamines. It derives from a melatonin.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:2198"),
+            (BQB.IS, "CHEBI:2198"),
             (BQB.IS, "inchikey/OMYMRCXOJJZYKE-UHFFFAOYSA-N"),
             (BQB.IS, "pubchem.compound/1864"),
         ],
     ),
     Substance(
         sid="cotinine",
-        name="cotinine",
         description="(-)-cotinine is an N-alkylpyrrolidine that consists of N-methylpyrrolidinone bearing a pyridin-3-yl substituent at "
         "position C-5 (the 5S-enantiomer). It is an alkaloid commonly found in Nicotiana tabacum. It has a role as a biomarker, "
         "an antidepressant, a plant metabolite and a human xenobiotic metabolite. It is a N-alkylpyrrolidine, a member of pyridines,"
         " a pyrrolidine alkaloid and a member of pyrrolidin-2-ones. Cotinine is a major metabolite of nicotine.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:68641"),
+            (BQB.IS, "CHEBI:68641"),
             (BQB.IS, "NCIT:C70941"),
             (BQB.IS, "inchikey/UIKROCXWUNQSPJ-VIFPVBQESA-N"),
             (BQB.IS, "pubchem.compound/854019"),
@@ -8990,7 +8675,6 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="chlormethiazole",
-        name="chlormethiazole",
         description="Clomethiazole is a well-established γ-aminobutyric acid "
         "(GABAA)-mimetic drug. It is a sedative and hypnotic that is widely"
         " used in treating and preventing symptoms of acute alcohol "
@@ -9000,7 +8684,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "agitation, restlessness, short-term insomnia and Parkinson's "
         "disease in the elderly.",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:92875"),
+            (BQB.IS, "CHEBI:92875"),
             (BQB.IS, "NCIT:C80664"),
             (BQB.IS, "inchikey/PCLITLDOTJTVDJ-UHFFFAOYSA-N"),
             (BQB.IS, "pubchem.compound/10783"),
@@ -9016,7 +8700,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "of amino acid metabolism, in addition to purine and pyrimidine "
         "synthesis, and is essential for hematopoiesis and red blood cell production. ",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:27470"),
+            (BQB.IS, "CHEBI:27470"),
             (BQB.IS, "NCIT:C510"),
         ],
     ),
@@ -9026,47 +8710,43 @@ SUBSTANCE_NODES: list[InfoNode] = [
         label="quinine sulphate",
         description="The sulfate salt form of the quinidine alkaloid isolate quinine. ",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:52250"),
+            (BQB.IS, "CHEBI:52250"),
             (BQB.IS, "NCIT:C29399"),
         ],
     ),
     Substance(
         sid="aminophylline",
-        name="aminophylline",
         label="aminophylline",
         description="A methylxanthine and derivative of theophylline. ",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:2659"),
+            (BQB.IS, "CHEBI:2659"),
             (BQB.IS, "NCIT:C47393"),
         ],
     ),
     Substance(
         sid="bumetanide",
-        name="bumetanide",
         label="bumetanide",
         description="A potent sulfamoylanthranilic acid derivative belonging to the class of loop diuretics. ",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3213"),
+            (BQB.IS, "CHEBI:3213"),
             (BQB.IS, "NCIT:C28875"),
         ],
     ),
     Substance(
         sid="colchicine",
-        name="colchicine",
         label="colchicine",
         description="An alkaloid isolated from Colchicum autumnale with anti-gout and anti-inflammatory activities. ",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:23359"),
+            (BQB.IS, "CHEBI:23359"),
             (BQB.IS, "NCIT:C385"),
         ],
     ),
     Substance(
         sid="bendroflumethiazide",
-        name="bendroflumethiazide",
         label="bendroflumethiazide",
         description="A long-acting agent, also known as bendrofluazide, belonging to the class of thiazide diuretics with antihypertensive activity. ",
         annotations=[
-            (BQB.IS, "chebi/CHEBI:3013"),
+            (BQB.IS, "CHEBI:3013"),
             (BQB.IS, "NCIT:C47410"),
         ],
     ),
@@ -9091,20 +8771,18 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="liraglutide",
-        name="liraglutide",
         label="liraglutide",
         description="GLP-1 analog used in the management of type 2 diabetes mellitus, prevention of cardiovascular "
         "complications associated with diabetes, and obesity.",
         annotations=[
             (BQB.IS, "pubchem.compound/16134956"),
             (BQB.IS, "NCIT:C82239"),
-            (BQB.IS, "chebi/CHEBI:71193"),
+            (BQB.IS, "CHEBI:71193"),
             (BQB.IS, "inchikey/YSDQQAXHVYUZIW-QCIJIYAXSA-N"),
         ],
     ),
     Substance(
         sid="dulaglutide",
-        name="dulaglutide",
         label="dulaglutide",
         description="A glucagon-like peptide-1 (GLP-1) receptor agonist used to control blood sugar in diabetes.",
         annotations=[
@@ -9135,13 +8813,12 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="lixisenatide",
-        name="lixisenatide",
         label="lixisenatide",
         description="GLP-1 receptor agonist for the treatment of type 2 diabetes.",
         annotations=[
             (BQB.IS, "pubchem.compound/90472060"),
             (BQB.IS, "NCIT:C166988"),
-            (BQB.IS, "chebi/CHEBI:85662"),
+            (BQB.IS, "CHEBI:85662"),
             (BQB.IS, "inchikey/XVVOERDUTLJJHN-IAEQDCLQSA-N"),
         ],
     ),

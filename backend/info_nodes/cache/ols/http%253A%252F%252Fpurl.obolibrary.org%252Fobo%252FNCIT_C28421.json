@@ -1,0 +1,216 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C28421",
+  "lang": "en",
+  "description": [
+    "An arbitrary categorization of individuals based on the assemblage of physical properties related to reproduction, and commonly associated with the designation of such categories as female and male. This designation is based on a combination of observable information from organ inventories, morphological assessments, hormone assessments, genetic testing, observed primary and secondary sex characteristics, menstrual status, and/or obstetric history. Current sex designation may or may not be the same as an individual's sex assigned or reported at birth."
+  ],
+  "synonyms": [
+    "SEX",
+    "SPCU",
+    "Sex Designation",
+    "Sex Parameter for Clinical Use",
+    "Sex for Clinical Use",
+    "Sex",
+    "sex"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Phenotypic expression of chromosomal makeup that defines a study subject as male, female, or other. Compare to gender. [The NCI Thesaurus contains biomedical terminologies that NCI does not own or control. This concept contains gender-related content that does not comply with Executive Order 14168.]",
+      "The assemblage of properties or qualities by which male is distinguished from female. [The NCI Thesaurus contains biomedical terminologies that NCI does not own or control. This concept contains gender-related content that does not comply with Executive Order 14168.]",
+      "The biologic character or quality that distinguishes male and female from one another as expressed by analysis of the person's gonadal, morphologic (internal and external), chromosomal, and hormonal characteristics."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CDISC-GLOSS",
+      "FDA",
+      "ICDC",
+      "NICHD",
+      "PCDC"
+    ],
+    "Has_ICDC_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C46112",
+      "http://purl.obolibrary.org/obo/NCIT_C46113"
+    ],
+    "Has_PCDC_ALL_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C16576",
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C20197",
+      "http://purl.obolibrary.org/obo/NCIT_C43234"
+    ],
+    "Has_PCDC_AML_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C16576",
+      "http://purl.obolibrary.org/obo/NCIT_C17649",
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C20197",
+      "http://purl.obolibrary.org/obo/NCIT_C43234"
+    ],
+    "Has_PCDC_Data_Type": [
+      "http://purl.obolibrary.org/obo/NCIT_C25162"
+    ],
+    "Has_PCDC_EWS_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C16576",
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C20197",
+      "http://purl.obolibrary.org/obo/NCIT_C43234"
+    ],
+    "Has_PCDC_GCT_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C16576",
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C20197",
+      "http://purl.obolibrary.org/obo/NCIT_C41438",
+      "http://purl.obolibrary.org/obo/NCIT_C43234"
+    ],
+    "Has_PCDC_HL_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C16576",
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C20197"
+    ],
+    "Has_PCDC_OS_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C16576",
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C20197",
+      "http://purl.obolibrary.org/obo/NCIT_C43234"
+    ],
+    "Legacy Concept Name": [
+      "Sex"
+    ],
+    "Preferred_Name": [
+      "Sex"
+    ],
+    "Semantic_Type": [
+      "Organism Attribute"
+    ],
+    "UMLS_CUI": [
+      "C1522384"
+    ],
+    "code": [
+      "C28421"
+    ],
+    "editor note": [
+      "This term has been modified from the source to comply with OBO guidelines, see https://github.com/ncit-obo-org/ncit-obo-edition/blob/main/README.md for details."
+    ]
+  },
+  "label": "Sex",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C28421",
+  "obo_id": "NCIT:C28421",
+  "in_subset": [
+    "NCIT_C165451",
+    "NCIT_C166373",
+    "NCIT_C173230",
+    "NCIT_C174018",
+    "NCIT_C174239",
+    "NCIT_C174243",
+    "NCIT_C177384",
+    "NCIT_C177390",
+    "NCIT_C178117",
+    "NCIT_C178122",
+    "NCIT_C179533",
+    "NCIT_C186313",
+    "NCIT_C186342",
+    "NCIT_C186764",
+    "NCIT_C19752",
+    "NCIT_C204411",
+    "NCIT_C54447",
+    "NCIT_C61410",
+    "NCIT_C67497",
+    "NCIT_C81222",
+    "NCIT_C83187",
+    "NCIT_C83188",
+    "NCIT_C88088",
+    "NCIT_C89506",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "SEX",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SPCU",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sex Designation",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sex Parameter for Clinical Use",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sex for Clinical Use",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sex",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "sex",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28421?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28421/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28421/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28421/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28421/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28421/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28421/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28421/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28421/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28421/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28421/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
