@@ -18,7 +18,7 @@ DEMOGRAPHICS_NODES: list[InfoNode] = [
     MeasurementType(
         sid="education-measurement",
         name="education measurement",
-        description="Education measurement. Information related to eduction status or "
+        description="Education measurement. Information related to education status or "
         "duration.",
         parents=["demographics measurement"],
         dtype=DType.ABSTRACT,
@@ -26,7 +26,7 @@ DEMOGRAPHICS_NODES: list[InfoNode] = [
     MeasurementType(
         sid="education-duration",
         name="education duration",
-        description="Duration of eduction in years.",
+        description="Duration of education in years.",
         parents=["education-measurement"],
         dtype=DType.NUMERIC,
         units=["year", NO_UNIT],
@@ -41,7 +41,7 @@ DEMOGRAPHICS_NODES: list[InfoNode] = [
     MeasurementType(
         sid="work-hours-categorial",
         name="work hours (categorial)",
-        description="Work hours categorial.",
+        description="Work hours categorical.",
         parents=["work-measurement"],
         dtype=DType.CATEGORICAL,
     ),

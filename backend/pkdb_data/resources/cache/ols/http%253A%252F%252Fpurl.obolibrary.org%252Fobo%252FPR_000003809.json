@@ -1,0 +1,107 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/PR_000003809",
+  "lang": "en",
+  "description": [
+    "Category=gene.",
+    "A protein that is a translation product of the human AFP gene or a 1:1 ortholog thereof."
+  ],
+  "synonyms": [
+    "alpha-1-fetoprotein",
+    "alpha-fetoglobulin",
+    "AFP",
+    "HPAFP"
+  ],
+  "annotation": {
+    "has_obo_namespace": [
+      "protein"
+    ],
+    "id": [
+      "PR:000003809"
+    ]
+  },
+  "label": "alpha-fetoprotein",
+  "ontology_name": "pr",
+  "ontology_prefix": "PR",
+  "ontology_iri": "http://purl.obolibrary.org/obo/pr.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "PR_000003809",
+  "obo_id": "PR:000003809",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A protein that is a translation product of the human AFP gene or a 1:1 ortholog thereof.",
+      "oboXrefs": [
+        {
+          "database": "PRO",
+          "id": "DNx",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "AFP",
+      "scope": "hasExactSynonym",
+      "type": "Unique short label for PRO terms for display purposes; based on orthology or--if such is not asserted--on the organism gene symbol.",
+      "xrefs": [
+        {
+          "database": "PRO",
+          "id": "DNx",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "HPAFP",
+      "scope": "hasRelatedSynonym",
+      "type": "Synonyms based on current or previous gene name, ORF name, or ordered locus name.",
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

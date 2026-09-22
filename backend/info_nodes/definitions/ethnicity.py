@@ -123,8 +123,8 @@ ETHNICITY_NODES: list[InfoNode] = [
     Choice(
         sid="finish",
         name="finish",
-        label="Finish",
-        description="Finish. A person having origins in any of the original peoples of Finnland.",
+        label="Finnish",
+        description="Finnish. A person having origins in any of the original peoples of Finland.",
         parents=["caucasian"],
         annotations=[
             (BQB.IS, "NCIT:C64943"),
@@ -225,7 +225,7 @@ ETHNICITY_NODES: list[InfoNode] = [
         sid="afro-trinidadians",
         name="afro trinidadians",
         label="Afro–Trinidadians",
-        description="A person having origins in the original peoples of the Indian sub-continent. ",
+        description="A person from Trinidad and Tobago with African ancestry.",
         parents=["ethnicity"],
         annotations=[],
     ),
@@ -252,7 +252,7 @@ ETHNICITY_NODES: list[InfoNode] = [
         sid="pacific-islander",
         name="pacific islander",
         label="Pacific Islander",
-        description="A person having origins in the original peoples of Pacific Islander.",
+        description="A person having origins in the original peoples of the Pacific Islands.",
         parents=["ethnicity"],
         annotations=[
             # (BQB.IS_VERSION_OF, "exo/0000154"),

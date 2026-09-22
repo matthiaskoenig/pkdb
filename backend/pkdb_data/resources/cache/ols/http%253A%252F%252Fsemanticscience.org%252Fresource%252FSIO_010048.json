@@ -1,0 +1,57 @@
+{
+  "iri": "http://semanticscience.org/resource/SIO_010048",
+  "lang": "en",
+  "description": [
+    "male is a biological sex of an individual with male sexual organs."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "Identifier": [
+      "SIO_010048"
+    ],
+    "equivalentTo": [
+      "PATO:0000384"
+    ]
+  },
+  "label": "male",
+  "ontology_name": "sio",
+  "ontology_prefix": "SIO",
+  "ontology_iri": "http://semanticscience.org/ontology/sio.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "SIO_010048",
+  "obo_id": "SIO:010048",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010048?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010048/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010048/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010048/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010048/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010048/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010048/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

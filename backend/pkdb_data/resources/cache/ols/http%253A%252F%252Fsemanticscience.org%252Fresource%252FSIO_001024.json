@@ -1,0 +1,66 @@
+{
+  "iri": "http://semanticscience.org/resource/SIO_001024",
+  "lang": "en",
+  "description": [
+    "A medical procedure is a procedure to identify, examine, alleviate or eliminate an undesirable biological disease or disorder."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "Identifier": [
+      "SIO_001024"
+    ]
+  },
+  "label": "medical procedure",
+  "ontology_name": "sio",
+  "ontology_prefix": "SIO",
+  "ontology_iri": "http://semanticscience.org/ontology/sio.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "SIO_001024",
+  "obo_id": "SIO:001024",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_001024?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_001024/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_001024/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_001024/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_001024/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_001024/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_001024/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_001024/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_001024/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_001024/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_001024/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,54 @@
+{
+  "iri": "http://semanticscience.org/resource/SIO_010052",
+  "lang": "en",
+  "description": [
+    "female is a biological sex of an individual with female sexual organs."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "Identifier": [
+      "SIO_010052"
+    ]
+  },
+  "label": "female",
+  "ontology_name": "sio",
+  "ontology_prefix": "SIO",
+  "ontology_iri": "http://semanticscience.org/ontology/sio.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "SIO_010052",
+  "obo_id": "SIO:010052",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010052?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010052/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010052/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010052/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010052/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010052/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_010052/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

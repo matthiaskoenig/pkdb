@@ -1284,14 +1284,14 @@ requires-dist = [
 dev = [
     { name = "bump-my-version", specifier = ">=1.5.1" },
     { name = "pre-commit", specifier = ">=4.6.2" },
-    { name = "pymetadata", specifier = "==0.6.4" },
+    { name = "pymetadata", specifier = "==0.6.5" },
     { name = "pytest", specifier = ">=9.1.1" },
     { name = "python-slugify", specifier = "==9.1.0" },
     { name = "ruff", specifier = ">=0.16.8" },
     { name = "ty", specifier = ">=0.0.83" },
 ]
 vocabulary = [
-    { name = "pymetadata", specifier = "==0.6.4" },
+    { name = "pymetadata", specifier = "==0.6.5" },
     { name = "python-slugify", specifier = "==9.1.0" },
 ]
 
@@ -1543,16 +1543,16 @@ crypto = [
 
 [[package]]
 name = "pymetadata"
-version = "0.6.4"
+version = "0.6.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pydantic" },
     { name = "requests" },
     { name = "rich" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/16/66/ff7e234c246889a043b7a3b83968f98b0af48d94a269cdc71f36aba38a1b/pymetadata-0.6.4.tar.gz", hash = "sha256:ad54c33759a1faecf84ed1402791ae423c189819406e1d4f39c63bbe6ab7001a", size = 5767591, upload-time = "2026-09-20T23:48:37.131Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/31/21/fc4785eda34f592cb2da9a92ee4d80a39d618435ecfcd813ebe799a5d86f/pymetadata-0.6.5.tar.gz", hash = "sha256:61f7c50c28e575d63d3c9e5da2001a89bb1b79997271d927d3744e11695aa241", size = 5769385, upload-time = "2026-09-22T18:34:11.083Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/be/37/136ebd81024f7da12e22eaaa3b32959ece3b04e48bcbb9893ebb288e4f97/pymetadata-0.6.4-py3-none-any.whl", hash = "sha256:b3b93627cc8b171a53c13ce098079777f8db2115fb7a5321a4ae700cef5b844c", size = 323019, upload-time = "2026-09-20T23:48:35.219Z" },
+    { url = "https://files.pythonhosted.org/packages/01/e9/02131b46cc1ad8754076938ee6fd84bebd85e6d8ffa6af61581d2151502b/pymetadata-0.6.5-py3-none-any.whl", hash = "sha256:b2caf95b8eb2252e2a1d9077fb56a16cff85ed371fc8734fa7011e7d68580e1a", size = 323233, upload-time = "2026-09-22T18:34:09.023Z" },
 ]
 
 [[package]]

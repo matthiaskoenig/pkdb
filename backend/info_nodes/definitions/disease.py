@@ -142,7 +142,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="An abnormal albumin excretion rate of more than 300 mg/g urine creatinine.",
         parents=["symptom"],
         synonyms=[],
-        annotations=[(BQB.IS, "https://bioregistry.io/SCDO:10002014")],
+        annotations=[(BQB.IS, "https://bioregistry.io/SCDO:1000201")],
     ),
     # --- Diseases -------------------------------------------------------------------------------
     MeasurementType(
@@ -191,8 +191,8 @@ DISEASE_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="hypercholesterolemia",
-        description="A laboratory test result indicating an increased amount of"
-        "cholesterol in the blood; Abnormally high level of cholesterol"
+        description="A laboratory test result indicating an increased amount of "
+        "cholesterol in the blood; Abnormally high level of cholesterol "
         "in the blood. See also 'FH', 'homozygote FH' and 'heterozygote FH'",
         parents=["disease-of-metabolism"],
         annotations=[
@@ -1178,7 +1178,7 @@ DISEASE_NODES: list[InfoNode] = [
         name="ischemic heart disease",
         description="A disorder of cardiac function caused by insufficient blood flow "
         "to the muscle tissue of the heart. The decreased blood flow may "
-        "be due to narrowing of the coronary arteries,"
+        "be due to narrowing of the coronary arteries, "
         "to obstruction by a thrombus, or less commonly, to diffuse narrowing of arterioles and "
         "other small vessels within the heart. Severe interruption of the blood "
         "supply to the myocardial tissue may result in necrosis of cardiac muscle "
@@ -1346,7 +1346,7 @@ DISEASE_NODES: list[InfoNode] = [
         name="stroke",
         description="A group of pathological conditions characterized by sudden, non-convulsive "
         "loss of neurological function due to brain ischemia or intracranial "
-        "hemorrhages."
+        "hemorrhages. "
         "A disorder characterized by a decrease or absence of blood supply to the "
         "brain caused by obstruction (thrombosis or embolism) of an artery resulting "
         "in neurological damage.",
@@ -1501,7 +1501,7 @@ DISEASE_NODES: list[InfoNode] = [
         "It is the most common urologic disorder in men, causing blockage "
         "of urine flow. Increase in constituent cells in the PROSTATE, "
         "leading to enlargement of the organ (hypertrophy) and adverse "
-        "impact on the lower urinary tract function. This can be caused"
+        "impact on the lower urinary tract function. This can be caused "
         "by increased rate of cell proliferation, reduced rate of cell "
         "death, or both.",
         parents=["benign-neoplasm"],
@@ -1639,7 +1639,7 @@ DISEASE_NODES: list[InfoNode] = [
         sid="chronic-bronchitis",
         name="chronic bronchitis",
         description="A type of chronic obstructive pulmonary disease characterized by chronic "
-        "inflammation in the bronchial tree that results in edema, mucus production,"
+        "inflammation in the bronchial tree that results in edema, mucus production, "
         "obstruction, and reduced airflow to and from the lung alveoli. The most common cause is "
         "tobacco smoking. Signs and symptoms include coughing with excessive mucus "
         "production, and shortness of breath.",
@@ -1685,7 +1685,7 @@ DISEASE_NODES: list[InfoNode] = [
         description="Non small cell lung cancer (NSCLC). The most common form of lung cancer "
         "is non-small cell lung cancer (NSCLC) that can be divided "
         "into 3 major histologic subtypes - squamous cell carcinoma, "
-        "adenocarcinoma, and large cell lung cancer."
+        "adenocarcinoma, and large cell lung cancer. "
         "NSCLC is often diagnosed at an advanced stage and has a "
         "poor prognosis.",
         parents=["lung cancer"],
@@ -1754,7 +1754,7 @@ DISEASE_NODES: list[InfoNode] = [
         "Persistently high systemic arterial blood pressure. Based on "
         "multiple readings, hypertension is currently defined as when "
         "systolic pressure is consistently greater than 140 mm Hg or when "
-        "diastolic pressure is consistently 90 mm Hg or more ."
+        "diastolic pressure is consistently 90 mm Hg or more . "
         "Use in addition 'blood pressure (categorical)' with choice 'elevated'. "
         "See also 'blood pressure'.",
         parents=["cardiovascular_disease"],

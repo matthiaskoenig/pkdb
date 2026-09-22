@@ -5,47 +5,46 @@ Dependencies between the nodes are important.
 """
 
 import logging
+from copy import deepcopy
 
-import pandas as pd
-
-from pkdb_data.info_nodes.definitions.anthropometry import ANTHROPOMETRY_NODES
-from pkdb_data.info_nodes.definitions.calculation_type import CALCULATION_NODES
-from pkdb_data.info_nodes.definitions.demographics import DEMOGRAPHICS_NODES
-from pkdb_data.info_nodes.definitions.disease import DISEASE_NODES
-from pkdb_data.info_nodes.definitions.dosing import (
+from info_nodes.definitions.anthropometry import ANTHROPOMETRY_NODES
+from info_nodes.definitions.calculation_type import CALCULATION_NODES
+from info_nodes.definitions.demographics import DEMOGRAPHICS_NODES
+from info_nodes.definitions.disease import DISEASE_NODES
+from info_nodes.definitions.dosing import (
     ADMINISTRATION_FORM_NODES,
     ADMINISTRATION_ROUTE_NODES,
     APPLICATION_NODES,
     DOSING_NODES,
 )
-from pkdb_data.info_nodes.definitions.ethnicity import ETHNICITY_NODES
-from pkdb_data.info_nodes.definitions.genetics import GENETICS_NODES
-from pkdb_data.info_nodes.definitions.imaging import IMAGING_MEASUREMENT_NODES
-from pkdb_data.info_nodes.definitions.lifestyle import LIFESTYLE_NODES
-from pkdb_data.info_nodes.definitions.measurement import MEASUREMENT_NODES
-from pkdb_data.info_nodes.definitions.medical_procedure import MEDICAL_PROCEDURE_NODES
-from pkdb_data.info_nodes.definitions.method import METHOD_NODES
-from pkdb_data.info_nodes.definitions.specie import SPECIE_NODES
-from pkdb_data.info_nodes.definitions.substance import SUBSTANCE_NODES
-from pkdb_data.info_nodes.definitions.tissue import TISSUE_NODES
-from pkdb_data.info_nodes.node import Choice, DType, InfoNode, NType
+from info_nodes.definitions.ethnicity import ETHNICITY_NODES
+from info_nodes.definitions.genetics import GENETICS_NODES
+from info_nodes.definitions.imaging import IMAGING_MEASUREMENT_NODES
+from info_nodes.definitions.lifestyle import LIFESTYLE_NODES
+from info_nodes.definitions.measurement import MEASUREMENT_NODES
+from info_nodes.definitions.medical_procedure import MEDICAL_PROCEDURE_NODES
+from info_nodes.definitions.method import METHOD_NODES
+from info_nodes.definitions.specie import SPECIE_NODES
+from info_nodes.definitions.substance import SUBSTANCE_NODES
+from info_nodes.definitions.tissue import TISSUE_NODES
+from info_nodes.graph import NodeIndex
+from info_nodes.node import Choice, DType, InfoNode, NType
 
 logger = logging.getLogger(__name__)
 
 
-def _is_duplicate(nodes_df: pd.DataFrame, field: str) -> None:
-    """Check for duplicate definitions of given field."""
-    _duplicates = nodes_df[nodes_df[field].duplicated(keep="first")]
-    _duplicates_no_undefined = _duplicates[_duplicates.ntype != NType.CHOICE]
-    if not _duplicates_no_undefined.empty:
-        ntype = _duplicates_no_undefined.ntype
-        raise ValueError(
-            f"For Dtype <{ntype.unique()}> the {field}s are not unique. "
-            f"Detail: <{list(getattr(_duplicates_no_undefined, field))}> "
-        )
+def _check_names(nodes: list[InfoNode]) -> None:
+    """Names identify non-choice definitions within each authored group."""
+    seen = set()
+    for node in nodes:
+        if node.ntype == NType.CHOICE:
+            continue
+        if node.name in seen:
+            raise ValueError(f"Duplicate node name {node.name!r}")
+        seen.add(node.name)
 
 
-def collect_nodes() -> list[InfoNode]:
+def collect_nodes() -> NodeIndex:
     """Collect and create all info nodes."""
     ROOT = "root"
     INTERVENTION = "intervention"  # only used on intervention
@@ -58,7 +57,6 @@ def collect_nodes() -> list[InfoNode]:
     ]
 
     # add nodes to nodes list
-    nodes_df: pd.DataFrame
     nodes: list[InfoNode]
     for nodes in [
         MEASUREMENT_NODES,
@@ -80,10 +78,8 @@ def collect_nodes() -> list[InfoNode]:
         SUBSTANCE_NODES,
         CALCULATION_NODES,
     ]:
-        nodes_df = pd.DataFrame([node.serialize(nodes) for node in nodes])
-        _is_duplicate(nodes_df, "name")
-
-        NODES.extend(nodes)
+        _check_names(nodes)
+        NODES.extend(deepcopy(nodes))
 
     # ----------------------
     # Query management
@@ -103,14 +99,14 @@ def collect_nodes() -> list[InfoNode]:
                 [
                     Choice(
                         sid=f"{sid}-YES",
-                        description=f"Yes {info_node.name}.",
+                        description=f"{info_node.label}: yes.",
                         parents=[sid],
                         name="Y",
                         label=f"{sid}",
                     ),
                     Choice(
                         f"{sid}-NO",
-                        description=f"No {info_node.name}.",
+                        description=f"{info_node.label}: no.",
                         parents=[sid],
                         name="N",
                         label=f"No {sid}",
@@ -128,7 +124,7 @@ def collect_nodes() -> list[InfoNode]:
                     sid=f"{sid}-Not-Reported",
                     name="NR",
                     label=f"Not reported {info_node.name}",
-                    description=f"Not Reported {info_node.name}.",
+                    description=f"{info_node.label}: not reported.",
                     parents=[sid],
                 )
             )
@@ -189,7 +185,7 @@ def collect_nodes() -> list[InfoNode]:
         SUBSTANCE_SET_NODES.append(
             InfoNode(
                 sid=f"{substance_node}-substances-all",
-                description=f"{substance_node} substances all",
+                description=f"All substances for {substance_node}.",
                 parents=[f"{substance_node}"],
                 name="substances all",
             )
@@ -197,22 +193,4 @@ def collect_nodes() -> list[InfoNode]:
 
     NODES.extend(SUBSTANCE_SET_NODES)
 
-    # check that all parents exist as nodes and are defined in order
-    sids = {n.sid: k for k, n in enumerate(NODES)}
-    for k, n in enumerate(NODES):
-        for parent in n.parents:
-            if parent not in sids:
-                logger.error(
-                    "parent node with sid %r in node %r does not exist", parent, n.sid
-                )
-            elif sids[parent] > k:
-                logger.error(
-                    "parent node <%r> defined after child node <%r>, change order.",
-                    parent,
-                    n.sid,
-                )
-
-    nodes_df = pd.DataFrame([node.serialize(nodes) for node in NODES])
-    _is_duplicate(nodes_df, "sid")
-
-    return NODES
+    return NodeIndex(NODES)

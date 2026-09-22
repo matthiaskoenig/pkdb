@@ -1,0 +1,57 @@
+{
+  "iri": "http://semanticscience.org/resource/SIO_000751",
+  "lang": "en",
+  "description": [
+    "A quality that has a value that is decreased compared to normal or average."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "Identifier": [
+      "SIO_000751"
+    ],
+    "equivalentTo": [
+      "PATO:0002301"
+    ]
+  },
+  "label": "decreased",
+  "ontology_name": "sio",
+  "ontology_prefix": "SIO",
+  "ontology_iri": "http://semanticscience.org/ontology/sio.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "SIO_000751",
+  "obo_id": "SIO:000751",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_000751?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_000751/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_000751/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_000751/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_000751/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_000751/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_000751/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

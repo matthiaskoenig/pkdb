@@ -16,10 +16,12 @@ def test_authored_term_reaches_backend_and_invalid_edit_preserves_json(
     workspace = tmp_path / "repository"
     source = workspace / "backend" / "pkdb_data"
     shutil.copytree(root / "backend/pkdb_data", source)
+    definitions_root = workspace / "backend/info_nodes"
+    shutil.copytree(root / "backend/info_nodes", definitions_root)
     script = workspace / "scripts/update_vocabulary.py"
     script.parent.mkdir()
     shutil.copy2(root / "scripts/update_vocabulary.py", script)
-    definitions = source / "info_nodes/definitions/anthropometry.py"
+    definitions = definitions_root / "definitions/anthropometry.py"
     definitions.write_text(
         definitions.read_text() + "\nANTHROPOMETRY_NODES.extend([\n"
         '    MeasurementType(sid="local-response", description="Test response",\n'
@@ -29,7 +31,7 @@ def test_authored_term_reaches_backend_and_invalid_edit_preserves_json(
         '           parents=["local-response"]),\n'
         "])\n"
     )
-    substances = source / "info_nodes/definitions/substance.py"
+    substances = definitions_root / "definitions/substance.py"
     substances.write_text(
         substances.read_text() + "\nSUBSTANCE_NODES.append(Substance(\n"
         '    sid="local-drug", description="Explicit chemical properties",\n'

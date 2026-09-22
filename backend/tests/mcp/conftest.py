@@ -8,6 +8,7 @@ import pytest
 import uvicorn
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
+from mcp.shared._context_streams import ContextReceiveStream, ContextSendStream
 
 from pkdb.app import create_app
 from pkdb.config import Settings
@@ -68,7 +69,11 @@ async def connect(url, token):
             read,
             write,
         ):
-            async with ClientSession(read, write) as session:
+            # Session shutdown closes its streams. Keep the transport's handles
+            # open until it cancels pending HTTP responses from abandoned calls.
+            assert isinstance(read, ContextReceiveStream)
+            assert isinstance(write, ContextSendStream)
+            async with ClientSession(read.clone(), write.clone()) as session:
                 await session.initialize()
                 yield session
 

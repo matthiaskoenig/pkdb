@@ -1,0 +1,57 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/FOODON_03000025",
+  "lang": "en",
+  "description": [
+    "A seed from an opium poppy plant (Papaver somniferum)"
+  ],
+  "synonyms": [],
+  "annotation": {
+    "Contributor": [
+      "https://orcid.org/0000-0001-5275-8866"
+    ],
+    "definition source": [
+      "https://en.wikipedia.org/wiki/Poppy_seed"
+    ]
+  },
+  "label": "poppy seed",
+  "ontology_name": "foodon",
+  "ontology_prefix": "FOODON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/foodon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "FOODON_03000025",
+  "obo_id": "FOODON:03000025",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03000025?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03000025/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03000025/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03000025/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03000025/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03000025/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03000025/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

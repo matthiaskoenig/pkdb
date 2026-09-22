@@ -5,20 +5,46 @@ from __future__ import annotations
 import logging
 from collections.abc import Iterable, Iterator
 from enum import StrEnum
+from functools import cache
 from typing import Any
 
 from pint import UndefinedUnitError
-from pymetadata.core.miriam import BQB
+from pymetadata.core.annotation import ProviderType, RDFAnnotation, RDFAnnotationData
+from pymetadata.core.miriam import BQB, BQM
 from pymetadata.core.xref import CrossReference
 from pymetadata.webservices.chebi import ChebiQuery
+from pymetadata.webservices.registry import get_registry
 from pymetadata.webservices.unichem import UnichemQuery
 from slugify import slugify
 
+from info_nodes.graph import NodeIndex
+from info_nodes.units import ureg
 from pkdb_data import CACHE_PATH, CACHE_USE
-from pkdb_data.info_nodes.annotation import NodeAnnotation
-from pkdb_data.info_nodes.units import ureg
 
 logger = logging.getLogger(__name__)
+
+
+@cache
+def resolve_annotation(relation: BQB | BQM, resource: str) -> RDFAnnotation:
+    """Resolve each annotation once per authoring process using pymetadata."""
+    annotation = RDFAnnotation(qualifier=relation, resource=resource)
+    if (
+        annotation.provider == ProviderType.IDENTIFIERS_ORG
+        and annotation.collection
+        and annotation.collection not in get_registry().ns_dict
+    ):
+        return annotation
+    return RDFAnnotationData(annotation)
+
+
+def normalize_description(description: str | None) -> str | None:
+    """Use single spaces and terminal punctuation without changing scientific text."""
+    if not description:
+        return description
+    description = " ".join(description.split())
+    if description and not description.endswith((".", "?", "!")):
+        description += "."
+    return description
 
 
 class DType(StrEnum):
@@ -81,7 +107,7 @@ class InfoObject:
         self.sid = InfoObject.url_slugify(sid)
         self.name = name if name else sid
         self.label = label if label else self.name
-        self.description = description
+        self.description = normalize_description(description)
         self.annotations = annotations
         self.synonyms = set(synonyms) if synonyms is not None else set()
         self.xrefs = xrefs
@@ -155,17 +181,18 @@ class InfoObject:
                         )
 
                     relation, resource = a_data
-                    annotation = NodeAnnotation(relation=relation, resource=resource)
-                elif isinstance(a_data, NodeAnnotation):
+                    annotation = resolve_annotation(relation, resource)
+                elif isinstance(a_data, RDFAnnotationData):
                     annotation = a_data
+                elif isinstance(a_data, RDFAnnotation):
+                    annotation = resolve_annotation(a_data.qualifier, a_data.resource)
                 else:
                     raise ValueError(
                         f"Unsupported annotation type: {type(a_data)}"
                         f" for {self.sid!r}: {a_data!r}"
                     )
 
-                if annotation.url:
-                    full_annotations.append(annotation)
+                full_annotations.append(annotation)
 
         self.annotations = full_annotations
 
@@ -178,8 +205,9 @@ class InfoObject:
         # query annotation information from ols
         if self.annotations:
             for annotation in self.annotations:
-                annotation.query_ols()
-                if annotation.relation == BQB.IS:
+                if not isinstance(annotation, RDFAnnotationData):
+                    continue
+                if annotation.qualifier == BQB.IS:
                     if annotation.label:
                         self.synonyms.add(annotation.label)
                     if annotation.synonyms:
@@ -223,16 +251,27 @@ class InfoObject:
         if self.xrefs:
             for xref in self.xrefs:
                 if isinstance(xref, dict):
-                    if "description" not in xref:
-                        xref["description"] = None
-                    xrefs_info.append(xref)
+                    xrefs_info.append({"description": None, **xref})
                 else:
                     xrefs_info.append(xref.to_dict())
 
         annotations_info = []
         if self.annotations:
             for annotation in self.annotations:
-                annotations_info.append(annotation.to_dict())
+                description = getattr(annotation, "description", None)
+                annotations_info.append(
+                    {
+                        "term": annotation.term,
+                        "relation": annotation.qualifier.value,
+                        "collection": annotation.collection,
+                        "description": description
+                        if isinstance(description, str)
+                        else None,
+                        "label": getattr(annotation, "label", None),
+                        "url": getattr(annotation, "url", None)
+                        or annotation.resource_normalized,
+                    }
+                )
 
         return {
             "sid": self.sid,
@@ -279,8 +318,6 @@ class InfoNode(InfoObject):
             deprecated=deprecated,
         )
         self.parents = [self.url_slugify(p) for p in parents] if parents else []
-        self._children: list[InfoNode] | None = None
-        self._children_source: Iterable[InfoNode] | None = None
 
     @property
     def can_choice(self) -> bool:
@@ -294,16 +331,9 @@ class InfoNode(InfoObject):
 
         Does not check if all children have been found.
         """
-        if (
-            force_calculation
-            or self._children is None
-            or self._children_source is not all_nodes
-        ):
-            # This is very expensive and should only be done once
-            self._children = [node for node in all_nodes if self.sid in node.parents]
-            self._children_source = all_nodes
-
-        return self._children
+        if isinstance(all_nodes, NodeIndex):
+            return list(all_nodes.children[self.sid])
+        return [node for node in all_nodes if self.sid in node.parents]
 
     def children_sids(
         self, all_nodes: Iterable[InfoNode], force_calculation: bool = True
@@ -322,12 +352,8 @@ class InfoNode(InfoObject):
 
     def choices(self, all_nodes: Iterable[InfoNode]) -> Iterator[str]:
         """Get choices."""
-        for child in self.children(all_nodes, force_calculation=False):
-            if not child.can_choice:
-                yield from child.choices(all_nodes)
-
-            if child.ntype == NType.CHOICE:
-                yield child.sid
+        index = all_nodes if isinstance(all_nodes, NodeIndex) else NodeIndex(all_nodes)
+        yield from index.choices(self.sid)
 
 
 class MeasurementType(InfoNode):
@@ -466,9 +492,15 @@ class Substance(InfoNode):
             if inchikey:
                 if self.annotations is None:
                     self.annotations = []
-                self.annotations.append(
-                    NodeAnnotation(relation=BQB.IS, resource=f"inchikey/{inchikey}")
-                )
+                if not any(
+                    annotation.qualifier == BQB.IS
+                    and annotation.collection == "inchikey"
+                    and annotation.term == inchikey
+                    for annotation in self.annotations
+                ):
+                    self.annotations.append(
+                        resolve_annotation(BQB.IS, f"inchikey/{inchikey}")
+                    )
 
                 # query cross references from unichem using the inchikey
                 xrefs_unichem: list[CrossReference] = UnichemQuery(
@@ -497,10 +529,10 @@ class Substance(InfoNode):
         if self.annotations:
             for annotation in self.annotations:
                 # check if a chebi annotation exists (returns first)
-                if (annotation.relation == BQB.IS) and (
-                    annotation.rdf_annotation.collection == "chebi"
+                if (annotation.qualifier == BQB.IS) and (
+                    annotation.collection == "chebi"
                 ):
-                    return str(annotation.rdf_annotation.term)
+                    return str(annotation.term)
 
         return None
 

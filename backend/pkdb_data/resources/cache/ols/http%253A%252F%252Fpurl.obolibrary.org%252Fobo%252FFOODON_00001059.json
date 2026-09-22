@@ -1,0 +1,82 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/FOODON_00001059",
+  "lang": "en",
+  "description": [
+    "Apple juice is a fruit juice made by the maceration and pressing of an apple.",
+    "SIREN DB annotation:\n* liquid, low viscosity, with no visible particles FOODON:03430123\n* fruit, peel present, core, pit or seed present FOODON:03420140"
+  ],
+  "synonyms": [
+    "apple juice"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "https://bioregistry.io/reference/siren:F1419"
+    ],
+    "definition source": [
+      "https://en.wikipedia.org/wiki/Apple_juice"
+    ],
+    "has curation status": [
+      "http://purl.obolibrary.org/obo/IAO_0000122"
+    ]
+  },
+  "label": "apple juice",
+  "ontology_name": "foodon",
+  "ontology_prefix": "FOODON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/foodon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "FOODON_00001059",
+  "obo_id": "FOODON:00001059",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": null,
+      "id": "https://bioregistry.io/reference/siren:F1419",
+      "description": null,
+      "url": "https://bioregistry.io/reference/siren:F1419"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_00001059?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_00001059/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_00001059/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_00001059/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_00001059/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_00001059/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_00001059/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_00001059/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_00001059/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_00001059/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_00001059/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

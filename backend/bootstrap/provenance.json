@@ -1,46 +1,352 @@
 {
   "generator": "scripts/update_vocabulary.py",
   "nodes": 2147,
-  "version": "95f3bab28999938c398ffb86fb0052877184f58e049f334a01de32858630668c",
-  "inputs_sha256": "dec552090c24e023c879fdc679278b9b3d58a4e547b48d69880dde6980ab9f36",
+  "version": "0cbab2c20f6dcdf8304efd42a655a89ee166eadc1db31008859e540ba43361d2",
+  "inputs_sha256": "6bb80d7d80a2968be208ddd4e9fe909044e7a046aea4f032510200475f7c1a1f",
   "definition_sha256": {
+    "backend/info_nodes/__init__.py": "79b16b6f24e831cdeb665b7936fbc21d06e9c5047c8d12c592b4eaa01be116ae",
+    "backend/info_nodes/audit.py": "13b09b2ccb917156bac6bce380791b5b6e7bef6c3c2feb0aa43cff06554764fe",
+    "backend/info_nodes/definitions/__init__.py": "f7cef468730c147ac8aec73b10f16ce5bcdff2e8ffed658e11d74ce345cca92c",
+    "backend/info_nodes/definitions/anthropometry.py": "5aabb05aca5d4d9a368bdfda29ad23c8063e3d20e4e4303042a8ff3c994026cf",
+    "backend/info_nodes/definitions/calculation_type.py": "e76a4775ee5fdcde30c375cc65f5124300ea93665ca37c219a5be995c7a43571",
+    "backend/info_nodes/definitions/demographics.py": "2501ceb0c10971f80cb12b422f02413603fb7b25493127cfbe80ba9fa9c0f627",
+    "backend/info_nodes/definitions/disease.py": "c9e051c76c79033f368e7e4a222a1790280800423f628e3d1d19dc7a556d1175",
+    "backend/info_nodes/definitions/dosing.py": "cbb6d1bd910377f504fb3cf01774b05f5f4d993c9a861caee7e61bfd03682665",
+    "backend/info_nodes/definitions/ethnicity.py": "c54e002bdb0eb7226d258bdf1fb2b62bb674070065474898d1aeb34df36e62dd",
+    "backend/info_nodes/definitions/genetics.py": "ae5a488ec5fb1ad303da04054dfd56fbc27fa3f2343fa58f88962da9f8cf9e1a",
+    "backend/info_nodes/definitions/imaging.py": "6a28280f90651ecd3702c5fc269a0ed928b205f1a79b87aa650080e1b15d77a5",
+    "backend/info_nodes/definitions/lifestyle.py": "850ee24daea1cc0b28e3961312f20618ee2eb758183b8d99b93bf495698fe5dc",
+    "backend/info_nodes/definitions/measurement.py": "208ecf897e8efd8b0b5cd8b37db7a137f9aeddc8c7050a204c6d651ea4b82156",
+    "backend/info_nodes/definitions/medical_procedure.py": "170f317917f1a858fcc6bc5ffc7fe5dea2251cf7b7f070741acc250e726f7242",
+    "backend/info_nodes/definitions/method.py": "1a8c2d09cfd5e48a7b3849fb59e7c663613f40b69e364038394625c380abce30",
+    "backend/info_nodes/definitions/specie.py": "5a2be5cd30ca5520283f4f24df3394c886b47b06080a6d9bba66f36f739cb763",
+    "backend/info_nodes/definitions/substance.py": "f4ccb4e2f34059928240c5b4439ead320b7287a474b04a32b94f87f9a0ebe9db",
+    "backend/info_nodes/definitions/tissue.py": "090627c3ae163f521b160b4ffe41f00731bfbbac56c5844314b19aef9826dcb9",
+    "backend/info_nodes/graph.py": "a0c9c8dcfd7b589541fe77b93768d9af660d16e677d069011e17bba8c0cdea33",
+    "backend/info_nodes/node.py": "395dc7e4c7039e5082318637691e195a10d3ec201b31aa35a38ebc9a24b8ae36",
+    "backend/info_nodes/nodes.py": "7470ba80613b9a03d97a3ae32c312236a3db26bdca65bbb13ab679dc054a06dc",
+    "backend/info_nodes/policies.py": "cbfd8036a068db10de603280704c1f8c34b42b159031208e4d605ad443f026cb",
+    "backend/info_nodes/units.py": "1d4087425ea9b997f782451507ad566ddfeed8654379b214a74376832e62b88b",
     "backend/pkdb_data/__init__.py": "06299f8bbc08e2083edac7dd8c85a4800dad62f4b99437a14b62510dc54e950e",
     "backend/pkdb_data/convert.py": "600ab081eecb7c9f31d898bb95cc59a01c570e6b8ed9192c4e5d575dead71314",
-    "backend/pkdb_data/info_nodes/__init__.py": "79b16b6f24e831cdeb665b7936fbc21d06e9c5047c8d12c592b4eaa01be116ae",
-    "backend/pkdb_data/info_nodes/annotation.py": "818da971c31f7a70b4d230cf7e1fe50629f8d634f74f380566b04ace416008d8",
-    "backend/pkdb_data/info_nodes/definitions/__init__.py": "f7cef468730c147ac8aec73b10f16ce5bcdff2e8ffed658e11d74ce345cca92c",
-    "backend/pkdb_data/info_nodes/definitions/anthropometry.py": "c56052024eb286d8a9fa9af4908c40a145a976e98f4bc737f7182b2565e06623",
-    "backend/pkdb_data/info_nodes/definitions/calculation_type.py": "e76a4775ee5fdcde30c375cc65f5124300ea93665ca37c219a5be995c7a43571",
-    "backend/pkdb_data/info_nodes/definitions/demographics.py": "a1795cb2e19700cbb082aab1fad367445dee9a4afc90a47627179a78f1cf8606",
-    "backend/pkdb_data/info_nodes/definitions/disease.py": "4b3f397f158004aa9e7d1506fe1699bc4095511d5b3bf86f2626c6da552dacd4",
-    "backend/pkdb_data/info_nodes/definitions/dosing.py": "742737a9194e6e3079e57f5def9c0a94561967ccf2c372ce1a745a0c02cc0729",
-    "backend/pkdb_data/info_nodes/definitions/ethnicity.py": "85b43863b75daa0e4be07e0dcaf2453db753885ac3990dfe02399c08789b25b0",
-    "backend/pkdb_data/info_nodes/definitions/genetics.py": "0e4df6e4cd11ff7aa6759fb0f47f9b763f9bd1b6357bf8b327a252b766e5fdc2",
-    "backend/pkdb_data/info_nodes/definitions/imaging.py": "df77c748803a3d0d838a631b77e9cefb55d999ea0419a654b2d7cdff7b369916",
-    "backend/pkdb_data/info_nodes/definitions/lifestyle.py": "0d378d46c8f3bc6262a91237a3e3aa4d100c09baa61de9e2d5460e858c932072",
-    "backend/pkdb_data/info_nodes/definitions/measurement.py": "ce3ba407092ff9ac29210c784c2e0c18bf1e7103bf6a423f96fbf47f23284be1",
-    "backend/pkdb_data/info_nodes/definitions/medical_procedure.py": "170f317917f1a858fcc6bc5ffc7fe5dea2251cf7b7f070741acc250e726f7242",
-    "backend/pkdb_data/info_nodes/definitions/method.py": "5c8e5b5b192df78ad0e273c6fd3eef53548b6876f3d4630a01e8584babcca1a4",
-    "backend/pkdb_data/info_nodes/definitions/specie.py": "3539650646a7b98704201eb197e190f6bba9b0a3a6cb2fcded58306d21635251",
-    "backend/pkdb_data/info_nodes/definitions/substance.py": "022ebff527600ba9a3116e3675f0e5ced706cb59686f1a6598c9205570de2f4c",
-    "backend/pkdb_data/info_nodes/definitions/tissue.py": "7ec403ed6023a3a8509d704fc0a4ad8004e479cbd5f89cb0489050fe4052be76",
-    "backend/pkdb_data/info_nodes/node.py": "6e79c61bf144f3d356ad10531cf7d9ffd0f6e2d4c94699677696a1d570c22639",
-    "backend/pkdb_data/info_nodes/nodes.py": "a1a2b6bb22450ce27d9f03eed6435fbd0e49c61f6d3f268b0574e9cabe5ea9c6",
-    "backend/pkdb_data/info_nodes/policies.py": "cbfd8036a068db10de603280704c1f8c34b42b159031208e4d605ad443f026cb",
-    "backend/pkdb_data/info_nodes/units.py": "1d4087425ea9b997f782451507ad566ddfeed8654379b214a74376832e62b88b",
-    "scripts/update_vocabulary.py": "c3786b0812b4de56cf406ff841b0a9366242dfa221102ed6310fc1f84984d763"
+    "scripts/update_vocabulary.py": "488c22e6cf9bd8de9a408a215137e92d8a2cad1a21fa07bfca855f649b6035ef"
   },
-  "uncached_optional_metadata": [
-    "https://www.ebi.ac.uk/ols4/api/ontologies/obi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOBI_OBI_0000070",
-    "https://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809",
-    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_000554",
-    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_000555",
-    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_000751",
-    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_001007",
-    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_001013",
-    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_001014",
-    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_001024",
-    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_010048",
-    "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_010052"
+  "uncached_optional_metadata": [],
+  "metadata_issues": [
+    {
+      "sid": "1r-2r-alpha-hydroxymetoprolol",
+      "code": "curation_review",
+      "message": "The source flags the stereoisomer annotation as incorrect; verify a stereospecific identifier."
+    },
+    {
+      "sid": "1r-2s-alpha-hydroxymetoprolol",
+      "code": "curation_review",
+      "message": "The source flags the stereoisomer annotation as incorrect; verify a stereospecific identifier."
+    },
+    {
+      "sid": "1s-2r-alpha-hydroxymetoprolol",
+      "code": "curation_review",
+      "message": "The source flags the stereoisomer annotation as incorrect; verify a stereospecific identifier."
+    },
+    {
+      "sid": "1s-2s-alpha-hydroxymetoprolol",
+      "code": "curation_review",
+      "message": "The source flags the stereoisomer annotation as incorrect; verify a stereospecific identifier."
+    },
+    {
+      "sid": "angiotensinogen",
+      "code": "curation_review",
+      "message": "The description identifies angiotensin I; review the description and annotations."
+    },
+    {
+      "sid": "auc-ratio",
+      "code": "curation_review",
+      "message": "A ratio of AUC values declares AUC units; verify units against curated usage."
+    },
+    {
+      "sid": "bile",
+      "code": "curation_review",
+      "message": "Review whether this fluid belongs in substances, tissues, or both."
+    },
+    {
+      "sid": "blood pressure systolic (change relative)blood pressure systolic auc_end (change)",
+      "code": "unknown_policy_measurement",
+      "message": "can_negative references an unknown measurement name."
+    },
+    {
+      "sid": "cf-irms",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0000887."
+    },
+    {
+      "sid": "cf-irms",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0000887; annotation retained without enrichment."
+    },
+    {
+      "sid": "clearance-intrinsic",
+      "code": "curation_review",
+      "message": "The description equates intrinsic clearance with total minus renal clearance; verify the intended quantity."
+    },
+    {
+      "sid": "colorimetric-assay",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0000001."
+    },
+    {
+      "sid": "colorimetric-assay",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0000001; annotation retained without enrichment."
+    },
+    {
+      "sid": "competition-dialysis",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0002405."
+    },
+    {
+      "sid": "competition-dialysis",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0002405; annotation retained without enrichment."
+    },
+    {
+      "sid": "concentration",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0002820."
+    },
+    {
+      "sid": "concentration",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0002820; annotation retained without enrichment."
+    },
+    {
+      "sid": "concentration-change",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0002820."
+    },
+    {
+      "sid": "concentration-change",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0002820; annotation retained without enrichment."
+    },
+    {
+      "sid": "concentration-change-absolute",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0002820."
+    },
+    {
+      "sid": "concentration-change-absolute",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0002820; annotation retained without enrichment."
+    },
+    {
+      "sid": "concentration-ss",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0002820."
+    },
+    {
+      "sid": "concentration-ss",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0002820; annotation retained without enrichment."
+    },
+    {
+      "sid": "concentration-unbound",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0002820."
+    },
+    {
+      "sid": "concentration-unbound",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0002820; annotation retained without enrichment."
+    },
+    {
+      "sid": "es-ms-ms",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0001109."
+    },
+    {
+      "sid": "es-ms-ms",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0001109; annotation retained without enrichment."
+    },
+    {
+      "sid": "gas-lc",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0001016."
+    },
+    {
+      "sid": "gas-lc",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0001016; annotation retained without enrichment."
+    },
+    {
+      "sid": "gc",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0000497."
+    },
+    {
+      "sid": "gc",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0000497; annotation retained without enrichment."
+    },
+    {
+      "sid": "gc-ms-sim",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0000571."
+    },
+    {
+      "sid": "gc-ms-sim",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0000571; annotation retained without enrichment."
+    },
+    {
+      "sid": "got",
+      "code": "curation_review",
+      "message": "Review overlap with AST before merging or retiring stable identifiers."
+    },
+    {
+      "sid": "hplc",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0001009."
+    },
+    {
+      "sid": "hplc",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0001009; annotation retained without enrichment."
+    },
+    {
+      "sid": "hplc-esi-ms",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0000482."
+    },
+    {
+      "sid": "hplc-esi-ms",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0000482; annotation retained without enrichment."
+    },
+    {
+      "sid": "hplc-esi-ms-over-ms",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0000578."
+    },
+    {
+      "sid": "hplc-esi-ms-over-ms",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0000578; annotation retained without enrichment."
+    },
+    {
+      "sid": "hplc-ms",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0000796."
+    },
+    {
+      "sid": "hplc-ms",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0000796; annotation retained without enrichment."
+    },
+    {
+      "sid": "hplc-ms-ms",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0002876."
+    },
+    {
+      "sid": "hplc-ms-ms",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0002876; annotation retained without enrichment."
+    },
+    {
+      "sid": "lc-esi-ms",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0000751."
+    },
+    {
+      "sid": "lc-esi-ms",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0000751; annotation retained without enrichment."
+    },
+    {
+      "sid": "lc-ms-ms",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: CHMO:0000701."
+    },
+    {
+      "sid": "lc-ms-ms",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for CHMO:0000701; annotation retained without enrichment."
+    },
+    {
+      "sid": "mixed-race",
+      "code": "curation_review",
+      "message": "The Caucasian annotation and synonym 'white' conflict with mixed race."
+    },
+    {
+      "sid": "pap",
+      "code": "curation_review",
+      "message": "Review the existing unit TODO for pulmonary artery pressure."
+    },
+    {
+      "sid": "pcwp",
+      "code": "curation_review",
+      "message": "Review the existing unit TODO for pulmonary capillary wedge pressure."
+    },
+    {
+      "sid": "phenobarbitone",
+      "code": "curation_review",
+      "message": "Review overlap with phenobarbital before merging stable identifiers."
+    },
+    {
+      "sid": "prothrombin time(change)",
+      "code": "unknown_policy_measurement",
+      "message": "can_negative references an unknown measurement name."
+    },
+    {
+      "sid": "rp-hplc",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0001259."
+    },
+    {
+      "sid": "rp-hplc",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0001259; annotation retained without enrichment."
+    },
+    {
+      "sid": "sex",
+      "code": "curation_review",
+      "message": "The sex measurement is annotated with NCIT:C16576 (Female); review whether this identifies the quantity or one of its choices."
+    },
+    {
+      "sid": "svr",
+      "code": "curation_review",
+      "message": "Review the existing unit TODO and the dimensionality of systemic vascular resistance."
+    },
+    {
+      "sid": "ultra-filtration",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0001645."
+    },
+    {
+      "sid": "ultra-filtration",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0001645; annotation retained without enrichment."
+    },
+    {
+      "sid": "uplc-ms",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: CHMO:0000715."
+    },
+    {
+      "sid": "uplc-ms",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for CHMO:0000715; annotation retained without enrichment."
+    },
+    {
+      "sid": "uv-spectrophotometry",
+      "code": "invalid_annotation",
+      "message": "Invalid annotation: chmo/https://bioregistry.io/CHMO:0001253."
+    },
+    {
+      "sid": "uv-spectrophotometry",
+      "code": "unresolved_annotation",
+      "message": "No registry namespace for chmo/https://bioregistry.io/CHMO:0001253; annotation retained without enrichment."
+    }
   ]
 }

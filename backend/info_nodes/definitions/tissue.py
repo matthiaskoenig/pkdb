@@ -25,7 +25,7 @@ TISSUE_NODES: list[InfoNode] = [
         description="Blood (normally venous). A liquid tissue; its major function is to transport oxygen "
         "throughout the body. It also supplies the tissues with nutrients, "
         "removes waste products, and contains various components of the "
-        "immune system defending the body against infection. (see also"
+        "immune system defending the body against infection. (see also "
         "'serum' and 'plasma'). See also 'arterial blood'.",
         parents=["tissue"],
         annotations=[
@@ -152,7 +152,7 @@ TISSUE_NODES: list[InfoNode] = [
     Tissue(
         sid="serum",
         description="Serum. The clear portion of the blood that remains after the removal "
-        "of the blood cells and the clotting proteins. (see also"
+        "of the blood cells and the clotting proteins. (see also "
         "'blood' and 'plasma')",
         parents=["tissue"],
         annotations=[

@@ -25,7 +25,7 @@ IMAGING_MEASUREMENT_NODES: list[InfoNode] = [
     MeasurementType(
         sid="relative-signal-intensity",
         name="relative signal intensity",
-        description="Relative signal intensity normalized to zero time point before"
+        description="Relative signal intensity normalized to zero time point before "
         "tracer injection",
         parents=["mri measurement"],
         dtype=DType.NUMERIC,
@@ -35,7 +35,7 @@ IMAGING_MEASUREMENT_NODES: list[InfoNode] = [
     MeasurementType(
         sid="maximum-relative-signal-intensity",
         name="maximum relative signal intensity",
-        description="Maximum of relative signal intensity normalized to zero time point before"
+        description="Maximum of relative signal intensity normalized to zero time point before "
         "tracer injection",
         parents=["mri measurement"],
         dtype=DType.NUMERIC,

@@ -115,7 +115,7 @@ GENETICS_NODES: list[InfoNode] = [
         sid="cyp2d6-activity-score",
         name="cyp2d6 activity score",
         label="CYP2D6 activity score",
-        description="CYP2D6 activity score. Calculated based on the allele combination"
+        description="CYP2D6 activity score. Calculated based on the allele combination "
         "and allele scores. Values are in the range [0-3].",
         parents=["gene-phenotype"],
         dtype=DType.NUMERIC,

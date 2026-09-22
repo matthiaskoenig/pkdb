@@ -140,9 +140,9 @@ SUBSTANCE_NODES: list[InfoNode] = [
     ),
     Substance(
         sid="teneligliptin",
-        description="Teneligliptin is a long-acting, orally bioavailable,"
-        "pyrrolidine-based inhibitor of dipeptidyl peptidase 4 (DPP-4),"
-        "with hypoglycemic activity. Teneligliptin may also reduce plasma triglyceride"
+        description="Teneligliptin is a long-acting, orally bioavailable, "
+        "pyrrolidine-based inhibitor of dipeptidyl peptidase 4 (DPP-4), "
+        "with hypoglycemic activity. Teneligliptin may also reduce plasma triglyceride "
         "levels through a sustained increase in GLP-1 levels.",
         annotations=[(BQB.IS, "chebi/CHEBI:136042"), (BQB.IS, "NCIT:C87623")],
         synonyms=["Teneligliptin"],
@@ -445,7 +445,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="co2",
         name="carbon dioxide",
-        description="A colorless, odorless, incombustible gas resulting from the oxidation of carbon."
+        description="A colorless, odorless, incombustible gas resulting from the oxidation of carbon. "
         "A one-carbon compound with formula CO2 in which the carbon is attached to each oxygen atom "
         "by a double bond. A colourless, odourless gas under normal conditions, it is produced during "
         "respiration by all animals, fungi and microorganisms that depend directly or indirectly on "
@@ -580,7 +580,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="apolipoprotein A-I",
         name="apoA-I",
         synonyms=["APOA1"],
-        description="Apolipoprotein A-I (267 aa, ~31 kDa) is encoded by the human APOA1 gene."
+        description="Apolipoprotein A-I (267 aa, ~31 kDa) is encoded by the human APOA1 gene. "
         "This protein is involved in the transport and metabolism of cholesterol. "
         "Participates in the reverse transport of cholesterol from tissues to the liver for "
         "excretion by promoting cholesterol efflux from tissues and by acting as a cofactor for "
@@ -594,7 +594,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="apolipoprotein A-II",
         name="apoA-II",
-        description="May stabilize HDL (high density lipoprotein) structure by its association"
+        description="May stabilize HDL (high density lipoprotein) structure by its association "
         "with lipids, and affect the HDL metabolism.",
         annotations=[
             (BQB.IS, "uniprot/P02652"),
@@ -620,7 +620,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         name="apoB-100",
         label="Apolipoprotein B-100",
         description="Apolipoprotein B is a major protein constituent of chylomicrons "
-        "(apo B-48), LDL (apo B-100) and VLDL (apo B-100). Apo B-100 functions as a"
+        "(apo B-48), LDL (apo B-100) and VLDL (apo B-100). Apo B-100 functions as a "
         "recognition signal for the cellular binding and internalization of LDL particles by "
         "the apoB/E receptor.",
         annotations=[
@@ -633,7 +633,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="apolipoprotein B100+B48",
         name="apoB100+48",
         synonyms=["APOB", "apoB", "apo-B"],
-        description="Apolipoprotein B100 and B48 come from the same gene, while B48"
+        description="Apolipoprotein B100 and B48 come from the same gene, while B48 "
         "is truncated; some immunological assays may quantify the sum (FlorBar)",
         annotations=[],
     ),
@@ -739,49 +739,49 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="ldl1",
         name="ldl1",
-        description="ldl subfraction based on density measurements"
+        description="ldl subfraction based on density measurements "
         "density interval: LDL-1, 1.020-1.024 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="ldl2",
         name="ldl2",
-        description="ldl subfraction based on density measurements"
+        description="ldl subfraction based on density measurements "
         "density interval: LDL-2, 1.025±1.029 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="ldl3",
         name="ldl3",
-        description="ldl subfraction based on density measurements"
+        description="ldl subfraction based on density measurements "
         "density interval: LDL-3, 1.030±1.034 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="ldl4",
         name="ldl4",
-        description="ldl subfraction based on density measurements"
+        description="ldl subfraction based on density measurements "
         "density interval: LDL-4, 1.035±1.040 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="ldl5",
         name="ldl5",
-        description="ldl subfraction based on density measurements"
+        description="ldl subfraction based on density measurements "
         "density interval: LDL-5, 1.041±1.047 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="ldl6",
         name="ldl6",
-        description="ldl subfraction based on density measurements"
+        description="ldl subfraction based on density measurements "
         "density interval: LDL-6, 1.048±1.057 g/mL",
         parents=["ldl"],
     ),
     Substance(
         sid="ldl7",
         name="ldl7",
-        description="ldl subfraction based on density measurements"
+        description="ldl subfraction based on density measurements "
         "density interval: LDL-7, 1.058±1.066 g/mL",
         parents=["ldl"],
     ),
@@ -831,7 +831,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="non-hdlc",
         name="non-hdl-c",
         label="non-HDL cholesterol",
-        description="determining the amount of lipoprotein and cholesterol which"
+        description="determining the amount of lipoprotein and cholesterol which "
         "is not hdl-c",
         parents=["hdlc"],
     ),
@@ -1607,7 +1607,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="panadol-extend",
         name="panadol extend",
-        description="Panadol Extend (PEx) is an over-the-counter, modified-release formulation of paracetamol."
+        description="Panadol Extend (PEx) is an over-the-counter, modified-release formulation of paracetamol. "
         "Each 665 mg tablet contains 69% slow-release and 31% immediate-release paracetamol.",
         deprecated=True,  # FIXME: merge with apap. This is a special release tablet.
     ),
@@ -2345,7 +2345,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="antibiotic-agent",
         name="antibiotic agent",
-        description="Any kind of antibiotic medication such as quinolone, ciprofloxacin, ... ."
+        description="Any kind of antibiotic medication such as quinolone, ciprofloxacin, ... . "
         "Substances naturally produced by microorganisms or their "
         "derivatives that selectively target microorganisms not humans. "
         "Antibiotics kill or inhibit the growth of microorganisms by "
@@ -2928,11 +2928,11 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="guaifenesin",
         name="guaifenesin",
-        description="Guaifenesin is thought to act as an expectorant by increasing the volume and reducing the"
-        "viscosity of secretions in the trachea and bronchi. It has been said to aid in the flow of"
-        "respiratory tract secretions, allowing ciliary movement to carry the loosened secretions upward"
-        "toward the pharynx. Thus, it may increase the efficiency of the cough reflex and facilitate"
-        "removal of the secretions."
+        description="Guaifenesin is thought to act as an expectorant by increasing the volume and reducing the "
+        "viscosity of secretions in the trachea and bronchi. It has been said to aid in the flow of "
+        "respiratory tract secretions, allowing ciliary movement to carry the loosened secretions upward "
+        "toward the pharynx. Thus, it may increase the efficiency of the cough reflex and facilitate "
+        "removal of the secretions. "
         "Guaifenesin has muscle relaxant and anticonvulsant properties and may act as an NMDA receptor antagonist.",
         annotations=[
             (BQB.IS, "chebi/CHEBI:5551"),
@@ -3173,7 +3173,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="sparteine",
         name="sparteine",
-        description="Sparteine is a quinolizidine alkaloid and a quinolizidine alkaloid fundamental parent."
+        description="Sparteine is a quinolizidine alkaloid and a quinolizidine alkaloid fundamental parent. "
         "Sparteine is a plant alkaloid derived from Cytisus scoparius and Lupinus mutabilis which may "
         "chelate calcium and magnesium. Often applied in CYP2D6 phenotyping.",
         annotations=[
@@ -3513,7 +3513,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="beclometasone",
         description="Beclometasone, also known as beclometasone dipropionate, and sold under the brand name Qvar "
-        "among others, is a steroid medication. It is available as an inhaler, cream, pills, and nasal spray."
+        "among others, is a steroid medication. It is available as an inhaler, cream, pills, and nasal spray. "
         "A 17alpha-hydroxy steroid that is prednisolone in which the hydrogens at the 9alpha and 16beta "
         "positions are substituted by a chlorine and a methyl group, respectively.",
         annotations=[(BQB.IS, "chebi/CHEBI:3001")],
@@ -4180,7 +4180,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="capsaicin",
         name="capsaicin",
-        description="Capsaicin an active component of chili peppers, which are plants belonging to the genus Capsicum."
+        description="Capsaicin an active component of chili peppers, which are plants belonging to the genus Capsicum. "
         "It is a chemical irritant for mammals, including humans, and produces a sensation of burning in "
         "any tissue with which it comes into contact.",
         annotations=[
@@ -5123,11 +5123,11 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="sitagliptin",
         name="sitagliptin",
-        description="An orally available, competitive, beta-amino acid-derived inhibitor of dipeptidyl peptidase 4 (DDP-4)"
-        "with hypoglycemic activity. Sitagliptin may cause an increased risk in the development of pancreatitis."
-        "Sitagliptin is a triazolopyrazine that exhibits hypoglycemic activity."
-        "It has a role as a serine proteinase inhibitor,"
-        "a hypoglycemic agent, an EC 3.4.14.5 (dipeptidyl-peptidase IV) inhibitor, an environmental contaminant and a xenobiotic."
+        description="An orally available, competitive, beta-amino acid-derived inhibitor of dipeptidyl peptidase 4 (DDP-4) "
+        "with hypoglycemic activity. Sitagliptin may cause an increased risk in the development of pancreatitis. "
+        "Sitagliptin is a triazolopyrazine that exhibits hypoglycemic activity. "
+        "It has a role as a serine proteinase inhibitor, "
+        "a hypoglycemic agent, an EC 3.4.14.5 (dipeptidyl-peptidase IV) inhibitor, an environmental contaminant and a xenobiotic. "
         "It is a triazolopyrazine and a trifluorobenzene.",
         annotations=[
             (BQB.IS, "chebi/CHEBI:40237"),
@@ -5683,7 +5683,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="met+metoh+mam",
         label="metoprolol + alpha-hydroxymetoprolol + metoprolol-acidic-metabolite",
-        description="Sum of metoprolol and its metbolites (often used in radioactivity assays).",
+        description="Sum of metoprolol and its metabolites (often used in radioactivity assays).",
         parents=[
             "metoprolol",
             "alpha-hydroxymetoprolol",
@@ -5693,7 +5693,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="metoh+mam",
         label="alpha-hydroxymetoprolol + metoprolol-acidic-metabolite",
-        description="Sum of metoprolol and its metbolites (often used in radioactivity assays).",
+        description="Sum of alpha-hydroxymetoprolol and metoprolol acidic metabolite.",
         parents=["alpha-hydroxymetoprolol", "metoprolol-acidic-metabolite"],
     ),
     # metoprolol ratios
@@ -6889,9 +6889,9 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="fexofenadine",
         name="fexofenadine",
         description="Fexofenadine is an antihistamine pharmaceutical drug used in the treatment of allergy symptoms, "
-        "such as hay fever and urticaria."
+        "such as hay fever and urticaria. "
         "Fexofenadine is a selective peripheral H1 receptor antagonist. Blockage prevents the activation of the H1 receptors "
-        "by histamine, preventing the symptoms associated with allergies from occurring."
+        "by histamine, preventing the symptoms associated with allergies from occurring. "
         "Taking erythromycin or ketoconazole while taking fexofenadine does increase the plasma levels of fexofenadine, "
         "but this increase does not influence the QT interval. The reason for this effect is likely due to transport-related effects, "
         "specifically involving p-glycoprotein (p-gp).",
@@ -7305,7 +7305,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         "It is used to treat major depressive disorder, obsessive-compulsive disorder, panic disorder, "
         "social anxiety disorder, posttraumatic stress disorder, generalized anxiety disorder and "
         "premenstrual dysphoric disorder. It has also been used in the treatment of premature ejaculation "
-        "and hot flashes due to menopause. It is taken by mouth."
+        "and hot flashes due to menopause. It is taken by mouth. "
         "Paroxetine interacts with the following cytochrome P450 enzymes: "
         "CYP2D6 for which it is both a substrate and a potent inhibitor. "
         "CYP2B6 (strong) inhibitor. "
@@ -7839,9 +7839,9 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="fluvastatin",
         name="fluvastatin",
-        description="A racemate comprising equimolar amounts of (3R,5S)- and (3S,5R)-fluvastatin."
-        "An HMG-CoA reductase inhibitor, it is used (often as the corresponding"
-        "sodium salt) to reduce triglycerides and LDL-cholesterol,"
+        description="A racemate comprising equimolar amounts of (3R,5S)- and (3S,5R)-fluvastatin. "
+        "An HMG-CoA reductase inhibitor, it is used (often as the corresponding "
+        "sodium salt) to reduce triglycerides and LDL-cholesterol, "
         "and increase HDL-chloesterol, in the treatment of hyperlipidaemia.",
         annotations=[
             (BQB.IS, "chebi/CHEBI:38561"),
@@ -7959,7 +7959,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="simva+simacid",
         label="simvastatin + simvastatin acid",
-        description="Sum of simvastatin and simvastatin acid. Lactone is converted to the acid form"
+        description="Sum of simvastatin and simvastatin acid. Lactone is converted to the acid form "
         "and the sum of both is determined in the assay (see Morris1993)",
         synonyms=[],
         parents=["simvastatin", "simvastatin acid"],
@@ -7968,7 +7968,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="active-simva-inhibitors",
         name="active simva inhibitors",
         label="Active HMG-CoA reductase inhibitors (simvastatin)",
-        description="The combination of all simvastatin derived HMG-CoA inhibitor metabolites."
+        description="The combination of all simvastatin derived HMG-CoA inhibitor metabolites. "
         "The latent metabolites are not included (see also 'total simva inhibitors').",
         synonyms=["Active HMG-CoA reductase inhibitors"],
     ),
@@ -7984,7 +7984,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="total-simva",
         name="total simva",
         label="total simvastatin metabolites",
-        description="Total simvastatin used for measurements with radioactive marked carbon; equivalent to simvastatin dose."
+        description="Total simvastatin used for measurements with radioactive marked carbon; equivalent to simvastatin dose. "
         "This is the combination of all simvastatin and derived metabolites.",
         synonyms=["Total simvastatin"],
     ),
@@ -8409,7 +8409,7 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="bifendate",
         name="bifendate",
-        description="Bifendate is a synthetic intermediate of schizandrin."
+        description="Bifendate is a synthetic intermediate of schizandrin. "
         "Bifendate has known human metabolites that include Mono-O-demethylated bdd and methyl "
         "4-(2,3-dihydroxy-4-methoxy-6-methoxycarbonylphenyl)-7-methoxy-1,3-benzodioxole-5-carboxylate.",
         annotations=[
@@ -8592,11 +8592,11 @@ SUBSTANCE_NODES: list[InfoNode] = [
         sid="probucol",
         name="probucol",
         synonyms=["Lorelco", "Biphenabid", "Bisphenabid"],
-        description="Probucol is a dithioketal that is propane-2,2-dithiol in which the"
+        description="Probucol is a dithioketal that is propane-2,2-dithiol in which the "
         "hydrogens attached to both sulfur atoms are replaced by 3,5-di-tert-butyl-4-"
         "hydroxyphenyl groups. An anticholesteremic drug with antioxidant and anti-inflammatory "
         "properties, it is used to treat high levels of cholesterol in blood. It has a role as "
-        "an anticholesteremic drug, an antioxidant, an anti-inflammatory drug, a cardiovascular drug"
+        "an anticholesteremic drug, an antioxidant, an anti-inflammatory drug, a cardiovascular drug "
         "and an antilipemic drug. It is a dithioketal and a polyphenol.",
         annotations=[
             (BQB.IS, "inchikey/FYPMFJGVHOHGLL-UHFFFAOYSA-N"),
@@ -8659,10 +8659,10 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="osilodostrat",
         name="osilodostrat",
-        description="Osilodrostat is an orally bioavailable inhibitor of both steroid 11beta-hydroxylase (cytochrome P450 (CYP) 11B1) and aldosterone synthase (CYP11B2; steroid 18-hydroxylase),"
-        "with potential anti-adrenal activity and ability to treat Cushing disease (CD). Upon administration, osilodrostat binds to and inhibits the activity of CYP11B1, the enzyme that"
-        "catalyzes the final step of cortisol synthesis from the precursor 11-deoxycortisol, and CYP11B2, the enzyme that catalyzes aldosterone synthesis from corticosterone and"
-        "11-deoxycorticosterone in the adrenal gland. The inhibition of CYP11B1 prevents the production of excess cortisol, thereby decreasing and normalizing the levels of cortisol."
+        description="Osilodrostat is an orally bioavailable inhibitor of both steroid 11beta-hydroxylase (cytochrome P450 (CYP) 11B1) and aldosterone synthase (CYP11B2; steroid 18-hydroxylase), "
+        "with potential anti-adrenal activity and ability to treat Cushing disease (CD). Upon administration, osilodrostat binds to and inhibits the activity of CYP11B1, the enzyme that "
+        "catalyzes the final step of cortisol synthesis from the precursor 11-deoxycortisol, and CYP11B2, the enzyme that catalyzes aldosterone synthesis from corticosterone and "
+        "11-deoxycorticosterone in the adrenal gland. The inhibition of CYP11B1 prevents the production of excess cortisol, thereby decreasing and normalizing the levels of cortisol. "
         "CD is most often caused by an adrenocorticotropic hormone (ACTH)-secreting pituitary tumor.",
         annotations=[
             (BQB.IS, "inchikey/USUZGMWDZDXMDG-CYBMUJFWSA-N"),
@@ -8688,8 +8688,8 @@ SUBSTANCE_NODES: list[InfoNode] = [
     Substance(
         sid="mexiletine",
         name="mexiletine",
-        description="Mexiletine (INN) (sold under the brand names Mexitil and NaMuscla) is a medication used to treat abnormal heart rhythms, chronic pain, and some causes of muscle stiffness."
-        "Common side effects include abdominal pain, chest discomfort, drowsiness, headache, and nausea. It works as a non-selective voltage-gated sodium channel blocker and belongs"
+        description="Mexiletine (INN) (sold under the brand names Mexitil and NaMuscla) is a medication used to treat abnormal heart rhythms, chronic pain, and some causes of muscle stiffness. "
+        "Common side effects include abdominal pain, chest discomfort, drowsiness, headache, and nausea. It works as a non-selective voltage-gated sodium channel blocker and belongs "
         "to the Class IB group of anti-arrhythmic medications.",
         annotations=[
             (BQB.IS, "chebi/CHEBI:6916"),

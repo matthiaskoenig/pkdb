@@ -380,7 +380,7 @@ METHOD_NODES: list[InfoNode] = [
         "ratio and relative abundance using two mass spectrometers in series.",
         parents=["lc-ms"],
         annotations=[
-            (BQB.IS, "chmo/https://bioregistry.io/CHMO:0000701"),
+            (BQB.IS, "CHMO:0000701"),
         ],
     ),
     Method(
@@ -397,7 +397,7 @@ METHOD_NODES: list[InfoNode] = [
         sid="uplc-ms-ms",
         name="UPLC MS/MS",
         label="Ultra-performance liquid chromatography-tandem mass spectrometry (UPLC MS/MS)",
-        description="A method where a sample mixture is first separated by ultra-performance liquid chromatography before being converted into ions which are characterised by their mass-to-charge ratio and relative abundance.",
+        description="A method where a sample mixture is first separated by ultra-performance liquid chromatography before tandem mass spectrometry characterises the ions by their mass-to-charge ratio and fragmentation.",
         parents=["uplc-ms"],
         annotations=[],
     ),

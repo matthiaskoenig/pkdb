@@ -1,6 +1,6 @@
 # Generated vocabulary
 
-The authoritative editable definitions are in `../pkdb_data/info_nodes/definitions/`. Do not edit `vocabulary.json` or `provenance.json` manually. Regenerate them from the repository root with:
+The authoritative editable definitions are in `../info_nodes/definitions/`. Do not edit `vocabulary.json` or `provenance.json` manually. Regenerate them from the repository root with:
 
 ```bash
 uv run --project backend --python 3.14 python scripts/update_vocabulary.py

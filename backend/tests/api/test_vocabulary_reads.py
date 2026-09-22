@@ -105,7 +105,7 @@ def test_vocabulary_detail_search_and_filters(client, session_factory):
     )
 
 
-def test_offline_vocabulary_matches_legacy_serializer(
+def test_offline_vocabulary_matches_legacy_serializer_with_resolved_metadata(
     client, session_factory, tmp_path
 ):
     from pathlib import Path
@@ -132,6 +132,18 @@ def test_offline_vocabulary_matches_legacy_serializer(
         return value
 
     for sid, expected in golden.items():
+        # The historical fixture captured unresolved provider templates and SIO
+        # metadata. Keep its API contract with the verified enrichment corrections.
+        for annotation in expected["annotations"]:
+            term = annotation["term"]
+            if annotation["collection"] == "chebi":
+                term = term.removeprefix("CHEBI:")
+            annotation["url"] = annotation["url"].replace("{$id}", term)
+            if annotation["collection"] == "sio" and term == "SIO_010048":
+                annotation["label"] = "male"
+                annotation["description"] = (
+                    "male is a biological sex of an individual with male sexual organs."
+                )
         response = client.get(f"/api/v1/info_nodes/{sid}/")
         assert response.status_code == 200
         assert unordered(response.json()) == unordered(expected)
