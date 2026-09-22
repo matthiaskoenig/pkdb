@@ -35,6 +35,17 @@ def test_public_media_respects_access_and_licence(
         session.add(
             StudyAttachment(study_id=study.id, file_id=staged.id, name="paper.pdf")
         )
+    detail_url = "/api/v1/studies/MEDIA/"
+    public_detail = client.get(detail_url)
+    if access == "private":
+        assert public_detail.status_code == 404
+    else:
+        assert public_detail.status_code == 200
+        assert len(public_detail.json()["files"]) == (1 if licence == "open" else 0)
+    owner_files = client.get(detail_url, headers=creator_headers).json()["files"]
+    assert len(owner_files) == 1
+    assert owner_files[0]["name"] == "data/paper.pdf"
+    assert owner_files[0]["file"] == f"/media/{staged.id}/paper.pdf"
     url = f"/media/{staged.id}/paper.pdf"
     assert client.get(url).status_code == status
     response = client.get(url, headers=creator_headers)

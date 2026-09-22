@@ -18,8 +18,17 @@ class Timecourse(Owned, Base):
     )
 
 
+class MeasurementSource(Owned, Base):
+    __tablename__ = "measurement_sources"
+    __table_args__ = (
+        UniqueConstraint("study_id", "id"),
+        UniqueConstraint("study_id", "key"),
+    )
+
+
 class Measurement(Owned, Scientific, Base):
     __tablename__ = "measurements"
+    source_id: Mapped[int | None]
     group_id: Mapped[int | None] = mapped_column(index=True)
     individual_id: Mapped[int | None] = mapped_column(index=True)
     derived_from_id: Mapped[int | None]
@@ -37,6 +46,10 @@ class Measurement(Owned, Scientific, Base):
     __table_args__ = (
         UniqueConstraint("study_id", "id"),
         UniqueConstraint("study_id", "key"),
+        ForeignKeyConstraint(
+            ["study_id", "source_id"],
+            ["measurement_sources.study_id", "measurement_sources.id"],
+        ),
         ForeignKeyConstraint(
             ["study_id", "group_id"], ["groups.study_id", "groups.id"]
         ),

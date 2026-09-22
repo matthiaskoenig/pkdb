@@ -20,6 +20,7 @@ def clear_children(session: Session, study_id: int) -> None:
         StudyAttachment,
         m.Scatter,
         m.Measurement,
+        m.MeasurementSource,
         m.Timecourse,
         g.Characteristic,
         i.Intervention,
@@ -193,10 +194,28 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
         m.Timecourse,
         [dict(study_id=sid, key=course.key) for course in study.timecourses],
     )
+    source_records = {}
+    measurement_source_keys = {}
+    for record in study.measurements:
+        if not record.calculated:
+            key = record.series_key or record.derived_from or record.key
+            source_records.setdefault(
+                key,
+                dict(
+                    study_id=sid,
+                    key=key,
+                    source=record.source.model_dump(mode="json")
+                    if record.source
+                    else None,
+                ),
+            )
+            measurement_source_keys[record.key] = key
+    source_ids = bulk(session, m.MeasurementSource, list(source_records.values()))
     measurements = []
     for record in study.measurements:
         row = science(record)
         row.update(
+            source_id=source_ids.get(measurement_source_keys.get(record.key)),
             group_id=group_names.get(record.group),
             individual_id=individual_names.get(record.individual),
             series_key=record.series_key,

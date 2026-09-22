@@ -18,7 +18,9 @@ from pkdb.db.serialize import (
     output_responses,
     reference_responses,
     subject_responses,
+    subset_responses,
 )
+from pkdb.db.study_responses import study_responses
 from pkdb.schemas.queries import Page, QuerySpec
 from pkdb.schemas.security import Principal
 
@@ -35,6 +37,8 @@ class QueryService:
             statement = statement.join(Study, Study.reference_id == Reference.id)
         elif model is not Study:
             statement = statement.join(Study, model.study_id == Study.id)
+        if model is Subset:
+            statement = statement.join(Scatter, Subset.scatter_id == Scatter.id)
         statement = statement.where(visibility(principal), where)
         with self.session_factory() as session:
             session.connection(execution_options={"isolation_level": "REPEATABLE READ"})
@@ -49,17 +53,11 @@ class QueryService:
                 )
             )
             if model is Study:
-                items = [
-                    {
-                        "sid": row.sid,
-                        "name": row.name,
-                        "access": row.access,
-                        "licence": row.licence,
-                    }
-                    for row in rows
-                ]
+                items = study_responses(session, rows, principal)
             elif model is Measurement:
                 items = output_responses(session, rows)
+            elif model is Subset:
+                items = subset_responses(session, rows)
             elif model is Reference:
                 items = reference_responses(session, rows)
             elif model is Intervention:

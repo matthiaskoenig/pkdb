@@ -152,6 +152,7 @@ def test_frost2014_postgresql_outputs_match_legacy(
         root = Study(
             sid=study.sid,
             name=study.metadata.name,
+            date=study.metadata.date,
             access="public",
             licence="closed",
             creator_id=owner.id,
@@ -305,3 +306,81 @@ def test_frost2014_postgresql_outputs_match_legacy(
     assert [author["first_name"] for author in page.items[0]["authors"]] == [
         author["first_name"] for author in subjects["references"][0]["authors"]
     ]
+
+    page = QueryService(session_factory).search(
+        QuerySpec.model_validate({"entity": "subsets", "page_size": 1000}), Principal()
+    )
+
+    def without_ids(value):
+        if isinstance(value, dict):
+            return {
+                key: without_ids(item) for key, item in value.items() if key != "pk"
+            }
+        if isinstance(value, list):
+            return [without_ids(item) for item in value]
+        return value
+
+    def compare(actual, expected):
+        if isinstance(expected, dict):
+            assert actual.keys() == expected.keys()
+            for key in expected:
+                compare(actual[key], expected[key])
+        elif isinstance(expected, list):
+            assert len(actual) == len(expected)
+            for left, right in zip(actual, expected, strict=True):
+                compare(left, right)
+        elif isinstance(expected, float):
+            assert math.isclose(actual, expected, rel_tol=1e-9, abs_tol=1e-12)
+        else:
+            assert actual == expected
+
+    compare(
+        sorted(without_ids(page.items), key=lambda row: row["name"]),
+        sorted(without_ids(subjects["subsets"]), key=lambda row: row["name"]),
+    )
+
+    public_study = (
+        QueryService(session_factory)
+        .search(QuerySpec(entity="studies"), Principal())
+        .items[0]
+    )
+    expected_study = subjects["study"]
+    expected_study[
+        "files"
+    ] = []  # Anonymous reads cannot list this closed-license study's files.
+    for section, entity in (
+        ("groupset", "groups"),
+        ("individualset", "individuals"),
+        ("interventionset", "interventions"),
+        ("outputset", "outputs"),
+        ("dataset", "subsets"),
+    ):
+        predicates = (
+            [{"field": "normed", "value": True}]
+            if entity in {"outputs", "interventions"}
+            else []
+        )
+        children = (
+            QueryService(session_factory)
+            .search(
+                QuerySpec.model_validate(
+                    {"entity": entity, "predicates": predicates, "page_size": 1000}
+                ),
+                Principal(),
+            )
+            .items
+        )
+        linked = public_study[section][entity]
+        assert set(linked) == {child["pk"] for child in children}
+        assert len(linked) == len(children)
+        public_study[section][entity] = len(linked)
+        expected_study[section][entity] = len(expected_study[section][entity])
+    # Member/substance ordering was not a legacy contract; author and point order were.
+    for field in ("curators", "collaborators", "substances"):
+        public_study[field] = sorted(
+            public_study[field], key=lambda row: json.dumps(row, sort_keys=True)
+        )
+        expected_study[field] = sorted(
+            expected_study[field], key=lambda row: json.dumps(row, sort_keys=True)
+        )
+    compare(without_ids(public_study), without_ids(expected_study))

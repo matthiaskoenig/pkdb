@@ -19,7 +19,13 @@ class Predicate(BaseModel):
 class QuerySpec(BaseModel):
     model_config = ConfigDict(extra="forbid")
     entity: Literal[
-        "studies", "outputs", "groups", "individuals", "interventions", "references"
+        "studies",
+        "outputs",
+        "groups",
+        "individuals",
+        "interventions",
+        "references",
+        "subsets",
     ]
     predicates: list[Predicate] = Field(default_factory=list, max_length=50)
     search: str | None = Field(default=None, max_length=500)

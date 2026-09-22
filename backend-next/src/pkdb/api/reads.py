@@ -174,3 +174,30 @@ def reference_detail(sid: str, request: Request):
     if not page.items:
         raise HTTPException(404, "Not found")
     return page.items[0]
+
+
+@router.get("/subsets/")
+def subsets(request: Request):
+    return result_page(request, query_spec(request, "subsets"))
+
+
+@router.get("/subsets/{identifier}/")
+def subset_detail(identifier: int, request: Request):
+    return subject_detail("subsets", identifier, request)
+
+
+@router.get("/studies/")
+def studies(request: Request):
+    return result_page(request, query_spec(request, "studies"))
+
+
+@router.get("/studies/{sid}/")
+def study_detail(sid: str, request: Request):
+    actor = request.app.state.principal(request, required=False)
+    page = request.app.state.queries.search(
+        QuerySpec(entity="studies", predicates=[Predicate(field="sid", value=sid)]),
+        actor,
+    )
+    if not page.items:
+        raise HTTPException(404, "Not found")
+    return page.items[0]

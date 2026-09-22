@@ -54,3 +54,19 @@ def test_unknown_comment_author_cannot_be_silently_dropped(
     ]
     with pytest.raises(StudyValidationError, match="unknown user"):
         service.replace(valid_bundle, principal)
+
+
+def test_reported_and_normalized_outputs_share_source_identity(
+    ingestion_context, valid_bundle, session_factory
+):
+    from sqlalchemy import select
+
+    from pkdb.db.models.measurements import Measurement
+
+    service, principal = ingestion_context
+    service.replace(valid_bundle, principal)
+    with session_factory() as session:
+        records = list(session.scalars(select(Measurement)))
+        assert len(records) == 2
+        assert records[0].source_id is not None
+        assert records[0].source_id == records[1].source_id

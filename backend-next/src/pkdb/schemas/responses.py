@@ -105,3 +105,128 @@ class ReferenceResponse(ResponseModel):
     journal: str | None
     date: str | None
     authors: list[AuthorResponse]
+
+
+class EmptyResponse(ResponseModel):
+    pass
+
+
+class SourceReference(ResponseModel):
+    pk: int
+
+
+class ArrayOutput(ResponseModel):
+    pk: int
+    group: GroupSummary | EmptyResponse
+    individual: SubjectSummary | EmptyResponse
+    interventions: list[SubjectSummary]
+    ex: SourceReference | EmptyResponse
+    normed: bool
+    value: float | None
+    mean: float | None
+    median: float | None
+    min: float | None
+    max: float | None
+    se: float | None
+    sd: float | None
+    cv: float | None
+    unit: str | None
+    time_unit: str | None
+    time: float | None
+    tissue: NodeResponse | None
+    method: NodeResponse | None
+    measurement_type: NodeResponse
+    substance: NodeResponse | None
+    choice: NodeResponse | None
+    label: str | None
+
+
+class SubsetResponse(ResponseModel):
+    pk: int
+    study: StudySummary
+    name: str
+    data_type: str
+    array: list[list[ArrayOutput]]
+
+
+class DescriptionResponse(ResponseModel):
+    pk: int
+    text: str
+
+
+class CommentResponse(DescriptionResponse):
+    username: str | None
+
+
+class NotesResponse(ResponseModel):
+    descriptions: list[DescriptionResponse]
+    comments: list[CommentResponse]
+
+
+class UserResponse(ResponseModel):
+    username: str
+    first_name: str
+    last_name: str
+
+
+class CuratorResponse(UserResponse):
+    rating: float
+
+
+class GroupSetResponse(NotesResponse):
+    groups: list[int]
+
+
+class IndividualSetResponse(NotesResponse):
+    individuals: list[int]
+
+
+class InterventionSetResponse(NotesResponse):
+    interventions: list[int]
+
+
+class OutputSetResponse(NotesResponse):
+    outputs: list[int]
+
+
+class DatasetResponse(NotesResponse):
+    subsets: list[int]
+
+
+class StudyReferenceResponse(ReferenceResponse):
+    study: StudySummary
+
+
+class AttachmentResponse(ResponseModel):
+    pk: str
+    name: str
+    file: str
+
+
+class StudyResponse(NotesResponse):
+    pk: str
+    sid: str
+    name: str
+    licence: str
+    access: str
+    date: str | None
+    group_count: int
+    individual_count: int
+    intervention_count: int
+    output_count: int
+    output_calculated_count: int
+    subset_count: int
+    timecourse_count: int
+    scatter_count: int
+    reference: StudyReferenceResponse | None
+    reference_date: str | None
+    creator: UserResponse | None
+    curators: list[CuratorResponse]
+    collaborators: list[UserResponse]
+    files: list[AttachmentResponse]
+    substances: list[NodeResponse]
+    groupset: GroupSetResponse
+    individualset: IndividualSetResponse
+    interventionset: InterventionSetResponse
+    outputset: OutputSetResponse
+    dataset: DatasetResponse

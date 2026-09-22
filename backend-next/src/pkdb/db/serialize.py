@@ -345,3 +345,69 @@ def reference_responses(session, rows):
         ).model_dump()
         for row in rows
     ]
+
+
+def subset_responses(session, rows):
+    from pkdb.db.models.measurements import Measurement, Scatter, SubsetDimension
+    from pkdb.schemas.responses import ArrayOutput, SubsetResponse
+
+    if not rows:
+        return []
+    associations = list(
+        session.execute(
+            select(SubsetDimension, Measurement)
+            .join(Measurement, SubsetDimension.measurement_id == Measurement.id)
+            .where(SubsetDimension.subset_id.in_([row.id for row in rows]))
+            .order_by(SubsetDimension.position)
+        )
+    )
+    measurements = {record.id: record for _, record in associations}
+    outputs = {
+        row["pk"]: row for row in output_responses(session, list(measurements.values()))
+    }
+    arrays = defaultdict(list)
+    for dimension, record in associations:
+        output = {
+            key: value
+            for key, value in outputs[record.id].items()
+            if key in ArrayOutput.model_fields
+        }
+        output.update(
+            group=output["group"] or {},
+            individual=output["individual"] or {},
+            ex={"pk": record.source_id} if record.source_id is not None else {},
+        )
+        arrays[dimension.subset_id].append(output)
+    datasets = {
+        row.id: row
+        for row in session.scalars(
+            select(Scatter).where(Scatter.id.in_({r.scatter_id for r in rows}))
+        )
+    }
+    studies = {
+        row.id: {"sid": row.sid, "name": row.name}
+        for row in session.scalars(
+            select(Study).where(Study.id.in_({r.study_id for r in rows}))
+        )
+    }
+    result = []
+    for row in rows:
+        width = len(row.dimension_labels)
+        points = arrays[row.id]
+        result.append(
+            SubsetResponse.model_validate(
+                {
+                    "pk": row.id,
+                    "study": studies[row.study_id],
+                    "name": row.name,
+                    "data_type": datasets[row.scatter_id].data_type,
+                    "array": [
+                        points[index : index + width]
+                        for index in range(0, len(points), width)
+                    ]
+                    if width
+                    else [],
+                }
+            ).model_dump()
+        )
+    return result

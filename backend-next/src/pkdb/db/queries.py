@@ -6,7 +6,7 @@ from collections import defaultdict
 from sqlalchemy import and_, exists, or_, select, true
 
 from pkdb.db.models.interventions import Intervention
-from pkdb.db.models.measurements import Measurement
+from pkdb.db.models.measurements import Measurement, Scatter, Subset
 from pkdb.db.models.studies import Reference, Study, StudyUser
 from pkdb.db.models.subjects import Group, Individual
 from pkdb.schemas.queries import Predicate, QuerySpec
@@ -55,6 +55,7 @@ MODELS = {
     "individuals": Individual,
     "interventions": Intervention,
     "references": Reference,
+    "subsets": Subset,
 }
 
 
@@ -98,6 +99,13 @@ def fields_for(entity):
                 )
             },
             "normed": Intervention.origin == "normalized",
+        }
+    if entity == "subsets":
+        return {
+            **fields,
+            "id": Subset.id,
+            "name": Subset.name,
+            "data_type": Scatter.data_type,
         }
     model = Group if entity == "groups" else Individual
     return {**fields, "id": model.id, "name": model.name}

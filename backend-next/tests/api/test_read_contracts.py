@@ -133,3 +133,77 @@ def test_reference_read_preserves_authors_and_visibility(
     assert response.status_code == 200
     assert client.get("/api/v1/references/").json()["data"]["count"] == 0
     assert client.get(f"/api/v1/references/{row['sid']}/").status_code == 404
+
+
+def test_scatter_subset_routes_preserve_dimension_order(
+    client, valid_bundle, creator_headers
+):
+    import json
+    from copy import deepcopy
+
+    valid_bundle.study["access"] = "public"
+    base = valid_bundle.study["outputset"]["outputs"][0]
+    valid_bundle.study["outputset"]["outputs"] = [
+        dict(deepcopy(base), label=label, time=time, output_type="array")
+        for time in (0, 1)
+        for label in ("x", "y")
+    ]
+    valid_bundle.study["dataset"] = {
+        "data": [
+            {
+                "name": "figure",
+                "data_type": "scatter",
+                "subsets": [
+                    {"name": "pairs", "dimensions": ["x", "y"], "shared": ["time"]}
+                ],
+            }
+        ]
+    }
+    response = client.put(
+        f"/api/v2/studies/{valid_bundle.study['sid']}",
+        headers=creator_headers,
+        data={
+            "study": json.dumps(valid_bundle.study),
+            "reference": json.dumps(valid_bundle.reference),
+        },
+    )
+    assert response.status_code == 201
+    response = client.get("/api/v1/subsets/")
+    assert response.status_code == 200
+    row = response.json()["data"]["data"][0]
+    assert row["data_type"] == "scatter"
+    assert len(row["array"]) == 2
+    assert [[point["label"] for point in pair] for pair in row["array"]] == [
+        ["x", "y"],
+        ["x", "y"],
+    ]
+    assert client.get(f"/api/v1/subsets/{row['pk']}/").json() == row
+
+
+def test_study_detail_contains_complete_sets_and_metadata(
+    client, valid_bundle, creator_headers
+):
+    import json
+
+    valid_bundle.study["access"] = "public"
+    valid_bundle.study["descriptions"] = ["Study description"]
+    response = client.put(
+        f"/api/v2/studies/{valid_bundle.study['sid']}",
+        headers=creator_headers,
+        data={
+            "study": json.dumps(valid_bundle.study),
+            "reference": json.dumps(valid_bundle.reference),
+        },
+    )
+    assert response.status_code == 201
+    response = client.get(f"/api/v1/studies/{valid_bundle.study['sid']}/")
+    assert response.status_code == 200
+    row = response.json()
+    assert row["reference"]["sid"] == valid_bundle.reference["sid"]
+    assert row["creator"]["username"] == "curator"
+    assert row["descriptions"][0]["text"] == "Study description"
+    assert len(row["groupset"]["groups"]) == row["group_count"] == 1
+    assert len(row["outputset"]["outputs"]) == row["output_count"] == 1
+    assert row["files"] == []
+    assert client.get("/api/v1/studies/").json()["data"]["data"] == [row]
+    assert client.get("/api/v1/studies/missing/").status_code == 404
