@@ -82,6 +82,10 @@ From now on every commit is checked with the pre-commit hooks (whitespace and fi
 
 ## Testing
 
+For the replacement FastAPI backend and `pkdb upload`, follow
+[Local upload testing](local-upload-testing.md). It uses a dedicated PostgreSQL
+container and includes vocabulary, account and study setup.
+
 The tests need a running postgres and elasticsearch, provided by `docker-compose-test.yml` in the repository root - fixed ports `5434` (postgres) and `9124` (elasticsearch), no named volumes, so a `search_index --rebuild` against them never touches the data of the develop stack (`docker-compose-develop.yml`, ports `5433`/`9123`). Start and stop them with:
 
 ```bash
