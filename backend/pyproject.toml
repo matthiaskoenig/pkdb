@@ -10,7 +10,7 @@ requires-python = ">=3.13,<3.15"
 dependencies = [
   "pydantic>=2,<3",
   "pydantic-settings>=2,<3",
-  "pandas>=2.3,<3",
+  "pandas>=2.3,<4",
   "numpy>=2.3,<3",
   "scipy>=1.16,<2",
   "pint>=0.25,<1",
