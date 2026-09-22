@@ -104,8 +104,6 @@ def test_each_uploaded_study_requires_a_visibility_probe(tmp_path, monkeypatch):
                 str(workload),
                 "--output",
                 str(tmp_path / "metrics.json"),
-                "--profile",
-                "replacement",
             ]
         )
 
@@ -173,8 +171,6 @@ def test_cold_and_warmup_samples_are_separate_from_five_measured_runs(
                 str(workload),
                 "--output",
                 str(output),
-                "--profile",
-                "replacement",
                 "--cold-start",
             ]
         )

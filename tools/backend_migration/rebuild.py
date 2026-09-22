@@ -10,9 +10,10 @@ from tempfile import NamedTemporaryFile
 from urllib.parse import quote
 
 import httpx
+from pydantic import ValidationError
+
 from pkdb.commands.upload import api_root, send_folder
 from pkdb.schemas.replacement import PublicationState
-from pydantic import ValidationError
 
 # Support both module invocation and the documented direct script invocation.
 if __package__ in (None, ""):

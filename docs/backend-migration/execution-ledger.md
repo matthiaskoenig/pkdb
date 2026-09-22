@@ -192,3 +192,26 @@ Execution: native, authorized by user.
 - Replaced the client reference test's live PubMed request with synthetic XML at the transport boundary. The old workbook test referenced a missing fixture without asserting success; it now creates a temporary workbook and checks actual TSV content. Vocabulary tests use isolated cached responses and a public registry subset; external network calls are disabled. No tests are skipped.
 - Verification: 108 legacy backend tests pass against the dedicated PostgreSQL/Elasticsearch test services; 33 isolated client tests and their type check pass. Root lint/format and legacy type checking pass. Previously recorded replacement verification remains 353 tests per Python and both runtime/restore image gates; replacement source has not changed in this integration fix.
 - Remote inspection confirms the legacy source checkpoint e82c21f3 already exists on origin/handoff/local-workspace-20260922. Integration is proceeding through the repository's required pull request and checks, not a direct develop push or a ruleset bypass.
+
+
+## 2026-09-22: retire the previous backend source
+
+- Explicit user instruction supersedes the earlier source-retirement hold: remove
+  the previous backend and simplify local setup. This is repository cleanup, not
+  production cutover or approval of unresolved scientific/compatibility gates.
+- The current implementation moves from `backend-next/` to `backend/`. Django,
+  Elasticsearch deployment, the old uploader/client tests, old environment
+  templates, destructive deployment helpers, nginx configuration, and legacy-only
+  export/benchmark tooling are removed. Historical evidence and provenance remain.
+- Root Compose starts only FastAPI and PostgreSQL, with distinct persistent volumes,
+  automatic Alembic migrations and vocabulary bootstrap. It binds localhost:18083.
+- `pkdb bootstrap-study` creates disabled attribution identities from read-only
+  study folders without changing existing accounts. Zensical documents the complete
+  Docker validation/upload workflow.
+- Python 3.13 and 3.14: 382 regular/tooling tests pass on each. Ruff and ty pass.
+  Zensical builds successfully. Real Frost2014 Docker validation, first upload (201),
+  replacement (200), authentication after restart, persisted study equality and
+  source-file hash preservation pass. Image lifecycle and database/attachment
+  restoration are verified separately.
+- Existing operational services, source data and volumes are preserved. Historical
+  corpus failures and acceptance gaps are not reclassified as passing.

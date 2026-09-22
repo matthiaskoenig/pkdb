@@ -1,0 +1,53 @@
+name: pkdb-current
+
+services:
+  db:
+    image: postgres:18.0
+    environment:
+      POSTGRES_DB: pkdb
+      POSTGRES_USER: pkdb
+      POSTGRES_PASSWORD: ${PKDB_POSTGRES_PASSWORD:-local-development-only}
+    volumes:
+      - database:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pkdb -d pkdb"]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+    restart: unless-stopped
+
+  backend:
+    image: pkdb-local:latest
+    build:
+      context: ./backend
+      args:
+        PYTHON_VERSION: ${PKDB_PYTHON_VERSION:-3.14}
+    environment:
+      PKDB_DATABASE_URL: postgresql+psycopg://pkdb:${PKDB_POSTGRES_PASSWORD:-local-development-only}@db:5432/pkdb
+      PKDB_FILE_ROOT: /data/files
+      PKDB_CORS_ORIGINS: ${PKDB_CORS_ORIGINS:-[]}
+    volumes:
+      - attachments:/data/files
+    ports:
+      - "127.0.0.1:${PKDB_HTTP_PORT:-18083}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    command:
+      - sh
+      - -c
+      - >-
+        alembic upgrade head &&
+        pkdb bootstrap /app/bootstrap &&
+        exec uvicorn pkdb.app:create_app --factory --host 0.0.0.0 --port 8000
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+    restart: unless-stopped
+
+volumes:
+  database:
+  attachments:

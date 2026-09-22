@@ -1,9 +1,0 @@
-{
-  "chebi": "CHEBI:3306",
-  "name": "calcitonin",
-  "definition": "A 32-membered heterodetic cyclic peptide comprising the sequence Cys-Ser-Asn-Leu-Ser-Thr-Cys-Val-Leu-Gly-Lys-Leu-Ser-Gln-Glu-Leu-His-Lys-Leu-Gln-Thr-Tyr-Pro-Arg-Thr-Asn-Thr-Gly-Ser-Gly-Thr-Pro-NH2 cyclised by a disulfide bridge between the two Cys residues at positions 1 and 7.",
-  "formula": "C145H240N44O48S2",
-  "charge": 0,
-  "mass": "3431.909",
-  "inchikey": "BBBFJLBPOGFECG-VJVYQDLKSA-N"
-}

@@ -1,9 +1,0 @@
-{
-  "chebi": "CHEBI:27899",
-  "name": "cisplatin",
-  "definition": "A diamminedichloroplatinum compound in which the two ammine ligands and two chloro ligands are oriented in a <i>cis</i> planar configuration around the central platinum ion. An anticancer drug that interacts with, and forms cross-links between, DNA and proteins, it is used as a neoplasm inhibitor to treat solid tumours, primarily of the testis and ovary. Commonly but incorrectly described as an alkylating agent due to its mechanism of action (but it lacks alkyl groups).",
-  "formula": "H6Cl2N2Pt",
-  "charge": 0,
-  "mass": "300.046",
-  "inchikey": "LXZZYRPGZAFOLE-UHFFFAOYSA-L"
-}
