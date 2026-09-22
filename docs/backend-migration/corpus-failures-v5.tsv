@@ -1,0 +1,487 @@
+path	sid	error_count	sampled_codes	sampled_locations
+Gd-EOB-DTPA/Gschwend2011	PKDB00702	1	timecourse_points	Gschwend2011.xlsx:Fig2:16
+Gd-EOB-DTPA/Hamm1995	PKDB00700	66	unknown_tissue	Hamm1995.xlsx:Fig4:372;Hamm1995.xlsx:Fig4:373;Hamm1995.xlsx:Fig4:374;Hamm1995.xlsx:Fig4:375;Hamm1995.xlsx:Fig4:376;Hamm1995.xlsx:Fig4:377;Hamm1995.xlsx:Fig4:378;Hamm1995.xlsx:Fig4:379;Hamm1995.xlsx:Fig4:380;Hamm1995.xlsx:Fig4:381
+Gd-EOB-DTPA/SchuhmannGiampieri1997	PKDB00701	1	unknown_column	SchuhmannGiampieri1997.xlsx:Tab4:3
+Gd-EOB-DTPA/Weiss2021	Weiss2021	1	unknown_column	Weiss2021.xlsx:TabIndividuals:3
+Gd-EOB-DTPA/Nassif2012	Nassif2012	280	unknown_intervention	Nassif2012.xlsx:TabExcretion:3;Nassif2012.xlsx:TabExcretion:4;Nassif2012.xlsx:TabExcretion:6;Nassif2012.xlsx:TabExcretion:7;Nassif2012.xlsx:TabExcretion:9;Nassif2012.xlsx:TabExcretion:10;Nassif2012.xlsx:TabExcretion:12;Nassif2012.xlsx:TabExcretion:13;Nassif2012.xlsx:TabExcretion:15;Nassif2012.xlsx:TabExcretion:16
+acetaminophen/Ali1993	PKDB00266	14	missing_time,missing_time_unit	Ali1993.xlsx:Tab1:3;Ali1993.xlsx:Tab1:4;Ali1993.xlsx:Tab1:5;Ali1993.xlsx:Tab1:6;Ali1993.xlsx:Tab1:7
+acetaminophen/Borin1989	Borin1989	1	date_from_datetime_parsing	study.json::
+acetaminophen/Forfar1980	PKDB00255	55	unknown_intervention	Forfar1980.xlsx:Tab2:3;Forfar1980.xlsx:Tab2:4;Forfar1980.xlsx:Tab2:5;Forfar1980.xlsx:Tab2:6;Forfar1980.xlsx:Tab2:7;Forfar1980.xlsx:Tab2:8;Forfar1980.xlsx:Tab2:9;Forfar1980.xlsx:Tab2:10;Forfar1980.xlsx:Tab2:11;Forfar1980.xlsx:Tab2:12
+acetaminophen/GodayArno2017	GodayArno2017	1	invalid_expression	GodayArno2017.xlsx:Tab1:3
+acetaminophen/HolmerPettersson2004	PKDB00222	1	invalid_expression	HolmerPettersson2004.xlsx:Tab1:3
+acetaminophen/Itoh2000	PKDB00149	1	unknown_measurement	study.json::
+acetaminophen/Kamali1992	PKDB00214	1	timecourse_points	Kamali1992.xlsx:Fig1:3
+acetaminophen/Kamali1987	3604267	6	unknown_measurement	study.json::
+acetaminophen/Kim2011	PKDB00139	1	invalid_choice	study.json::
+acetaminophen/Kolawole2002	PKDB00259	4	unknown_measurement	study.json::
+acetaminophen/Liedtke1979	PKDB00226	1	unknown_measurement	study.json::
+acetaminophen/Lowenthal1976	PKDB00213	1	timecourse_points	Lowenthal1976.xlsx:Fig1:14
+acetaminophen/McGilveray1972	PKDB00147	2	unknown_measurement	study.json::
+acetaminophen/Morais1992	1732127	1	unknown_measurement	study.json::
+acetaminophen/Rumble1991	PKDB00221	2	unknown_measurement	study.json::
+acetaminophen/Shively1975	PKDB00171	2	unknown_measurement	study.json::
+acetaminophen_mice/Kim2017		1	invalid_json	study.json::
+acetaminophen_mice/Liu1996		1	invalid_json	study.json::
+acetaminophen_mice/Siegers1978b	643897	29	unit_dimension,unknown_intervention,unknown_route	Siegers1978b.xlsx:Fig1:25;Siegers1978b.xlsx:Fig1:26;Siegers1978b.xlsx:Fig1:27;Siegers1978b.xlsx:Fig1:28;Siegers1978b.xlsx:Fig1:29;Siegers1978b.xlsx:Fig1:30;Siegers1978b.xlsx:TabInterventions:10;Siegers1978b.xlsx:TabInterventions:11;Siegers1978b.xlsx:TabInterventions:12
+albuterol/Demnati1995	PKDB01185	1	negative_value	Demnati1995.xlsx:Fig2:46
+albuterol/Goldstein1987	PKDB01177	1	timecourse_points	Goldstein1987.xlsx:Fig1:3
+albuterol/Hindle1992	PKDB01184	1	unknown_column	Hindle1992.xlsx:Tab2:3
+albuterol/Powell1986	PKDB01176	1	timecourse_points	Powell1986.xlsx:Fig1:3
+albuterol/Rey1989	PKDB01184	1	unknown_image	::
+albuterol/Ward2000	PKDB01202	1	timecourse_points	Ward2000.xlsx:Fig1:108
+aliskiren/Ayalasomayajula2008a	PKDB00917	6	unknown_measurement	Ayalasomayajula2008a.xlsx:Tab2:6;Ayalasomayajula2008a.xlsx:Tab2:11;Ayalasomayajula2008a.xlsx:Tab2:16;Ayalasomayajula2008a.xlsx:Tab2:21;Ayalasomayajula2008a.xlsx:Tab2:26;Ayalasomayajula2008a.xlsx:Tab2:31
+aliskiren/Balcarek2014	PKDB00933	1	timecourse_points	Balcarek2014.xlsx:Fig4:60
+aliskiren/Tapaninen2010	PKDB00918	2	unknown_measurement	Tapaninen2010.xlsx:Tab1:9;Tapaninen2010.xlsx:Tab1:19
+aliskiren/Tapaninen2011	PKDB00865	1	unknown_image	::
+aliskiren/Vaidyanathan2006	PKDB00681	16	unknown_measurement	Vaidyanathan2006.xlsx:Tab2:7;Vaidyanathan2006.xlsx:Tab2:13;Vaidyanathan2006.xlsx:Tab2:19;Vaidyanathan2006.xlsx:Tab2:25;Vaidyanathan2006.xlsx:Tab2:31;Vaidyanathan2006.xlsx:Tab2:37;Vaidyanathan2006.xlsx:Tab2:43;Vaidyanathan2006.xlsx:Tab2:49;Vaidyanathan2006.xlsx:Tab3:7;Vaidyanathan2006.xlsx:Tab3:13
+aliskiren/Vaidyanathan2007	PKDB00868	8	unknown_measurement	Vaidyanathan2007.xlsx:Tab2:9;Vaidyanathan2007.xlsx:Tab2:17;Vaidyanathan2007.xlsx:Tab2:25;Vaidyanathan2007.xlsx:Tab2:33;Vaidyanathan2007.xlsx:Tab2:41;Vaidyanathan2007.xlsx:Tab2:49;Vaidyanathan2007.xlsx:Tab4:9;Vaidyanathan2007.xlsx:Tab4:17
+aliskiren/Vaidyanathan2007a	PKDB00869	3	unknown_measurement	Vaidyanathan2007a.xlsx:Tab2:9;Vaidyanathan2007a.xlsx:Tab2:17;Vaidyanathan2007a.xlsx:Tab2:25
+aliskiren/Vaidyanathan2008a	PKDB00935	6	unknown_measurement	Vaidyanathan2008a.xlsx:Tab2:7;Vaidyanathan2008a.xlsx:Tab2:13;Vaidyanathan2008a.xlsx:Tab2:19;Vaidyanathan2008a.xlsx:Tab2:25;Vaidyanathan2008a.xlsx:Tab2:31;Vaidyanathan2008a.xlsx:Tab2:37
+aliskiren/Vaidyanathan2007b	PKDB00870	6	unknown_measurement	Vaidyanathan2007b.xlsx:Tab3:31;Vaidyanathan2007b.xlsx:Tab3:39;Vaidyanathan2007b.xlsx:Tab3:47;Vaidyanathan2007b.xlsx:Tab3:55;Vaidyanathan2007b.xlsx:Tab3:63;Vaidyanathan2007b.xlsx:Tab3:71
+aliskiren/Waldmeier2007	PKDB00872	3	unknown_measurement	Waldmeier2007.xlsx:Tab1:9;Waldmeier2007.xlsx:Tab1:17;Waldmeier2007.xlsx:Tab1:25
+aliskiren/Zhao2006	PKDB00873	2	unknown_measurement	Zhao2006.xlsx:Tab2:8;Zhao2006.xlsx:Tab2:15
+apixaban/Frost2013a	PKDB01147	1	unknown_image	::
+apixaban/Frost2014a	PKDB01167	18	unknown_measurement	Frost2014a.xlsx:Tab3:10;Frost2014a.xlsx:Tab3:11;Frost2014a.xlsx:Tab3:12;Frost2014a.xlsx:Tab3:14;Frost2014a.xlsx:Tab3:15;Frost2014a.xlsx:Tab3:16;Frost2014a.xlsx:Tab3:25;Frost2014a.xlsx:Tab3:26;Frost2014a.xlsx:Tab3:27;Frost2014a.xlsx:Tab3:29
+apixaban/Frost2015	PKDB01098	1	negative_value	Frost2015.xlsx:Fig4:734
+apixaban/Frost2018	PKDB01151	336	unit_dimension,unknown_measurement,unknown_method	Frost2018.xlsx:Fig3:3;Frost2018.xlsx:Fig3:4;Frost2018.xlsx:Fig3:5;Frost2018.xlsx:Fig3:6;Frost2018.xlsx:Fig3:8;Frost2018.xlsx:Fig3:9
+apixaban/Kreutz2017	PKDB01097	90	unknown_measurement	Kreutz2017.xlsx:Fig3:3;Kreutz2017.xlsx:Fig3:4;Kreutz2017.xlsx:Fig3:5;Kreutz2017.xlsx:Fig3:6;Kreutz2017.xlsx:Fig3:7;Kreutz2017.xlsx:Fig3:8;Kreutz2017.xlsx:Fig3:9;Kreutz2017.xlsx:Fig3:10;Kreutz2017.xlsx:Fig3:11;Kreutz2017.xlsx:Fig3:12
+apixaban/Wang2016	PKDB01141	1	unknown_column	Wang2016.xlsx:Tab3:3
+atorvastatin/Lins2003		1	invalid_json	reference.json::
+atorvastatin/Lilja1999	10460065	1	unknown_image	::
+caffeine/Blanchard1982	PKDB00127	1	timecourse_points	Blanchard1982.xlsx:Fig1:14
+caffeine/Brazier1980	PKDB00438	1	duplicate_identifier	::
+caffeine/Calatayud1995	PKDB00441	16	invalid_choice	Calatayud1995.xlsx:TabGroups:10;Calatayud1995.xlsx:TabIndividuals:3;Calatayud1995.xlsx:TabIndividuals:7;Calatayud1995.xlsx:TabIndividuals:9;Calatayud1995.xlsx:TabIndividuals:11;Calatayud1995.xlsx:TabIndividuals:14;Calatayud1995.xlsx:TabIndividuals:19;Calatayud1995.xlsx:TabIndividuals:21;Calatayud1995.xlsx:TabIndividuals:23
+caffeine/Cheng1990	PKDB00018	1	invalid_choice	Cheng1990.xlsx:TabIndividuals:15
+caffeine/Chia2016	PKDB00448	1	dataset_dimensions	Chia2016.xlsx:TabData:3
+caffeine/Desmond1980	PKDB00384	1	unknown_column	study.json::
+caffeine/Gunes2009	PKDB00455	6	unknown_measurement	Gunes2009.xlsx:TabGroups:17;Gunes2009.xlsx:TabGroups:18;Gunes2009.xlsx:TabGroups:19;Gunes2009.xlsx:TabGroups:20;Gunes2009.xlsx:TabGroups:21;Gunes2009.xlsx:TabGroups:22
+caffeine/Hashiguchi1992	PKDB00459	1	dataset_dimensions	Hashiguchi1992.xlsx:TabData:3
+caffeine/Holstege1989	PKDB00461	1	timecourse_points	Holstege1989.xlsx:Fig1:53
+caffeine/Holstege1993	PKDB00462	8	unknown_measurement	Holstege1993.xlsx:Tab1A:11;Holstege1993.xlsx:Tab1A:12;Holstege1993.xlsx:Tab1A:13;Holstege1993.xlsx:Tab1A:14;Holstege1993.xlsx:Tab1A:15;Holstege1993.xlsx:Tab1A:16;Holstege1993.xlsx:Tab1A:17;Holstege1993.xlsx:Tab1A:18
+caffeine/JodynisLiebert2004	PKDB00382	3	missing_unit	JodynisLiebert2004.xlsx:Tab2:15;JodynisLiebert2004.xlsx:Tab2:16;JodynisLiebert2004.xlsx:Tab2:17
+caffeine/Jost1987	PKDB00463	2	unknown_measurement	Jost1987.xlsx:TabGroups:8;Jost1987.xlsx:TabGroups:23
+caffeine/IKP243	IKP243	1	pk_zero_curve	IKP243.xlsx:TabTimecourses:957
+caffeine/KinzigSchippers1999	PKDB00467	1	timecourse_points	KinzigSchippers1999.xlsx:Fig2:3
+caffeine/Kukongviriyapan2004	PKDB00469	1	unknown_column	study.json::
+caffeine/Lammers2018	PKDB00471	1	dataset_dimensions	Lammers2018.xlsx:TabData:3
+caffeine/McDonagh1991	PKDB00474	1	unknown_image	::
+caffeine/Matthaei2016	PKDB00473	3	unknown_measurement	Matthaei2016.xlsx:TabGroups:62;Matthaei2016.xlsx:TabGroups:63
+caffeine/McQuilkin1995	PKDB00475	1	timecourse_points	McQuilkin1995.xlsx:Fig2:12
+caffeine/Millard2018	PKDB00381	2	unknown_measurement	Millard2018.xlsx:TabIndividuals:3;Millard2018.xlsx:TabIndividuals:4
+caffeine/Scott1989	PKDB00486	1	timecourse_points	Scott1989.xlsx:Fig1:16
+caffeine/Tian2019	PKDB00490	10	unknown_measurement	Tian2019.xlsx:TabGroups:13;Tian2019.xlsx:TabGroups:21
+caffeine/Wahllaender1990	PKDB00493	2	unknown_measurement	Wahllaender1990.xlsx:TabGroups:9;Wahllaender1990.xlsx:TabGroups:10
+canagliflozin/Chen2015	PKDB00858	6	unknown_measurement	Chen2015.xlsx:Tab2:8;Chen2015.xlsx:Tab2:16;Chen2015.xlsx:Tab2:24;Chen2015.xlsx:Tab2:32;Chen2015.xlsx:Tab2:40;Chen2015.xlsx:Tab2:48
+canagliflozin/Devineni2014	PKDB00879	1	unknown_image	::
+canagliflozin/Devineni2015a	PKDB00876	18	unknown_measurement	Devineni2015a.xlsx:Tab1:8;Devineni2015a.xlsx:Tab1:18;Devineni2015a.xlsx:Tab1:28;Devineni2015a.xlsx:Tab1:38;Devineni2015a.xlsx:Tab1:48;Devineni2015a.xlsx:Tab1:58;Devineni2015a.xlsx:Tab1:68;Devineni2015a.xlsx:Tab1:78;Devineni2015a.xlsx:Tab1:88;Devineni2015a.xlsx:Tab1:97
+canagliflozin/Devineni2015b	PKDB00877	1	timecourse_points	Devineni2015b.xlsx:Tab1A:14
+canagliflozin/Devineni2015c	PKDB00881	1	unknown_image	::
+canagliflozin/Devineni2015d	PKDB00882	1	unknown_image	::
+canagliflozin/Devineni2015e	PKDB00883	1	timecourse_points	Devineni2015e.xlsx:Fig1:18
+canagliflozin/Devineni2016	PKDB00884	1	unknown_image	::
+canagliflozin/Iijima2015	PKDB00885	1	invalid_table	Iijima2015.xlsx:Tab2:
+canagliflozin/Inagaki2014	PKDB00878	4	unknown_measurement	Inagaki2014.xlsx:Tab3:7;Inagaki2014.xlsx:Tab3:18;Inagaki2014.xlsx:Tab3:29;Inagaki2014.xlsx:Tab3:40
+canagliflozin/Sha2014	PKDB00890	1	timecourse_points	Sha2014.xlsx:Fig7:3
+captopril/Drayer1983	PKDB01062	4	negative_value	Drayer1983.xlsx:TabText2:4;Drayer1983.xlsx:TabText2:10;Drayer1983.xlsx:TabText2:16;Drayer1983.xlsx:TabText2:22
+captopril/Duchin1982	PKDB00817	1	unknown_image	::
+captopril/Ohman1985	PKDB00829	48	unknown_measurement	Ohman1985.xlsx:Fig1:54;Ohman1985.xlsx:Fig1:55;Ohman1985.xlsx:Fig1:56;Ohman1985.xlsx:Fig1:57;Ohman1985.xlsx:Fig1:58;Ohman1985.xlsx:Fig1:59;Ohman1985.xlsx:Fig1:60;Ohman1985.xlsx:Fig1:61;Ohman1985.xlsx:Fig1:62;Ohman1985.xlsx:Fig1:63
+captopril/Singhvi1982	PKDB00836	1	timecourse_points	Singhvi1982.xlsx:Tab2:3
+chlorzoxazone/Puris2019	PKDB00642	1	unknown_image	::
+chlorzoxazone/Vesell1995	PKDB00644	1	unknown_column	Vesell1995.xlsx:Tab1:3
+cholesterol/Mol1986	PKDB00513	1	timecourse_points	Mol1986.xlsx:Tab1:3
+cholesterol/Moelgaard1988	PKDB00512	1	timecourse_points	Moelgaard1988.xlsx:Fig1:3
+cholesterol/Ntanios1999	PKDB00375	1	unknown_image	::
+cholesterol/Sivkov2021	PKDB00673	1	reference_mismatch	::
+cholesterol/Saito1991	PKDB00654	1	timecourse_points	Saito1991.xlsx:Tab9:3
+cholesterol/template		1	invalid_json	study.json::
+cholesterol/Stern2000	10868312	1	timecourse_points	Stern2000.xlsx:Tab1:4
+codeine/Chen1989_Thesis190-224	Chen1989ThesisChapter4	1	invalid_expression	Chen1989_Thesis190-224.xlsx:Tab431:3
+codeine/Chen1991	PKDB00091	1	invalid_expression	Chen1991.xlsx:TabA:3
+codeine/He2008	PKDB00093	1	timecourse_points	He2008.xlsx:Tab2:3
+codeine/Lafolie1996	PKDB00097	1	invalid_expression	Lafolie1996.xlsx:Tab1:3
+codeine/Loetsch2006	PKDB00099	1	invalid_expression	Loetsch2006.xlsx:Tab1:3
+codeine/Mikus1997	PKDB00100	1	invalid_expression	Mikus1997.xlsx:Tab1:3
+codeine/Molanaei2010	PKDB00103	1	invalid_expression	Molanaei2010.xlsx:Tab1:4
+codeine/Sindrup1996	PKDB00107	1	invalid_expression	Sindrup1996.xlsx:Tab1:3
+codeine/Vree1992	PKDB00109	1	invalid_expression	Vree1992.xlsx:Tab1A:3
+creatinine/Chow1985		1	study_name	::
+creatinine/Bauer1982	Bauer1982	1	unknown_column	Bauer1982.xlsx:Fig1:3
+creatinine/Jacobsen1980	Jacobsen1980	1	invalid_table	Jacobsen1980.xlsx:Fig2:
+creatinine/Rawson2002	Rawson2002	1	invalid_table	Rawson2002.xlsx:TabIndividuals:
+creatinine/Schedel1999	Schedel1999	1	timecourse_metadata	Schedel1999.xlsx:Fig1:11
+creatinine/Steenge2000	Steenge2000	1	invalid_table	Steenge2000.xlsx:Fig3:
+dapagliflozin/Boulton2013	PKDB00838	1	timecourse_points	Boulton2013.xlsx:Fig1:16
+dapagliflozin/Hwang2022a	PKDB00923	1	unknown_image	::
+dapagliflozin/Kasichayanula2011	PKDB00841	1	timecourse_points	Kasichayanula2011.xlsx:Fig1:3
+dapagliflozin/Kasichayanula2012	PKDB00925	1	duplicate_identifier	::
+dapagliflozin/Kasichayanula2013	PKDB00844	1	invalid_choice	Kasichayanula2013.xlsx:TabGroups:25
+dapagliflozin/Obermeier2010	PKDB00848	1	timecourse_points	Obermeier2010.xlsx:Fig6:3
+dapagliflozin/vanderAartvanderBeek2020	PKDB00929	1	invalid_choice	vanderAartvanderBeek2020.xlsx:TabGroups:7
+dextromethorphan/Chen2017	PKDB00577	1	invalid_table	Chen2017.xlsx:Fig2A:
+dextromethorphan/Edwards2017	PKDB00496	1	invalid_expression	Edwards2017.xlsx:TabGroups:3
+dextromethorphan/Gaedigk2018		1	invalid_json	study.json::
+dextromethorphan/Gazzaz2018	29633238	1	invalid_choice,reversed_range	Gazzaz2018.xlsx:Fig3_median:84;study.json::
+dextromethorphan/Hou1996	8612385	1	string_type	study.json::
+dextromethorphan/Montane2013	PKDB00589	1	string_type	study.json::
+dextromethorphan/Myrand2008	PKDB00497	635	unknown_substance	Myrand2008.xlsx:Fig6:262;Myrand2008.xlsx:Fig6:263;Myrand2008.xlsx:Fig6:264;Myrand2008.xlsx:Fig6:265;Myrand2008.xlsx:Fig6:266;Myrand2008.xlsx:Fig6:267;Myrand2008.xlsx:Fig6:268;Myrand2008.xlsx:Fig6:269;Myrand2008.xlsx:Fig6:270;Myrand2008.xlsx:Fig6:271
+dextromethorphan/Tamminga2001	11417446	1	pk_zero_curve	Tamminga2001.xlsx:Fig1:66
+dextromethorphan/Frank2009	PKDB00582	1	timecourse_points	Frank2009.xlsx:Tab148:17
+diazepam/DeSilva1966	PKDB00272	1	duplicate_column	DeSilva1966.xlsx:Fig6:
+diazepam/Giles1981	PKDB00276	1	duplicate_column	Giles1981.xlsx:Fig1:
+diazepam/Kaplan1973	PKDB00270	1	invalid_expression	Kaplan1973.xlsx:TabIndividuals:3
+diazepam/Lamson2011	PKDB00285	1	timecourse_points	Lamson2011.xlsx:Fig3:3
+diazepam/Klotz1975	PKDB00274	1	timecourse_points	Klotz1975.xlsx:Fig3:3
+dulaglutide/Barrington2011a	PKDB01009	1	timecourse_points	Barrington2011a.xlsx:Fig2:13
+dulaglutide/Chen2018	PKDB01010	1	unknown_image	::
+dulaglutide/Dungan2014	PKDB01011	1	unknown_image	::
+dulaglutide/FDAGBDO	PKDB01091	1	timecourse_points	FDAGBDO.xlsx:Fig45:3
+dulaglutide/Gerstein2019	PKDB01015	1	missing	study.json::
+dulaglutide/Pratley2018	PKDB01019	2	duplicate_identifier	::
+dulaglutide/Umpierrez2011	PKDB01123	1	missing	study.json::
+dulaglutide/Umpierrez2014	PKDB01124	1	timecourse_points	Umpierrez2014.xlsx:Fig2a:3
+dulaglutide/Weinstock2015	PKDB01131	1	duplicate_identifier	::
+dulaglutide/Wysham2014	PKDB01132	1	timecourse_points	Wysham2014.xlsx:Fig2a:3
+dulaglutide/Xu2022	PKDB01020	1	unknown_image	::
+edoxaban/Brown2015	PKDB01094	1	invalid_table	Brown2015.xlsx:Tab2:
+edoxaban/Chen2017b	PKDB01074	9	unknown_measurement	Chen2017b.xlsx:Tab2:5;Chen2017b.xlsx:Tab2:16;Chen2017b.xlsx:Tab2:27;Chen2017b.xlsx:Tab4:4;Chen2017b.xlsx:Tab4:12;Chen2017b.xlsx:Tab4:20;Chen2017b.xlsx:Tab4:28;Chen2017b.xlsx:Tab4:36;Chen2017b.xlsx:Tab4:44
+edoxaban/Matsushima2013	PKDB01095	1	unknown_image	::
+edoxaban/Mendell2012	PKDB01133	1	unknown_image	::
+edoxaban/Mendell2011	PKDB01075	1	unknown_image	::
+edoxaban/Mendell2013b	PKDB01128	1	unknown_image	::
+edoxaban/Mendell2015	PKDB01076	1	unknown_image	::
+edoxaban/Mikus2019	PKDB01138	1	unknown_image	::
+edoxaban/Ogata2010	PKDB01077	1	unknown_image	::
+edoxaban/Metze2021	PKDB01137	1	timecourse_points	Metze2021.xlsx:Fig1:308
+edoxaban/Rohr2024	PKDB01101	1	unknown_image	::
+empagliflozin/Chen2015a	PKDB00930	1	unknown_image	::
+empagliflozin/Heise2013	PKDB00914	1	timecourse_points	Heise2013.xlsx:Fig1:3
+empagliflozin/Heise2013a	PKDB00915	1	timecourse_points	Heise2013a.xlsx:Fig1:3
+empagliflozin/Jiang2023b	PKDB01000	2	unknown_measurement	Jiang2023b.xlsx:Tab2:8;Jiang2023b.xlsx:Tab2:16
+empagliflozin/Macha2013e	PKDB01001	28	missing_unit	Macha2013e.xlsx:Fig3:32;Macha2013e.xlsx:Fig3:33;Macha2013e.xlsx:Fig3:34;Macha2013e.xlsx:Fig3:35;Macha2013e.xlsx:Fig3:36;Macha2013e.xlsx:Fig3:37;Macha2013e.xlsx:Fig3:38;Macha2013e.xlsx:Fig3:39;Macha2013e.xlsx:Fig3:40;Macha2013e.xlsx:Fig3:41
+empagliflozin/Macha2014f	PKDB00939	224	unknown_individual	Macha2014f.xlsx:Fig2:3;Macha2014f.xlsx:Fig2:4;Macha2014f.xlsx:Fig2:5;Macha2014f.xlsx:Fig2:6;Macha2014f.xlsx:Fig2:7;Macha2014f.xlsx:Fig2:8;Macha2014f.xlsx:Fig2:9;Macha2014f.xlsx:Fig2:10;Macha2014f.xlsx:Fig2:11;Macha2014f.xlsx:Fig2:12
+empagliflozin/Macha2014b	PKDB00938	1	timecourse_points	Macha2014b.xlsx:Tab2A:27
+empagliflozin/Macha2015b	PKDB01156	1	timecourse_points	Macha2015b.xlsx:Fig1:35
+empagliflozin/Sarashina2014	PKDB00942	1	unknown_image	::
+empagliflozin/Seman2013	PKDB00943	1	split_length	::
+empagliflozin/Zhao2015	PKDB00932	1	timecourse_points	Zhao2015.xlsx:Fig1:3
+enalapril/Baba1990	PKDB00740	1	invalid_choice	Baba1990.xlsx:TabGroups:18
+enalapril/Dickstein1987a	PKDB00770	1	invalid_table	Dickstein1987a.xlsx:Fig1:
+enalapril/Donnelly1990	PKDB00771	1	unknown_image	::
+enalapril/ElungJensen2001	ElungJensen2001	1	invalid_number	::
+enalapril/Fruncillo1987	PKDB00773	1	timecourse_points	Fruncillo1987.xlsx:Fig2:3
+enalapril/Her2021	PKDB00775	1	timecourse_points	Her2021.xlsx:Fig3:39
+enalapril/Hockings1986	PKDB00776	1	unknown_image	::
+enalapril/Lowenthal1985	PKDB00782	1	unknown_image	::
+enalapril/Marzo2002	PKDB00784	2	int_type,string_type	study.json::
+enalapril/Ohnishi1989	PKDB00791	3	unknown_measurement	Ohnishi1989.xlsx:Tab1:8;Ohnishi1989.xlsx:Tab2:8;Ohnishi1989.xlsx:Tab2:16
+enalapril/Schwartz1985	PKDB00794	70	unknown_individual	Schwartz1985.xlsx:Fig1:3;Schwartz1985.xlsx:Fig1:4;Schwartz1985.xlsx:Fig1:5;Schwartz1985.xlsx:Fig1:6;Schwartz1985.xlsx:Fig1:7;Schwartz1985.xlsx:Fig1:8;Schwartz1985.xlsx:Fig1:9;Schwartz1985.xlsx:Fig1:10;Schwartz1985.xlsx:Fig1:11;Schwartz1985.xlsx:Fig1:13
+enalapril/Stage2017	PKDB00797	1	missing	study.json::
+ethinylestradiol/Ankrom2020	PKDB00744	1	timecourse_points	Ankrom2020.xlsx:Fig3:45
+ethinylestradiol/Back1987a	PKDB01087	1	timecourse_metadata	Back1987a.xlsx:Fig1:27
+galactose/Wynne1989	Wynne1989	260	unknown_intervention	Wynne1989.xlsx:TabA:3;Wynne1989.xlsx:TabA:4;Wynne1989.xlsx:TabA:5;Wynne1989.xlsx:TabA:6;Wynne1989.xlsx:TabA:7;Wynne1989.xlsx:TabA:8;Wynne1989.xlsx:TabA:9;Wynne1989.xlsx:TabA:10;Wynne1989.xlsx:TabA:11;Wynne1989.xlsx:TabA:12
+ethinylestradiol/vandenHeuvel2005	PKDB00762	1	timecourse_points	vandenHeuvel2005.xlsx:Fig3:58
+glimepiride/Badian1996	PKDB00908	1	timecourse_points	Badian1996.xlsx:Fig5:3
+glimepiride/Niemi2002	PKDB00952	6	negative_value	Niemi2002.xlsx:Tab2:3;Niemi2002.xlsx:Tab2:4;Niemi2002.xlsx:Tab2:8;Niemi2002.xlsx:Tab2:9;Niemi2002.xlsx:Tab2:13;Niemi2002.xlsx:Tab2:14
+glimepiride/Suzuki2006	PKDB00956	1	invalid_table	Suzuki2006.xlsx:Tab2A:
+glucose/Alford1976	4593614	1	missing	study.json::
+glucose/Basu1996	8636416	1	missing	study.json::
+glucose/Bagdade1971	5115750	1	timecourse_points	Bagdade1971.xlsx:Tab1Mean:3
+glucose/Blackard1970	5443433	1	missing	study.json::
+glucose/Blackard1971	5549213	1	missing	study.json::
+glucose/Bonadonna1993a		1	invalid_json	reference.json::
+glucose/Bondy1956	13319484	1	missing	study.json::
+glucose/Cahill1966	5926444	1	unknown_field	::
+glucose/Coon1992		1	invalid_json	reference.json::
+glucose/Coppack1989b		1	invalid_json	study.json::
+glucose/Coppack1996		1	invalid_json	reference.json::
+glucose/Crockford1966	5216127	1	missing	study.json::
+glucose/DallaMan2006	17946394	1	missing_characteristics	study.json::
+glucose/DeFronzo1981		1	invalid_json	reference.json::
+glucose/DeFronzo1983	6336701	1	missing	study.json::
+glucose/Degn2004	PKDB00070	1	pk_zero_curve	Degn2004.xlsx:Fig1A:3
+glucose/Ferrannini1983	6344651	1	missing	study.json::
+glucose/Ferrannini1979	PKDB00072	1	timecourse_points	Ferrannini1979.xlsx:Fig1:3
+glucose/Frayn1993		1	invalid_json	reference.json::
+glucose/Gerich1993		1	invalid_json	study.json::
+glucose/Glauber1986		1	study_name	::
+glucose/Goodner1969		1	invalid_json	reference.json::
+glucose/Gottesman1982		1	invalid_json	study.json::
+glucose/Gottesman1984	6363173	1	unknown_field	::
+glucose/Gray1982	6759226	1	missing	study.json::
+glucose/Grill1979		1	invalid_json	reference.json::
+glucose/Groop1989		1	invalid_json	reference.json::
+glucose/Hed1979	371340	1	missing	study.json::
+glucose/Henderson1991		1	study_name	::
+glucose/Hoekstra1982		1	invalid_json	reference.json::
+glucose/Jackson1983		1	invalid_json	reference.json::
+glucose/Jackson1984		1	invalid_json	reference.json::
+glucose/Jackson1986		1	invalid_json	reference.json::
+glucose/Jenssen1993	8404995	1	unknown_field	::
+glucose/Jenssen1990	2200805	1	missing	study.json::
+glucose/Jones1997		1	invalid_json	reference.json::
+glucose/Karam1968		1	invalid_json	study.json::
+glucose/Kelley1988		1	invalid_json	reference.json::
+glucose/Kelley1994b		1	invalid_json	reference.json::
+glucose/Kerkshoffs1998		1	study_name	::
+glucose/Jones1998	PKDB00079	2	unknown_measurement	study.json::
+glucose/Kjems2001	PKDB00080	1	timecourse_points	Kjems2001.xlsx:Fig3:3
+glucose/Kraas1974	4409874	1	missing	study.json::
+glucose/Laakso1990		1	invalid_json	reference.json::
+glucose/Laakso1990a		1	invalid_json	reference.json::
+glucose/Lerner1971		1	invalid_json	reference.json::
+glucose/Magnusson1992		1	invalid_json	reference.json::
+glucose/Malin2013	24045867	1	missing_dosing_field	study.json::
+glucose/McMahon1989		1	invalid_json	reference.json::
+glucose/Meier2003	12764578	1	missing	study.json::
+glucose/Meier2004	14988249	1	missing	study.json::
+glucose/Meier2004b	15561915	1	missing	study.json::
+glucose/Meyer2002	11788375	1	unknown_field	::
+glucose/Nauck1993a	8473405	1	missing	study.json::
+glucose/Nielsen1997		1	invalid_json	reference.json::
+glucose/Nuttal2008		1	invalid_json	study.json::
+glucose/Ohashi2018	29560274	1	invalid_expression	Ohashi2018.xlsx:TabIndividuals:3
+glucose/Osei1997		1	invalid_json	reference.json::
+glucose/Petersen2001	11319724	1	missing	study.json::
+glucose/Polidori2016		1	invalid_json	reference.json::
+glucose/Polonsky1986	PKDB00084	1	invalid_subset	study.json::
+glucose/Polonsky1988a		1	invalid_json	reference.json::
+glucose/Quddusi2003	12610039	1	missing	study.json::
+glucose/Radziuk2001	11544610	1	unknown_field	::
+glucose/Reaven1988		1	invalid_json	reference.json::
+glucose/Revers1984		1	invalid_json	reference.json::
+glucose/Rizza1981		1	invalid_json	reference.json::
+glucose/Roden1996		1	study_name	::
+glucose/Rose1966		1	invalid_json	study.json::
+glucose/Rothman1991	1948033	1	unknown_field	::
+glucose/Samols1966		1	invalid_json	reference.json::
+glucose/Sherwin1977		1	study_name	::
+glucose/Stumvoll2000		1	invalid_json	reference.json::
+glucose/Swerdloff1967		1	invalid_json	reference.json::
+glucose/Taylor1996		1	invalid_json	reference.json::
+glucose/Thiebaud1982		1	invalid_json	reference.json::
+glucose/Tokuyama1993		1	invalid_json	reference.json::
+glucose/Tillil1988	PKDB00267	1	unknown_column	Tillil1988.xlsx:Fig3:3
+glucose/Visboell2003	12832099	1	missing	study.json::
+glucose/Visboell2003b	12519856	1	missing	study.json::
+glucose/Vranic1980		1	invalid_json	reference.json::
+glucose/Woerle2003		1	invalid_json	reference.json::
+glucose/Woerle2006		1	invalid_json	reference.json::
+glucose/Yki-Jaervinen1987		1	invalid_json	study.json::
+hydrochlorothiazide/Anderson1961	PKDB01102	1	timecourse_points	Anderson1961.xlsx:Tab1:35
+hydrochlorothiazide/Beermann1977a	PKDB00821	15	unknown_substance	Beermann1977a.xlsx:Fig5:27;Beermann1977a.xlsx:Fig5:28;Beermann1977a.xlsx:Fig5:29;Beermann1977a.xlsx:Fig5:30;Beermann1977a.xlsx:Fig5:31;Beermann1977a.xlsx:Fig5tc:47;Beermann1977a.xlsx:Fig5tc:48;Beermann1977a.xlsx:Fig5tc:49;Beermann1977a.xlsx:Fig5tc:50;Beermann1977a.xlsx:Fig5tc:51
+hydrochlorothiazide/Beermann1979	PKDB01105	1	missing_characteristics	Beermann1979.xlsx:TabGroups:3
+hydrochlorothiazide/Ernst2006		1	study_name	::
+hydrochlorothiazide/Dussol2005	15615808	83	missing_unit,unit_dimension,unknown_method	Dussol2005.xlsx:Tab2:3;Dussol2005.xlsx:Tab2:4;Dussol2005.xlsx:Tab2:7;Dussol2005.xlsx:Tab2:10;Dussol2005.xlsx:Tab2:11;Dussol2005.xlsx:Tab2:14
+hydrochlorothiazide/Giudicelli1987	PKDB00753	2	duplicate_identifier	::
+hydrochlorothiazide/Hunninghake1986	PKDB00755	1	string_type	study.json::
+hydrochlorothiazide/Knauf1995	8583780	1	model_type	study.json::
+hydrochlorothiazide/Ripley2000	PKDB01108	1	timecourse_points	Ripley2000.xlsx:Fig1_2:11
+hydrochlorothiazide/Williams1982	PKDB01109	1	negative_value	Williams1982.xlsx:Tab2:39
+icg/Gadano1997	PKDB00394	1	invalid_choice	study.json::
+icg/Kawasaki1991	Kawasaki1991	1	invalid_table	Kawasaki1991.xlsx:TabIndividuals:
+icg/Moeller2018	PKDB00410	2	invalid_choice,missing_unit	Moeller2018.xlsx:Tab1:8;Moeller2018.xlsx:TabGroups:8
+icg/Peng2015	Peng2015	1	invalid_table	Peng2015.xlsx:TabIndividuals:
+icg/SwineLeipzig2014	SwineLeipzig2014	1	invalid_number	::
+icg_rat/Fukuyama1988	2907201	8	unit_dimension	Fukuyama1988.xlsx:Fig1:3;Fukuyama1988.xlsx:Fig1:4;Fukuyama1988.xlsx:Fig1:5;Fukuyama1988.xlsx:Fig1:6;Fukuyama1988.xlsx:Fig1:7;Fukuyama1988.xlsx:Fig1:8;Fukuyama1988.xlsx:Fig1:9;Fukuyama1988.xlsx:Fig1:10
+icg_rat/Hashimoto1997	9186470	42	unknown_measurement	Hashimoto1997.xlsx:Fig2:13;Hashimoto1997.xlsx:Fig2:14;Hashimoto1997.xlsx:Fig2:15;Hashimoto1997.xlsx:Fig2:16;Hashimoto1997.xlsx:Fig2:17;Hashimoto1997.xlsx:Fig2:18;Hashimoto1997.xlsx:Fig2:19;Hashimoto1997.xlsx:Fig2:20;Hashimoto1997.xlsx:Fig2:21;Hashimoto1997.xlsx:Fig2:22
+icg_rat/Mori1987		1	study_name	::
+inulin/Cousins1999		1	invalid_json	study.json::
+icg_rat/deGraaf2011	21233172	80	unknown_measurement	deGraaf2011.xlsx:Tab2:3;deGraaf2011.xlsx:Tab2:4;deGraaf2011.xlsx:Tab2:5;deGraaf2011.xlsx:Tab2:6;deGraaf2011.xlsx:Tab2:7;deGraaf2011.xlsx:Tab2:8;deGraaf2011.xlsx:Tab2:9;deGraaf2011.xlsx:Tab2:10;deGraaf2011.xlsx:Tab2:11;deGraaf2011.xlsx:Tab2:12
+lenvatinib/Shumaker2014a	PKDB01234	1	duplicate_identifier	::
+lenvatinib/Yamada2011	PKDB01181	2	int_type,string_type	study.json::
+liraglutide/Agerso2002	PKDB01039	135	unit_dimension	Agerso2002.xlsx:Fig4a:81;Agerso2002.xlsx:Fig4a:82;Agerso2002.xlsx:Fig4a:83;Agerso2002.xlsx:Fig4a:84;Agerso2002.xlsx:Fig4a:85;Agerso2002.xlsx:Fig4a:86;Agerso2002.xlsx:Fig4a:87;Agerso2002.xlsx:Fig4a:88;Agerso2002.xlsx:Fig4a:89;Agerso2002.xlsx:Fig4a:90
+liraglutide/Buse2009	PKDB01040	1	missing	study.json::
+liraglutide/Damholt2006	PKDB01041	1	invalid_table	Damholt2006.xlsx:Fig4:
+liraglutide/Degn2004	PKDB01160	20	missing_time,missing_time_unit,unit_dimension,unknown_method	Degn2004.xlsx:Tab1:3;Degn2004.xlsx:Tab1:4;Degn2004.xlsx:Tab1:7;Degn2004.xlsx:Tab1:10;Degn2004.xlsx:Tab1:11;Degn2004.xlsx:Tab1:14
+liraglutide/Feinglos2005	PKDB01043	1	missing	study.json::
+liraglutide/Elbrond2002	PKDB01042	75	unit_dimension	Elbrond2002.xlsx:Tab2:3;Elbrond2002.xlsx:Tab2:4;Elbrond2002.xlsx:Tab2:5;Elbrond2002.xlsx:Tab2:6;Elbrond2002.xlsx:Tab2:7;Elbrond2002.xlsx:Tab2:8;Elbrond2002.xlsx:Tab2:9;Elbrond2002.xlsx:Tab2:10;Elbrond2002.xlsx:Tab2:11;Elbrond2002.xlsx:Tab2:13
+liraglutide/Flint2010	PKDB01045	4	unknown_measurement	Flint2010.xlsx:Tab3:7;Flint2010.xlsx:Tab3:14;Flint2010.xlsx:Tab3:21;Flint2010.xlsx:Tab3:28
+liraglutide/Garber2009	PKDB01182	1	unknown_image	::
+liraglutide/Garber2011	PKDB01046	1	missing	study.json::
+liraglutide/Ingwersen2012	Ingwersen2012	1	invalid_number	::
+liraglutide/Jiang2011	PKDB01049	6	unknown_measurement	Jiang2011.xlsx:Tab1:7;Jiang2011.xlsx:Tab1:14;Jiang2011.xlsx:Tab1:21;Jiang2011.xlsx:Tab1:28;Jiang2011.xlsx:Tab1:35;Jiang2011.xlsx:Tab1:42
+liraglutide/Jacobsen2009	PKDB01048	5	unknown_measurement	Jacobsen2009.xlsx:Tab2:7;Jacobsen2009.xlsx:Tab2:13;Jacobsen2009.xlsx:Tab2:19;Jacobsen2009.xlsx:Tab2:25;Jacobsen2009.xlsx:Tab2:31
+liraglutide/Liu2023	PKDB01051	2	unknown_measurement	Liu2023.xlsx:Tab3:8;Liu2023.xlsx:Tab3:17
+liraglutide/Juhl2002	PKDB01163	4	unknown_measurement	Juhl2002.xlsx:Tab1:25;Juhl2002.xlsx:Tab1:26;Juhl2002.xlsx:Tab1:28;Juhl2002.xlsx:Tab1:29
+liraglutide/Mader2016	PKDB01052	3	unknown_measurement	Mader2016.xlsx:Tab2:8;Mader2016.xlsx:Tab2:16;Mader2016.xlsx:Tab2:24
+liraglutide/Madsbad2004	PKDB01183	1	missing	study.json::
+liraglutide/Marre2009	PKDB01054	1	missing	study.json::
+liraglutide/Nauck2009	PKDB01162	1	missing	study.json::
+liraglutide/Pratley2010	PKDB01055	15	unit_dimension	Pratley2010.xlsx:Fig3b:21;Pratley2010.xlsx:Fig3b:22;Pratley2010.xlsx:Fig3b:23;Pratley2010.xlsx:Fig3b:24;Pratley2010.xlsx:Fig3b:25;Pratley2010.xlsx:Fig3b:27;Pratley2010.xlsx:Fig3b:28;Pratley2010.xlsx:Fig3b:29;Pratley2010.xlsx:Fig3b:30;Pratley2010.xlsx:Fig3b:31
+liraglutide/RussellJones2009a	PKDB01056	1	missing	study.json::
+liraglutide/Sedman2017	Sedman2017	1	invalid_table	Sedman2017.xlsx:Fig1:
+liraglutide/Wilding2016		1	invalid_json	study.json::
+liraglutide/Xu2023	PKDB01057	2	unknown_measurement	Xu2023.xlsx:Tab3:9;Xu2023.xlsx:Tab3:18
+liraglutide/Vilsboll2008	Vilsboll2008	1	unknown_image	::
+liraglutide/Zhou2022	PKDB01058	2	unknown_measurement	Zhou2022.xlsx:Tab2:8;Zhou2022.xlsx:Tab2:17
+liraglutide/Zinman2009	PKDB01059	1	missing	study.json::
+liraglutide/vanCan2014	PKDB01164	1	unknown_image	::
+lisinopril/Beermann1988	Beermann1988	1	timecourse_points	Beermann1988.xlsx:Fig2:35
+lisinopril/Bellissant1996	Bellissant1996	150	unknown_measurement	Bellissant1996.xlsx:Fig1:120;Bellissant1996.xlsx:Fig1:121;Bellissant1996.xlsx:Fig1:122;Bellissant1996.xlsx:Fig1:123;Bellissant1996.xlsx:Fig1:124;Bellissant1996.xlsx:Fig1:126;Bellissant1996.xlsx:Fig1:127;Bellissant1996.xlsx:Fig1:128;Bellissant1996.xlsx:Fig1:129;Bellissant1996.xlsx:Fig1:130
+lisinopril/Brunner1981	Brunner1981	1	timecourse_points	Brunner1981.xlsx:Fig1:3
+lisinopril/Dickstein1987	Dickstein1987	37	unit_dimension	Dickstein1987.xlsx:Fig1:31;Dickstein1987.xlsx:Fig1:32;Dickstein1987.xlsx:Fig1:33;Dickstein1987.xlsx:Fig1:34;Dickstein1987.xlsx:Fig1:35;Dickstein1987.xlsx:Fig1:36;Dickstein1987.xlsx:Fig1:37;Dickstein1987.xlsx:Fig1:38;Dickstein1987.xlsx:Fig1:39;Dickstein1987.xlsx:Fig1:40
+lisinopril/Greenbaum2000		1	invalid_json	study.json::
+lisinopril/Neubeck1994	Neubeck1994	1	timecourse_points	Neubeck1994.xlsx:Fig2:5
+lisinopril/Rotmensch1984	Rotmensch1984	156	subject_reference	Rotmensch1984.xlsx:Fig1:3;Rotmensch1984.xlsx:Fig1:4;Rotmensch1984.xlsx:Fig1:5;Rotmensch1984.xlsx:Fig1:6;Rotmensch1984.xlsx:Fig1:7;Rotmensch1984.xlsx:Fig1:8;Rotmensch1984.xlsx:Fig1:9;Rotmensch1984.xlsx:Fig1:10;Rotmensch1984.xlsx:Fig1:11;Rotmensch1984.xlsx:Fig1:12
+lisinopril/Shionoiri1990	1706800	1	timecourse_points	Shionoiri1990.xlsx:Fig4:9
+lisinopril/Till1989	Till1989	34	unknown_group	Till1989.xlsx:Fig1:3;Till1989.xlsx:Fig1:4;Till1989.xlsx:Fig1:5;Till1989.xlsx:Fig1:6;Till1989.xlsx:Fig1:7;Till1989.xlsx:Fig1:8;Till1989.xlsx:Fig1:9;Till1989.xlsx:Fig1:10;Till1989.xlsx:Fig1:11;Till1989.xlsx:Fig1:12
+lisinopril/Vandenburg1988	PKDB00979	1	invalid_table	Vandenburg1988.xlsx:Tab1:
+lixisenatide/Ahren2013	PKDB00998	1	invalid_table	Ahren2013.xlsx:Fig1a:
+lixisenatide/BarrientosPerez2022	PKDB00999	1	timecourse_points	BarrientosPerez2022.xlsx:FigS2:22
+lixisenatide/Fonseca2012	PKDB01026	1	missing	study.json::
+lixisenatide/Riddle2013		1	invalid_json	reference.json::
+lixisenatide/Rayner2020	PKDB01029	1	duplicate_identifier	::
+lixisenatide/Rosenstock2014	PKDB01032	16	unit_dimension	Rosenstock2014.xlsx:Fig2a:3;Rosenstock2014.xlsx:Fig2a:4;Rosenstock2014.xlsx:Fig2a:5;Rosenstock2014.xlsx:Fig2a:6;Rosenstock2014.xlsx:Fig2a:7;Rosenstock2014.xlsx:Fig2a:8;Rosenstock2014.xlsx:Fig2a:9;Rosenstock2014.xlsx:Fig2a:10;Rosenstock2014.xlsx:Fig2a:12;Rosenstock2014.xlsx:Fig2a:13
+lixisenatide/Rosenstock2016	PKDB01033	1	missing	study.json::
+lixisenatide/Seino2012	PKDB01034	1	missing	study.json::
+lixisenatide/Yang2018	PKDB01037	8	unit_dimension	Yang2018.xlsx:Tab2:6;Yang2018.xlsx:Tab2:7;Yang2018.xlsx:Tab2:11;Yang2018.xlsx:Tab2:12;Yang2018.xlsx:Tab2:16;Yang2018.xlsx:Tab2:17;Yang2018.xlsx:Tab2:21;Yang2018.xlsx:Tab2:22
+losartan/Christen1991a	PKDB00977	1	unknown_image	::
+losartan/Goldberg1995	PKDB00975	1	unknown_image	::
+losartan/Goldberg1995a	PKDB00974	1	timecourse_points	Goldberg1995a.xlsx:Fig3:15
+losartan/Lo1995	PKDB00922	1	unknown_image	::
+midazolam/Backman1996	PKDB00227	1	invalid_expression	Backman1996.xlsx:TabA:3
+metoprolol/Seeringer2008	PKDB00535	1	dataset_label	study.json::
+midazolam/Eeckhoudt2001	PKDB00322	1	invalid_expression	Eeckhoudt2001.xlsx:TabA:3
+midazolam/Greenblatt2004	PKDB00298	1	invalid_expression	Greenblatt2004.xlsx:TabA:3
+midazolam/Klotz1982	PKDB00203	2	unknown_measurement	study.json::
+midazolam/Mandema1992	PKDB00206	1	unknown_image	::
+midazolam/Pentikaeinen1989	PKDB00269	5	invalid_choice	Pentikaeinen1989.xlsx:Tab1A:3;Pentikaeinen1989.xlsx:Tab1A:5;Pentikaeinen1989.xlsx:Tab1A:6;Pentikaeinen1989.xlsx:Tab1A:8
+midazolam/Yu2004	PKDB00324	1	invalid_expression	Yu2004.xlsx:Tab1:3
+montelukast/Dennison2018	PKDB01227	86	unknown_intervention	Dennison2018.xlsx:Fig2:22;Dennison2018.xlsx:Fig2:23;Dennison2018.xlsx:Fig2:24;Dennison2018.xlsx:Fig2:25;Dennison2018.xlsx:Fig2:26;Dennison2018.xlsx:Fig2:27;Dennison2018.xlsx:Fig2:28;Dennison2018.xlsx:Fig2:29;Dennison2018.xlsx:Fig2:30;Dennison2018.xlsx:Fig2:31
+montelukast/Karonen2012	PKDB01204	1	timecourse_points	Karonen2012.xlsx:Fig2:82
+montelukast/Pedroso2013	PKDB01227	4	unknown_measurement	Pedroso2013.xlsx:Tab2:6;Pedroso2013.xlsx:Tab2:15;Pedroso2013.xlsx:Tab4:6;Pedroso2013.xlsx:Tab4:15
+morphine/Bass1992	1474160	1	timecourse_points	Bass1992.xlsx:Tab1:3
+morphine/Chapman1990	Chapman1990	1	unknown_image	::
+morphine/Dale2007	Dale2007	1	string_type	study.json::
+morphine/Dershwitz2000	10969293	1	invalid_table	Dershwitz2000.xlsx:Fig1:
+morphine/Dayno2017	28829526	1	invalid_table	Dayno2017.xlsx:Fig1:
+morphine/Everts1998	10700307	1	invalid_table	Everts1998.xlsx:Fig1:
+morphine/Hanna1991	1997044	1	invalid_table	Hanna1991.xlsx:Tab2:
+morphine/Drake1996	8735684	106	unknown_intervention	Drake1996.xlsx:Fig1:3;Drake1996.xlsx:Fig1:4;Drake1996.xlsx:Fig1:5;Drake1996.xlsx:Fig1:6;Drake1996.xlsx:Fig1:7;Drake1996.xlsx:Fig1:8;Drake1996.xlsx:Fig1:9;Drake1996.xlsx:Fig1:10;Drake1996.xlsx:Fig1:11;Drake1996.xlsx:Fig1:12
+morphine/Hasselstrom1993	8491060	1	unknown_column	Hasselstrom1993.xlsx:Tab2:3
+morphine/Lotsch1999		1	study_name	::
+morphine/Kinzler2019	Kinzler2019	1	timecourse_points	Kinzler2019.xlsx:Fig1:3
+morphine/Manara1989		1	study_name	::
+morphine/Osborne1990	2295214	154	unknown_intervention	Osborne1990.xlsx:Tab1:3;Osborne1990.xlsx:Tab1:4;Osborne1990.xlsx:Tab1:5;Osborne1990.xlsx:Tab1:6;Osborne1990.xlsx:Tab1:7;Osborne1990.xlsx:Tab1:8;Osborne1990.xlsx:Tab1:9;Osborne1990.xlsx:Tab1:10;Osborne1990.xlsx:Tab1:11;Osborne1990.xlsx:Tab1:12
+morphine/Sarton2000	Sarton2000	1	string_type	study.json::
+morphine/Villesen2006	Villesen2006	1	unknown_image	::
+morphine/Villesen2007b	17541571	1	timecourse_points	Villesen2007b.xlsx:Fig1:3
+morphine/Westerling1995	7624926	1	invalid_table	Westerling1995.xlsx:Fig1:
+morphine/Wolff1988		1	study_name	::
+morphine/Yeh1975		1	invalid_json	study.json::
+morphine/Villesen2007	Villesen2007	1	timecourse_points	Villesen2007.xlsx:Fig1B:34
+omeprazole/Iftikhar2024		1	invalid_json	reference.json::
+omeprazole/Regaardh1990	PKDB00525	1	unknown_image	::
+omeprazole/Sohn1992	PKDB00526	1	timecourse_points	Sohn1992.xlsx:Fig2:44
+pravastatin/Halstenson1992	PKDB00541	1	unknown_image	::
+pravastatin/Ho2007	PKDB00544	1	unknown_image	::
+pravastatin/Hunninghake1990a	PKDB00601	6	unit_dimension	Hunninghake1990a.xlsx:Fig1:51;Hunninghake1990a.xlsx:Fig1:52;Hunninghake1990a.xlsx:Fig1:53;Hunninghake1990a.xlsx:Fig1:54;Hunninghake1990a.xlsx:Fig1:55;Hunninghake1990a.xlsx:Fig1:56
+pravastatin/Mellies1993		1	invalid_json	study.json::
+pravastatin/Nishizato2003	PKDB00554	1	unknown_image	::
+pravastatin/Raasch1991		1	invalid_json	study.json::
+pravastatin/Simons1992	Simons1992	1	unknown_substance	Simons1992.xlsx:TabInterventions:6
+ramipril/Bainbridge1991	PKDB00675	4	negative_value	Bainbridge1991.xlsx:Fig2:14;Bainbridge1991.xlsx:Fig2:15;Bainbridge1991.xlsx:Fig2:16;Bainbridge1991.xlsx:Fig2:17
+ramipril/Azizi2013	23608658	3	unknown_method	Azizi2013.xlsx:Tab2:3;Azizi2013.xlsx:Tab2:13;Azizi2013.xlsx:Tab2:25
+ramipril/Bohm1986	PKDB00686	48	unit_dimension	Bohm1986.xlsx:Fig3:3;Bohm1986.xlsx:Fig3:4;Bohm1986.xlsx:Fig3:5;Bohm1986.xlsx:Fig3:6;Bohm1986.xlsx:Fig3:7;Bohm1986.xlsx:Fig3:8;Bohm1986.xlsx:Fig3:10;Bohm1986.xlsx:Fig3:11;Bohm1986.xlsx:Fig3:12;Bohm1986.xlsx:Fig3:13
+ramipril/Beermann1993	PKDB00674	446	unknown_intervention	Beermann1993.xlsx:Fig7:3;Beermann1993.xlsx:Fig7:4;Beermann1993.xlsx:Fig7:5;Beermann1993.xlsx:Fig7:6;Beermann1993.xlsx:Fig7:7;Beermann1993.xlsx:Fig7:8;Beermann1993.xlsx:Fig7:9;Beermann1993.xlsx:Fig7:10;Beermann1993.xlsx:Fig7:11;Beermann1993.xlsx:Fig7:12
+ramipril/Debusmann1987	Debusmann1987	1	missing	study.json::
+ramipril/Heintz1993	PKDB00678	1	dataset_dimensions	Heintz1993.xlsx:TabData:3
+ramipril/Lavorini2014	Lavorini2014	92	unknown_intervention	Lavorini2014.xlsx:Fig2:65;Lavorini2014.xlsx:Fig4:14;Lavorini2014.xlsx:Fig4:15;Lavorini2014.xlsx:Fig4:16;Lavorini2014.xlsx:Fig4:17;Lavorini2014.xlsx:Fig4:18;Lavorini2014.xlsx:Fig4:19;Lavorini2014.xlsx:Fig4:20;Lavorini2014.xlsx:Fig4:21;Lavorini2014.xlsx:Fig4:22
+ramipril/Lee1996	8710760	16	unknown_measurement	Lee1996.xlsx:Tab3:3;Lee1996.xlsx:Tab3:4;Lee1996.xlsx:Tab3:5;Lee1996.xlsx:Tab3:6;Lee1996.xlsx:Tab3:13;Lee1996.xlsx:Tab3:14;Lee1996.xlsx:Tab3:15;Lee1996.xlsx:Tab3:16;Lee1996.xlsx:Tab3:23;Lee1996.xlsx:Tab3:24
+ramipril/Macha2013	23497760	1	unknown_column	Macha2013.xlsx:Tab1:3
+ramipril/Levitt2006	PKDB00687	2	negative_value	Levitt2006.xlsx:Fig8:203;Levitt2006.xlsx:Fig8:204
+ramipril/Meyer1987	PKDB00656	1	unknown_image	::
+ramipril/Ruf1994	PKDB00677	2	unknown_substance	Ruf1994.xlsx:Tab2:8;Ruf1994.xlsx:Tab2:16
+ramipril/Schunkert1989a	2533075	1	invalid_number	::
+ramipril/Shionoiri1987	PKDB00657	1	unknown_image	::
+ramipril/Wenting1987	PKDB00684	1	timecourse_points	Wenting1987.xlsx:Fig2:31
+ramipril/Verho1995	7555035	1	unknown_image	::
+ramipril/deGraeff1989	PKDB00685	1	unknown_column	deGraeff1989.xlsx:Fig2:3
+rapamycin/Bottiger2001	PKDB01038	2	unknown_measurement	Bottiger2001.xlsx:Tab1:7;Bottiger2001.xlsx:Tab1:14
+rapamycin/Brattstrom2000	PKDB01003	4	unknown_measurement	Brattstrom2000.xlsx:Tab3:12;Brattstrom2000.xlsx:Tab3:21;Brattstrom2000.xlsx:Tab3:30;Brattstrom2000.xlsx:Tab3:39
+rapamycin/Leung2006	PKDB01073	1	unknown_image	::
+rapamycin/Rogers2008	PKDB01081	1	invalid_table	Rogers2008.xlsx:TabIndividuals:
+rapamycin/Renders2007	PKDB01080	1	unknown_image	::
+rapamycin/Tortorici2014	PKDB01007	2	unknown_measurement	Tortorici2014.xlsx:Tab1:7;Tortorici2014.xlsx:Tab1:13
+rapamycin/Wang2014	PKDB01082	2	unknown_measurement	Wang2014.xlsx:Tab1:6;Wang2014.xlsx:Tab1:12
+rapamycin/Zhang2017	PKDB01071	1	unknown_image	::
+rapamycin/Zimmerman1999	PKDB01084	2	unknown_measurement	Zimmerman1999.xlsx:Tab1:9;Zimmerman1999.xlsx:Tab1:17
+rapamycin/Zimmerman1997	PKDB01083	37	unknown_measurement	Zimmerman1997.xlsx:Tab2:7;Zimmerman1997.xlsx:Tab2:16;Zimmerman1997.xlsx:Tab2:26;Zimmerman1997.xlsx:Tab2:36;Zimmerman1997.xlsx:Tab2:46;Zimmerman1997.xlsx:Tab2:55;Zimmerman1997.xlsx:Tab2:65;Zimmerman1997.xlsx:Tab2:75;Zimmerman1997.xlsx:Tab2:85;Zimmerman1997.xlsx:Tab2:95
+rapamycin/Zimmerman2005	PKDB01085	3	unknown_measurement	Zimmerman2005.xlsx:Tab2:7;Zimmerman2005.xlsx:Tab2:18;Zimmerman2005.xlsx:Tab2:29
+rapamycin/Zimmerman2008	PKDB01086	1	invalid_table	Zimmerman2008.xlsx:TabIndividuals:
+regorafenib/Bayer Study_11651		1	study_name	::
+regorafenib/Bayer study_14596		1	study_name	::
+rapamycin/Zimmerman2003	PKDB01072	6	unknown_measurement	Zimmerman2003.xlsx:Tab1:8;Zimmerman2003.xlsx:Tab1:15;Zimmerman2003.xlsx:Tab1:22;Zimmerman2003.xlsx:Tab2:8;Zimmerman2003.xlsx:Tab2:15;Zimmerman2003.xlsx:Tab2:22
+regorafenib/Gerisch2018	PKDB01214	1	timecourse_points	Gerisch2018.xlsx:Fig2:18
+regorafenib/Jones2015	PKDB01216	2	int_type,string_type	study.json::
+regorafenib/Renouf2016	16653	1	reference_mismatch	::
+regorafenib/Zhang2021	PKDB01224	1	timecourse_points	Zhang2021.xlsx:Fig3:57
+rivaroxaban/Alalawneh2024	PKDB00983	4	unknown_measurement	Alalawneh2024.xlsx:Tab2:12;Alalawneh2024.xlsx:Tab2:23;Alalawneh2024.xlsx:Tab3:12;Alalawneh2024.xlsx:Tab3:23
+rivaroxaban/Graff2007	PKDB00984	1	unknown_image	::
+rivaroxaban/Jiang2010	PKDB00986	1	invalid_table	Jiang2010.xlsx:Tab2:
+rivaroxaban/Kubitza2005a	PKDB00988	8	unknown_measurement	Kubitza2005a.xlsx:Tab2:7;Kubitza2005a.xlsx:Tab2:16;Kubitza2005a.xlsx:Tab2:23;Kubitza2005a.xlsx:Tab2:35;Kubitza2005a.xlsx:Tab2:47;Kubitza2005a.xlsx:Tab2:60;Kubitza2005a.xlsx:Tab2:68;Kubitza2005a.xlsx:Tab2:75
+rivaroxaban/Kubitza2005	PKDB00987	27	negative_value	Kubitza2005.xlsx:Fig1A:12;Kubitza2005.xlsx:Fig1A:25;Kubitza2005.xlsx:Fig1A:34;Kubitza2005.xlsx:Fig1A:36;Kubitza2005.xlsx:Fig1A:37;Kubitza2005.xlsx:Fig1A:71;Kubitza2005.xlsx:Fig1A:106;Kubitza2005.xlsx:Fig1A:107;Kubitza2005.xlsx:Fig1A:153;Kubitza2005.xlsx:Fig1A:155
+rivaroxaban/Kubitza2013	PKDB00990	1	unknown_image	::
+rivaroxaban/Moore2014	PKDB00992	1	unknown_image	::
+rivaroxaban/Santos2024	PKDB01112	1	timecourse_points	Santos2024.xlsx:Fig1:47
+rivaroxaban/Zhao2009	PKDB00994	28	missing_unit,negative_value	Zhao2009.xlsx:Fig2C:13;Zhao2009.xlsx:Fig2C:38;Zhao2009.xlsx:Fig2C:51;Zhao2009.xlsx:Fig1A_2A:15;Zhao2009.xlsx:Fig1A_2A:43;Zhao2009.xlsx:Fig1A_2A:57;Zhao2009.xlsx:Fig1A_2A:101;Zhao2009.xlsx:Fig1A_2A:104;Zhao2009.xlsx:Fig1A_2A:105;Zhao2009.xlsx:Fig1A_2A:106
+semaglutide/Baekdal2018a	Baekdal2018a	1	unknown_image	::
+semaglutide/Baekdal2021	Baekdal2021	1	invalid_table	Baekdal2021.xlsx:Tab2:
+semaglutide/Baekdal2021a	Baekdal2021a	1	unknown_column	Baekdal2021a.xlsx:Fig4:3
+semaglutide/Granhall2019		1	invalid_json	study.json::
+semaglutide/Ikushima2018	PKDB01200	1	timecourse_points	Ikushima2018.xlsx:Fig2:3
+semaglutide/Jensen2018	PKDB01232	1	timecourse_points	Jensen2018.xlsx:Fig1a:45
+semaglutide/VanHout2023		1	invalid_json	reference.json::
+semaglutide/Westergaard2024		1	study_name	::
+semaglutide/Marbury2017	PKDB01231	1	timecourse_points	Marbury2017.xlsx:Fig2:3
+simvastatin/Jiang2017	PKDB00366	4	invalid_choice	study.json::
+simvastatin/Lilja1998	PKDB00342	1	invalid_table	Lilja1998.xlsx:TabI:
+simvastatin/OBrien2003	PKDB00369	1	invalid_choice	study.json::
+simvastatin/Simard2001	PKDB00358	1	unknown_image	::
+simvastatin/Prueksaritanont2001	PKDB00370	1	timecourse_points	Prueksaritanont2001.xlsx:Fig3:13
+simvastatin/Sugimoto2001	PKDB00359	1	unknown_image	::
+simvastatin/Zhou2013	PKDB00363	1	unknown_image	::
+simvastatin/Watanabe2004	15531380	1	dataset_dimensions	Watanabe2004.xlsx:TabData:3
+sorafenib/Bins2017	PKDB00724	1	unknown_column	Bins2017.xlsx:Fig4:3
+sorafenib/Duran2007	PKDB00725	1	unknown_column	Duran2007.xlsx:Fig2:3
+sorafenib/Ferrario2016	PKDB00726	142	subject_reference	Ferrario2016.xlsx:Fig4:3;Ferrario2016.xlsx:Fig4:4;Ferrario2016.xlsx:Fig4:5;Ferrario2016.xlsx:Fig4:6;Ferrario2016.xlsx:Fig4:7;Ferrario2016.xlsx:Fig4:8;Ferrario2016.xlsx:Fig4:10;Ferrario2016.xlsx:Fig4:11;Ferrario2016.xlsx:Fig4:12;Ferrario2016.xlsx:Fig4:13
+sorafenib/Fucile2015	PKDB00727	28	subject_reference	Fucile2015.xlsx:Fig1:3;Fucile2015.xlsx:Fig1:4;Fucile2015.xlsx:Fig1:5;Fucile2015.xlsx:Fig1:6;Fucile2015.xlsx:Fig1:7;Fucile2015.xlsx:Fig1:8;Fucile2015.xlsx:Fig1:9;Fucile2015.xlsx:Fig1:10;Fucile2015.xlsx:Fig1:11;Fucile2015.xlsx:Fig1:12
+sorafenib/Fukudo2014	PKDB00728	4	unknown_group	Fukudo2014.xlsx:Fig3:3;Fukudo2014.xlsx:Fig3:4;Fukudo2014.xlsx:Fig3:5;Fukudo2014.xlsx:Fig3:6
+sorafenib/Huh2021	PKDB00731	1	unknown_column	Huh2021.xlsx:Fig2:3
+sorafenib/Huang2017	PKDB00730	1	unknown_column	Huang2017.xlsx:Fig3:3
+sorafenib/Hussaarts2020	PKDB00732	1	unknown_column	Hussaarts2020.xlsx:Fig1:3
+sorafenib/Ishii2014	PKDB00733	1	unknown_column	Ishii2014.xlsx:Fig1:3
+sorafenib/Navid2013	Navid2013	1	unknown_column	Navid2013.xlsx:Fig1:3
+sorafenib/Mammatas2020	PKDB00734	28	missing_time,unit_dimension,unknown_measurement	Mammatas2020.xlsx:Tab3:3;Mammatas2020.xlsx:Tab3:4;Mammatas2020.xlsx:Tab3:5;Mammatas2020.xlsx:Tab3:6;Mammatas2020.xlsx:Tab3:10;Mammatas2020.xlsx:Tab3:11
+sorafenib/Zimmerman2012	PKDB00736	20	unknown_group,unknown_substance	Zimmerman2012.xlsx:Fig1:18;Zimmerman2012.xlsx:Fig1:19;Zimmerman2012.xlsx:Fig1:20;Zimmerman2012.xlsx:Fig1:21;Zimmerman2012.xlsx:Fig1:8;Zimmerman2012.xlsx:Fig1:9;Zimmerman2012.xlsx:Fig1:10;Zimmerman2012.xlsx:Fig1:11;Zimmerman2012.xlsx:Fig1:13;Zimmerman2012.xlsx:Fig1:14
+sorafenib/Strumberg2005	PKDB00735	241	unknown_intervention	Strumberg2005.xlsx:Fig1:3;Strumberg2005.xlsx:Fig1:4;Strumberg2005.xlsx:Fig1:5;Strumberg2005.xlsx:Fig1:6;Strumberg2005.xlsx:Fig1:7;Strumberg2005.xlsx:Fig1:8;Strumberg2005.xlsx:Fig1:9;Strumberg2005.xlsx:Fig1:10;Strumberg2005.xlsx:Fig1:11;Strumberg2005.xlsx:Fig1:13
+talinolol/Bernsdorf2006	PKDB00616	3	invalid_choice	Bernsdorf2006.xlsx:TabGroups:17;Bernsdorf2006.xlsx:TabGroups:19;Bernsdorf2006.xlsx:TabGroups:23
+talinolol/Bogman2005	PKDB00565	5	invalid_choice	Bogman2005.xlsx:TabGroups:17;Bogman2005.xlsx:TabIndividuals:6;Bogman2005.xlsx:TabIndividuals:7;Bogman2005.xlsx:TabIndividuals:8;Bogman2005.xlsx:TabIndividuals:9
+talinolol/Drozdzik2014		1	invalid_json	study.json::
+talinolol/Han2009	PKDB00555	1	invalid_choice	Han2009.xlsx:TabGroups:16
+talinolol/Haustein1981	PKDB00703	1	unknown_image	::
+talinolol/He2012	PKDB00611	1	invalid_choice	He2012.xlsx:TabGroups:15
+talinolol/Krueger2001	PKDB00704	1	timecourse_points	Krueger2001.xlsx:Fig1:42
+talinolol/Nguyen2014	PKDB00612	1	dataset_dimensions	Nguyen2014.xlsx:TabData:3
+talinolol/Nguyen2015	PKDB00705	4	invalid_choice	Nguyen2015.xlsx:TabGroups:15;Nguyen2015.xlsx:TabGroups:16;Nguyen2015.xlsx:TabGroups:17;Nguyen2015.xlsx:TabGroups:20
+talinolol/Schwarz1999	PKDB00613	1	duplicate_identifier	::
+talinolol/Schwarz2000	PKDB00706	1	duplicate_identifier	::
+talinolol/Schwarz2007	PKDB00614	6	invalid_choice	Schwarz2007.xlsx:TabGroups:15;Schwarz2007.xlsx:TabGroups:16;Schwarz2007.xlsx:TabGroups:21;Schwarz2007.xlsx:TabGroups:22;Schwarz2007.xlsx:TabIndividuals:3
+talinolol/Terhaag1989	PKDB00708	1	invalid_table	Terhaag1989.xlsx:Tab1median:
+talinolol/Wang2013	PKDB00567	1	unknown_column	Wang2013.xlsx:TabInterventions:3
+talinolol/Westphal2000a	PKDB00562	1	timecourse_points	Westphal2000a.xlsx:Tab2a:3
+talinolol/Westphal2000b	PKDB00620	1	duplicate_identifier	::
+talinolol/Zeng2009	PKDB00617	1	string_type	study.json::
+talinolol/Zhang2005	PKDB00568	2	invalid_choice,reversed_range	Zhang2005.xlsx:TabGroups:3;Zhang2005.xlsx:TabGroups:13;Zhang2005.xlsx:TabGroups:15
+talinolol/Zschiesche2002	PKDB00618	1	duplicate_identifier	::
+tirzepatide/Coskun2018	PKDB00967	14	unknown_measurement	Coskun2018.xlsx:Tab2:7;Coskun2018.xlsx:Tab2:14;Coskun2018.xlsx:Tab2:21;Coskun2018.xlsx:Tab2:28;Coskun2018.xlsx:Tab2:35;Coskun2018.xlsx:Tab2:42;Coskun2018.xlsx:TabS2:10;Coskun2018.xlsx:TabS2:20;Coskun2018.xlsx:TabS2:30;Coskun2018.xlsx:TabS2:40
+tirzepatide/Furihata2022	PKDB00964	4	duplicate_identifier,unknown_measurement	::;Furihata2022.xlsx:TabS1:10;Furihata2022.xlsx:TabS1:21;Furihata2022.xlsx:TabS1:32
+tirzepatide/Feng2023	PKDB00962	6	unknown_measurement	Feng2023.xlsx:TabS1:7;Feng2023.xlsx:TabS1:14;Feng2023.xlsx:TabS1:21;Feng2023.xlsx:TabS1:28;Feng2023.xlsx:TabS1:35;Feng2023.xlsx:TabS1:42
+tirzepatide/Urva2021		1	invalid_json	study.json::
+tirzepatide/Urva2022	PKDB00969	1	split_length	::
+torasemide/Brater1987	PKDB00320	1	unknown_image	::
+torasemide/Brunner1988	PKDB00290	1	invalid_choice,reversed_range	Brunner1988.xlsx:Tab5:15;Brunner1988.xlsx:TabGroups:13
+torasemide/Cho2005	PKDB00287	1	date_from_datetime_parsing	study.json::
+torasemide/Kramer1995	PKDB00301	1	timecourse_points	Kramer1995.xlsx:Fig3:3
+torasemide/Lesne1982	PKDB00297	1	timecourse_points	Lesne1982.xlsx:Fig2:91
+torasemide/Schwarz1993	PKDB00292	1	invalid_choice	Schwarz1993.xlsx:TabGroups:8

@@ -26,3 +26,13 @@ def creator_headers(ingestion_context, session_factory):
     with session_factory.begin() as session:
         token = issue_token(session.get(User, principal.user_id), session)
     return {"Authorization": f"Token {token}"}
+
+
+@pytest.fixture
+def admin_headers(session_factory):
+    with session_factory.begin() as session:
+        user = User(username="operator", role="admin", active=True)
+        session.add(user)
+        session.flush()
+        token = issue_token(user, session)
+    return {"Authorization": f"Token {token}"}

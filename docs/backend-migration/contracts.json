@@ -1939,10 +1939,11 @@
       "verification": {
         "status": "implemented_admin_user_checkpoint",
         "tests": [
-          "tests/api/test_admin_users.py"
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
         ],
         "remaining": [
-          "legacy validation-error status/shape parity",
+          "complete legacy validation-error edge-case matrix",
           "fixed-role mapping review"
         ]
       }
@@ -1968,10 +1969,11 @@
       "verification": {
         "status": "implemented_admin_user_checkpoint",
         "tests": [
-          "tests/api/test_admin_users.py"
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
         ],
         "remaining": [
-          "legacy validation-error status/shape parity",
+          "complete legacy validation-error edge-case matrix",
           "fixed-role mapping review"
         ]
       }
@@ -1997,10 +1999,11 @@
       "verification": {
         "status": "implemented_admin_user_checkpoint",
         "tests": [
-          "tests/api/test_admin_users.py"
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
         ],
         "remaining": [
-          "legacy validation-error status/shape parity",
+          "complete legacy validation-error edge-case matrix",
           "fixed-role mapping review"
         ]
       }
@@ -2026,10 +2029,11 @@
       "verification": {
         "status": "implemented_admin_user_checkpoint",
         "tests": [
-          "tests/api/test_admin_users.py"
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
         ],
         "remaining": [
-          "legacy validation-error status/shape parity",
+          "complete legacy validation-error edge-case matrix",
           "fixed-role mapping review"
         ]
       }
@@ -2055,10 +2059,11 @@
       "verification": {
         "status": "implemented_admin_user_checkpoint",
         "tests": [
-          "tests/api/test_admin_users.py"
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
         ],
         "remaining": [
-          "legacy validation-error status/shape parity",
+          "complete legacy validation-error edge-case matrix",
           "fixed-role mapping review"
         ]
       }
@@ -2084,10 +2089,11 @@
       "verification": {
         "status": "implemented_admin_user_checkpoint",
         "tests": [
-          "tests/api/test_admin_users.py"
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
         ],
         "remaining": [
-          "legacy validation-error status/shape parity",
+          "complete legacy validation-error edge-case matrix",
           "fixed-role mapping review"
         ]
       }
@@ -2113,10 +2119,11 @@
       "verification": {
         "status": "implemented_admin_user_checkpoint",
         "tests": [
-          "tests/api/test_admin_users.py"
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
         ],
         "remaining": [
-          "legacy validation-error status/shape parity",
+          "complete legacy validation-error edge-case matrix",
           "fixed-role mapping review"
         ]
       }
@@ -2145,10 +2152,11 @@
       "verification": {
         "status": "implemented_admin_user_checkpoint",
         "tests": [
-          "tests/api/test_admin_users.py"
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
         ],
         "remaining": [
-          "legacy validation-error status/shape parity",
+          "complete legacy validation-error edge-case matrix",
           "fixed-role mapping review"
         ]
       }
@@ -3215,8 +3223,7 @@
           "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
         ],
         "remaining": [
-          "full filter/operator compatibility matrix",
-          "analysis detail aliases"
+          "full filter/operator compatibility matrix"
         ]
       }
     },
@@ -3257,7 +3264,16 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/exports.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_detail_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py::test_analysis_details_match_list_rows_and_enforce_saved_visibility"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/interventions/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -3296,7 +3312,16 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/exports.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_detail_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py::test_analysis_details_match_list_rows_and_enforce_saved_visibility"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/interventions\\.(?P<format>[a-z0-9]+)/?$",
@@ -3545,8 +3570,7 @@
           "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
         ],
         "remaining": [
-          "full filter/operator compatibility matrix",
-          "analysis detail aliases"
+          "full filter/operator compatibility matrix"
         ]
       }
     },
@@ -3573,7 +3597,16 @@
         "StudyPermission"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/exports.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_detail_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py::test_analysis_details_match_list_rows_and_enforce_saved_visibility"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/studies/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -3598,7 +3631,16 @@
         "StudyPermission"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/exports.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_detail_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py::test_analysis_details_match_list_rows_and_enforce_saved_visibility"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/studies\\.(?P<format>[a-z0-9]+)/?$",
@@ -3673,8 +3715,7 @@
           "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
         ],
         "remaining": [
-          "full filter/operator compatibility matrix",
-          "analysis detail aliases"
+          "full filter/operator compatibility matrix"
         ]
       }
     },
@@ -3717,7 +3758,16 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/exports.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_detail_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py::test_analysis_details_match_list_rows_and_enforce_saved_visibility"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/timecourses/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -3758,7 +3808,16 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/exports.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_detail_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py::test_analysis_details_match_list_rows_and_enforce_saved_visibility"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/timecourses\\.(?P<format>[a-z0-9]+)/?$",

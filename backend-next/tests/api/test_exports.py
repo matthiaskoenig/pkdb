@@ -250,3 +250,87 @@ def test_frontend_multi_match_search_alias_filters_study_membership(
         )
         assert response.status_code == 200
         assert response.json()["data"]["count"] == count
+
+
+def test_analysis_details_match_list_rows_and_enforce_saved_visibility(
+    client, creator_headers, valid_bundle, session_factory
+):
+    from pkdb.db.models.vocabulary import VocabularyNode
+
+    with session_factory.begin() as session:
+        session.add_all(
+            [
+                VocabularyNode(
+                    sid=name,
+                    name=name,
+                    kind="measurement",
+                    definition={
+                        "dtype": "numeric",
+                        "units": [unit],
+                        "time_required": name == "auc_end",
+                    },
+                )
+                for name, unit in [
+                    ("auc_end", "mg*h/l"),
+                    ("auc_inf", "mg*h/l"),
+                    ("cmax", "mg/l"),
+                    ("kel", "1/h"),
+                    ("thalf", "h"),
+                    ("tmax", "h"),
+                    ("clearance", "l/h"),
+                    ("vd", "l"),
+                    ("vd_ss", "l"),
+                ]
+            ]
+        )
+    base = valid_bundle.study["outputset"]["outputs"][0]
+    valid_bundle.study["outputset"]["outputs"] = [
+        {
+            **deepcopy(base),
+            "time": time,
+            "mean": 8 / (2**time),
+            "output_type": "timecourse",
+            "label": "curve",
+        }
+        for time in range(4)
+    ]
+    response = client.put(
+        f"/api/v2/studies/{valid_bundle.study['sid']}",
+        headers=creator_headers,
+        data={
+            "study": json.dumps(valid_bundle.study),
+            "reference": json.dumps(valid_bundle.reference),
+        },
+    )
+    assert response.status_code == 201, response.json()
+    empty = client.get(
+        "/api/v1/filter/", headers=creator_headers, params={"studies__sid": "missing"}
+    ).json()["uuid"]
+    for entity, key in (
+        ("studies", "sid"),
+        ("interventions", "intervention_pk"),
+        ("timecourses", "subset_pk"),
+    ):
+        rows = client.get(f"/api/v1/pkdata/{entity}/", headers=creator_headers).json()[
+            "data"
+        ]["data"]
+        assert rows
+        expected = rows[0]
+        url = f"/api/v1/pkdata/{entity}/{expected[key]}"
+        for suffix in ("/", ".json", ".json/"):
+            detail = client.get(url + suffix, headers=creator_headers)
+            assert detail.status_code == 200
+            assert detail.json() == expected
+            assert client.get(url + suffix).status_code == 404
+        assert (
+            client.get(
+                url + "/", headers=creator_headers, params={"uuid": empty}
+            ).status_code
+            == 404
+        )
+    assert (
+        client.get(
+            "/api/v1/pkdata/interventions/invalid/", headers=creator_headers
+        ).status_code
+        == 404
+    )

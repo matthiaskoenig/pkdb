@@ -34,6 +34,47 @@ def analysis_rows(entity: str, request: Request):
     }
 
 
+@router.get("/pkdata/{entity}/{identifier}/")
+def analysis_detail(entity: str, identifier: str, request: Request):
+    from pkdb.schemas.queries import Predicate
+
+    fields = {
+        "studies": "sid",
+        "interventions": "intervention_pk",
+        "timecourses": "subset_pk",
+    }
+    if entity not in fields:
+        raise HTTPException(404, "Not found")
+    value = identifier
+    if entity != "studies":
+        try:
+            value = int(identifier)
+            if not 0 < value < 2**63:
+                raise ValueError
+        except ValueError:
+            raise HTTPException(404, "Not found") from None
+    actor = request.app.state.principal(request, required=False)
+    query = query_spec(request, ENTITIES[entity], analysis=True)
+    query = query.model_copy(
+        update={
+            "page": 1,
+            "page_size": 1,
+            "predicates": [
+                *query.predicates,
+                Predicate(field=fields[entity], value=value),
+            ],
+        }
+    )
+    try:
+        spec, actor = saved_selection(request, actor)
+        page = request.app.state.analysis.search(entity, query, actor, filter_spec=spec)
+    except ValueError:
+        raise HTTPException(400, "Invalid query parameters") from None
+    if not page.items:
+        raise HTTPException(404, "Not found")
+    return page.items[0]
+
+
 def saved_selection(request, actor):
     from uuid import UUID
 

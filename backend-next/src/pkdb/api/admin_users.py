@@ -1,24 +1,33 @@
 """Legacy user administration routes; account secrets appear only at creation."""
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 
 from pkdb.schemas.admin_users import AdminUserCreate, AdminUserPatch, AdminUserPut
+from pkdb.services.authorization import AuthorizationDenied
 
-router = APIRouter(prefix="/api/v1/_users")
+
+def require_administrator(request: Request):
+    actor = request.app.state.principal(request)
+    if actor.role != "admin":
+        raise AuthorizationDenied("Administrator required")
+    request.state.admin_actor = actor
+
+
+router = APIRouter(
+    prefix="/api/v1/_users", dependencies=[Depends(require_administrator)]
+)
 
 
 @router.post("/", status_code=201)
 def create_user(data: AdminUserCreate, request: Request):
-    return request.app.state.admin_users.create(
-        request.app.state.principal(request), data
-    )
+    return request.app.state.admin_users.create(request.state.admin_actor, data)
 
 
 @router.get("/{user_id}/")
 def retrieve_user(user_id: int, request: Request):
     try:
         return request.app.state.admin_users.retrieve(
-            request.app.state.principal(request), user_id
+            request.state.admin_actor, user_id
         )
     except LookupError:
         raise HTTPException(404, "User not found") from None
@@ -27,7 +36,7 @@ def retrieve_user(user_id: int, request: Request):
 def update_user(user_id, data, request):
     try:
         return request.app.state.admin_users.update(
-            request.app.state.principal(request),
+            request.state.admin_actor,
             user_id,
             data.model_dump(exclude_unset=True),
         )

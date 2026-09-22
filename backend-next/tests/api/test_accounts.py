@@ -57,7 +57,7 @@ def test_registration_rejects_privilege_injection(client, mailbox, session_facto
             "role": "admin",
         },
     )
-    assert response.status_code == 422
+    assert response.status_code == 400
     with session_factory() as session:
         assert session.scalar(select(User).where(User.username == "elevated")) is None
 

@@ -2,17 +2,7 @@ import pytest
 from sqlalchemy import select
 
 from pkdb.db.models.users import EmailAddress, User
-from pkdb.services.authentication import issue_token, password_hash
-
-
-@pytest.fixture
-def admin_headers(session_factory):
-    with session_factory.begin() as session:
-        user = User(username="operator", role="admin", active=True)
-        session.add(user)
-        session.flush()
-        token = issue_token(user, session)
-    return {"Authorization": f"Token {token}"}
+from pkdb.services.authentication import password_hash
 
 
 def payload():
@@ -113,19 +103,19 @@ def test_admin_update_preserves_identity_and_applies_single_role(client, admin_h
         client.put(
             url, headers=admin_headers, json={"last_name": "Missing role"}
         ).status_code
-        == 422
+        == 400
     )
     assert (
         client.patch(
             url, headers=admin_headers, json={"groups": ["basic", "admin"]}
         ).status_code
-        == 422
+        == 400
     )
     assert (
         client.patch(
             url, headers=admin_headers, json={"groups": ["unknown"]}
         ).status_code
-        == 422
+        == 400
     )
     assert (
         client.get("/api/v1/_users/999999/", headers=admin_headers).status_code == 404

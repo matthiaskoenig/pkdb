@@ -157,3 +157,22 @@ are not complete. The legacy backend remains unchanged and is not retired.
 - Earlier full rebuild/restore artifacts remain evidence for processing version
   4. Two new publications use version 5; a fresh complete rebuild/resume is still
   required after compatibility and vocabulary dispositions are settled.
+
+## Administrative, account-error and analysis-detail checkpoint
+
+- 330 regular tests pass on each actual Python 3.13 and 3.14; Ruff/format/ty pass.
+  Administrator-only user creation and name/role updates use verified email,
+  password hashing, and transaction-level privilege checks. Existing tokens
+  observe role changes immediately; duplicate creation rolls back.
+- Captured legacy account required/blank/email errors now return HTTP400 field
+  mappings without echoing supplied passwords. Administrator permissions are
+  checked before model-field validation and again within the transaction.
+- Analysis detail reads for studies, interventions and timecourses match list
+  rows, including JSON suffixes and saved-filter/private visibility. Association
+  detail identities for groups/individuals/outputs/data remain to be resolved.
+- Processing5 read-only corpus audit:1,579 folders,1,093 valid,486 invalid,zero
+  unexpected exceptions. See corpus-audit-v5.json and corpus-failures-v5.tsv.
+  Error codes/locations are sampled at ten issues per folder; error_count retains
+  the complete count reported by validation. No source edits or exclusions.
+- This audit is not a repeated complete HTTP rebuild. The full rebuild report
+  remains at its earlier checkpoint plus two separately verified publications.

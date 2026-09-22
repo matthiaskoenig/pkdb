@@ -9,6 +9,7 @@ from tempfile import TemporaryDirectory, TemporaryFile
 from uuid import uuid4
 
 from fastapi import FastAPI, Request
+from fastapi.exceptions import RequestValidationError
 from pydantic import ValidationError
 from sqlalchemy import text
 from starlette.concurrency import run_in_threadpool
@@ -26,6 +27,7 @@ from pkdb.api import (
     reads,
     staging,
 )
+from pkdb.api.errors import account_validation_error
 from pkdb.api.limits import UploadLimits
 from pkdb.config import Settings
 from pkdb.db.read import publication_state, read_study
@@ -71,6 +73,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             session_factory.kw["bind"].dispose()
 
     app = FastAPI(title="PK-DB", version="0.10.0", lifespan=lifespan)
+    app.add_exception_handler(RequestValidationError, account_validation_error)
     app.state.accounts = AccountService(session_factory, SMTPMailer(settings))
     app.state.admin_users = AdminUserService(session_factory)
     app.state.file_store = file_store
