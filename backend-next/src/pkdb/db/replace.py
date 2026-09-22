@@ -30,6 +30,10 @@ def clear_children(session: Session, study_id: int) -> None:
         session.execute(delete(model).where(model.study_id == study_id))
 
 
+class ReferenceConflict(ValueError):
+    pass
+
+
 def bulk(session: Session, model, rows: list[dict]) -> dict[str, int]:
     result = {}
     for start in range(0, len(rows), 1000):
@@ -90,7 +94,7 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
         )
     )
     if assigned is not None:
-        raise ValueError("Reference belongs to another study")
+        raise ReferenceConflict("Reference belongs to another study")
     for name, value in study.reference.model_dump(exclude={"sid", "authors"}).items():
         setattr(reference, name, value)
     session.execute(delete(s.Author).where(s.Author.reference_id == reference.id))

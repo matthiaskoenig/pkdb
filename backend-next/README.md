@@ -84,3 +84,26 @@ Bootstrap applies the reviewed offline vocabulary and account identities in one
 transaction. Cleanup removes expired saved criteria and eligible staged/crash
 files, preserving publication references and active file leases. Schedule cleanup
 through the deployment environment; no background queue is required.
+
+## Legacy staged uploads
+
+The compatibility sequence stages a reference at `POST /api/v1/_references/`,
+attachments at `POST /api/v1/_datafiles/`, and study core at
+`POST /api/v1/_studies/`. PATCH the related sets to `/_studies/{sid}/` and send
+`dataset` last, including an empty object when absent. The final dataset patch
+seals the generation; a subsequent patch reopens it unless it includes dataset.
+`POST /api/v1/update_index/` with `{"sid": "..."}` then validates and publishes
+synchronously. It performs no indexing job. Unsupported actions are rejected.
+
+Drafts and references belong to their staging account and expire after 24 hours.
+A second begin or overlapping operation for the same account/study returns 409.
+A retry after successful finalization returns the legacy success response for an
+authorized existing study. A newer incomplete draft cannot be finalized by that
+retry. Clients without generation identifiers must keep each upload sequence
+strictly serial; delayed requests from separate sessions cannot be distinguished.
+
+An explicit `DELETE /api/v1/_studies/{sid}/` really deletes an authorized study.
+Delete-before-upload clients therefore cannot preserve old data after a failed
+replacement and should use the complete-bundle CLI. Failed staged finalization
+itself leaves the previous publication unchanged. Legacy editable GET/PUT and
+remaining reference adapter contracts are still under implementation.
