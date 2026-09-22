@@ -303,12 +303,27 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
             for dataset, index, subset, key in subset_records
         ],
     )
+    point_ids = bulk(
+        session,
+        m.SubsetPoint,
+        [
+            dict(
+                study_id=sid,
+                key=f"{key}:point:{index}",
+                subset_id=subsets[key],
+                position=index,
+            )
+            for _, _, subset, key in subset_records
+            for index in range(len(subset.points))
+        ],
+    )
     dimensions = [
         dict(
             study_id=sid,
             subset_id=subsets[key],
             position=point_index * len(subset.dimensions) + dimension,
             dimension=subset.dimensions[dimension].dimension,
+            point_id=point_ids[f"{key}:point:{point_index}"],
             measurement_id=measurement_ids[measurement_key],
         )
         for _, _, subset, key in subset_records

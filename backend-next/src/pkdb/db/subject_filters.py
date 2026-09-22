@@ -15,7 +15,7 @@ def effective_characteristics(entity):
         subject.id.label("subject_id"),
         group_id.label("ancestor_id"),
         literal(1 if individual else 0).label("depth"),
-    ).cte("subject_lineage", recursive=True)
+    ).cte(recursive=True)
     ancestor = aliased(Group)
     lineage = lineage.union_all(
         select(lineage.c.subject_id, ancestor.parent_id, lineage.c.depth + 1)
@@ -37,13 +37,13 @@ def effective_characteristics(entity):
             .join(Characteristic, Characteristic.individual_id == Individual.id)
             .where(Characteristic.origin == "normalized")
         )
-    candidates = candidates.cte("candidate_characteristics")
+    candidates = candidates.cte()
     ranked = select(
         candidates,
         func.min(candidates.c.depth)
         .over(partition_by=(candidates.c.subject_id, candidates.c.measurement_type))
         .label("nearest"),
-    ).cte("ranked_characteristics")
+    ).cte()
     additive = select(VocabularyNode.sid).where(
         VocabularyNode.name.in_(["disease", "abstinence"])
     )
@@ -55,7 +55,7 @@ def effective_characteristics(entity):
                 ranked.c.measurement_type.in_(additive),
             )
         )
-        .cte("effective_characteristics")
+        .cte()
     )
 
 

@@ -24,15 +24,29 @@ ALIASES = {
 }
 BOOLEANS = {"normed", "calculated"}
 NUMBERS = {"value", "mean", "median", "sd", "se", "cv", "minimum", "maximum", "time"}
-INTEGERS = {"id", "count", "group_pk", "individual_pk"}
+INTEGERS = {
+    "id",
+    "count",
+    "group_pk",
+    "individual_pk",
+    "intervention_pk",
+    "raw_pk",
+    "characteristica_pk",
+    "group_count",
+    "group_parent_pk",
+    "individual_group_pk",
+    "data_pk",
+    "subset_pk",
+    "data_point_pk",
+}
 
 
-def query_spec(request: Request, entity: str) -> QuerySpec:
+def query_spec(request: Request, entity: str, *, analysis=False) -> QuerySpec:
     predicates = []
     params = request.query_params
     try:
         for key, raw in params.multi_items():
-            if key in {"page", "page_size", "ordering", "search"}:
+            if key in {"page", "page_size", "ordering", "search", "uuid"}:
                 continue
             field, separator, operator = key.partition("__")
             name_fields = {
@@ -46,10 +60,17 @@ def query_spec(request: Request, entity: str) -> QuerySpec:
                     "application",
                 },
             }.get(entity, set())
-            if entity in {"groups", "individuals"} and field in {
-                "choice_sid",
-                "measurement_type_sid",
-            }:
+            if analysis:
+                name_fields = set()
+            if (
+                not analysis
+                and entity in {"groups", "individuals"}
+                and field
+                in {
+                    "choice_sid",
+                    "measurement_type_sid",
+                }
+            ):
                 field = "characteristics." + (
                     "measurement_type" if field == "measurement_type_sid" else field
                 )
@@ -102,7 +123,10 @@ def query_spec(request: Request, entity: str) -> QuerySpec:
 def result_page(request: Request, query: QuerySpec):
     actor = request.app.state.principal(request, required=False)
     try:
-        page = request.app.state.queries.search(query, actor)
+        from pkdb.api.exports import saved_selection
+
+        spec, actor = saved_selection(request, actor)
+        page = request.app.state.queries.search(query, actor, filter_spec=spec)
     except ValueError:
         raise HTTPException(400, "Invalid query parameters") from None
     if query.page > 1 and not page.items:

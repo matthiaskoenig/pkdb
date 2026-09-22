@@ -35,6 +35,17 @@ def test_scatter_survives_atomic_publication_and_readback(
     actual = read_study(result.sid, principal, session_factory)
     assert actual.scatters == expected.scatters
     assert len(actual.scatters[0].subsets[0].points) == 2
+    from sqlalchemy import select
+
+    from pkdb.db.models.measurements import SubsetDimension
+
+    with session_factory() as session:
+        dimensions = list(
+            session.scalars(select(SubsetDimension).order_by(SubsetDimension.position))
+        )
+        assert dimensions[0].point_id == dimensions[1].point_id
+        assert dimensions[2].point_id == dimensions[3].point_id
+        assert dimensions[0].point_id != dimensions[2].point_id
     service.replace(valid_bundle, principal)
     assert (
         read_study(result.sid, principal, session_factory).scatters == expected.scatters

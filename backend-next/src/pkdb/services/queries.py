@@ -31,7 +31,9 @@ class QueryService:
     def __init__(self, session_factory):
         self.session_factory = session_factory
 
-    def search(self, query: QuerySpec, principal: Principal) -> Page:
+    def search(
+        self, query: QuerySpec, principal: Principal, *, filter_spec=None
+    ) -> Page:
         where, order = conditions(query), ordering(query)
         model = MODELS[query.entity]
         statement = select(model)
@@ -41,6 +43,12 @@ class QueryService:
             statement = statement.join(Study, model.study_id == Study.id)
         if model is Subset:
             statement = statement.join(Scatter, Subset.scatter_id == Scatter.id)
+        if filter_spec is not None:
+            from pkdb.db.selection import constraint
+
+            statement = statement.where(
+                constraint(query.entity, filter_spec, principal)
+            )
         statement = statement.where(where)
         if model is not VocabularyNode:
             statement = statement.where(visibility(principal))

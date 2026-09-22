@@ -384,3 +384,88 @@ def test_frost2014_postgresql_outputs_match_legacy(
             expected_study[field], key=lambda row: json.dumps(row, sort_keys=True)
         )
     compare(without_ids(public_study), without_ids(expected_study))
+
+    from pkdb.db.analysis import ENTITIES
+    from pkdb.services.analysis import AnalysisService
+
+    analysis_golden = json.loads(
+        (
+            Path(__file__).parents[1] / "tests/fixtures/golden/frost2014-analysis.json"
+        ).read_text()
+    )
+    actual_identities = {}
+    for entity in ("groups", "individuals", "interventions", "outputs"):
+        actual_identities[entity] = {
+            str(row["pk"]): row
+            for row in QueryService(session_factory)
+            .search(
+                QuerySpec.model_validate({"entity": entity, "page_size": 1000}),
+                Principal(),
+            )
+            .items
+        }
+
+    def stable_analysis(rows, identities):
+        def identity(entity, identifier):
+            if identifier is None:
+                return None
+            row = identities[entity][str(identifier)]
+            if entity == "outputs":
+                return {
+                    "normed": row["normed"],
+                    "calculated": row["calculated"],
+                    "label": row["label"],
+                    "time": row["time"],
+                    "measurement_type": row["measurement_type"]["sid"],
+                    "substance": row["substance"]["sid"] if row["substance"] else None,
+                    "group": row["group"]["name"] if row["group"] else None,
+                    "individual": row["individual"]["name"]
+                    if row["individual"]
+                    else None,
+                }
+            if entity == "interventions":
+                return {"name": row["name"], "normed": row["normed"]}
+            return row["name"]
+
+        result = []
+        mapping = {
+            "output_pk": "outputs",
+            "intervention_pk": "interventions",
+            "raw_pk": "interventions",
+            "group_pk": "groups",
+            "group_parent_pk": "groups",
+            "individual_group_pk": "groups",
+            "individual_pk": "individuals",
+        }
+        for original in rows:
+            row = {
+                key: value
+                for key, value in original.items()
+                if key
+                not in {"data_pk", "subset_pk", "data_point_pk", "characteristica_pk"}
+            }
+            for key, entity in mapping.items():
+                if key in row:
+                    value = row[key]
+                    row[key] = (
+                        [identity(entity, item) for item in value]
+                        if isinstance(value, list)
+                        else identity(entity, value)
+                    )
+            for key in ("curators", "substances"):
+                if key in row:
+                    row[key] = sorted(row[key])
+            result.append(row)
+        return sorted(result, key=lambda row: json.dumps(row, sort_keys=True))
+
+    for entity, expected in analysis_golden["rows"].items():
+        actual = AnalysisService(session_factory).search(
+            entity,
+            QuerySpec.model_validate({"entity": ENTITIES[entity], "page_size": 1000}),
+            Principal(),
+        )
+        assert actual.count == len(actual.items) == len(expected), entity
+        compare(
+            stable_analysis(actual.items, actual_identities),
+            stable_analysis(expected, analysis_golden["identities"]),
+        )

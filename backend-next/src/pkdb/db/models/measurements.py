@@ -156,15 +156,38 @@ class Subset(Owned, Base):
     )
 
 
+class SubsetPoint(Owned, Base):
+    __tablename__ = "subset_points"
+    subset_id: Mapped[int]
+    position: Mapped[int]
+    __table_args__ = (
+        UniqueConstraint("study_id", "id"),
+        UniqueConstraint("study_id", "key"),
+        UniqueConstraint("study_id", "subset_id", "id"),
+        UniqueConstraint("subset_id", "position"),
+        ForeignKeyConstraint(
+            ["study_id", "subset_id"],
+            ["subsets.study_id", "subsets.id"],
+            ondelete="CASCADE",
+        ),
+    )
+
+
 class SubsetDimension(Base):
     __tablename__ = "subset_dimensions"
     study_id: Mapped[int] = mapped_column(primary_key=True)
     subset_id: Mapped[int] = mapped_column(primary_key=True)
     position: Mapped[int] = mapped_column(primary_key=True)
     dimension: Mapped[str]
+    point_id: Mapped[int]
     measurement_id: Mapped[int]
     shared: Mapped[bool] = mapped_column(default=False)
     __table_args__ = (
+        ForeignKeyConstraint(
+            ["study_id", "subset_id", "point_id"],
+            ["subset_points.study_id", "subset_points.subset_id", "subset_points.id"],
+            ondelete="CASCADE",
+        ),
         ForeignKeyConstraint(
             ["study_id", "subset_id"],
             ["subsets.study_id", "subsets.id"],
