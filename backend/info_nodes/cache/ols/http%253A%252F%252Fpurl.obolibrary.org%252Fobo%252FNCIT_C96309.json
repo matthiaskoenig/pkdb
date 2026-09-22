@@ -1,0 +1,130 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C96309",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "1-Naphthaleneheptanoic acid, 8-(2,2-dimethyl-1-oxobutoxy)-1,2,6,7,8,8a-hexahydro-beta,delta-dihydroxy-2,6-dimethyl-, (1S-(1alpha(betaS*,deltaS*),2alpha,6beta,8beta,8aalpha))-",
+    "L-654969",
+    "Simvastatin Acid",
+    "Simvastatin Carboxylic Acid",
+    "Simvastatin Hydroxy Acid",
+    "TENIVASTATIN",
+    "Tenivastatin"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "121009-77-6"
+    ],
+    "Chemical_Formula": [
+      "C25H40O6"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "9L6M5TH46B"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C96312"
+    ],
+    "Preferred_Name": [
+      "Tenivastatin"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0246012"
+    ],
+    "code": [
+      "C96309"
+    ]
+  },
+  "label": "Tenivastatin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C96309",
+  "obo_id": "NCIT:C96309",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "1-Naphthaleneheptanoic acid, 8-(2,2-dimethyl-1-oxobutoxy)-1,2,6,7,8,8a-hexahydro-beta,delta-dihydroxy-2,6-dimethyl-, (1S-(1alpha(betaS*,deltaS*),2alpha,6beta,8beta,8aalpha))-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "L-654969",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Simvastatin Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Simvastatin Carboxylic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Simvastatin Hydroxy Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "TENIVASTATIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Tenivastatin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96309?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96309/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96309/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96309/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96309/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96309/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96309/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

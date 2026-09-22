@@ -1,0 +1,224 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_32635",
+  "lang": "en",
+  "description": [
+    "An aryl sulfate that is paracetamol in which the hydroxy group has been replaced by a sulfooxy group."
+  ],
+  "synonyms": [
+    "4-acetamidophenyl hydrogen sulfate",
+    "4-acetamidophenyl hydrogen sulfate",
+    "4-acetaminophen sulfate",
+    "N-(4-(sulfooxy)phenyl)acetamide",
+    "N-acetyl-4-aminophenol sulfate",
+    "acetaminophen sulfate ester",
+    "acetaminophen sulfate"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:6457132",
+      "cas:10066-90-7",
+      "pubmed:12831506",
+      "pubmed:24401842",
+      "reaxys:3331457"
+    ],
+    "generalized_empirical_formula": [
+      "C8H9NO5S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:32635"
+    ],
+    "inchi_key_string": [
+      "IGTYILLPRJOVFY-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C8H9NO5S/c1-6(10)9-7-2-4-8(5-3-7)14-15(11,12)13/h2-5H,1H3,(H,9,10)(H,11,12,13)"
+    ],
+    "mass": [
+      "231.229"
+    ],
+    "monoisotopic_mass": [
+      "231.02014"
+    ],
+    "smiles_string": [
+      "CC(=O)Nc1ccc(OS(=O)(=O)O)cc1"
+    ]
+  },
+  "label": "paracetamol sulfate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_32635",
+  "obo_id": "CHEBI:32635",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "6457132",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "10066-90-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=10066-90-7"
+    },
+    {
+      "database": "pubmed",
+      "id": "12831506",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12831506/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24401842",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24401842/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3331457",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-acetamidophenyl hydrogen sulfate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-acetamidophenyl hydrogen sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-acetaminophen sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(4-(sulfooxy)phenyl)acetamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-acetyl-4-aminophenol sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acetaminophen sulfate ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acetaminophen sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

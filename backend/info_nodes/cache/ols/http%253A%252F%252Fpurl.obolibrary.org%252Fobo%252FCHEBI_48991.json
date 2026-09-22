@@ -1,0 +1,252 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_48991",
+  "lang": "en",
+  "description": [
+    "An oxopurine that is xanthine in which the hydrogen attached to the nitrogen at position 7 is replaced by a methyl group. It is an intermediate metabolite in the synthesis of caffeine."
+  ],
+  "synonyms": [
+    "3,7-dihydro-7-methyl-1H-purine-2,6-dione",
+    "7-Methylxanthin",
+    "7-methyl-3,7-dihydro-1H-purine-2,6-dione",
+    "7-methyl-3,7-dihydro-1H-purine-2,6-dione",
+    "7-methylxanthine",
+    "Heteroxanthin",
+    "Heteroxanthine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:552-62-5",
+      "hmdb:HMDB0001991",
+      "kegg.compound:C16353",
+      "knapsack:C00007326",
+      "metacyc.compound:7-METHYLXANTHINE",
+      "pubmed:11712316",
+      "pubmed:18068204",
+      "pubmed:4196487",
+      "reaxys:171027"
+    ],
+    "generalized_empirical_formula": [
+      "C6H6N4O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:48991"
+    ],
+    "inchi_key_string": [
+      "PFWLFWPASULGAN-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C6H6N4O2/c1-10-2-7-4-3(10)5(11)9-6(12)8-4/h2H,1H3,(H2,8,9,11,12)"
+    ],
+    "mass": [
+      "166.14"
+    ],
+    "monoisotopic_mass": [
+      "166.04908"
+    ],
+    "smiles_string": [
+      "Cn1cnc2nc(=O)nc(=O)c21"
+    ]
+  },
+  "label": "7-methylxanthine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_48991",
+  "obo_id": "CHEBI:48991",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "552-62-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=552-62-5"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001991",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001991"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C16353",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00007326",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00007326"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "7-METHYLXANTHINE",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11712316",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11712316/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18068204",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18068204/"
+    },
+    {
+      "database": "pubmed",
+      "id": "4196487",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/4196487/"
+    },
+    {
+      "database": "reaxys",
+      "id": "171027",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "7-methyl-3,7-dihydro-1H-purine-2,6-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,7-dihydro-7-methyl-1H-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7-Methylxanthin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7-methyl-3,7-dihydro-1H-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7-methylxanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Heteroxanthin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Heteroxanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48991?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48991/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48991/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48991/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48991/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48991/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48991/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48991/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48991/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,1092 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_5855",
+  "lang": "en",
+  "description": [
+    "A monocarboxylic acid that is propionic acid in which one of the hydrogens at position 2 is substituted by a 4-(2-methylpropyl)phenyl group."
+  ],
+  "synonyms": [
+    "(+-)-2-(p-isobutylphenyl)propionic acid",
+    "(+-)-alpha-methyl-4-(2-methylpropyl)benzeneacetic acid",
+    "(+-)-ibuprofen",
+    "(+-)-p-isobutylhydratropic acid",
+    "(4-isobutylphenyl)-alpha-methylacetic acid",
+    "(RS)-ibuprofen",
+    "2-(4-isobutylphenyl)propanoic acid",
+    "2-[4-(2-methylpropyl)phenyl]propanoic acid",
+    "2-[4-(2-methylpropyl)phenyl]propanoic acid",
+    "4-isobutylhydratropic acid",
+    "Adran",
+    "Advil",
+    "Amibufen",
+    "Anco",
+    "Anflagen",
+    "Apsifen",
+    "Bluton",
+    "Brufen",
+    "Brufort",
+    "Buburone",
+    "Butylenin",
+    "Dolgin",
+    "Dolgirid",
+    "Dolgit",
+    "Dolo-Dolgit",
+    "Ebufac",
+    "Epobron",
+    "Femadon",
+    "Haltran",
+    "Ibu-Attritin",
+    "Ibumetin",
+    "Ibuprocin",
+    "Ibuprofen",
+    "Ibutid",
+    "Inabrin",
+    "Inoven",
+    "Lamidon",
+    "Lebrufen",
+    "Liptan",
+    "Medipren",
+    "Motrin",
+    "Mynosedin",
+    "Nobfen",
+    "Nobgen",
+    "Nuprin",
+    "Nurofen",
+    "Pediaprofen",
+    "Roidenin",
+    "Rufen",
+    "Seclodin",
+    "Suspren",
+    "Tabalon",
+    "Trendar",
+    "Urem",
+    "alpha-(4-isobutylphenyl)propionic acid",
+    "alpha-(p-isobutylphenyl)propionic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:15687-27-1",
+      "drugbank:DB01050",
+      "drugcentral:1407",
+      "hmdb:HMDB0001925",
+      "kegg.compound:C01588",
+      "kegg.drug:D00126",
+      "lincs.smallmolecule:LSM-1354",
+      "patent:GB971700",
+      "patent:US3228831",
+      "patent:US3385886",
+      "patent:US5215755",
+      "patent:US6727286",
+      "pubmed:11433218",
+      "pubmed:12723739",
+      "pubmed:14562167",
+      "pubmed:15506544",
+      "pubmed:16176022",
+      "pubmed:18335846",
+      "pubmed:18697608",
+      "pubmed:21368281",
+      "pubmed:24168233",
+      "pubmed:25521617",
+      "pubmed:25708941",
+      "pubmed:25915907",
+      "pubmed:29756342",
+      "reaxys:2049713",
+      "wikipedia.en:Ibuprofen"
+    ],
+    "generalized_empirical_formula": [
+      "C13H18O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:5855"
+    ],
+    "inchi_key_string": [
+      "HEFNNWSXXWATRW-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C13H18O2/c1-9(2)8-11-4-6-12(7-5-11)10(3)13(14)15/h4-7,9-10H,8H2,1-3H3,(H,14,15)"
+    ],
+    "mass": [
+      "206.285"
+    ],
+    "monoisotopic_mass": [
+      "206.13068"
+    ],
+    "smiles_string": [
+      "CC(C)Cc1ccc(C(C)C(=O)O)cc1"
+    ]
+  },
+  "label": "ibuprofen",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_5855",
+  "obo_id": "CHEBI:5855",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "15687-27-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=15687-27-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01050",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01050"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1407",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1407"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001925",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001925"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C01588",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00126",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1354",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "GB971700",
+      "description": "patent",
+      "url": "https://www.google.com/patents/GB971700"
+    },
+    {
+      "database": "patent",
+      "id": "US3228831",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3228831"
+    },
+    {
+      "database": "patent",
+      "id": "US3385886",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3385886"
+    },
+    {
+      "database": "patent",
+      "id": "US5215755",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US5215755"
+    },
+    {
+      "database": "patent",
+      "id": "US6727286",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US6727286"
+    },
+    {
+      "database": "pubmed",
+      "id": "11433218",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11433218/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12723739",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12723739/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14562167",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14562167/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15506544",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15506544/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16176022",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16176022/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18335846",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18335846/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18697608",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18697608/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21368281",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21368281/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24168233",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24168233/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25521617",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25521617/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25708941",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25708941/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25915907",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25915907/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29756342",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29756342/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2049713",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Ibuprofen",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-[4-(2-methylpropyl)phenyl]propanoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-2-(p-isobutylphenyl)propionic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-alpha-methyl-4-(2-methylpropyl)benzeneacetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-ibuprofen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-p-isobutylhydratropic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(4-isobutylphenyl)-alpha-methylacetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(RS)-ibuprofen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(4-isobutylphenyl)propanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-[4-(2-methylpropyl)phenyl]propanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-isobutylhydratropic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Adran",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Advil",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Amibufen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Anco",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Anflagen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Apsifen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Bluton",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Brufen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Brufort",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Buburone",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Butylenin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dolgin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dolgirid",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dolgit",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dolo-Dolgit",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ebufac",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Epobron",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Femadon",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Haltran",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ibu-Attritin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ibumetin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ibuprocin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ibuprofen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ibutid",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Inabrin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Inoven",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lamidon",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lebrufen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Liptan",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Medipren",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Motrin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Motrin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mynosedin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Nobfen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Nobgen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Nuprin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Nurofen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Pediaprofen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Roidenin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Rufen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Seclodin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Suspren",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tabalon",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Trendar",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Urem",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-(4-isobutylphenyl)propionic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-(p-isobutylphenyl)propionic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5855/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

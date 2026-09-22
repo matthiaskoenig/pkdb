@@ -1,0 +1,325 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_49040",
+  "lang": "en",
+  "description": [
+    "A β-lactam that is azetidin-2-one which is substituted at 1, 3, and 4 by <em>p</em>-fluorophenyl, 3-(<em>p</em>-fluorophenyl)-3-hydroxypropyl, and  4-hydroxyphenyl groups, respectively (the 3<i>R</i>,3'<i>S</i>,4<i>S</i> enantiomer)."
+  ],
+  "synonyms": [
+    "(3R,4S)-1-(4-fluorophenyl)-3-[(3S)-3-(4-fluorophenyl)-3-hydroxypropyl]-4-(4-hydroxyphenyl)azetidin-2-one",
+    "(3R,4S)-1-(4-fluorophenyl)-3-[(3S)-3-(4-fluorophenyl)-3-hydroxypropyl]-4-(4-hydroxyphenyl)azetidin-2-one",
+    "Ezedoc",
+    "Ezetrol",
+    "Zetia",
+    "ezetimiba",
+    "ezetimibe",
+    "ezetimibum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:163222-33-1",
+      "drugbank:DB00973",
+      "drugcentral:1125",
+      "hmdb:HMDB0015108",
+      "kegg.drug:D01966",
+      "lincs.smallmolecule:LSM-5536",
+      "pubmed:17587760",
+      "pubmed:18585981",
+      "pubmed:23219178",
+      "pubmed:23266293",
+      "pubmed:23317398",
+      "pubmed:23471229",
+      "pubmed:23510093",
+      "pubmed:23538020",
+      "reaxys:7981967",
+      "wikipedia.en:Ezetimibe"
+    ],
+    "generalized_empirical_formula": [
+      "C24H21F2NO3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:49040"
+    ],
+    "inchi_key_string": [
+      "OLNTVTPDXPETLC-XPWALMASSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C24H21F2NO3/c25-17-5-1-15(2-6-17)22(29)14-13-21-23(16-3-11-20(28)12-4-16)27(24(21)30)19-9-7-18(26)8-10-19/h1-12,21-23,28-29H,13-14H2/t21-,22+,23-/m1/s1"
+    ],
+    "mass": [
+      "409.432"
+    ],
+    "monoisotopic_mass": [
+      "409.14895"
+    ],
+    "smiles_string": [
+      "[H][C@]1(CC[C@H](O)c2ccc(F)cc2)C(=O)N(c2ccc(F)cc2)[C@]1([H])c1ccc(O)cc1"
+    ]
+  },
+  "label": "ezetimibe",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_49040",
+  "obo_id": "CHEBI:49040",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "163222-33-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=163222-33-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00973",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00973"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1125",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1125"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015108",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015108"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D01966",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5536",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "17587760",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17587760/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18585981",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18585981/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23219178",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23219178/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23266293",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23266293/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23317398",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23317398/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23471229",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23471229/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23510093",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23510093/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23538020",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23538020/"
+    },
+    {
+      "database": "reaxys",
+      "id": "7981967",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Ezetimibe",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3R,4S)-1-(4-fluorophenyl)-3-[(3S)-3-(4-fluorophenyl)-3-hydroxypropyl]-4-(4-hydroxyphenyl)azetidin-2-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3R,4S)-1-(4-fluorophenyl)-3-[(3S)-3-(4-fluorophenyl)-3-hydroxypropyl]-4-(4-hydroxyphenyl)azetidin-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ezedoc",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ezetrol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Zetia",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ezetimiba",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ezetimibe",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ezetimibe",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ezetimibum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49040?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49040/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49040/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49040/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49040/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49040/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49040/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49040/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,112 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_0081088",
+  "lang": "en",
+  "description": [
+    "A chronic myeloid leukemia that is characterized by an abnormally high number of neutrophils and the expression of the BCR-ABL1 fusion gene."
+  ],
+  "synonyms": [
+    "Chronic myelogenous leukemia, BCR/ABL positive"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD9CM:205.1",
+      "ICDO:9875/3",
+      "MESH:D015464",
+      "NCI:C9128",
+      "SNOMEDCT_US_2025_09_01:92818009"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:0081088"
+    ]
+  },
+  "label": "chronic myelogenous leukemia, BCR-ABL1 positive",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "DOID_0081088",
+  "obo_id": "DOID:0081088",
+  "in_subset": [
+    "DO_cancer_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A chronic myeloid leukemia that is characterized by an abnormally high number of neutrophils and the expression of the BCR-ABL1 fusion gene.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD9CM",
+      "id": "205.1",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICDO",
+      "id": "9875/3",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D015464",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D015464"
+    },
+    {
+      "database": "NCI",
+      "id": "C9128",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C9128"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "92818009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/92818009"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081088?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081088/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081088/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081088/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081088/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081088/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081088/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

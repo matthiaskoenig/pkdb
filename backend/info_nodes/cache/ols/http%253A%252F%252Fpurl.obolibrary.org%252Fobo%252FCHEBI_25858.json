@@ -1,0 +1,392 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_25858",
+  "lang": "en",
+  "description": [
+    "A dimethylxanthine having the two methyl groups located at positions 1 and 7. It is a metabolite of caffeine and theobromine in animals."
+  ],
+  "synonyms": [
+    "1,7-Dimethylxanthine",
+    "1,7-dimethyl-3,7-dihydro-1H-purine-2,6-dione",
+    "1,7-dimethyl-3,7-dihydro-1H-purine-2,6-dione",
+    "1,7-dimethylxanthine",
+    "3,7-Dihydro-1,7-dimethyl-1H-purine-2,6-dione",
+    "Paraxanthine",
+    "p-Xanthine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:611-59-6",
+      "hmdb:HMDB0001860",
+      "kegg.compound:C13747",
+      "lincs.smallmolecule:LSM-20962",
+      "metacyc.compound:1-7-DIMETHYLXANTHINE",
+      "pubmed:10416066",
+      "pubmed:10572151",
+      "pubmed:10593655",
+      "pubmed:10877011",
+      "pubmed:11090584",
+      "pubmed:1128545",
+      "pubmed:12110375",
+      "pubmed:16870158",
+      "pubmed:17655324",
+      "pubmed:18621927",
+      "pubmed:20004571",
+      "pubmed:20614853",
+      "pubmed:20853468",
+      "pubmed:21380987",
+      "pubmed:22770225",
+      "pubmed:2882985",
+      "pubmed:3371146",
+      "pubmed:3798364",
+      "pubmed:7920690",
+      "pubmed:7977734",
+      "pubmed:8529334",
+      "pubmed:9920286",
+      "reaxys:197907",
+      "wikipedia.en:Paraxanthine"
+    ],
+    "generalized_empirical_formula": [
+      "C7H8N4O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:34067"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:25858"
+    ],
+    "inchi_key_string": [
+      "QUNWUDVFRNGTCO-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C7H8N4O2/c1-10-3-8-5-4(10)6(12)11(2)7(13)9-5/h3H,1-2H3,(H,9,13)"
+    ],
+    "mass": [
+      "180.167"
+    ],
+    "monoisotopic_mass": [
+      "180.06473"
+    ],
+    "smiles_string": [
+      "Cn1c(=O)nc2ncn(C)c2c1=O"
+    ]
+  },
+  "label": "1,7-dimethylxanthine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_25858",
+  "obo_id": "CHEBI:25858",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "611-59-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=611-59-6"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001860",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001860"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C13747",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-20962",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "1-7-DIMETHYLXANTHINE",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10416066",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10416066/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10572151",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10572151/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10593655",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10593655/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10877011",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10877011/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11090584",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11090584/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1128545",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1128545/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12110375",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12110375/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16870158",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16870158/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17655324",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17655324/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18621927",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18621927/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20004571",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20004571/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20614853",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20614853/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20853468",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20853468/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21380987",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21380987/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22770225",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22770225/"
+    },
+    {
+      "database": "pubmed",
+      "id": "2882985",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2882985/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3371146",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3371146/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3798364",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3798364/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7920690",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7920690/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7977734",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7977734/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8529334",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8529334/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9920286",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9920286/"
+    },
+    {
+      "database": "reaxys",
+      "id": "197907",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Paraxanthine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1,7-dimethyl-3,7-dihydro-1H-purine-2,6-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,7-Dimethylxanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,7-dimethyl-3,7-dihydro-1H-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,7-dimethylxanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,7-Dihydro-1,7-dimethyl-1H-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Paraxanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "p-Xanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

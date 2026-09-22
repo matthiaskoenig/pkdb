@@ -1,0 +1,165 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/MONDO_0004790",
+  "lang": "en",
+  "description": [
+    "Editor note: classified as inherited in DO",
+    "A reversible condition wherein large vacuoles of triglyceride fat accumulate in liver cells via the process of steatosis."
+  ],
+  "synonyms": [
+    "fatty liver"
+  ],
+  "annotation": {
+    "curated content resource": [
+      "https://www.malacards.org/card/steatotic_liver_disease"
+    ],
+    "database_cross_reference": [
+      "DOID:9452",
+      "ICD9:571.8",
+      "MEDGEN:398225",
+      "MESH:D005234",
+      "SCTID:197321007",
+      "SCTID:371330000",
+      "UMLS:C2711227"
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/398225",
+      "http://identifiers.org/mesh/D005234",
+      "http://identifiers.org/snomedct/197321007",
+      "http://linkedlifedata.com/resource/umls/id/C2711227",
+      "http://purl.obolibrary.org/obo/DOID_9452"
+    ],
+    "id": [
+      "MONDO:0004790"
+    ]
+  },
+  "label": "fatty liver disease",
+  "ontology_name": "mondo",
+  "ontology_prefix": "MONDO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/mondo/mondo-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "MONDO_0004790",
+  "obo_id": "MONDO:0004790",
+  "in_subset": [
+    "otar"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A reversible condition wherein large vacuoles of triglyceride fat accumulate in liver cells via the process of steatosis.",
+      "oboXrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Fatty_liver",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Fatty_liver"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "9452",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/DOID_9452"
+    },
+    {
+      "database": "ICD9",
+      "id": "571.8",
+      "description": "MONDO:relatedTo",
+      "url": null
+    },
+    {
+      "database": "MEDGEN",
+      "id": "398225",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/398225"
+    },
+    {
+      "database": "MESH",
+      "id": "D005234",
+      "description": "MONDO:equivalentTo",
+      "url": "http://id.nlm.nih.gov/mesh/D005234"
+    },
+    {
+      "database": "SCTID",
+      "id": "197321007",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/197321007"
+    },
+    {
+      "database": "SCTID",
+      "id": "371330000",
+      "description": "MONDO:equivalentObsolete",
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/371330000"
+    },
+    {
+      "database": "UMLS",
+      "id": "C2711227",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C2711227"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "fatty liver",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MONDO",
+          "id": "0005317",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/MONDO_0005317"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790/graph"
+    },
+    "disease_has_basis_in_disruption_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0004021"
+    },
+    "disease_has_feature": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mondo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMONDO_0004790/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0004029"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

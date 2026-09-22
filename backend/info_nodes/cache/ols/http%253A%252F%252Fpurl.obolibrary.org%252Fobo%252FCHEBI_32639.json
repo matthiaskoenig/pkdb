@@ -1,0 +1,181 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_32639",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "3-(Glutathion-S-yl)acetaminophen",
+    "AA-Glutathion",
+    "AA-Gsh",
+    "Acetaminophen glutathion",
+    "Glutathione-S-acetaminophen conjugate",
+    "L-gamma-glutamyl-S-(5-acetamido-2-hydroxyphenyl)-L-cysteinylglycine",
+    "L-gamma-glutamyl-S-(5-acetamido-2-hydroxyphenyl)-L-cysteinylglycine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "generalized_empirical_formula": [
+      "C18H24N4O8S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:32639"
+    ],
+    "inchi_key_string": [
+      "VFNAXGMNFCUWCI-RYUDHWBXSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C18H24N4O8S/c1-9(23)21-10-2-4-13(24)14(6-10)31-8-12(17(28)20-7-16(26)27)22-15(25)5-3-11(19)18(29)30/h2,4,6,11-12,24H,3,5,7-8,19H2,1H3,(H,20,28)(H,21,23)(H,22,25)(H,26,27)(H,29,30)/t11-,12-/m0/s1"
+    ],
+    "mass": [
+      "456.477"
+    ],
+    "monoisotopic_mass": [
+      "456.13148"
+    ],
+    "smiles_string": [
+      "CC(=O)Nc1ccc(O)c(SC[C@H](NC(=O)CC[C@H](N)C(=O)O)C(=O)NCC(=O)O)c1"
+    ]
+  },
+  "label": "acetaminophen glutathione conjugate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_32639",
+  "obo_id": "CHEBI:32639",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "L-gamma-glutamyl-S-(5-acetamido-2-hydroxyphenyl)-L-cysteinylglycine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-(Glutathion-S-yl)acetaminophen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AA-Glutathion",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AA-Gsh",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Acetaminophen glutathion",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Glutathione-S-acetaminophen conjugate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-gamma-glutamyl-S-(5-acetamido-2-hydroxyphenyl)-L-cysteinylglycine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32639?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32639/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32639/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32639/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32639/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32639/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32639/graph"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32639/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,263 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_5778",
+  "lang": "en",
+  "description": [
+    "A benzothiadiazine that is 3,4-dihydro-2<em>H</em>-1,2,4-benzothiadiazine 1,1-dioxide substituted by a chloro group at position 6 and a sulfonamide at 7. It is diuretic used for the treatment of hypertension and congestive heart failure."
+  ],
+  "synonyms": [
+    "6-chloro-3,4-dihydro-2H-1,2,4-benzothiadiazine-7-sulfonamide 1,1-dioxide",
+    "6-chloro-3,4-dihydro-2H-1,2,4-benzothiadiazine-7-sulfonamide 1,1-dioxide",
+    "Esidrix (TN)",
+    "hidroclorotiazida",
+    "hydrochlorothiazide",
+    "hydrochlorothiazidum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:58-93-5",
+      "drugbank:DB00999",
+      "drugcentral:1385",
+      "hmdb:HMDB0001928",
+      "kegg.compound:C07041",
+      "kegg.drug:D00340",
+      "lincs.smallmolecule:LSM-5308",
+      "pdb-ccd:HCZ",
+      "pubmed:24055851",
+      "pubmed:24657333",
+      "pubmed:24849193",
+      "reaxys:625101",
+      "wikipedia.en:Hydrochlorothiazide"
+    ],
+    "generalized_empirical_formula": [
+      "C7H8ClN3O4S2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:5778"
+    ],
+    "inchi_key_string": [
+      "JZUFKLXOESDKRF-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C7H8ClN3O4S2/c8-4-1-5-7(2-6(4)16(9,12)13)17(14,15)11-3-10-5/h1-2,10-11H,3H2,(H2,9,12,13)"
+    ],
+    "mass": [
+      "297.745"
+    ],
+    "monoisotopic_mass": [
+      "296.96448"
+    ],
+    "smiles_string": [
+      "NS(=O)(=O)c1cc2c(cc1Cl)NCNS2(=O)=O"
+    ]
+  },
+  "label": "hydrochlorothiazide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_5778",
+  "obo_id": "CHEBI:5778",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "58-93-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=58-93-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00999",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00999"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1385",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1385"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001928",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001928"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07041",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00340",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5308",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "HCZ",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "24055851",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24055851/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24657333",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24657333/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24849193",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24849193/"
+    },
+    {
+      "database": "reaxys",
+      "id": "625101",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Hydrochlorothiazide",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "6-chloro-3,4-dihydro-2H-1,2,4-benzothiadiazine-7-sulfonamide 1,1-dioxide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-chloro-3,4-dihydro-2H-1,2,4-benzothiadiazine-7-sulfonamide 1,1-dioxide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Esidrix (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hidroclorotiazida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hydrochlorothiazide",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hydrochlorothiazidum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5778?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5778/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5778/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5778/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5778/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5778/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5778/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5778/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

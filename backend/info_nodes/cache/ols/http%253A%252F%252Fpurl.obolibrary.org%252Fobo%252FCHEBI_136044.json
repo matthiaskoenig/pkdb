@@ -1,0 +1,240 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_136044",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "BR-A-657",
+    "Fimasartan component of br1015",
+    "Fimasartan component of br1019",
+    "Fimasartan",
+    "fimasartan potassium hydrate",
+    "fimasartan potassium trihydrate",
+    "fimasartan potassium",
+    "kanarb"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:247257-48-3",
+      "drugcentral:4906",
+      "pubmed:22264484",
+      "pubmed:30177375",
+      "pubmed:32985885",
+      "pubmed:36270005"
+    ],
+    "generalized_empirical_formula": [
+      "C27H31N7OS"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:136044"
+    ],
+    "inchi_key_string": [
+      "AMEROGPZOLAFBN-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C27H31N7OS/c1-5-6-11-24-28-18(2)23(16-25(36)33(3)4)27(35)34(24)17-19-12-14-20(15-13-19)21-9-7-8-10-22(21)26-29-31-32-30-26/h7-10,12-15H,5-6,11,16-17H2,1-4H3,(H,29,30,31,32)"
+    ],
+    "mass": [
+      "501.66"
+    ],
+    "monoisotopic_mass": [
+      "501.23108"
+    ],
+    "smiles_string": [
+      "CCCCc1nc(C)c(CC(=S)N(C)C)c(=O)n1Cc1ccc(-c2ccccc2-c2nnnn2)cc1"
+    ]
+  },
+  "label": "fimasartan",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_136044",
+  "obo_id": "CHEBI:136044",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "247257-48-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=247257-48-3"
+    },
+    {
+      "database": "drugcentral",
+      "id": "4906",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/4906"
+    },
+    {
+      "database": "pubmed",
+      "id": "22264484",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22264484/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30177375",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30177375/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32985885",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32985885/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36270005",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36270005/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "BR-A-657",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Fimasartan component of br1015",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Fimasartan component of br1019",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Fimasartan",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fimasartan potassium hydrate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fimasartan potassium trihydrate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fimasartan potassium",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "kanarb",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136044?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136044/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136044/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136044/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136044/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136044/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136044/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136044/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

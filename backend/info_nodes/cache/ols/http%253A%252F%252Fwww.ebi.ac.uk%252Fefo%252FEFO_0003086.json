@@ -1,0 +1,116 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0003086",
+  "lang": "en",
+  "description": [
+    "A disease affecting the kidneys"
+  ],
+  "synonyms": [
+    "Kidney Disorder",
+    "kidney diseases",
+    "nephropathy",
+    "renal disease",
+    "renal system disease"
+  ],
+  "annotation": {
+    "created_by": [
+      "Helen Parkinson"
+    ],
+    "database_cross_reference": [
+      "DOID:557",
+      "ICD10:N01",
+      "ICD10:N26",
+      "MESH:D007674",
+      "MedDRA:10051051",
+      "NCIt:C3149",
+      "NCIt:C34843",
+      "SNOMEDCT:90708001"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0005240, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0005240"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005240"
+    ]
+  },
+  "label": "obsolete_kidney disease",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005240",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0003086",
+  "obo_id": "EFO:0003086",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "557",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_557"
+    },
+    {
+      "database": "ICD10",
+      "id": "N01",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/N01"
+    },
+    {
+      "database": "ICD10",
+      "id": "N26",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/N26"
+    },
+    {
+      "database": "MESH",
+      "id": "D007674",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D007674"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10051051",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10051051"
+    },
+    {
+      "database": "NCIt",
+      "id": "C3149",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3149"
+    },
+    {
+      "database": "NCIt",
+      "id": "C34843",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C34843"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "90708001",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/90708001"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003086?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003086/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

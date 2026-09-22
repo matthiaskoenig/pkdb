@@ -1,0 +1,330 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_5130",
+  "lang": "en",
+  "description": [
+    "A monocarboxylic acid that is a 2-fluoro-[1,1'-biphenyl-4-yl] moiety linked to C-2 of propionic acid. A non-steroidal anti-inflammatory, analgesic and antipyretic, it is used as a pre-operative anti-miotic as well as orally for arthritis or dental pain."
+  ],
+  "synonyms": [
+    "(+-)-2-fluoro-alpha-methyl-4-biphenylacetic acid",
+    "2-(2-fluoro-[1,1'-biphenyl-4-yl])propanoic acid",
+    "2-(2-fluoro-[1,1'-biphenyl-4-yl])propanoic acid",
+    "2-(2-fluorobiphenyl-4-yl)propanoic acid",
+    "2-fluoro-alpha-methyl-(1,1'-biphenyl)-4-acetic acid",
+    "3-fluoro-4-phenylhydratropic acid",
+    "Ansaid",
+    "Flurbiprofen"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:2054451",
+      "cas:5104-49-4",
+      "drugbank:DB00712",
+      "drugcentral:1219",
+      "kegg.drug:D00330",
+      "lincs.smallmolecule:LSM-5174",
+      "pubmed:12859660",
+      "pubmed:17562170",
+      "pubmed:19588427",
+      "pubmed:27746736",
+      "pubmed:27832658",
+      "pubmed:28147361",
+      "pubmed:28166217",
+      "pubmed:28298171",
+      "pubmed:28402193",
+      "wikipedia.en:Flurbiprofen"
+    ],
+    "generalized_empirical_formula": [
+      "C15H13FO2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:5130"
+    ],
+    "inchi_key_string": [
+      "SYTBZMRGLBWNTM-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C15H13FO2/c1-10(15(17)18)12-7-8-13(14(16)9-12)11-5-3-2-4-6-11/h2-10H,1H3,(H,17,18)"
+    ],
+    "mass": [
+      "244.265"
+    ],
+    "monoisotopic_mass": [
+      "244.08996"
+    ],
+    "smiles_string": [
+      "CC(C(=O)O)c1ccc(-c2ccccc2)c(F)c1"
+    ]
+  },
+  "label": "flurbiprofen",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_5130",
+  "obo_id": "CHEBI:5130",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "2054451",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "5104-49-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=5104-49-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00712",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00712"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1219",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1219"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00330",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5174",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "12859660",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12859660/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17562170",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17562170/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19588427",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19588427/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27746736",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27746736/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27832658",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27832658/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28147361",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28147361/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28166217",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28166217/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28298171",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28298171/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28402193",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28402193/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Flurbiprofen",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-(2-fluoro-[1,1'-biphenyl-4-yl])propanoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-2-fluoro-alpha-methyl-4-biphenylacetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(2-fluoro-[1,1'-biphenyl-4-yl])propanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(2-fluorobiphenyl-4-yl)propanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-fluoro-alpha-methyl-(1,1'-biphenyl)-4-acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-fluoro-4-phenylhydratropic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ansaid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Flurbiprofen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    },
+    "has_parent_hydride": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5130/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018040"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

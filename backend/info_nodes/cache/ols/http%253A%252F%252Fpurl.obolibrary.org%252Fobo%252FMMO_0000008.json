@@ -1,0 +1,87 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/MMO_0000008",
+  "lang": "en",
+  "description": [
+    "A technique for assessing blood flow by placing an infrared emitting diode along with a sensor, on the surface of the skin over a blood vessel with the amount of light reflected back to the sensor being inversely proportional to the number of red blood cells flowing through the vessel."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "has_obo_namespace": [
+      "measurement_method_ontology"
+    ],
+    "id": [
+      "MMO:0000008"
+    ]
+  },
+  "label": "photoplethysmography",
+  "ontology_name": "mmo",
+  "ontology_prefix": "MMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/mmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "MMO_0000008",
+  "obo_id": "MMO:0000008",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A technique for assessing blood flow by placing an infrared emitting diode along with a sensor, on the surface of the skin over a blood vessel with the amount of light reflected back to the sensor being inversely proportional to the number of red blood cells flowing through the vessel.",
+      "oboXrefs": [
+        {
+          "database": "Dorland",
+          "id": "Dorlands_Illustrated_Medical_Dictionary--31st_Ed",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "ISBN",
+          "id": "978-1416049982",
+          "description": null,
+          "url": "https://www.worldcat.org/search?q=bn%3A978-1416049982"
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000008?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000008/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000008/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000008/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000008/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000008/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000008/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000008/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000008/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000008/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000008/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

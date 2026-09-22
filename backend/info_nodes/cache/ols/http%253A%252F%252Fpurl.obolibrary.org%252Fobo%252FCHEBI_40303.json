@@ -1,0 +1,403 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_40303",
+  "lang": "en",
+  "description": [
+    "A fatty acid ester that is mevastatin carrying an additional methyl group on the carbobicyclic skeleton. It is used in as an anticholesteremic drug and has been found in fungal species such as <em>Aspergillus terreus</em> and <em>Pleurotus ostreatus</em> (oyster mushroom)."
+  ],
+  "synonyms": [
+    "(1S,3R,7S,8S,8aR)-1,2,3,7,8,8a-hexahydro-3,7-dimethyl-8-(2-(2R,4R)-(tetrahydro-4-hydroxy-6-oxo-2H-pyran-2-yl)ethyl)-1-naphthalenyl (S)-2-methyl-butyrate",
+    "(1S,3R,7S,8S,8aR)-8-{2-[(2R,4R)-4-hydroxy-6-oxotetrahydro-2H-pyran-2-yl]ethyl}-3,7-dimethyl-1,2,3,7,8,8a-hexahydronaphthalen-1-yl (2S)-2-methylbutanoate",
+    "(1S,3R,7S,8S,8aR)-8-{2-[(2R,4R)-4-hydroxy-6-oxotetrahydro-2H-pyran-2-yl]ethyl}-3,7-dimethyl-1,2,3,7,8,8a-hexahydronaphthalen-1-yl (2S)-2-methylbutanoate",
+    "2beta,6alpha-dimethyl-8alpha-(2-methyl-1-oxobutoxy)-mevinic acid lactone",
+    "6alpha-methylcompactin",
+    "LOVASTATIN",
+    "Lovastatin",
+    "MK-803",
+    "ML-530B",
+    "Mevacor",
+    "Mevinolin",
+    "lovastatin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:3631989",
+      "cas:75330-75-5",
+      "drugbank:DB00227",
+      "drugcentral:1612",
+      "hmdb:HMDB0014372",
+      "kegg.compound:C07074",
+      "kegg.drug:D00359",
+      "knapsack:C00000547",
+      "lincs.smallmolecule:LSM-2189",
+      "patent:CN103172602",
+      "patent:WO2013090461",
+      "pdb-ccd:803",
+      "pubmed:11375168",
+      "pubmed:11389707",
+      "pubmed:11483865",
+      "pubmed:18642339",
+      "pubmed:24093797",
+      "pubmed:7720768",
+      "reaxys:4720754",
+      "wikipedia.en:Lovastatin"
+    ],
+    "generalized_empirical_formula": [
+      "C24H36O5"
+    ],
+    "has_alternative_id": [
+      "CHEBI:40299",
+      "CHEBI:6544"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:40303"
+    ],
+    "inchi_key_string": [
+      "PCZOHLXUXFIOCF-BXMDZJJMSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C24H36O5/c1-5-15(3)24(27)29-21-11-14(2)10-17-7-6-16(4)20(23(17)21)9-8-19-12-18(25)13-22(26)28-19/h6-7,10,14-16,18-21,23,25H,5,8-9,11-13H2,1-4H3/t14-,15-,16-,18+,19+,20-,21-,23-/m0/s1"
+    ],
+    "mass": [
+      "404.547"
+    ],
+    "monoisotopic_mass": [
+      "404.25627"
+    ],
+    "smiles_string": [
+      "[H][C@@]12C(=C[C@H](C)C[C@@H]1OC(=O)[C@@H](C)CC)C=C[C@H](C)[C@@H]2CC[C@@H]1C[C@@H](O)CC(=O)O1"
+    ]
+  },
+  "label": "lovastatin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_40303",
+  "obo_id": "CHEBI:40303",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "3631989",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "75330-75-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=75330-75-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00227",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00227"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1612",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1612"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014372",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014372"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07074",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00359",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00000547",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00000547"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-2189",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "CN103172602",
+      "description": "patent",
+      "url": "https://www.google.com/patents/CN103172602"
+    },
+    {
+      "database": "patent",
+      "id": "WO2013090461",
+      "description": "patent",
+      "url": "https://www.google.com/patents/WO2013090461"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "803",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11375168",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11375168/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11389707",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11389707/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11483865",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11483865/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18642339",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18642339/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24093797",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24093797/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7720768",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7720768/"
+    },
+    {
+      "database": "reaxys",
+      "id": "4720754",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Lovastatin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(1S,3R,7S,8S,8aR)-8-{2-[(2R,4R)-4-hydroxy-6-oxotetrahydro-2H-pyran-2-yl]ethyl}-3,7-dimethyl-1,2,3,7,8,8a-hexahydronaphthalen-1-yl (2S)-2-methylbutanoate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S,3R,7S,8S,8aR)-1,2,3,7,8,8a-hexahydro-3,7-dimethyl-8-(2-(2R,4R)-(tetrahydro-4-hydroxy-6-oxo-2H-pyran-2-yl)ethyl)-1-naphthalenyl (S)-2-methyl-butyrate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S,3R,7S,8S,8aR)-8-{2-[(2R,4R)-4-hydroxy-6-oxotetrahydro-2H-pyran-2-yl]ethyl}-3,7-dimethyl-1,2,3,7,8,8a-hexahydronaphthalen-1-yl (2S)-2-methylbutanoate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2beta,6alpha-dimethyl-8alpha-(2-methyl-1-oxobutoxy)-mevinic acid lactone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6alpha-methylcompactin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "LOVASTATIN",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lovastatin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "MK-803",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ML-530B",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mevacor",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mevinolin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lovastatin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40303?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40303/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40303/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40303/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40303/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40303/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40303/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40303/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40303/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

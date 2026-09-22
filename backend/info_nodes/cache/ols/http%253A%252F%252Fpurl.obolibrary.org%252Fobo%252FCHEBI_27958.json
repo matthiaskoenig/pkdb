@@ -1,0 +1,529 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_27958",
+  "lang": "en",
+  "description": [
+    "A tropane alkaloid obtained from leaves of the South American shrub <em>Erythroxylon coca</em>."
+  ],
+  "synonyms": [
+    "(-)-cocaine",
+    "(1R,2R,3S,5S)-2-(methoxycarbonyl)tropan-3-yl benzoate",
+    "(1R,2R,3S,5S)-2-(methoxycarbonyl)tropan-3-yl benzoate",
+    "2-methyl-3beta-hydroxy-1alphaH,5alphaH-tropane-2beta-carboxylate benzoate (ester)",
+    "Benzoylmethylecgonine",
+    "COCAINE",
+    "Cocain",
+    "Cocaina",
+    "Cocaine",
+    "Kokain",
+    "Neurocaine",
+    "[1R-(exo,exo)]-3-(benzoyloxy)-8-methyl-8-azabicyclo[3.2.1]octane-2-carboxylic acid, methyl ester",
+    "beta-Cocain",
+    "cocainum",
+    "l-Cocain",
+    "l-cocaine",
+    "methyl (1R,2R,3S,5S)-3-(benzoyloxy)-8-methyl-8-azabicyclo[3.2.1]octane-2-carboxylate",
+    "methyl (1R,2R,3S,5S)-3-(benzoyloxy)-8-methyl-8-azabicyclo[3.2.1]octane-2-carboxylate",
+    "methyl [1R-(exo,exo)]-3-(benzoyloxy)-8-methyl-8-azabicyclo[3.2.1]octane-2-carboxylate",
+    "methyl benzoylecgonine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:3621912",
+      "cas:50-36-2",
+      "drugbank:DB00907",
+      "drugcentral:723",
+      "gmelin:170209",
+      "kegg.compound:C01416",
+      "kegg.drug:D00110",
+      "knapsack:C00002285",
+      "metacyc.compound:CPD-9776",
+      "pdb-ccd:COC",
+      "pubmed:11416615",
+      "pubmed:11853120",
+      "pubmed:14962054",
+      "pubmed:17551070",
+      "pubmed:19536276",
+      "pubmed:21150772",
+      "pubmed:25303034",
+      "reaxys:5291037",
+      "reaxys:91034",
+      "wikipedia.en:Cocaine"
+    ],
+    "generalized_empirical_formula": [
+      "C17H21NO4"
+    ],
+    "has_alternative_id": [
+      "CHEBI:23346",
+      "CHEBI:3801",
+      "CHEBI:41642"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:27958"
+    ],
+    "inchi_key_string": [
+      "ZPUCINDJVBIVPJ-LJISPDSOSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C17H21NO4/c1-18-12-8-9-13(18)15(17(20)21-2)14(10-12)22-16(19)11-6-4-3-5-7-11/h3-7,12-15H,8-10H2,1-2H3/t12-,13+,14-,15+/m0/s1"
+    ],
+    "mass": [
+      "303.358"
+    ],
+    "monoisotopic_mass": [
+      "303.14706"
+    ],
+    "smiles_string": [
+      "[H][C@]12CC[C@]([H])([C@@H](C(=O)OC)[C@@H](OC(=O)c3ccccc3)C1)N2C"
+    ]
+  },
+  "label": "cocaine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_27958",
+  "obo_id": "CHEBI:27958",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "3621912",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "50-36-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=50-36-2"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00907",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00907"
+    },
+    {
+      "database": "drugcentral",
+      "id": "723",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/723"
+    },
+    {
+      "database": "gmelin",
+      "id": "170209",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C01416",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00110",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00002285",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00002285"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-9776",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "COC",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11416615",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11416615/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11853120",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11853120/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14962054",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14962054/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17551070",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17551070/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19536276",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19536276/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21150772",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21150772/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25303034",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25303034/"
+    },
+    {
+      "database": "reaxys",
+      "id": "5291037",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "reaxys",
+      "id": "91034",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Cocaine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(1R,2R,3S,5S)-2-(methoxycarbonyl)tropan-3-yl benzoate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methyl (1R,2R,3S,5S)-3-(benzoyloxy)-8-methyl-8-azabicyclo[3.2.1]octane-2-carboxylate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-cocaine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1R,2R,3S,5S)-2-(methoxycarbonyl)tropan-3-yl benzoate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-methyl-3beta-hydroxy-1alphaH,5alphaH-tropane-2beta-carboxylate benzoate (ester)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Benzoylmethylecgonine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "COCAINE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cocain",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cocaina",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cocaine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Kokain",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Kokain",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Neurocaine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[1R-(exo,exo)]-3-(benzoyloxy)-8-methyl-8-azabicyclo[3.2.1]octane-2-carboxylic acid, methyl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "beta-Cocain",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cocainum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "l-Cocain",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "l-cocaine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methyl (1R,2R,3S,5S)-3-(benzoyloxy)-8-methyl-8-azabicyclo[3.2.1]octane-2-carboxylate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methyl [1R-(exo,exo)]-3-(benzoyloxy)-8-methyl-8-azabicyclo[3.2.1]octane-2-carboxylate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methyl benzoylecgonine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27958?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27958/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27958/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27958/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27958/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27958/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27958/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27958/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27958/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

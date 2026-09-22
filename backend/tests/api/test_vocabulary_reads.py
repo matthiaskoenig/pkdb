@@ -105,7 +105,7 @@ def test_vocabulary_detail_search_and_filters(client, session_factory):
     )
 
 
-def test_offline_vocabulary_matches_legacy_serializer_with_resolved_metadata(
+def test_refreshed_vocabulary_preserves_legacy_api_contract(
     client, session_factory, tmp_path
 ):
     from pathlib import Path
@@ -131,19 +131,19 @@ def test_offline_vocabulary_matches_legacy_serializer_with_resolved_metadata(
             )
         return value
 
+    snapshot = json.loads((root / "bootstrap/vocabulary.json").read_text())
+    current_nodes = {node["sid"]: node for node in snapshot["nodes"]}
     for sid, expected in golden.items():
-        # The historical fixture captured unresolved provider templates and SIO
-        # metadata. Keep its API contract with the verified enrichment corrections.
-        for annotation in expected["annotations"]:
-            term = annotation["term"]
-            if annotation["collection"] == "chebi":
-                term = term.removeprefix("CHEBI:")
-            annotation["url"] = annotation["url"].replace("{$id}", term)
-            if annotation["collection"] == "sio" and term == "SIO_010048":
-                annotation["label"] = "male"
-                annotation["description"] = (
-                    "male is a biological sex of an individual with male sexual organs."
-                )
+        # Keep the historical API contract, but compare volatile enrichment with
+        # the freshly generated source data that was actually bootstrapped.
+        current = current_nodes[sid]
+        for field in ("annotations", "xrefs"):
+            expected[field] = [json.loads(value) for value in current["terms"][field]]
+        expected["synonyms"] = current["terms"]["synonyms"]
+        if expected["substance"] is not None:
+            expected["substance"] = {
+                key: current["definition"][key] for key in ("mass", "charge", "formula")
+            }
         response = client.get(f"/api/v1/info_nodes/{sid}/")
         assert response.status_code == 200
         assert unordered(response.json()) == unordered(expected)

@@ -1,0 +1,126 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C830",
+  "lang": "en",
+  "description": [
+    "An element with atomic symbol Na, atomic number 11, and atomic weight 23."
+  ],
+  "synonyms": [
+    "Na",
+    "SODIUM",
+    "Sodium (NOS)",
+    "Sodium",
+    "sodium"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A mineral needed by the body to keep body fluids in balance.  Sodium is found in table salt and in many processed foods.  Too much sodium can cause the body to retain water."
+    ],
+    "CAS_Registry": [
+      "7440-23-5"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:26708"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Sodium"
+    ],
+    "FDA_UNII_Code": [
+      "9NEZ333N27"
+    ],
+    "Legacy Concept Name": [
+      "Sodium"
+    ],
+    "Preferred_Name": [
+      "Sodium"
+    ],
+    "Semantic_Type": [
+      "Element, Ion, or Isotope"
+    ],
+    "UMLS_CUI": [
+      "C0037473"
+    ],
+    "code": [
+      "C830"
+    ]
+  },
+  "label": "Sodium",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C830",
+  "obo_id": "NCIT:C830",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Na",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SODIUM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sodium (NOS)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sodium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "sodium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C830?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C830/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C830/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C830/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C830/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C830/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C830/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

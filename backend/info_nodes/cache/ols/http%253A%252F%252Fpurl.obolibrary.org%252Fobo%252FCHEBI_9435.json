@@ -1,0 +1,387 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9435",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(RS)-Temazepam",
+    "Kentepam",
+    "NSC-246303",
+    "Normison",
+    "Restoril (TN)",
+    "Restoril",
+    "Temaz",
+    "Temazepam civ",
+    "Temazepam",
+    "WY-3917",
+    "levanxene",
+    "levanxol"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:846-50-4",
+      "drugcentral:2585",
+      "hmdb:HMDB0014376",
+      "kegg.compound:C07125",
+      "kegg.drug:D00370",
+      "pubmed:10836148",
+      "pubmed:10891117",
+      "pubmed:15781124",
+      "pubmed:16472241",
+      "pubmed:17574307",
+      "pubmed:20014752",
+      "pubmed:22194678",
+      "pubmed:26948801",
+      "pubmed:31483",
+      "pubmed:32686940",
+      "pubmed:37468498",
+      "pubmed:7359533",
+      "pubmed:7861419",
+      "pubmed:8978853"
+    ],
+    "generalized_empirical_formula": [
+      "C16H13ClN2O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9435"
+    ],
+    "inchi_key_string": [
+      "SEQDDYPDSLOBDC-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C16H13ClN2O2/c1-19-13-8-7-11(17)9-12(13)14(18-15(20)16(19)21)10-5-3-2-4-6-10/h2-9,15,20H,1H3"
+    ],
+    "mass": [
+      "300.745"
+    ],
+    "monoisotopic_mass": [
+      "300.06656"
+    ],
+    "smiles_string": [
+      "CN1C(=O)C(O)N=C(c2ccccc2)c2cc(Cl)ccc21"
+    ]
+  },
+  "label": "Temazepam",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9435",
+  "obo_id": "CHEBI:9435",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "846-50-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=846-50-4"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2585",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2585"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014376",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014376"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07125",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00370",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10836148",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10836148/"
+    },
+    {
+      "database": "pubmed",
+      "id": "10891117",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10891117/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15781124",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15781124/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16472241",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16472241/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17574307",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17574307/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20014752",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20014752/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22194678",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22194678/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26948801",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26948801/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31483",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31483/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32686940",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32686940/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37468498",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37468498/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7359533",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7359533/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7861419",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7861419/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8978853",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8978853/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(RS)-Temazepam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Kentepam",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NSC-246303",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Normison",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Restoril (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Restoril",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Temaz",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Temazepam civ",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Temazepam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "WY-3917",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levanxene",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levanxol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

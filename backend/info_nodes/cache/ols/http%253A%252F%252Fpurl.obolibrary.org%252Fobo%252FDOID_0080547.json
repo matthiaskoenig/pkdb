@@ -1,0 +1,108 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_0080547",
+  "lang": "en",
+  "description": [
+    "A metabolic dysfunction-associated steatotic liver disease characterized by the presence of inflammation with hepatocyte injury such as ballooning, with or without fibrosis."
+  ],
+  "synonyms": [
+    "non-alcoholic steatohepatitis",
+    "nonalcoholic steatohepatitis",
+    "MASH",
+    "NASH"
+  ],
+  "annotation": {
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:0080547"
+    ]
+  },
+  "label": "metabolic dysfunction-associated steatohepatitis",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "DOID_0080547",
+  "obo_id": "DOID:0080547",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A metabolic dysfunction-associated steatotic liver disease characterized by the presence of inflammation with hepatocyte injury such as ballooning, with or without fibrosis.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "MASH",
+      "scope": "hasExactSynonym",
+      "type": "acronym",
+      "xrefs": []
+    },
+    {
+      "name": "NASH",
+      "scope": "hasExactSynonym",
+      "type": "acronym",
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0080547?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0080547/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0080547/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0080547/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0080547/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0080547/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0080547/graph"
+    },
+    "has_symptom": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0080547/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002452"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

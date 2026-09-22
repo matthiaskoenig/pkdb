@@ -1,0 +1,784 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_68610",
+  "lang": "en",
+  "description": [
+    "A xanthine that is 7<em>H</em>-xanthine bearing (4-methylquinazolin-2-yl)methyl, methyl, but-2-yn-1-yl and 3-aminopiperidin-1-yl substituents at positions 1, 3, 7 and 8 respectively (the <i>R</i>-enantiomer). Used for treatment of type II diabetes."
+  ],
+  "synonyms": [
+    "(R)-8-(3-aminopiperidin-1-yl)-7-but-2-ynyl-3-methyl-1-(4-methylquinazolin-2-ylmethyl)-3,7-dihydro-purine-2,6-dione",
+    "8-[(3R)-3-aminopiperidin-1-yl]-7-(but-2-yn-1-yl)-3-methyl-1-[(4-methylquinazolin-2-yl)methyl]-3,7-dihydro-1H-purine-2,6-dione",
+    "8-[(3R)-3-aminopiperidin-1-yl]-7-(but-2-yn-1-yl)-3-methyl-1-[(4-methylquinazolin-2-yl)methyl]-3,7-dihydro-1H-purine-2,6-dione",
+    "BI 1356",
+    "Tradjenta",
+    "linagliptin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:668270-12-0",
+      "kegg.drug:D09566",
+      "patent:EP1852108",
+      "patent:EP246874",
+      "patent:US2007259900",
+      "patent:US2012165525",
+      "patent:WO2004018468",
+      "patent:WO2006048427",
+      "patent:WO2009022008",
+      "patent:WO2010072776",
+      "pdb-ccd:356",
+      "pubmed:19476474",
+      "pubmed:19552619",
+      "pubmed:19732457",
+      "pubmed:19771584",
+      "pubmed:19777398",
+      "pubmed:19947894",
+      "pubmed:20086031",
+      "pubmed:20160157",
+      "pubmed:20497745",
+      "pubmed:20538719",
+      "pubmed:20637971",
+      "pubmed:20875371",
+      "pubmed:21053992",
+      "pubmed:21059094",
+      "pubmed:21084763",
+      "pubmed:21114605",
+      "pubmed:21205122",
+      "pubmed:21306414",
+      "pubmed:21340661",
+      "pubmed:21352464",
+      "pubmed:21410628",
+      "pubmed:21443284",
+      "pubmed:21543033",
+      "pubmed:21603986",
+      "pubmed:21642558",
+      "pubmed:21672124",
+      "pubmed:21680988",
+      "pubmed:21681003",
+      "pubmed:21701440",
+      "pubmed:21714581",
+      "pubmed:21723606",
+      "pubmed:21752782",
+      "pubmed:21781152",
+      "pubmed:21803422",
+      "pubmed:21883034",
+      "pubmed:21913883",
+      "pubmed:21916836",
+      "pubmed:22022857",
+      "pubmed:22143285",
+      "pubmed:22145698",
+      "pubmed:22149370",
+      "pubmed:22177783",
+      "pubmed:22198311",
+      "pubmed:22217485",
+      "pubmed:22234149",
+      "pubmed:22242621",
+      "pubmed:22268497",
+      "pubmed:22318932",
+      "pubmed:22340363",
+      "pubmed:22346314",
+      "pubmed:22356132",
+      "pubmed:22420306",
+      "pubmed:22440191",
+      "pubmed:22482239",
+      "pubmed:22493041",
+      "pubmed:22498683",
+      "pubmed:22541836",
+      "pubmed:22568694",
+      "pubmed:22587735",
+      "pubmed:22651241",
+      "pubmed:22691164",
+      "pubmed:22748821",
+      "pubmed:22761275",
+      "pubmed:22761701",
+      "pubmed:22804249",
+      "pubmed:22816729",
+      "pubmed:22879795",
+      "pubmed:22913735",
+      "pubmed:22926098",
+      "pubmed:22939034",
+      "pubmed:22974280",
+      "pubmed:22986920",
+      "pubmed:22997980",
+      "pubmed:23033241",
+      "reaxys:11300181",
+      "wikipedia.en:Linagliptin"
+    ],
+    "generalized_empirical_formula": [
+      "C25H28N8O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:68610"
+    ],
+    "inchi_key_string": [
+      "LTXREWYXXSTFRX-QGZVFWFLSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C25H28N8O2/c1-4-5-13-32-21-22(29-24(32)31-12-8-9-17(26)14-31)30(3)25(35)33(23(21)34)15-20-27-16(2)18-10-6-7-11-19(18)28-20/h6-7,10-11,17H,8-9,12-15,26H2,1-3H3/t17-/m1/s1"
+    ],
+    "mass": [
+      "472.553"
+    ],
+    "monoisotopic_mass": [
+      "472.23352"
+    ],
+    "smiles_string": [
+      "CC#CCn1c(N2CCC[C@@H](N)C2)nc2c1c(=O)n(Cc1nc(C)c3ccccc3n1)c(=O)n2C"
+    ]
+  },
+  "label": "linagliptin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_68610",
+  "obo_id": "CHEBI:68610",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "668270-12-0",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=668270-12-0"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D09566",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP1852108",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP1852108"
+    },
+    {
+      "database": "patent",
+      "id": "EP246874",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP246874"
+    },
+    {
+      "database": "patent",
+      "id": "US2007259900",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2007259900"
+    },
+    {
+      "database": "patent",
+      "id": "US2012165525",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2012165525"
+    },
+    {
+      "database": "patent",
+      "id": "WO2004018468",
+      "description": "patent",
+      "url": "https://www.google.com/patents/WO2004018468"
+    },
+    {
+      "database": "patent",
+      "id": "WO2006048427",
+      "description": "patent",
+      "url": "https://www.google.com/patents/WO2006048427"
+    },
+    {
+      "database": "patent",
+      "id": "WO2009022008",
+      "description": "patent",
+      "url": "https://www.google.com/patents/WO2009022008"
+    },
+    {
+      "database": "patent",
+      "id": "WO2010072776",
+      "description": "patent",
+      "url": "https://www.google.com/patents/WO2010072776"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "356",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "19476474",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19476474/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19552619",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19552619/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19732457",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19732457/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19771584",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19771584/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19777398",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19777398/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19947894",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19947894/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20086031",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20086031/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20160157",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20160157/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20497745",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20497745/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20538719",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20538719/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20637971",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20637971/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20875371",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20875371/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21053992",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21053992/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21059094",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21059094/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21084763",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21084763/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21114605",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21114605/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21205122",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21205122/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21306414",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21306414/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21340661",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21340661/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21352464",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21352464/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21410628",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21410628/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21443284",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21443284/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21543033",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21543033/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21603986",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21603986/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21642558",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21642558/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21672124",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21672124/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21680988",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21680988/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21681003",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21681003/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21701440",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21701440/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21714581",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21714581/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21723606",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21723606/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21752782",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21752782/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21781152",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21781152/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21803422",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21803422/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21883034",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21883034/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21913883",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21913883/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21916836",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21916836/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22022857",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22022857/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22143285",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22143285/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22145698",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22145698/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22149370",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22149370/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22177783",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22177783/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22198311",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22198311/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22217485",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22217485/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22234149",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22234149/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22242621",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22242621/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22268497",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22268497/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22318932",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22318932/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22340363",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22340363/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22346314",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22346314/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22356132",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22356132/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22420306",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22420306/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22440191",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22440191/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22482239",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22482239/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22493041",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22493041/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22498683",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22498683/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22541836",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22541836/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22568694",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22568694/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22587735",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22587735/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22651241",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22651241/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22691164",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22691164/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22748821",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22748821/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22761275",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22761275/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22761701",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22761701/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22804249",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22804249/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22816729",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22816729/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22879795",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22879795/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22913735",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22913735/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22926098",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22926098/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22939034",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22939034/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22974280",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22974280/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22986920",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22986920/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22997980",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22997980/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23033241",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23033241/"
+    },
+    {
+      "database": "reaxys",
+      "id": "11300181",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Linagliptin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "8-[(3R)-3-aminopiperidin-1-yl]-7-(but-2-yn-1-yl)-3-methyl-1-[(4-methylquinazolin-2-yl)methyl]-3,7-dihydro-1H-purine-2,6-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-8-(3-aminopiperidin-1-yl)-7-but-2-ynyl-3-methyl-1-(4-methylquinazolin-2-ylmethyl)-3,7-dihydro-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-[(3R)-3-aminopiperidin-1-yl]-7-(but-2-yn-1-yl)-3-methyl-1-[(4-methylquinazolin-2-yl)methyl]-3,7-dihydro-1H-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BI 1356",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tradjenta",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "linagliptin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68610?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68610/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68610/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68610/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68610/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68610/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68610/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68610/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68610/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

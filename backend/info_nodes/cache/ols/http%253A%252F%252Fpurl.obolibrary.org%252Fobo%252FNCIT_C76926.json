@@ -1,0 +1,109 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C76926",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "LACTIC ACID, UNSPECIFIED FORM",
+    "Lactate",
+    "Lactic Acid",
+    "lactic acid"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A substance made from sugars in milk, by the action of certain enzymes. It is used in skin care products to reduce wrinkles and soften the skin. It is also being studied in the treatment of hand-foot syndrome (a condition marked by pain, swelling, numbness, tingling, or redness of the hands or feet) in patients receiving chemotherapy. Lactic acid is also made in muscles in the body and is used in many chemical processes in the body. It is a type of alpha hydroxyl acid."
+    ],
+    "CHEBI_ID": [
+      "CHEBI:28358"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "33X04XA5AT"
+    ],
+    "Legacy Concept Name": [
+      "Lactic_Acid"
+    ],
+    "Preferred_Name": [
+      "Lactic Acid"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0064582"
+    ],
+    "code": [
+      "C76926"
+    ]
+  },
+  "label": "Lactic Acid",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C76926",
+  "obo_id": "NCIT:C76926",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "LACTIC ACID, UNSPECIFIED FORM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lactate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lactic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "lactic acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76926?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76926/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76926/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76926/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76926/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76926/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76926/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

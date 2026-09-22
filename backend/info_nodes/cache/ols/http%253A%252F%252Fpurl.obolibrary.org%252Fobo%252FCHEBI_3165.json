@@ -1,0 +1,322 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3165",
+  "lang": "en",
+  "description": [
+    "A linear nonapeptide messenger belonging to the kinin group of proteins, with amino acid sequence RPPGFSPFR. Enzymatically produced from kallidin in the blood, it is a powerful vasodilator that causes smooth muscle contraction, and may mediate inflammation."
+  ],
+  "synonyms": [
+    "Arg-Pro-Pro-Gly-Phe-Ser-Pro-Phe-Arg",
+    "BK",
+    "L-Arg-L-Pro-L-Pro-Gly-L-Phe-L-Ser-L-Pro-L-Phe-L-Arg",
+    "L-arginyl-L-prolyl-L-prolylglycyl-L-phenylalanyl-L-seryl-L-prolyl-L-phenylalanyl-L-arginine",
+    "L-arginyl-L-prolyl-L-prolylglycyl-L-phenylalanyl-L-seryl-L-prolyl-L-phenylalanyl-L-arginine",
+    "L-bradykinin",
+    "RPPGFSPFR"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:58-82-2",
+      "pubmed:11799074",
+      "pubmed:11975815",
+      "pubmed:13446366",
+      "pubmed:13811230",
+      "pubmed:14597148",
+      "pubmed:15105283",
+      "pubmed:16680069",
+      "pubmed:18127230",
+      "pubmed:27318425",
+      "pubmed:27328010",
+      "pubmed:27432758",
+      "pubmed:27445816",
+      "pubmed:7859389",
+      "pubmed:8723398",
+      "pubmed:9403361",
+      "reaxys:24162492",
+      "reaxys:2801232",
+      "wikipedia.en:Bradykinin"
+    ],
+    "generalized_empirical_formula": [
+      "C50H73N15O11"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3165"
+    ],
+    "inchi_key_string": [
+      "QXZGBUJJYSLZLT-FDISYFBBSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C50H73N15O11/c51-32(16-7-21-56-49(52)53)45(72)65-25-11-20-39(65)47(74)64-24-9-18-37(64)43(70)58-28-40(67)59-34(26-30-12-3-1-4-13-30)41(68)62-36(29-66)46(73)63-23-10-19-38(63)44(71)61-35(27-31-14-5-2-6-15-31)42(69)60-33(48(75)76)17-8-22-57-50(54)55/h1-6,12-15,32-39,66H,7-11,16-29,51H2,(H,58,70)(H,59,67)(H,60,69)(H,61,71)(H,62,68)(H,75,76)(H4,52,53,56)(H4,54,55,57)/t32-,33-,34-,35-,36-,37-,38-,39-/m0/s1"
+    ],
+    "mass": [
+      "1060.228"
+    ],
+    "monoisotopic_mass": [
+      "1059.5614"
+    ],
+    "smiles_string": [
+      "N=C(N)NCCC[C@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)[C@@H]1CCCN1C(=O)[C@H](CO)NC(=O)[C@H](Cc1ccccc1)NC(=O)CNC(=O)[C@@H]1CCCN1C(=O)[C@@H]1CCCN1C(=O)[C@@H](N)CCCNC(=N)N)C(=O)O"
+    ]
+  },
+  "label": "bradykinin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3165",
+  "obo_id": "CHEBI:3165",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "58-82-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=58-82-2"
+    },
+    {
+      "database": "pubmed",
+      "id": "11799074",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11799074/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11975815",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11975815/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13446366",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13446366/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13811230",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13811230/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14597148",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14597148/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15105283",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15105283/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16680069",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16680069/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18127230",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18127230/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27318425",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27318425/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27328010",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27328010/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27432758",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27432758/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27445816",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27445816/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7859389",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7859389/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8723398",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8723398/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9403361",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9403361/"
+    },
+    {
+      "database": "reaxys",
+      "id": "24162492",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "reaxys",
+      "id": "2801232",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Bradykinin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "L-arginyl-L-prolyl-L-prolylglycyl-L-phenylalanyl-L-seryl-L-prolyl-L-phenylalanyl-L-arginine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Arg-Pro-Pro-Gly-Phe-Ser-Pro-Phe-Arg",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BK",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-Arg-L-Pro-L-Pro-Gly-L-Phe-L-Ser-L-Pro-L-Phe-L-Arg",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-arginyl-L-prolyl-L-prolylglycyl-L-phenylalanyl-L-seryl-L-prolyl-L-phenylalanyl-L-arginine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-bradykinin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "RPPGFSPFR",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3165?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3165/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3165/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3165/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3165/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3165/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3165/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3165/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3165/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

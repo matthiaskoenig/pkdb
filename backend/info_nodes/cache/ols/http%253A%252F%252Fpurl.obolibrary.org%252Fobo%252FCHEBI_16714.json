@@ -1,0 +1,505 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_16714",
+  "lang": "en",
+  "description": [
+    "A  morphinane alkaloid found in the opium poppy, <em>Papaver somniferum var. album</em>; has analgesic, anti-tussive and anti-diarrhoeal properties."
+  ],
+  "synonyms": [
+    "(-)-Codeine",
+    "(1S,13R,14S,17R)-10-methoxy-4-methyl-12-oxa-4-azapentacyclo[9.6.1.0(1,13).0(5,17).0(7,18)]octadeca-7(18),8,10,15-tetraen-14-ol",
+    "(5alpha,6alpha)-7,8-Didehydro-4,5-epoxy-3-methoxy-17-methylmorphinan-6-ol",
+    "3-methoxy-17-methyl-7,8-didehydro-4,5alpha-epoxymorphinan-6alpha-ol",
+    "3-methoxy-17-methyl-7,8-didehydro-4,5alpha-epoxymorphinan-6alpha-ol",
+    "7,8-didehydro-4,5alpha-epoxy-3-methoxy-17-methylmorphinan-6alpha-ol",
+    "Codein",
+    "Codeine",
+    "Codicept",
+    "Coducept",
+    "O(3)-methylmorphine",
+    "codeina",
+    "codeine anhydrous",
+    "codeine",
+    "l-codeine",
+    "methylmorphine",
+    "morphine 3-methyl ether",
+    "morphine monomethyl ether",
+    "morphine-3-methyl ether"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:5303198",
+      "beilstein:5768734",
+      "cas:76-57-3",
+      "drugbank:DB00318",
+      "drugcentral:725",
+      "gmelin:232454",
+      "kegg.compound:C06174",
+      "knapsack:C00001837",
+      "pubmed:2215478",
+      "pubmed:23507688",
+      "pubmed:24069665",
+      "pubmed:24176887",
+      "pubmed:24324229",
+      "pubmed:24396053",
+      "pubmed:24458010",
+      "pubmed:24491926",
+      "pubmed:24517264",
+      "pubmed:9776433",
+      "reaxys:94996",
+      "wikipedia.en:Codeine"
+    ],
+    "generalized_empirical_formula": [
+      "C18H21NO3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:14006",
+      "CHEBI:23348",
+      "CHEBI:3803"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:16714"
+    ],
+    "inchi_key_string": [
+      "OROGSEYTTFOCAN-DNJOTXNNSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C18H21NO3/c1-19-8-7-18-11-4-5-13(20)17(18)22-16-14(21-2)6-3-10(15(16)18)9-12(11)19/h3-6,11-13,17,20H,7-9H2,1-2H3/t11-,12+,13-,17-,18-/m0/s1"
+    ],
+    "mass": [
+      "299.37"
+    ],
+    "monoisotopic_mass": [
+      "299.15214"
+    ],
+    "smiles_string": [
+      "[H][C@@]12C=C[C@H](O)[C@@H]3Oc4c(OC)ccc5c4[C@@]31CCN(C)[C@@H]2C5"
+    ]
+  },
+  "label": "codeine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_16714",
+  "obo_id": "CHEBI:16714",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "5303198",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "beilstein",
+      "id": "5768734",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "76-57-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=76-57-3"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00318",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00318"
+    },
+    {
+      "database": "drugcentral",
+      "id": "725",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/725"
+    },
+    {
+      "database": "gmelin",
+      "id": "232454",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06174",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00001837",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00001837"
+    },
+    {
+      "database": "pubmed",
+      "id": "2215478",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2215478/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23507688",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23507688/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24069665",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24069665/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24176887",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24176887/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24324229",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24324229/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24396053",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24396053/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24458010",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24458010/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24491926",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24491926/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24517264",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24517264/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9776433",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9776433/"
+    },
+    {
+      "database": "reaxys",
+      "id": "94996",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Codeine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3-methoxy-17-methyl-7,8-didehydro-4,5alpha-epoxymorphinan-6alpha-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-Codeine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S,13R,14S,17R)-10-methoxy-4-methyl-12-oxa-4-azapentacyclo[9.6.1.0(1,13).0(5,17).0(7,18)]octadeca-7(18),8,10,15-tetraen-14-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(5alpha,6alpha)-7,8-Didehydro-4,5-epoxy-3-methoxy-17-methylmorphinan-6-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-methoxy-17-methyl-7,8-didehydro-4,5alpha-epoxymorphinan-6alpha-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7,8-didehydro-4,5alpha-epoxy-3-methoxy-17-methylmorphinan-6alpha-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Codein",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Codeine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Codicept",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Coducept",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "O(3)-methylmorphine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "codeina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "codeine anhydrous",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "codeine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "l-codeine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methylmorphine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "morphine 3-methyl ether",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "morphine monomethyl ether",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "morphine-3-methyl ether",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16714?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16714/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16714/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16714/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16714/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16714/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16714/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16714/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16714/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16714/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,288 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_49575",
+  "lang": "en",
+  "description": [
+    "A 1,4-benzodiazepinone that is 1,3-dihydro-2<em>H</em>-1,4-benzodiazepin-2-one substituted by a chloro group at position 7, a methyl group at position 1 and a phenyl group at position 5."
+  ],
+  "synonyms": [
+    "7-chloro-1,3-dihydro-1-methyl-5-phenyl-2H-1,4-benzodiazepin-2-one",
+    "7-chloro-1-methyl-5-phenyl-1,3-dihydro-2H-1,4-benzodiazepin-2-one",
+    "7-chloro-1-methyl-5-phenyl-1,3-dihydro-2H-1,4-benzodiazepin-2-one",
+    "Diazepam",
+    "Valium",
+    "methyl diazepinone"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:754371",
+      "cas:439-14-5",
+      "drugbank:DB00829",
+      "drugcentral:852",
+      "gmelin:124061",
+      "hmdb:HMDB0014967",
+      "kegg.compound:C06948",
+      "kegg.drug:D00293",
+      "lincs.smallmolecule:LSM-2359",
+      "pdb-ccd:DZP",
+      "pubmed:11925051",
+      "pubmed:16365514",
+      "pubmed:16780966",
+      "reaxys:754371",
+      "vsdb:2972",
+      "wikipedia.en:Diazepam"
+    ],
+    "generalized_empirical_formula": [
+      "C16H13ClN2O"
+    ],
+    "has_alternative_id": [
+      "CHEBI:4494",
+      "CHEBI:49574"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:49575"
+    ],
+    "inchi_key_string": [
+      "AAOVKJBEBIDNHE-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C16H13ClN2O/c1-19-14-8-7-12(17)9-13(14)16(18-10-15(19)20)11-5-3-2-4-6-11/h2-9H,10H2,1H3"
+    ],
+    "mass": [
+      "284.746"
+    ],
+    "monoisotopic_mass": [
+      "284.07164"
+    ],
+    "smiles_string": [
+      "CN1C(=O)CN=C(c2ccccc2)c2cc(Cl)ccc21"
+    ]
+  },
+  "label": "diazepam",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_49575",
+  "obo_id": "CHEBI:49575",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "754371",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "439-14-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=439-14-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00829",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00829"
+    },
+    {
+      "database": "drugcentral",
+      "id": "852",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/852"
+    },
+    {
+      "database": "gmelin",
+      "id": "124061",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014967",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014967"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06948",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00293",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-2359",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "DZP",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11925051",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11925051/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16365514",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16365514/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16780966",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16780966/"
+    },
+    {
+      "database": "reaxys",
+      "id": "754371",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "2972",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/2972.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Diazepam",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "7-chloro-1-methyl-5-phenyl-1,3-dihydro-2H-1,4-benzodiazepin-2-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7-chloro-1,3-dihydro-1-methyl-5-phenyl-2H-1,4-benzodiazepin-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7-chloro-1-methyl-5-phenyl-1,3-dihydro-2H-1,4-benzodiazepin-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Diazepam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Valium",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methyl diazepinone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49575?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49575/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49575/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49575/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49575/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49575/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49575/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49575/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

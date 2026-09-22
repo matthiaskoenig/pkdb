@@ -1,0 +1,69 @@
+{
+  "iri": "http://purl.org/sig/ont/fma/fma7199",
+  "lang": "en",
+  "description": [],
+  "synonyms": [],
+  "annotation": {
+    "FMAID": [
+      7199.0
+    ],
+    "non-English equivalent": [
+      "Bituka",
+      "Intestino"
+    ],
+    "preferred name": [
+      "Intestine"
+    ],
+    "synonym": [
+      "Bowel",
+      "Gut"
+    ]
+  },
+  "label": "Intestine",
+  "ontology_name": "fma",
+  "ontology_prefix": "FMA",
+  "ontology_iri": "http://purl.org/sig/ont/fma.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": false,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "fma7199",
+  "obo_id": "fma7199",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7199?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7199/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7199/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7199/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7199/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7199/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7199/graph"
+    },
+    "constitutional_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7199/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fconstitutional_part"
+    },
+    "regional_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7199/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fregional_part"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

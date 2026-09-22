@@ -1,0 +1,280 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_62207",
+  "lang": "en",
+  "description": [
+    "A 3-methylxanthine tautomer where the imidazole proton is located at the 9-position."
+  ],
+  "synonyms": [
+    "2-oxo-3-methylhypoxanthine",
+    "3 MX",
+    "3,9-dihydro-3-methyl-1H-purine-2,6-dione",
+    "3-Methylxanthine",
+    "3-methyl-3,7(9)-dihydro-purine-2,6-dione",
+    "3-methyl-3,9-dihydro-1H-purine-2,6-dione",
+    "3-methyl-3,9-dihydro-1H-purine-2,6-dione",
+    "3-methyl-3,9-dihydro-2H,6H-purine-2,6-dione"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:1076-22-8",
+      "kegg.compound:C16357",
+      "metacyc.compound:RXN-11546",
+      "pubmed:10579878",
+      "pubmed:11465391",
+      "pubmed:1676739",
+      "pubmed:2576447",
+      "pubmed:7503772",
+      "pubmed:7632164",
+      "pubmed:8641328",
+      "reaxys:612099"
+    ],
+    "generalized_empirical_formula": [
+      "C6H6N4O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:62207"
+    ],
+    "inchi_key_string": [
+      "GMSNIKWWOQHZGF-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C6H6N4O2/c1-10-4-3(7-2-8-4)5(11)9-6(10)12/h2H,1H3,(H,7,8)(H,9,11,12)"
+    ],
+    "mass": [
+      "166.14"
+    ],
+    "monoisotopic_mass": [
+      "166.04908"
+    ],
+    "smiles_string": [
+      "Cn1c(=O)nc(=O)c2ncnc21"
+    ]
+  },
+  "label": "3-methyl-9H-xanthine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_62207",
+  "obo_id": "CHEBI:62207",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "1076-22-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=1076-22-8"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C16357",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "RXN-11546",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10579878",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10579878/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11465391",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11465391/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1676739",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1676739/"
+    },
+    {
+      "database": "pubmed",
+      "id": "2576447",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2576447/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7503772",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7503772/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7632164",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7632164/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8641328",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8641328/"
+    },
+    {
+      "database": "reaxys",
+      "id": "612099",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3-methyl-3,9-dihydro-1H-purine-2,6-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-oxo-3-methylhypoxanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3 MX",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,9-dihydro-3-methyl-1H-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-Methylxanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-methyl-3,7(9)-dihydro-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-methyl-3,9-dihydro-1H-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-methyl-3,9-dihydro-2H,6H-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_62207?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_62207/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_62207/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_62207/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_62207/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_62207/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_62207/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_62207/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_tautomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_62207/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018036"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

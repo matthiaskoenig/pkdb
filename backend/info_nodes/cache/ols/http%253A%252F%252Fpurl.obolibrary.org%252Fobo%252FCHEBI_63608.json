@@ -1,0 +1,325 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_63608",
+  "lang": "en",
+  "description": [
+    "A monocarboxylic acid amide obtained by formal condensation of the carboxy group of 4,4-difluorocyclohexanecarboxylic acid and the primary amino group of (1<i>S</i>)-3-[(3-<i>exo</i>)-3-(3-isopropyl-5-methyl-4<em>H</em>-1,2,4-triazol-4-yl)-8-azabicyclo[3.2.1]oct-8-yl]-1-phenylpropylamine. An antiretroviral drug, it prevents the interaction of HIV-1 gp120 and chemokine receptor 5 (CCR5) necessary for CCR5-tropic HIV-1 to enter cells."
+  ],
+  "synonyms": [
+    "4,4-difluoro-N-{(1S)-3-[(3-exo)-3-(3-isopropyl-5-methyl-4H-1,2,4-triazol-4-yl)-8-azabicyclo[3.2.1]oct-8-yl]-1-phenylpropyl}cyclohexanecarboxamide",
+    "4,4-difluoro-N-{(1S)-3-[(3-exo)-3-(3-isopropyl-5-methyl-4H-1,2,4-triazol-4-yl)-8-azabicyclo[3.2.1]oct-8-yl]-1-phenylpropyl}cyclohexanecarboxamide",
+    "maraviroc",
+    "maravirocum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:376348-65-1",
+      "drugbank:DB04835",
+      "kegg.drug:D06670",
+      "pubmed:21134404",
+      "pubmed:21383098",
+      "pubmed:21393136",
+      "pubmed:21505306",
+      "pubmed:21595497",
+      "pubmed:21692669",
+      "pubmed:21987241",
+      "pubmed:22017448",
+      "pubmed:22034870",
+      "pubmed:22064539",
+      "pubmed:22090117",
+      "pubmed:22118500",
+      "pubmed:22174038",
+      "pubmed:22236118",
+      "pubmed:22247337",
+      "pubmed:24419064",
+      "pubmed:24651825",
+      "pubmed:24652492",
+      "pubmed:25017682",
+      "reaxys:10131963",
+      "wikipedia.en:Maraviroc"
+    ],
+    "generalized_empirical_formula": [
+      "C29H41F2N5O"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:63608"
+    ],
+    "inchi_key_string": [
+      "GSNHKUDZZFZSJB-QYOOZWMWSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C29H41F2N5O/c1-19(2)27-34-33-20(3)36(27)25-17-23-9-10-24(18-25)35(23)16-13-26(21-7-5-4-6-8-21)32-28(37)22-11-14-29(30,31)15-12-22/h4-8,19,22-26H,9-18H2,1-3H3,(H,32,37)/t23-,24+,25-,26-/m0/s1"
+    ],
+    "mass": [
+      "513.677"
+    ],
+    "monoisotopic_mass": [
+      "513.32792"
+    ],
+    "smiles_string": [
+      "Cc1nnc(C(C)C)n1[C@@H]1C[C@H]2CC[C@@H](C1)N2CC[C@H](NC(=O)C1CCC(F)(F)CC1)c1ccccc1"
+    ]
+  },
+  "label": "maraviroc",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_63608",
+  "obo_id": "CHEBI:63608",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "376348-65-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=376348-65-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB04835",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB04835"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D06670",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "21134404",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21134404/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21383098",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21383098/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21393136",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21393136/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21505306",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21505306/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21595497",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21595497/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21692669",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21692669/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21987241",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21987241/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22017448",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22017448/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22034870",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22034870/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22064539",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22064539/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22090117",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22090117/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22118500",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22118500/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22174038",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22174038/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22236118",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22236118/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22247337",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22247337/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24419064",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24419064/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24651825",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24651825/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24652492",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24652492/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25017682",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25017682/"
+    },
+    {
+      "database": "reaxys",
+      "id": "10131963",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Maraviroc",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4,4-difluoro-N-{(1S)-3-[(3-exo)-3-(3-isopropyl-5-methyl-4H-1,2,4-triazol-4-yl)-8-azabicyclo[3.2.1]oct-8-yl]-1-phenylpropyl}cyclohexanecarboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4,4-difluoro-N-{(1S)-3-[(3-exo)-3-(3-isopropyl-5-methyl-4H-1,2,4-triazol-4-yl)-8-azabicyclo[3.2.1]oct-8-yl]-1-phenylpropyl}cyclohexanecarboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "maraviroc",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "maraviroc",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "maravirocum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63608?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63608/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63608/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63608/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63608/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63608/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63608/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63608/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

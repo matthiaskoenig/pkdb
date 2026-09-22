@@ -1,0 +1,114 @@
+{
+  "iri": "http://purl.org/sig/ont/fma/fma7200",
+  "lang": "en",
+  "description": [
+    "Old definition: Organ with organ cavity which is continuous proximally with the stomach and distally with the large intestine. Examples: There is only one small intestine."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "FMAID": [
+      7200.0
+    ],
+    "definition": [
+      "Organ with organ cavity, each instance of which is proximally continuous_with some stomach; distally continuous_with some large intestine. Examples: There is only one stomach."
+    ],
+    "non-English equivalent": [
+      "Intestin grêle",
+      "Intestino pequeño",
+      "Intestinum tenue",
+      "Kleiner Darm"
+    ],
+    "preferred name": [
+      "Small intestine"
+    ],
+    "synonym": [
+      "Small bowel"
+    ]
+  },
+  "label": "Small intestine",
+  "ontology_name": "fma",
+  "ontology_prefix": "FMA",
+  "ontology_iri": "http://purl.org/sig/ont/fma.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": false,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "fma7200",
+  "obo_id": "fma7200",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/graph"
+    },
+    "arterial_supply": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Farterial_supply"
+    },
+    "bounded_by": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fbounded_by"
+    },
+    "constitutional_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fconstitutional_part"
+    },
+    "contained_in": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fcontained_in"
+    },
+    "continuous_distally_with": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fcontinuous_distally_with"
+    },
+    "continuous_proximally_with": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fcontinuous_proximally_with"
+    },
+    "continuous_with": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fcontinuous_with"
+    },
+    "distal_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fdistal_to"
+    },
+    "lymphatic_drainage": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Flymphatic_drainage"
+    },
+    "member_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fmember_of"
+    },
+    "nerve_supply": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fnerve_supply"
+    },
+    "proximal_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fproximal_to"
+    },
+    "regional_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fregional_part"
+    },
+    "regional_part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fregional_part_of"
+    },
+    "venous_drainage": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7200/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fvenous_drainage"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

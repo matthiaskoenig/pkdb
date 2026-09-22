@@ -1,0 +1,172 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C374",
+  "lang": "en",
+  "description": [
+    "A histamine H(2)-receptor antagonist.  Enhancing anti-tumor cell-mediated responses, cimetidine blocks histamine's ability to stimulate suppressor T lymphocyte activity and to inhibit natural killer (NK) cell activity and interleukin-2 production.  Cimetidine also may inhibit tumor growth by suppressing histamine's growth-factor activity and blocking histamine-induced stimulation of vascular endothelial growth factor (VEGF), a pro-angiogenic growth factor. (NCI04)"
+  ],
+  "synonyms": [
+    "CIMETIDINE",
+    "Cimetidine",
+    "Guanidine, N''-Cyano-N-Methyl-N'-(2-(((5-Methyl-1H-Imidazol-4-yl)Methyl)Thio)Ethyl)-",
+    "N-Cyano-N'-methyl-N''-[2-[[(5-methyl-1H-imidazol-4-yl)methyl]thio]ethyl]guanidine",
+    "Tagamet",
+    "cimetidine"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug usually used to treat stomach ulcers and heartburn. It is also commonly used in a regimen to prevent allergic reactions."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Gastrointestinal conditions; allergic reaction prevention; immune modulation"
+    ],
+    "CAS_Registry": [
+      "51481-61-9"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:3699"
+    ],
+    "Chemical_Formula": [
+      "C10H16N6S"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "GDC",
+      "HemOnc"
+    ],
+    "Display_Name": [
+      "Cimetidine"
+    ],
+    "FDA_UNII_Code": [
+      "80061L1WGD"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C87467"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C41020"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Cimetidine"
+    ],
+    "Maps_To": [
+      "Cimetidine"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "39185"
+    ],
+    "NSC Number": [
+      "335308"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "39185"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "39185"
+    ],
+    "Preferred_Name": [
+      "Cimetidine"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0008783"
+    ],
+    "code": [
+      "C374"
+    ]
+  },
+  "label": "Cimetidine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C374",
+  "obo_id": "NCIT:C374",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C176424",
+    "NCIT_C177537",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CIMETIDINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cimetidine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Guanidine, N''-Cyano-N-Methyl-N'-(2-(((5-Methyl-1H-Imidazol-4-yl)Methyl)Thio)Ethyl)-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "N-Cyano-N'-methyl-N''-[2-[[(5-methyl-1H-imidazol-4-yl)methyl]thio]ethyl]guanidine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Tagamet",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "cimetidine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C374?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C374/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C374/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C374/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C374/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C374/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C374/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

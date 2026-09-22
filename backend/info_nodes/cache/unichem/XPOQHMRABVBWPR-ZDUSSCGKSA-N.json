@@ -1,0 +1,1238 @@
+[
+  {
+    "src_id": "2",
+    "src_compound_id": "DB00625"
+  },
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:119486"
+  },
+  {
+    "src_id": "3",
+    "src_compound_id": "EFZ"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL223228"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "37762"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "64139"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "JE6H2O27P8"
+  },
+  {
+    "src_id": "5",
+    "src_compound_id": "EFZ"
+  },
+  {
+    "src_id": "49",
+    "src_compound_id": "PD003010"
+  },
+  {
+    "src_id": "50",
+    "src_compound_id": "AJEYAQ"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "1704"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "186543"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "42381"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0014763"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID9046029"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00000885"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00000893"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00000903"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00000912"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00000918"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00000939"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00001086"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00001087"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00001122"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00001758"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00001766"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002213"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002220"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002225"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002227"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002230"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002234"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002235"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002239"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002362"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002393"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002419"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002447"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00002448"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00004582"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00004585"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00004852"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00005000"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00005017"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00005018"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00005918"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00006154"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00006190"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00006208"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00011895"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00013520"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00013897"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00016718"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00017758"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00021463"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00023413"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00028327"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00031070"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00038220"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00038532"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00039741"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00042289"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00050895"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00053638"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00074581"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00075231"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00075907"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00084136"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00098293"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00100048"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00102960"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00110305"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00112047"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00115609"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00116116"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00116298"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00118898"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00121017"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00122538"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00127959"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00127972"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00135343"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00135369"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00135382"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00158405"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00158457"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00158470"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00158821"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00162097"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00162643"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00192595"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00192660"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00196599"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00196612"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00197613"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00197613"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00224458"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00234091"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00256828"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00260078"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00266058"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00280969"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00299091"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00302822"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00307502"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00314626"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00332306"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00335322"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00342355"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00344760"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00350272"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00357188"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00364793"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00365612"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00369941"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00386659"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00398996"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00399685"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00427297"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00428116"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00433056"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00442962"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00444379"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00454337"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00454337"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00457665"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00474435"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00476424"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00482963"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00483054"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00495326"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00523458"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00532168"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00533390"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00540449"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00543725"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00545558"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00549198"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00549198"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00556634"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00573001"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00615745"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00615810"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00615810"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00620438"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00624195"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00640887"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00643968"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00643968"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00697892"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00727597"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00730223"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00744809"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00752856"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00759070"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00775606"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00792324"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00802802"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00810303"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00822315"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00824421"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00828789"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00836212"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00862823"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00869557"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00870363"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00878306"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00903682"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00924898"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00936195"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00946595"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00951015"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00960570"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00964002"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00964171"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00966160"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00978068"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00978237"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00984152"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00992069"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00993031"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01011413"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01014481"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01040091"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01049685"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01075152"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01087814"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01095796"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01098526"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01127204"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01146873"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01147107"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01160120"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01173510"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01174914"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01187862"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01192035"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01194856"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01231555"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01241773"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01241773"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01254656"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01263015"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01268839"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01270802"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01271894"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01338883"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01340950"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01343225"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01352117"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01380080"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01435018"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01445223"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01451333"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01472380"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01489046"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01515813"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01516060"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01516970"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01565889"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01571414"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01585038"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01588002"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01618305"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01632345"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01632891"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01641016"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01641809"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01668147"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01690403"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01695954"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01704898"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01709084"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01714414"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01751555"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01778413"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01789879"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01805258"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01837277"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01878890"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01900015"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01903031"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01935830"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01978743"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01980342"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01989910"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02057796"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02164812"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02178592"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02226991"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02245022"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02253823"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02273765"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02283060"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02284035"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02284035"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02285374"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02302547"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02401256"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02415595"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02421289"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02447016"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02475915"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02489461"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02499874"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02547844"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02556268"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02631473"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02631473"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02632474"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02722421"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02750059"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02777229"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02832778"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02935075"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02945163"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03048422"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03122262"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03178084"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03249181"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03309566"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03532425"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03595709"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03762928"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03983239"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04022967"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04296695"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04303598"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04390334"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04424264"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04424264"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04459598"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04504045"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04513379"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04680091"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04973020"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05067439"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05076682"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05141422"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05330273"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05560360"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05789173"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05909644"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05995249"
+  },
+  {
+    "src_id": "84",
+    "src_compound_id": "Efavirenz"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "Molport-003-983-924"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "Molport-051-608-175"
+  },
+  {
+    "src_id": "34",
+    "src_compound_id": "989"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "2483"
+  }
+]

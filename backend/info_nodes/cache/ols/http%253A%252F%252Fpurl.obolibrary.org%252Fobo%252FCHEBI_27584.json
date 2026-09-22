@@ -1,0 +1,285 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_27584",
+  "lang": "en",
+  "description": [
+    "A pregnane-based steroidal hormone produced by the outer-section (zona glomerulosa) of the adrenal cortex in the adrenal gland, and acts on the distal tubules and collecting ducts of the kidney to cause the conservation of sodium, secretion of potassium, increased water retention, and increased blood pressure. The overall effect of aldosterone is to increase reabsorption of ions and water in the kidney."
+  ],
+  "synonyms": [
+    "(+)-aldosterone",
+    "(11beta)-11,21-dihydroxy-3,20-dioxopregn-4-en-18-al",
+    "11beta,21-Dihydroxy-3,20-dioxo-4-pregnen-18-al",
+    "11beta,21-dihydroxy-3,20-dioxopregn-4-en-18-al",
+    "11beta,21-dihydroxy-3,20-dioxopregn-4-en-18-al",
+    "ALDOSTERONE",
+    "Aldosterone",
+    "aldosterone"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:52-39-1",
+      "drugbank:DB04630",
+      "drugcentral:111",
+      "hmdb:HMDB0000037",
+      "kegg.compound:C01780",
+      "lincs.smallmolecule:LSM-42770",
+      "lipidmaps:LMST02030026",
+      "pdb-ccd:AS4",
+      "pubmed:10438974",
+      "reaxys:3224996",
+      "wikipedia.en:Aldosterone"
+    ],
+    "generalized_empirical_formula": [
+      "C21H28O5"
+    ],
+    "has_alternative_id": [
+      "CHEBI:22306",
+      "CHEBI:2563",
+      "CHEBI:40919"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:27584"
+    ],
+    "inchi_key_string": [
+      "PQSUYGKTWSAVDQ-ZVIOFETBSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H28O5/c1-20-7-6-13(24)8-12(20)2-3-14-15-4-5-16(18(26)10-22)21(15,11-23)9-17(25)19(14)20/h8,11,14-17,19,22,25H,2-7,9-10H2,1H3/t14-,15-,16+,17-,19+,20-,21+/m0/s1"
+    ],
+    "mass": [
+      "360.45"
+    ],
+    "monoisotopic_mass": [
+      "360.19367"
+    ],
+    "smiles_string": [
+      "[H][C@@]12CC[C@]([H])(C(=O)CO)[C@@]1(C=O)C[C@H](O)[C@@]1([H])[C@@]2([H])CCC2=CC(=O)CC[C@@]21C"
+    ]
+  },
+  "label": "aldosterone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_27584",
+  "obo_id": "CHEBI:27584",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "52-39-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=52-39-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB04630",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB04630"
+    },
+    {
+      "database": "drugcentral",
+      "id": "111",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/111"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0000037",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0000037"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C01780",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-42770",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "lipidmaps",
+      "id": "LMST02030026",
+      "description": "lipidmaps",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMST02030026"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "AS4",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10438974",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10438974/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3224996",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Aldosterone",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "11beta,21-dihydroxy-3,20-dioxopregn-4-en-18-al",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-aldosterone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(11beta)-11,21-dihydroxy-3,20-dioxopregn-4-en-18-al",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "11beta,21-Dihydroxy-3,20-dioxo-4-pregnen-18-al",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "11beta,21-dihydroxy-3,20-dioxopregn-4-en-18-al",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ALDOSTERONE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Aldosterone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "aldosterone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27584?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27584/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27584/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27584/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27584/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27584/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27584/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27584/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_parent_hydride": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27584/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018040"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

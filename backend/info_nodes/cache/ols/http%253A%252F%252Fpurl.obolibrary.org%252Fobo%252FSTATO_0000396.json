@@ -1,0 +1,71 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/STATO_0000396",
+  "lang": "en",
+  "description": [
+    "The geometric mean is defined as the nth root of the product of n numbers, i.e., for a set of numbers \\{x_i\\}_{i=1}^N, the geometric mean is defined as \\left(\\prod_{i=1}^N x_i\\right)^{1/N}."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "Python command": [
+      "http://docs.scipy.org/doc/scipy-0.13.0/reference/generated/scipy.stats.mstats.gmean.html"
+    ],
+    "R command": [
+      "http://personality-project.org/r/html/geometric.mean.html\n\nUsage: >geometric.mean(x,na.rm=TRUE)\n\nArguments: x\t, a vector or data.frame"
+    ],
+    "definition source": [
+      "adapted from:\nhttps://en.wikipedia.org/wiki/Mean#Geometric_mean_.28GM.29\nhttps://en.wikipedia.org/wiki/Geometric_mean"
+    ],
+    "example of usage": [
+      "The geometric mean of two numbers, say 2 and 8, is just the square root of their product; that is sqrt(2 x 8)=4."
+    ],
+    "has curation status": [
+      "http://purl.obolibrary.org/obo/IAO_0000122"
+    ],
+    "term editor": [
+      "Alejandra Gonzalez-Beltran",
+      "Orlaith Burke",
+      "Philippe Rocca-Serra"
+    ]
+  },
+  "label": "geometric mean",
+  "ontology_name": "stato",
+  "ontology_prefix": "STATO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/stato/stato.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "STATO_0000396",
+  "obo_id": "STATO:0000396",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000396?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000396/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000396/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000396/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000396/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000396/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/stato/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSTATO_0000396/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

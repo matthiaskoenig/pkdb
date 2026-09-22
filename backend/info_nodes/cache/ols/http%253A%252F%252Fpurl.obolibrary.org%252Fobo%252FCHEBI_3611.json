@@ -1,0 +1,389 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3611",
+  "lang": "en",
+  "description": [
+    "A benzodiazepine that is 3<em>H</em>-1,4-benzodiazepine 4-oxide substituted by a chloro group at position 7, a phenyl group at position 5 and a methylamino group at position 2."
+  ],
+  "synonyms": [
+    "7-chloro-2-methylamino-5-phenyl-3H-1,4-benzodiazepin-4-oxide",
+    "7-chloro-N-methyl-5-phenyl-3H-1,4-benzodiazepin-2-amine 4-oxide",
+    "7-chloro-N-methyl-5-phenyl-3H-1,4-benzodiazepin-2-amine 4-oxide",
+    "CDP",
+    "Helogaphen",
+    "Libritabs",
+    "Multum",
+    "Risolid",
+    "Silibrin",
+    "Tropium",
+    "chlordiazepoxide base",
+    "chlordiazepoxide",
+    "chlordiazepoxidum",
+    "clopoxide",
+    "methaminodiazepoxide"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:58-25-3",
+      "drugbank:DB00475",
+      "drugcentral:594",
+      "hmdb:HMDB0014618",
+      "kegg.drug:D00267",
+      "patent:MY6500040",
+      "patent:US2893992",
+      "patent:US3122474",
+      "pubmed:17049372",
+      "pubmed:19643124",
+      "pubmed:9632243",
+      "reaxys:550356",
+      "wikipedia.en:Chlordiazepoxide"
+    ],
+    "generalized_empirical_formula": [
+      "C16H14ClN3O"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3611"
+    ],
+    "inchi_key_string": [
+      "ANTSCNMPPGJYLG-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C16H14ClN3O/c1-18-15-10-20(21)16(11-5-3-2-4-6-11)13-9-12(17)7-8-14(13)19-15/h2-9H,10H2,1H3,(H,18,19)"
+    ],
+    "mass": [
+      "299.761"
+    ],
+    "monoisotopic_mass": [
+      "299.08254"
+    ],
+    "smiles_string": [
+      "CNC1=Nc2ccc(Cl)cc2C(c2ccccc2)=N(=O)C1"
+    ]
+  },
+  "label": "chlordiazepoxide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3611",
+  "obo_id": "CHEBI:3611",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "58-25-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=58-25-3"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00475",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00475"
+    },
+    {
+      "database": "drugcentral",
+      "id": "594",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/594"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014618",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014618"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00267",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "MY6500040",
+      "description": "patent",
+      "url": "https://www.google.com/patents/MY6500040"
+    },
+    {
+      "database": "patent",
+      "id": "US2893992",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2893992"
+    },
+    {
+      "database": "patent",
+      "id": "US3122474",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3122474"
+    },
+    {
+      "database": "pubmed",
+      "id": "17049372",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17049372/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19643124",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19643124/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9632243",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9632243/"
+    },
+    {
+      "database": "reaxys",
+      "id": "550356",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Chlordiazepoxide",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "7-chloro-N-methyl-5-phenyl-3H-1,4-benzodiazepin-2-amine 4-oxide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7-chloro-2-methylamino-5-phenyl-3H-1,4-benzodiazepin-4-oxide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7-chloro-N-methyl-5-phenyl-3H-1,4-benzodiazepin-2-amine 4-oxide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CDP",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Helogaphen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Libritabs",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Multum",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Risolid",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Silibrin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tropium",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlordiazepoxide base",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlordiazepoxide",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlordiazepoxidum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clopoxide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methaminodiazepoxide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3611?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3611/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3611/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3611/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3611/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3611/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3611/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3611/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

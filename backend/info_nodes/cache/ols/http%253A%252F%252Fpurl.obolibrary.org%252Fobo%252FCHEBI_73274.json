@@ -1,0 +1,319 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_73274",
+  "lang": "en",
+  "description": [
+    "A <em>C</em>-glycosyl compound that is used (in its hemihydrate form) for treatment of type II diabetes via inhibition of sodium-glucose transport protein subtype 2."
+  ],
+  "synonyms": [
+    "(1S)-1,5-anhydro-1-(3-{[5-(4-fluorophenyl)-2-thienyl]methyl}-4-methylphenyl)-D-glucitol",
+    "(1S)-1,5-anhydro-1-(3-{[5-(4-fluorophenyl)-2-thienyl]methyl}-4-methylphenyl)-D-glucitol",
+    "1-(Glucopyranosyl)-4-methyl-3-(5-(4-fluorophenyl)-2-thienylmethyl)benzene"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:842133-18-0",
+      "drugcentral:4758",
+      "patent:US2008146515",
+      "patent:US2010099883",
+      "patent:US2012289694",
+      "patent:WO2009035969",
+      "patent:WO2011142478",
+      "pubmed:20690635",
+      "pubmed:21457428",
+      "pubmed:22226086",
+      "pubmed:22355316",
+      "pubmed:22385274",
+      "pubmed:22492586",
+      "pubmed:22548646",
+      "pubmed:22621689",
+      "pubmed:22632452",
+      "pubmed:23087012",
+      "pubmed:23279307",
+      "pubmed:23370138",
+      "pubmed:23412078",
+      "pubmed:23464594",
+      "pubmed:23563279",
+      "pubmed:23564919",
+      "pubmed:23585665",
+      "pubmed:23590413",
+      "reaxys:18362681",
+      "wikipedia.en:Canagliflozin"
+    ],
+    "generalized_empirical_formula": [
+      "C24H25FO5S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:73274"
+    ],
+    "inchi_key_string": [
+      "XTNGUQKDFGDXSJ-ZXGKGEBGSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C24H25FO5S/c1-13-2-3-15(24-23(29)22(28)21(27)19(12-26)30-24)10-16(13)11-18-8-9-20(31-18)14-4-6-17(25)7-5-14/h2-10,19,21-24,26-29H,11-12H2,1H3/t19-,21-,22+,23-,24+/m1/s1"
+    ],
+    "mass": [
+      "444.524"
+    ],
+    "monoisotopic_mass": [
+      "444.14067"
+    ],
+    "smiles_string": [
+      "[H][C@@]1(c2ccc(C)c(Cc3ccc(-c4ccc(F)cc4)s3)c2)O[C@H](CO)[C@@H](O)[C@H](O)[C@H]1O"
+    ]
+  },
+  "label": "canagliflozin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_73274",
+  "obo_id": "CHEBI:73274",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "842133-18-0",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=842133-18-0"
+    },
+    {
+      "database": "drugcentral",
+      "id": "4758",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/4758"
+    },
+    {
+      "database": "patent",
+      "id": "US2008146515",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2008146515"
+    },
+    {
+      "database": "patent",
+      "id": "US2010099883",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2010099883"
+    },
+    {
+      "database": "patent",
+      "id": "US2012289694",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2012289694"
+    },
+    {
+      "database": "patent",
+      "id": "WO2009035969",
+      "description": "patent",
+      "url": "https://www.google.com/patents/WO2009035969"
+    },
+    {
+      "database": "patent",
+      "id": "WO2011142478",
+      "description": "patent",
+      "url": "https://www.google.com/patents/WO2011142478"
+    },
+    {
+      "database": "pubmed",
+      "id": "20690635",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20690635/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21457428",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21457428/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22226086",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22226086/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22355316",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22355316/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22385274",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22385274/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22492586",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22492586/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22548646",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22548646/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22621689",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22621689/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22632452",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22632452/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23087012",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23087012/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23279307",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23279307/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23370138",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23370138/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23412078",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23412078/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23464594",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23464594/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23563279",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23563279/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23564919",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23564919/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23585665",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23585665/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23590413",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23590413/"
+    },
+    {
+      "database": "reaxys",
+      "id": "18362681",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Canagliflozin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(1S)-1,5-anhydro-1-(3-{[5-(4-fluorophenyl)-2-thienyl]methyl}-4-methylphenyl)-D-glucitol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S)-1,5-anhydro-1-(3-{[5-(4-fluorophenyl)-2-thienyl]methyl}-4-methylphenyl)-D-glucitol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(Glucopyranosyl)-4-methyl-3-(5-(4-fluorophenyl)-2-thienylmethyl)benzene",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_73274?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_73274/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_73274/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_73274/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_73274/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_73274/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_73274/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_73274/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

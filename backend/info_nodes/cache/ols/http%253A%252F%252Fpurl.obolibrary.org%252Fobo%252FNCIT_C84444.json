@@ -1,0 +1,145 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C84444",
+  "lang": "en",
+  "description": [
+    "A term referring to fatty replacement of the hepatic parenchyma which is not related to alcohol use."
+  ],
+  "synonyms": [
+    "MASLD",
+    "Metabolic Dysfunction-Associated Steatotic Liver Disease",
+    "NAFLD - Nonalcoholic Fatty Liver Disease",
+    "NAFLD",
+    "Non-Alcoholic Fatty Liver Disease",
+    "Nonalcoholic Fatty Liver Disease"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CPTAC",
+      "CTRP",
+      "Cellosaurus",
+      "GDC"
+    ],
+    "Display_Name": [
+      "Metabolic Dysfunction-Associated Steatotic Liver Disease"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C16457",
+      "http://purl.obolibrary.org/obo/NCIT_C17103"
+    ],
+    "Maps_To": [
+      "Nonalcoholic Fatty Liver Disease"
+    ],
+    "Preferred_Name": [
+      "Metabolic Dysfunction-Associated Steatotic Liver Disease"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C0400966"
+    ],
+    "code": [
+      "C84444"
+    ]
+  },
+  "label": "Metabolic Dysfunction-Associated Steatotic Liver Disease",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C84444",
+  "obo_id": "NCIT:C84444",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118168",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C157528",
+    "NCIT_C157529",
+    "NCIT_C157711",
+    "NCIT_C165258",
+    "NCIT_C177537"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "MASLD",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Metabolic Dysfunction-Associated Steatotic Liver Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "NAFLD - Nonalcoholic Fatty Liver Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "NAFLD",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Non-Alcoholic Fatty Liver Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Nonalcoholic Fatty Liver Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84444?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84444/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84444/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84444/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84444/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84444/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84444/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84444/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84444/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84444/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84444/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

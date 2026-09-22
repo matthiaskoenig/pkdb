@@ -1,0 +1,312 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6931",
+  "lang": "en",
+  "description": [
+    "An imidazobenzodiazepine that is 4<em>H</em>-imidazo[1,5-<em>a</em>][1,4]benzodiazepine which is substituted by a methyl, 2-fluorophenyl and chloro groups at positions 1, 6 and 8, respectively."
+  ],
+  "synonyms": [
+    "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepine",
+    "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepine",
+    "Buccolam",
+    "Dormicum",
+    "mezolam",
+    "midazolam",
+    "midazolamum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:59467-70-8",
+      "drugbank:DB00683",
+      "drugcentral:1802",
+      "hmdb:HMDB0014821",
+      "kegg.compound:C07524",
+      "kegg.drug:D00550",
+      "lincs.smallmolecule:LSM-5200",
+      "metacyc.compound:CPD-20500",
+      "pdb-ccd:08J",
+      "pubmed:1832310",
+      "pubmed:26032507",
+      "pubmed:28706559",
+      "pubmed:29516686",
+      "pubmed:30076807",
+      "pubmed:30113394",
+      "pubmed:30157038",
+      "reaxys:625572",
+      "wikipedia.en:Midazolam"
+    ],
+    "generalized_empirical_formula": [
+      "C18H13ClFN3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6931"
+    ],
+    "inchi_key_string": [
+      "DDLIGBOFAVUZHB-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C18H13ClFN3/c1-11-21-9-13-10-22-18(14-4-2-3-5-16(14)20)15-8-12(19)6-7-17(15)23(11)13/h2-9H,10H2,1H3"
+    ],
+    "mass": [
+      "325.774"
+    ],
+    "monoisotopic_mass": [
+      "325.0782"
+    ],
+    "smiles_string": [
+      "Cc1ncc2n1-c1ccc(Cl)cc1C(c1ccccc1F)=NC2"
+    ]
+  },
+  "label": "midazolam",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6931",
+  "obo_id": "CHEBI:6931",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "59467-70-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=59467-70-8"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00683",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00683"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1802",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1802"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014821",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014821"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07524",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00550",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5200",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-20500",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "08J",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "1832310",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1832310/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26032507",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26032507/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28706559",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28706559/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29516686",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29516686/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30076807",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30076807/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30113394",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30113394/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30157038",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30157038/"
+    },
+    {
+      "database": "reaxys",
+      "id": "625572",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Midazolam",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Buccolam",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dormicum",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mezolam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "midazolam",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "midazolamum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

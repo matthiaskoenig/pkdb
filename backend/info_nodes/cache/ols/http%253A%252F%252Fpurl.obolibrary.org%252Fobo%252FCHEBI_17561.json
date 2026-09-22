@@ -1,0 +1,481 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_17561",
+  "lang": "en",
+  "description": [
+    "An optically active form of cysteine having <small>L</small>-configuration."
+  ],
+  "synonyms": [
+    "(2R)-2-amino-3-mercaptopropanoic acid",
+    "(2R)-2-amino-3-sulfanylpropanoic acid",
+    "(R)-2-amino-3-mercaptopropanoic acid",
+    "C",
+    "CYSTEINE",
+    "CYSTEINE",
+    "Cys",
+    "E 920",
+    "E-920",
+    "E920",
+    "FREE CYSTEINE",
+    "L-2-Amino-3-mercaptopropionic acid",
+    "L-Cystein",
+    "L-Cysteine",
+    "L-Cysteine",
+    "L-Zystein",
+    "L-cysteine",
+    "L-cysteine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:52-90-4",
+      "drugbank:DB00151",
+      "drugcentral:769",
+      "ecmdb:ECMDB00574",
+      "gmelin:49991",
+      "hmdb:HMDB0000574",
+      "kegg.compound:C00097",
+      "kegg.drug:D00026",
+      "knapsack:C00001351",
+      "metacyc.compound:CYS",
+      "pdb-ccd:CYS",
+      "pubmed:11732994",
+      "pubmed:13761469",
+      "pubmed:22735334",
+      "reaxys:1721408",
+      "wikipedia.en:Cysteine",
+      "ymdb:YMDB00046"
+    ],
+    "generalized_empirical_formula": [
+      "C3H7NO2S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:13095",
+      "CHEBI:21261",
+      "CHEBI:41227",
+      "CHEBI:41700",
+      "CHEBI:41768",
+      "CHEBI:41781",
+      "CHEBI:41811",
+      "CHEBI:6207"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:17561"
+    ],
+    "inchi_key_string": [
+      "XUJNEKJLAYXESH-REOHCLBHSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C3H7NO2S/c4-2(1-7)3(5)6/h2,7H,1,4H2,(H,5,6)/t2-/m0/s1"
+    ],
+    "mass": [
+      "121.161"
+    ],
+    "monoisotopic_mass": [
+      "121.01975"
+    ],
+    "smiles_string": [
+      "N[C@@H](CS)C(=O)O"
+    ]
+  },
+  "label": "L-cysteine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_17561",
+  "obo_id": "CHEBI:17561",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "52-90-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=52-90-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00151",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00151"
+    },
+    {
+      "database": "drugcentral",
+      "id": "769",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/769"
+    },
+    {
+      "database": "ecmdb",
+      "id": "ECMDB00574",
+      "description": "ecmdb",
+      "url": "http://ecmdb.ca/compounds/ECMDB00574"
+    },
+    {
+      "database": "gmelin",
+      "id": "49991",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0000574",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0000574"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00097",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00026",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00001351",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00001351"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CYS",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "CYS",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11732994",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11732994/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13761469",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13761469/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22735334",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22735334/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1721408",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Cysteine",
+      "description": "wikipedia.en",
+      "url": null
+    },
+    {
+      "database": "ymdb",
+      "id": "YMDB00046",
+      "description": "ymdb",
+      "url": "http://www.ymdb.ca/compounds/YMDB00046"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "CYSTEINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-Cysteine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-cysteine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2R)-2-amino-3-mercaptopropanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "jcbn",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2R)-2-amino-3-sulfanylpropanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-2-amino-3-mercaptopropanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "C",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CYSTEINE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cys",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E 920",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E-920",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E920",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "FREE CYSTEINE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-2-Amino-3-mercaptopropionic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-Cystein",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-Cysteine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-Zystein",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-cysteine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17561?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17561/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17561/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17561/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17561/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17561/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17561/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17561/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17561/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17561/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "is_tautomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17561/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018036"
+    },
+    "is_enantiomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17561/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018039"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

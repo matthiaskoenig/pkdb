@@ -1,0 +1,270 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_48390",
+  "lang": "en",
+  "description": [
+    "A secondary amino compound that is (1<i>R</i>)-1-(naphthalen-1-yl)ethanamine in which one of the hydrogens attached to the nitrogen is substituted by a 3-[3-(trifluoromethyl)phenyl]propyl group."
+  ],
+  "synonyms": [
+    "(R)-alpha-methyl-N-[3-[3-(trifluoromethyl)phenyl]propyl]-1-naphthalenemethane amine",
+    "CNC",
+    "Mimpara",
+    "N-((1R)-1-(Naphthalen-1-yl)ethyl)-3-(3-(trifluoromethyl)phenyl)propan-1-amine",
+    "N-[(1R)-1-(1-naphthyl)ethyl]-3-[3-(trifluoromethyl)phenyl]propan-1-amine",
+    "N-[(1R)-1-(1-naphthyl)ethyl]-3-[3-(trifluoromethyl)phenyl]propan-1-amine",
+    "cinacalcet"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:226256-56-0",
+      "drugbank:DB01012",
+      "drugcentral:647",
+      "kegg.drug:D03504",
+      "lincs.smallmolecule:LSM-5815",
+      "patent:US2007060645",
+      "patent:US6011068",
+      "patent:US6211244",
+      "pubmed:16680561",
+      "pubmed:17652181",
+      "reaxys:10191346",
+      "wikipedia.en:Cinacalcet"
+    ],
+    "generalized_empirical_formula": [
+      "C22H22F3N"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:48390"
+    ],
+    "inchi_key_string": [
+      "VDHAWDNDOKGFTD-MRXNPFEDSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C22H22F3N/c1-16(20-13-5-10-18-9-2-3-12-21(18)20)26-14-6-8-17-7-4-11-19(15-17)22(23,24)25/h2-5,7,9-13,15-16,26H,6,8,14H2,1H3/t16-/m1/s1"
+    ],
+    "mass": [
+      "357.419"
+    ],
+    "monoisotopic_mass": [
+      "357.17043"
+    ],
+    "smiles_string": [
+      "C[C@@H](NCCCc1cccc(C(F)(F)F)c1)c1cccc2ccccc12"
+    ]
+  },
+  "label": "cinacalcet",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_48390",
+  "obo_id": "CHEBI:48390",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "226256-56-0",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=226256-56-0"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01012",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01012"
+    },
+    {
+      "database": "drugcentral",
+      "id": "647",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/647"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D03504",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5815",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US2007060645",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2007060645"
+    },
+    {
+      "database": "patent",
+      "id": "US6011068",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US6011068"
+    },
+    {
+      "database": "patent",
+      "id": "US6211244",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US6211244"
+    },
+    {
+      "database": "pubmed",
+      "id": "16680561",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16680561/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17652181",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17652181/"
+    },
+    {
+      "database": "reaxys",
+      "id": "10191346",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Cinacalcet",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-[(1R)-1-(1-naphthyl)ethyl]-3-[3-(trifluoromethyl)phenyl]propan-1-amine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-alpha-methyl-N-[3-[3-(trifluoromethyl)phenyl]propyl]-1-naphthalenemethane amine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "patent",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CNC",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "patent",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mimpara",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-((1R)-1-(Naphthalen-1-yl)ethyl)-3-(3-(trifluoromethyl)phenyl)propan-1-amine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-[(1R)-1-(1-naphthyl)ethyl]-3-[3-(trifluoromethyl)phenyl]propan-1-amine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cinacalcet",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48390?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48390/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48390/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48390/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48390/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48390/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48390/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48390/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

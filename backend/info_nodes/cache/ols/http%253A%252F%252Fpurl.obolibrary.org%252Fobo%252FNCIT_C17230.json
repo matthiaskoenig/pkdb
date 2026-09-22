@@ -1,0 +1,195 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C17230",
+  "lang": "en",
+  "description": [
+    "The use of high-frequency sound waves to generate images of the body."
+  ],
+  "synonyms": [
+    "2-Dimensional Grayscale Ultrasound Imaging",
+    "2-Dimensional Ultrasound Imaging",
+    "2D-US",
+    "ULTRASOUND",
+    "US",
+    "Ultrasonography",
+    "Ultrasound Imaging",
+    "Ultrasound Test",
+    "Ultrasound",
+    "Ultrasound, Medical",
+    "ultrasonography",
+    "ultrasound"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A procedure in which high-energy sound waves are bounced off internal tissues or organs and make echoes. The echo patterns are shown on the screen of an ultrasound machine, forming a picture of body tissues called a sonogram.",
+      "A technique in which high-frequency sound waves are bounced off internal organs and the echo pattern is converted into a 2 dimensional picture of the structures beneath the transducer."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CTRP",
+      "GDC",
+      "NICHD",
+      "OORO"
+    ],
+    "Display_Name": [
+      "Ultrasonography"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C17369"
+    ],
+    "Legacy Concept Name": [
+      "Ultrasound_Imaging"
+    ],
+    "Maps_To": [
+      "Ultrasound"
+    ],
+    "Preferred_Name": [
+      "Ultrasound Imaging"
+    ],
+    "Semantic_Type": [
+      "Health Care Activity"
+    ],
+    "UMLS_CUI": [
+      "C0041618"
+    ],
+    "code": [
+      "C17230"
+    ]
+  },
+  "label": "Ultrasound Imaging",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C17230",
+  "obo_id": "NCIT:C17230",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118169",
+    "NCIT_C157711",
+    "NCIT_C177537",
+    "NCIT_C192234",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C85492",
+    "NCIT_C89506",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "2-Dimensional Grayscale Ultrasound Imaging",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "2-Dimensional Ultrasound Imaging",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "2D-US",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ULTRASOUND",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "US",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ultrasonography",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ultrasound Imaging",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ultrasound Test",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ultrasound",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ultrasound, Medical",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ultrasonography",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ultrasound",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17230?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17230/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17230/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17230/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17230/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17230/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17230/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17230/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17230/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17230/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17230/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

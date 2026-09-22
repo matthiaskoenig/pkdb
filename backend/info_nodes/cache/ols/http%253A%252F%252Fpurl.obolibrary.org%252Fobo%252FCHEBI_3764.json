@@ -1,0 +1,311 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3764",
+  "lang": "en",
+  "description": [
+    "A member of the class of imidazoles that is 1<em>H</em>-imidazole in which the hydrogen attached to a nitrogen is replaced by a monochlorotrityl group."
+  ],
+  "synonyms": [
+    "1-((2-Chlorophenyl)diphenylmethyl)-1H-imidazole",
+    "1-(alpha-(2-Chlorophenyl)benzhydryl)imidazole",
+    "1-(o-Chloro-alpha,alpha-diphenylbenzyl)imidazole",
+    "1-(o-Chlorotrityl)imidazole",
+    "1-[(2-chlorophenyl)(diphenyl)methyl]-1H-imidazole",
+    "1-[(2-chlorophenyl)(diphenyl)methyl]-1H-imidazole",
+    "Clotrimazole",
+    "Lotrimin (TN)",
+    "Mycelex (TN)"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:23593-75-1",
+      "drugbank:DB00257",
+      "drugcentral:719",
+      "hmdb:HMDB0001922",
+      "kegg.compound:C06922",
+      "kegg.drug:D00282",
+      "lincs.smallmolecule:LSM-5341",
+      "pdb-ccd:CL6",
+      "pubmed:18728240",
+      "pubmed:24892421",
+      "reaxys:622318",
+      "wikipedia.en:Clotrimazole"
+    ],
+    "generalized_empirical_formula": [
+      "C22H17ClN2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3764"
+    ],
+    "inchi_key_string": [
+      "VNFPBHJOKIVQEB-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C22H17ClN2/c23-21-14-8-7-13-20(21)22(25-16-15-24-17-25,18-9-3-1-4-10-18)19-11-5-2-6-12-19/h1-17H"
+    ],
+    "mass": [
+      "344.845"
+    ],
+    "monoisotopic_mass": [
+      "344.10803"
+    ],
+    "smiles_string": [
+      "Clc1ccccc1C(c1ccccc1)(c1ccccc1)n1ccnc1"
+    ]
+  },
+  "label": "clotrimazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3764",
+  "obo_id": "CHEBI:3764",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "23593-75-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=23593-75-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00257",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00257"
+    },
+    {
+      "database": "drugcentral",
+      "id": "719",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/719"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001922",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001922"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06922",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00282",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5341",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "CL6",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "18728240",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18728240/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24892421",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24892421/"
+    },
+    {
+      "database": "reaxys",
+      "id": "622318",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Clotrimazole",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1-[(2-chlorophenyl)(diphenyl)methyl]-1H-imidazole",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-((2-Chlorophenyl)diphenylmethyl)-1H-imidazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(alpha-(2-Chlorophenyl)benzhydryl)imidazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(o-Chloro-alpha,alpha-diphenylbenzyl)imidazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(o-Chlorotrityl)imidazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-[(2-chlorophenyl)(diphenyl)methyl]-1H-imidazole",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Clotrimazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Clotrimazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lotrimin (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mycelex (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3764?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3764/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3764/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3764/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3764/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3764/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3764/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3764/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

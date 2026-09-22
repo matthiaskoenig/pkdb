@@ -1,0 +1,90 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHMO_0000701",
+  "lang": "en",
+  "description": [
+    "A method where a sample mixture is first separated by liquid chromatography before being ionised and characterised by mass-to-charge ratio and relative abundance using two mass spectrometers in series."
+  ],
+  "synonyms": [
+    "LC-MS-MS",
+    "LC-MS/MS",
+    "LC-MS2",
+    "LC-MSMS",
+    "LC/MS/MS",
+    "LCMSMS",
+    "liquid chromatography tandem mass spectrometry",
+    "liquid chromatography tandem mass spectroscopy",
+    "liquid chromatography-tandem mass spectroscopy"
+  ],
+  "annotation": {
+    "alternative label": [
+      "LC-MS-MS",
+      "LC-MS/MS",
+      "LC-MS2",
+      "LC-MSMS",
+      "LC/MS/MS",
+      "LCMSMS",
+      "liquid chromatography tandem mass spectrometry",
+      "liquid chromatography tandem mass spectroscopy",
+      "liquid chromatography-tandem mass spectroscopy"
+    ],
+    "definition source": [
+      "CHMO"
+    ],
+    "id": [
+      "CHMO:0000701"
+    ]
+  },
+  "label": "liquid chromatography-tandem mass spectrometry",
+  "ontology_name": "chmo",
+  "ontology_prefix": "CHMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHMO_0000701",
+  "obo_id": "CHMO:0000701",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000701?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000701/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000701/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000701/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000701/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000701/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000701/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000701/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000701/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000701/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000701/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

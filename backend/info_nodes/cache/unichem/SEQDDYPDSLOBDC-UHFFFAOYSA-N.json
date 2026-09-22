@@ -1,0 +1,86 @@
+[
+  {
+    "src_id": "2",
+    "src_compound_id": "DB00231"
+  },
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:9435"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL967"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "29398512"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "29463"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "5391"
+  },
+  {
+    "src_id": "4",
+    "src_compound_id": "7300"
+  },
+  {
+    "src_id": "49",
+    "src_compound_id": "PD000427"
+  },
+  {
+    "src_id": "50",
+    "src_compound_id": "ZZZAUS"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "CHB1QD2QSS"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0014376"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID8021309"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00245661"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00465972"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00940550"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00940550"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02153788"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02374567"
+  },
+  {
+    "src_id": "84",
+    "src_compound_id": "Temazepam"
+  },
+  {
+    "src_id": "34",
+    "src_compound_id": "2585"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "50408032"
+  }
+]

@@ -1,0 +1,624 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_27999",
+  "lang": "en",
+  "description": [
+    "An <em>N</em>-sulfonylurea that consists of 1-butylurea having a tosyl group attached at the 3-position."
+  ],
+  "synonyms": [
+    "1-Butyl-3-(p-methylphenylsulfonyl)urea",
+    "1-Butyl-3-(p-tolylsulfonyl)urea",
+    "1-Butyl-3-tosylurea",
+    "1-p-Toluenesulfonyl-3-butylurea",
+    "3-(p-Tolyl-4-sulfonyl)-1-butylurea",
+    "N-(4-Methylbenzenesulfonyl)-N'-butylurea",
+    "N-(4-Methylphenylsulfonyl)-N'-butylurea",
+    "N-(Sulfonyl-p-methylbenzene)-N'-N-butylurea",
+    "N-(p-Methylbenzenesulfonyl)-N'-butylurea",
+    "N-Butyl-N'-(4-methylphenylsulfonyl)urea",
+    "N-Butyl-N'-(p-tolylsulfonyl)urea",
+    "N-Butyl-N'-p-toluenesulfonylurea",
+    "N-[(butylamino)carbonyl]-4-methylbenzenesulfonamide",
+    "N-[(butylamino)carbonyl]-4-methylbenzenesulfonamide",
+    "N-n-Butyl-N'-tosylurea",
+    "Orinase (TN)",
+    "Tolbutamide",
+    "Tolylsulfonylbutylurea",
+    "tolbutamida",
+    "tolbutamide",
+    "tolbutamidum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:64-77-7",
+      "drugbank:DB01124",
+      "drugcentral:2696",
+      "kegg.compound:C07148",
+      "kegg.drug:D00380",
+      "lincs.smallmolecule:LSM-3907",
+      "patent:DE1066575",
+      "patent:GB808071",
+      "patent:US2968158",
+      "pubmed:11835228",
+      "pubmed:11840346",
+      "pubmed:11911494",
+      "pubmed:12042355",
+      "pubmed:12355256",
+      "pubmed:15207658",
+      "pubmed:15317941",
+      "pubmed:15620874",
+      "pubmed:15655519",
+      "pubmed:16290322",
+      "pubmed:16426753",
+      "pubmed:19059420",
+      "pubmed:20880646",
+      "pubmed:21178111",
+      "pubmed:21193530",
+      "pubmed:21471135",
+      "pubmed:21535124",
+      "pubmed:21712613",
+      "pubmed:21757329",
+      "pubmed:21827497",
+      "pubmed:21831467",
+      "pubmed:22028182",
+      "pubmed:22079696",
+      "reaxys:1984428",
+      "wikipedia.en:Tolbutamide"
+    ],
+    "generalized_empirical_formula": [
+      "C12H18N2O3S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:27019",
+      "CHEBI:9616"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:27999"
+    ],
+    "inchi_key_string": [
+      "JLRGJRBPOGGCBT-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C12H18N2O3S/c1-3-4-9-13-12(15)14-18(16,17)11-7-5-10(2)6-8-11/h5-8H,3-4,9H2,1-2H3,(H2,13,14,15)"
+    ],
+    "mass": [
+      "270.354"
+    ],
+    "monoisotopic_mass": [
+      "270.10381"
+    ],
+    "smiles_string": [
+      "CCCCNC(=O)NS(=O)(=O)c1ccc(C)cc1"
+    ]
+  },
+  "label": "tolbutamide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_27999",
+  "obo_id": "CHEBI:27999",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "64-77-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=64-77-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01124",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01124"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2696",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2696"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07148",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00380",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3907",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "DE1066575",
+      "description": "patent",
+      "url": "https://www.google.com/patents/DE1066575"
+    },
+    {
+      "database": "patent",
+      "id": "GB808071",
+      "description": "patent",
+      "url": "https://www.google.com/patents/GB808071"
+    },
+    {
+      "database": "patent",
+      "id": "US2968158",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2968158"
+    },
+    {
+      "database": "pubmed",
+      "id": "11835228",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11835228/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11840346",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11840346/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11911494",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11911494/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12042355",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12042355/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12355256",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12355256/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15207658",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15207658/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15317941",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15317941/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15620874",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15620874/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15655519",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15655519/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16290322",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16290322/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16426753",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16426753/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19059420",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19059420/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20880646",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20880646/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21178111",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21178111/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21193530",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21193530/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21471135",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21471135/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21535124",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21535124/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21712613",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21712613/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21757329",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21757329/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21827497",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21827497/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21831467",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21831467/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22028182",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22028182/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22079696",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22079696/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1984428",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Tolbutamide",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-[(butylamino)carbonyl]-4-methylbenzenesulfonamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Butyl-3-(p-methylphenylsulfonyl)urea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Butyl-3-(p-tolylsulfonyl)urea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Butyl-3-tosylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-p-Toluenesulfonyl-3-butylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-(p-Tolyl-4-sulfonyl)-1-butylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(4-Methylbenzenesulfonyl)-N'-butylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(4-Methylphenylsulfonyl)-N'-butylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(Sulfonyl-p-methylbenzene)-N'-N-butylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(p-Methylbenzenesulfonyl)-N'-butylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-Butyl-N'-(4-methylphenylsulfonyl)urea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-Butyl-N'-(p-tolylsulfonyl)urea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-Butyl-N'-p-toluenesulfonylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-[(butylamino)carbonyl]-4-methylbenzenesulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-n-Butyl-N'-tosylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Orinase (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tolbutamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tolylsulfonylbutylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tolbutamida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tolbutamide",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tolbutamidum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27999?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27999/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27999/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27999/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27999/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27999/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27999/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27999/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

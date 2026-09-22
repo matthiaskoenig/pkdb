@@ -1,0 +1,226 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_135323",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Gestodene",
+    "SH B 331",
+    "SH-B-331",
+    "gestinol",
+    "gestodeno"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:60282-87-3",
+      "drugcentral:1291",
+      "hmdb:HMDB0015668",
+      "pubmed:16248836",
+      "pubmed:18426954",
+      "pubmed:18834112",
+      "pubmed:20014752",
+      "pubmed:20185316",
+      "pubmed:23956101",
+      "pubmed:37468498"
+    ],
+    "generalized_empirical_formula": [
+      "C21H26O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:135323"
+    ],
+    "inchi_key_string": [
+      "SIGSPDASOTUPFS-XUDSTZEESA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H26O2/c1-3-20-11-9-17-16-8-6-15(22)13-14(16)5-7-18(17)19(20)10-12-21(20,23)4-2/h2,10,12-13,16-19,23H,3,5-9,11H2,1H3/t16-,17+,18+,19-,20-,21-/m0/s1"
+    ],
+    "mass": [
+      "310.437"
+    ],
+    "monoisotopic_mass": [
+      "310.19328"
+    ],
+    "smiles_string": [
+      "[H][C@@]12C=C[C@@](O)(C#C)[C@@]1(CC)CC[C@@]1([H])[C@@]2([H])CCC2=CC(=O)CC[C@@]21[H]"
+    ]
+  },
+  "label": "gestodene",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_135323",
+  "obo_id": "CHEBI:135323",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "60282-87-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=60282-87-3"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1291",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1291"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015668",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015668"
+    },
+    {
+      "database": "pubmed",
+      "id": "16248836",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16248836/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18426954",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18426954/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18834112",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18834112/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20014752",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20014752/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20185316",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20185316/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23956101",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23956101/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37468498",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37468498/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Gestodene",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "SH B 331",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "SH-B-331",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "gestinol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "gestodeno",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135323?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135323/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135323/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135323/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135323/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135323/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135323/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135323/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

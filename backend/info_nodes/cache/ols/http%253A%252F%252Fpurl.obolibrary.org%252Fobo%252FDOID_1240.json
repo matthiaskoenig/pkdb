@@ -1,0 +1,146 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_1240",
+  "lang": "en",
+  "description": [
+    "A cancer that affects the blood or bone marrow characterized by an abnormal proliferation of blood cells."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10CM:C95.90",
+      "ICD9CM:208",
+      "ICDO:9800/3",
+      "MESH:D007938",
+      "NCI:C3161",
+      "SNOMEDCT_US_2025_09_01:255049003",
+      "UMLS_CUI:C0023418"
+    ],
+    "has_alternative_id": [
+      "DOID:9145"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:1240"
+    ]
+  },
+  "label": "leukemia",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_1240",
+  "obo_id": "DOID:1240",
+  "in_subset": [
+    "DO_RAD_slim",
+    "DO_cancer_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A cancer that affects the blood or bone marrow characterized by an abnormal proliferation of blood cells.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "C95.90",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "208",
+      "description": null,
+      "url": "http://icd9cm.chrisendres.com/index.php?action=search&srchtext=208"
+    },
+    {
+      "database": "ICDO",
+      "id": "9800/3",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D007938",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D007938"
+    },
+    {
+      "database": "NCI",
+      "id": "C3161",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3161"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "255049003",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/255049003"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0023418",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0023418"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1240?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1240/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1240/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1240/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1240/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1240/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1240/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1240/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1240/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1240/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1240/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

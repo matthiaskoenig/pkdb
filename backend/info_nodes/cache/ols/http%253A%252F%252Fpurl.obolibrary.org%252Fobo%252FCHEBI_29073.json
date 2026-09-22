@@ -1,0 +1,661 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_29073",
+  "lang": "en",
+  "description": [
+    "The <small>L</small>-enantiomer of ascorbic acid and conjugate acid of <small>L</small>-ascorbate."
+  ],
+  "synonyms": [
+    "(5R)-5-[(1S)-1,2-dihydroxyethyl]-3,4-dihydroxyfuran-2(5H)-one",
+    "(5R)-5-[(1S)-1,2-dihydroxyethyl]-3,4-dihydroxyfuran-2(5H)-one",
+    "ASCORBIC ACID",
+    "Ascoltin",
+    "Ascorbic acid",
+    "Ascorbicap",
+    "Ascorbinsaeure",
+    "E 300",
+    "E-300",
+    "E300",
+    "L-(+)-ascorbic acid",
+    "L-Ascorbate",
+    "L-Ascorbic acid",
+    "L-threo-hex-2-enono-1,4-lactone",
+    "L-threo-hex-2-enono-1,4-lactone",
+    "Vitamin C",
+    "acide ascorbique",
+    "acido ascorbico",
+    "acidum ascorbicum",
+    "acidum ascorbinicum",
+    "ascorbic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "bpdb:2405",
+      "cas:50-81-7",
+      "drugbank:DB00126",
+      "drugcentral:4072",
+      "gmelin:4087",
+      "hmdb:HMDB0000044",
+      "kegg.compound:C00072",
+      "kegg.drug:D00018",
+      "knapsack:C00001179",
+      "metacyc.compound:ASCORBATE",
+      "pdb-ccd:ASC",
+      "pubmed:10799361",
+      "pubmed:12180551",
+      "pubmed:12569111",
+      "pubmed:15917019",
+      "pubmed:15925292",
+      "pubmed:15949874",
+      "pubmed:16425787",
+      "pubmed:16522902",
+      "pubmed:16611389",
+      "pubmed:16725131",
+      "pubmed:17253561",
+      "pubmed:17623524",
+      "pubmed:17636648",
+      "pubmed:18813862",
+      "pubmed:19273781",
+      "pubmed:19580823",
+      "pubmed:19692922",
+      "pubmed:22770225",
+      "pubmed:3015170",
+      "pubmed:491997",
+      "pubmed:5477017",
+      "pubmed:7711198",
+      "pubmed:8467348",
+      "pubmed:8726814",
+      "pubmed:9506998",
+      "reaxys:84272",
+      "wikipedia.en:Ascorbic_Acid"
+    ],
+    "generalized_empirical_formula": [
+      "C6H8O6"
+    ],
+    "has_alternative_id": [
+      "CHEBI:17208",
+      "CHEBI:21240",
+      "CHEBI:2868",
+      "CHEBI:40892",
+      "CHEBI:43473"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:29073"
+    ],
+    "inchi_key_string": [
+      "CIWBSHSKHKDKBQ-JLAZNSOCSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C6H8O6/c7-1-2(8)5-3(9)4(10)6(11)12-5/h2,5,7-10H,1H2/t2-,5+/m0/s1"
+    ],
+    "mass": [
+      "176.124"
+    ],
+    "monoisotopic_mass": [
+      "176.03209"
+    ],
+    "smiles_string": [
+      "[H][C@]1([C@@H](O)CO)OC(=O)C(O)=C1O"
+    ]
+  },
+  "label": "L-ascorbic acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_29073",
+  "obo_id": "CHEBI:29073",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "bpdb",
+      "id": "2405",
+      "description": "bpdb",
+      "url": "https://sitem.herts.ac.uk/aeru/bpdb/Reports/2405.htm"
+    },
+    {
+      "database": "cas",
+      "id": "50-81-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=50-81-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00126",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00126"
+    },
+    {
+      "database": "drugcentral",
+      "id": "4072",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/4072"
+    },
+    {
+      "database": "gmelin",
+      "id": "4087",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0000044",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0000044"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00072",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00018",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00001179",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00001179"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "ASCORBATE",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "ASC",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10799361",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10799361/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12180551",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12180551/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12569111",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12569111/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15917019",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15917019/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15925292",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15925292/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15949874",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15949874/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16425787",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16425787/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16522902",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16522902/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16611389",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16611389/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16725131",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16725131/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17253561",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17253561/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17623524",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17623524/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17636648",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17636648/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18813862",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18813862/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19273781",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19273781/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19580823",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19580823/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19692922",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19692922/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22770225",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22770225/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3015170",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3015170/"
+    },
+    {
+      "database": "pubmed",
+      "id": "491997",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/491997/"
+    },
+    {
+      "database": "pubmed",
+      "id": "5477017",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/5477017/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7711198",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7711198/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8467348",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8467348/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8726814",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8726814/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9506998",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9506998/"
+    },
+    {
+      "database": "reaxys",
+      "id": "84272",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Ascorbic_Acid",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(5R)-5-[(1S)-1,2-dihydroxyethyl]-3,4-dihydroxyfuran-2(5H)-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-threo-hex-2-enono-1,4-lactone",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(5R)-5-[(1S)-1,2-dihydroxyethyl]-3,4-dihydroxyfuran-2(5H)-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ASCORBIC ACID",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ascoltin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ascorbic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ascorbicap",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ascorbinsaeure",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E 300",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E-300",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E300",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-(+)-ascorbic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-Ascorbate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-Ascorbic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-threo-hex-2-enono-1,4-lactone",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Vitamin C",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acide ascorbique",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acido ascorbico",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acidum ascorbicum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acidum ascorbinicum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ascorbic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29073?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29073/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29073/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29073/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29073/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29073/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29073/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29073/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29073/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "is_enantiomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_29073/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018039"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,366 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_32300",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "3,4-Dideoxy-4-[[2-hydroxy-1-(hydroxymethyl)ethyl]amino]-2-C-(hydroxymethyl)-D-epi-inositol",
+    "A-71100",
+    "AO-128",
+    "Basen (TN)",
+    "Voglibose",
+    "glustat",
+    "voglibosa",
+    "voglistat"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:83480-29-9",
+      "drugcentral:2845",
+      "hmdb:HMDB0015598",
+      "kegg.drug:D01665",
+      "pubmed:18595718",
+      "pubmed:20014752",
+      "pubmed:21185187",
+      "pubmed:21345683",
+      "pubmed:21420866",
+      "pubmed:21454075",
+      "pubmed:22300884",
+      "pubmed:23106358",
+      "pubmed:23956101",
+      "pubmed:24973028",
+      "pubmed:26840363",
+      "pubmed:27325449",
+      "pubmed:28495082",
+      "pubmed:29518717",
+      "pubmed:30001846",
+      "pubmed:30108873",
+      "pubmed:33347966",
+      "pubmed:36812150",
+      "pubmed:37468498",
+      "pubmed:39291031"
+    ],
+    "generalized_empirical_formula": [
+      "C10H21NO7"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:32300"
+    ],
+    "inchi_key_string": [
+      "FZNCGRZWXLXZSZ-CIQUZCHMSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C10H21NO7/c12-2-5(3-13)11-6-1-10(18,4-14)9(17)8(16)7(6)15/h5-9,11-18H,1-4H2/t6-,7-,8+,9-,10-/m0/s1"
+    ],
+    "mass": [
+      "267.278"
+    ],
+    "monoisotopic_mass": [
+      "267.1318"
+    ],
+    "smiles_string": [
+      "OCC(CO)N[C@H]1C[C@](O)(CO)[C@@H](O)[C@H](O)[C@H]1O"
+    ]
+  },
+  "label": "Voglibose",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_32300",
+  "obo_id": "CHEBI:32300",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "83480-29-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=83480-29-9"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2845",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2845"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015598",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015598"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D01665",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "18595718",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18595718/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20014752",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20014752/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21185187",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21185187/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21345683",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21345683/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21420866",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21420866/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21454075",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21454075/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22300884",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22300884/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23106358",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23106358/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23956101",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23956101/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24973028",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24973028/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26840363",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26840363/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27325449",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27325449/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28495082",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28495082/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29518717",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29518717/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30001846",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30001846/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30108873",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30108873/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33347966",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33347966/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36812150",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36812150/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37468498",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37468498/"
+    },
+    {
+      "database": "pubmed",
+      "id": "39291031",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39291031/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3,4-Dideoxy-4-[[2-hydroxy-1-(hydroxymethyl)ethyl]amino]-2-C-(hydroxymethyl)-D-epi-inositol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "A-71100",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AO-128",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Basen (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Voglibose",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glustat",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "voglibosa",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "voglistat",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32300?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32300/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32300/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32300/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32300/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32300/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32300/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32300/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

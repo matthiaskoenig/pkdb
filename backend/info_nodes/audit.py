@@ -6,23 +6,7 @@ from pymetadata.core.miriam import BQB
 from info_nodes.graph import NodeIndex
 
 # Preserve stable identifiers and scientific policies until curated data is reviewed.
-CURATION_REVIEW = {
-    "sex": "The sex measurement is annotated with NCIT:C16576 (Female); review whether this identifies the quantity or one of its choices.",
-    "mixed-race": "The Caucasian annotation and synonym 'white' conflict with mixed race.",
-    "angiotensinogen": "The description identifies angiotensin I; review the description and annotations.",
-    "clearance-intrinsic": "The description equates intrinsic clearance with total minus renal clearance; verify the intended quantity.",
-    "auc-ratio": "A ratio of AUC values declares AUC units; verify units against curated usage.",
-    "svr": "Review the existing unit TODO and the dimensionality of systemic vascular resistance.",
-    "pcwp": "Review the existing unit TODO for pulmonary capillary wedge pressure.",
-    "pap": "Review the existing unit TODO for pulmonary artery pressure.",
-    "got": "Review overlap with AST before merging or retiring stable identifiers.",
-    "bile": "Review whether this fluid belongs in substances, tissues, or both.",
-    "phenobarbitone": "Review overlap with phenobarbital before merging stable identifiers.",
-    "1s-2r-alpha-hydroxymetoprolol": "The source flags the stereoisomer annotation as incorrect; verify a stereospecific identifier.",
-    "1s-2s-alpha-hydroxymetoprolol": "The source flags the stereoisomer annotation as incorrect; verify a stereospecific identifier.",
-    "1r-2r-alpha-hydroxymetoprolol": "The source flags the stereoisomer annotation as incorrect; verify a stereospecific identifier.",
-    "1r-2s-alpha-hydroxymetoprolol": "The source flags the stereoisomer annotation as incorrect; verify a stereospecific identifier.",
-}
+CURATION_REVIEW = {}
 
 
 def audit_nodes(nodes: NodeIndex, *, policies: dict[str, list[str]]) -> list[dict]:

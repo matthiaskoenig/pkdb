@@ -1,0 +1,191 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C12472",
+  "lang": "en",
+  "description": [
+    "A specialized form of connective tissue consisting primarily of adipocytes (fat cells), surrounded by a meshwork of collagen fibers."
+  ],
+  "synonyms": [
+    "ADIPOSE TISSUE",
+    "Adipose Tissue",
+    "Adipose",
+    "Body Fat",
+    "Fat Tissue",
+    "Human Adipose Tissue",
+    "adipose tissue",
+    "fat tissue",
+    "fat",
+    "fatty tissue"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Connective tissue consisting primarily of adipocytes (fat cells) and supporting structural matrix.",
+      "Portion of connective tissue composed of adipocytes enmeshed in areolar tissue."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "FDA",
+      "GDC",
+      "UBERON"
+    ],
+    "Display_Name": [
+      "Adipose Tissue"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C171435",
+      "http://purl.obolibrary.org/obo/NCIT_C70729"
+    ],
+    "Legacy Concept Name": [
+      "Adipose_Tissue"
+    ],
+    "Maps_To": [
+      "Adipose"
+    ],
+    "NCI_META_CUI": [
+      "CL1773619"
+    ],
+    "Preferred_Name": [
+      "Adipose Tissue"
+    ],
+    "Semantic_Type": [
+      "Tissue"
+    ],
+    "code": [
+      "C12472"
+    ],
+    "database_cross_reference": [
+      "UBERON:0001013"
+    ]
+  },
+  "label": "Adipose Tissue",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C12472",
+  "obo_id": "NCIT:C12472",
+  "in_subset": [
+    "NCIT_C133250",
+    "NCIT_C157711",
+    "NCIT_C177537",
+    "NCIT_C198975",
+    "NCIT_C54452",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C77529",
+    "NCIT_C78734"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "UBERON",
+      "id": "0001013",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/UBERON_0001013"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "ADIPOSE TISSUE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Adipose Tissue",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Adipose",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Body Fat",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Fat Tissue",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Human Adipose Tissue",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "adipose tissue",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "fat tissue",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "fat",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "fatty tissue",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12472?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12472/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12472/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12472/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12472/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12472/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12472/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12472/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12472/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12472/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12472/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

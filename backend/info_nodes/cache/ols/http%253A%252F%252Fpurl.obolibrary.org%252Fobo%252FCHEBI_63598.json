@@ -1,0 +1,643 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_63598",
+  "lang": "en",
+  "description": [
+    "An optically active form of ofloxacin having (<i>S</i>)-configuration; an inhibitor of bacterial topoisomerase IV and DNA gyrase."
+  ],
+  "synonyms": [
+    "(-)-Ofloxacin",
+    "(-)-ofloxacin",
+    "(3S)-(-)-9-fluoro-3-methyl-10-(4-methyl-1-piperazinyl)-7-oxo-2,3-dihydro-7H-pyrido[1,2,3-de][1,4]benzoxazine-6-carboxylic acid",
+    "(3S)-9-fluoro-3-methyl-10-(4-methylpiperazin-1-yl)-7-oxo-2,3-dihydro-7H-[1,4]oxazino[2,3,4-ij]quinoline-6-carboxylic acid",
+    "(3S)-9-fluoro-3-methyl-10-(4-methylpiperazin-1-yl)-7-oxo-2,3-dihydro-7H-[1,4]oxazino[2,3,4-ij]quinoline-6-carboxylic acid",
+    "(S)-(-)-9-fluoro-3-methyl-10-(4-methyl-1-piperazinyl)-7-oxo-2,3-dihydro-7H-pyrido[1,2,3-de][1,4]benzooxazine-6-carboxylic acid",
+    "(S)-9-Fluoro-2,3-dihydro-3-methyl-10-(4-methyl-1-piperazinyl)-7-oxo-7H-pyrido(1,2,3-de)-1,4-benzoxazine-6-carboxylic acid",
+    "(S)-ofloxacin",
+    "DR 3355",
+    "DR-3355",
+    "L-ofloxacin",
+    "Ofloxacin S-(-)-form",
+    "S-(-)-ofloxacin",
+    "levofloxacin",
+    "levofloxacine",
+    "levofloxacino",
+    "levofloxacinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:100986-85-4",
+      "drugbank:DB01137",
+      "drugcentral:1569",
+      "hmdb:HMDB0001929",
+      "kegg.compound:C07660",
+      "kegg.drug:D08120",
+      "lincs.smallmolecule:LSM-5270",
+      "pdb-ccd:LFX",
+      "pubmed:10803495",
+      "pubmed:11141388",
+      "pubmed:11181130",
+      "pubmed:11249554",
+      "pubmed:11558453",
+      "pubmed:11898264",
+      "pubmed:11975700",
+      "pubmed:14581720",
+      "pubmed:15969945",
+      "pubmed:17549677",
+      "pubmed:19212411",
+      "pubmed:20596531",
+      "pubmed:2079448",
+      "pubmed:21075586",
+      "pubmed:21965436",
+      "pubmed:21974858",
+      "pubmed:22088660",
+      "pubmed:22221614",
+      "pubmed:23965305",
+      "pubmed:26792525",
+      "pubmed:27050128",
+      "pubmed:34323366",
+      "pubmed:34824229",
+      "pubmed:36076992",
+      "pubmed:36102678",
+      "pubmed:36119964",
+      "pubmed:36135690",
+      "pubmed:36314364",
+      "pubmed:36328279",
+      "pubmed:8656585",
+      "pubmed:8957581",
+      "pubmed:9068926",
+      "pubmed:9624783",
+      "reaxys:5385660",
+      "vsdb:1899",
+      "wikipedia.en:Levofloxacin"
+    ],
+    "generalized_empirical_formula": [
+      "C18H20FN3O4"
+    ],
+    "has_alternative_id": [
+      "CHEBI:6440"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:63598"
+    ],
+    "inchi_key_string": [
+      "GSDSWSVVBLHKDQ-JTQLQIEISA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C18H20FN3O4/c1-10-9-26-17-14-11(16(23)12(18(24)25)8-22(10)14)7-13(19)15(17)21-5-3-20(2)4-6-21/h7-8,10H,3-6,9H2,1-2H3,(H,24,25)/t10-/m0/s1"
+    ],
+    "mass": [
+      "361.373"
+    ],
+    "monoisotopic_mass": [
+      "361.14378"
+    ],
+    "smiles_string": [
+      "C[C@H]1COc2c(N3CCN(C)CC3)c(F)cc3c(=O)c(C(=O)O)cn1c23"
+    ]
+  },
+  "label": "levofloxacin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_63598",
+  "obo_id": "CHEBI:63598",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "100986-85-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=100986-85-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01137",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01137"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1569",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1569"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001929",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001929"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07660",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08120",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5270",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "LFX",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10803495",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10803495/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11141388",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11141388/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11181130",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11181130/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11249554",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11249554/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11558453",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11558453/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11898264",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11898264/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11975700",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11975700/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14581720",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14581720/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15969945",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15969945/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17549677",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17549677/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19212411",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19212411/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20596531",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20596531/"
+    },
+    {
+      "database": "pubmed",
+      "id": "2079448",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2079448/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21075586",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21075586/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21965436",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21965436/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21974858",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21974858/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22088660",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22088660/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22221614",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22221614/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23965305",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23965305/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26792525",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26792525/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27050128",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27050128/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34323366",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34323366/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34824229",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34824229/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36076992",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36076992/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36102678",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36102678/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36119964",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36119964/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36135690",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36135690/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36314364",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36314364/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36328279",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36328279/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8656585",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8656585/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8957581",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8957581/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9068926",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9068926/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9624783",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9624783/"
+    },
+    {
+      "database": "reaxys",
+      "id": "5385660",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1899",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1899.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Levofloxacin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3S)-9-fluoro-3-methyl-10-(4-methylpiperazin-1-yl)-7-oxo-2,3-dihydro-7H-[1,4]oxazino[2,3,4-ij]quinoline-6-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-Ofloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-ofloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3S)-(-)-9-fluoro-3-methyl-10-(4-methyl-1-piperazinyl)-7-oxo-2,3-dihydro-7H-pyrido[1,2,3-de][1,4]benzoxazine-6-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3S)-9-fluoro-3-methyl-10-(4-methylpiperazin-1-yl)-7-oxo-2,3-dihydro-7H-[1,4]oxazino[2,3,4-ij]quinoline-6-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-(-)-9-fluoro-3-methyl-10-(4-methyl-1-piperazinyl)-7-oxo-2,3-dihydro-7H-pyrido[1,2,3-de][1,4]benzooxazine-6-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-9-Fluoro-2,3-dihydro-3-methyl-10-(4-methyl-1-piperazinyl)-7-oxo-7H-pyrido(1,2,3-de)-1,4-benzoxazine-6-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-ofloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DR 3355",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DR-3355",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-ofloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ofloxacin S-(-)-form",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "S-(-)-ofloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levofloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levofloxacine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levofloxacino",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levofloxacinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63598?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63598/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63598/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63598/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63598/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63598/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63598/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63598/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63598/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "is_enantiomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63598/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018039"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

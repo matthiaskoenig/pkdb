@@ -1,0 +1,354 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3720",
+  "lang": "en",
+  "description": [
+    "The amide resulting from formal condensation of 4-amino-5-chloro-2-methoxybenzoic acid with <em>cis</em>-1-[3-(4-fluorophenoxy)propyl]-3-methoxypiperidin-4-amine. It has been used (as its monohydrate or as its tartrate) for the treatment of gastro-oesophageal reflux disease and for non-ulcer dyspepsia, but its propensity to cause cardiac arrhythmias resulted in its complete withdrawal from many countries, including the U.K., and restrictions on its use elsewhere."
+  ],
+  "synonyms": [
+    "(+-)-cisapride",
+    "4-Amino-5-chloro-N-{1-[3-(4-fluoro-phenoxy)-propyl]-3-methoxy-piperidin-4-yl}-2-methoxy-benzamide",
+    "4-amino-5-chloro-N-(1-(3-(4-fluorophenoxy)propyl)-3-methoxypiperidin-4-yl)-2-methoxybenzamide",
+    "4-amino-5-chloro-N-{cis-1-[3-(4-fluorophenoxy)propyl]-3-methoxypiperidin-4-yl}-2-methoxybenzamide",
+    "4-amino-5-chloro-N-{cis-1-[3-(4-fluorophenoxy)propyl]-3-methoxypiperidin-4-yl}-2-methoxybenzamide",
+    "Cisapride",
+    "cis-4-amino-5-chloro-N-(1-(3-(p-fluorophenoxy)propyl)-3-methoxy-4-piperidyl)-o-anisamide",
+    "cis-4-amino-5-chloro-N-{1-[3-(4-fluorophenoxy)propyl]-3-methoxy-4-piperidinyl}-2-methoxybenzamide",
+    "cis-4-amino-5-chloro-N-{1-[3-(p-fluorophenoxy)propyl]-3-methoxy-4-piperidinyl}-o-anisamide",
+    "cisaprida",
+    "cisapride",
+    "cisapridum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:81098-60-4",
+      "drugbank:DB00604",
+      "kegg.compound:C06910",
+      "kegg.drug:D00274",
+      "lincs.smallmolecule:LSM-2133",
+      "patent:EP76530",
+      "patent:US4962115",
+      "pubmed:10891117",
+      "pubmed:12190308",
+      "pubmed:19110341",
+      "pubmed:19663444",
+      "pubmed:1995885",
+      "pubmed:2139471"
+    ],
+    "generalized_empirical_formula": [
+      "C23H29ClFN3O4"
+    ],
+    "has_alternative_id": [
+      "CHEBI:143545",
+      "CHEBI:151790",
+      "CHEBI:221485",
+      "CHEBI:657397",
+      "CHEBI:657741"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3720"
+    ],
+    "inchi_key_string": [
+      "DCSUBABJRXZOMT-IRLDBZIGSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C23H29ClFN3O4/c1-30-21-13-19(26)18(24)12-17(21)23(29)27-20-8-10-28(14-22(20)31-2)9-3-11-32-16-6-4-15(25)5-7-16/h4-7,12-13,20,22H,3,8-11,14,26H2,1-2H3,(H,27,29)/t20-,22+/m1/s1"
+    ],
+    "mass": [
+      "465.953"
+    ],
+    "monoisotopic_mass": [
+      "465.18306"
+    ],
+    "smiles_string": [
+      "COc1cc(N)c(Cl)cc1C(=O)N[C@@H]1CCN(CCCOc2ccc(F)cc2)C[C@@H]1OC"
+    ]
+  },
+  "label": "cisapride",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3720",
+  "obo_id": "CHEBI:3720",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "81098-60-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=81098-60-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00604",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00604"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06910",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00274",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-2133",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP76530",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP76530"
+    },
+    {
+      "database": "patent",
+      "id": "US4962115",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4962115"
+    },
+    {
+      "database": "pubmed",
+      "id": "10891117",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10891117/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12190308",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12190308/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19110341",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19110341/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19663444",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19663444/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1995885",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1995885/"
+    },
+    {
+      "database": "pubmed",
+      "id": "2139471",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2139471/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-amino-5-chloro-N-{cis-1-[3-(4-fluorophenoxy)propyl]-3-methoxypiperidin-4-yl}-2-methoxybenzamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-cisapride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-Amino-5-chloro-N-{1-[3-(4-fluoro-phenoxy)-propyl]-3-methoxy-piperidin-4-yl}-2-methoxy-benzamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-amino-5-chloro-N-(1-(3-(4-fluorophenoxy)propyl)-3-methoxypiperidin-4-yl)-2-methoxybenzamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-amino-5-chloro-N-{cis-1-[3-(4-fluorophenoxy)propyl]-3-methoxypiperidin-4-yl}-2-methoxybenzamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cisapride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cis-4-amino-5-chloro-N-(1-(3-(p-fluorophenoxy)propyl)-3-methoxy-4-piperidyl)-o-anisamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cis-4-amino-5-chloro-N-{1-[3-(4-fluorophenoxy)propyl]-3-methoxy-4-piperidinyl}-2-methoxybenzamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cis-4-amino-5-chloro-N-{1-[3-(p-fluorophenoxy)propyl]-3-methoxy-4-piperidinyl}-o-anisamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cisaprida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cisapride",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cisapridum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3720?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3720/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3720/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3720/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3720/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3720/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3720/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3720/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

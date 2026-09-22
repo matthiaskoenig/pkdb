@@ -1,0 +1,139 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_136042",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "tenelia",
+    "teneligliptin hydrobromide hydrate",
+    "teneligliptin hydrobromide"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:760937-92-6",
+      "drugcentral:4895"
+    ],
+    "generalized_empirical_formula": [
+      "C22H30N6OS"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:136042"
+    ],
+    "inchi_key_string": [
+      "WGRQANOPCQRCME-PMACEKPBSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C22H30N6OS/c1-17-13-21(28(24-17)18-5-3-2-4-6-18)26-9-7-25(8-10-26)19-14-20(23-15-19)22(29)27-11-12-30-16-27/h2-6,13,19-20,23H,7-12,14-16H2,1H3/t19-,20-/m0/s1"
+    ],
+    "mass": [
+      "426.59"
+    ],
+    "monoisotopic_mass": [
+      "426.22018"
+    ],
+    "smiles_string": [
+      "[H][C@@]1(N2CCN(c3cc(C)nn3-c3ccccc3)CC2)CN[C@]([H])(C(=O)N2CCSC2)C1"
+    ]
+  },
+  "label": "teneligliptin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_136042",
+  "obo_id": "CHEBI:136042",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "760937-92-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=760937-92-6"
+    },
+    {
+      "database": "drugcentral",
+      "id": "4895",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/4895"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "tenelia",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "teneligliptin hydrobromide hydrate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "teneligliptin hydrobromide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136042?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136042/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136042/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136042/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136042/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136042/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136042/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

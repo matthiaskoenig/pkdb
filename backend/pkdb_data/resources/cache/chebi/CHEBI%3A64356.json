@@ -1,9 +1,0 @@
-{
-  "chebi": "CHEBI:64356",
-  "name": "pregabalin",
-  "definition": "A \u03b3-amino acid that is \u03b3-aminobutyric acid (GABA) carrying an isobutyl substitutent at the \u03b2-position (the <i>S</i>-enantiomer). Binds with high affinity to the \u03b1<small><sub>2</sub></small>-\u03b4 site (an auxiliary subunit of voltage-gated calcium channels) in central nervous system tissues.",
-  "formula": "C8H17NO2",
-  "charge": 0,
-  "mass": "159.229",
-  "inchikey": "AYXYPKUFHZROOJ-ZETCQYMHSA-N"
-}

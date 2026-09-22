@@ -1,0 +1,791 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7936",
+  "lang": "en",
+  "description": [
+    "A benzodioxole that consists of piperidine bearing 1,3-benzodioxol-5-yloxy)methyl and 4-fluorophenyl substituents at positions 3 and 4 respectively; the (3<i>S</i>,4<i>R</i>)-diastereomer. Highly potent and selective 5-HT uptake inhibitor that binds with high affinity to the serotonin transporter (Ki = 0.05 nM). Ki values are 1.1, 350 and 1100 nM for inhibition of [3H]-5-HT, [3H]-l-NA and [3H]-DA uptake respectively. Displays minimal affinity for α1-, α2- or β-adrenoceptors, 5-HT<small><sub>2A</sub></small>, 5-HT<small><sub>1A</sub></small>, D<small><sub>2</sub></small> or H<small><sub>1</sub></small> receptors at concentrations below 1000 nM, however displays weak affinity for muscarinic ACh receptors (Ki = 42 nM). Antidepressant and anxiolytic in vivo."
+  ],
+  "synonyms": [
+    "(-)-(3S,4R)-4-(p-fluorophenyl)-3-((3,4-(methylenedioxy)phenoxy)methyl)piperidine",
+    "(3S,4R)-3-[(1,3-benzodioxol-5-yloxy)methyl]-4-(4-fluorophenyl)piperidine",
+    "(3S,4R)-3-[(1,3-benzodioxol-5-yloxy)methyl]-4-(4-fluorophenyl)piperidine",
+    "(3S-trans)-3-((1,3-benzodioxol-5-yloxy)methyl)-4-(4-fluorophenyl)piperidine",
+    "Paroxetine",
+    "paroxetina",
+    "paroxetinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:61869-08-7",
+      "drugbank:DB00715",
+      "drugcentral:2068",
+      "kegg.compound:C07415",
+      "kegg.drug:D02362",
+      "lincs.smallmolecule:LSM-2843",
+      "pubmed:11009210",
+      "pubmed:11169163",
+      "pubmed:11271409",
+      "pubmed:11281965",
+      "pubmed:11324355",
+      "pubmed:11360029",
+      "pubmed:11513198",
+      "pubmed:11563413",
+      "pubmed:11565622",
+      "pubmed:11819027",
+      "pubmed:11893234",
+      "pubmed:11910269",
+      "pubmed:12027788",
+      "pubmed:12088162",
+      "pubmed:12369443",
+      "pubmed:12421645",
+      "pubmed:12818234",
+      "pubmed:12820211",
+      "pubmed:12906023",
+      "pubmed:12920419",
+      "pubmed:14516531",
+      "pubmed:14521492",
+      "pubmed:14566196",
+      "pubmed:14566200",
+      "pubmed:14619895",
+      "pubmed:14624192",
+      "pubmed:14673053",
+      "pubmed:14689334",
+      "pubmed:14978354",
+      "pubmed:15048901",
+      "pubmed:15199661",
+      "pubmed:15241233",
+      "pubmed:15264994",
+      "pubmed:15374134",
+      "pubmed:15376524",
+      "pubmed:15544025",
+      "pubmed:15613191",
+      "pubmed:15845695",
+      "pubmed:15853570",
+      "pubmed:15903129",
+      "pubmed:15963219",
+      "pubmed:15992089",
+      "pubmed:16395417",
+      "pubmed:16397315",
+      "pubmed:16426087",
+      "pubmed:16765127",
+      "pubmed:16822276",
+      "pubmed:16913391",
+      "pubmed:17122538",
+      "pubmed:17162096",
+      "pubmed:17219219",
+      "pubmed:17286545",
+      "pubmed:17452166",
+      "pubmed:17559097",
+      "pubmed:17612590",
+      "pubmed:17652957",
+      "pubmed:17874333",
+      "pubmed:18273418",
+      "pubmed:18345955",
+      "pubmed:18808757",
+      "pubmed:18983224",
+      "pubmed:19687003",
+      "pubmed:19851065",
+      "pubmed:21404089",
+      "pubmed:21452176",
+      "pubmed:21739267",
+      "pubmed:21908494",
+      "pubmed:21909633",
+      "pubmed:21922171",
+      "pubmed:21939725",
+      "pubmed:22153922",
+      "pubmed:22198456",
+      "pubmed:22212003",
+      "pubmed:22240860",
+      "pubmed:22263916",
+      "pubmed:22283559",
+      "pubmed:22353759",
+      "pubmed:22377745",
+      "reaxys:7467879",
+      "wikipedia.en:Paroxetine"
+    ],
+    "generalized_empirical_formula": [
+      "C19H20FNO3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7936"
+    ],
+    "inchi_key_string": [
+      "AHOUBRCZNHFOSL-YOEHRIQHSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C19H20FNO3/c20-15-3-1-13(2-4-15)17-7-8-21-10-14(17)11-22-16-5-6-18-19(9-16)24-12-23-18/h1-6,9,14,17,21H,7-8,10-12H2/t14-,17-/m0/s1"
+    ],
+    "mass": [
+      "329.371"
+    ],
+    "monoisotopic_mass": [
+      "329.14272"
+    ],
+    "smiles_string": [
+      "[H][C@@]1(c2ccc(F)cc2)CCNC[C@H]1COc1ccc2c(c1)OCO2"
+    ]
+  },
+  "label": "paroxetine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7936",
+  "obo_id": "CHEBI:7936",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "61869-08-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=61869-08-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00715",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00715"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2068",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2068"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07415",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D02362",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-2843",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11009210",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11009210/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11169163",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11169163/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11271409",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11271409/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11281965",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11281965/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11324355",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11324355/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11360029",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11360029/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11513198",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11513198/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11563413",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11563413/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11565622",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11565622/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11819027",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11819027/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11893234",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11893234/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11910269",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11910269/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12027788",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12027788/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12088162",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12088162/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12369443",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12369443/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12421645",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12421645/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12818234",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12818234/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12820211",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12820211/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12906023",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12906023/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12920419",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12920419/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14516531",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14516531/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14521492",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14521492/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14566196",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14566196/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14566200",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14566200/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14619895",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14619895/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14624192",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14624192/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14673053",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14673053/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14689334",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14689334/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14978354",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14978354/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15048901",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15048901/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15199661",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15199661/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15241233",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15241233/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15264994",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15264994/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15374134",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15374134/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15376524",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15376524/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15544025",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15544025/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15613191",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15613191/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15845695",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15845695/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15853570",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15853570/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15903129",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15903129/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15963219",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15963219/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15992089",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15992089/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16395417",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16395417/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16397315",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16397315/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16426087",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16426087/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16765127",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16765127/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16822276",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16822276/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16913391",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16913391/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17122538",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17122538/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17162096",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17162096/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17219219",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17219219/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17286545",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17286545/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17452166",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17452166/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17559097",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17559097/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17612590",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17612590/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17652957",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17652957/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17874333",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17874333/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18273418",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18273418/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18345955",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18345955/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18808757",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18808757/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18983224",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18983224/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19687003",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19687003/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19851065",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19851065/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21404089",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21404089/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21452176",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21452176/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21739267",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21739267/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21908494",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21908494/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21909633",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21909633/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21922171",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21922171/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21939725",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21939725/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22153922",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22153922/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22198456",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22198456/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22212003",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22212003/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22240860",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22240860/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22263916",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22263916/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22283559",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22283559/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22353759",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22353759/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22377745",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22377745/"
+    },
+    {
+      "database": "reaxys",
+      "id": "7467879",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Paroxetine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3S,4R)-3-[(1,3-benzodioxol-5-yloxy)methyl]-4-(4-fluorophenyl)piperidine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-(3S,4R)-4-(p-fluorophenyl)-3-((3,4-(methylenedioxy)phenoxy)methyl)piperidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3S,4R)-3-[(1,3-benzodioxol-5-yloxy)methyl]-4-(4-fluorophenyl)piperidine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3S-trans)-3-((1,3-benzodioxol-5-yloxy)methyl)-4-(4-fluorophenyl)piperidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Paroxetine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "paroxetina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "paroxetinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,158 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_1826",
+  "lang": "en",
+  "description": [
+    "A brain disease that is characterized by the occurrance of at least two unprovoked seizures resulting from a persistent epileptogenic abnormality of the brain that is able to spontaneously generate paroxysmal activity and typically manifested by sudden brief episodes of altered or diminished consciousness, involuntary movements, or convulsions."
+  ],
+  "synonyms": [
+    "epilepsy syndrome",
+    "epileptic syndrome"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "EFO:0000474",
+      "ICD10CM:G40.909",
+      "ICD9CM:345.9",
+      "MESH:D004827",
+      "NCI:C3020",
+      "SNOMEDCT_US_2025_09_01:267698007",
+      "UMLS_CUI:C0014544"
+    ],
+    "has exact match": [
+      "ICD10CM:G40"
+    ],
+    "has narrower match": [
+      "ICD10CM:G40.9",
+      "ICD10CM:G40.909"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:1826"
+    ]
+  },
+  "label": "epilepsy",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_1826",
+  "obo_id": "DOID:1826",
+  "in_subset": [
+    "DO_FlyBase_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A brain disease that is characterized by the occurrance of at least two unprovoked seizures resulting from a persistent epileptogenic abnormality of the brain that is able to spontaneously generate paroxysmal activity and typically manifested by sudden brief episodes of altered or diminished consciousness, involuntary movements, or convulsions.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0000474",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0000474"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "G40.909",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "345.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D004827",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D004827"
+    },
+    {
+      "database": "NCI",
+      "id": "C3020",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3020"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "267698007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/267698007"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0014544",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0014544"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1826?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1826/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1826/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1826/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1826/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1826/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1826/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1826/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1826/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1826/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1826/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

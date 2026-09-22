@@ -1,0 +1,366 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_92875",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Clomethiazole",
+    "Distraneurine",
+    "Heminevrin",
+    "chlorethiazol",
+    "chlorethiazole",
+    "chlormethiazol",
+    "chlormethiazole HCl",
+    "chlormethiazole hydrochloride",
+    "chlormethiazole",
+    "clomethiazole edisilate",
+    "clomethiazole",
+    "clomethiazolum",
+    "clometiazol",
+    "distraneurin",
+    "emineurina"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:533-45-9",
+      "drugcentral:602",
+      "lincs.smallmolecule:LSM-3110",
+      "pubmed:10891117",
+      "pubmed:12873507",
+      "pubmed:15646539",
+      "pubmed:18426954",
+      "pubmed:19445515",
+      "pubmed:20014752",
+      "pubmed:22779770"
+    ],
+    "generalized_empirical_formula": [
+      "C6H8ClNS"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:92875"
+    ],
+    "inchi_key_string": [
+      "PCLITLDOTJTVDJ-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C6H8ClNS/c1-5-6(2-3-7)9-4-8-5/h4H,2-3H2,1H3"
+    ],
+    "mass": [
+      "161.657"
+    ],
+    "monoisotopic_mass": [
+      "161.0066"
+    ],
+    "smiles_string": [
+      "Cc1ncsc1CCCl"
+    ]
+  },
+  "label": "5-(2-chloroethyl)-4-methylthiazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_92875",
+  "obo_id": "CHEBI:92875",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "533-45-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=533-45-9"
+    },
+    {
+      "database": "drugcentral",
+      "id": "602",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/602"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3110",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10891117",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10891117/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12873507",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12873507/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15646539",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15646539/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18426954",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18426954/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19445515",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19445515/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20014752",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20014752/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22779770",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22779770/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Clomethiazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Distraneurine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Heminevrin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlorethiazol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlorethiazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlormethiazol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlormethiazole HCl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlormethiazole hydrochloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlormethiazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clomethiazole edisilate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clomethiazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clomethiazolum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clometiazol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "distraneurin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "emineurina",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_92875?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_92875/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_92875/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_92875/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_92875/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_92875/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_92875/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_92875/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

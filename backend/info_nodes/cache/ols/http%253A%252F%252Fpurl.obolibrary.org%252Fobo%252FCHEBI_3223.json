@@ -1,0 +1,307 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3223",
+  "lang": "en",
+  "description": [
+    "An azaspiro compound that is 8-azaspiro[4.5]decane-7,9-dione substituted at the nitrogen atom by a 4-(piperazin-1-yl)butyl group which in turn is substituted by a pyrimidin-2-yl group at the <em>N</em><small><sup>4</small></sup> position."
+  ],
+  "synonyms": [
+    "8-(4-(4-(2-Pyrimidinyl)-1-piperizinyl)butyl)-8-azaspiro(4,5)decane-7,9-dione",
+    "8-[4-(4-pyrimidin-2-ylpiperazin-1-yl)butyl]-8-azaspiro[4.5]decane-7,9-dione",
+    "8-[4-(4-pyrimidin-2-ylpiperazin-1-yl)butyl]-8-azaspiro[4.5]decane-7,9-dione",
+    "Buspirone",
+    "buspirona",
+    "buspirone",
+    "buspironum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:36505-84-7",
+      "drugbank:DB00490",
+      "drugcentral:437",
+      "hmdb:HMDB0014633",
+      "kegg.compound:C06861",
+      "kegg.drug:D07593",
+      "lincs.smallmolecule:LSM-4105",
+      "patent:DE2057845",
+      "patent:US3717634",
+      "pubmed:15876901",
+      "pubmed:20825390",
+      "pubmed:26746121",
+      "pubmed:8638511",
+      "reaxys:964904",
+      "wikipedia.en:Buspirone"
+    ],
+    "generalized_empirical_formula": [
+      "C21H31N5O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3223"
+    ],
+    "inchi_key_string": [
+      "QWCRAEMEVRGPNT-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H31N5O2/c27-18-16-21(6-1-2-7-21)17-19(28)26(18)11-4-3-10-24-12-14-25(15-13-24)20-22-8-5-9-23-20/h5,8-9H,1-4,6-7,10-17H2"
+    ],
+    "mass": [
+      "385.512"
+    ],
+    "monoisotopic_mass": [
+      "385.24778"
+    ],
+    "smiles_string": [
+      "O=C1CC2(CCCC2)CC(=O)N1CCCCN1CCN(c2ncccn2)CC1"
+    ]
+  },
+  "label": "buspirone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3223",
+  "obo_id": "CHEBI:3223",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "36505-84-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=36505-84-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00490",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00490"
+    },
+    {
+      "database": "drugcentral",
+      "id": "437",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/437"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014633",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014633"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06861",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07593",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-4105",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "DE2057845",
+      "description": "patent",
+      "url": "https://www.google.com/patents/DE2057845"
+    },
+    {
+      "database": "patent",
+      "id": "US3717634",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3717634"
+    },
+    {
+      "database": "pubmed",
+      "id": "15876901",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15876901/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20825390",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20825390/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26746121",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26746121/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8638511",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8638511/"
+    },
+    {
+      "database": "reaxys",
+      "id": "964904",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Buspirone",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "8-[4-(4-pyrimidin-2-ylpiperazin-1-yl)butyl]-8-azaspiro[4.5]decane-7,9-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-(4-(4-(2-Pyrimidinyl)-1-piperizinyl)butyl)-8-azaspiro(4,5)decane-7,9-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-[4-(4-pyrimidin-2-ylpiperazin-1-yl)butyl]-8-azaspiro[4.5]decane-7,9-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Buspirone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "buspirona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "buspirone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "buspirone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "buspironum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

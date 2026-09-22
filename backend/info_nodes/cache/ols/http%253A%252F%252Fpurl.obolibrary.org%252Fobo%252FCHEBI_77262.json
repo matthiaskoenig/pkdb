@@ -1,0 +1,193 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_77262",
+  "lang": "en",
+  "description": [
+    "A 5-methoxy-2-{[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1<em>H</em>-benzimidazole that has <i>R</i> configuration at the sulfur atom."
+  ],
+  "synonyms": [
+    "(+)-omeprazole",
+    "(R)-(+)-omeprazole",
+    "5-methoxy-2-{(R)-[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+    "5-methoxy-2-{(R)-[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:119141-89-8",
+      "pubmed:20685482",
+      "pubmed:22344845",
+      "pubmed:22549736",
+      "pubmed:23435615",
+      "pubmed:23629159",
+      "reaxys:7798294"
+    ],
+    "generalized_empirical_formula": [
+      "C17H19N3O3S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:77262"
+    ],
+    "inchi_key_string": [
+      "SUBDBMMJDZJVOS-XMMPIXPASA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C17H19N3O3S/c1-10-8-18-15(11(2)16(10)23-4)9-24(21)17-19-13-6-5-12(22-3)7-14(13)20-17/h5-8H,9H2,1-4H3,(H,19,20)/t24-/m1/s1"
+    ],
+    "mass": [
+      "345.424"
+    ],
+    "monoisotopic_mass": [
+      "345.11471"
+    ],
+    "smiles_string": [
+      "COc1ccc2nc([S@](=O)Cc3ncc(C)c(OC)c3C)nc2c1"
+    ]
+  },
+  "label": "(R)-omeprazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_77262",
+  "obo_id": "CHEBI:77262",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "119141-89-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=119141-89-8"
+    },
+    {
+      "database": "pubmed",
+      "id": "20685482",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20685482/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22344845",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22344845/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22549736",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22549736/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23435615",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23435615/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23629159",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23629159/"
+    },
+    {
+      "database": "reaxys",
+      "id": "7798294",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-methoxy-2-{(R)-[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-omeprazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-(+)-omeprazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-methoxy-2-{(R)-[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77262?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77262/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77262/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77262/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77262/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77262/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77262/graph"
+    },
+    "is_enantiomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77262/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018039"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

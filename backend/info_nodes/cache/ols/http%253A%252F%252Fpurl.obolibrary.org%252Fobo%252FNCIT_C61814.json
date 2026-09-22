@@ -1,0 +1,104 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C61814",
+  "lang": "en",
+  "description": [
+    "A synthetic broad-spectrum fluoroquinolone with antibacterial activity. Lomefloxacin inhibits DNA gyrase, a type II topoisomerase involved in the induction or relaxation of supercoiling during DNA replication. This inhibition leads to a decrease in DNA synthesis during bacterial replication, resulting in cell growth inhibition and eventually cell lysis."
+  ],
+  "synonyms": [
+    "LOMEFLOXACIN",
+    "Lomefloxacin"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "98079-51-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:116278"
+    ],
+    "Chemical_Formula": [
+      "C17H19F2N3O3"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "L6BR2WJD8V"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C47587",
+      "http://purl.obolibrary.org/obo/NCIT_C76231"
+    ],
+    "Legacy Concept Name": [
+      "Lomefloxacin"
+    ],
+    "Preferred_Name": [
+      "Lomefloxacin"
+    ],
+    "Semantic_Type": [
+      "Antibiotic",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0065162"
+    ],
+    "code": [
+      "C61814"
+    ]
+  },
+  "label": "Lomefloxacin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C61814",
+  "obo_id": "NCIT:C61814",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "LOMEFLOXACIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lomefloxacin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61814?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61814/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61814/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61814/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61814/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61814/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61814/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

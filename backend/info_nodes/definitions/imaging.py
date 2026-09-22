@@ -12,7 +12,6 @@ IMAGING_MEASUREMENT_NODES: list[InfoNode] = [
         description="measurement via MRI",
         parents=["measurement"],
         dtype=DType.ABSTRACT,
-        annotations=[],
     ),
     MeasurementType(
         sid="ct-measurement",
@@ -20,7 +19,6 @@ IMAGING_MEASUREMENT_NODES: list[InfoNode] = [
         description="measurement via CT",
         parents=["measurement"],
         dtype=DType.ABSTRACT,
-        annotations=[],
     ),
     MeasurementType(
         sid="relative-signal-intensity",
@@ -30,7 +28,6 @@ IMAGING_MEASUREMENT_NODES: list[InfoNode] = [
         parents=["mri measurement"],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     MeasurementType(
         sid="maximum-relative-signal-intensity",
@@ -40,15 +37,12 @@ IMAGING_MEASUREMENT_NODES: list[InfoNode] = [
         parents=["mri measurement"],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
     MeasurementType(
         sid="attenuation",
-        name="attenuation",
         description="Attenuation",
         parents=["ct measurement"],
         dtype=DType.NUMERIC,
         units=[DIMENSIONLESS],
-        annotations=[],
     ),
 ]

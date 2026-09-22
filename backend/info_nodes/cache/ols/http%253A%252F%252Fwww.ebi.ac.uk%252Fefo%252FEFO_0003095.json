@@ -1,0 +1,79 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0003095",
+  "lang": "en",
+  "description": [
+    "A term referring to fatty replacement of the hepatic parenchyma which is not related to alcohol use."
+  ],
+  "synonyms": [
+    "NAFLD - Nonalcoholic Fatty Liver Disease",
+    "NAFLD",
+    "Nonalcoholic Fatty Liver Disease"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "MESH:D065626",
+      "NCIt:C84444",
+      "OMIM:613282"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0013209, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0013209"
+    ],
+    "term editor": [
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0013209"
+    ]
+  },
+  "label": "obsolete_non-alcoholic fatty liver disease",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0013209",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0003095",
+  "obo_id": "EFO:0003095",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "MESH",
+      "id": "D065626",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D065626"
+    },
+    {
+      "database": "NCIt",
+      "id": "C84444",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C84444"
+    },
+    {
+      "database": "OMIM",
+      "id": "613282",
+      "description": null,
+      "url": "https://omim.org/entry/613282"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

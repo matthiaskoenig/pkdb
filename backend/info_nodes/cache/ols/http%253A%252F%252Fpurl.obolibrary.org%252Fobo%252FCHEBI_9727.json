@@ -1,0 +1,560 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9727",
+  "lang": "en",
+  "description": [
+    "An oxazolidinone that is 1,3-oxazolidine-2,4-dione substituted by methyl groups at positions 3, 5 and 5. It is an antiepileptic agent."
+  ],
+  "synonyms": [
+    "3,5,5-trimethyl-1,3-oxazolidine-2,4-dione",
+    "3,5,5-trimethyl-1,3-oxazolidine-2,4-dione",
+    "3,5,5-trimethyl-2,4-oxazolidinedione",
+    "Absentol",
+    "Absetil",
+    "Convenixa",
+    "Edion",
+    "Epidione",
+    "Epixal",
+    "Petidion",
+    "Petilep",
+    "Petimalin",
+    "Ptimal",
+    "Tridione Dulcet",
+    "Tridione",
+    "trimetadiona",
+    "trimetadione",
+    "trimethadione",
+    "trimethadionum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:127-48-0",
+      "drugbank:DB00347",
+      "drugcentral:2751",
+      "hmdb:HMDB0014491",
+      "kegg.drug:D00392",
+      "lincs.smallmolecule:LSM-5345",
+      "pubmed:10634315",
+      "pubmed:11057156",
+      "pubmed:11722678",
+      "pubmed:13590839",
+      "pubmed:13649111",
+      "pubmed:15282739",
+      "pubmed:15653505",
+      "pubmed:16171802",
+      "pubmed:18248662",
+      "pubmed:18862627",
+      "pubmed:18876072",
+      "pubmed:21638752",
+      "pubmed:2210093",
+      "pubmed:23017458",
+      "pubmed:23321016",
+      "pubmed:30605901",
+      "pubmed:7653500",
+      "pubmed:8791774",
+      "pubmed:8865369",
+      "pubmed:9375358",
+      "pubmed:9827046",
+      "reaxys:121627",
+      "wikipedia.en:Trimethadione"
+    ],
+    "generalized_empirical_formula": [
+      "C6H9NO3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:94526"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9727"
+    ],
+    "inchi_key_string": [
+      "IRYJRGCIQBGHIV-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C6H9NO3/c1-6(2)4(8)7(3)5(9)10-6/h1-3H3"
+    ],
+    "mass": [
+      "143.142"
+    ],
+    "monoisotopic_mass": [
+      "143.05824"
+    ],
+    "smiles_string": [
+      "CN1C(=O)OC(C)(C)C1=O"
+    ]
+  },
+  "label": "trimethadione",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9727",
+  "obo_id": "CHEBI:9727",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "127-48-0",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=127-48-0"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00347",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00347"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2751",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2751"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014491",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014491"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00392",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5345",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10634315",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10634315/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11057156",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11057156/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11722678",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11722678/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13590839",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13590839/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13649111",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13649111/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15282739",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15282739/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15653505",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15653505/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16171802",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16171802/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18248662",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18248662/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18862627",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18862627/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18876072",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18876072/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21638752",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21638752/"
+    },
+    {
+      "database": "pubmed",
+      "id": "2210093",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2210093/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23017458",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23017458/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23321016",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23321016/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30605901",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30605901/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7653500",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7653500/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8791774",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8791774/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8865369",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8865369/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9375358",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9375358/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9827046",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9827046/"
+    },
+    {
+      "database": "reaxys",
+      "id": "121627",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Trimethadione",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3,5,5-trimethyl-1,3-oxazolidine-2,4-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,5,5-trimethyl-1,3-oxazolidine-2,4-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,5,5-trimethyl-2,4-oxazolidinedione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Absentol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Absetil",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Convenixa",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Edion",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Epidione",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Epixal",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Petidion",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Petilep",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Petimalin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ptimal",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tridione Dulcet",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tridione",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "trimetadiona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "trimetadione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "trimethadione",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "trimethadionum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9727?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9727/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9727/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9727/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9727/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9727/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9727/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9727/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

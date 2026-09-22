@@ -1,0 +1,421 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_47781",
+  "lang": "en",
+  "description": [
+    "A dibenzoazepine consisting of 10,11-dihydro-5<em>H</em>-dibenzo[<em>b</em>,<em>f</em>]azepine substituted on nitrogen with a 3-(methylamino)propyl group."
+  ],
+  "synonyms": [
+    "3-(10,11-DIHYDRO-5H-DIBENZO[B,F]AZEPIN-5-YL)-N-METHYLPROPAN-1-AMINE",
+    "3-(10,11-DIHYDRO-5H-DIBENZO[B,F]AZEPIN-5-YL)-N-METHYLPROPAN-1-AMINE",
+    "3-(10,11-dihydro-5H-dibenzo[b,f]azepin-5-yl)-N-methylpropan-1-amine",
+    "3-(10,11-dihydro-5H-dibenzo[b,f]azepin-5-yl)-N-methylpropan-1-amine",
+    "5-(gamma-methylaminopropyl)iminodibenzyl",
+    "DMI",
+    "Desipramin",
+    "Desipramine",
+    "N-(3-methylaminopropyl)iminobibenzyl",
+    "demethylimipramine",
+    "desipramina",
+    "desipramine",
+    "desipraminum",
+    "desmethylimipramine",
+    "monodemethylimipramine",
+    "norimipramine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:50-47-5",
+      "drugbank:DB01151",
+      "drugcentral:812",
+      "hmdb:HMDB0015282",
+      "kegg.compound:C06943",
+      "kegg.drug:D07791",
+      "lincs.smallmolecule:LSM-3351",
+      "pdb-ccd:DSM",
+      "pubmed:11041270",
+      "pubmed:11287497",
+      "pubmed:19328214",
+      "pubmed:20825390",
+      "pubmed:24399719",
+      "reaxys:1432747",
+      "wikipedia.en:Desipramine"
+    ],
+    "generalized_empirical_formula": [
+      "C18H22N2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:4448",
+      "CHEBI:47393"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:47781"
+    ],
+    "inchi_key_string": [
+      "HCYAFALTSJYZDH-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C18H22N2/c1-19-13-6-14-20-17-9-4-2-7-15(17)11-12-16-8-3-5-10-18(16)20/h2-5,7-10,19H,6,11-14H2,1H3"
+    ],
+    "mass": [
+      "266.388"
+    ],
+    "monoisotopic_mass": [
+      "266.1783"
+    ],
+    "smiles_string": [
+      "CNCCCN1c2ccccc2CCc2ccccc21"
+    ]
+  },
+  "label": "desipramine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_47781",
+  "obo_id": "CHEBI:47781",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "50-47-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=50-47-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01151",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01151"
+    },
+    {
+      "database": "drugcentral",
+      "id": "812",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/812"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015282",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015282"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06943",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07791",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3351",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "DSM",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11041270",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11041270/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11287497",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11287497/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19328214",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19328214/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20825390",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20825390/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24399719",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24399719/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1432747",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Desipramine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3-(10,11-DIHYDRO-5H-DIBENZO[B,F]AZEPIN-5-YL)-N-METHYLPROPAN-1-AMINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-(10,11-dihydro-5H-dibenzo[b,f]azepin-5-yl)-N-methylpropan-1-amine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-(10,11-DIHYDRO-5H-DIBENZO[B,F]AZEPIN-5-YL)-N-METHYLPROPAN-1-AMINE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-(10,11-dihydro-5H-dibenzo[b,f]azepin-5-yl)-N-methylpropan-1-amine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-(gamma-methylaminopropyl)iminodibenzyl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DMI",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Desipramin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Desipramine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(3-methylaminopropyl)iminobibenzyl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "demethylimipramine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "desipramina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "desipramine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "desipraminum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "desmethylimipramine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "monodemethylimipramine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "norimipramine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47781?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47781/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47781/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47781/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47781/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47781/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47781/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47781/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

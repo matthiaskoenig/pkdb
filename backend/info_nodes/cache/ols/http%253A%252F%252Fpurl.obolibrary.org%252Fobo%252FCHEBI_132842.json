@@ -1,0 +1,476 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_132842",
+  "lang": "en",
+  "description": [
+    "A sulfonamide consisting of pyridine with a 4-aminobenzenesulfonamido group at the 2-position."
+  ],
+  "synonyms": [
+    "2-(p-Aminobenzenesulphonamido)pyridine",
+    "2-Sulfanilamidopyridin",
+    "2-Sulfanilamidopyridine",
+    "2-Sulfanilylaminopyridine",
+    "2-Sulfapyridine",
+    "4-(2-Pyridinylsulfonyl)aniline",
+    "4-Amino-N,2-pyridinylbenzenesulfonamide",
+    "4-Amino-N-pyridin-2-yl-benzenesulfonamide",
+    "4-[(2-Pyridylamino)sulfonyl]aniline",
+    "4-amino-N-(pyridin-2-yl)benzenesulfonamide",
+    "4-amino-N-(pyridin-2-yl)benzenesulfonamide",
+    "N(1)-2-Pyridylsulfanilamide",
+    "N(1)-Pyridylsulfanilamide",
+    "N-2-Pyridylsulfanilamide",
+    "Solfapiridina",
+    "Sulphapyridine",
+    "sulfapiridina",
+    "sulfapyridine",
+    "sulfapyridinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:144-83-2",
+      "drugbank:DB00891",
+      "drugcentral:2524",
+      "gmelin:219135",
+      "hmdb:HMDB0015028",
+      "kegg.drug:D02434",
+      "lincs.smallmolecule:LSM-5531",
+      "patent:GB512145",
+      "patent:US2275354",
+      "pubmed:11431418",
+      "pubmed:17964793",
+      "pubmed:6136612",
+      "pubmed:6993682",
+      "pubmed:7021831",
+      "reaxys:222065",
+      "vsdb:1922",
+      "wikipedia.en:Sulfapyridine"
+    ],
+    "generalized_empirical_formula": [
+      "C11H11N3O2S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:132842"
+    ],
+    "inchi_key_string": [
+      "GECHUMIMRBOMGK-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C11H11N3O2S/c12-9-4-6-10(7-5-9)17(15,16)14-11-3-1-2-8-13-11/h1-8H,12H2,(H,13,14)"
+    ],
+    "mass": [
+      "249.295"
+    ],
+    "monoisotopic_mass": [
+      "249.0572"
+    ],
+    "smiles_string": [
+      "Nc1ccc(S(=O)(=O)Nc2ccccn2)cc1"
+    ]
+  },
+  "label": "sulfapyridine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_132842",
+  "obo_id": "CHEBI:132842",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "144-83-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=144-83-2"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00891",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00891"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2524",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2524"
+    },
+    {
+      "database": "gmelin",
+      "id": "219135",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015028",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015028"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D02434",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5531",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "GB512145",
+      "description": "patent",
+      "url": "https://www.google.com/patents/GB512145"
+    },
+    {
+      "database": "patent",
+      "id": "US2275354",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2275354"
+    },
+    {
+      "database": "pubmed",
+      "id": "11431418",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11431418/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17964793",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17964793/"
+    },
+    {
+      "database": "pubmed",
+      "id": "6136612",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6136612/"
+    },
+    {
+      "database": "pubmed",
+      "id": "6993682",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6993682/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7021831",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7021831/"
+    },
+    {
+      "database": "reaxys",
+      "id": "222065",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1922",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1922.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Sulfapyridine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-amino-N-(pyridin-2-yl)benzenesulfonamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(p-Aminobenzenesulphonamido)pyridine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Sulfanilamidopyridin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Sulfanilamidopyridine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Sulfanilylaminopyridine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Sulfapyridine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(2-Pyridinylsulfonyl)aniline",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-Amino-N,2-pyridinylbenzenesulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-Amino-N-pyridin-2-yl-benzenesulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-[(2-Pyridylamino)sulfonyl]aniline",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-amino-N-(pyridin-2-yl)benzenesulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N(1)-2-Pyridylsulfanilamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N(1)-Pyridylsulfanilamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-2-Pyridylsulfanilamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Solfapiridina",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sulphapyridine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sulfapiridina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sulfapyridine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sulfapyridinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132842?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132842/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132842/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132842/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132842/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132842/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132842/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132842/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132842/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

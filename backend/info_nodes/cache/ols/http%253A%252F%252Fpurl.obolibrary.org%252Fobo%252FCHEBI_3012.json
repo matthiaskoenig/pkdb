@@ -1,0 +1,336 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3012",
+  "lang": "en",
+  "description": [
+    "A hydrochloride salt resulting from the reaction of benazepril with 1 mol eq. of hydrogen chloride. It is used as a prodrug for angiotensin-converting enzyme inhibitor benazeprilat in the treatment of hypertension and heart failure."
+  ],
+  "synonyms": [
+    "Briem",
+    "Cibace",
+    "Cibacen",
+    "Cibacene",
+    "Labopol",
+    "Lotensin",
+    "Tensanil",
+    "Zinadril",
+    "[(3S)-3-{[(2S)-1-ethoxy-1-oxo-4-phenylbutan-2-yl]amino}-2-oxo-2,3,4,5-tetrahydro-1H-1-benzazepin-1-yl]acetic acid hydrochloride",
+    "[(3S)-3-{[(2S)-1-ethoxy-1-oxo-4-phenylbutan-2-yl]amino}-2-oxo-2,3,4,5-tetrahydro-1H-1-benzazepin-1-yl]acetic acid hydrochloride",
+    "benazepril HCl",
+    "benazepril monohydrochloride"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:86541-74-4",
+      "drugbank:DB00542",
+      "kegg.compound:C07701",
+      "kegg.drug:D00620",
+      "pubmed:17984588",
+      "pubmed:22469039",
+      "pubmed:2264573",
+      "pubmed:26228576",
+      "pubmed:2853611",
+      "reaxys:4286047",
+      "vsdb:1767"
+    ],
+    "generalized_empirical_formula": [
+      "C24H28N2O5.HCl"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3012"
+    ],
+    "inchi_key_string": [
+      "VPSRQEHTHIMDQM-FKLPMGAJSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C24H28N2O5.ClH/c1-2-31-24(30)20(14-12-17-8-4-3-5-9-17)25-19-15-13-18-10-6-7-11-21(18)26(23(19)29)16-22(27)28;/h3-11,19-20,25H,2,12-16H2,1H3,(H,27,28);1H/t19-,20-;/m0./s1"
+    ],
+    "mass": [
+      "460.958"
+    ],
+    "monoisotopic_mass": [
+      "460.1765"
+    ],
+    "smiles_string": [
+      "Cl.[H][C@]1(N[C@@H](CCc2ccccc2)C(=O)OCC)CCc2ccccc2N(CC(=O)O)C1=O"
+    ]
+  },
+  "label": "benazepril hydrochloride",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3012",
+  "obo_id": "CHEBI:3012",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "86541-74-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=86541-74-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00542",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00542"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07701",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00620",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "17984588",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17984588/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22469039",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22469039/"
+    },
+    {
+      "database": "pubmed",
+      "id": "2264573",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2264573/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26228576",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26228576/"
+    },
+    {
+      "database": "pubmed",
+      "id": "2853611",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2853611/"
+    },
+    {
+      "database": "reaxys",
+      "id": "4286047",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1767",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1767.htm"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "[(3S)-3-{[(2S)-1-ethoxy-1-oxo-4-phenylbutan-2-yl]amino}-2-oxo-2,3,4,5-tetrahydro-1H-1-benzazepin-1-yl]acetic acid hydrochloride",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Briem",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cibace",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cibacen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cibacene",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Labopol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lotensin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tensanil",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Zinadril",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[(3S)-3-{[(2S)-1-ethoxy-1-oxo-4-phenylbutan-2-yl]amino}-2-oxo-2,3,4,5-tetrahydro-1H-1-benzazepin-1-yl]acetic acid hydrochloride",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "benazepril HCl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "benazepril monohydrochloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3012?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3012/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3012/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3012/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3012/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3012/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3012/graph"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3012/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3012/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

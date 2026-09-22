@@ -1,0 +1,111 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7633",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Normorphine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:466-97-7",
+      "kegg.compound:C11785"
+    ],
+    "generalized_empirical_formula": [
+      "C16H17NO3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7633"
+    ],
+    "inchi_key_string": [
+      "ONBWJWYUHXVEJS-ZTYRTETDSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C16H17NO3/c18-11-3-1-8-7-10-9-2-4-12(19)15-16(9,5-6-17-10)13(8)14(11)20-15/h1-4,9-10,12,15,17-19H,5-7H2/t9-,10+,12-,15-,16-/m0/s1"
+    ],
+    "mass": [
+      "271.316"
+    ],
+    "monoisotopic_mass": [
+      "271.12084"
+    ],
+    "smiles_string": [
+      "[H][C@@]12C=C[C@H](O)[C@@H]3Oc4c(O)ccc5c4[C@@]31CCN[C@@H]2C5"
+    ]
+  },
+  "label": "Normorphine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7633",
+  "obo_id": "CHEBI:7633",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "466-97-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=466-97-7"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C11785",
+      "description": "kegg.compound",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Normorphine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7633?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7633/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7633/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7633/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7633/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7633/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7633/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

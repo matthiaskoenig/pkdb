@@ -1,0 +1,438 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_196955",
+  "lang": "en",
+  "description": [
+    "A secondary carboxamide resulting from the formal condensation of the carboxy group of (3'<i>S</i>)-2'-oxo-1',2',5,7-tetrahydrospiro[cyclopenta[<em>b</em>]pyridine-6,3'-pyrrolo[2,3-<em>b</em>]pyridine]-3-carboxylic acid with the amino group of (3<i>S</i>,5<i>S</i>,6<i>R</i>)-3-amino-6-methyl-1-(2,2,2-trifluoroethyl)-5-(2,3,6-trifluorophenyl)piperidin-2-one. It is a selective oral, small-molecule antagonist of calcitonin gene-related peptide (CGRP) receptor that has been approved for the treatment of migraine."
+  ],
+  "synonyms": [
+    "(3'S)-N-[(3S,5S,6R)-6-methyl-2-oxo-1-(2,2,2-trifluoroethyl)-5-(2,3,6-trifluorophenyl)piperidin-3-yl]-2'-oxo-1',2',5,7-tetrahydrospiro[cyclopenta[b]pyridine-6,3'-pyrrolo[2,3-b]pyridine]-3-carboxamide",
+    "(3'S)-N-[(3S,5S,6R)-6-methyl-2-oxo-1-(2,2,2-trifluoroethyl)-5-(2,3,6-trifluorophenyl)piperidin-3-yl]-2'-oxo-1',2',5,7-tetrahydrospiro[cyclopenta[b]pyridine-6,3'-pyrrolo[2,3-b]pyridine]-3-carboxamide",
+    "AGN-241689",
+    "MK-8031",
+    "Qulipta",
+    "atogepant",
+    "atogepantum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:1374248-81-3",
+      "drugbank:DB16098",
+      "kegg.drug:D11313",
+      "pubmed:34407343",
+      "pubmed:34813050",
+      "pubmed:34964810",
+      "pubmed:35085204",
+      "pubmed:35093013",
+      "pubmed:35230651",
+      "pubmed:35319319",
+      "pubmed:35332801",
+      "pubmed:35358493",
+      "pubmed:35469689",
+      "pubmed:35493707",
+      "pubmed:35675076",
+      "pubmed:35705886",
+      "pubmed:35983926",
+      "pubmed:36153941",
+      "pubmed:36226229",
+      "pubmed:36396451",
+      "pubmed:36552072",
+      "pubmed:36602199",
+      "pubmed:36620892",
+      "pubmed:36651532",
+      "pubmed:37038933",
+      "pubmed:37210713",
+      "pubmed:37278480",
+      "pubmed:37424270",
+      "pubmed:37516124",
+      "pubmed:37516125",
+      "pubmed:37564925",
+      "pubmed:37630989",
+      "pubmed:37638400",
+      "pubmed:37650778",
+      "pubmed:37656319",
+      "wikipedia.en:Atogepant"
+    ],
+    "generalized_empirical_formula": [
+      "C29H23F6N5O3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:196955"
+    ],
+    "inchi_key_string": [
+      "QIVUCLWGARAQIO-OLIXTKCUSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C29H23F6N5O3/c1-13-16(22-18(30)4-5-19(31)23(22)32)8-20(26(42)40(13)12-29(33,34)35)38-25(41)15-7-14-9-28(10-21(14)37-11-15)17-3-2-6-36-24(17)39-27(28)43/h2-7,11,13,16,20H,8-10,12H2,1H3,(H,38,41)(H,36,39,43)/t13-,16-,20+,28+/m1/s1"
+    ],
+    "mass": [
+      "603.523"
+    ],
+    "monoisotopic_mass": [
+      "603.17051"
+    ],
+    "smiles_string": [
+      "[H][C@@]1(c2c(F)ccc(F)c2F)C[C@H](NC(=O)c2cnc3c(c2)C[C@@]2(C3)C(=O)Nc3ncccc32)C(=O)N(CC(F)(F)F)[C@@H]1C"
+    ]
+  },
+  "label": "atogepant",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_196955",
+  "obo_id": "CHEBI:196955",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "1374248-81-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=1374248-81-3"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB16098",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB16098"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D11313",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "34407343",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34407343/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34813050",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34813050/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34964810",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34964810/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35085204",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35085204/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35093013",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35093013/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35230651",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35230651/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35319319",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35319319/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35332801",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35332801/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35358493",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35358493/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35469689",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35469689/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35493707",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35493707/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35675076",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35675076/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35705886",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35705886/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35983926",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35983926/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36153941",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36153941/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36226229",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36226229/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36396451",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36396451/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36552072",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36552072/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36602199",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36602199/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36620892",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36620892/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36651532",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36651532/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37038933",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37038933/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37210713",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37210713/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37278480",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37278480/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37424270",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37424270/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37516124",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37516124/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37516125",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37516125/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37564925",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37564925/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37630989",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37630989/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37638400",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37638400/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37650778",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37650778/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37656319",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37656319/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Atogepant",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3'S)-N-[(3S,5S,6R)-6-methyl-2-oxo-1-(2,2,2-trifluoroethyl)-5-(2,3,6-trifluorophenyl)piperidin-3-yl]-2'-oxo-1',2',5,7-tetrahydrospiro[cyclopenta[b]pyridine-6,3'-pyrrolo[2,3-b]pyridine]-3-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3'S)-N-[(3S,5S,6R)-6-methyl-2-oxo-1-(2,2,2-trifluoroethyl)-5-(2,3,6-trifluorophenyl)piperidin-3-yl]-2'-oxo-1',2',5,7-tetrahydrospiro[cyclopenta[b]pyridine-6,3'-pyrrolo[2,3-b]pyridine]-3-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AGN-241689",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "MK-8031",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Qulipta",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "atogepant",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "atogepantum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

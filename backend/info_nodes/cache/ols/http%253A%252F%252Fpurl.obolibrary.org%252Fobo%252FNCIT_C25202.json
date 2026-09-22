@@ -1,0 +1,191 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C25202",
+  "lang": "en",
+  "description": [
+    "A family of pyridoxal phosphate-dependent enzymes involved in amino acid metabolism and in the urea and tricarboxylic acid cycles. Aspartate aminotransferase specifically and reversibly catalyzes the transfer of an amino group from L-aspartate to alpha-ketoglutarate forming oxaloacetate and L-glutamate."
+  ],
+  "synonyms": [
+    "AAT",
+    "ASAT",
+    "AST",
+    "AspAT",
+    "Aspartate Aminotransferase",
+    "Aspartate Transaminase",
+    "EC 2.6.1.1",
+    "GOT",
+    "Glutamic Oxaloacetic Transaminase",
+    "SGOT (AST)",
+    "SGOT",
+    "aspartate transaminase",
+    "serum glutamic-oxaloacetic transaminase"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "An enzyme found in the liver, heart, and other tissues. A high level of serum glutamic-oxaloacetic transaminase released into the blood may be a sign of liver or heart damage, cancer, or other diseases."
+    ],
+    "Contributing_Source": [
+      "CTRP"
+    ],
+    "DesignNote": [
+      "Urea Cycle, Tricarboxylic Acid Cycle, Transamination"
+    ],
+    "Display_Name": [
+      "Aspartate Aminotransferase"
+    ],
+    "Legacy Concept Name": [
+      "SGOT-AST_Protein"
+    ],
+    "Preferred_Name": [
+      "Aspartate Aminotransferase"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein",
+      "Enzyme"
+    ],
+    "UMLS_CUI": [
+      "C0242192"
+    ],
+    "code": [
+      "C25202"
+    ]
+  },
+  "label": "Aspartate Aminotransferase",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C25202",
+  "obo_id": "NCIT:C25202",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C142800"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "AAT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ASAT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "AST",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "AspAT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Aspartate Aminotransferase",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Aspartate Transaminase",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "EC 2.6.1.1",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "GOT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Glutamic Oxaloacetic Transaminase",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SGOT (AST)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SGOT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "aspartate transaminase",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "serum glutamic-oxaloacetic transaminase",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25202?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25202/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25202/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25202/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25202/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25202/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25202/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25202/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25202/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25202/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25202/graph"
+    },
+    "Gene_Product_Plays_Role_In_Biological_Process": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25202/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R53"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

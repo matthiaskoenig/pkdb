@@ -1,0 +1,431 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_71272",
+  "lang": "en",
+  "description": [
+    "A monocarboxylic acid amide obtained by formal condensation of the carboxy group of (2<i>S</i>)-amino(3-hydroxyadamantan-1-yl)acetic acid with the amino group of (1<i>S</i>,3<i>S</i>,5<i>S</i>)-2-azabicyclo[3.1.0]hexane-3-carbonitrile. Used in its monohydrate form for the treatment of Type II diabetes."
+  ],
+  "synonyms": [
+    "(1S,3S,5S)-2-((2S)-Amino(3-hydroxytricyclo(3.3.1.13,7)dec-1-yl)acetyl)-2-azabicyclo(3.1.0)hexane-3-carbonitrile",
+    "(1S,3S,5S)-2-[(2S)-2-amino-2-(3-hydroxyadamantan-1-yl)acetyl]-2-azabicyclo[3.1.0]hexane-3-carbonitrile",
+    "(1S,3S,5S)-2-[(2S)-2-amino-2-(3-hydroxyadamantan-1-yl)acetyl]-2-azabicyclo[3.1.0]hexane-3-carbonitrile",
+    "BMS 477118",
+    "BMS-477118",
+    "saxagliptin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:361442-04-8",
+      "drugbank:DB06335",
+      "drugcentral:4114",
+      "hmdb:HMDB0015634",
+      "kegg.drug:D08996",
+      "patent:US2005222242",
+      "patent:US2007172525",
+      "patent:WO2007078726",
+      "patent:WO2009022009",
+      "patent:WO2011125011",
+      "pubmed:22001114",
+      "pubmed:22066527",
+      "pubmed:22081481",
+      "pubmed:22098472",
+      "pubmed:22132773",
+      "pubmed:22149373",
+      "pubmed:22192246",
+      "pubmed:22221000",
+      "pubmed:22232748",
+      "pubmed:22248301",
+      "pubmed:22292415",
+      "pubmed:22313154",
+      "pubmed:22313172",
+      "pubmed:22334441",
+      "pubmed:22349123",
+      "pubmed:22475049",
+      "pubmed:22496391",
+      "pubmed:22564773",
+      "pubmed:22668067",
+      "pubmed:22776778",
+      "pubmed:22823746",
+      "pubmed:22828124",
+      "pubmed:22932707",
+      "pubmed:22943617",
+      "pubmed:23137182",
+      "reaxys:10201614",
+      "wikipedia.en:Saxagliptin"
+    ],
+    "generalized_empirical_formula": [
+      "C18H25N3O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:71272"
+    ],
+    "inchi_key_string": [
+      "QGJUIPDUBHWZPV-SGTAVMJGSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C18H25N3O2/c19-8-13-2-12-3-14(12)21(13)16(22)15(20)17-4-10-1-11(5-17)7-18(23,6-10)9-17/h10-15,23H,1-7,9,20H2/t10?,11?,12-,13+,14+,15-,17?,18?/m1/s1"
+    ],
+    "mass": [
+      "315.417"
+    ],
+    "monoisotopic_mass": [
+      "315.19468"
+    ],
+    "smiles_string": [
+      "[H][C@]12C[C@@H](C#N)N(C(=O)[C@@H](N)C34CC5CC(CC(O)(C5)C3)C4)[C@@]1([H])C2"
+    ]
+  },
+  "label": "saxagliptin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_71272",
+  "obo_id": "CHEBI:71272",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "361442-04-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=361442-04-8"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB06335",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB06335"
+    },
+    {
+      "database": "drugcentral",
+      "id": "4114",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/4114"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015634",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015634"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08996",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US2005222242",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2005222242"
+    },
+    {
+      "database": "patent",
+      "id": "US2007172525",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2007172525"
+    },
+    {
+      "database": "patent",
+      "id": "WO2007078726",
+      "description": "patent",
+      "url": "https://www.google.com/patents/WO2007078726"
+    },
+    {
+      "database": "patent",
+      "id": "WO2009022009",
+      "description": "patent",
+      "url": "https://www.google.com/patents/WO2009022009"
+    },
+    {
+      "database": "patent",
+      "id": "WO2011125011",
+      "description": "patent",
+      "url": "https://www.google.com/patents/WO2011125011"
+    },
+    {
+      "database": "pubmed",
+      "id": "22001114",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22001114/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22066527",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22066527/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22081481",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22081481/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22098472",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22098472/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22132773",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22132773/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22149373",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22149373/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22192246",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22192246/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22221000",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22221000/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22232748",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22232748/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22248301",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22248301/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22292415",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22292415/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22313154",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22313154/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22313172",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22313172/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22334441",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22334441/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22349123",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22349123/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22475049",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22475049/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22496391",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22496391/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22564773",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22564773/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22668067",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22668067/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22776778",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22776778/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22823746",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22823746/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22828124",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22828124/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22932707",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22932707/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22943617",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22943617/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23137182",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23137182/"
+    },
+    {
+      "database": "reaxys",
+      "id": "10201614",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Saxagliptin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(1S,3S,5S)-2-[(2S)-2-amino-2-(3-hydroxyadamantan-1-yl)acetyl]-2-azabicyclo[3.1.0]hexane-3-carbonitrile",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S,3S,5S)-2-((2S)-Amino(3-hydroxytricyclo(3.3.1.13,7)dec-1-yl)acetyl)-2-azabicyclo(3.1.0)hexane-3-carbonitrile",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S,3S,5S)-2-[(2S)-2-amino-2-(3-hydroxyadamantan-1-yl)acetyl]-2-azabicyclo[3.1.0]hexane-3-carbonitrile",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BMS 477118",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BMS-477118",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "saxagliptin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

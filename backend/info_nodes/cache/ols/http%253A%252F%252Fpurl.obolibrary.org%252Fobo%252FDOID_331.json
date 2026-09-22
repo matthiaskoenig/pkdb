@@ -1,0 +1,124 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_331",
+  "lang": "en",
+  "description": [
+    "A nervous system disease that affects either the spinal cord (myelopathy) or brain (encephalopathy) of the central nervous system."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10CM:G96.9",
+      "MESH:D002493",
+      "NCI:C2934",
+      "SNOMEDCT_US_2025_09_01:267144009",
+      "UMLS_CUI:C0007682"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:331"
+    ]
+  },
+  "label": "central nervous system disease",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_331",
+  "obo_id": "DOID:331",
+  "in_subset": [
+    "DO_AGR_slim",
+    "DO_CFDE_slim",
+    "DO_GXD_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A nervous system disease that affects either the spinal cord (myelopathy) or brain (encephalopathy) of the central nervous system.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "G96.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D002493",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D002493"
+    },
+    {
+      "database": "NCI",
+      "id": "C2934",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C2934"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "267144009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/267144009"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0007682",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0007682"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_331?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_331/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_331/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_331/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_331/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_331/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_331/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_331/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_331/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_331/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_331/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

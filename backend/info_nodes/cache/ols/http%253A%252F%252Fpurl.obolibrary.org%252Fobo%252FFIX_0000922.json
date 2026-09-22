@@ -1,0 +1,67 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/FIX_0000922",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "cGC-MS"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "PUBMED:12462614"
+    ],
+    "has_obo_namespace": [
+      "fix.ontology"
+    ],
+    "id": [
+      "FIX:0000922"
+    ]
+  },
+  "label": "capillary gas chromatography-mass spectrometry",
+  "ontology_name": "fix",
+  "ontology_prefix": null,
+  "ontology_iri": "http://purl.obolibrary.org/obo/fix.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": false,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "FIX_0000922",
+  "obo_id": "FIX:0000922",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "PUBMED",
+      "id": "12462614",
+      "description": null,
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12462614/"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fix/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFIX_0000922?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fix/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFIX_0000922/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fix/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFIX_0000922/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fix/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFIX_0000922/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fix/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFIX_0000922/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fix/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFIX_0000922/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fix/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFIX_0000922/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -18,6 +18,7 @@ def generated_vocabulary(tmp_path_factory):
         [
             sys.executable,
             str(ROOT / "scripts/update_vocabulary.py"),
+            "--offline",
             "--output",
             str(output),
         ],
@@ -59,16 +60,11 @@ def test_annotation_urls_are_resolved(generated_vocabulary):
     )
 
 
-def test_generation_reports_metadata_issues(generated_vocabulary):
-    issues = generated_vocabulary["provenance"]["metadata_issues"]
-    assert any(
-        issue["sid"] == "mixed-race" and issue["code"] == "curation_review"
-        for issue in issues
-    )
-    assert any(issue["code"] == "unknown_policy_measurement" for issue in issues)
+def test_generation_tracks_authoring_sources(generated_vocabulary):
     sources = generated_vocabulary["provenance"]["definition_sha256"]
     assert "backend/info_nodes/node.py" in sources
-    assert not any("pkdb_data/info_nodes" in path for path in sources)
+    assert "backend/info_nodes/convert.py" in sources
+    assert not any("pkdb_data" in path for path in sources)
 
 
 def test_annotation_metadata_is_available_offline(generated_vocabulary):
@@ -85,9 +81,33 @@ def test_annotation_metadata_is_available_offline(generated_vocabulary):
     ]
 
 
+def test_chmo_annotations_resolve_from_offline_cache(generated_vocabulary):
+    annotations = [
+        json.loads(value)
+        for node in generated_vocabulary["vocabulary"]["nodes"]
+        for value in node["terms"]["annotations"]
+    ]
+    chmo = [
+        annotation for annotation in annotations if annotation["collection"] == "chmo"
+    ]
+    assert len(chmo) == 23
+    for annotation in chmo:
+        assert annotation["term"].startswith("CHMO:")
+        assert annotation["url"] == f"https://bioregistry.io/{annotation['term']}"
+        assert annotation["label"]
+        # CHMO:0002876 has no definition in the cached ontology record.
+        assert annotation["description"] or annotation["term"] == "CHMO:0002876"
+    assert not [
+        issue
+        for issue in generated_vocabulary["provenance"]["metadata_issues"]
+        if "CHMO:" in issue["message"]
+    ]
+
+
 @pytest.mark.parametrize(
     ("sid", "collection", "label"),
     [
+        ("sex", "ncit", "Sex"),
         ("age", "sio", "age"),
         ("assay", "obi", "assay"),
         ("alpha-fetoprotein", "pr", "alpha-fetoprotein"),

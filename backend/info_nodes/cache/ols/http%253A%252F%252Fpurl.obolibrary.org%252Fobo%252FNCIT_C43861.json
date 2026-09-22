@@ -1,0 +1,92 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C43861",
+  "lang": "en",
+  "description": [
+    "Denotes the inhabitants of Sweden, a person from there, or their descendants elsewhere."
+  ],
+  "synonyms": [
+    "SWEDISH",
+    "Swedish"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A person having origins in any of the original peoples of Sweden."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "Legacy Concept Name": [
+      "Swedish"
+    ],
+    "Preferred_Name": [
+      "Swedish"
+    ],
+    "Semantic_Type": [
+      "Population Group"
+    ],
+    "UMLS_CUI": [
+      "C1710263"
+    ],
+    "code": [
+      "C43861"
+    ]
+  },
+  "label": "Swedish",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C43861",
+  "obo_id": "NCIT:C43861",
+  "in_subset": [
+    "NCIT_C128689",
+    "NCIT_C61410",
+    "NCIT_C66830"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "SWEDISH",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Swedish",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43861?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43861/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43861/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43861/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43861/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43861/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43861/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

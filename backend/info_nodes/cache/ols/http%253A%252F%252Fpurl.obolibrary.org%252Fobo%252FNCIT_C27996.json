@@ -1,0 +1,162 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C27996",
+  "lang": "en",
+  "description": [
+    "Gross necrosis of the myocardium, as a result of interruption of the blood supply to the area, as in coronary thrombosis."
+  ],
+  "synonyms": [
+    "Heart Attack",
+    "MI",
+    "Myocardial Infarct",
+    "Myocardial Infarction",
+    "Myocardial infarction"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A condition which occurs when blood flow decreases or stops to a part of the heart, causing damage to the heart muscle.",
+      "A disorder characterized by gross necrosis of the myocardium; this is due to an interruption of blood supply to the area.",
+      "Gross necrosis of the myocardium, as a result of interruption of the blood supply to the area, as in coronary thrombosis.",
+      "Necrosis of the myocardium, as a result of interruption of the blood supply to the area."
+    ],
+    "Contributing_Source": [
+      "ACC/AHA",
+      "CTCAE",
+      "Cellosaurus",
+      "FDA",
+      "GDC",
+      "MedDRA",
+      "NICHD"
+    ],
+    "FDA_Table": [
+      "Patient Code (Appendix B)"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C16457",
+      "http://purl.obolibrary.org/obo/NCIT_C17103"
+    ],
+    "Legacy Concept Name": [
+      "Myocardial_Infarction"
+    ],
+    "Maps_To": [
+      "Myocardial Infarction",
+      "Myocardial infarction"
+    ],
+    "Preferred_Name": [
+      "Myocardial Infarction"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C3280935"
+    ],
+    "code": [
+      "C27996"
+    ],
+    "database_cross_reference": [
+      "IMDRF:E061202"
+    ]
+  },
+  "label": "Myocardial Infarction",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C27996",
+  "obo_id": "NCIT:C27996",
+  "in_subset": [
+    "NCIT_C118464",
+    "NCIT_C157711",
+    "NCIT_C165258",
+    "NCIT_C167409",
+    "NCIT_C177537",
+    "NCIT_C189762",
+    "NCIT_C208333",
+    "NCIT_C54450",
+    "NCIT_C90259",
+    "NCIT_C99147"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "IMDRF",
+      "id": "E061202",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Heart Attack",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "MI",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Myocardial Infarct",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Myocardial Infarction",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Myocardial infarction",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C27996?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C27996/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C27996/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C27996/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C27996/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C27996/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C27996/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C27996/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C27996/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C27996/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C27996/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

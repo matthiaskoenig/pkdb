@@ -1,0 +1,135 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000400",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "DM - Diabetes mellitus",
+    "Diabetes NOS",
+    "Diabetes mellitus (disorder)",
+    "Diabetes mellitus, NOS",
+    "Diabetes"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:9351",
+      "ICD10:E13",
+      "ICD10:E14",
+      "ICD9:250",
+      "MESH:D003920",
+      "MedDRA:10012601",
+      "MedDRA:10012624",
+      "MedDRA:10012625",
+      "NCIt:C2985",
+      "OMIM:612227",
+      "SNOMEDCT:73211009"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0005015, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0005015"
+    ],
+    "term editor": [
+      "James Malone"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005015"
+    ]
+  },
+  "label": "obsolete_diabetes mellitus",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005015",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0000400",
+  "obo_id": "EFO:0000400",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "9351",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_9351"
+    },
+    {
+      "database": "ICD10",
+      "id": "E13",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/E13"
+    },
+    {
+      "database": "ICD10",
+      "id": "E14",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/E14"
+    },
+    {
+      "database": "ICD9",
+      "id": "250",
+      "description": null,
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=250"
+    },
+    {
+      "database": "MESH",
+      "id": "D003920",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D003920"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10012601",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10012601"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10012624",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10012624"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10012625",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10012625"
+    },
+    {
+      "database": "NCIt",
+      "id": "C2985",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C2985"
+    },
+    {
+      "database": "OMIM",
+      "id": "612227",
+      "description": null,
+      "url": "https://omim.org/entry/612227"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "73211009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/73211009"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

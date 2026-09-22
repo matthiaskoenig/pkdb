@@ -1,0 +1,133 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_28",
+  "lang": "en",
+  "description": [
+    "A disease of anatomical entity that is located_in endocrine glands which secretes a type of hormone directly into the bloodstream to regulate the body."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10CM:E34.9",
+      "ICD9CM:259.9",
+      "MESH:D004700",
+      "NCI:C3009",
+      "SNOMEDCT_US_2025_09_01:67432001",
+      "UMLS_CUI:C0014130"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:28"
+    ]
+  },
+  "label": "endocrine system disease",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_28",
+  "obo_id": "DOID:28",
+  "in_subset": [
+    "DO_AGR_slim",
+    "DO_CFDE_slim",
+    "DO_GXD_slim",
+    "DO_MGI_slim",
+    "DO_RAD_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A disease of anatomical entity that is located_in endocrine glands which secretes a type of hormone directly into the bloodstream to regulate the body.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "E34.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "259.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D004700",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D004700"
+    },
+    {
+      "database": "NCI",
+      "id": "C3009",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3009"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "67432001",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/67432001"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0014130",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0014130"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_28?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_28/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_28/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_28/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_28/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_28/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_28/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_28/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_28/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_28/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_28/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

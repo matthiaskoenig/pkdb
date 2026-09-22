@@ -1,0 +1,382 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_53579",
+  "lang": "en",
+  "description": [
+    "A morphinane alkaloid that is a derivative of morphine with a 2-morpholinoethyl group at the 3-position."
+  ],
+  "synonyms": [
+    "(5alpha,6alpha)-17-methyl-3-[2-(morpholin-4-yl)ethoxy]-7,8-didehydro-4,5-epoxymorphinan-6-ol",
+    "(5alpha,6alpha)-17-methyl-3-[2-(morpholin-4-yl)ethoxy]-7,8-didehydro-4,5-epoxymorphinan-6-ol",
+    "3-(2-(4-Morpholinyl)ethyl)morphine",
+    "3-(2-Morpholinoethyl)morphine",
+    "3-Morpholylaethylmorphin",
+    "3-morpholinoethylmorphine",
+    "7,8-Didehydro-4,5-alpha-epoxy-17-methyl-3-(2-morpholinoethoxy)morphinan-6-alpha-ol",
+    "Morpholinylethylmorphine",
+    "Tetrahydro-1,4-oxazinylmethylcodeine",
+    "beta-Morpholinoethylmorphine",
+    "folcodina",
+    "pholcodine",
+    "pholcodinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:509-67-1",
+      "drugcentral:2154",
+      "kegg.drug:D07385",
+      "pubmed:11829134",
+      "pubmed:12593758",
+      "pubmed:17667569",
+      "pubmed:1910552",
+      "pubmed:19210354",
+      "pubmed:19563989",
+      "pubmed:19796197",
+      "pubmed:22380984",
+      "pubmed:23283141",
+      "pubmed:23772895",
+      "pubmed:29368335",
+      "reaxys:63383",
+      "wikipedia.en:Pholcodine"
+    ],
+    "generalized_empirical_formula": [
+      "C23H30N2O4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:53579"
+    ],
+    "inchi_key_string": [
+      "GPFAJKDEDBRFOS-FKQDBXSBSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C23H30N2O4/c1-24-7-6-23-16-3-4-18(26)22(23)29-21-19(5-2-15(20(21)23)14-17(16)24)28-13-10-25-8-11-27-12-9-25/h2-5,16-18,22,26H,6-14H2,1H3/t16-,17+,18-,22-,23-/m0/s1"
+    ],
+    "mass": [
+      "398.503"
+    ],
+    "monoisotopic_mass": [
+      "398.22056"
+    ],
+    "smiles_string": [
+      "[H][C@@]12C=C[C@H](O)[C@]3([H])Oc4c(OCCN5CCOCC5)ccc5c4[C@]13CCN(C)[C@@H]2C5"
+    ]
+  },
+  "label": "pholcodine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_53579",
+  "obo_id": "CHEBI:53579",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "509-67-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=509-67-1"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2154",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2154"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07385",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11829134",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11829134/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12593758",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12593758/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17667569",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17667569/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1910552",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1910552/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19210354",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19210354/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19563989",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19563989/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19796197",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19796197/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22380984",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22380984/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23283141",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23283141/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23772895",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23772895/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29368335",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29368335/"
+    },
+    {
+      "database": "reaxys",
+      "id": "63383",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Pholcodine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(5alpha,6alpha)-17-methyl-3-[2-(morpholin-4-yl)ethoxy]-7,8-didehydro-4,5-epoxymorphinan-6-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(5alpha,6alpha)-17-methyl-3-[2-(morpholin-4-yl)ethoxy]-7,8-didehydro-4,5-epoxymorphinan-6-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-(2-(4-Morpholinyl)ethyl)morphine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-(2-Morpholinoethyl)morphine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-Morpholylaethylmorphin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-morpholinoethylmorphine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7,8-Didehydro-4,5-alpha-epoxy-17-methyl-3-(2-morpholinoethoxy)morphinan-6-alpha-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Morpholinylethylmorphine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tetrahydro-1,4-oxazinylmethylcodeine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "beta-Morpholinoethylmorphine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "folcodina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pholcodine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pholcodinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_53579?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_53579/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_53579/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_53579/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_53579/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_53579/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_53579/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_53579/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

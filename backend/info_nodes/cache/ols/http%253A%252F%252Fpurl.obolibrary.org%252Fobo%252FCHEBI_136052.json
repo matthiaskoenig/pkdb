@@ -1,0 +1,184 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_136052",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "CKD-501",
+    "Lobeglitazone",
+    "duvie",
+    "lobeglitazona",
+    "lobeglitazone sulfate"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:607723-33-1",
+      "drugcentral:5078",
+      "pubmed:25890697",
+      "pubmed:32339855"
+    ],
+    "generalized_empirical_formula": [
+      "C24H24N4O5S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:136052"
+    ],
+    "inchi_key_string": [
+      "CHHXEZSCHQVSRE-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C24H24N4O5S/c1-28(21-14-22(26-15-25-21)33-19-9-7-17(31-2)8-10-19)11-12-32-18-5-3-16(4-6-18)13-20-23(29)27-24(30)34-20/h3-10,14-15,20H,11-13H2,1-2H3,(H,27,29,30)"
+    ],
+    "mass": [
+      "480.546"
+    ],
+    "monoisotopic_mass": [
+      "480.14674"
+    ],
+    "smiles_string": [
+      "[H]C1(Cc2ccc(OCCN(C)c3cc(Oc4ccc(OC)cc4)ncn3)cc2)SC(=O)NC1=O"
+    ]
+  },
+  "label": "lobeglitazone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_136052",
+  "obo_id": "CHEBI:136052",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "607723-33-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=607723-33-1"
+    },
+    {
+      "database": "drugcentral",
+      "id": "5078",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/5078"
+    },
+    {
+      "database": "pubmed",
+      "id": "25890697",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25890697/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32339855",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32339855/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "CKD-501",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lobeglitazone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "duvie",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lobeglitazona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lobeglitazone sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,114 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C62167",
+  "lang": "en",
+  "description": [
+    "A posterior recumbent body position whereby the person lies on its back and faces upward."
+  ],
+  "synonyms": [
+    "SUPINE",
+    "Supine Position",
+    "Supine position",
+    "Supine"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A posterior recumbent body position whereby the person lies on its back and faces upward. (NCI)",
+      "Lying with the face upward or on the dorsal surface."
+    ],
+    "Contributing_Source": [
+      "ACC/AHA",
+      "CDISC",
+      "OORO"
+    ],
+    "Legacy Concept Name": [
+      "Supine_Position"
+    ],
+    "Preferred_Name": [
+      "Supine Position"
+    ],
+    "Semantic_Type": [
+      "Spatial Concept"
+    ],
+    "UMLS_CUI": [
+      "C0038846"
+    ],
+    "code": [
+      "C62167"
+    ]
+  },
+  "label": "Supine Position",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C62167",
+  "obo_id": "NCIT:C62167",
+  "in_subset": [
+    "NCIT_C167409",
+    "NCIT_C192234",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C71148",
+    "NCIT_C77526",
+    "NCIT_C77527",
+    "NCIT_C78431"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "SUPINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Supine Position",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Supine position",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Supine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62167?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62167/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62167/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62167/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62167/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62167/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62167/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

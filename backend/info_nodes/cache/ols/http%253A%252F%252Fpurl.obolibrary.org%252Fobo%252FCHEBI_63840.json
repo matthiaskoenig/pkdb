@@ -1,0 +1,196 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_63840",
+  "lang": "en",
+  "description": [
+    "A sulfoxide that is omeprazole in which one of the methyl hydrogens at position 5 on the pyridine ring is substituted by a hydroxy group."
+  ],
+  "synonyms": [
+    "(4-methoxy-6-{[(5-methoxy-1H-benzimidazol-2-yl)sulfinyl]methyl}-5-methylpyridin-3-yl)methanol",
+    "(4-methoxy-6-{[(5-methoxy-1H-benzimidazol-2-yl)sulfinyl]methyl}-5-methylpyridin-3-yl)methanol",
+    "5-Methoxy-2-(((4-methoxy-3-methyl-5-hydroxymethyl-2-pyridinyl)methyl)sulfinyl)-1H-benzimidazole",
+    "Hydroxyomeprazole"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:92340-57-3",
+      "pubmed:19166730",
+      "pubmed:21546194",
+      "pubmed:7781266",
+      "pubmed:8550990",
+      "pubmed:9916309",
+      "reaxys:8439890"
+    ],
+    "generalized_empirical_formula": [
+      "C17H19N3O4S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:63840"
+    ],
+    "inchi_key_string": [
+      "CMZHQFXXAAIBKE-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C17H19N3O4S/c1-10-15(18-7-11(8-21)16(10)24-3)9-25(22)17-19-13-5-4-12(23-2)6-14(13)20-17/h4-7,21H,8-9H2,1-3H3,(H,19,20)"
+    ],
+    "mass": [
+      "361.423"
+    ],
+    "monoisotopic_mass": [
+      "361.10963"
+    ],
+    "smiles_string": [
+      "COc1ccc2nc(S(=O)Cc3ncc(CO)c(OC)c3C)nc2c1"
+    ]
+  },
+  "label": "5'-hydroxyomeprazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_63840",
+  "obo_id": "CHEBI:63840",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "92340-57-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=92340-57-3"
+    },
+    {
+      "database": "pubmed",
+      "id": "19166730",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19166730/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21546194",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21546194/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7781266",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7781266/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8550990",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8550990/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9916309",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9916309/"
+    },
+    {
+      "database": "reaxys",
+      "id": "8439890",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(4-methoxy-6-{[(5-methoxy-1H-benzimidazol-2-yl)sulfinyl]methyl}-5-methylpyridin-3-yl)methanol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(4-methoxy-6-{[(5-methoxy-1H-benzimidazol-2-yl)sulfinyl]methyl}-5-methylpyridin-3-yl)methanol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Methoxy-2-(((4-methoxy-3-methyl-5-hydroxymethyl-2-pyridinyl)methyl)sulfinyl)-1H-benzimidazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Hydroxyomeprazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63840?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63840/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63840/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63840/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63840/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63840/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63840/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63840/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63840/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

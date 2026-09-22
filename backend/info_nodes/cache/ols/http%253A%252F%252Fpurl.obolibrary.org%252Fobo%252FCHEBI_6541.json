@@ -1,0 +1,343 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6541",
+  "lang": "en",
+  "description": [
+    "A biphenylyltetrazole where a 1,1'-biphenyl group is attached at the 5-position and has an additional trisubstituted imidazol-1-ylmethyl group at the 4'-position"
+  ],
+  "synonyms": [
+    "(2-butyl-4-chloro-1-{[2'-(1H-tetrazol-5-yl)[1,1'-biphenyl]-4-yl]methyl}-1H-imidazol-5-yl)methanol",
+    "(2-butyl-4-chloro-1-{[2'-(1H-tetrazol-5-yl)[1,1'-biphenyl]-4-yl]methyl}-1H-imidazol-5-yl)methanol",
+    "(2-butyl-4-chloro-1-{[2'-(1H-tetrazol-5-yl)biphenyl-4-yl]methyl}-1H-imidazol-5-yl)methanol",
+    "2-n-butyl-4-chloro-5-hydroxymethyl-1-[(2'-(1H-tetrazol-5-yl)biphenyl-4-yl)methyl]imidazole",
+    "Losartan",
+    "losartan"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:114798-26-4",
+      "drugbank:DB00678",
+      "drugcentral:1610",
+      "hmdb:HMDB0014816",
+      "kegg.compound:C07072",
+      "kegg.drug:D08146",
+      "lincs.smallmolecule:LSM-3701",
+      "patent:EP253310",
+      "patent:US5138069",
+      "pubmed:11115412",
+      "pubmed:11589260",
+      "pubmed:12561964",
+      "pubmed:15703421",
+      "pubmed:18800450",
+      "pubmed:18800451",
+      "pubmed:18800458",
+      "pubmed:18940180",
+      "pubmed:31299855",
+      "pubmed:31613648",
+      "pubmed:31636311",
+      "pubmed:31893179",
+      "pubmed:32048541",
+      "reaxys:4770867",
+      "wikipedia.en:Losartan"
+    ],
+    "generalized_empirical_formula": [
+      "C22H23ClN6O"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6541"
+    ],
+    "inchi_key_string": [
+      "PSIFNNKUMBGKDQ-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C22H23ClN6O/c1-2-3-8-20-24-21(23)19(14-30)29(20)13-15-9-11-16(12-10-15)17-6-4-5-7-18(17)22-25-27-28-26-22/h4-7,9-12,30H,2-3,8,13-14H2,1H3,(H,25,26,27,28)"
+    ],
+    "mass": [
+      "422.92"
+    ],
+    "monoisotopic_mass": [
+      "422.16219"
+    ],
+    "smiles_string": [
+      "CCCCc1nc(Cl)c(CO)n1Cc1ccc(-c2ccccc2-c2nnnn2)cc1"
+    ]
+  },
+  "label": "losartan",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6541",
+  "obo_id": "CHEBI:6541",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "114798-26-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=114798-26-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00678",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00678"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1610",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1610"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014816",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014816"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07072",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08146",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3701",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP253310",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP253310"
+    },
+    {
+      "database": "patent",
+      "id": "US5138069",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US5138069"
+    },
+    {
+      "database": "pubmed",
+      "id": "11115412",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11115412/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11589260",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11589260/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12561964",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12561964/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15703421",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15703421/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18800450",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18800450/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18800451",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18800451/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18800458",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18800458/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18940180",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18940180/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31299855",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31299855/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31613648",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31613648/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31636311",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31636311/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31893179",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31893179/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32048541",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32048541/"
+    },
+    {
+      "database": "reaxys",
+      "id": "4770867",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Losartan",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2-butyl-4-chloro-1-{[2'-(1H-tetrazol-5-yl)[1,1'-biphenyl]-4-yl]methyl}-1H-imidazol-5-yl)methanol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2-butyl-4-chloro-1-{[2'-(1H-tetrazol-5-yl)[1,1'-biphenyl]-4-yl]methyl}-1H-imidazol-5-yl)methanol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2-butyl-4-chloro-1-{[2'-(1H-tetrazol-5-yl)biphenyl-4-yl]methyl}-1H-imidazol-5-yl)methanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-n-butyl-4-chloro-5-hydroxymethyl-1-[(2'-(1H-tetrazol-5-yl)biphenyl-4-yl)methyl]imidazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iuphar",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Losartan",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "losartan",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6541?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6541/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6541/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6541/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6541/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6541/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6541/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6541/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6541/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

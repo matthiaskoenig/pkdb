@@ -1,0 +1,325 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_82985",
+  "lang": "en",
+  "description": [
+    "A polyketide obtained by hydrolysis of the pyranone ring of lovastatin."
+  ],
+  "synonyms": [
+    "(3R,5R)-7-[(1S,2S,6R,8S,8aR)-2,6-dimethyl-8-{[(2S)-2-methylbutanoyl]oxy}-1,2,6,7,8,8a-hexahydronaphthalen-1-yl]-3,5-dihydroxyheptanoic acid",
+    "(3R,5R)-7-[(1S,2S,6R,8S,8aR)-2,6-dimethyl-8-{[(2S)-2-methylbutanoyl]oxy}-1,2,6,7,8,8a-hexahydronaphthalen-1-yl]-3,5-dihydroxyheptanoic acid",
+    "L 154819",
+    "L-154819",
+    "Lovastatin acid",
+    "MK 819",
+    "MSD 803 acid",
+    "Monacolinic K acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:75225-51-3",
+      "pubmed:11372002",
+      "pubmed:11831543",
+      "pubmed:12369143",
+      "pubmed:12434405",
+      "pubmed:12927388",
+      "pubmed:19530726",
+      "pubmed:22995742",
+      "pubmed:23227093",
+      "pubmed:23352857",
+      "pubmed:24534845",
+      "pubmed:24990555",
+      "pubmed:3988710",
+      "pubmed:6665743",
+      "pubmed:9050262",
+      "pubmed:9585793",
+      "reaxys:4574661"
+    ],
+    "generalized_empirical_formula": [
+      "C24H38O6"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:82985"
+    ],
+    "inchi_key_string": [
+      "QLJODMDSTUBWDW-BXMDZJJMSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C24H38O6/c1-5-15(3)24(29)30-21-11-14(2)10-17-7-6-16(4)20(23(17)21)9-8-18(25)12-19(26)13-22(27)28/h6-7,10,14-16,18-21,23,25-26H,5,8-9,11-13H2,1-4H3,(H,27,28)/t14-,15-,16-,18+,19+,20-,21-,23-/m0/s1"
+    ],
+    "mass": [
+      "422.562"
+    ],
+    "monoisotopic_mass": [
+      "422.26684"
+    ],
+    "smiles_string": [
+      "[H][C@@]12C(=C[C@H](C)C[C@@H]1OC(=O)[C@@H](C)CC)C=C[C@H](C)[C@@H]2CC[C@@H](O)C[C@@H](O)CC(=O)O"
+    ]
+  },
+  "label": "mevinolinic acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_82985",
+  "obo_id": "CHEBI:82985",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "75225-51-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=75225-51-3"
+    },
+    {
+      "database": "pubmed",
+      "id": "11372002",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11372002/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11831543",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11831543/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12369143",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12369143/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12434405",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12434405/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12927388",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12927388/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19530726",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19530726/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22995742",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22995742/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23227093",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23227093/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23352857",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23352857/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24534845",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24534845/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24990555",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24990555/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3988710",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3988710/"
+    },
+    {
+      "database": "pubmed",
+      "id": "6665743",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6665743/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9050262",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9050262/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9585793",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9585793/"
+    },
+    {
+      "database": "reaxys",
+      "id": "4574661",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3R,5R)-7-[(1S,2S,6R,8S,8aR)-2,6-dimethyl-8-{[(2S)-2-methylbutanoyl]oxy}-1,2,6,7,8,8a-hexahydronaphthalen-1-yl]-3,5-dihydroxyheptanoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3R,5R)-7-[(1S,2S,6R,8S,8aR)-2,6-dimethyl-8-{[(2S)-2-methylbutanoyl]oxy}-1,2,6,7,8,8a-hexahydronaphthalen-1-yl]-3,5-dihydroxyheptanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L 154819",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-154819",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lovastatin acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "MK 819",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "MSD 803 acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Monacolinic K acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82985?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82985/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82985/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82985/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82985/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82985/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82985/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82985/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82985/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82985/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

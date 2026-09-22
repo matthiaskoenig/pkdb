@@ -1,0 +1,147 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_74",
+  "lang": "en",
+  "description": [
+    "A disease of anatomical entity that has_material_basis_in hematopoietic cells."
+  ],
+  "synonyms": [
+    "Blood disease",
+    "Blood dyscrasia",
+    "DISEASE OF THE BLOOD AND BLOOD-FORMING ORGANS",
+    "Hematological disease",
+    "blood disorder",
+    "disease of haematopoietic system",
+    "disease of hematopoietic system",
+    "haematopoietic system disease"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10CM:D75.9",
+      "ICD9CM:289.9",
+      "MESH:D006402",
+      "NCI:C26323",
+      "SNOMEDCT_US_2025_09_01:154785002",
+      "UMLS_CUI:C0018939"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:74"
+    ]
+  },
+  "label": "hematopoietic system disease",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_74",
+  "obo_id": "DOID:74",
+  "in_subset": [
+    "DO_AGR_slim",
+    "DO_CFDE_slim",
+    "DO_GXD_slim",
+    "DO_MGI_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A disease of anatomical entity that has_material_basis_in hematopoietic cells.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "D75.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "289.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D006402",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D006402"
+    },
+    {
+      "database": "NCI",
+      "id": "C26323",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C26323"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "154785002",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/154785002"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0018939",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0018939"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_74?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_74/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_74/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_74/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_74/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_74/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_74/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_74/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_74/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_74/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_74/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

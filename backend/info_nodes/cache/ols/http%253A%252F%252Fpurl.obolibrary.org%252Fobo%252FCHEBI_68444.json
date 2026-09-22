@@ -1,0 +1,161 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_68444",
+  "lang": "en",
+  "description": [
+    "A 1-methylxanthine tautomer where the imidazole proton is located at the 7-position."
+  ],
+  "synonyms": [
+    "1-methyl-3,7-dihydro-1H-purine-2,6-dione",
+    "1-methyl-3,7-dihydro-1H-purine-2,6-dione"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:6136-37-4",
+      "hmdb:HMDB0010738",
+      "kegg.compound:C16358",
+      "metacyc.compound:CPD-9025",
+      "pubmed:22770225",
+      "reaxys:171507"
+    ],
+    "generalized_empirical_formula": [
+      "C6H6N4O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:68444"
+    ],
+    "inchi_key_string": [
+      "MVOYJPOZRLFTCP-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C6H6N4O2/c1-10-5(11)3-4(8-2-7-3)9-6(10)12/h2H,1H3,(H,7,8)(H,9,12)"
+    ],
+    "mass": [
+      "166.14"
+    ],
+    "monoisotopic_mass": [
+      "166.04908"
+    ],
+    "smiles_string": [
+      "Cn1c(=O)nc2ncnc2c1=O"
+    ]
+  },
+  "label": "1-methyl-7H-xanthine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_68444",
+  "obo_id": "CHEBI:68444",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "6136-37-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=6136-37-4"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0010738",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0010738"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C16358",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-9025",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "22770225",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22770225/"
+    },
+    {
+      "database": "reaxys",
+      "id": "171507",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1-methyl-3,7-dihydro-1H-purine-2,6-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-methyl-3,7-dihydro-1H-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68444?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68444/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68444/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68444/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68444/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68444/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68444/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68444/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68444/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,478 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_68641",
+  "lang": "en",
+  "description": [
+    "An <em>N</em>-alkylpyrrolidine that consists of <em>N</em>-methylpyrrolidinone bearing a pyridin-3-yl substituent at position C-5 (the 5<i>S</i>-enantiomer). It is an alkaloid commonly found in <em>Nicotiana tabacum</em>."
+  ],
+  "synonyms": [
+    "(5S)-1-methyl-5-(pyridin-3-yl)pyrrolidin-2-one",
+    "(5S)-1-methyl-5-(pyridin-3-yl)pyrrolidin-2-one",
+    "(S)-(-)-Cotinine",
+    "(S)-1-Methyl-5-(3-pyridinyl)-2-pyrrolidinone",
+    "(S)-Cotinine",
+    "cotinina",
+    "cotinine",
+    "cotininum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:486-56-6",
+      "drugcentral:737",
+      "hmdb:HMDB0001046",
+      "knapsack:C00034470",
+      "lincs.smallmolecule:LSM-5986",
+      "metacyc.compound:CPD-2742",
+      "pubmed:14700346",
+      "pubmed:21655912",
+      "pubmed:21953524",
+      "pubmed:22027507",
+      "pubmed:22137886",
+      "pubmed:22169225",
+      "pubmed:22180597",
+      "pubmed:22200307",
+      "pubmed:22244928",
+      "pubmed:22253001",
+      "pubmed:22434216",
+      "pubmed:22460317",
+      "pubmed:22487419",
+      "pubmed:22489581",
+      "pubmed:22574797",
+      "pubmed:22608097",
+      "pubmed:22678157",
+      "pubmed:22687995",
+      "pubmed:22770225",
+      "pubmed:22809871",
+      "pubmed:22871902",
+      "pubmed:22878732",
+      "pubmed:22899265",
+      "pubmed:22919158",
+      "pubmed:23000417",
+      "pubmed:23011941",
+      "pubmed:23087643",
+      "reaxys:5736575",
+      "reaxys:83099",
+      "wikipedia.en:Cotinine"
+    ],
+    "generalized_empirical_formula": [
+      "C10H12N2O"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:68641"
+    ],
+    "inchi_key_string": [
+      "UIKROCXWUNQSPJ-VIFPVBQESA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C10H12N2O/c1-12-9(4-5-10(12)13)8-3-2-6-11-7-8/h2-3,6-7,9H,4-5H2,1H3/t9-/m0/s1"
+    ],
+    "mass": [
+      "176.219"
+    ],
+    "monoisotopic_mass": [
+      "176.09496"
+    ],
+    "smiles_string": [
+      "[H][C@@]1(c2cccnc2)CCC(=O)N1C"
+    ]
+  },
+  "label": "(-)-cotinine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_68641",
+  "obo_id": "CHEBI:68641",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "486-56-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=486-56-6"
+    },
+    {
+      "database": "drugcentral",
+      "id": "737",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/737"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001046",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001046"
+    },
+    {
+      "database": "knapsack",
+      "id": "C00034470",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00034470"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5986",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-2742",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "14700346",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14700346/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21655912",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21655912/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21953524",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21953524/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22027507",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22027507/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22137886",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22137886/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22169225",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22169225/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22180597",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22180597/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22200307",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22200307/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22244928",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22244928/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22253001",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22253001/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22434216",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22434216/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22460317",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22460317/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22487419",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22487419/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22489581",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22489581/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22574797",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22574797/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22608097",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22608097/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22678157",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22678157/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22687995",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22687995/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22770225",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22770225/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22809871",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22809871/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22871902",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22871902/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22878732",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22878732/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22899265",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22899265/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22919158",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22919158/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23000417",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23000417/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23011941",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23011941/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23087643",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23087643/"
+    },
+    {
+      "database": "reaxys",
+      "id": "5736575",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "reaxys",
+      "id": "83099",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Cotinine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(5S)-1-methyl-5-(pyridin-3-yl)pyrrolidin-2-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(5S)-1-methyl-5-(pyridin-3-yl)pyrrolidin-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-(-)-Cotinine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-1-Methyl-5-(3-pyridinyl)-2-pyrrolidinone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-Cotinine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cotinina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cotinine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cotinine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cotinine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cotininum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

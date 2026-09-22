@@ -1,0 +1,149 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C753",
+  "lang": "en",
+  "description": [
+    "An inactive substance, treatment or procedure that is intended to provide baseline measurements for the experimental protocol of a clinical trial."
+  ],
+  "synonyms": [
+    "PLCB",
+    "Placebo",
+    "placebo therapy",
+    "placebo",
+    "sham therapy"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A pharmaceutical preparation that does not contain the investigational agent and is generally prepared to be physically indistinguishable from the preparation containing the investigational product.",
+      "An inactive substance or treatment that looks the same as, and is given the same way as, an active drug or treatment being tested. The effects of the active drug or treatment are compared to the effects of the placebo.",
+      "Something that looks like the treatment being studied, but doesn't contain any medicine. (https://mrctcenter.org/glossaryterm/placebo/)"
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CDISC-GLOSS",
+      "CTRP",
+      "GDC",
+      "ICH",
+      "MRCT-Ctr"
+    ],
+    "Display_Name": [
+      "Placebo"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Placebo"
+    ],
+    "Maps_To": [
+      "Placebo"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "43469"
+    ],
+    "NCI_META_CUI": [
+      "CL473981"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "43469"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "43469"
+    ],
+    "Preferred_Name": [
+      "Placebo"
+    ],
+    "Semantic_Type": [
+      "Conceptual Entity"
+    ],
+    "code": [
+      "C753"
+    ]
+  },
+  "label": "Placebo",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C753",
+  "obo_id": "NCIT:C753",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C176424",
+    "NCIT_C177537",
+    "NCIT_C188693",
+    "NCIT_C203912",
+    "NCIT_C207417",
+    "NCIT_C217022",
+    "NCIT_C217023",
+    "NCIT_C217285",
+    "NCIT_C61410",
+    "NCIT_C67497"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "PLCB",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Placebo",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "placebo therapy",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "placebo",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "sham therapy",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C753?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C753/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C753/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C753/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C753/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C753/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C753/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

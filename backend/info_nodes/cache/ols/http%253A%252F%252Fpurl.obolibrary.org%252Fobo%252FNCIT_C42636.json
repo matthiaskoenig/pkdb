@@ -1,0 +1,191 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C42636",
+  "lang": "en",
+  "description": [
+    "The form in which active and/or inert ingredient(s) are physically presented."
+  ],
+  "synonyms": [
+    "DOSFRM",
+    "Dosage Form",
+    "Dose Form",
+    "Drug Dose Form",
+    "Pharmaceutical Dosage Form",
+    "Pharmaceutical Dose Form",
+    "Pharmaceutical Formulation",
+    "Pharmaceutical",
+    "dosage form",
+    "dose form",
+    "pharmaceutical form"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Physical characteristics of a drug product, (e.g., tablet, capsule, or solution) that contains a drug substance, generally, but not necessarily, in association with one or more other ingredients. (CDISC Glossary)",
+      "Physical characteristics of a drug product, (e.g., tablet, capsule, or solution) that contains a drug substance, generally, but not necessarily, in association with one or more other ingredients. [After 21 CFR 314.3; After IDMP] See also drug product.",
+      "Physical characteristics of a drug product, (e.g., tablet, capsule, or solution) that contains a drug substance, generally-but not necessarily-in association with one or more other ingredients. (CDISC Glossary)"
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CDISC-GLOSS",
+      "ICH",
+      "NCPDP"
+    ],
+    "DesignNote": [
+      "Dosage form can have a significant effect on the onset, duration and intensity of the pharmacological action of a drug. A pharmaceutical dosage form controls the rate at which the drug is released into the biological fluids. This release rate affects its intrinsic absorption pattern and therefore, the bioavailability of the drug."
+    ],
+    "FDA_Table": [
+      "Dosage Form (C-DRG-00201)"
+    ],
+    "Legacy Concept Name": [
+      "Pharmaceutical_Dosage_Form"
+    ],
+    "OID": [
+      "2.16.840.1.113883.3.26.1.1.2"
+    ],
+    "Preferred_Name": [
+      "Pharmaceutical Dosage Form"
+    ],
+    "Semantic_Type": [
+      "Biomedical or Dental Material",
+      "Functional Concept"
+    ],
+    "UMLS_CUI": [
+      "C0013058"
+    ],
+    "code": [
+      "C42636"
+    ]
+  },
+  "label": "Pharmaceutical Dosage Form",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C42636",
+  "obo_id": "NCIT:C42636",
+  "in_subset": [
+    "NCIT_C132298",
+    "NCIT_C177904",
+    "NCIT_C217022",
+    "NCIT_C217023",
+    "NCIT_C217347",
+    "NCIT_C61410",
+    "NCIT_C66738",
+    "NCIT_C66830",
+    "NCIT_C67152",
+    "NCIT_C67497",
+    "NCIT_C82590",
+    "NCIT_C89508"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "DOSFRM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Dosage Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Dose Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Drug Dose Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pharmaceutical Dosage Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pharmaceutical Dose Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pharmaceutical Formulation",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pharmaceutical",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "dosage form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "dose form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "pharmaceutical form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42636?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42636/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42636/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42636/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42636/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42636/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42636/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42636/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42636/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42636/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42636/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

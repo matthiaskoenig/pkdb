@@ -1,0 +1,381 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_16113",
+  "lang": "en",
+  "description": [
+    "A cholestanoid consisting of cholestane having a double bond at the 5,6-position as well as a 3β-hydroxy group."
+  ],
+  "synonyms": [
+    "(3beta,14beta,17alpha)-cholest-5-en-3-ol",
+    "CHOLESTEROL",
+    "Cholest-5-en-3beta-ol",
+    "Cholest-5-en-3beta-ol",
+    "Cholesterin",
+    "Cholesterol",
+    "cholest-5-en-3beta-ol",
+    "cholest-5-en-3beta-ol",
+    "cholesterol"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:57-88-5",
+      "drugbank:DB04540",
+      "gmelin:550297",
+      "hmdb:HMDB0000067",
+      "kegg.compound:C00187",
+      "kegg.drug:D00040",
+      "knapsack:C00003648",
+      "lipidmaps:LMST01010001",
+      "metacyc.compound:CHOLESTEROL",
+      "pdb-ccd:CLR",
+      "pubmed:10901445",
+      "pubmed:11412894",
+      "pubmed:16341241",
+      "pubmed:24287311",
+      "pubmed:25308664",
+      "pubmed:25451949",
+      "pubmed:25522988",
+      "pubmed:25658343",
+      "pubmed:25977713",
+      "pubmed:4696527",
+      "pubmed:8838010",
+      "reaxys:2060565",
+      "wikipedia.en:Cholesterol"
+    ],
+    "generalized_empirical_formula": [
+      "C27H46O"
+    ],
+    "has_alternative_id": [
+      "CHEBI:13982",
+      "CHEBI:23204",
+      "CHEBI:3659",
+      "CHEBI:41564"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:16113"
+    ],
+    "inchi_key_string": [
+      "HVYWMOMLDIMFJA-DPAQBDIFSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C27H46O/c1-18(2)7-6-8-19(3)23-11-12-24-22-10-9-20-17-21(28)13-15-26(20,4)25(22)14-16-27(23,24)5/h9,18-19,21-25,28H,6-8,10-17H2,1-5H3/t19-,21+,22+,23-,24+,25+,26+,27-/m1/s1"
+    ],
+    "mass": [
+      "386.664"
+    ],
+    "monoisotopic_mass": [
+      "386.35487"
+    ],
+    "smiles_string": [
+      "[H][C@@]12CC=C3C[C@@H](O)CC[C@]3(C)[C@@]1([H])CC[C@@]1(C)[C@@]2([H])CC[C@]1([H])[C@H](C)CCCC(C)C"
+    ]
+  },
+  "label": "cholesterol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_16113",
+  "obo_id": "CHEBI:16113",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "57-88-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=57-88-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB04540",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB04540"
+    },
+    {
+      "database": "gmelin",
+      "id": "550297",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0000067",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0000067"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C00187",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00040",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00003648",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00003648"
+    },
+    {
+      "database": "lipidmaps",
+      "id": "LMST01010001",
+      "description": "lipidmaps",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMST01010001"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CHOLESTEROL",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "CLR",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10901445",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10901445/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11412894",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11412894/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16341241",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16341241/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24287311",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24287311/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25308664",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25308664/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25451949",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25451949/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25522988",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25522988/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25658343",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25658343/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25977713",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25977713/"
+    },
+    {
+      "database": "pubmed",
+      "id": "4696527",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/4696527/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8838010",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8838010/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2060565",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Cholesterol",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Cholest-5-en-3beta-ol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cholest-5-en-3beta-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3beta,14beta,17alpha)-cholest-5-en-3-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CHOLESTEROL",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cholest-5-en-3beta-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cholesterin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cholesterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cholest-5-en-3beta-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cholesterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16113?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16113/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16113/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16113/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16113/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16113/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16113/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16113/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

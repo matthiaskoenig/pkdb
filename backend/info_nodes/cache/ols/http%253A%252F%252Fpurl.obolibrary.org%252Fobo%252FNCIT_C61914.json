@@ -1,0 +1,103 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C61914",
+  "lang": "en",
+  "description": [
+    "A phenethylamine and a diastereomer of ephedrine with sympathomimetic property. Pseudoephedrine displaces norepinephrine from storage vesicles in presynaptic neurones, thereby releasing norepinephrine into the neuronal synapses where it stimulates primarily alpha-adrenergic receptors. It also has weak direct agonist activity at alpha- and beta- adrenergic receptors. Receptor stimulation results in vasoconstriction and decreases nasal and sinus congestion."
+  ],
+  "synonyms": [
+    "PSEUDOEPHEDRINE",
+    "Pseudoephedrine"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "90-82-4"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:51209"
+    ],
+    "Chemical_Formula": [
+      "C10H15NO"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "7CUC9DDI9F"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C29390",
+      "http://purl.obolibrary.org/obo/NCIT_C47696"
+    ],
+    "Legacy Concept Name": [
+      "Pseudoephedrine"
+    ],
+    "Preferred_Name": [
+      "Pseudoephedrine"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0033798"
+    ],
+    "code": [
+      "C61914"
+    ]
+  },
+  "label": "Pseudoephedrine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C61914",
+  "obo_id": "NCIT:C61914",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "PSEUDOEPHEDRINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pseudoephedrine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61914?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61914/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61914/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61914/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61914/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61914/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61914/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

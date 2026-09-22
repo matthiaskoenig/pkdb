@@ -1,0 +1,166 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C38238",
+  "lang": "en",
+  "description": [
+    "Intradermal injection is a method of drug administration within the substance of the skin, particularly the dermis."
+  ],
+  "synonyms": [
+    "DL",
+    "I-DERMAL",
+    "I-dermal",
+    "IC",
+    "ID",
+    "INTRADERMAL",
+    "Intracutaneous",
+    "Intradermal Injection",
+    "Intradermal Route of Administration",
+    "Intradermal use",
+    "Intradermal"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Administration within the dermis. (FDA)",
+      "Injection of a medicinal product into the dermis."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "EDQM-HC",
+      "FDA"
+    ],
+    "FDA_Table": [
+      "Route of Administration (C-DRG-00301)"
+    ],
+    "Legacy Concept Name": [
+      "Intradermal_Route_of_Drug_Administration"
+    ],
+    "Preferred_Name": [
+      "Intradermal Route of Administration"
+    ],
+    "Semantic_Type": [
+      "Functional Concept"
+    ],
+    "UMLS_CUI": [
+      "C1522475"
+    ],
+    "code": [
+      "C38238"
+    ]
+  },
+  "label": "Intradermal Route of Administration",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C38238",
+  "obo_id": "NCIT:C38238",
+  "in_subset": [
+    "NCIT_C148636",
+    "NCIT_C150107",
+    "NCIT_C54452",
+    "NCIT_C54455",
+    "NCIT_C61410",
+    "NCIT_C66729",
+    "NCIT_C66830",
+    "NCIT_C77526"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "DL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "I-DERMAL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "I-dermal",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "IC",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ID",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "INTRADERMAL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intracutaneous",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intradermal Injection",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intradermal Route of Administration",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intradermal use",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intradermal",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38238?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38238/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38238/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38238/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38238/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38238/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C38238/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

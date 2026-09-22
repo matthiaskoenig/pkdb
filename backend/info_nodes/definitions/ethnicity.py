@@ -56,7 +56,6 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="asian",
-        name="asian",
         label="Asian",
         description="Asian. A person having origins in any of the original peoples of the "
         "Far East, Southeast Asia, or the Indian subcontinent, including for "
@@ -69,7 +68,6 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="korean",
-        name="korean",
         label="Korean",
         description="Korean. A person having origins in any of the original peoples of "
         "Korea.",
@@ -80,7 +78,6 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="chinese",
-        name="chinese",
         label="Chinese",
         description="Chinese. A person having origins in any of the original peoples of China.",
         parents=["asian"],
@@ -90,7 +87,6 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="japanese",
-        name="japanese",
         label="Japanese",
         description="A person having origins in any of the original peoples of Japan.",
         parents=["asian"],
@@ -100,7 +96,6 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="thai",
-        name="thai",
         label="Thai",
         description="Denotes the inhabitants of Thailand, a person from there, or their descendants elsewhere.",
         parents=["asian"],
@@ -110,7 +105,6 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="caucasian",
-        name="caucasian",
         label="Caucasian",
         description="Caucasian. An ethnic group comprised of persons having origins in any "
         "of the original peoples of Europe, the Middle East, or North Africa.",
@@ -122,7 +116,6 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="finish",
-        name="finish",
         label="Finnish",
         description="Finnish. A person having origins in any of the original peoples of Finland.",
         parents=["caucasian"],
@@ -132,7 +125,6 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="hispanic",
-        name="hispanic",
         label="Hispanic",
         description="Hispanic or Latino. A person of Cuban, Mexican, "
         "Puerto Rican, South or Central American, or other Spanish culture or "
@@ -145,11 +137,9 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="non-hispanic",
-        name="non-hispanic",
         label="Non-Hispanic",
         description="Not Hispanic or Latino.",
         parents=["ethnicity"],
-        annotations=[],
     ),
     Choice(
         sid="mixed-race",
@@ -157,10 +147,7 @@ ETHNICITY_NODES: list[InfoNode] = [
         label="Mixed race",
         description="Mixed race origin.",
         parents=["ethnicity"],
-        annotations=[
-            (BQB.IS, "efo/0003156"),
-        ],
-        synonyms=["white"],
+        synonyms=[],
     ),
     Choice(
         sid="white-new-zealanders",
@@ -175,7 +162,6 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="asian indian",
-        name="asian indian",
         label="Asian Indian",
         description="A person having origins in the original peoples of the Indian sub-continent.",
         parents=["ethnicity"],
@@ -185,7 +171,6 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="egyptian",
-        name="egyptian",
         label="Egyptian",
         description="Denotes the inhabitants of Egypt, a person from there, or their descendants elsewhere.",
         parents=["ethnicity"],
@@ -195,15 +180,12 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="jordanian",
-        name="jordanian",
         label="Jordanian",
         description="Denotes the inhabitants of Jordan, a person from there, or their descendants elsewhere.",
         parents=["ethnicity"],
-        annotations=[],
     ),
     Choice(
         sid="swedish",
-        name="swedish",
         label="Swedish",
         description="Denotes the inhabitants of Sweden, a person from there, or their descendants elsewhere.",
         parents=["ethnicity"],
@@ -213,7 +195,6 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="spanish",
-        name="spanish",
         label="Spanish",
         description="Denotes the inhabitants of Spain, a person from there, or their descendants elsewhere.",
         parents=["ethnicity"],
@@ -227,7 +208,6 @@ ETHNICITY_NODES: list[InfoNode] = [
         label="Afro–Trinidadians",
         description="A person from Trinidad and Tobago with African ancestry.",
         parents=["ethnicity"],
-        annotations=[],
     ),
     Choice(
         sid="indo-trinidadians",
@@ -236,11 +216,9 @@ ETHNICITY_NODES: list[InfoNode] = [
         description="A person of Indian origin who are nationals of Trinidad and Tobago "
         "whose ancestors came from India and the wider subcontinent beginning in 1845.",
         parents=["ethnicity"],
-        annotations=[],
     ),
     Choice(
         sid="black",
-        name="black",
         label="Black",
         description="A person having origins in the original peoples of sub-Saharan Africa or the Caribbean.",
         parents=["ethnicity"],
@@ -250,29 +228,23 @@ ETHNICITY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="pacific-islander",
+        # (BQB.IS_VERSION_OF, "exo/0000154"),
         name="pacific islander",
         label="Pacific Islander",
         description="A person having origins in the original peoples of the Pacific Islands.",
         parents=["ethnicity"],
-        annotations=[
-            # (BQB.IS_VERSION_OF, "exo/0000154"),
-        ],
     ),
     Choice(
         sid="indian",
-        name="indian",
         label="Indian",
         description="A person having origins in India.",
         parents=["ethnicity"],
-        annotations=[],
     ),
     Choice(
         sid="mexican",
-        name="mexican",
         label="Mexican",
         description="A person having origins in Mexico.",
         parents=["ethnicity"],
-        annotations=[],
     ),
     Choice(
         sid="west_asian",
@@ -280,40 +252,31 @@ ETHNICITY_NODES: list[InfoNode] = [
         label="West Asian",
         description="A person having origins in West Asia.",
         parents=["ethnicity"],
-        annotations=[],
     ),
     Choice(
         sid="taiwanese",
-        name="taiwanese",
         label="Taiwanese",
         description="A person having origins in Taiwan.",
         parents=["ethnicity"],
-        annotations=[],
     ),
     Choice(
         sid="hongkonger",
-        name="hongkonger",
         label="Hongkonger",
         description="A person having origins in Hong Kong.",
         parents=["ethnicity"],
-        annotations=[],
         synonyms=["Hong Konger", "Hong Kongese"],
     ),
     Choice(
         sid="aboriginal",
-        name="aboriginal",
         label="Aboriginal",
         description="A person with indigenous australian origin.",
         parents=["ethnicity"],
-        annotations=[],
         synonyms=["Aboriginy"],
     ),
     Choice(
         sid="russian",
-        name="russian",
         label="Russian",
         description="Denotes the inhabitants of Russia, a person from there, or their descendants elsewhere.",
         parents=["caucasian"],
-        annotations=[],
     ),
 ]

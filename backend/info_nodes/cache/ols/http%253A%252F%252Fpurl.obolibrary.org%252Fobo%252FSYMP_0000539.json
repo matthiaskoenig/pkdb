@@ -1,0 +1,96 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/SYMP_0000539",
+  "lang": "en",
+  "description": [
+    "A skin and integumentary tissue symptom that is characterized by a yellowish pigmentation of the skin, tissues, and certain body fluids is caused by the deposition of bile pigments that follows interference with normal production and discharge of bile (as in certain liver diseases) or excessive breakdown of red blood cells (as after internal hemorrhage or in various hemolytic states)."
+  ],
+  "synonyms": [
+    "icteric",
+    "icterus"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD9CM_2005:782.4",
+      "UMLS_CUI:C0476232",
+      "UMLS_ICD9CM_2005_AUI:A0243785"
+    ],
+    "has_obo_namespace": [
+      "symptoms"
+    ],
+    "id": [
+      "SYMP:0000539"
+    ]
+  },
+  "label": "jaundice",
+  "ontology_name": "symp",
+  "ontology_prefix": "SYMP",
+  "ontology_iri": "http://purl.obolibrary.org/obo/symp.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "SYMP_0000539",
+  "obo_id": "SYMP:0000539",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A skin and integumentary tissue symptom that is characterized by a yellowish pigmentation of the skin, tissues, and certain body fluids is caused by the deposition of bile pigments that follows interference with normal production and discharge of bile (as in certain liver diseases) or excessive breakdown of red blood cells (as after internal hemorrhage or in various hemolytic states).",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD9CM_2005",
+      "id": "782.4",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0476232",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0476232"
+    },
+    {
+      "database": "UMLS_ICD9CM_2005_AUI",
+      "id": "A0243785",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000539?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000539/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000539/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000539/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000539/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000539/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000539/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

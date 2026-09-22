@@ -1,0 +1,295 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_585948",
+  "lang": "en",
+  "description": [
+    "The mixed (methyl, ethyl) diester of 4-(2,3-dichlorophenyl)-2,6-dimethyl-1,4-dihydropyridine-3,5-dicarboxylic acid. A calcium-channel blocker, it lowers blood pressure by reducing peripheral vascular resistance through a highly selective action on smooth muscle in arteriolar resistance vessels. It is used in the management of hypertension and angina pectoris."
+  ],
+  "synonyms": [
+    "(+-)-ethyl methyl 4-(2,3-dichlorophenyl)-1,4-dihydro-2,6-dimethyl-3,5-pyridinedicarboxylate",
+    "3-ethyl 5-methyl 4-(2,3-dichlorophenyl)-2,6-dimethyl-1,4-dihydro-3,5-pyridinedicarboxylate",
+    "4-(2,3-dichlorophenyl)-1,4-dihydro-2,6-dimethyl-3,5-pyridinedicarboxylic acid ethyl methyl ester",
+    "FELODIPINE",
+    "ethyl methyl 4-(2,3-dichlorophenyl)-2,6-dimethyl-1,4-dihydropyridine-3,5-dicarboxylate",
+    "ethyl methyl 4-(2,3-dichlorophenyl)-2,6-dimethyl-1,4-dihydropyridine-3,5-dicarboxylate",
+    "felodipina",
+    "felodipine",
+    "felodipinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:72509-76-3",
+      "drugbank:DB01023",
+      "drugcentral:1142",
+      "kegg.drug:D00319",
+      "lincs.smallmolecule:LSM-1447",
+      "patent:EP7293",
+      "patent:US4264611",
+      "pdb-ccd:225",
+      "pubmed:18457386",
+      "reaxys:4331472",
+      "wikipedia.en:Felodipine"
+    ],
+    "generalized_empirical_formula": [
+      "C18H19Cl2NO4"
+    ],
+    "has_alternative_id": [
+      "CHEBI:49383",
+      "CHEBI:4996"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:585948"
+    ],
+    "inchi_key_string": [
+      "RZTAMFZIAATZDJ-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C18H19Cl2NO4/c1-5-25-18(23)14-10(3)21-9(2)13(17(22)24-4)15(14)11-7-6-8-12(19)16(11)20/h6-8,15,21H,5H2,1-4H3"
+    ],
+    "mass": [
+      "384.259"
+    ],
+    "monoisotopic_mass": [
+      "383.06911"
+    ],
+    "smiles_string": [
+      "CCOC(=O)C1=C(C)NC(C)=C(C(=O)OC)C1c1cccc(Cl)c1Cl"
+    ]
+  },
+  "label": "felodipine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_585948",
+  "obo_id": "CHEBI:585948",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "72509-76-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=72509-76-3"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01023",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01023"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1142",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1142"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00319",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1447",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP7293",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP7293"
+    },
+    {
+      "database": "patent",
+      "id": "US4264611",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4264611"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "225",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "18457386",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18457386/"
+    },
+    {
+      "database": "reaxys",
+      "id": "4331472",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Felodipine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "ethyl methyl 4-(2,3-dichlorophenyl)-2,6-dimethyl-1,4-dihydropyridine-3,5-dicarboxylate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-ethyl methyl 4-(2,3-dichlorophenyl)-1,4-dihydro-2,6-dimethyl-3,5-pyridinedicarboxylate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-ethyl 5-methyl 4-(2,3-dichlorophenyl)-2,6-dimethyl-1,4-dihydro-3,5-pyridinedicarboxylate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(2,3-dichlorophenyl)-1,4-dihydro-2,6-dimethyl-3,5-pyridinedicarboxylic acid ethyl methyl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "FELODIPINE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ethyl methyl 4-(2,3-dichlorophenyl)-2,6-dimethyl-1,4-dihydropyridine-3,5-dicarboxylate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "felodipina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "felodipine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "felodipinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_585948?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_585948/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_585948/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_585948/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_585948/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_585948/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_585948/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_585948/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

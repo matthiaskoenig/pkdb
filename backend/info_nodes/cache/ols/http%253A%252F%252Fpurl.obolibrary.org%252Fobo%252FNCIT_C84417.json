@@ -1,0 +1,93 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C84417",
+  "lang": "en",
+  "description": [
+    "Progressive kidney disorder caused by vascular damage to the glomerular capillaries, in patients with diabetes mellitus. It is usually manifested with nephritic syndrome and glomerulosclerosis."
+  ],
+  "synonyms": [
+    "Diabetic Kidney Disease",
+    "Diabetic Nephropathy"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Nephropathy resulting from diabetes mellitus. It is usually associated with proteinuria and progressive glomerulosclerosis."
+    ],
+    "Contributing_Source": [
+      "Cellosaurus",
+      "NICHD"
+    ],
+    "Preferred_Name": [
+      "Diabetic Nephropathy"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C0011881"
+    ],
+    "code": [
+      "C84417"
+    ]
+  },
+  "label": "Diabetic Nephropathy",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C84417",
+  "obo_id": "NCIT:C84417",
+  "in_subset": [
+    "NCIT_C123272",
+    "NCIT_C165258",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Diabetic Kidney Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Diabetic Nephropathy",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84417?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84417/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84417/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84417/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84417/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84417/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84417/graph"
+    },
+    "Disease_Has_Finding": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84417/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R108"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

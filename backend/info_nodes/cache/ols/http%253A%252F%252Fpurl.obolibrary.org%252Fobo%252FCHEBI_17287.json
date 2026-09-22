@@ -1,0 +1,373 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_17287",
+  "lang": "en",
+  "description": [
+    "A phosphoamino acid consisting of creatine having a phospho group attached at the primary nitrogen of the guanidino group."
+  ],
+  "synonyms": [
+    "Creatine phosphate",
+    "Creatine phosphic acid",
+    "N(omega)-phosphonocreatine",
+    "N-(N-phosphonoamido)sarcosine",
+    "N-(Phosphonoamidino)sarcosine",
+    "N-Phosphocreatine",
+    "N-Phosphorylcreatine",
+    "N-[imino(phosphonoamino)methyl]-N-methylglycine",
+    "N-[imino(phosphonoamino)methyl]-N-methylglycine",
+    "N-phosphocreatine",
+    "Phosphocreatine",
+    "phosphorylcreatine",
+    "{[imino(phosphonoamino)methyl](methyl)amino}acetic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:67-07-2",
+      "drugcentral:3464",
+      "hmdb:HMDB0001511",
+      "kegg.compound:C02305",
+      "metacyc.compound:CREATINE-P",
+      "pubmed:1160340",
+      "pubmed:11867929",
+      "pubmed:13772879",
+      "pubmed:13881337",
+      "pubmed:14421251",
+      "pubmed:5879486",
+      "reaxys:1797096",
+      "wikipedia.en:Phosphocreatine"
+    ],
+    "generalized_empirical_formula": [
+      "C4H10N3O5P"
+    ],
+    "has_alternative_id": [
+      "CHEBI:12526",
+      "CHEBI:14813",
+      "CHEBI:26053",
+      "CHEBI:8145"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:17287"
+    ],
+    "inchi_key_string": [
+      "DRBBFCLWYRJSJZ-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C4H10N3O5P/c1-7(2-3(8)9)4(5)6-13(10,11)12/h2H2,1H3,(H,8,9)(H4,5,6,10,11,12)"
+    ],
+    "mass": [
+      "211.114"
+    ],
+    "monoisotopic_mass": [
+      "211.03581"
+    ],
+    "smiles_string": [
+      "CN(CC(=O)O)C(=N)NP(=O)(O)O"
+    ]
+  },
+  "label": "N-phosphocreatine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_17287",
+  "obo_id": "CHEBI:17287",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "67-07-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=67-07-2"
+    },
+    {
+      "database": "drugcentral",
+      "id": "3464",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/3464"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001511",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001511"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C02305",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CREATINE-P",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "1160340",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1160340/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11867929",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11867929/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13772879",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13772879/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13881337",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13881337/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14421251",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14421251/"
+    },
+    {
+      "database": "pubmed",
+      "id": "5879486",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/5879486/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1797096",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Phosphocreatine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-[imino(phosphonoamino)methyl]-N-methylglycine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Creatine phosphate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Creatine phosphic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N(omega)-phosphonocreatine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iubmb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(N-phosphonoamido)sarcosine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iubmb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(Phosphonoamidino)sarcosine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-Phosphocreatine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-Phosphorylcreatine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-[imino(phosphonoamino)methyl]-N-methylglycine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-phosphocreatine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phosphocreatine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phosphorylcreatine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "{[imino(phosphonoamino)methyl](methyl)amino}acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17287?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17287/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17287/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17287/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17287/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17287/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17287/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17287/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17287/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17287/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

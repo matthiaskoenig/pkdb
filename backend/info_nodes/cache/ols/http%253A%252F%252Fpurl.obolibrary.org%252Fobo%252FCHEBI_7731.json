@@ -1,0 +1,659 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7731",
+  "lang": "en",
+  "description": [
+    "A racemate comprising equimolar amounts of levofloxacin and dextrofloxacin. It is a synthetic fluoroquinolone antibacterial agent which inhibits the supercoiling activity of bacterial DNA gyrase, halting DNA replication."
+  ],
+  "synonyms": [
+    "(+-)-ofloxacin",
+    "(3RS)-9-fluoro-3-methyl-10-(4-methylpiperazin-1-yl)-7-oxo-2,3-dihydro-7H-[1,4]oxazino[2,3,4-ij]quinoline-6-carboxylic acid",
+    "DL 8280",
+    "DL-8280",
+    "Exocin",
+    "Floxin",
+    "Gailuoxian",
+    "HOE 280",
+    "HOE-280",
+    "OFLX",
+    "ORF 18489",
+    "Ocuflox",
+    "Oxaldin",
+    "Prifloxcin",
+    "Prifloxin",
+    "Tarivid",
+    "Visiren",
+    "ofloxacin",
+    "ofloxacine",
+    "ofloxacino",
+    "ofloxacinum",
+    "rac-8-fluoro-3-methyl-9-(4-methyl-piperazin-1-yl)-6-oxo-2,3-dihydro-6H-1-oxa-3a-aza-phenalene-5-carboxylic acid",
+    "rac-9-fluoro-3-methyl-10-(4-methylpiperazin-1-yl)-7-oxo-2,3-dihydro-7H-[1,4]oxazino[2,3,4-ij]quinoline-6-carboxylic acid",
+    "rac-9-fluoro-3-methyl-10-(4-methylpiperazin-1-yl)-7-oxo-2,3-dihydro-7H-[1,4]oxazino[2,3,4-ij]quinoline-6-carboxylic acid",
+    "rac-ofloxacin",
+    "racemic ofloxacin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:82419-36-1",
+      "drugbank:DB01165",
+      "drugcentral:1981",
+      "hmdb:HMDB0015296",
+      "kegg.compound:C07321",
+      "kegg.drug:D00453",
+      "lincs.smallmolecule:LSM-4370",
+      "metacyc.compound:CPD-12843",
+      "pubmed:11710934",
+      "pubmed:11903499",
+      "pubmed:12827054",
+      "pubmed:15008519",
+      "pubmed:15557076",
+      "pubmed:16669862",
+      "pubmed:1804789",
+      "pubmed:19646516",
+      "pubmed:24497308",
+      "pubmed:24550337",
+      "pubmed:3469159",
+      "pubmed:3546152",
+      "pubmed:35897550",
+      "pubmed:36004580",
+      "pubmed:36228398",
+      "pubmed:36268299",
+      "pubmed:6960805",
+      "pubmed:7884650",
+      "pubmed:9228220",
+      "reaxys:3657947",
+      "vsdb:1898",
+      "wikipedia.en:Ofloxacin"
+    ],
+    "generalized_empirical_formula": [
+      "C18H20FN3O4"
+    ],
+    "has_alternative_id": [
+      "CHEBI:100146"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7731"
+    ],
+    "mass": [
+      "361.373"
+    ],
+    "monoisotopic_mass": [
+      "361.14378"
+    ]
+  },
+  "label": "ofloxacin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7731",
+  "obo_id": "CHEBI:7731",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "82419-36-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=82419-36-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01165",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01165"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1981",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1981"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015296",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015296"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07321",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00453",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-4370",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-12843",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11710934",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11710934/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11903499",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11903499/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12827054",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12827054/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15008519",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15008519/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15557076",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15557076/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16669862",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16669862/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1804789",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1804789/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19646516",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19646516/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24497308",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24497308/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24550337",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24550337/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3469159",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3469159/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3546152",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3546152/"
+    },
+    {
+      "database": "pubmed",
+      "id": "35897550",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/35897550/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36004580",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36004580/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36228398",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36228398/"
+    },
+    {
+      "database": "pubmed",
+      "id": "36268299",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/36268299/"
+    },
+    {
+      "database": "pubmed",
+      "id": "6960805",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/6960805/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7884650",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7884650/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9228220",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9228220/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3657947",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1898",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1898.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Ofloxacin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "rac-9-fluoro-3-methyl-10-(4-methylpiperazin-1-yl)-7-oxo-2,3-dihydro-7H-[1,4]oxazino[2,3,4-ij]quinoline-6-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-ofloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3RS)-9-fluoro-3-methyl-10-(4-methylpiperazin-1-yl)-7-oxo-2,3-dihydro-7H-[1,4]oxazino[2,3,4-ij]quinoline-6-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DL 8280",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DL-8280",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Exocin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Floxin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Gailuoxian",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "HOE 280",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "HOE-280",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "OFLX",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ORF 18489",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ocuflox",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Oxaldin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Prifloxcin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Prifloxin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tarivid",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Visiren",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ofloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ofloxacine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ofloxacino",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ofloxacinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-8-fluoro-3-methyl-9-(4-methyl-piperazin-1-yl)-6-oxo-2,3-dihydro-6H-1-oxa-3a-aza-phenalene-5-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-9-fluoro-3-methyl-10-(4-methylpiperazin-1-yl)-7-oxo-2,3-dihydro-7H-[1,4]oxazino[2,3,4-ij]quinoline-6-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-ofloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "racemic ofloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7731?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7731/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7731/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7731/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7731/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7731/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7731/graph"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7731/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7731/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

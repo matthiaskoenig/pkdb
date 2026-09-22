@@ -1,0 +1,294 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7496",
+  "lang": "en",
+  "description": [
+    "An aryl sulfide that is used (as its mesylate salt) for treatment of HIV and also exhibits some anticancer properties."
+  ],
+  "synonyms": [
+    "(3S,4aS,8aS)-N-tert-butyl-2-[(2R,3R)-2-hydroxy-3-[(3-hydroxy-2-methylbenzoyl)amino]-4-(phenylsulfanyl)butyl]decahydroisoquinoline-3-carboxamide",
+    "(3S,4aS,8aS)-N-tert-butyl-2-[(2R,3R)-2-hydroxy-3-[(3-hydroxy-2-methylbenzoyl)amino]-4-(phenylsulfanyl)butyl]decahydroisoquinoline-3-carboxamide",
+    "nelfinavir"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:159989-64-7",
+      "drugbank:DB00220",
+      "drugcentral:1893",
+      "hmdb:HMDB0014365",
+      "kegg.compound:C07257",
+      "kegg.drug:D08259",
+      "lincs.smallmolecule:LSM-5819",
+      "pdb-ccd:1UN",
+      "pubmed:23109184",
+      "pubmed:23386514",
+      "pubmed:23454896",
+      "pubmed:23647753",
+      "pubmed:23872785",
+      "pubmed:23916134",
+      "pubmed:24194293",
+      "pubmed:24418752",
+      "pubmed:24483157",
+      "pubmed:24498124",
+      "pubmed:24574416",
+      "pubmed:24596143",
+      "pubmed:24719428",
+      "reaxys:7419619",
+      "wikipedia.en:Nelfinavir"
+    ],
+    "generalized_empirical_formula": [
+      "C32H45N3O4S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7496"
+    ],
+    "inchi_key_string": [
+      "QAGYKUNXZHXKMR-HKWSIXNMSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C32H45N3O4S/c1-21-25(15-10-16-28(21)36)30(38)33-26(20-40-24-13-6-5-7-14-24)29(37)19-35-18-23-12-9-8-11-22(23)17-27(35)31(39)34-32(2,3)4/h5-7,10,13-16,22-23,26-27,29,36-37H,8-9,11-12,17-20H2,1-4H3,(H,33,38)(H,34,39)/t22-,23+,26-,27-,29+/m0/s1"
+    ],
+    "mass": [
+      "567.796"
+    ],
+    "monoisotopic_mass": [
+      "567.31308"
+    ],
+    "smiles_string": [
+      "[H][C@@]12CCCC[C@]1([H])CN(C[C@@H](O)[C@H](CSc1ccccc1)NC(=O)c1cccc(O)c1C)[C@H](C(=O)NC(C)(C)C)C2"
+    ]
+  },
+  "label": "nelfinavir",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7496",
+  "obo_id": "CHEBI:7496",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "159989-64-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=159989-64-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00220",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00220"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1893",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1893"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014365",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014365"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07257",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08259",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5819",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "1UN",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "23109184",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23109184/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23386514",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23386514/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23454896",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23454896/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23647753",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23647753/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23872785",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23872785/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23916134",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23916134/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24194293",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24194293/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24418752",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24418752/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24483157",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24483157/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24498124",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24498124/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24574416",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24574416/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24596143",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24596143/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24719428",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24719428/"
+    },
+    {
+      "database": "reaxys",
+      "id": "7419619",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Nelfinavir",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3S,4aS,8aS)-N-tert-butyl-2-[(2R,3R)-2-hydroxy-3-[(3-hydroxy-2-methylbenzoyl)amino]-4-(phenylsulfanyl)butyl]decahydroisoquinoline-3-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3S,4aS,8aS)-N-tert-butyl-2-[(2R,3R)-2-hydroxy-3-[(3-hydroxy-2-methylbenzoyl)amino]-4-(phenylsulfanyl)butyl]decahydroisoquinoline-3-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "nelfinavir",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,107 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C383",
+  "lang": "en",
+  "description": [
+    "A naturally occurring phenanthrene alkaloid and opioid agonist with analgesic, antidiarrheal and antitussive activities. Codeine mimics the actions of endogenous opioids by binding to the opioid receptors at many sites within the central nervous system (CNS). Stimulation of mu-subtype opioid receptors results in a decrease in the release of nociceptive neurotransmitters such as substance P, GABA, dopamine, acetylcholine and noradrenaline; in addition, the codeine metabolite morphine induces opening of G-protein-coupled inwardly rectifying potassium (GIRK) channels and blocks the opening of N-type voltage-gated calcium channels, resulting in hyperpolarization and reduced neuronal excitability. Stimulation of gut mu-subtype opioid receptors results in a reduction in intestinal motility and delayed intestinal transit times. Antitussive activity is mediated through codeine's action on the cough center in the medulla."
+  ],
+  "synonyms": [
+    "CODEINE",
+    "Codeine"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "6059-47-8"
+    ],
+    "Chemical_Formula": [
+      "C18H21NO3.H2O"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "Q830PW7520"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C53137",
+      "http://purl.obolibrary.org/obo/NCIT_C74548"
+    ],
+    "Legacy Concept Name": [
+      "Codeine"
+    ],
+    "NSC Number": [
+      "11427"
+    ],
+    "Preferred_Name": [
+      "Codeine"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0009214"
+    ],
+    "code": [
+      "C383"
+    ]
+  },
+  "label": "Codeine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C383",
+  "obo_id": "NCIT:C383",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CODEINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Codeine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C383?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C383/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C383/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C383/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C383/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C383/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C383/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C383/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

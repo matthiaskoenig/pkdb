@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:27470",
+  "name": "folic acid",
+  "definition": "An <em>N</em>-acyl-amino acid that is a form of the water-soluble vitamin B<small><sub>9</sub></small>. Its biologically active forms (tetrahydrofolate and others) are essential for nucleotide biosynthesis and homocysteine remethylation.",
+  "formula": "C19H19N7O6",
+  "charge": 0,
+  "mass": "441.404",
+  "inchikey": "OVBPIULPVIDEAO-LBPRGKRZSA-N"
+}

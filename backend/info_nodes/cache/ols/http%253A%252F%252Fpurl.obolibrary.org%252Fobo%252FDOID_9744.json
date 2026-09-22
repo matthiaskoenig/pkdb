@@ -1,0 +1,161 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_9744",
+  "lang": "en",
+  "description": [
+    "Xref MGI. OMIM mapping confirmed by DO. [SN].",
+    "A diabetes mellitus that is characterized by destruction of pancreatic beta cells resulting in absent or extremely low insulin production."
+  ],
+  "synonyms": [
+    "insulin-dependent diabetes mellitus",
+    "type I diabetes mellitus",
+    "IDDM"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "GARD:10268",
+      "ICD10CM:E10",
+      "KEGG:04940",
+      "MESH:D003922",
+      "MIM:222100",
+      "NCI:C2986",
+      "SNOMEDCT_US_2025_09_01:46635009",
+      "UMLS_CUI:C0011854"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:9744"
+    ]
+  },
+  "label": "type 1 diabetes mellitus",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_9744",
+  "obo_id": "DOID:9744",
+  "in_subset": [
+    "DO_rare_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A diabetes mellitus that is characterized by destruction of pancreatic beta cells resulting in absent or extremely low insulin production.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "GARD",
+      "id": "10268",
+      "description": null,
+      "url": "https://rarediseases.info.nih.gov/?gard_id=10268"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "E10",
+      "description": null,
+      "url": "https://www.icd10data.com/search?s=E10"
+    },
+    {
+      "database": "KEGG",
+      "id": "04940",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D003922",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D003922"
+    },
+    {
+      "database": "MIM",
+      "id": "222100",
+      "description": null,
+      "url": "https://omim.org/MIM:222100"
+    },
+    {
+      "database": "NCI",
+      "id": "C2986",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C2986"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "46635009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/46635009"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0011854",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0011854"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "IDDM",
+      "scope": "hasExactSynonym",
+      "type": "acronym",
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9744?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9744/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9744/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9744/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9744/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9744/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9744/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9744/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9744/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9744/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9744/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

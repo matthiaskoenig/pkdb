@@ -1,0 +1,342 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_15407",
+  "lang": "en",
+  "description": [
+    "A  phenethylamine alkaloid that is 2-phenylethanamine substituted by a methyl group at the amino nitrogen and a methyl and a hydroxy group at position 2 and 1 respectively."
+  ],
+  "synonyms": [
+    "(-)-Ephedrine",
+    "(1R,2S)-1-phenyl-1-hydroxy-2-methylaminopropane",
+    "(1R,2S)-2-(methylamino)-1-phenylpropan-1-ol",
+    "(1R,2S)-2-(methylamino)-1-phenylpropan-1-ol",
+    "Ephedrine",
+    "L(-)-ephedrine",
+    "L-Ephedrine",
+    "L-erythro-2-(methylamino)-1-phenylpropan-1-ol",
+    "l-ephedrine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:299-42-3",
+      "chemspider:4856",
+      "drugbank:DB01364",
+      "drugcentral:1024",
+      "gmelin:261389",
+      "kegg.compound:C01575",
+      "kegg.drug:D00124",
+      "knapsack:C00001409",
+      "pubmed:13359219",
+      "pubmed:13809594",
+      "pubmed:21465337",
+      "pubmed:25660335",
+      "pubmed:27662264",
+      "pubmed:27846433",
+      "reaxys:2208730",
+      "vsdb:2959",
+      "wikipedia.en:Ephedrine"
+    ],
+    "generalized_empirical_formula": [
+      "C10H15NO"
+    ],
+    "has_alternative_id": [
+      "CHEBI:10776",
+      "CHEBI:132176",
+      "CHEBI:18483",
+      "CHEBI:4801"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:15407"
+    ],
+    "inchi_key_string": [
+      "KWGRBVOPPLSCSI-WPRPVWTQSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C10H15NO/c1-8(11-2)10(12)9-6-4-3-5-7-9/h3-8,10-12H,1-2H3/t8-,10-/m0/s1"
+    ],
+    "mass": [
+      "165.236"
+    ],
+    "monoisotopic_mass": [
+      "165.11536"
+    ],
+    "smiles_string": [
+      "CN[C@@H](C)[C@H](O)c1ccccc1"
+    ]
+  },
+  "label": "(-)-ephedrine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_15407",
+  "obo_id": "CHEBI:15407",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "299-42-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=299-42-3"
+    },
+    {
+      "database": "chemspider",
+      "id": "4856",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.4856.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01364",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01364"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1024",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1024"
+    },
+    {
+      "database": "gmelin",
+      "id": "261389",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C01575",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00124",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00001409",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00001409"
+    },
+    {
+      "database": "pubmed",
+      "id": "13359219",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13359219/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13809594",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13809594/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21465337",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21465337/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25660335",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25660335/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27662264",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27662264/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27846433",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27846433/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2208730",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "2959",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/2959.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Ephedrine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(1R,2S)-2-(methylamino)-1-phenylpropan-1-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-Ephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1R,2S)-1-phenyl-1-hydroxy-2-methylaminopropane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1R,2S)-2-(methylamino)-1-phenylpropan-1-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L(-)-ephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-Ephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-erythro-2-(methylamino)-1-phenylpropan-1-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "l-ephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15407?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15407/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15407/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15407/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15407/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15407/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15407/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15407/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15407/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,208 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_15443",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(1,2-beta-D-Fructosyl)n",
+    "(1,2-beta-D-fructosyl)n",
+    "(2,1-beta-D-Fructosyl)n",
+    "(2,1-beta-D-fructosyl)n",
+    "(2->1)-beta-D-fructofuranan",
+    "(2->1)-beta-D-fructofuranan",
+    "Inulin"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "cas:9005-80-5",
+      "drugbank:DB00638",
+      "kegg.compound:C03323",
+      "kegg.drug:D00171",
+      "kegg.glycan:G10497"
+    ],
+    "generalized_empirical_formula": [
+      "(C12H20O11)n"
+    ],
+    "has_alternative_id": [
+      "CHEBI:10799",
+      "CHEBI:10845",
+      "CHEBI:169",
+      "CHEBI:18519",
+      "CHEBI:24854"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:15443"
+    ]
+  },
+  "label": "inulin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_15443",
+  "obo_id": "CHEBI:15443",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "9005-80-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=9005-80-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00638",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00638"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C03323",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00171",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "kegg.glycan",
+      "id": "G10497",
+      "description": "kegg.glycan",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2->1)-beta-D-fructofuranan",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1,2-beta-D-Fructosyl)n",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1,2-beta-D-fructosyl)n",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iubmb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2,1-beta-D-Fructosyl)n",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2,1-beta-D-fructosyl)n",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iubmb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2->1)-beta-D-fructofuranan",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Inulin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15443?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15443/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15443/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15443/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15443/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15443/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15443/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_15443/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

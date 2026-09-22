@@ -1,0 +1,508 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_75246",
+  "lang": "en",
+  "description": [
+    "A semisynthetic member of the class of rifamycins and non-systemic gastrointestinal site-specific broad spectrum antibiotic. Used in the treatment of traveller's diarrhoea, hepatic encephalopathy and irritable bowel syndrome."
+  ],
+  "synonyms": [
+    "(2S,16Z,18E,20S,21S,22R,23R,24R,25S,26R,27S,28E)-5,6,21,23-tetrahydroxy-27-methoxy-2,4,11,16,20,22,24,26-octamethyl-1,15-dioxo-1,2-dihydro-2,7-(epoxypentadeca[1,11,13]trienoimino)furo[2'',3'':7',8']naphtho[1',2':4,5]imidazo[1,2-a]pyridin-25-yl acetate",
+    "(2S,16Z,18E,20S,21S,22R,23R,24R,25S,26R,27S,28E)-5,6,21,23-tetrahydroxy-27-methoxy-2,4,11,16,20,22,24,26-octamethyl-1,15-dioxo-1,2-dihydro-2,7-(epoxypentadeca[1,11,13]trienoimino)furo[2'',3'':7',8']naphtho[1',2':4,5]imidazo[1,2-a]pyridin-25-yl acetate",
+    "Rifamycin L 105",
+    "Rifamycin L 105SV",
+    "Rifaxidin",
+    "Xifaxsan",
+    "rifaximin",
+    "rifaximina",
+    "rifaximine",
+    "rifaximinun"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:80621-81-4",
+      "drugbank:DB01220",
+      "drugcentral:2379",
+      "hmdb:HMDB0015351",
+      "kegg.drug:D02554",
+      "pubmed:23092785",
+      "pubmed:23095030",
+      "pubmed:23183443",
+      "pubmed:23216382",
+      "pubmed:23273888",
+      "pubmed:23274384",
+      "pubmed:23275147",
+      "pubmed:23303506",
+      "pubmed:23314671",
+      "pubmed:23340064",
+      "pubmed:23389621",
+      "pubmed:23445237",
+      "pubmed:23526308",
+      "pubmed:23556126",
+      "pubmed:23565181",
+      "pubmed:23589147",
+      "pubmed:23640348",
+      "pubmed:23653636",
+      "pubmed:23740443",
+      "pubmed:23798671",
+      "pubmed:23843564",
+      "pubmed:23877348",
+      "pubmed:23922656",
+      "pubmed:25214516",
+      "pubmed:25339518",
+      "pubmed:25565769",
+      "pubmed:25586470",
+      "pubmed:25641072",
+      "pubmed:25835116",
+      "pubmed:25867912",
+      "pubmed:25932262",
+      "pubmed:26028929",
+      "pubmed:26043290",
+      "reaxys:7790802",
+      "wikipedia.en:Rifaximin"
+    ],
+    "generalized_empirical_formula": [
+      "C43H51N3O11"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:75246"
+    ],
+    "inchi_key_string": [
+      "NZCRJKRKKOLAOJ-XRCRFVBUSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C43H51N3O11/c1-19-14-16-46-28(18-19)44-32-29-30-37(50)25(7)40-31(29)41(52)43(9,57-40)55-17-15-27(54-10)22(4)39(56-26(8)47)24(6)36(49)23(5)35(48)20(2)12-11-13-21(3)42(53)45-33(34(32)46)38(30)51/h11-18,20,22-24,27,35-36,39,48-51H,1-10H3,(H,45,53)/b12-11+,17-15+,21-13-/t20-,22+,23+,24+,27-,35-,36+,39+,43-/m0/s1"
+    ],
+    "mass": [
+      "785.891"
+    ],
+    "monoisotopic_mass": [
+      "785.35236"
+    ],
+    "smiles_string": [
+      "CO[C@H]1/C=C/O[C@@]2(C)Oc3c(C)c(O)c4c(O)c(c5c(nc6cc(C)ccn65)c4c3C2=O)NC(=O)/C(C)=CC=C[C@H](C)[C@H](O)[C@@H](C)[C@@H](O)[C@@H](C)[C@H](OC(C)=O)[C@@H]1C"
+    ]
+  },
+  "label": "rifaximin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_75246",
+  "obo_id": "CHEBI:75246",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "80621-81-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=80621-81-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01220",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01220"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2379",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2379"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015351",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015351"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D02554",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "23092785",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23092785/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23095030",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23095030/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23183443",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23183443/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23216382",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23216382/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23273888",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23273888/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23274384",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23274384/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23275147",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23275147/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23303506",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23303506/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23314671",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23314671/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23340064",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23340064/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23389621",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23389621/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23445237",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23445237/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23526308",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23526308/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23556126",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23556126/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23565181",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23565181/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23589147",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23589147/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23640348",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23640348/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23653636",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23653636/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23740443",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23740443/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23798671",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23798671/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23843564",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23843564/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23877348",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23877348/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23922656",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23922656/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25214516",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25214516/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25339518",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25339518/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25565769",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25565769/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25586470",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25586470/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25641072",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25641072/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25835116",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25835116/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25867912",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25867912/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25932262",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25932262/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26028929",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26028929/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26043290",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26043290/"
+    },
+    {
+      "database": "reaxys",
+      "id": "7790802",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Rifaximin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2S,16Z,18E,20S,21S,22R,23R,24R,25S,26R,27S,28E)-5,6,21,23-tetrahydroxy-27-methoxy-2,4,11,16,20,22,24,26-octamethyl-1,15-dioxo-1,2-dihydro-2,7-(epoxypentadeca[1,11,13]trienoimino)furo[2'',3'':7',8']naphtho[1',2':4,5]imidazo[1,2-a]pyridin-25-yl acetate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S,16Z,18E,20S,21S,22R,23R,24R,25S,26R,27S,28E)-5,6,21,23-tetrahydroxy-27-methoxy-2,4,11,16,20,22,24,26-octamethyl-1,15-dioxo-1,2-dihydro-2,7-(epoxypentadeca[1,11,13]trienoimino)furo[2'',3'':7',8']naphtho[1',2':4,5]imidazo[1,2-a]pyridin-25-yl acetate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Rifamycin L 105",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Rifamycin L 105SV",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Rifaxidin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Xifaxsan",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rifaximin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rifaximina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rifaximine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rifaximinun",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75246?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75246/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75246/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75246/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75246/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75246/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75246/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75246/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

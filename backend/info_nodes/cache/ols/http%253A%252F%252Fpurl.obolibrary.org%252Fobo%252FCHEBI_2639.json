@@ -1,0 +1,345 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_2639",
+  "lang": "en",
+  "description": [
+    "A member of the class of pyrazines resulting from the formal monoacylation of guanidine with the carboxy group of 3,5-diamino-6-chloropyrazine-2-carboxylic acid."
+  ],
+  "synonyms": [
+    "3,5-diamino-N-[amino(imino)methyl]-6-chloropyrazine-2-carboxamide",
+    "3,5-diamino-N-[amino(imino)methyl]-6-chloropyrazine-2-carboxamide",
+    "3,5-diamino-N-carbamimidoyl-6-chloropyrazine-2-carboxamide",
+    "Amiloride",
+    "N-Amidino-3,5-diamino-6-chloropyrazinecarboxamide",
+    "amilorida",
+    "amiloride",
+    "amiloridum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:616612",
+      "cas:2609-46-3",
+      "drugbank:DB00594",
+      "drugcentral:158",
+      "hmdb:HMDB0014732",
+      "kegg.compound:C06821",
+      "kegg.drug:D07447",
+      "lincs.smallmolecule:LSM-4194",
+      "metacyc.compound:CPD-10324",
+      "patent:BE639386",
+      "patent:US3313813",
+      "pdb-ccd:AMR",
+      "pubmed:16020936",
+      "pubmed:24410943",
+      "pubmed:24419567",
+      "pubmed:9124403",
+      "reaxys:657410",
+      "wikipedia.en:Amiloride"
+    ],
+    "generalized_empirical_formula": [
+      "C6H8ClN7O"
+    ],
+    "has_alternative_id": [
+      "CHEBI:47210"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:2639"
+    ],
+    "inchi_key_string": [
+      "XSDQTOBWRPYKKA-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C6H8ClN7O/c7-2-4(9)13-3(8)1(12-2)5(15)14-6(10)11/h(H4,8,9,13)(H4,10,11,14,15)"
+    ],
+    "mass": [
+      "229.631"
+    ],
+    "monoisotopic_mass": [
+      "229.04789"
+    ],
+    "smiles_string": [
+      "N=C(N)NC(=O)c1nc(Cl)c(N)nc1N"
+    ]
+  },
+  "label": "amiloride",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_2639",
+  "obo_id": "CHEBI:2639",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "616612",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "2609-46-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=2609-46-3"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00594",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00594"
+    },
+    {
+      "database": "drugcentral",
+      "id": "158",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/158"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014732",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014732"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06821",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D07447",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-4194",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-10324",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "BE639386",
+      "description": "patent",
+      "url": "https://www.google.com/patents/BE639386"
+    },
+    {
+      "database": "patent",
+      "id": "US3313813",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3313813"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "AMR",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "16020936",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16020936/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24410943",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24410943/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24419567",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24419567/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9124403",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9124403/"
+    },
+    {
+      "database": "reaxys",
+      "id": "657410",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Amiloride",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3,5-diamino-N-[amino(imino)methyl]-6-chloropyrazine-2-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,5-diamino-N-[amino(imino)methyl]-6-chloropyrazine-2-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,5-diamino-N-carbamimidoyl-6-chloropyrazine-2-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Amiloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-Amidino-3,5-diamino-6-chloropyrazinecarboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amilorida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amiloride",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amiloride",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amiloridum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2639?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2639/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2639/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2639/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2639/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2639/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2639/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2639/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2639/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

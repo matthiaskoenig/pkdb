@@ -1,0 +1,220 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C3161",
+  "lang": "en",
+  "description": [
+    "A malignant (clonal) hematologic disorder, involving hematopoietic stem cells and characterized by the presence of primitive or atypical myeloid or lymphoid cells in the bone marrow and the blood. Leukemias are classified as acute or chronic based on the degree of cellular differentiation and the predominant cell type present. Leukemia is usually associated with anemia, fever, hemorrhagic episodes, and splenomegaly. Common leukemias include acute myeloid leukemia, chronic myelogenous leukemia, acute lymphoblastic or precursor lymphoblastic leukemia, and chronic lymphocytic leukemia. Treatment is vital to patient survival; untreated, the natural course of acute leukemias is normally measured in weeks or months, while that of chronic leukemias is more often measured in months or years."
+  ],
+  "synonyms": [
+    "Blood (Leukemia)",
+    "LEUKEMIA, MALIGNANT",
+    "Leukemia NOS",
+    "Leukemia",
+    "Leukemia, Disease",
+    "Leukemia, NOS",
+    "Leukemias",
+    "Leukemias, General",
+    "leukemia"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A cancer of the blood or bone marrow that is characterized by increased production of abnormal blood cells.",
+      "A progressive, proliferative disease of blood cells, originating from myeloid or lymphoid stem cells.",
+      "Cancer that starts in blood-forming tissue such as the bone marrow and causes large numbers of blood cells to be produced and enter the bloodstream."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CPTAC",
+      "CTEP",
+      "CTRP",
+      "GDC",
+      "MedDRA",
+      "NICHD"
+    ],
+    "Display_Name": [
+      "Leukemia"
+    ],
+    "ICD-O-3_Code": [
+      "9800/3"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C176985",
+      "http://purl.obolibrary.org/obo/NCIT_C177621",
+      "http://purl.obolibrary.org/obo/NCIT_C178243",
+      "http://purl.obolibrary.org/obo/NCIT_C2991"
+    ],
+    "Legacy Concept Name": [
+      "Leukemia"
+    ],
+    "Maps_To": [
+      "9800/3",
+      "Leukaemia of unspecified cell type",
+      "Leukaemia, unspecified",
+      "Leukemia of unspecified cell type",
+      "Leukemia",
+      "Leukemia, NOS",
+      "Leukemia, unspecified not having achieved remission",
+      "Leukemias, NOS",
+      "Other leukaemias of specified cell type",
+      "Other leukemia of unspecified cell type without mention of having achieved remission",
+      "Other leukemia of unspecified cell type",
+      "Other specified leukaemias",
+      "Other specified leukemia",
+      "Other specified leukemias not having achieved remission",
+      "Other specified leukemias",
+      "Unspecified leukemia without mention of having achieved remission",
+      "Unspecified leukemia"
+    ],
+    "Neoplastic_Status": [
+      "Malignant"
+    ],
+    "Preferred_Name": [
+      "Leukemia"
+    ],
+    "Semantic_Type": [
+      "Neoplastic Process"
+    ],
+    "UMLS_CUI": [
+      "C0023418"
+    ],
+    "code": [
+      "C3161"
+    ]
+  },
+  "label": "Leukemia",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C3161",
+  "obo_id": "NCIT:C3161",
+  "in_subset": [
+    "NCIT_C102905",
+    "NCIT_C103127",
+    "NCIT_C116977",
+    "NCIT_C118168",
+    "NCIT_C118464",
+    "NCIT_C126659",
+    "NCIT_C138188",
+    "NCIT_C138190",
+    "NCIT_C156952",
+    "NCIT_C156966",
+    "NCIT_C157711",
+    "NCIT_C158034",
+    "NCIT_C158035",
+    "NCIT_C158520",
+    "NCIT_C168655",
+    "NCIT_C168656",
+    "NCIT_C168657",
+    "NCIT_C168658",
+    "NCIT_C168661",
+    "NCIT_C168662",
+    "NCIT_C175324",
+    "NCIT_C177537",
+    "NCIT_C189762",
+    "NCIT_C61410",
+    "NCIT_C77526",
+    "NCIT_C88025",
+    "NCIT_C90259",
+    "NCIT_C99147"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Blood (Leukemia)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "LEUKEMIA, MALIGNANT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Leukemia NOS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Leukemia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Leukemia, Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Leukemia, NOS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Leukemias",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Leukemias, General",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "leukemia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3161?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3161/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3161/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3161/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3161/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3161/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3161/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3161/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3161/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3161/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3161/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,142 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C47638",
+  "lang": "en",
+  "description": [
+    "A synthetic, broad-spectrum fluoroquinolone with antibacterial activity. Norfloxacin inhibits activity of DNA gyrase, thereby blocking bacterial DNA replication. Norfloxacin concentrates in the renal tubules and bladder and is bactericidal against a wide range of aerobic gram-positive and gram-negative organisms."
+  ],
+  "synonyms": [
+    "1,4-Dihydro-1-ethyl-6-fluoro-4-oxo-7-(1-piperazinyl)-3-quinolinecarboxylic Acid",
+    "Baccidal",
+    "Fulgram",
+    "MK-366",
+    "NORFLOXACIN",
+    "Norfloxacin",
+    "Noroxin",
+    "Sebercim"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "70458-96-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:100246"
+    ],
+    "Chemical_Formula": [
+      "C16H18FN3O3"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "N0F8P22L1P"
+    ],
+    "Legacy Concept Name": [
+      "Norfloxacin"
+    ],
+    "Preferred_Name": [
+      "Norfloxacin"
+    ],
+    "Semantic_Type": [
+      "Antibiotic",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0028365"
+    ],
+    "code": [
+      "C47638"
+    ]
+  },
+  "label": "Norfloxacin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C47638",
+  "obo_id": "NCIT:C47638",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "1,4-Dihydro-1-ethyl-6-fluoro-4-oxo-7-(1-piperazinyl)-3-quinolinecarboxylic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Baccidal",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Fulgram",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "MK-366",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "NORFLOXACIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Norfloxacin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Noroxin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sebercim",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47638?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47638/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47638/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47638/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47638/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47638/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47638/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

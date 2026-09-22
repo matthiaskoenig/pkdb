@@ -1,0 +1,448 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8774",
+  "lang": "en",
+  "description": [
+    "A dipeptide that is the prodrug for ramiprilat, the active metabolite obtained by hydrolysis of the ethyl ester group. An angiotensin-converting enzyme (ACE) inhibitor, used to treat high blood pressure and congestive heart failure."
+  ],
+  "synonyms": [
+    "(2S,3aS,6aS)-1-[(2S)-2-{[(1S)-1-ethoxycarbonyl-3-phenylpropyl]amino}propanoyl]octahydrocyclopenta[b]pyrrole-2-carboxylic acid",
+    "(2S,3aS,6aS)-1-[(2S)-2-{[(1S)-1-ethoxycarbonyl-3-phenylpropyl]amino}propanoyl]octahydrocyclopenta[b]pyrrole-2-carboxylic acid",
+    "(2S-(1(R*(R*)),2alpha,3abeta,6abeta))-1-(2-((1-(Ethoxycarbonyl)-3-phenylpropyl)amino)-1-oxopropyl)octahydrocyclopenta(b)pyrrole-2-carboxylic acid",
+    "Altace (TN)",
+    "Ramipril",
+    "Ramiprilum",
+    "Tritace",
+    "ramipril"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:87333-19-5",
+      "drugbank:DB00178",
+      "drugcentral:2356",
+      "hmdb:HMDB0014324",
+      "kegg.drug:D00421",
+      "lincs.smallmolecule:LSM-5950",
+      "pubmed:11095026",
+      "pubmed:11575208",
+      "pubmed:12076194",
+      "pubmed:12768220",
+      "pubmed:15110900",
+      "pubmed:16144510",
+      "pubmed:16734081",
+      "pubmed:17004100",
+      "pubmed:17192135",
+      "pubmed:17496463",
+      "pubmed:17903031",
+      "pubmed:20122169",
+      "pubmed:22799880",
+      "pubmed:23557551",
+      "pubmed:23713675",
+      "pubmed:23747952",
+      "pubmed:23842688",
+      "pubmed:23842829",
+      "pubmed:23951921",
+      "pubmed:24048485",
+      "pubmed:24090393",
+      "pubmed:24191305",
+      "pubmed:24397981",
+      "pubmed:24435506",
+      "pubmed:24452090",
+      "pubmed:24509355",
+      "reaxys:4214464",
+      "vsdb:1888",
+      "wikipedia.en:Ramipril"
+    ],
+    "generalized_empirical_formula": [
+      "C23H32N2O5"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8774"
+    ],
+    "inchi_key_string": [
+      "HDACQVRGBOVJII-JBDAPHQKSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C23H32N2O5/c1-3-30-23(29)18(13-12-16-8-5-4-6-9-16)24-15(2)21(26)25-19-11-7-10-17(19)14-20(25)22(27)28/h4-6,8-9,15,17-20,24H,3,7,10-14H2,1-2H3,(H,27,28)/t15-,17-,18-,19-,20-/m0/s1"
+    ],
+    "mass": [
+      "416.518"
+    ],
+    "monoisotopic_mass": [
+      "416.23112"
+    ],
+    "smiles_string": [
+      "[H][C@@]12CCC[C@]1([H])N(C(=O)[C@H](C)N[C@@H](CCc1ccccc1)C(=O)OCC)[C@H](C(=O)O)C2"
+    ]
+  },
+  "label": "ramipril",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8774",
+  "obo_id": "CHEBI:8774",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "87333-19-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=87333-19-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00178",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00178"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2356",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2356"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014324",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014324"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00421",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5950",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11095026",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11095026/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11575208",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11575208/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12076194",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12076194/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12768220",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12768220/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15110900",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15110900/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16144510",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16144510/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16734081",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16734081/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17004100",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17004100/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17192135",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17192135/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17496463",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17496463/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17903031",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17903031/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20122169",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20122169/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22799880",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22799880/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23557551",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23557551/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23713675",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23713675/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23747952",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23747952/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23842688",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23842688/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23842829",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23842829/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23951921",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23951921/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24048485",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24048485/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24090393",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24090393/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24191305",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24191305/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24397981",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24397981/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24435506",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24435506/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24452090",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24452090/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24509355",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24509355/"
+    },
+    {
+      "database": "reaxys",
+      "id": "4214464",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1888",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1888.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Ramipril",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2S,3aS,6aS)-1-[(2S)-2-{[(1S)-1-ethoxycarbonyl-3-phenylpropyl]amino}propanoyl]octahydrocyclopenta[b]pyrrole-2-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S,3aS,6aS)-1-[(2S)-2-{[(1S)-1-ethoxycarbonyl-3-phenylpropyl]amino}propanoyl]octahydrocyclopenta[b]pyrrole-2-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S-(1(R*(R*)),2alpha,3abeta,6abeta))-1-(2-((1-(Ethoxycarbonyl)-3-phenylpropyl)amino)-1-oxopropyl)octahydrocyclopenta(b)pyrrole-2-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Altace (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ramipril",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ramiprilum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tritace",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ramipril",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,70 @@
+{
+  "iri": "http://purl.org/sig/ont/fma/fma62293",
+  "lang": "en",
+  "description": [],
+  "synonyms": [],
+  "annotation": {
+    "FMAID": [
+      62293.0
+    ],
+    "preferred name": [
+      "Hemoglobin"
+    ],
+    "synonym": [
+      "Haemoglobin"
+    ]
+  },
+  "label": "Hemoglobin",
+  "ontology_name": "fma",
+  "ontology_prefix": "FMA",
+  "ontology_iri": "http://purl.org/sig/ont/fma.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": false,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "fma62293",
+  "obo_id": "fma62293",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma62293?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma62293/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma62293/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma62293/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma62293/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma62293/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma62293/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma62293/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma62293/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma62293/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma62293/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

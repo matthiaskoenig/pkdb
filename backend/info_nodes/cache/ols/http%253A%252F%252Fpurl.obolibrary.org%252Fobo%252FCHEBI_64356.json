@@ -1,0 +1,378 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_64356",
+  "lang": "en",
+  "description": [
+    "A γ-amino acid that is γ-aminobutyric acid (GABA) carrying an isobutyl substitutent at the β-position (the <i>S</i>-enantiomer). Binds with high affinity to the α<small><sub>2</sub></small>-δ site (an auxiliary subunit of voltage-gated calcium channels) in central nervous system tissues."
+  ],
+  "synonyms": [
+    "(3S)-3-(aminomethyl)-5-methylhexanoic acid",
+    "(3S)-3-(aminomethyl)-5-methylhexanoic acid",
+    "(S)-3-Isobutyl GABA",
+    "3-Isobutyl GABA",
+    "Lyrica",
+    "pregabalin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:148553-50-8",
+      "drugbank:DB00230",
+      "drugcentral:2255",
+      "kegg.drug:D02716",
+      "patent:EP1178034",
+      "patent:EP2418194",
+      "patent:US2008311635",
+      "patent:US6359169",
+      "pubmed:22339078",
+      "pubmed:22345870",
+      "pubmed:22362672",
+      "pubmed:22366121",
+      "pubmed:22404404",
+      "pubmed:22413436",
+      "pubmed:22415534",
+      "pubmed:22415535",
+      "pubmed:22424859",
+      "pubmed:22431439",
+      "pubmed:22448469",
+      "pubmed:22449111",
+      "pubmed:22459341",
+      "pubmed:22468635",
+      "pubmed:22470326",
+      "pubmed:22473300",
+      "pubmed:22473872",
+      "pubmed:22476240",
+      "pubmed:22480279",
+      "reaxys:8404778",
+      "wikipedia.en:Pregabalin"
+    ],
+    "generalized_empirical_formula": [
+      "C8H17NO2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:64356"
+    ],
+    "inchi_key_string": [
+      "AYXYPKUFHZROOJ-ZETCQYMHSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C8H17NO2/c1-6(2)3-7(5-9)4-8(10)11/h6-7H,3-5,9H2,1-2H3,(H,10,11)/t7-/m0/s1"
+    ],
+    "mass": [
+      "159.229"
+    ],
+    "monoisotopic_mass": [
+      "159.12593"
+    ],
+    "smiles_string": [
+      "CC(C)C[C@H](CN)CC(=O)O"
+    ]
+  },
+  "label": "pregabalin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_64356",
+  "obo_id": "CHEBI:64356",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "148553-50-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=148553-50-8"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00230",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00230"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2255",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2255"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D02716",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP1178034",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP1178034"
+    },
+    {
+      "database": "patent",
+      "id": "EP2418194",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP2418194"
+    },
+    {
+      "database": "patent",
+      "id": "US2008311635",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2008311635"
+    },
+    {
+      "database": "patent",
+      "id": "US6359169",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US6359169"
+    },
+    {
+      "database": "pubmed",
+      "id": "22339078",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22339078/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22345870",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22345870/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22362672",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22362672/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22366121",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22366121/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22404404",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22404404/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22413436",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22413436/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22415534",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22415534/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22415535",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22415535/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22424859",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22424859/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22431439",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22431439/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22448469",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22448469/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22449111",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22449111/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22459341",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22459341/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22468635",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22468635/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22470326",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22470326/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22473300",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22473300/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22473872",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22473872/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22476240",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22476240/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22480279",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22480279/"
+    },
+    {
+      "database": "reaxys",
+      "id": "8404778",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Pregabalin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3S)-3-(aminomethyl)-5-methylhexanoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3S)-3-(aminomethyl)-5-methylhexanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-3-Isobutyl GABA",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-Isobutyl GABA",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lyrica",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pregabalin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64356?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64356/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64356/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64356/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64356/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64356/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64356/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64356/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64356/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

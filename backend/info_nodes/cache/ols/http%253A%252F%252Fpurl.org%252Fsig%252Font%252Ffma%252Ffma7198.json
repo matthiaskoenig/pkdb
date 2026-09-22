@@ -1,0 +1,115 @@
+{
+  "iri": "http://purl.org/sig/ont/fma/fma7198",
+  "lang": "en",
+  "description": [],
+  "synonyms": [],
+  "annotation": {
+    "FMAID": [
+      7198.0
+    ],
+    "definition": [
+      "Lobular organ the parenchyma of which consists of glandular acini which communicate via a duct system with the duodenum. Examples: There is only one pancreas."
+    ],
+    "non-English equivalent": [
+      "Lapay",
+      "Pancréas",
+      "Pankreas",
+      "Páncreas"
+    ],
+    "preferred name": [
+      "Pancreas"
+    ]
+  },
+  "label": "Pancreas",
+  "ontology_name": "fma",
+  "ontology_prefix": "FMA",
+  "ontology_iri": "http://purl.org/sig/ont/fma.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": false,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "fma7198",
+  "obo_id": "fma7198",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/graph"
+    },
+    "anterior_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fanterior_to"
+    },
+    "arterial_supply": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Farterial_supply"
+    },
+    "bounded_by": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fbounded_by"
+    },
+    "constitutional_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fconstitutional_part"
+    },
+    "constitutional_part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fconstitutional_part_of"
+    },
+    "contained_in": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fcontained_in"
+    },
+    "develops_from": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fdevelops_from"
+    },
+    "direct_left_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fdirect_left_of"
+    },
+    "direct_right_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fdirect_right_of"
+    },
+    "lymphatic_drainage": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Flymphatic_drainage"
+    },
+    "medial_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fmedial_to"
+    },
+    "member_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fmember_of"
+    },
+    "nerve_supply": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fnerve_supply"
+    },
+    "posterior_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fposterior_to"
+    },
+    "regional_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fregional_part"
+    },
+    "superior_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fsuperior_to"
+    },
+    "venous_drainage": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Ffma7198/http%253A%252F%252Fpurl.org%252Fsig%252Font%252Ffma%252Fvenous_drainage"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

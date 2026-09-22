@@ -1,0 +1,462 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_48574",
+  "lang": "en",
+  "description": [
+    "A member of the class of  pyrazolidines that is 1,2-diphenylpyrazolidine-3,5-dione carrying a butyl group at the 4-position."
+  ],
+  "synonyms": [
+    "3,5-Dioxo-1,2-diphenyl-4-n-butylpyrazolidine",
+    "4-BUTYL-1,2-DIPHENYL-PYRAZOLIDINE-3,5-DIONE",
+    "4-butyl-1,2-diphenylpyrazolidine-3,5-dione",
+    "4-butyl-1,2-diphenylpyrazolidine-3,5-dione",
+    "4-n-Butyl-1,2-diphenyl-3,5-pyrazolidinedione",
+    "Phenbutazone",
+    "Phenylbutazon",
+    "Phenylbutazone",
+    "fenilbutazona",
+    "phenylbutazone",
+    "phenylbutazonum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:50-33-9",
+      "drugbank:DB00812",
+      "drugcentral:2145",
+      "hmdb:HMDB0014950",
+      "kegg.compound:C07440",
+      "kegg.drug:D00510",
+      "lincs.smallmolecule:LSM-2219",
+      "pdb-ccd:P1Z",
+      "pubmed:11264893",
+      "pubmed:12692637",
+      "pubmed:13010905",
+      "pubmed:13048452",
+      "pubmed:13747451",
+      "pubmed:19614844",
+      "pubmed:20176071",
+      "pubmed:21668837",
+      "pubmed:22082440",
+      "pubmed:22180948",
+      "pubmed:22245664",
+      "pubmed:23369749",
+      "pubmed:23525812",
+      "pubmed:25287371",
+      "pubmed:26090772",
+      "pubmed:26808199",
+      "pubmed:3425858",
+      "pubmed:7655439",
+      "reaxys:290080",
+      "vsdb:1775",
+      "wikipedia.en:Phenylbutazone"
+    ],
+    "generalized_empirical_formula": [
+      "C19H20N2O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:44635",
+      "CHEBI:8091"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:48574"
+    ],
+    "inchi_key_string": [
+      "VYMDGNCVAMGZFE-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C19H20N2O2/c1-2-3-14-17-18(22)20(15-10-6-4-7-11-15)21(19(17)23)16-12-8-5-9-13-16/h4-13,17H,2-3,14H2,1H3"
+    ],
+    "mass": [
+      "308.381"
+    ],
+    "monoisotopic_mass": [
+      "308.15248"
+    ],
+    "smiles_string": [
+      "CCCCC1C(=O)N(c2ccccc2)N(c2ccccc2)C1=O"
+    ]
+  },
+  "label": "phenylbutazone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_48574",
+  "obo_id": "CHEBI:48574",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "50-33-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=50-33-9"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00812",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00812"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2145",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2145"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014950",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014950"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07440",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00510",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-2219",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "P1Z",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11264893",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11264893/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12692637",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12692637/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13010905",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13010905/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13048452",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13048452/"
+    },
+    {
+      "database": "pubmed",
+      "id": "13747451",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13747451/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19614844",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19614844/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20176071",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20176071/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21668837",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21668837/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22082440",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22082440/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22180948",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22180948/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22245664",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22245664/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23369749",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23369749/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23525812",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23525812/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25287371",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25287371/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26090772",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26090772/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26808199",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26808199/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3425858",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3425858/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7655439",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7655439/"
+    },
+    {
+      "database": "reaxys",
+      "id": "290080",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1775",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1775.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Phenylbutazone",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-butyl-1,2-diphenylpyrazolidine-3,5-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,5-Dioxo-1,2-diphenyl-4-n-butylpyrazolidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-BUTYL-1,2-DIPHENYL-PYRAZOLIDINE-3,5-DIONE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-butyl-1,2-diphenylpyrazolidine-3,5-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-n-Butyl-1,2-diphenyl-3,5-pyrazolidinedione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenbutazone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenylbutazon",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenylbutazone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fenilbutazona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenylbutazone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenylbutazone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenylbutazonum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48574?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48574/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48574/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48574/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48574/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48574/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48574/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48574/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,4 +1,4 @@
-"""Compile editable info_nodes definitions into the backend's offline JSON files.
+"""Refresh public metadata and compile info_nodes into backend bootstrap JSON.
 
 Run: uv run --project backend python scripts/update_vocabulary.py
 Use --check in CI to detect stale generated files without changing them.
@@ -6,68 +6,43 @@ Use --check in CI to detect stale generated files without changing them.
 
 import argparse
 import hashlib
+import importlib
 import json
 import logging
 import os
 import shutil
-import socket
 import sys
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "backend" / "pkdb_data"
 DEFINITIONS = ROOT / "backend" / "info_nodes"
+CACHE = DEFINITIONS / "cache"
 
 
-def encode(value):
+def encode(value: object) -> str:
     """Use stable formatting for committed generated files."""
     return json.dumps(value, indent=2, ensure_ascii=True) + "\n"
 
 
-def compile_vocabulary():
-    """Read only committed metadata caches; never contact external services."""
+def compile_vocabulary(cache_path: Path, *, offline: bool) -> dict[str, str]:
+    """Compile definitions against a staged cache, with optional remote refresh."""
     sys.dont_write_bytecode = True
     logging.disable(logging.CRITICAL)
+    sys.path.insert(0, str(ROOT / "backend"))
+    from info_nodes.metadata_cache import use_metadata_cache
 
-    def forbid_network(*args, **kwargs):
-        raise RuntimeError("Network forbidden during vocabulary generation")
-
-    socket.socket.connect = forbid_network
-    socket.socket.connect_ex = forbid_network
-    import pymetadata
-    from pymetadata.webservices import chebi, ols, registry, unichem
-    from pymetadata.webservices.webservice import WebserviceError
-
-    misses = set()
-
-    def cache_miss(url, **kwargs):
-        misses.add(url)
-        raise WebserviceError("No cached metadata; define scientific values explicitly")
-
-    def read_cache(cache_path, **kwargs):
-        return json.loads(Path(cache_path).read_text())
-
-    with TemporaryDirectory(prefix="pkdb-vocabulary-") as directory:
-        cache = Path(directory) / "cache"
-        shutil.copytree(SOURCE / "resources" / "cache", cache)
-        pymetadata.CACHE_PATH = cache
-        for module in (registry, chebi, unichem, ols):
-            module.read_json_cache = read_cache
-            module.get_json = cache_miss
-            if hasattr(module, "cache_age"):
-                module.cache_age = lambda path: 0 if Path(path).exists() else None
-        sys.path.insert(0, str(ROOT / "backend"))
-        import pkdb_data
-
-        pkdb_data.CACHE_PATH = cache
+    with use_metadata_cache(cache_path, offline=offline) as metadata:
+        # Definitions resolve annotations when imported. Rebuild them for each cache.
+        for name, module in list(sys.modules.items()):
+            if name.startswith("info_nodes.definitions."):
+                importlib.reload(module)
+        if "info_nodes.nodes" in sys.modules:
+            importlib.reload(sys.modules["info_nodes.nodes"])
         from info_nodes.audit import audit_nodes
+        from info_nodes.convert import convert_vocabulary
         from info_nodes.nodes import collect_nodes
-        from info_nodes.policies import (
-            CAN_NEGATIVE,
-            TIME_REQUIRED_MEASUREMENT_TYPES,
-        )
-        from pkdb_data.convert import convert_vocabulary
+        from info_nodes.policies import CAN_NEGATIVE, TIME_REQUIRED_MEASUREMENT_TYPES
 
         nodes = collect_nodes()
         serialized = [node.serialize(nodes) for node in nodes]
@@ -89,16 +64,19 @@ def compile_vocabulary():
     from pkdb.db.bootstrap import Snapshot, validate_snapshot
 
     validate_snapshot(Snapshot.model_validate(snapshot))
-    inputs = [
-        *SOURCE.rglob("*.py"),
-        *SOURCE.rglob("*.json"),
-        *DEFINITIONS.rglob("*.py"),
-        Path(__file__).resolve(),
-    ]
+    inputs = [*DEFINITIONS.rglob("*.py"), Path(__file__).resolve()]
     hashes = {
         str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
         for path in sorted(inputs)
     }
+    hashes.update(
+        {
+            str(
+                (CACHE / path.relative_to(cache_path)).relative_to(ROOT)
+            ): hashlib.sha256(path.read_bytes()).hexdigest()
+            for path in sorted(cache_path.rglob("*.json"))
+        }
+    )
     provenance = {
         "generator": "scripts/update_vocabulary.py",
         "nodes": len(nodes),
@@ -109,20 +87,55 @@ def compile_vocabulary():
         "definition_sha256": {
             name: digest for name, digest in hashes.items() if name.endswith(".py")
         },
-        "uncached_optional_metadata": sorted(misses),
+        "uncached_optional_metadata": sorted(metadata.misses),
         "metadata_issues": issues,
     }
     return {"vocabulary.json": encode(snapshot), "provenance.json": encode(provenance)}
 
 
-def main():
+def publish_cache(staged_cache: Path) -> None:
+    """Replace the cache after validation, without retaining obsolete entries."""
+    with TemporaryDirectory(dir=DEFINITIONS, prefix=".cache-refresh-") as directory:
+        replacement = Path(directory) / "new"
+        previous = Path(directory) / "old"
+        shutil.copytree(staged_cache, replacement)
+        if CACHE.exists():
+            os.replace(CACHE, previous)
+        try:
+            os.replace(replacement, CACHE)
+        except OSError:
+            if previous.exists():
+                os.replace(previous, CACHE)
+            raise
+
+
+def main() -> int:
     """Validate everything before replacing generated files, or check for drift."""
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--check", action="store_true")
+    modes = parser.add_mutually_exclusive_group()
+    modes.add_argument(
+        "--check", action="store_true", help="Check committed output offline"
+    )
+    modes.add_argument(
+        "--offline", action="store_true", help="Generate without remote requests"
+    )
+    modes.add_argument(
+        "--refresh-cache", action="store_true", help="Fetch into an empty cache"
+    )
     parser.add_argument("--output", type=Path, default=ROOT / "backend" / "bootstrap")
     args = parser.parse_args()
     try:
-        outputs = compile_vocabulary()
+        with TemporaryDirectory(prefix="pkdb-metadata-") as directory:
+            staged_cache = Path(directory) / "cache"
+            if args.refresh_cache or not CACHE.exists():
+                staged_cache.mkdir()
+            else:
+                shutil.copytree(CACHE, staged_cache)
+            offline = args.offline or args.check
+            outputs = compile_vocabulary(staged_cache, offline=offline)
+            # Promote only a cache whose definitions and snapshot validated.
+            if not offline:
+                publish_cache(staged_cache)
         issues = json.loads(outputs["provenance.json"])["metadata_issues"]
         if issues:
             print(

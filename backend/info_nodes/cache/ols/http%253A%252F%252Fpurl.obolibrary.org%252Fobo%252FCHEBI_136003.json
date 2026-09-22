@@ -1,0 +1,420 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_136003",
+  "lang": "en",
+  "description": [
+    "A 6-(dimethylamino)-4,4-diphenylheptan-3-one that has (<i>R</i>)-configuration. It is the active enantiomer of methadone and its hydrochloride salt is used to treat adults who are addicted to drugs such as heroin and morphine."
+  ],
+  "synonyms": [
+    "(-)-(R)-6-(dimethylamino)-4,4-diphenyl-3-heptanone",
+    "(-)-methadone",
+    "(6R)-6-(dimethylamino)-4,4-diphenylheptan-3-one",
+    "(6R)-6-(dimethylamino)-4,4-diphenylheptan-3-one",
+    "(6R)-methadone",
+    "(R)-(-)-methadone",
+    "(R)-6-(dimethylamino)-4,4-diphenyl-3-heptanone",
+    "(R)-methadone",
+    "L-6-(dimethylamino)-4,4-diphenyl-3-heptanone",
+    "R-methadone",
+    "l-methadone",
+    "levometadona",
+    "levomethadone",
+    "levomethadonum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:125-58-6",
+      "chemspider:20904",
+      "drugbank:DB13515",
+      "drugcentral:4586",
+      "kegg.drug:D08121",
+      "pubmed:20308640",
+      "pubmed:21371149",
+      "pubmed:25669614",
+      "pubmed:27974484",
+      "pubmed:29393208",
+      "pubmed:29902789",
+      "pubmed:31842942",
+      "pubmed:32302325",
+      "pubmed:32586692",
+      "pubmed:32903474",
+      "pubmed:33345336",
+      "pubmed:33423953",
+      "reaxys:3213668",
+      "wikipedia.en:Levomethadone"
+    ],
+    "generalized_empirical_formula": [
+      "C21H27NO"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:136003"
+    ],
+    "inchi_key_string": [
+      "USSIQXCVUWKGNF-QGZVFWFLSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H27NO/c1-5-20(23)21(16-17(2)22(3)4,18-12-8-6-9-13-18)19-14-10-7-11-15-19/h6-15,17H,5,16H2,1-4H3/t17-/m1/s1"
+    ],
+    "mass": [
+      "309.453"
+    ],
+    "monoisotopic_mass": [
+      "309.20926"
+    ],
+    "smiles_string": [
+      "CCC(=O)C(C[C@@H](C)N(C)C)(c1ccccc1)c1ccccc1"
+    ]
+  },
+  "label": "levomethadone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_136003",
+  "obo_id": "CHEBI:136003",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "125-58-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=125-58-6"
+    },
+    {
+      "database": "chemspider",
+      "id": "20904",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.20904.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB13515",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB13515"
+    },
+    {
+      "database": "drugcentral",
+      "id": "4586",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/4586"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08121",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "20308640",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20308640/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21371149",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21371149/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25669614",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25669614/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27974484",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27974484/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29393208",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29393208/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29902789",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29902789/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31842942",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31842942/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32302325",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32302325/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32586692",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32586692/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32903474",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32903474/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33345336",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33345336/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33423953",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33423953/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3213668",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Levomethadone",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(6R)-6-(dimethylamino)-4,4-diphenylheptan-3-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-(R)-6-(dimethylamino)-4,4-diphenyl-3-heptanone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-methadone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(6R)-6-(dimethylamino)-4,4-diphenylheptan-3-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(6R)-methadone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-(-)-methadone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-6-(dimethylamino)-4,4-diphenyl-3-heptanone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-methadone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-6-(dimethylamino)-4,4-diphenyl-3-heptanone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "R-methadone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "l-methadone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levometadona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levomethadone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levomethadonum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136003?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136003/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136003/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136003/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136003/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136003/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136003/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136003/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_enantiomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136003/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018039"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

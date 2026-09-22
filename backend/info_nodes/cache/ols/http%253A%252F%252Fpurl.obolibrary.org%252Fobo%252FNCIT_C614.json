@@ -1,0 +1,219 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C614",
+  "lang": "en",
+  "description": [
+    "A synthetic aminoethylamide with local anesthetic and antiarrhythmic properties. Lidocaine stabilizes the neuronal membrane by binding to and inhibiting voltage-gated sodium channels, thereby inhibiting the ionic fluxes required for the initiation and conduction of impulses and effecting local anesthesia."
+  ],
+  "synonyms": [
+    ".omega.-Diethylamino-2,6-dimethylacetanilide",
+    "2-(Diethylamino)-2',6'-acetoxylidide",
+    "2-(Diethylamino)-N-(2,6-dimethylphenyl)acetamide",
+    "2-Diethylamino-2',6'-acetoxylidide",
+    "Cuivasil",
+    "Duncaine",
+    "LIDOCAINE",
+    "Leostesin",
+    "Lidocaine",
+    "Lidothesin",
+    "Lignocaine",
+    "Omega-diethylamino-2,6-dimethylacetanilide",
+    "Rucaina",
+    "lidocaine"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A substance used to relieve pain by blocking signals at the nerve endings in skin. It can also be given intravenously to stop heart arrhythmias. It is a type of local anesthetic and antiarrhythmic."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Cardiac arrhythmias; Local anesthetic"
+    ],
+    "CAS_Registry": [
+      "137-58-6"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:6456"
+    ],
+    "Chemical_Formula": [
+      "C14H22N2O"
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Lidocaine"
+    ],
+    "FDA_UNII_Code": [
+      "98PI200987"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C48000"
+    ],
+    "Legacy Concept Name": [
+      "Lidocaine"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "39607"
+    ],
+    "NSC Number": [
+      "40030"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "39607"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "39607"
+    ],
+    "Preferred_Name": [
+      "Lidocaine"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0023660"
+    ],
+    "code": [
+      "C614"
+    ]
+  },
+  "label": "Lidocaine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C614",
+  "obo_id": "NCIT:C614",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C159412",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": ".omega.-Diethylamino-2,6-dimethylacetanilide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "2-(Diethylamino)-2',6'-acetoxylidide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "2-(Diethylamino)-N-(2,6-dimethylphenyl)acetamide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "2-Diethylamino-2',6'-acetoxylidide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cuivasil",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Duncaine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "LIDOCAINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Leostesin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lidocaine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lidothesin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lignocaine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Omega-diethylamino-2,6-dimethylacetanilide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Rucaina",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "lidocaine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C614?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C614/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C614/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C614/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C614/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C614/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C614/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C614/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

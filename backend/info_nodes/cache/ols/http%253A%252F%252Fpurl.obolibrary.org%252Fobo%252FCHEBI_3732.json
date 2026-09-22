@@ -1,0 +1,331 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3732",
+  "lang": "en",
+  "description": [
+    "The 6-<em>O</em>-methyl ether of erythromycin A, clarithromycin is a macrolide antibiotic used in the treatment of respiratory-tract, skin and soft-tissue infections. It is also used to eradicate <em>Helicobacter pylori</em> in the treatment of peptic ulcer disease. It prevents bacteria from growing by interfering with their protein synthesis."
+  ],
+  "synonyms": [
+    "6-O-methylerythromycin A",
+    "6-O-methylerythromycin",
+    "CLA",
+    "CLARITHROMYCIN",
+    "Clarithromycin",
+    "O(6)-methylerythromycin",
+    "O(6)-methylerythromycin",
+    "clarithromycin",
+    "clarithromycina",
+    "clarithromycine",
+    "clarithromycinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:81103-11-9",
+      "drugbank:DB01211",
+      "drugcentral:668",
+      "kegg.compound:C06912",
+      "kegg.drug:D00276",
+      "lincs.smallmolecule:LSM-5606",
+      "lipidmaps:LMPK04000014",
+      "patent:EP41355",
+      "patent:US4331803",
+      "pdb-ccd:CTY",
+      "pubmed:16387493",
+      "reaxys:3581974"
+    ],
+    "generalized_empirical_formula": [
+      "C38H69NO13"
+    ],
+    "has_alternative_id": [
+      "CHEBI:41676",
+      "CHEBI:442148",
+      "CHEBI:670147"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3732"
+    ],
+    "inchi_key_string": [
+      "AGOYDEPGAOXOCK-KCBOHYOISA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C38H69NO13/c1-15-26-38(10,45)31(42)21(4)28(40)19(2)17-37(9,47-14)33(52-35-29(41)25(39(11)12)16-20(3)48-35)22(5)30(23(6)34(44)50-26)51-27-18-36(8,46-13)32(43)24(7)49-27/h19-27,29-33,35,41-43,45H,15-18H2,1-14H3/t19-,20-,21+,22+,23-,24+,25+,26-,27+,29-,30+,31-,32+,33-,35+,36-,37-,38-/m1/s1"
+    ],
+    "mass": [
+      "747.964"
+    ],
+    "monoisotopic_mass": [
+      "747.47689"
+    ],
+    "smiles_string": [
+      "[H][C@]1(O[C@H]2[C@H](C)[C@@H](O[C@]3([H])O[C@H](C)C[C@H](N(C)C)[C@H]3O)[C@](C)(OC)C[C@@H](C)C(=O)[C@H](C)[C@@H](O)[C@](C)(O)[C@@H](CC)OC(=O)[C@@H]2C)C[C@@](C)(OC)[C@@H](O)[C@H](C)O1"
+    ]
+  },
+  "label": "clarithromycin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3732",
+  "obo_id": "CHEBI:3732",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "81103-11-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=81103-11-9"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01211",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01211"
+    },
+    {
+      "database": "drugcentral",
+      "id": "668",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/668"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06912",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00276",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5606",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "lipidmaps",
+      "id": "LMPK04000014",
+      "description": "lipidmaps",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMPK04000014"
+    },
+    {
+      "database": "patent",
+      "id": "EP41355",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP41355"
+    },
+    {
+      "database": "patent",
+      "id": "US4331803",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4331803"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "CTY",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "16387493",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16387493/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3581974",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "O(6)-methylerythromycin",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-O-methylerythromycin A",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-O-methylerythromycin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CLA",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CLARITHROMYCIN",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Clarithromycin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "O(6)-methylerythromycin",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clarithromycin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clarithromycina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clarithromycine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "clarithromycinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3732?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3732/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3732/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3732/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3732/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3732/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3732/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3732/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,75 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CMO_0000670",
+  "lang": "en",
+  "description": [
+    "This is not the same term as the original \"heart measurement\".  That term is now \"heart morphological measurement\"."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "created_by": [
+      "jsmith"
+    ],
+    "creation_date": [
+      "2012-02-15T05:06:19Z"
+    ],
+    "has_obo_namespace": [
+      "clinical_measurement_ontology"
+    ],
+    "id": [
+      "CMO:0000670"
+    ]
+  },
+  "label": "heart measurement",
+  "ontology_name": "cmo",
+  "ontology_prefix": "CMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/cmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CMO_0000670",
+  "obo_id": "CMO:0000670",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000670?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000670/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000670/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000670/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000670/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000670/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000670/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000670/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000670/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000670/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000670/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

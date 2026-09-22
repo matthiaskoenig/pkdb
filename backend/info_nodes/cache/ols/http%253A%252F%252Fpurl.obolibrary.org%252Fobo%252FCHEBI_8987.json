@@ -1,0 +1,111 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8987",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "SK&F 91581"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:34970-65-5",
+      "kegg.compound:C11799"
+    ],
+    "generalized_empirical_formula": [
+      "C8H14N4S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8987"
+    ],
+    "inchi_key_string": [
+      "RGIDMSNTKAZSFO-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C8H14N4S/c1-9-8(13)11-4-2-3-7-5-10-6-12-7/h5-6H,2-4H2,1H3,(H,10,12)(H2,9,11,13)"
+    ],
+    "mass": [
+      "198.295"
+    ],
+    "monoisotopic_mass": [
+      "198.09392"
+    ],
+    "smiles_string": [
+      "CNC(=S)NCCCc1cncn1"
+    ]
+  },
+  "label": "SK&F 91581",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8987",
+  "obo_id": "CHEBI:8987",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "34970-65-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=34970-65-5"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C11799",
+      "description": "kegg.compound",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "SK&F 91581",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8987?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8987/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8987/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8987/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8987/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8987/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8987/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

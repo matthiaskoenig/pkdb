@@ -1,0 +1,102 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C84729",
+  "lang": "en",
+  "description": [
+    "An autosomal recessive inherited disorder characterized by unconjugated hyperbilirubinemia, resulting in harmless intermittent jaundice."
+  ],
+  "synonyms": [
+    "Gilbert Disease",
+    "Gilbert Syndrome",
+    "Gilbert's Syndrome"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "GDC"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C16457",
+      "http://purl.obolibrary.org/obo/NCIT_C17103"
+    ],
+    "Maps_To": [
+      "Gilbert's Syndrome"
+    ],
+    "Preferred_Name": [
+      "Gilbert Syndrome"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C0017551"
+    ],
+    "code": [
+      "C84729"
+    ]
+  },
+  "label": "Gilbert Syndrome",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C84729",
+  "obo_id": "NCIT:C84729",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C177537"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Gilbert Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gilbert Syndrome",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gilbert's Syndrome",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84729?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84729/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84729/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84729/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84729/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84729/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84729/graph"
+    },
+    "Disease_Mapped_To_Gene": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84729/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R176"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

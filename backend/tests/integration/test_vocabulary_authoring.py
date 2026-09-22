@@ -14,8 +14,6 @@ def test_authored_term_reaches_backend_and_invalid_edit_preserves_json(
 ):
     root = Path(__file__).resolve().parents[3]
     workspace = tmp_path / "repository"
-    source = workspace / "backend" / "pkdb_data"
-    shutil.copytree(root / "backend/pkdb_data", source)
     definitions_root = workspace / "backend/info_nodes"
     shutil.copytree(root / "backend/info_nodes", definitions_root)
     script = workspace / "scripts/update_vocabulary.py"
@@ -42,7 +40,7 @@ def test_authored_term_reaches_backend_and_invalid_edit_preserves_json(
     output = workspace / "backend/bootstrap"
     output.mkdir()
     (output / "users.json").write_text("[]\n")
-    command = [sys.executable, str(script)]
+    command = [sys.executable, str(script), "--offline"]
     result = subprocess.run(command, capture_output=True, text=True, timeout=600)
     assert result.returncode == 0, result.stderr
     snapshot = json.loads((output / "vocabulary.json").read_text())

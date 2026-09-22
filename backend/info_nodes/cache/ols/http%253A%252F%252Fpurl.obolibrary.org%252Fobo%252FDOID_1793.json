@@ -1,0 +1,292 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_1793",
+  "lang": "en",
+  "description": [
+    "Xref MGI.",
+    "An endocrine gland cancer located_in the pancreas."
+  ],
+  "synonyms": [
+    "Ca body of pancreas",
+    "Ca head of pancreas",
+    "Ca tail of pancreas",
+    "malignant neoplasm of body of pancreas",
+    "malignant neoplasm of head of pancreas",
+    "malignant neoplasm of tail of pancreas",
+    "pancreas neoplasm",
+    "pancreatic neoplasm",
+    "pancreatic tumor"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "GARD:9364",
+      "ICD10CM:C25.0",
+      "ICD10CM:C25.1",
+      "ICD10CM:C25.2",
+      "ICD9CM:157.0",
+      "ICD9CM:157.1",
+      "ICD9CM:157.2",
+      "ICD9CM:157.8",
+      "KEGG:05212",
+      "MESH:D010190",
+      "NCI:C194089",
+      "NCI:C194090",
+      "NCI:C194091",
+      "NCI:C3305",
+      "ORDO:1333",
+      "ORDO:217074",
+      "SNOMEDCT_US_2025_09_01:126859007",
+      "SNOMEDCT_US_2025_09_01:187796007",
+      "SNOMEDCT_US_2025_09_01:93715005",
+      "SNOMEDCT_US_2025_09_01:93823001",
+      "SNOMEDCT_US_2025_09_01:94082003",
+      "UMLS_CUI:C0030297",
+      "UMLS_CUI:C0153458",
+      "UMLS_CUI:C0153459",
+      "UMLS_CUI:C0153460",
+      "UMLS_CUI:C0153463"
+    ],
+    "has_alternative_id": [
+      "DOID:14356",
+      "DOID:1797",
+      "DOID:3588",
+      "DOID:9859"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:1793"
+    ]
+  },
+  "label": "pancreatic cancer",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_1793",
+  "obo_id": "DOID:1793",
+  "in_subset": [
+    "DO_CFDE_slim",
+    "DO_cancer_slim",
+    "DO_rare_slim",
+    "NCIthesaurus",
+    "TopNodes_DOcancerslim"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "An endocrine gland cancer located_in the pancreas.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "GARD",
+      "id": "9364",
+      "description": null,
+      "url": "https://rarediseases.info.nih.gov/?gard_id=9364"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "C25.0",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD10CM",
+      "id": "C25.1",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD10CM",
+      "id": "C25.2",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "157.0",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "157.1",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "157.2",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "157.8",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "KEGG",
+      "id": "05212",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D010190",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D010190"
+    },
+    {
+      "database": "NCI",
+      "id": "C194089",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C194089"
+    },
+    {
+      "database": "NCI",
+      "id": "C194090",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C194090"
+    },
+    {
+      "database": "NCI",
+      "id": "C194091",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C194091"
+    },
+    {
+      "database": "NCI",
+      "id": "C3305",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3305"
+    },
+    {
+      "database": "ORDO",
+      "id": "1333",
+      "description": null,
+      "url": "http://www.orpha.net/ORDO/Orphanet_1333"
+    },
+    {
+      "database": "ORDO",
+      "id": "217074",
+      "description": null,
+      "url": "http://www.orpha.net/ORDO/Orphanet_217074"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "126859007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/126859007"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "187796007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/187796007"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "93715005",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/93715005"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "93823001",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/93823001"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "94082003",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/94082003"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0030297",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0030297"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0153458",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0153458"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0153459",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0153459"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0153460",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0153460"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0153463",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0153463"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1793?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1793/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1793/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1793/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1793/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1793/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1793/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1793/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1793/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1793/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1793/graph"
+    },
+    "has_major_susceptibility_factor": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1793/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0004005"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,412 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_64312",
+  "lang": "en",
+  "description": [
+    "A primary aliphatic amine that is the 3,5-dimethyl derivative of 1-aminoadamantane. A low to moderate affinity uncompetitive (open-channel); NMDA receptor antagonist which binds preferentially to the NMDA receptor-operated cation channels."
+  ],
+  "synonyms": [
+    "1,3-Dimethyl-5-adamantanamine",
+    "1-Amino-3,5-dimethyladamantane",
+    "3,5-Dimethyl-1-adamantanamine",
+    "3,5-Dimethyl-1-aminoadamantane",
+    "3,5-Dimethyltricyclo(3.3.1.1(3,7))decan-1-amine",
+    "3,5-dimethyladamantan-1-amine",
+    "3,5-dimethyladamantan-1-amine",
+    "memantina",
+    "memantine",
+    "memantinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:19982-08-2",
+      "drugbank:DB01043",
+      "drugcentral:1679",
+      "kegg.compound:C13736",
+      "kegg.drug:D08174",
+      "lincs.smallmolecule:LSM-5154",
+      "patent:US2011282100",
+      "pubmed:20104942",
+      "pubmed:21953515",
+      "pubmed:21955815",
+      "pubmed:22030128",
+      "pubmed:22134197",
+      "pubmed:22245025",
+      "pubmed:22248638",
+      "pubmed:22290557",
+      "pubmed:22297273",
+      "pubmed:22300835",
+      "pubmed:22311362",
+      "pubmed:22327556",
+      "pubmed:22329473",
+      "pubmed:22392787",
+      "pubmed:22414570",
+      "pubmed:22425751",
+      "reaxys:2075983",
+      "wikipedia.en:Memantine"
+    ],
+    "generalized_empirical_formula": [
+      "C12H21N"
+    ],
+    "has_alternative_id": [
+      "CHEBI:34832"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:64312"
+    ],
+    "inchi_key_string": [
+      "BUGYDGFZZOZRHP-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C12H21N/c1-10-3-9-4-11(2,6-10)8-12(13,5-9)7-10/h9H,3-8,13H2,1-2H3"
+    ],
+    "mass": [
+      "179.307"
+    ],
+    "monoisotopic_mass": [
+      "179.1674"
+    ],
+    "smiles_string": [
+      "CC12CC3CC(C)(C1)CC(N)(C3)C2"
+    ]
+  },
+  "label": "memantine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_64312",
+  "obo_id": "CHEBI:64312",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "19982-08-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=19982-08-2"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01043",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01043"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1679",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1679"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C13736",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08174",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5154",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US2011282100",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2011282100"
+    },
+    {
+      "database": "pubmed",
+      "id": "20104942",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20104942/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21953515",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21953515/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21955815",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21955815/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22030128",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22030128/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22134197",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22134197/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22245025",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22245025/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22248638",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22248638/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22290557",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22290557/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22297273",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22297273/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22300835",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22300835/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22311362",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22311362/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22327556",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22327556/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22329473",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22329473/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22392787",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22392787/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22414570",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22414570/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22425751",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22425751/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2075983",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Memantine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3,5-dimethyladamantan-1-amine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,3-Dimethyl-5-adamantanamine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Amino-3,5-dimethyladamantane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,5-Dimethyl-1-adamantanamine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,5-Dimethyl-1-aminoadamantane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,5-Dimethyltricyclo(3.3.1.1(3,7))decan-1-amine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,5-dimethyladamantan-1-amine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "memantina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "memantine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "memantinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64312?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64312/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64312/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64312/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64312/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64312/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64312/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64312/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64312/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    },
+    "has_parent_hydride": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_64312/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018040"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

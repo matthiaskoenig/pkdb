@@ -1,0 +1,54 @@
+[
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:139388"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL143715"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "2817943"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "75324"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "EJ939L81MY"
+  },
+  {
+    "src_id": "49",
+    "src_compound_id": "PD099229"
+  },
+  {
+    "src_id": "50",
+    "src_compound_id": "TMURIC"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "39970"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0004328"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID90177659"
+  },
+  {
+    "src_id": "51",
+    "src_compound_id": "FDB015351"
+  },
+  {
+    "src_id": "84",
+    "src_compound_id": "Theacrine"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "Molport-001-742-468"
+  }
+]

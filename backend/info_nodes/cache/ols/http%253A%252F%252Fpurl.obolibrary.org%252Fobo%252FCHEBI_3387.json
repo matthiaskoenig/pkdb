@@ -1,0 +1,742 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3387",
+  "lang": "en",
+  "description": [
+    "A dibenzoazepine that is 5<em>H</em>-dibenzo[<em>b</em>,<em>f</em>]azepine carrying a carbamoyl substituent at the azepine nitrogen, used as an anticonvulsant."
+  ],
+  "synonyms": [
+    "5-Carbamoyl-5H-dibenz(b,f)azepine",
+    "5-Carbamoyl-5H-dibenzo(b,f)azepine",
+    "5-Carbamyl-5H-dibenzo(b,f)azepine",
+    "5-carbamoyl-5H-dibenz[b,f]azepine",
+    "5H-Dibenz(b,f)azepine-5-carboxamide",
+    "5H-dibenzo[b,f]azepine-5-carboxamide",
+    "5H-dibenzo[b,f]azepine-5-carboxamide",
+    "Carbamazepen",
+    "Carnexiv",
+    "carbamazepina",
+    "carbamazepine",
+    "carbamazepinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:298-46-4",
+      "drugbank:DB00564",
+      "drugcentral:489",
+      "hmdb:HMDB0014704",
+      "kegg.compound:C06868",
+      "kegg.drug:D00252",
+      "lincs.smallmolecule:LSM-3610",
+      "patent:US2004220187",
+      "patent:US2007167446",
+      "patent:US2011177136",
+      "patent:US2011245283",
+      "patent:US2948718",
+      "pubmed:10411478",
+      "pubmed:11071486",
+      "pubmed:11129121",
+      "pubmed:11240598",
+      "pubmed:11475584",
+      "pubmed:11595204",
+      "pubmed:11888243",
+      "pubmed:11891095",
+      "pubmed:12073283",
+      "pubmed:12228880",
+      "pubmed:12475188",
+      "pubmed:12749779",
+      "pubmed:12799799",
+      "pubmed:12957643",
+      "pubmed:14160216",
+      "pubmed:14572037",
+      "pubmed:14581052",
+      "pubmed:14713026",
+      "pubmed:14723323",
+      "pubmed:15165631",
+      "pubmed:15557493",
+      "pubmed:15665743",
+      "pubmed:15683742",
+      "pubmed:15739418",
+      "pubmed:15820347",
+      "pubmed:15850602",
+      "pubmed:16033627",
+      "pubmed:16150575",
+      "pubmed:16245817",
+      "pubmed:16380297",
+      "pubmed:16394456",
+      "pubmed:16437428",
+      "pubmed:16538175",
+      "pubmed:16562645",
+      "pubmed:16616830",
+      "pubmed:16990009",
+      "pubmed:17027750",
+      "pubmed:17028629",
+      "pubmed:17207414",
+      "pubmed:17582711",
+      "pubmed:17873967",
+      "pubmed:17949959",
+      "pubmed:18163657",
+      "pubmed:18415623",
+      "pubmed:18637155",
+      "pubmed:18652684",
+      "pubmed:18656520",
+      "pubmed:18969759",
+      "pubmed:19135617",
+      "pubmed:19473818",
+      "pubmed:19741433",
+      "pubmed:19921623",
+      "pubmed:22322005",
+      "pubmed:27967303",
+      "pubmed:7602118",
+      "reaxys:1246090",
+      "wikipedia.en:Carbamazepine"
+    ],
+    "generalized_empirical_formula": [
+      "C15H12N2O"
+    ],
+    "has_alternative_id": [
+      "CHEBI:115086"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3387"
+    ],
+    "inchi_key_string": [
+      "FFGPTBGBLSHEPO-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C15H12N2O/c16-15(18)17-13-7-3-1-5-11(13)9-10-12-6-2-4-8-14(12)17/h1-10H,(H2,16,18)"
+    ],
+    "mass": [
+      "236.274"
+    ],
+    "monoisotopic_mass": [
+      "236.09496"
+    ],
+    "smiles_string": [
+      "NC(=O)N1c2ccccc2C=Cc2ccccc21"
+    ]
+  },
+  "label": "carbamazepine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3387",
+  "obo_id": "CHEBI:3387",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "298-46-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=298-46-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00564",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00564"
+    },
+    {
+      "database": "drugcentral",
+      "id": "489",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/489"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014704",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014704"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06868",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00252",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3610",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US2004220187",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2004220187"
+    },
+    {
+      "database": "patent",
+      "id": "US2007167446",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2007167446"
+    },
+    {
+      "database": "patent",
+      "id": "US2011177136",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2011177136"
+    },
+    {
+      "database": "patent",
+      "id": "US2011245283",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2011245283"
+    },
+    {
+      "database": "patent",
+      "id": "US2948718",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2948718"
+    },
+    {
+      "database": "pubmed",
+      "id": "10411478",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10411478/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11071486",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11071486/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11129121",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11129121/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11240598",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11240598/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11475584",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11475584/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11595204",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11595204/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11888243",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11888243/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11891095",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11891095/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12073283",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12073283/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12228880",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12228880/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12475188",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12475188/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12749779",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12749779/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12799799",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12799799/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12957643",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12957643/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14160216",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14160216/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14572037",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14572037/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14581052",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14581052/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14713026",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14713026/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14723323",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14723323/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15165631",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15165631/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15557493",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15557493/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15665743",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15665743/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15683742",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15683742/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15739418",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15739418/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15820347",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15820347/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15850602",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15850602/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16033627",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16033627/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16150575",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16150575/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16245817",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16245817/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16380297",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16380297/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16394456",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16394456/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16437428",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16437428/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16538175",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16538175/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16562645",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16562645/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16616830",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16616830/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16990009",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16990009/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17027750",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17027750/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17028629",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17028629/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17207414",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17207414/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17582711",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17582711/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17873967",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17873967/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17949959",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17949959/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18163657",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18163657/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18415623",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18415623/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18637155",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18637155/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18652684",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18652684/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18656520",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18656520/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18969759",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18969759/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19135617",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19135617/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19473818",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19473818/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19741433",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19741433/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19921623",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19921623/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22322005",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22322005/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27967303",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27967303/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7602118",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7602118/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1246090",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Carbamazepine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5H-dibenzo[b,f]azepine-5-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Carbamoyl-5H-dibenz(b,f)azepine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Carbamoyl-5H-dibenzo(b,f)azepine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Carbamyl-5H-dibenzo(b,f)azepine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-carbamoyl-5H-dibenz[b,f]azepine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5H-Dibenz(b,f)azepine-5-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5H-dibenzo[b,f]azepine-5-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Carbamazepen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Carnexiv",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbamazepina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbamazepine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbamazepinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

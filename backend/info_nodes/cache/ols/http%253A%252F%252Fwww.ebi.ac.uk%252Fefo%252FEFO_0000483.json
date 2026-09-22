@@ -1,0 +1,88 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000483",
+  "lang": "en",
+  "description": [
+    "Activity that requires physical or mental exertion, especially when performed to develop or maintain fitness."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "database_cross_reference": [
+      "MESH:D015444",
+      "MedDRA:10015634",
+      "NCIt:C16567",
+      "SNOMEDCT:256235009"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "term editor": [
+      "James Malone"
+    ]
+  },
+  "label": "exercise",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "EFO_0000483",
+  "obo_id": "EFO:0000483",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "MESH",
+      "id": "D015444",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D015444"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10015634",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10015634"
+    },
+    {
+      "database": "NCIt",
+      "id": "C16567",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C16567"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "256235009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/256235009"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000483?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000483/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000483/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000483/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000483/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000483/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000483/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

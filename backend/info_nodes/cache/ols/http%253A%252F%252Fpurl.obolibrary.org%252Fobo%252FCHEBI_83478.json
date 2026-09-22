@@ -1,0 +1,179 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_83478",
+  "lang": "en",
+  "description": [
+    "A monocarboxylic acid that is phenylacetic acid substituted by a 2-hydroxy-3-(propan-2-ylamino)propoxy group at position 4. It is a metabolite of the drug atenolol."
+  ],
+  "synonyms": [
+    "(2-Hydroxy-3-((1-methylethyl)amino)propoxy)benzeneacetic acid",
+    "Metoprolol acid",
+    "{4-[2-hydroxy-3-(propan-2-ylamino)propoxy]phenyl}acetic acid",
+    "{4-[2-hydroxy-3-(propan-2-ylamino)propoxy]phenyl}acetic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:56392-14-4",
+      "pubmed:24033151",
+      "pubmed:24070867",
+      "pubmed:25310538",
+      "reaxys:8774963"
+    ],
+    "generalized_empirical_formula": [
+      "C14H21NO4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:83478"
+    ],
+    "inchi_key_string": [
+      "PUQIRTNPJRFRCZ-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C14H21NO4/c1-10(2)15-8-12(16)9-19-13-5-3-11(4-6-13)7-14(17)18/h3-6,10,12,15-16H,7-9H2,1-2H3,(H,17,18)"
+    ],
+    "mass": [
+      "267.325"
+    ],
+    "monoisotopic_mass": [
+      "267.14706"
+    ],
+    "smiles_string": [
+      "CC(C)NCC(O)COc1ccc(CC(=O)O)cc1"
+    ]
+  },
+  "label": "atenolol acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_83478",
+  "obo_id": "CHEBI:83478",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "56392-14-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=56392-14-4"
+    },
+    {
+      "database": "pubmed",
+      "id": "24033151",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24033151/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24070867",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24070867/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25310538",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25310538/"
+    },
+    {
+      "database": "reaxys",
+      "id": "8774963",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "{4-[2-hydroxy-3-(propan-2-ylamino)propoxy]phenyl}acetic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2-Hydroxy-3-((1-methylethyl)amino)propoxy)benzeneacetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Metoprolol acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "{4-[2-hydroxy-3-(propan-2-ylamino)propoxy]phenyl}acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_83478?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_83478/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_83478/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_83478/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_83478/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_83478/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_83478/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_83478/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

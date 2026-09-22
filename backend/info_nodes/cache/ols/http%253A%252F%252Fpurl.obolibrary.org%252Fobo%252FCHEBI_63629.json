@@ -1,0 +1,287 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_63629",
+  "lang": "en",
+  "description": [
+    "2,1,3-Benzothiadiazole substituted at C-4 by a Δ<small><sup>1</small></sup>-imidazolin-2-ylamino group and at C-4 by a chloro group.  It is an agonist at α<small><sub>2</sub></small>-adrenergic receptor sites."
+  ],
+  "synonyms": [
+    "5-Chloro-4-(2-imidazolin-2-ylamino)-2,1,3-benzothiadiazole",
+    "5-chloro-N-(4,5-dihydro-1H-imidazol-2-yl)-2,1,3-benzothiadiazol-4-amine",
+    "5-chloro-N-(4,5-dihydro-1H-imidazol-2-yl)-2,1,3-benzothiadiazol-4-amine",
+    "Tizanidine",
+    "tizanidina",
+    "tizanidine",
+    "tizanidinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:51322-75-9",
+      "drugbank:DB00697",
+      "drugcentral:2683",
+      "kegg.compound:C07452",
+      "kegg.drug:D08611",
+      "lincs.smallmolecule:LSM-5242",
+      "patent:US3843668",
+      "pubmed:21317414",
+      "pubmed:21733633",
+      "pubmed:21982341",
+      "pubmed:22196407",
+      "pubmed:22223284",
+      "reaxys:618691",
+      "wikipedia.en:Tizanidine"
+    ],
+    "generalized_empirical_formula": [
+      "C9H8ClN5S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:9608"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:63629"
+    ],
+    "inchi_key_string": [
+      "XFYDIVBRZNQMJC-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C9H8ClN5S/c10-5-1-2-6-8(15-16-14-6)7(5)13-9-11-3-4-12-9/h1-2H,3-4H2,(H2,11,12,13)"
+    ],
+    "mass": [
+      "253.718"
+    ],
+    "monoisotopic_mass": [
+      "253.01889"
+    ],
+    "smiles_string": [
+      "Clc1ccc2nsnc2c1NC1=NCCN1"
+    ]
+  },
+  "label": "tizanidine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_63629",
+  "obo_id": "CHEBI:63629",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "51322-75-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=51322-75-9"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00697",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00697"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2683",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2683"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07452",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08611",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5242",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US3843668",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3843668"
+    },
+    {
+      "database": "pubmed",
+      "id": "21317414",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21317414/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21733633",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21733633/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21982341",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21982341/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22196407",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22196407/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22223284",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22223284/"
+    },
+    {
+      "database": "reaxys",
+      "id": "618691",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Tizanidine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-chloro-N-(4,5-dihydro-1H-imidazol-2-yl)-2,1,3-benzothiadiazol-4-amine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Chloro-4-(2-imidazolin-2-ylamino)-2,1,3-benzothiadiazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-chloro-N-(4,5-dihydro-1H-imidazol-2-yl)-2,1,3-benzothiadiazol-4-amine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tizanidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tizanidina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tizanidine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tizanidinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63629?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63629/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63629/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63629/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63629/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63629/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63629/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63629/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

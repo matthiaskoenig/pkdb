@@ -1,0 +1,125 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C28840",
+  "lang": "en",
+  "description": [
+    "A synthetically-derived form of the endogenous alkaloid isolated from the plant Atropa belladonna.  Atropine functions as a sympathetic, competitive antagonist of muscarinic cholinergic receptors, thereby abolishing the effects of parasympathetic stimulation.  This agent may induce tachycardia, inhibit secretions, and relax smooth muscles. (NCI04)"
+  ],
+  "synonyms": [
+    "ATROPINE",
+    "Atropen",
+    "Atropine",
+    "dl-Tropyl Tropate",
+    "endo-(+/-)-alpha-(Hydroxymethyl)benzeneacetic Acid 8-methyl-8-azabicyclo[3.2.1]oct-3-yl Ester"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "51-55-8"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:16684"
+    ],
+    "Chemical_Formula": [
+      "C17H23NO3"
+    ],
+    "Contributing_Source": [
+      "FDA",
+      "HemOnc"
+    ],
+    "FDA_UNII_Code": [
+      "7C0697DR9I"
+    ],
+    "Has_Salt_Or_Ester_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C2744"
+    ],
+    "Legacy Concept Name": [
+      "Atropine"
+    ],
+    "Preferred_Name": [
+      "Atropine"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0004259"
+    ],
+    "code": [
+      "C28840"
+    ]
+  },
+  "label": "Atropine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C28840",
+  "obo_id": "NCIT:C28840",
+  "in_subset": [
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "ATROPINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Atropen",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Atropine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "dl-Tropyl Tropate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "endo-(+/-)-alpha-(Hydroxymethyl)benzeneacetic Acid 8-methyl-8-azabicyclo[3.2.1]oct-3-yl Ester",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28840?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28840/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28840/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28840/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28840/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28840/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28840/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

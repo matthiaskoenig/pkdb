@@ -1,0 +1,459 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8427",
+  "lang": "en",
+  "description": [
+    "A dithioketal that is propane-2,2-dithiol in which the hydrogens attached to both sulfur atoms are replaced by 3,5-di-tert-butyl-4-hydroxyphenyl groups. An anticholesteremic drug with antioxidant and anti-inflammatory properties, it is used to treat high levels of cholesterol in blood."
+  ],
+  "synonyms": [
+    "4,4'- (Isopropylidenedithio)bis(2,6-di-tert-butylphenol)",
+    "4,4'-(propane-2,2-diyldisulfanediyl)bis(2,6-di-tert-butylphenol)",
+    "4,4'-(propane-2,2-diyldisulfanediyl)bis(2,6-di-tert-butylphenol)",
+    "Acetone bis(3,5-di-tert-butyl-4-hydroxyphenyl) mercaptole",
+    "Biphenabid",
+    "Bisbid",
+    "Bisphenabid",
+    "DH-581",
+    "Lesterol",
+    "Lorelco",
+    "Lurselle",
+    "Serterol",
+    "Superlipid",
+    "probucol",
+    "probucolum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:23288-49-5",
+      "drugbank:DB01599",
+      "drugcentral:2269",
+      "hmdb:HMDB0015537",
+      "kegg.compound:C07373",
+      "kegg.drug:D00476",
+      "lincs.smallmolecule:LSM-3617",
+      "patent:CN101423484",
+      "patent:CN101455842",
+      "patent:CN102973535",
+      "patent:FR1561853",
+      "patent:US3576883",
+      "patent:US3862332",
+      "pubmed:22305809",
+      "pubmed:23107872",
+      "pubmed:23167559",
+      "pubmed:23334712",
+      "pubmed:23363981",
+      "pubmed:23378294",
+      "pubmed:23443157",
+      "pubmed:23741215",
+      "reaxys:2026253",
+      "wikipedia.en:Probucol"
+    ],
+    "generalized_empirical_formula": [
+      "C31H48O2S2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8427"
+    ],
+    "inchi_key_string": [
+      "FYPMFJGVHOHGLL-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C31H48O2S2/c1-27(2,3)21-15-19(16-22(25(21)32)28(4,5)6)34-31(13,14)35-20-17-23(29(7,8)9)26(33)24(18-20)30(10,11)12/h15-18,32-33H,1-14H3"
+    ],
+    "mass": [
+      "516.857"
+    ],
+    "monoisotopic_mass": [
+      "516.30957"
+    ],
+    "smiles_string": [
+      "CC(C)(Sc1cc(C(C)(C)C)c(O)c(C(C)(C)C)c1)Sc1cc(C(C)(C)C)c(O)c(C(C)(C)C)c1"
+    ]
+  },
+  "label": "probucol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8427",
+  "obo_id": "CHEBI:8427",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "23288-49-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=23288-49-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01599",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01599"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2269",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2269"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015537",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015537"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07373",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00476",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3617",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "CN101423484",
+      "description": "patent",
+      "url": "https://www.google.com/patents/CN101423484"
+    },
+    {
+      "database": "patent",
+      "id": "CN101455842",
+      "description": "patent",
+      "url": "https://www.google.com/patents/CN101455842"
+    },
+    {
+      "database": "patent",
+      "id": "CN102973535",
+      "description": "patent",
+      "url": "https://www.google.com/patents/CN102973535"
+    },
+    {
+      "database": "patent",
+      "id": "FR1561853",
+      "description": "patent",
+      "url": "https://www.google.com/patents/FR1561853"
+    },
+    {
+      "database": "patent",
+      "id": "US3576883",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3576883"
+    },
+    {
+      "database": "patent",
+      "id": "US3862332",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3862332"
+    },
+    {
+      "database": "pubmed",
+      "id": "22305809",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22305809/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23107872",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23107872/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23167559",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23167559/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23334712",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23334712/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23363981",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23363981/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23378294",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23378294/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23443157",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23443157/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23741215",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23741215/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2026253",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Probucol",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4,4'-(propane-2,2-diyldisulfanediyl)bis(2,6-di-tert-butylphenol)",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4,4'- (Isopropylidenedithio)bis(2,6-di-tert-butylphenol)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4,4'-(propane-2,2-diyldisulfanediyl)bis(2,6-di-tert-butylphenol)",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Acetone bis(3,5-di-tert-butyl-4-hydroxyphenyl) mercaptole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Biphenabid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Bisbid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Bisphenabid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DH-581",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lesterol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lorelco",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lurselle",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Serterol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Superlipid",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "probucol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "probucolum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8427?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8427/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8427/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8427/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8427/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8427/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8427/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8427/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

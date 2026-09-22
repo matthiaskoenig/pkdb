@@ -1,0 +1,261 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C3099",
+  "lang": "en",
+  "description": [
+    "A malignant tumor that arises from hepatocytes. Hepatocellular carcinoma is relatively rare in the United States but very common in all African countries south of the Sahara and in Southeast Asia. Most cases are seen in patients over the age of 50 years, but this tumor can also occur in younger individuals and even in children. Hepatocellular carcinoma is more common in males than females and is associated with hepatitis B, hepatitis C, chronic alcohol abuse and cirrhosis. Serum elevation of alpha-fetoprotein occurs in a large percentage of patients with hepatocellular carcinoma. Grossly, hepatocellular carcinoma may present as a single mass, as multiple nodules, or as diffuse liver involvement. Microscopically, there is a wide range of differentiation from tumor to tumor (well differentiated to poorly differentiated tumors). Hepatocellular carcinomas quickly metastasize to regional lymph nodes and lung. The overall median survival of untreated liver cell carcinoma is about 4 months. The most effective treatment of hepatocellular carcinoma is complete resection of the tumor. Lately, an increasing number of tumors have been treated with liver transplantation."
+  ],
+  "synonyms": [
+    "CARCINOMA, HEPATOCELLULAR, MALIGNANT",
+    "Carcinoma of Liver Cells",
+    "Carcinoma of the Liver Cells",
+    "HCC",
+    "Hepatocellular Cancer",
+    "Hepatocellular Carcinoma",
+    "Hepatocellular carcinoma",
+    "Hepatoma",
+    "LIHC",
+    "Liver Cell Cancer (Hepatocellular Carcinoma)",
+    "Liver Cell Carcinoma",
+    "Liver cell carcinoma",
+    "Primary Carcinoma of Liver Cells",
+    "Primary Carcinoma of the Liver Cells",
+    "hepatocellular carcinoma",
+    "hepatoma"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A malignant neoplasm arising from hepatocytes.",
+      "A type of adenocarcinoma and the most common type of liver tumor."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CPTAC",
+      "CTEP",
+      "CTRP",
+      "Cellosaurus",
+      "GDC",
+      "mCode"
+    ],
+    "Display_Name": [
+      "Hepatocellular Carcinoma"
+    ],
+    "ICD-O-3_Code": [
+      "8170/3"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C176985",
+      "http://purl.obolibrary.org/obo/NCIT_C177621"
+    ],
+    "Legacy Concept Name": [
+      "Hepatocellular_Carcinoma"
+    ],
+    "Maps_To": [
+      "8170/3",
+      "Hepatocarcinoma",
+      "Hepatocellular carcinoma, NOS",
+      "Hepatoma, NOS",
+      "Hepatoma, malignant",
+      "Liver cell carcinoma",
+      "Malignant neoplasm: Liver cell carcinoma"
+    ],
+    "Neoplasm_Has_Special_Category": [
+      "http://purl.obolibrary.org/obo/NCIT_C9292"
+    ],
+    "Neoplastic_Status": [
+      "Malignant"
+    ],
+    "Preferred_Name": [
+      "Hepatocellular Carcinoma"
+    ],
+    "Semantic_Type": [
+      "Neoplastic Process"
+    ],
+    "UMLS_CUI": [
+      "C0019204"
+    ],
+    "code": [
+      "C3099"
+    ]
+  },
+  "label": "Hepatocellular Carcinoma",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C3099",
+  "obo_id": "NCIT:C3099",
+  "in_subset": [
+    "NCIT_C102905",
+    "NCIT_C103066",
+    "NCIT_C116977",
+    "NCIT_C118168",
+    "NCIT_C126659",
+    "NCIT_C138188",
+    "NCIT_C138190",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C156966",
+    "NCIT_C157529",
+    "NCIT_C157711",
+    "NCIT_C158520",
+    "NCIT_C165258",
+    "NCIT_C168655",
+    "NCIT_C168656",
+    "NCIT_C168657",
+    "NCIT_C168658",
+    "NCIT_C168661",
+    "NCIT_C168662",
+    "NCIT_C177537",
+    "NCIT_C193006",
+    "NCIT_C193178",
+    "NCIT_C193231",
+    "NCIT_C193248",
+    "NCIT_C193249",
+    "NCIT_C61410",
+    "NCIT_C77526",
+    "NCIT_C88025",
+    "oncotree_slim"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CARCINOMA, HEPATOCELLULAR, MALIGNANT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Carcinoma of Liver Cells",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Carcinoma of the Liver Cells",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "HCC",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hepatocellular Cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hepatocellular Carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hepatocellular carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hepatoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "LIHC",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver Cell Cancer (Hepatocellular Carcinoma)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver Cell Carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver cell carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Primary Carcinoma of Liver Cells",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Primary Carcinoma of the Liver Cells",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "hepatocellular carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "hepatoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3099?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3099/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3099/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3099/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3099/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3099/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3099/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3099/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3099/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3099/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3099/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

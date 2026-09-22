@@ -1,0 +1,98 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_1001141",
+  "lang": "en",
+  "description": [
+    "Inflammation of the KIDNEY involving the renal parenchyma (the NEPHRONS); KIDNEY PELVIS; and KIDNEY CALICES. It is characterized by ABDOMINAL PAIN; FEVER; NAUSEA; VOMITING; and occasionally DIARRHEA."
+  ],
+  "synonyms": [
+    "Pyelonephritis"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:11400",
+      "MESH:D011704",
+      "MedDRA:10037596",
+      "MedDRA:10037606",
+      "NCIt:C34965",
+      "SNOMEDCT:45816000"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0006939, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0006939"
+    ],
+    "term editor": [
+      "Sirarat Sarntivijai"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0006939"
+    ]
+  },
+  "label": "obsolete_pyelonephritis",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0006939",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_1001141",
+  "obo_id": "EFO:1001141",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "11400",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_11400"
+    },
+    {
+      "database": "MESH",
+      "id": "D011704",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D011704"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10037596",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10037596"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10037606",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10037606"
+    },
+    {
+      "database": "NCIt",
+      "id": "C34965",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C34965"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "45816000",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/45816000"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

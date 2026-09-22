@@ -1,0 +1,272 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_82602",
+  "lang": "en",
+  "description": [
+    "A proline derivative that is 4-(phenylsulfanyl)-<small>L</small>-proline in which the amine proton is replaced by a (2<i>S</i>)-2-methyl-3-sulfanylpropanoyl group. The active metabolite of zofenopril."
+  ],
+  "synonyms": [
+    "(4S)-1-[(2S)-2-methyl-3-sulfanylpropanoyl]-4-(phenylsulfanyl)-L-proline",
+    "(4S)-1-[(2S)-2-methyl-3-sulfanylpropanoyl]-4-(phenylsulfanyl)-L-proline",
+    "zofenoprilat",
+    "zofenoprilate",
+    "zofenoprilatum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:75176-37-3",
+      "pubmed:11145066",
+      "pubmed:1462853",
+      "pubmed:1475237",
+      "pubmed:16452552",
+      "pubmed:1881459",
+      "pubmed:19738489",
+      "pubmed:20924096",
+      "pubmed:21377823",
+      "pubmed:23868084",
+      "pubmed:23965518",
+      "pubmed:2561143",
+      "reaxys:6486825",
+      "wikipedia.en:Zofenoprilat"
+    ],
+    "generalized_empirical_formula": [
+      "C15H19NO3S2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:82602"
+    ],
+    "inchi_key_string": [
+      "UQWLOWFDKAFKAP-WXHSDQCUSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C15H19NO3S2/c1-10(9-20)14(17)16-8-12(7-13(16)15(18)19)21-11-5-3-2-4-6-11/h2-6,10,12-13,20H,7-9H2,1H3,(H,18,19)/t10-,12+,13+/m1/s1"
+    ],
+    "mass": [
+      "325.455"
+    ],
+    "monoisotopic_mass": [
+      "325.08064"
+    ],
+    "smiles_string": [
+      "C[C@H](CS)C(=O)N1C[C@@H](Sc2ccccc2)C[C@H]1C(=O)O"
+    ]
+  },
+  "label": "zofenoprilat",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_82602",
+  "obo_id": "CHEBI:82602",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "75176-37-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=75176-37-3"
+    },
+    {
+      "database": "pubmed",
+      "id": "11145066",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11145066/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1462853",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1462853/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1475237",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1475237/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16452552",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16452552/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1881459",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1881459/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19738489",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19738489/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20924096",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20924096/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21377823",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21377823/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23868084",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23868084/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23965518",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23965518/"
+    },
+    {
+      "database": "pubmed",
+      "id": "2561143",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/2561143/"
+    },
+    {
+      "database": "reaxys",
+      "id": "6486825",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Zofenoprilat",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(4S)-1-[(2S)-2-methyl-3-sulfanylpropanoyl]-4-(phenylsulfanyl)-L-proline",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(4S)-1-[(2S)-2-methyl-3-sulfanylpropanoyl]-4-(phenylsulfanyl)-L-proline",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "zofenoprilat",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "zofenoprilat",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "zofenoprilate",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "zofenoprilatum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82602?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82602/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82602/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82602/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82602/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82602/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82602/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82602/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_82602/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,85 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000408",
+  "lang": "en",
+  "description": [
+    "A disease is a disposition that describes states of disease associated with a particular sample and/or organism."
+  ],
+  "synonyms": [
+    "Homo sapiens disease",
+    "human disease"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:4",
+      "ICD10:R69",
+      "MESH:D004194",
+      "SNOMEDCT:64572001"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0000001, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0000001"
+    ],
+    "term editor": [
+      "James Malone"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0000001"
+    ]
+  },
+  "label": "obsolete_disease",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0000001",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0000408",
+  "obo_id": "EFO:0000408",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "4",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_4"
+    },
+    {
+      "database": "ICD10",
+      "id": "R69",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/R69"
+    },
+    {
+      "database": "MESH",
+      "id": "D004194",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D004194"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "64572001",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/64572001"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

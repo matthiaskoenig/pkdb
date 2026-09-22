@@ -1,0 +1,205 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_39026",
+  "lang": "en",
+  "description": [
+    "A class of lipoproteins of small size (18-25 nm) and low density (1.019-1.063 g/ml) particles with a core composed mainly of cholesterol esters and smaller amounts of triglycerides. The surface monolayer consists mostly of phospholipids, a single copy of apolipoprotein B-100, and free cholesterol molecules. The main function of LDL is to transport cholesterol and cholesterol esters from the liver. Excessive levels are associated with cardiovascular disease."
+  ],
+  "synonyms": [
+    "LDL",
+    "beta-lipoproteins",
+    "low-density lipoproteins"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "pubmed:11082530",
+      "pubmed:15583011",
+      "pubmed:15913955",
+      "pubmed:19349632",
+      "pubmed:28401639",
+      "pubmed:28432662",
+      "pubmed:28792690",
+      "pubmed:28827781",
+      "pubmed:28847800",
+      "pubmed:28859941",
+      "pubmed:28870972",
+      "wikipedia.en:Low-density_lipoprotein"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:39026"
+    ]
+  },
+  "label": "low-density lipoprotein",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_39026",
+  "obo_id": "CHEBI:39026",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "pubmed",
+      "id": "11082530",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11082530/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15583011",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15583011/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15913955",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15913955/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19349632",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19349632/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28401639",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28401639/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28432662",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28432662/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28792690",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28792690/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28827781",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28827781/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28847800",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28847800/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28859941",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28859941/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28870972",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28870972/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Low-density_lipoprotein",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "LDL",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "beta-lipoproteins",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "low-density lipoproteins",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39026?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39026/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39026/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39026/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39026/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39026/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39026/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39026/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39026/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39026/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39026/graph"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39026/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

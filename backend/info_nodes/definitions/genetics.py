@@ -359,7 +359,6 @@ GENETICS_NODES: list[InfoNode] = [
     ),
     MeasurementType(
         sid="cyp2d6 genotype",
-        name="cyp2d6 genotype",
         label="CYP2D6 genotype",
         description="CYP2D6 genotype.",
         parents=["genotype"],

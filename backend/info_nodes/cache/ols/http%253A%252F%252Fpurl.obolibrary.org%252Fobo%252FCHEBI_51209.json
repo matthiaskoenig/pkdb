@@ -1,0 +1,626 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_51209",
+  "lang": "en",
+  "description": [
+    "A member of the class of the class of phenylethanolamines that is (1<i>S</i>)-2-(methylamino)-1-phenylethan-1-ol in which the <em>pro</em>-<i>S</i> hydrogen at position 2 is replaced by a methyl group."
+  ],
+  "synonyms": [
+    "(+) threo-2-(methylamino)-1-phenyl-1-propanol",
+    "(+)-(1S,2S)-Pseudoephedrine",
+    "(+)-Pseudoephedrine",
+    "(+)-psi-Ephedrine",
+    "(+)-threo-Ephedrine",
+    "(1S,2S)-(+)-Pseudoephedrine",
+    "(1S,2S)-2-(methylamino)-1-phenylpropan-1-ol",
+    "(1S,2S)-2-(methylamino)-1-phenylpropan-1-ol",
+    "(1S,2S)-Pseudoephedrine",
+    "2-(Methylamino)-1-phenyl-1-propanol",
+    "Isoephedrine",
+    "L(+)-psi-Ephedrine",
+    "L-(+)-Pseudoephedrine",
+    "Pseudoephedrine D-form",
+    "Pseudoephedrine",
+    "Psi-ephedrin",
+    "Psi-ephedrine",
+    "d-Isoephedrine",
+    "d-Pseudoephedrine",
+    "d-psi-2-Methylamino-1-phenyl-1-propanol",
+    "d-psi-Ephedrine",
+    "pseudoefedrina",
+    "pseudoephedrine",
+    "pseudoephedrinum",
+    "psi-ephedrine",
+    "trans-Ephedrine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:90-82-4",
+      "drugbank:DB00852",
+      "drugcentral:2326",
+      "hmdb:HMDB0001943",
+      "kegg.compound:C02765",
+      "kegg.drug:D08449",
+      "knapsack:C00031097",
+      "lincs.smallmolecule:LSM-3885",
+      "metacyc.compound:CPD-9954",
+      "pubmed:11153535",
+      "pubmed:12199969",
+      "pubmed:15532139",
+      "pubmed:16410207",
+      "pubmed:16531903",
+      "pubmed:16965375",
+      "pubmed:17230461",
+      "pubmed:17316256",
+      "pubmed:26708626",
+      "pubmed:26762956",
+      "pubmed:26888635",
+      "pubmed:27168748",
+      "pubmed:27179610",
+      "reaxys:2414132",
+      "wikipedia.en:Pseudoephedrine"
+    ],
+    "generalized_empirical_formula": [
+      "C10H15NO"
+    ],
+    "has_alternative_id": [
+      "CHEBI:44"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:51209"
+    ],
+    "inchi_key_string": [
+      "KWGRBVOPPLSCSI-WCBMZHEXSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C10H15NO/c1-8(11-2)10(12)9-6-4-3-5-7-9/h3-8,10-12H,1-2H3/t8-,10+/m0/s1"
+    ],
+    "mass": [
+      "165.236"
+    ],
+    "monoisotopic_mass": [
+      "165.11536"
+    ],
+    "smiles_string": [
+      "CN[C@@H](C)[C@@H](O)c1ccccc1"
+    ]
+  },
+  "label": "pseudoephedrine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_51209",
+  "obo_id": "CHEBI:51209",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "90-82-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=90-82-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00852",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00852"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2326",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2326"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001943",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001943"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C02765",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08449",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00031097",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00031097"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-3885",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-9954",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11153535",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11153535/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12199969",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12199969/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15532139",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15532139/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16410207",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16410207/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16531903",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16531903/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16965375",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16965375/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17230461",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17230461/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17316256",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17316256/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26708626",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26708626/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26762956",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26762956/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26888635",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26888635/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27168748",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27168748/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27179610",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27179610/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2414132",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Pseudoephedrine",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(1S,2S)-2-(methylamino)-1-phenylpropan-1-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+) threo-2-(methylamino)-1-phenyl-1-propanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-(1S,2S)-Pseudoephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-Pseudoephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-psi-Ephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-threo-Ephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S,2S)-(+)-Pseudoephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S,2S)-2-(methylamino)-1-phenylpropan-1-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S,2S)-Pseudoephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(Methylamino)-1-phenyl-1-propanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Isoephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L(+)-psi-Ephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-(+)-Pseudoephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Pseudoephedrine D-form",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "hmdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Pseudoephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Psi-ephedrin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Psi-ephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "d-Isoephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "d-Pseudoephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "d-psi-2-Methylamino-1-phenyl-1-propanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "d-psi-Ephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pseudoefedrina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pseudoephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pseudoephedrinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "psi-ephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "trans-Ephedrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_51209?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_51209/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_51209/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_51209/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_51209/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_51209/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_51209/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_51209/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_51209/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

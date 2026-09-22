@@ -16,7 +16,8 @@ CAN_NEGATIVE = [
     "concentration change absolute",
     "cumulative amount (change)",
     "blood pressure systolic (change)",
-    "blood pressure systolic (change relative)blood pressure systolic auc_end (change)",
+    "blood pressure systolic (change relative)",
+    "blood pressure systolic auc_end (change)",
     "blood pressure diastolic (change)",
     "blood pressure diastolic (change relative)",
     "blood pressure diastolic auc_end (change)",
@@ -27,6 +28,6 @@ CAN_NEGATIVE = [
     "weight (change)",
     "hba1c (change)",
     "inr (change)",
-    "prothrombin time(change)",
+    "prothrombin time (change)",
     "aPTT (change)",
 ]

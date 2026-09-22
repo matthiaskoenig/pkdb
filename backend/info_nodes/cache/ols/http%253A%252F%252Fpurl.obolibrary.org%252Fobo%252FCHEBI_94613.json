@@ -1,0 +1,299 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_94613",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "AC 1198",
+    "AC-1198",
+    "BAX 1400Z",
+    "BAX-1400Z",
+    "BAY-1400Z",
+    "DMO",
+    "Eupractone",
+    "NSC-30152",
+    "Nortrimethadione",
+    "dimetadiona",
+    "dimethadione"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "hmdb:HMDB0061093",
+      "lincs.smallmolecule:LSM-5546",
+      "pubmed:12873507",
+      "pubmed:22961681",
+      "pubmed:23571415",
+      "pubmed:28817930",
+      "pubmed:38318365"
+    ],
+    "generalized_empirical_formula": [
+      "C5H7NO3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:94613"
+    ],
+    "inchi_key_string": [
+      "JYJFNDQBESEHJQ-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C5H7NO3/c1-5(2)3(7)6-4(8)9-5/h1-2H3,(H,6,7,8)"
+    ],
+    "mass": [
+      "129.115"
+    ],
+    "monoisotopic_mass": [
+      "129.04259"
+    ],
+    "smiles_string": [
+      "CC1(C)OC(=O)NC1=O"
+    ]
+  },
+  "label": "5,5-dimethyloxazolidine-2,4-dione",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_94613",
+  "obo_id": "CHEBI:94613",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "hmdb",
+      "id": "HMDB0061093",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0061093"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5546",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "12873507",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12873507/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22961681",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22961681/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23571415",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23571415/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28817930",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28817930/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38318365",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38318365/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "AC 1198",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AC-1198",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BAX 1400Z",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BAX-1400Z",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BAY-1400Z",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DMO",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Eupractone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NSC-30152",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Nortrimethadione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dimetadiona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dimethadione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dimethadione",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94613?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94613/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94613/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94613/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94613/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94613/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94613/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

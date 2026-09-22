@@ -1,0 +1,121 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C152328",
+  "lang": "en",
+  "description": [
+    "A glucagon-like peptide-1 (GLP-1) receptor agonist that is 94% homologous to human GLP-1 (7-37), with antihyperglycemic and appetite regulating activities. Upon administration, semaglutide binds to and activates GLP-1 receptor. In pancreatic beta cells, this increases glucose-dependent insulin release. Semaglutide also reduces the elevated glucagon secretion by inhibiting alpha cells of the pancreas and slows gastric emptying. Altogether this lowers the postprandial glucose level. In the brain, the binding to and activation of GLP-1 receptor suppresses appetite, which decreases caloric intake and lowers body weight. GLP-1 is normally secreted by L cells of the gastrointestinal (GI) mucosa in response to a meal to normalize blood glucose levels. It also plays an important role in the regulation of appetite and caloric intake."
+  ],
+  "synonyms": [
+    "Ozempic",
+    "Rybelsus",
+    "SEMAGLUTIDE",
+    "Semaglutide",
+    "Wegovy"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "910463-68-2"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Semaglutide"
+    ],
+    "FDA_UNII_Code": [
+      "53AXN4NNHX"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "813086"
+    ],
+    "NCI_META_CUI": [
+      "CL553532"
+    ],
+    "Preferred_Name": [
+      "Semaglutide"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "code": [
+      "C152328"
+    ]
+  },
+  "label": "Semaglutide",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C152328",
+  "obo_id": "NCIT:C152328",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Ozempic",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Rybelsus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SEMAGLUTIDE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Semaglutide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Wegovy",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C152328?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C152328/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C152328/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C152328/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C152328/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C152328/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C152328/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

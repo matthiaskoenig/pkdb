@@ -1,0 +1,116 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C75026",
+  "lang": "en",
+  "description": [
+    "The sodium salt form of salcaprozate, an oral absorption promoter. Salcaprozate sodium may be used as a delivery agent to promote the oral absorption of certain macromolecules with poor bioavailability such as insulin and heparin."
+  ],
+  "synonyms": [
+    "E414",
+    "SALCAPROZATE SODIUM",
+    "Salcaprozate Sodium",
+    "Sodium 8-((2-hydroxybenzoyl)amino)octanoate"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "203787-91-1"
+    ],
+    "Chemical_Formula": [
+      "C15H20NO4.Na"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "DesignNote": [
+      "oral absorption promotor (PMID: 19636071)"
+    ],
+    "FDA_UNII_Code": [
+      "1YTW0422YU"
+    ],
+    "Has_Free_Acid_Or_Base_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C72096"
+    ],
+    "Legacy Concept Name": [
+      "Salcaprozate_Sodium"
+    ],
+    "Preferred_Name": [
+      "Salcaprozate Sodium"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C2699262"
+    ],
+    "code": [
+      "C75026"
+    ]
+  },
+  "label": "Salcaprozate Sodium",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C75026",
+  "obo_id": "NCIT:C75026",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "E414",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SALCAPROZATE SODIUM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Salcaprozate Sodium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sodium 8-((2-hydroxybenzoyl)amino)octanoate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C75026?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C75026/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C75026/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C75026/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C75026/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C75026/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C75026/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

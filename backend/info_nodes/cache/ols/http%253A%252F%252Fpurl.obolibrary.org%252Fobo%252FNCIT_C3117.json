@@ -1,0 +1,217 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C3117",
+  "lang": "en",
+  "description": [
+    "Blood pressure that is abnormally high."
+  ],
+  "synonyms": [
+    "HTN",
+    "High Blood Pressure",
+    "High Blood Pressure/ Hypertension",
+    "High blood pressure",
+    "Hypertension",
+    "Vascular Hypertensive Disorder",
+    "Vascular hypertensive disorder",
+    "high blood pressure",
+    "hypertension"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A blood pressure of 140/90 or higher. High blood pressure usually has no symptoms. It can harm the arteries and cause an increase in the risk of stroke, heart attack, kidney failure, and blindness.",
+      "A disorder characterized by a pathological increase in blood pressure; a repeatedly elevation in the blood pressure exceeding 140 over 90 mm Hg.",
+      "Abnormally high blood pressure.",
+      "Blood pressure that is abnormally high."
+    ],
+    "Contributing_Source": [
+      "ACC/AHA",
+      "CPTAC",
+      "CTCAE",
+      "CTRP",
+      "Cellosaurus",
+      "FDA",
+      "GDC",
+      "MedDRA",
+      "NICHD",
+      "PCDC",
+      "SeroNet"
+    ],
+    "Display_Name": [
+      "Hypertension"
+    ],
+    "FDA_Table": [
+      "Patient Code (Appendix B)"
+    ],
+    "Has_SeroNet_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C48660",
+      "http://purl.obolibrary.org/obo/NCIT_C49487",
+      "http://purl.obolibrary.org/obo/NCIT_C49488"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C16457",
+      "http://purl.obolibrary.org/obo/NCIT_C17103"
+    ],
+    "Legacy Concept Name": [
+      "Hypertension"
+    ],
+    "Maps_To": [
+      "Hypertension"
+    ],
+    "Preferred_Name": [
+      "Hypertension"
+    ],
+    "Semantic_Type": [
+      "Finding"
+    ],
+    "UMLS_CUI": [
+      "C4014808"
+    ],
+    "code": [
+      "C3117"
+    ],
+    "database_cross_reference": [
+      "IMDRF:E2320"
+    ]
+  },
+  "label": "Hypertension",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C3117",
+  "obo_id": "NCIT:C3117",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118168",
+    "NCIT_C118464",
+    "NCIT_C156952",
+    "NCIT_C157711",
+    "NCIT_C158034",
+    "NCIT_C158520",
+    "NCIT_C159328",
+    "NCIT_C159330",
+    "NCIT_C165258",
+    "NCIT_C177537",
+    "NCIT_C178718",
+    "NCIT_C179026",
+    "NCIT_C179027",
+    "NCIT_C186336",
+    "NCIT_C186341",
+    "NCIT_C189083",
+    "NCIT_C189762",
+    "NCIT_C191200",
+    "NCIT_C191383",
+    "NCIT_C191396",
+    "NCIT_C191671",
+    "NCIT_C208333",
+    "NCIT_C54450",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "IMDRF",
+      "id": "E2320",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "HTN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "High Blood Pressure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "High Blood Pressure/ Hypertension",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "High blood pressure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hypertension",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Vascular Hypertensive Disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Vascular hypertensive disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "high blood pressure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "hypertension",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3117?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3117/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3117/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3117/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3117/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3117/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3117/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3117/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3117/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3117/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3117/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,254 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9342",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "1,2-Diphenyl-3,5-dioxo-4-(2-phenylsulfinylethyl)pyrazolidine",
+    "1,2-Diphenyl-4-(2'-phenylsulfinethyl)-3,5-pyrazolidinedione",
+    "1,2-diphenyl-4-[2-(phenylsulfinyl)ethyl]pyrazolidine-3,5-dione",
+    "1,2-diphenyl-4-[2-(phenylsulfinyl)ethyl]pyrazolidine-3,5-dione",
+    "4-(2-Benzenesulfinylethyl)-1,2-diphenylpyrazolidine-3,5-dione",
+    "Anturane (TN)",
+    "Sulfinpyrazone",
+    "Sulfoxyphenylpyrazolidine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:713597",
+      "cas:57-96-5",
+      "drugbank:DB01138",
+      "drugcentral:2528",
+      "kegg.compound:C07317",
+      "kegg.drug:D00449",
+      "lincs.smallmolecule:LSM-1491",
+      "wikipedia.en:Sulfinpyrazone"
+    ],
+    "generalized_empirical_formula": [
+      "C23H20N2O3S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9342"
+    ],
+    "inchi_key_string": [
+      "MBGGBVCUIVRRBF-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C23H20N2O3S/c26-22-21(16-17-29(28)20-14-8-3-9-15-20)23(27)25(19-12-6-2-7-13-19)24(22)18-10-4-1-5-11-18/h1-15,21H,16-17H2"
+    ],
+    "mass": [
+      "404.491"
+    ],
+    "monoisotopic_mass": [
+      "404.11946"
+    ],
+    "smiles_string": [
+      "O=C1C(CCS(=O)c2ccccc2)C(=O)N(c2ccccc2)N1c1ccccc1"
+    ]
+  },
+  "label": "sulfinpyrazone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9342",
+  "obo_id": "CHEBI:9342",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "713597",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "57-96-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=57-96-5"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01138",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01138"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2528",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2528"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07317",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00449",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1491",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Sulfinpyrazone",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1,2-diphenyl-4-[2-(phenylsulfinyl)ethyl]pyrazolidine-3,5-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,2-Diphenyl-3,5-dioxo-4-(2-phenylsulfinylethyl)pyrazolidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,2-Diphenyl-4-(2'-phenylsulfinethyl)-3,5-pyrazolidinedione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,2-diphenyl-4-[2-(phenylsulfinyl)ethyl]pyrazolidine-3,5-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(2-Benzenesulfinylethyl)-1,2-diphenylpyrazolidine-3,5-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Anturane (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sulfinpyrazone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sulfoxyphenylpyrazolidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9342?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9342/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9342/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9342/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9342/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9342/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9342/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9342/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

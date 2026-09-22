@@ -1,0 +1,269 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6904",
+  "lang": "en",
+  "description": [
+    "A propanolamine that is 1-(propan-2-ylamino)propan-2-ol substituted by a  4-(2-methoxyethyl)phenoxy group at position 1."
+  ],
+  "synonyms": [
+    "(RS)-Metoprolol",
+    "1-(isopropylamino)-3-[4-(2-methoxyethyl)phenoxy]propan-2-ol",
+    "1-[4-(2-methoxyethyl)phenoxy]-3-(propan-2-ylamino)propan-2-ol",
+    "1-[4-(2-methoxyethyl)phenoxy]-3-(propan-2-ylamino)propan-2-ol",
+    "Metoprolol"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:37350-58-6",
+      "cas:51384-51-1",
+      "drugbank:DB00264",
+      "drugcentral:1786",
+      "hmdb:HMDB0001932",
+      "kegg.compound:C07202",
+      "kegg.drug:D02358",
+      "lincs.smallmolecule:LSM-1259",
+      "pubmed:15140634",
+      "pubmed:15797646",
+      "pubmed:23314750",
+      "pubmed:24025984",
+      "reaxys:1117585",
+      "wikipedia.en:Metoprolol"
+    ],
+    "generalized_empirical_formula": [
+      "C15H25NO3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6904"
+    ],
+    "inchi_key_string": [
+      "IUBSYMUCCVWXPE-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C15H25NO3/c1-12(2)16-10-14(17)11-19-15-6-4-13(5-7-15)8-9-18-3/h4-7,12,14,16-17H,8-11H2,1-3H3"
+    ],
+    "mass": [
+      "267.369"
+    ],
+    "monoisotopic_mass": [
+      "267.18344"
+    ],
+    "smiles_string": [
+      "COCCc1ccc(OCC(O)CNC(C)C)cc1"
+    ]
+  },
+  "label": "metoprolol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6904",
+  "obo_id": "CHEBI:6904",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "37350-58-6",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=37350-58-6"
+    },
+    {
+      "database": "cas",
+      "id": "51384-51-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=51384-51-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00264",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00264"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1786",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1786"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001932",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001932"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07202",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D02358",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1259",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "15140634",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15140634/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15797646",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15797646/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23314750",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23314750/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24025984",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24025984/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1117585",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Metoprolol",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1-[4-(2-methoxyethyl)phenoxy]-3-(propan-2-ylamino)propan-2-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(RS)-Metoprolol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(isopropylamino)-3-[4-(2-methoxyethyl)phenoxy]propan-2-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-[4-(2-methoxyethyl)phenoxy]-3-(propan-2-ylamino)propan-2-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Metoprolol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Metoprolol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6904?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6904/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6904/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6904/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6904/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6904/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6904/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6904/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

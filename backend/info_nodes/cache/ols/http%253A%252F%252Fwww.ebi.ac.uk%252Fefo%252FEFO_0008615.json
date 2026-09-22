@@ -1,0 +1,105 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0008615",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Cystic Kidney Diseases",
+    "Cystic Renal Diseases",
+    "Kidney, Cystic"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:2975",
+      "ICD10:Q61",
+      "MESH:D052177",
+      "MedDRA:10011771",
+      "MedDRA:10011772",
+      "NCIt:C34750",
+      "UMLS:C1691228"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0002473, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0002473"
+    ],
+    "term editor": [
+      "Zoe May Pendlington"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0002473"
+    ]
+  },
+  "label": "obsolete_cystic kidney disease",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0002473",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0008615",
+  "obo_id": "EFO:0008615",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "2975",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_2975"
+    },
+    {
+      "database": "ICD10",
+      "id": "Q61",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/Q61"
+    },
+    {
+      "database": "MESH",
+      "id": "D052177",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D052177"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10011771",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10011771"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10011772",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10011772"
+    },
+    {
+      "database": "NCIt",
+      "id": "C34750",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C34750"
+    },
+    {
+      "database": "UMLS",
+      "id": "C1691228",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C1691228"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0008615?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0008615/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

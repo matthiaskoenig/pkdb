@@ -1,0 +1,134 @@
+[
+  {
+    "src_id": "2",
+    "src_compound_id": "DB04540"
+  },
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:16113"
+  },
+  {
+    "src_id": "33",
+    "src_compound_id": "LMST01010001"
+  },
+  {
+    "src_id": "3",
+    "src_compound_id": "CLR"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL112570"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "2156"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "31229441"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "5997"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "97C5T2UQ7J"
+  },
+  {
+    "src_id": "5",
+    "src_compound_id": "CLR"
+  },
+  {
+    "src_id": "49",
+    "src_compound_id": "PD011961"
+  },
+  {
+    "src_id": "50",
+    "src_compound_id": "CHOEST"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "10614"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "108772"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "189"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "224798"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "229269"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "229270"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "265743"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0000067"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID3022401"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00009841"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00147251"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00272844"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00965068"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01773278"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01890031"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02195115"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02585895"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT04359823"
+  },
+  {
+    "src_id": "84",
+    "src_compound_id": "Cholesterol"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "Molport-002-506-911"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "20192"
+  }
+]

@@ -1,0 +1,188 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C2190",
+  "lang": "en",
+  "description": [
+    "A volatile liquid prepared by fermentation of certain carbohydrates. Alcohol acts as a central nervous system (CNS) depressant, a diuretic, and a disinfectant. Although the exact mechanism of CNS depression is unknown, alcohol may act by inhibiting the opening of calcium channels, mediated by the binding of the inhibitory neurotransmitter gamma-amino butyric acid (GABA) to GABA-A receptors, or through inhibitory actions at N-methyl-D-aspartate (NMDA)-type glutamate receptors. Alcohol inhibits the production of antidiuretic hormone, thereby producing diuresis that may lead to dehydration. This agent kills organisms by denaturing their proteins."
+  ],
+  "synonyms": [
+    "ALCOHOL",
+    "Absolute Ethanol",
+    "Absolute ethanol",
+    "Alcohol",
+    "Dehydrated Alcohol",
+    "Dehydrated Ethanol",
+    "ETHANOL",
+    "Ethanol",
+    "Ethyl Alcohol",
+    "Methylcarbinol",
+    "alcohol"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A chemical substance found in beer, wine, and liquor, and some medicines, mouthwashes, household products, and essential oils (scented liquid taken from plants). Alcohol contains a carbon atom attached to a hydroxyl group (a molecule made of an oxygen atom and a hydrogen atom)."
+    ],
+    "CAS_Registry": [
+      "64-17-5"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:16236"
+    ],
+    "Chemical_Formula": [
+      "C2H6O"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Alcohol"
+    ],
+    "FDA_UNII_Code": [
+      "3K9958V90M"
+    ],
+    "Legacy Concept Name": [
+      "Alcohol"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "446576"
+    ],
+    "NSC Number": [
+      "85228"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "446576"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "446576"
+    ],
+    "Preferred_Name": [
+      "Alcohol"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0001962"
+    ],
+    "code": [
+      "C2190"
+    ]
+  },
+  "label": "Alcohol",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C2190",
+  "obo_id": "NCIT:C2190",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "ALCOHOL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Absolute Ethanol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Absolute ethanol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Alcohol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Dehydrated Alcohol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Dehydrated Ethanol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ETHANOL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ethanol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ethyl Alcohol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Methylcarbinol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "alcohol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2190?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2190/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2190/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2190/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2190/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2190/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2190/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2190/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

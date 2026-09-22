@@ -1,0 +1,113 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000373",
+  "lang": "en",
+  "description": [
+    "1. inadequacy of the heart so that as a pump it fails to maintain the circulation of blood, with the result that congestion and edema develop in the tissues; SEE ALSO forward heart failure, backward heart failure, right ventricular failure, left ventricular failure. SYN cardiac failure, cardiac insufficiency, congestive heart failure, myocardial insufficiency. 2. resulting clinical syndromes including shortness of breath, pitting edema, enlarged tender liver, engorged neck veins, and pulmonary rales in various combinations.",
+    "A heterogeneous condition in which the heart is unable to pump out sufficient blood to meet the metabolic need of the body. Heart failure can be caused by structural defects, functional abnormalities (VENTRICULAR DYSFUNCTION), or a sudden overload beyond its capacity. Chronic heart failure is more common than acute heart failure which results from sudden insult to cardiac function, such as MYOCARDIAL INFARCTION.",
+    "Failure of the heart to pump a sufficient amount of blood to meet the needs of the body tissues, resulting in tissue congestion and edema. Signs and symptoms include shortness of breath, pitting edema, enlarged tender liver, engorged neck veins, and pulmonary rales.",
+    "Heart failure accompanied by EDEMA, such as swelling of the legs and ankles and congestion in the lungs.",
+    "Heart failure caused by dysfunction of the MYOCARDIUM, leading to defective cardiac emptying (contraction) or filling (relaxation).",
+    "Heart failure involving the LEFT VENTRICLE.",
+    "Heart failure involving the RIGHT VENTRICLE."
+  ],
+  "synonyms": [
+    "CCF - Congestive cardiac failure",
+    "CHF - Congestive heart failure",
+    "CHF NOS",
+    "CHF",
+    "Cardiac Failure Congestive",
+    "Cardiac Failure",
+    "Congestive cardiac failure",
+    "Congestive heart disease",
+    "Congestive heart failure (disorder)",
+    "Congestive heart failure, unspecified",
+    "Congetive cardiac failure",
+    "Decompensation, Heart",
+    "FAILURE, CONGESTIVE HEART",
+    "Heart Decompensation",
+    "Heart Failure, Congestive",
+    "Myocardial Failure"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:6000",
+      "ICD9:428.0",
+      "MedDRA:10010684",
+      "NCIt:C3080",
+      "SNOMEDCT:42343007"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0005009, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0005009"
+    ],
+    "term editor": [
+      "James Malone",
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005009"
+    ]
+  },
+  "label": "obsolete_congestive heart failure",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005009",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0000373",
+  "obo_id": "EFO:0000373",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "6000",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_6000"
+    },
+    {
+      "database": "ICD9",
+      "id": "428.0",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MedDRA",
+      "id": "10010684",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10010684"
+    },
+    {
+      "database": "NCIt",
+      "id": "C3080",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3080"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "42343007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/42343007"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000373?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000373/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

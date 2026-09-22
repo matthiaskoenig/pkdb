@@ -1,0 +1,806 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_10033",
+  "lang": "en",
+  "description": [
+    "A racemate comprising equal amounts of (<i>R</i>)- and (<i>S</i>)-warfarin. Extensively used as both an anticoagulant drug and as a pesticide against rats and mice."
+  ],
+  "synonyms": [
+    "(+-)-warfarin",
+    "(RS)-warfarin",
+    "4-hydroxy-3-[(1RS)-3-oxo-1-phenylbutyl]-2H-1-benzopyran-2-one",
+    "4-hydroxy-3-[(1RS)-3-oxo-1-phenylbutyl]-2H-chromen-2-one",
+    "4-hydroxy-3-[(1RS)-3-oxo-1-phenylbutyl]coumarin",
+    "Brumolin",
+    "Coumafene",
+    "DL-3-(alpha-acetonylbenzyl)-4-hydroxycoumarin",
+    "DL-warfarin",
+    "Kumadu",
+    "Kumatox",
+    "Ratron",
+    "Rodafarin",
+    "Warf 10",
+    "Zoocoumarin",
+    "rac-1-(4'-hydroxy-3'-coumarinyl)-1-phenyl-3-butanone",
+    "rac-3-(1'-phenyl-2'-acetylethyl)-4-hydroxycoumarin",
+    "rac-3-(acetonylbenzyl)-4-hydroxycoumarin",
+    "rac-3-(alpha-acetonylbenzyl)-4-hydroxycoumarin",
+    "rac-3-(alpha-phenyl-beta-acetylethyl)-4-hydroxycoumarin",
+    "rac-4-hydroxy-3-(3-oxo-1-phenylbutyl)-2H-1-benzopyran-2-one",
+    "rac-4-hydroxy-3-(3-oxo-1-phenylbutyl)-2H-1-benzopyran-2-one",
+    "rac-4-hydroxy-3-(3-oxo-1-phenylbutyl)coumarin",
+    "rac-warfarin",
+    "racemic warfarin",
+    "warfarin",
+    "warfarina",
+    "warfarine",
+    "warfarinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:81-81-2",
+      "drugbank:DB00682",
+      "foodb.food:FDB022750",
+      "hmdb:HMDB0001935",
+      "kegg.compound:C01541",
+      "kegg.drug:D08682",
+      "lincs.smallmolecule:LSM-1405",
+      "patent:US2427578",
+      "patent:US2765321",
+      "patent:US2777859",
+      "patent:US3239529",
+      "pesticides:warfarin",
+      "pmc:PMC10207235",
+      "ppdb:681",
+      "pubmed:13358873",
+      "pubmed:15578879",
+      "pubmed:18294321",
+      "pubmed:19294412",
+      "pubmed:24478171",
+      "pubmed:24973057",
+      "pubmed:25022924",
+      "pubmed:25023204",
+      "pubmed:25393417",
+      "pubmed:25466603",
+      "pubmed:25534862",
+      "pubmed:25537751",
+      "pubmed:25555316",
+      "pubmed:25683623",
+      "pubmed:25757926",
+      "pubmed:25823787",
+      "pubmed:25828628",
+      "pubmed:25830869",
+      "pubmed:25842804",
+      "pubmed:25845131",
+      "pubmed:25986145",
+      "pubmed:26114209",
+      "pubmed:26142522",
+      "pubmed:26142525",
+      "pubmed:26203765",
+      "pubmed:26238769",
+      "pubmed:37359384",
+      "pubmed:37648560",
+      "pubmed:37755126",
+      "reaxys:1293536",
+      "wikipedia.en:Warfarin"
+    ],
+    "generalized_empirical_formula": [
+      "C19H16O4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:10033"
+    ],
+    "mass": [
+      "308.333"
+    ],
+    "monoisotopic_mass": [
+      "308.10486"
+    ]
+  },
+  "label": "warfarin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_10033",
+  "obo_id": "CHEBI:10033",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "81-81-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=81-81-2"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00682",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00682"
+    },
+    {
+      "database": "foodb.food",
+      "id": "FDB022750",
+      "description": "foodb.food",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001935",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001935"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C01541",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08682",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1405",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US2427578",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2427578"
+    },
+    {
+      "database": "patent",
+      "id": "US2765321",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2765321"
+    },
+    {
+      "database": "patent",
+      "id": "US2777859",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US2777859"
+    },
+    {
+      "database": "patent",
+      "id": "US3239529",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3239529"
+    },
+    {
+      "database": "pesticides",
+      "id": "warfarin",
+      "description": "pesticides",
+      "url": null
+    },
+    {
+      "database": "pmc",
+      "id": "PMC10207235",
+      "description": "pmc",
+      "url": "http://europepmc.org/articles/PMC10207235"
+    },
+    {
+      "database": "ppdb",
+      "id": "681",
+      "description": "ppdb",
+      "url": "https://sitem.herts.ac.uk/aeru/ppdb/en/Reports/681.htm"
+    },
+    {
+      "database": "pubmed",
+      "id": "13358873",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/13358873/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15578879",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15578879/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18294321",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18294321/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19294412",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19294412/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24478171",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24478171/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24973057",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24973057/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25022924",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25022924/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25023204",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25023204/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25393417",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25393417/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25466603",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25466603/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25534862",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25534862/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25537751",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25537751/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25555316",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25555316/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25683623",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25683623/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25757926",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25757926/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25823787",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25823787/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25828628",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25828628/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25830869",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25830869/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25842804",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25842804/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25845131",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25845131/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25986145",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25986145/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26114209",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26114209/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26142522",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26142522/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26142525",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26142525/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26203765",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26203765/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26238769",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26238769/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37359384",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37359384/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37648560",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37648560/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37755126",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37755126/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1293536",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Warfarin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "rac-4-hydroxy-3-(3-oxo-1-phenylbutyl)-2H-1-benzopyran-2-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-warfarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(RS)-warfarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-hydroxy-3-[(1RS)-3-oxo-1-phenylbutyl]-2H-1-benzopyran-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-hydroxy-3-[(1RS)-3-oxo-1-phenylbutyl]-2H-chromen-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-hydroxy-3-[(1RS)-3-oxo-1-phenylbutyl]coumarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ppdb",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Brumolin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Coumafene",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DL-3-(alpha-acetonylbenzyl)-4-hydroxycoumarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DL-warfarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Kumadu",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Kumatox",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ratron",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Rodafarin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Warf 10",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Zoocoumarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-1-(4'-hydroxy-3'-coumarinyl)-1-phenyl-3-butanone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-3-(1'-phenyl-2'-acetylethyl)-4-hydroxycoumarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-3-(acetonylbenzyl)-4-hydroxycoumarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-3-(alpha-acetonylbenzyl)-4-hydroxycoumarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-3-(alpha-phenyl-beta-acetylethyl)-4-hydroxycoumarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-4-hydroxy-3-(3-oxo-1-phenylbutyl)-2H-1-benzopyran-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-4-hydroxy-3-(3-oxo-1-phenylbutyl)coumarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-warfarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "racemic warfarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "warfarin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "warfarina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "warfarine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "warfarinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10033?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10033/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10033/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10033/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10033/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10033/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10033/graph"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10033/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10033/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10033/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

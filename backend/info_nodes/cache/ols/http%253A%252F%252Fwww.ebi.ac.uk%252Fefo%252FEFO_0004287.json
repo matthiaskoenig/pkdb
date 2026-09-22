@@ -1,0 +1,89 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0004287",
+  "lang": "en",
+  "description": [
+    "A potentially lethal cardiac arrhythmia that is characterized by uncoordinated extremely rapid firing of electrical impulses (400-600/min) in HEART VENTRICLES. Such asynchronous ventricular quivering or fibrillation prevents any effective cardiac output and results in unconsciousness ( SYNCOPE). It is one of the major electrocardiographic patterns seen with CARDIAC ARREST."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD9:427.41",
+      "MESH:D014693",
+      "MedDRA:10047290",
+      "NCIt:C50799",
+      "SNOMEDCT:71908006"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0000190, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0000190"
+    ],
+    "term editor": [
+      "Dani Welter"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0000190"
+    ]
+  },
+  "label": "obsolete_ventricular fibrillation",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0000190",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0004287",
+  "obo_id": "EFO:0004287",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD9",
+      "id": "427.41",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D014693",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D014693"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10047290",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10047290"
+    },
+    {
+      "database": "NCIt",
+      "id": "C50799",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C50799"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "71908006",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/71908006"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004287?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004287/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

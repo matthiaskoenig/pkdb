@@ -1,0 +1,178 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000401",
+  "lang": "en",
+  "description": [
+    "Diabetic nephropathy (sometimes called Kimmelstiel-Wilson syndrome) is a progressive kidney disorder caused by vascular damage to the glomerular capillaries, in patients with diabetes mellitus. It is usually manifested with nephritic syndrome and glomerulosclerosis."
+  ],
+  "synonyms": [
+    "DKD",
+    "DMII RENAL UNCNTRLD",
+    "DMII RENL NT ST UNCNTRLD",
+    "Diabetes with renal manifestations (disorder)",
+    "Diabetes with renal manifestations",
+    "Diabetes-nephrosis syndrome (disorder)",
+    "Diabetes-nephrosis syndrome",
+    "Diabetic Glomerulosclerosis",
+    "Diabetic Kidney Disease",
+    "Diabetic Kidney Diseases",
+    "Diabetic Nephropathies",
+    "Diabetic renal disease (disorder)",
+    "Diabetic renal disease",
+    "Glomerulosclerosis, Diabetic",
+    "Glomerulosclerosis, Nodular",
+    "Intracapillary Glomerulosclerosis",
+    "Kidney Disease, Diabetic",
+    "Kidney Diseases, Diabetic",
+    "Kimmelstiel - Wilson disease",
+    "Kimmelstiel Wilson Disease",
+    "Kimmelstiel Wilson Syndrome",
+    "Kimmelstiel-Wilson Disease",
+    "Kimmelstiel-Wilson Syndrome",
+    "Nephropathies, Diabetic",
+    "Nephropathy, Diabetic",
+    "Nephrotic syndrome due to diabetes mellitus",
+    "Nephrotic syndrome in diabetes mellitus (disorder)",
+    "Nephrotic syndrome in diabetes mellitus",
+    "Nodular Glomerulosclerosis",
+    "Renal disorder associated with diabetes mellitus",
+    "Syndrome, Kimmelstiel-Wilson"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD9:250.4",
+      "MESH:D003928",
+      "MedDRA:10061835",
+      "NCIt:C84417",
+      "OMIM:612624",
+      "OMIM:612628",
+      "OMIM:612634",
+      "SNOMEDCT:127013003",
+      "SNOMEDCT:197605007",
+      "SNOMEDCT:311366001",
+      "SNOMEDCT:38542009",
+      "SNOMEDCT:54181000",
+      "SNOMEDCT:707221002"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0005016, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0005016"
+    ],
+    "term editor": [
+      "James Malone",
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005016"
+    ]
+  },
+  "label": "obsolete_diabetic nephropathy",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005016",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0000401",
+  "obo_id": "EFO:0000401",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD9",
+      "id": "250.4",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D003928",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D003928"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10061835",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10061835"
+    },
+    {
+      "database": "NCIt",
+      "id": "C84417",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C84417"
+    },
+    {
+      "database": "OMIM",
+      "id": "612624",
+      "description": null,
+      "url": "https://omim.org/entry/612624"
+    },
+    {
+      "database": "OMIM",
+      "id": "612628",
+      "description": null,
+      "url": "https://omim.org/entry/612628"
+    },
+    {
+      "database": "OMIM",
+      "id": "612634",
+      "description": null,
+      "url": "https://omim.org/entry/612634"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "127013003",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/127013003"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "197605007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/197605007"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "311366001",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/311366001"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "38542009",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/38542009"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "54181000",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/54181000"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "707221002",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/707221002"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000401?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000401/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

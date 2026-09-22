@@ -1,0 +1,171 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_68441",
+  "lang": "en",
+  "description": [
+    "An oxopurine that is 7,9-dihydro-1<em>H</em>-purine-2,6,8(3<em>H</em>)-trione substituted by a methyl group at N-1. It is one of the metabolites of caffeine found in human urine."
+  ],
+  "synonyms": [
+    "1-methyl-7,9-dihydro-1H-purine-2,6,8(3H)-trione",
+    "1-methyl-7,9-dihydro-1H-purine-2,6,8(3H)-trione"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:708-79-2",
+      "hmdb:HMDB0003099",
+      "kegg.compound:C16359",
+      "metacyc.compound:CPD-14119",
+      "pubmed:15537072",
+      "pubmed:22770225",
+      "reaxys:195190"
+    ],
+    "generalized_empirical_formula": [
+      "C6H6N4O3"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:68441"
+    ],
+    "inchi_key_string": [
+      "QFDRTQONISXGJA-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C6H6N4O3/c1-10-4(11)2-3(9-6(10)13)8-5(12)7-2/h1H3,(H,9,13)(H2,7,8,12)"
+    ],
+    "mass": [
+      "182.139"
+    ],
+    "monoisotopic_mass": [
+      "182.04399"
+    ],
+    "smiles_string": [
+      "Cn1c(=O)nc2nc(=O)nc2c1=O"
+    ]
+  },
+  "label": "1-methyluric acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_68441",
+  "obo_id": "CHEBI:68441",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "708-79-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=708-79-2"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0003099",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0003099"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C16359",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-14119",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "15537072",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15537072/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22770225",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22770225/"
+    },
+    {
+      "database": "reaxys",
+      "id": "195190",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1-methyl-7,9-dihydro-1H-purine-2,6,8(3H)-trione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-methyl-7,9-dihydro-1H-purine-2,6,8(3H)-trione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68441?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68441/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68441/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68441/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68441/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68441/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68441/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68441/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68441/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68441/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,319 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_32114",
+  "lang": "en",
+  "description": [
+    "The simplest member of the class of salicylamides derived from salicylic acid."
+  ],
+  "synonyms": [
+    "2-Carbamoylphenol",
+    "2-Carboxamidophenol",
+    "2-Hydroxybenzamide",
+    "2-hydroxybenzamide",
+    "2-hydroxybenzamide",
+    "OHB",
+    "Salicylic Acid amide",
+    "o-Hydroxybenzamide",
+    "salicilamida",
+    "salicylamide",
+    "salicylamidum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:65-45-2",
+      "drugbank:DB08797",
+      "drugcentral:2415",
+      "gmelin:142521",
+      "kegg.drug:D01811",
+      "pdb-ccd:OHB",
+      "pubmed:14729655",
+      "pubmed:1650428",
+      "pubmed:22530891",
+      "reaxys:742439",
+      "wikipedia.en:Salicylamide"
+    ],
+    "generalized_empirical_formula": [
+      "C7H7NO2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:32114"
+    ],
+    "inchi_key_string": [
+      "SKZKKFZAGNVIMN-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C7H7NO2/c8-7(10)5-3-1-2-4-6(5)9/h1-4,9H,(H2,8,10)"
+    ],
+    "mass": [
+      "137.138"
+    ],
+    "monoisotopic_mass": [
+      "137.04768"
+    ],
+    "smiles_string": [
+      "NC(=O)c1ccccc1O"
+    ]
+  },
+  "label": "salicylamide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_32114",
+  "obo_id": "CHEBI:32114",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "65-45-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=65-45-2"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB08797",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB08797"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2415",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2415"
+    },
+    {
+      "database": "gmelin",
+      "id": "142521",
+      "description": "gmelin",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D01811",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "OHB",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "14729655",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14729655/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1650428",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1650428/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22530891",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22530891/"
+    },
+    {
+      "database": "reaxys",
+      "id": "742439",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Salicylamide",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-hydroxybenzamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Carbamoylphenol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Carboxamidophenol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Hydroxybenzamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-hydroxybenzamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "OHB",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salicylic Acid amide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "o-Hydroxybenzamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "salicilamida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "salicylamide",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "salicylamidum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32114?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32114/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32114/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32114/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32114/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32114/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32114/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32114/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,161 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000712",
+  "lang": "en",
+  "description": [
+    "A group of pathological conditions characterized by sudden, non-convulsive loss of neurological function due to BRAIN ISCHEMIA or INTRACRANIAL HEMORRHAGES. Stroke is classified by the type of tissue NECROSIS, such as the anatomic location, vasculature involved, etiology, age of the affected individual, and hemorrhagic vs. non-hemorrhagic nature. (From Adams et al., Principles of Neurology, 6th ed, pp777-810)",
+    "A sudden loss of neurological function secondary to hemorrhage or ischemia in the brain parenchyma due to a vascular event.",
+    "A sudden, nonconvulsive loss of neurologic function due to an ischemic or hemorrhagic intracranial vascular event. In general, cerebrovascular accidents are classified by anatomic location in the brain, vascular distribution, etiology, age of the affected individual, and hemorrhagic vs. nonhemorrhagic nature (MeSH).",
+    "A sudden, nonconvulsive loss of neurologic function due to an ischemic or hemorrhagic intracranial vascular event. In general, cerebrovascular accidents are classified by anatomic location in the brain, vascular distribution, etiology, age of the affected individual, and hemorrhagic vs. nonhemorrhagic nature. (From Adams et al., Principles of Neurology, 6th ed, pp777-810)",
+    "Tissue NECROSIS in any area of the brain, including the CEREBRAL HEMISPHERES, the CEREBELLUM, and the BRAIN STEM. Brain infarction is the result of a cascade of events initiated by inadequate blood flow through the brain that is followed by HYPOXIA and HYPOGLYCEMIA in brain tissue. Damage may be temporary, permanent, selective or pan-necrosis."
+  ],
+  "synonyms": [
+    "Acute Cerebrovascular Accident",
+    "Acute Cerebrovascular Accidents",
+    "Acute Stroke",
+    "Acute Strokes",
+    "Apoplexy",
+    "Apoplexy, Cerebrovascular",
+    "Brain Vascular Accident",
+    "Brain Vascular Accidents",
+    "CEREBROVASCULAR ACCIDENT, (CVA)",
+    "CVA (Cerebrovascular Accident)",
+    "CVA (cerebral vascular accident)",
+    "CVA - Cerebrovascular accident unspecified",
+    "CVA - Cerebrovascular accident",
+    "CVA",
+    "CVA, CEREBROVASCULAR ACCIDENT",
+    "CVAs (Cerebrovascular Accident)",
+    "Cerebral Stroke",
+    "Cerebral Strokes",
+    "Cerebrovascular Accident",
+    "Cerebrovascular Accident, Acute",
+    "Cerebrovascular Accidents",
+    "Cerebrovascular Accidents, Acute",
+    "Cerebrovascular Apoplexy",
+    "Cerebrovascular Apoplexya",
+    "Cerebrovascular Stroke",
+    "Cerebrovascular Strokes",
+    "Cerebrovascular accident (disorder) [Ambiguous]",
+    "Cerebrovascular accident (disorder)",
+    "STROKE SYNDROME",
+    "SYNDROME, STROKE",
+    "Stroke NOS (disorder)",
+    "Stroke NOS",
+    "Stroke and cerebrovascular accident unspecified (disorder)",
+    "Stroke and cerebrovascular accident unspecified",
+    "Stroke, Acute",
+    "Stroke, Cerebral",
+    "Stroke, Cerebrovascular",
+    "Stroke/CVA - undefined",
+    "Strokes",
+    "Strokes, Acute",
+    "Strokes, Cerebral",
+    "Strokes, Cerebrovascular",
+    "Vascular Accident, Brain",
+    "Vascular Accidents, Brain",
+    "ischemic stroke"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10:I64",
+      "MESH:D020521",
+      "MedDRA:10042244",
+      "NCIt:C3390",
+      "NIFSTD:birnlex_12783",
+      "OMIM:601367",
+      "SNOMEDCT:230690007",
+      "SNOMEDCT:422504002"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0005098, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0005098"
+    ],
+    "term editor": [
+      "James Malone",
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0005098"
+    ]
+  },
+  "label": "obsolete_stroke",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0005098",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0000712",
+  "obo_id": "EFO:0000712",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD10",
+      "id": "I64",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/I64"
+    },
+    {
+      "database": "MESH",
+      "id": "D020521",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D020521"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10042244",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10042244"
+    },
+    {
+      "database": "NCIt",
+      "id": "C3390",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3390"
+    },
+    {
+      "database": "NIFSTD",
+      "id": "birnlex_12783",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "OMIM",
+      "id": "601367",
+      "description": null,
+      "url": "https://omim.org/entry/601367"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "230690007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/230690007"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "422504002",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/422504002"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

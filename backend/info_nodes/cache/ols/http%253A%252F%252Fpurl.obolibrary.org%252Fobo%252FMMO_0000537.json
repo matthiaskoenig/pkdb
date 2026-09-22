@@ -1,0 +1,90 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/MMO_0000537",
+  "lang": "en",
+  "description": [
+    "An analytical technique in that combines the physical separation capabilities of high pressure liquid chromatography (HPLC) with the mass analysis capabilities of mass spectrometry (MS). Molecular mixtures are initially separated into components by HPLC. As these components exit the column, they are subjected to mass spectrometry for identification based on their mass-to-charge ratio and behavior in a magnetic field."
+  ],
+  "synonyms": [
+    "HPLC-MS",
+    "high pressure liquid chromatography-mass spectrometry"
+  ],
+  "annotation": {
+    "created_by": [
+      "jsmith"
+    ],
+    "creation_date": [
+      "2014-06-05T15:09:27Z"
+    ],
+    "has_obo_namespace": [
+      "measurement_method_ontology"
+    ],
+    "id": [
+      "MMO:0000537"
+    ]
+  },
+  "label": "high-performance liquid chromatography-mass spectrometry",
+  "ontology_name": "mmo",
+  "ontology_prefix": "MMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/mmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "MMO_0000537",
+  "obo_id": "MMO:0000537",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "An analytical technique in that combines the physical separation capabilities of high pressure liquid chromatography (HPLC) with the mass analysis capabilities of mass spectrometry (MS). Molecular mixtures are initially separated into components by HPLC. As these components exit the column, they are subjected to mass spectrometry for identification based on their mass-to-charge ratio and behavior in a magnetic field.",
+      "oboXrefs": [
+        {
+          "database": "Dorland",
+          "id": "Dorlands_Illustrated_Medical_Dictionary--31st_Ed",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "ISBN",
+          "id": "978-1416049982",
+          "description": null,
+          "url": "https://www.worldcat.org/search?q=bn%3A978-1416049982"
+        },
+        {
+          "database": "Segen",
+          "id": "Segens_Medical_Dictionary_2012",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000537?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000537/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000537/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000537/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000537/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000537/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000537/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

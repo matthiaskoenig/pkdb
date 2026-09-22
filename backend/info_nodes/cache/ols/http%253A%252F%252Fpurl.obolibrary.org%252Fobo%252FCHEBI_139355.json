@@ -1,0 +1,354 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_139355",
+  "lang": "en",
+  "description": [
+    "A <small><sup>13</small></sup>C-modified compound that is methacetin which has <small><sup>13</small></sup>C as the predominant isotope of the methoxy carbon. In normal subjects, methacetin is rapidly metabolised in the liver, being dealkylated by hepatic CYP1A2 to give paracetamol (acetaminophen); the methyl of the methoxy group is eliminated as CO<small><sub>2</sub></small>. Administering methacetin-(methoxy-<small><sup>13</small></sup>C) to a patient enables the liver (cytochrome P-450 1A2) function to be determined quickly and precisely by measuring the <small><sup>13</small></sup>CO<small><sub>2</sub></small> in the breath (e.g. by isotope-selective non-dispersive infrared spectrometry (NDIRS))."
+  ],
+  "synonyms": [
+    "(13)C-MBT",
+    "(13)C-methacetin",
+    "N-{4-[((13)C)methyloxy]phenyl}acetamide",
+    "N-{4-[((13)C)methyloxy]phenyl}acetamide",
+    "[(13)C]methacetin",
+    "methacetin C-13",
+    "methacetin methoxy-C-13",
+    "p-acetanisidine C-13"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:72156-70-8",
+      "pubmed:17593076",
+      "pubmed:18339592",
+      "pubmed:18763185",
+      "pubmed:19248196",
+      "pubmed:19297040",
+      "pubmed:20149989",
+      "pubmed:21287423",
+      "pubmed:21386198",
+      "pubmed:21687605",
+      "pubmed:22174547",
+      "pubmed:22540278",
+      "pubmed:22612381",
+      "pubmed:22827182",
+      "pubmed:23322130",
+      "pubmed:23549507",
+      "pubmed:23642250",
+      "pubmed:23967104",
+      "pubmed:25170215",
+      "pubmed:26220750",
+      "pubmed:26935501",
+      "reaxys:31580327"
+    ],
+    "generalized_empirical_formula": [
+      "C8[13C]H11NO2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:139355"
+    ],
+    "inchi_key_string": [
+      "XVAIDCNLVLTVFM-VQEHIDDOSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C9H11NO2/c1-7(11)10-8-3-5-9(12-2)6-4-8/h3-6H,1-2H3,(H,10,11)/i2+1"
+    ],
+    "mass": [
+      "166.184"
+    ],
+    "monoisotopic_mass": [
+      "166.08233"
+    ],
+    "smiles_string": [
+      "CC(=O)Nc1ccc(O[13CH3])cc1"
+    ]
+  },
+  "label": "methacetin-(methoxy-(13)C)",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_139355",
+  "obo_id": "CHEBI:139355",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "72156-70-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=72156-70-8"
+    },
+    {
+      "database": "pubmed",
+      "id": "17593076",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17593076/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18339592",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18339592/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18763185",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18763185/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19248196",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19248196/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19297040",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19297040/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20149989",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20149989/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21287423",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21287423/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21386198",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21386198/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21687605",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21687605/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22174547",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22174547/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22540278",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22540278/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22612381",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22612381/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22827182",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22827182/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23322130",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23322130/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23549507",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23549507/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23642250",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23642250/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23967104",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23967104/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25170215",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25170215/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26220750",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26220750/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26935501",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26935501/"
+    },
+    {
+      "database": "reaxys",
+      "id": "31580327",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-{4-[((13)C)methyloxy]phenyl}acetamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(13)C-MBT",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(13)C-methacetin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-{4-[((13)C)methyloxy]phenyl}acetamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[(13)C]methacetin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methacetin C-13",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methacetin methoxy-C-13",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "p-acetanisidine C-13",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139355?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139355/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139355/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139355/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139355/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139355/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139355/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139355/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

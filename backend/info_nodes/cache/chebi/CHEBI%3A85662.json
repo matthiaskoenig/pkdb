@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:85662",
+  "name": "lixisenatide",
+  "definition": "A forty-four membered polypeptide consisting of <small>L</small>-His, Gly, <small>L</small>-Glu, Gly, <small>L</small>-Thr, <small>L</small>-Phe, <small>L</small>-Thr, <small>L</small>-Ser, <small>L</small>-Asp, <small>L</small>-Leu, <small>L</small>-Ser, <small>L</small>-Lys, <small>L</small>-Gln, <small>L</small>-Met, <small>L</small>-Glu, <small>L</small>-Glu, <small>L</small>-Glu, <small>L</small>-Ala, <small>L</small>-Val, <small>L</small>-Arg, <small>L</small>-Leu, <small>L</small>-Phe, <small>L</small>-Ile, <small>L</small>-Glu, <small>L</small>-Trp, <small>L</small>-Leu, <small>L</small>-Lys, <small>L</small>-Asn, Gly, Gly, <small>L</small>Pro, <small>L</small>-Ser, <small>L</small>-Ser, Gly, <small>L</small>-Ala, <small>L</small>-Pro, <small>L</small>-Pro, <small>L</small>-Ser, <small>L</small>-Lys, <small>L</small>-Lys, <small>L</small>-Lys, <small>L</small>-Lys, <small>L</small>-Lys, and <small>L</small>-Lys-NH<small><sub>2</sub></small> residues joined in sequence. Used as an adjunct to diet and exercise for the treatment of adults with type II diabetes.",
+  "formula": "C215H347N61O65S",
+  "charge": 0,
+  "mass": "4858.570",
+  "inchikey": "XVVOERDUTLJJHN-IAEQDCLQSA-N"
+}

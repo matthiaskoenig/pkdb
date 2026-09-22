@@ -1,0 +1,182 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_145335",
+  "lang": "en",
+  "description": [
+    "A β-<small>D</small>-glucosiduronic acid that is β-<small>D</small>-glucuronic acid in which the anomeric hydroxyl hydrogen has been replaced by a 8-chloro-6-(2-fluorophenyl)-1-methyl-4<em>H</em>-imidazo[1,5-<em>a</em>][1,4]benzodiazepin-4-yl group. It is the glucuronidated conjugate of the midazolam metabolite, 4-hydroxymidazolam."
+  ],
+  "synonyms": [
+    "4-OH MDZ glucuronide",
+    "4-hydroxymidazolam glucuronide",
+    "4-hydroxymidazolam-glucuronide",
+    "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepin-4-yl beta-D-glucopyranosiduronic acid",
+    "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepin-4-yl beta-D-glucopyranosiduronic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:81256-82-8",
+      "pubmed:20713656",
+      "pubmed:28978489"
+    ],
+    "generalized_empirical_formula": [
+      "C24H21ClFN3O7"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:145335"
+    ],
+    "inchi_key_string": [
+      "MPHAZAPYEZYBRV-UOPHVPOOSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C24H21ClFN3O7/c1-10-27-9-16-22(36-24-20(32)18(30)19(31)21(35-24)23(33)34)28-17(12-4-2-3-5-14(12)26)13-8-11(25)6-7-15(13)29(10)16/h2-9,18-22,24,30-32H,1H3,(H,33,34)/t18-,19-,20+,21-,22?,24-/m0/s1"
+    ],
+    "mass": [
+      "517.897"
+    ],
+    "monoisotopic_mass": [
+      "517.10521"
+    ],
+    "smiles_string": [
+      "Cc1ncc2n1-c1ccc(Cl)cc1C(c1ccccc1F)=NC2O[C@@H]1O[C@H](C(=O)O)[C@@H](O)[C@H](O)[C@H]1O"
+    ]
+  },
+  "label": "4-hydroxymidazolam beta-D-glucuronide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_145335",
+  "obo_id": "CHEBI:145335",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "81256-82-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=81256-82-8"
+    },
+    {
+      "database": "pubmed",
+      "id": "20713656",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20713656/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28978489",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28978489/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepin-4-yl beta-D-glucopyranosiduronic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-OH MDZ glucuronide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-hydroxymidazolam glucuronide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-hydroxymidazolam-glucuronide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepin-4-yl beta-D-glucopyranosiduronic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145335?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145335/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145335/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145335/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145335/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145335/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145335/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145335/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145335/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

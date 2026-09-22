@@ -1,0 +1,1015 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_4031",
+  "lang": "en",
+  "description": [
+    "A cyclic nonribosomal peptide of eleven amino acids; an immunosuppressant drug widely used in post-allogeneic organ transplant to reduce the activity of the patient's immune system, and therefore the risk of organ rejection. Also causes reversible inhibition of immunocompetent lymphocytes in the G0- and G1-phase of the cell cycle."
+  ],
+  "synonyms": [
+    "(R-[R*,R*-(E)])-Cyclic(L-alanyl-D-alanyl-N-methyl-L-leucyl-N-methyl-L-leucyl-N-methyl-L-valyl-3-hydroxy-N,4-dimethyl-L-2-amino-6-octenoyl-L-alpha-aminobutyryl-N-methylglycyl-N-methyl-L-leucyl-L-valyl-N-methyl-L-leucyl)",
+    "1,11-cyclo[L-alanyl-D-alanyl-N-methyl-L-leucyl-N-methyl-L-leucyl-N-methyl-L-valyl-(E)-(2S,3R,4R)-2-amino-3-hydroxy-N,4-dimethyloct-6-enoyl-L-2-aminobutanoyl-N-methylglycyl-N-methyl-L-leucyl-L-valyl-N-methyl-L-leucine]",
+    "30-ethyl-33-[(4E)-1-hydroxy-2-methylhex-4-en-1-yl]-1,4,7,10,12,15,19,25,28-nonamethyl-6,9,18,24-tetrakis(2-methylpropyl)-3,21-bis(propan-2-yl)-1,4,7,10,13,16,19,22,25,28,31-undecaazacyclotritriacontane-2,5,8,11,14,17,20,23,26,29,32-undecone",
+    "30-ethyl-33-[(4E)-1-hydroxy-2-methylhex-4-en-1-yl]-1,4,7,10,12,15,19,25,28-nonamethyl-6,9,18,24-tetrakis(2-methylpropyl)-3,21-bis(propan-2-yl)-1,4,7,10,13,16,19,22,25,28,31-undecaazacyclotritriacontane-2,5,8,11,14,17,20,23,26,29,32-undecone",
+    "30-ethyl-33-[(4E)-1-hydroxy-2-methylhex-4-en-1-yl]-6,9,18,24-tetraisobutyl-3,21-diisopropyl-1,4,7,10,12,15,19,25,28-nonamethyl-1,4,7,10,13,16,19,22,25,28,31-undecaazacyclotritriacontane-2,5,8,11,14,17,20,23,26,29,32-undecone",
+    "Antibiotic S 7481F1",
+    "Ciclosporin",
+    "Cyclo(L-alanyl-D-alanyl-N-methyl-L-leucyl-N-methyl-L-leucyl-N-methyl-L-valyl-((3R,4R,6E)-6,7-didehydro-3-hydroxy-N,4-dimethyl-L-2-aminooctanoyl)-L-2-aminobutanoyl-N-methylglycyl-N-methyl-L-leucyl-L-valyl-N-methylleucyl)",
+    "Cyclosporin A",
+    "Cyclosporine",
+    "Gengraf",
+    "Neoral",
+    "Sandimmune",
+    "ciclosporin",
+    "ciclosporina",
+    "ciclosporine",
+    "ciclosporinum",
+    "cyclosporin A"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:59865-13-3",
+      "chemspider:4447449",
+      "drugbank:DB00091",
+      "drugcentral:760",
+      "hmdb:HMDB0250682",
+      "kegg.compound:C05086",
+      "kegg.drug:D00184",
+      "knapsack:C00001517",
+      "lincs.smallmolecule:LSM-1703",
+      "lipidmaps:LMPK14000003",
+      "metacyc.compound:CPD-20532",
+      "patent:US4117118",
+      "pubmed:11058832",
+      "pubmed:11069928",
+      "pubmed:11079273",
+      "pubmed:11080188",
+      "pubmed:11238591",
+      "pubmed:11256490",
+      "pubmed:11278005",
+      "pubmed:11315347",
+      "pubmed:11370709",
+      "pubmed:11406057",
+      "pubmed:11426833",
+      "pubmed:11442023",
+      "pubmed:11481617",
+      "pubmed:11493684",
+      "pubmed:11529914",
+      "pubmed:11557554",
+      "pubmed:11564166",
+      "pubmed:11676831",
+      "pubmed:11870366",
+      "pubmed:12021257",
+      "pubmed:12050171",
+      "pubmed:12603598",
+      "pubmed:12761440",
+      "pubmed:12929192",
+      "pubmed:12950728",
+      "pubmed:14521916",
+      "pubmed:14621732",
+      "pubmed:14638917",
+      "pubmed:14672695",
+      "pubmed:14682659",
+      "pubmed:14743390",
+      "pubmed:15030555",
+      "pubmed:15175101",
+      "pubmed:15210365",
+      "pubmed:15306697",
+      "pubmed:15383526",
+      "pubmed:15541012",
+      "pubmed:15613074",
+      "pubmed:15626898",
+      "pubmed:15657176",
+      "pubmed:1566062",
+      "pubmed:15711594",
+      "pubmed:15811524",
+      "pubmed:15962181",
+      "pubmed:16372476",
+      "pubmed:16404634",
+      "pubmed:16724420",
+      "pubmed:16801218",
+      "pubmed:16898534",
+      "pubmed:17032751",
+      "pubmed:17083576",
+      "pubmed:17117422",
+      "pubmed:17192032",
+      "pubmed:17220244",
+      "pubmed:17229932",
+      "pubmed:17265451",
+      "pubmed:17446460",
+      "pubmed:17603747",
+      "pubmed:18076075",
+      "pubmed:18171316",
+      "pubmed:18191430",
+      "pubmed:18217899",
+      "pubmed:18259730",
+      "pubmed:18299432",
+      "pubmed:18359899",
+      "pubmed:18583716",
+      "pubmed:18597363",
+      "pubmed:18790203",
+      "pubmed:18818682",
+      "pubmed:18931077",
+      "pubmed:18975184",
+      "pubmed:19282398",
+      "pubmed:19589783",
+      "pubmed:21752960",
+      "pubmed:23620378",
+      "pubmed:24134630",
+      "pubmed:31144214",
+      "pubmed:34561200",
+      "pubmed:34561814",
+      "reaxys:3647785",
+      "vsdb:1765",
+      "wikipedia.en:Ciclosporin"
+    ],
+    "generalized_empirical_formula": [
+      "C62H111N11O12"
+    ],
+    "has_alternative_id": [
+      "CHEBI:63586",
+      "CHEBI:91802"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:4031"
+    ],
+    "inchi_key_string": [
+      "PMATZTZNYRCHOR-CGLBZJNRSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C62H111N11O12/c1-25-27-28-40(15)52(75)51-56(79)65-43(26-2)58(81)67(18)33-48(74)68(19)44(29-34(3)4)55(78)66-49(38(11)12)61(84)69(20)45(30-35(5)6)54(77)63-41(16)53(76)64-42(17)57(80)70(21)46(31-36(7)8)59(82)71(22)47(32-37(9)10)60(83)72(23)50(39(13)14)62(85)73(51)24/h25,27,34-47,49-52,75H,26,28-33H2,1-24H3,(H,63,77)(H,64,76)(H,65,79)(H,66,78)/b27-25+/t40-,41+,42-,43+,44+,45+,46+,47+,49+,50+,51+,52-/m1/s1"
+    ],
+    "mass": [
+      "1202.635"
+    ],
+    "monoisotopic_mass": [
+      "1201.84137"
+    ],
+    "smiles_string": [
+      "C/C=C/C[C@@H](C)[C@@H](O)[C@H]1C(=O)N[C@@H](CC)C(=O)N(C)CC(=O)N(C)[C@@H](CC(C)C)C(=O)N[C@@H](C(C)C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N[C@@H](C)C(=O)N[C@H](C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N(C)[C@@H](CC(C)C)C(=O)N(C)[C@@H](C(C)C)C(=O)N1C"
+    ]
+  },
+  "label": "cyclosporin A",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_4031",
+  "obo_id": "CHEBI:4031",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "59865-13-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=59865-13-3"
+    },
+    {
+      "database": "chemspider",
+      "id": "4447449",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.4447449.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00091",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00091"
+    },
+    {
+      "database": "drugcentral",
+      "id": "760",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/760"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0250682",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0250682"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C05086",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00184",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00001517",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00001517"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1703",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "lipidmaps",
+      "id": "LMPK14000003",
+      "description": "lipidmaps",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMPK14000003"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-20532",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US4117118",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4117118"
+    },
+    {
+      "database": "pubmed",
+      "id": "11058832",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11058832/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11069928",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11069928/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11079273",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11079273/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11080188",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11080188/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11238591",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11238591/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11256490",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11256490/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11278005",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11278005/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11315347",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11315347/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11370709",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11370709/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11406057",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11406057/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11426833",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11426833/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11442023",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11442023/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11481617",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11481617/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11493684",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11493684/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11529914",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11529914/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11557554",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11557554/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11564166",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11564166/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11676831",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11676831/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11870366",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11870366/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12021257",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12021257/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12050171",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12050171/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12603598",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12603598/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12761440",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12761440/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12929192",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12929192/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12950728",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12950728/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14521916",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14521916/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14621732",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14621732/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14638917",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14638917/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14672695",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14672695/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14682659",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14682659/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14743390",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14743390/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15030555",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15030555/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15175101",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15175101/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15210365",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15210365/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15306697",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15306697/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15383526",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15383526/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15541012",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15541012/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15613074",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15613074/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15626898",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15626898/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15657176",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15657176/"
+    },
+    {
+      "database": "pubmed",
+      "id": "1566062",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1566062/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15711594",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15711594/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15811524",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15811524/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15962181",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15962181/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16372476",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16372476/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16404634",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16404634/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16724420",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16724420/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16801218",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16801218/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16898534",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16898534/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17032751",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17032751/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17083576",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17083576/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17117422",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17117422/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17192032",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17192032/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17220244",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17220244/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17229932",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17229932/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17265451",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17265451/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17446460",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17446460/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17603747",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17603747/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18076075",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18076075/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18171316",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18171316/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18191430",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18191430/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18217899",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18217899/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18259730",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18259730/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18299432",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18299432/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18359899",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18359899/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18583716",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18583716/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18597363",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18597363/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18790203",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18790203/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18818682",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18818682/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18931077",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18931077/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18975184",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18975184/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19282398",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19282398/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19589783",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19589783/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21752960",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21752960/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23620378",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23620378/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24134630",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24134630/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31144214",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31144214/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34561200",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34561200/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34561814",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34561814/"
+    },
+    {
+      "database": "reaxys",
+      "id": "3647785",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "vsdb",
+      "id": "1765",
+      "description": "vsdb",
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1765.htm"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Ciclosporin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "30-ethyl-33-[(4E)-1-hydroxy-2-methylhex-4-en-1-yl]-1,4,7,10,12,15,19,25,28-nonamethyl-6,9,18,24-tetrakis(2-methylpropyl)-3,21-bis(propan-2-yl)-1,4,7,10,13,16,19,22,25,28,31-undecaazacyclotritriacontane-2,5,8,11,14,17,20,23,26,29,32-undecone",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R-[R*,R*-(E)])-Cyclic(L-alanyl-D-alanyl-N-methyl-L-leucyl-N-methyl-L-leucyl-N-methyl-L-valyl-3-hydroxy-N,4-dimethyl-L-2-amino-6-octenoyl-L-alpha-aminobutyryl-N-methylglycyl-N-methyl-L-leucyl-L-valyl-N-methyl-L-leucyl)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,11-cyclo[L-alanyl-D-alanyl-N-methyl-L-leucyl-N-methyl-L-leucyl-N-methyl-L-valyl-(E)-(2S,3R,4R)-2-amino-3-hydroxy-N,4-dimethyloct-6-enoyl-L-2-aminobutanoyl-N-methylglycyl-N-methyl-L-leucyl-L-valyl-N-methyl-L-leucine]",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "jcbn",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "30-ethyl-33-[(4E)-1-hydroxy-2-methylhex-4-en-1-yl]-1,4,7,10,12,15,19,25,28-nonamethyl-6,9,18,24-tetrakis(2-methylpropyl)-3,21-bis(propan-2-yl)-1,4,7,10,13,16,19,22,25,28,31-undecaazacyclotritriacontane-2,5,8,11,14,17,20,23,26,29,32-undecone",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "30-ethyl-33-[(4E)-1-hydroxy-2-methylhex-4-en-1-yl]-6,9,18,24-tetraisobutyl-3,21-diisopropyl-1,4,7,10,12,15,19,25,28-nonamethyl-1,4,7,10,13,16,19,22,25,28,31-undecaazacyclotritriacontane-2,5,8,11,14,17,20,23,26,29,32-undecone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Antibiotic S 7481F1",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ciclosporin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cyclo(L-alanyl-D-alanyl-N-methyl-L-leucyl-N-methyl-L-leucyl-N-methyl-L-valyl-((3R,4R,6E)-6,7-didehydro-3-hydroxy-N,4-dimethyl-L-2-aminooctanoyl)-L-2-aminobutanoyl-N-methylglycyl-N-methyl-L-leucyl-L-valyl-N-methylleucyl)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cyclosporin A",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cyclosporine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cyclosporine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Gengraf",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Neoral",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sandimmune",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ciclosporin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ciclosporina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ciclosporine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ciclosporinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cyclosporin A",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4031?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4031/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4031/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4031/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4031/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4031/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4031/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4031/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

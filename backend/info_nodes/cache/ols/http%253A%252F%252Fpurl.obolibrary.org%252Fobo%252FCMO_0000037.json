@@ -1,0 +1,108 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CMO_0000037",
+  "lang": "en",
+  "description": [
+    "Percentage of total blood volume that is made up of red blood cells."
+  ],
+  "synonyms": [
+    "Hct",
+    "packed cell volume",
+    "packed red blood cell volume"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "EFO:0004348",
+      "VT:0001586"
+    ],
+    "has_obo_namespace": [
+      "clinical_measurement_ontology"
+    ],
+    "id": [
+      "CMO:0000037"
+    ]
+  },
+  "label": "hematocrit",
+  "ontology_name": "cmo",
+  "ontology_prefix": "CMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/cmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CMO_0000037",
+  "obo_id": "CMO:0000037",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "Percentage of total blood volume that is made up of red blood cells.",
+      "oboXrefs": [
+        {
+          "database": "ISBN",
+          "id": "978-0323057479",
+          "description": null,
+          "url": "https://www.worldcat.org/search?q=bn%3A978-0323057479"
+        },
+        {
+          "database": "Mosby",
+          "id": "Mosbys_Manual_of_Diagnostic_and_Laboratory_Tests--4th_Ed",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0004348",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0004348"
+    },
+    {
+      "database": "VT",
+      "id": "0001586",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/VT_0001586"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000037?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000037/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000037/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000037/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000037/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000037/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000037/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000037/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000037/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000037/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000037/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

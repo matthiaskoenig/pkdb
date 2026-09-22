@@ -1,0 +1,558 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_28077",
+  "lang": "en",
+  "description": [
+    "A member of the class of rifamycins that is a a semisynthetic antibiotic derived from <em>Amycolatopsis rifamycinica</em> (previously known as <em>Amycolatopsis mediterranei</em> and <em>Streptomyces mediterranei</em>)."
+  ],
+  "synonyms": [
+    "(7S,9E,11S,12R,13S,14R,15R,16R,17S,18S,19E,21Z)-2,15,17,27,29-pentahydroxy-11-methoxy-3,7,12,14,16,18,22-heptamethyl-26-{(E)-[(4-methylpiperazin-1-yl)imino]methyl}-6,23-dioxo-8,30-dioxa-24-azatetracyclo[23.3.1.1(4,7).0(5,28)]triaconta-1(28),1(29),2,4,9,19,21,25,27-nonaen-13-yl acetate",
+    "(7S,9E,11S,12R,13S,14R,15R,16R,17S,18S,19E,21Z)-2,15,17,27,29-pentahydroxy-11-methoxy-3,7,12,14,16,18,22-heptamethyl-26-{(E)-[(4-methylpiperazin-1-yl)imino]methyl}-6,23-dioxo-8,30-dioxa-24-azatetracyclo[23.3.1.1(4,7).0(5,28)]triaconta-1(28),1(29),2,4,9,19,21,25,27-nonaen-13-yl acetate",
+    "3-(((4-Methyl-1-piperazinyl)imino)methyl)rifamycin SV",
+    "RFP",
+    "Rifampicin",
+    "Rifampin",
+    "rifamcin",
+    "rifampicin",
+    "rifampicina",
+    "rifampicinum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:13292-46-1",
+      "drugbank:DB01045",
+      "hmdb:HMDB0015179",
+      "kegg.compound:C06688",
+      "kegg.drug:D00211",
+      "patent:NL6509961",
+      "patent:US3342810",
+      "pdb-ccd:RFP",
+      "pubmed:11600355",
+      "pubmed:14665784",
+      "pubmed:14670633",
+      "pubmed:15331348",
+      "pubmed:15383168",
+      "pubmed:15705662",
+      "pubmed:16159084",
+      "pubmed:16515773",
+      "pubmed:17828712",
+      "pubmed:18332862",
+      "pubmed:19386087",
+      "pubmed:19458074",
+      "pubmed:19723399",
+      "pubmed:24718527",
+      "pubmed:25720500",
+      "pubmed:26725427",
+      "pubmed:26819743",
+      "pubmed:27082586",
+      "pubmed:27143080",
+      "pubmed:27182275",
+      "pubmed:27242224",
+      "pubmed:27470132",
+      "pubmed:27569735",
+      "pubmed:27617596",
+      "pubmed:27640793",
+      "pubmed:27755552",
+      "pubmed:27795624",
+      "pubmed:27883163",
+      "pubmed:27965540",
+      "pubmed:27993874",
+      "pubmed:28081169",
+      "pubmed:28118809",
+      "pubmed:28181840",
+      "pubmed:28184157",
+      "pubmed:28207542",
+      "pubmed:28262820",
+      "reaxys:5723476",
+      "wikipedia.en:Rifampicin"
+    ],
+    "generalized_empirical_formula": [
+      "C43H58N4O12"
+    ],
+    "has_alternative_id": [
+      "CHEBI:26577",
+      "CHEBI:45308",
+      "CHEBI:8858"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:28077"
+    ],
+    "inchi_key_string": [
+      "JQXXHWHPUNPDRT-WLSIYKJHSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C43H58N4O12/c1-21-12-11-13-22(2)42(55)45-33-28(20-44-47-17-15-46(9)16-18-47)37(52)30-31(38(33)53)36(51)26(6)40-32(30)41(54)43(8,59-40)57-19-14-29(56-10)23(3)39(58-27(7)48)25(5)35(50)24(4)34(21)49/h11-14,19-21,23-25,29,34-35,39,49-53H,15-18H2,1-10H3,(H,45,55)/b12-11+,19-14+,22-13-,44-20+/t21-,23+,24+,25+,29-,34-,35+,39+,43-/m0/s1"
+    ],
+    "mass": [
+      "822.953"
+    ],
+    "monoisotopic_mass": [
+      "822.40512"
+    ],
+    "smiles_string": [
+      "CO[C@H]1/C=C/O[C@@]2(C)Oc3c(C)c(O)c4c(O)c(c(/C=N/N5CCN(C)CC5)c(O)c4c3C2=O)NC(=O)/C(C)=CC=C[C@H](C)[C@H](O)[C@@H](C)[C@@H](O)[C@@H](C)[C@H](OC(C)=O)[C@@H]1C"
+    ]
+  },
+  "label": "rifampicin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_28077",
+  "obo_id": "CHEBI:28077",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "13292-46-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=13292-46-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01045",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01045"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015179",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015179"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06688",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00211",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "NL6509961",
+      "description": "patent",
+      "url": "https://www.google.com/patents/NL6509961"
+    },
+    {
+      "database": "patent",
+      "id": "US3342810",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3342810"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "RFP",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11600355",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11600355/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14665784",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14665784/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14670633",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14670633/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15331348",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15331348/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15383168",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15383168/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15705662",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15705662/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16159084",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16159084/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16515773",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16515773/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17828712",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17828712/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18332862",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18332862/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19386087",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19386087/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19458074",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19458074/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19723399",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19723399/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24718527",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24718527/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25720500",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25720500/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26725427",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26725427/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26819743",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26819743/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27082586",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27082586/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27143080",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27143080/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27182275",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27182275/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27242224",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27242224/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27470132",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27470132/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27569735",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27569735/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27617596",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27617596/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27640793",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27640793/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27755552",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27755552/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27795624",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27795624/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27883163",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27883163/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27965540",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27965540/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27993874",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27993874/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28081169",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28081169/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28118809",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28118809/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28181840",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28181840/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28184157",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28184157/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28207542",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28207542/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28262820",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28262820/"
+    },
+    {
+      "database": "reaxys",
+      "id": "5723476",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Rifampicin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(7S,9E,11S,12R,13S,14R,15R,16R,17S,18S,19E,21Z)-2,15,17,27,29-pentahydroxy-11-methoxy-3,7,12,14,16,18,22-heptamethyl-26-{(E)-[(4-methylpiperazin-1-yl)imino]methyl}-6,23-dioxo-8,30-dioxa-24-azatetracyclo[23.3.1.1(4,7).0(5,28)]triaconta-1(28),1(29),2,4,9,19,21,25,27-nonaen-13-yl acetate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(7S,9E,11S,12R,13S,14R,15R,16R,17S,18S,19E,21Z)-2,15,17,27,29-pentahydroxy-11-methoxy-3,7,12,14,16,18,22-heptamethyl-26-{(E)-[(4-methylpiperazin-1-yl)imino]methyl}-6,23-dioxo-8,30-dioxa-24-azatetracyclo[23.3.1.1(4,7).0(5,28)]triaconta-1(28),1(29),2,4,9,19,21,25,27-nonaen-13-yl acetate",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-(((4-Methyl-1-piperazinyl)imino)methyl)rifamycin SV",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "RFP",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Rifampicin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Rifampin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rifamcin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rifampicin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rifampicina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rifampicinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28077?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28077/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28077/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28077/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28077/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28077/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28077/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28077/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_tautomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28077/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018036"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

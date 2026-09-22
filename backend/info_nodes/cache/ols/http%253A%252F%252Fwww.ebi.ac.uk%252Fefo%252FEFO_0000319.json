@@ -1,0 +1,266 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000319",
+  "lang": "en",
+  "description": [
+    "A body system disease which occurs in the blood, heart, blood vessels or the lymphatic system that passes nutrients (such as amino acids and electrolytes), gases, hormones, blood cells or lymph to and from cells in the body to help fight diseases and help stabilize body temperature and pH to maintain homeostasis.",
+    "A non-neoplastic or neoplastic disorder affecting the heart or the vessels (arteries, veins and lymph vessels).  Representative examples of non-neoplastic cardiovascular disorders are endocarditis and hypertension.  Representative examples of neoplastic cardiovascular disorders are endocardial myxoma and angiosarcoma. -- 2003",
+    "A non-neoplastic or neoplastic disorder affecting the heart or the vessels (arteries, veins and lymph vessels). Representative examples of non-neoplastic cardiovascular disorders are endocarditis and hypertension. Representative examples of neoplastic cardiovascular disorders are endocardial myxoma and angiosarcoma.",
+    "Pathological conditions involving the CARDIOVASCULAR SYSTEM including the HEART; the BLOOD VESSELS; or the PERICARDIUM."
+  ],
+  "synonyms": [
+    "ASCVD",
+    "CARDIOVASC DIS",
+    "CIRCULATORY DISEASE NOS",
+    "CVD",
+    "CVD, NOS",
+    "CVS disease",
+    "Cardiovascular Disease (CVD)",
+    "Cardiovascular Diseases",
+    "Cardiovascular Disorder",
+    "Cardiovascular Disorders",
+    "Cardiovascular disease, NOS",
+    "Cardiovascular disease, unspecified",
+    "Cardiovascular disorder, NOS",
+    "Cardiovascular system disease",
+    "Certain sequelae of myocardial infarction, not elsewhere classified",
+    "Circulatory system disease NOS (disorder)",
+    "Circulatory system disease NOS",
+    "DISEASES OF THE CIRCULATORY SYSTEM",
+    "Disease affecting entire cardiovascular system (disorder)",
+    "Disease affecting entire cardiovascular system",
+    "Disease of cardiovascular system (disorder)",
+    "Disease of cardiovascular system",
+    "Disease of cardiovascular system, NOS",
+    "Disease, Cardiovascular",
+    "Diseases, Cardiovascular",
+    "Disorder of cardiovascular system (disorder)",
+    "Disorder of cardiovascular system",
+    "Disorder of circulatory system",
+    "Disorder of circulatory system, NOS",
+    "Disorder of the circulatory system",
+    "ILL-DEFINED HRT DIS NEC",
+    "Ill-defined descriptions and complications of heart disease",
+    "OTHER SEQUELAE OF MI NEC",
+    "Other diseases of endocardium (disorder)",
+    "Other diseases of endocardium",
+    "Other diseases of pericardium (disorder)",
+    "Other diseases of pericardium",
+    "Other disorders of papillary muscle",
+    "Other forms of heart disease (disorder)",
+    "Other forms of heart disease",
+    "Other heart disease (disorder)",
+    "Other heart disease NOS (disorder)",
+    "Other heart disease NOS",
+    "Other heart disease",
+    "Other ill-defined heart disease (disorder)",
+    "Other ill-defined heart disease NOS (disorder)",
+    "Other ill-defined heart disease NOS",
+    "Other ill-defined heart disease",
+    "Other ill-defined heart diseases",
+    "Other pericardial disease NOS (disorder)",
+    "Other pericardial disease NOS",
+    "Other sequelae of myocardial infarction, not elsewhere classified",
+    "Other specified diseases of pericardium",
+    "Other specified pericardial disease NOS (disorder)",
+    "Other specified pericardial disease NOS",
+    "PAPILLARY MUSCLE DIS NEC",
+    "PERICARDIAL DISEASE NEC",
+    "Unspecified circulatory system disorder",
+    "[X]Cardiovascular disease, unspecified (disorder)",
+    "[X]Cardiovascular disease, unspecified",
+    "[X]Other forms of heart disease (disorder)",
+    "[X]Other forms of heart disease",
+    "[X]Other ill-defined heart diseases (disorder)",
+    "[X]Other ill-defined heart diseases",
+    "[X]Other specified diseases of pericardium (disorder)",
+    "[X]Other specified diseases of pericardium",
+    "circulatory system disease",
+    "disease of subdivision of hemolymphoid system"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "DOID:1287",
+      "ICD10:I98",
+      "ICD10:I99",
+      "ICD9:390-459.99",
+      "ICD9:420-429.99",
+      "ICD9:423",
+      "ICD9:423.8",
+      "ICD9:424",
+      "ICD9:429",
+      "ICD9:429.2",
+      "ICD9:429.7",
+      "ICD9:429.8",
+      "ICD9:429.81",
+      "ICD9:429.89",
+      "ICD9:459.9",
+      "MESH:D002318",
+      "MedDRA:10007648",
+      "NCIt:C2931",
+      "SNOMEDCT:105980002",
+      "SNOMEDCT:49601007"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "obsoleted_in_version": [
+      "3.88.0"
+    ],
+    "reason_for_obsolescence": [
+      "Replaced by Mondo term MONDO_0004995, with which this term was previously merged. Use: http://purl.obolibrary.org/obo/MONDO_0004995"
+    ],
+    "term editor": [
+      "James Malone"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0004995"
+    ]
+  },
+  "label": "obsolete_cardiovascular disease",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0004995",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0000319",
+  "obo_id": "EFO:0000319",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "1287",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_1287"
+    },
+    {
+      "database": "ICD10",
+      "id": "I98",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/I98"
+    },
+    {
+      "database": "ICD10",
+      "id": "I99",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/I99"
+    },
+    {
+      "database": "ICD9",
+      "id": "390-459.99",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "420-429.99",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "423",
+      "description": null,
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=423"
+    },
+    {
+      "database": "ICD9",
+      "id": "423.8",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "424",
+      "description": null,
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=424"
+    },
+    {
+      "database": "ICD9",
+      "id": "429",
+      "description": null,
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=429"
+    },
+    {
+      "database": "ICD9",
+      "id": "429.2",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "429.7",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "429.8",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "429.81",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "429.89",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "459.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D002318",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D002318"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10007648",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10007648"
+    },
+    {
+      "database": "NCIt",
+      "id": "C2931",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C2931"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "105980002",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/105980002"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "49601007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/49601007"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000319?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000319/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

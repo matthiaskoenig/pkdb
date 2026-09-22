@@ -1,0 +1,620 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_4659",
+  "lang": "en",
+  "description": [
+    "An organic disulfide that results from the formal oxidative dimerisation of <em>N</em>,<em>N</em>-diethyldithiocarbamic acid.  A multi-enzyme inhibitor that is used in alcohol aversion therapy and also exhibits anticancer properties."
+  ],
+  "synonyms": [
+    "1,1',1'',1'''-[disulfanediylbis(carbonothioylnitrilo)]tetraethane",
+    "1,1',1'',1'''-[disulfanediylbis(carbonothioylnitrilo)]tetraethane",
+    "1,1'-dithiobis(N,N-diethylthioformamide)",
+    "Antabuse",
+    "Disulfiram",
+    "N,N,N',N'-tetraethylthiuram disulfide",
+    "Tetraethylthiuram disulfide",
+    "bis(diethylthiocarbamoyl) disulfide",
+    "tetraethylthioperoxydicarbonic diamide",
+    "tetraethylthiuram disulfide",
+    "tetraethylthiuram disulphide"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:97-77-8",
+      "drugbank:DB00822",
+      "drugcentral:928",
+      "hmdb:HMDB0014960",
+      "kegg.compound:C01692",
+      "kegg.drug:D00131",
+      "lincs.smallmolecule:LSM-5467",
+      "metacyc.compound:DISULFIRAM",
+      "pesticides:disulfiram",
+      "pubmed:10841824",
+      "pubmed:11005259",
+      "pubmed:11716515",
+      "pubmed:14978246",
+      "pubmed:15325261",
+      "pubmed:15709459",
+      "pubmed:16426571",
+      "pubmed:16661923",
+      "pubmed:16666414",
+      "pubmed:16880974",
+      "pubmed:17079463",
+      "pubmed:17579916",
+      "pubmed:17667894",
+      "pubmed:18579431",
+      "pubmed:19720750",
+      "pubmed:19782464",
+      "pubmed:19787200",
+      "pubmed:21471244",
+      "pubmed:24496638",
+      "pubmed:25133664",
+      "pubmed:25445071",
+      "pubmed:25464072",
+      "pubmed:25476326",
+      "pubmed:25495604",
+      "pubmed:25557293",
+      "pubmed:25565438",
+      "pubmed:25657800",
+      "pubmed:25777347",
+      "pubmed:26033731",
+      "pubmed:26224731",
+      "pubmed:26235918",
+      "pubmed:26239994",
+      "pubmed:26314552",
+      "pubmed:26517513",
+      "pubmed:26550292",
+      "pubmed:31151194",
+      "pubmed:32963852",
+      "pubmed:32971817",
+      "pubmed:33731397",
+      "pubmed:34012274",
+      "pubmed:34045896",
+      "pubmed:8442800",
+      "pubmed:8572926",
+      "reaxys:1712560",
+      "wikipedia.en:Disulfiram"
+    ],
+    "generalized_empirical_formula": [
+      "C10H20N2S4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:4659"
+    ],
+    "inchi_key_string": [
+      "AUZONCFQVSMFAP-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C10H20N2S4/c1-5-11(6-2)9(13)15-16-10(14)12(7-3)8-4/h5-8H2,1-4H3"
+    ],
+    "mass": [
+      "296.552"
+    ],
+    "monoisotopic_mass": [
+      "296.05093"
+    ],
+    "smiles_string": [
+      "CCN(CC)C(=S)SSC(=S)N(CC)CC"
+    ]
+  },
+  "label": "disulfiram",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_4659",
+  "obo_id": "CHEBI:4659",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "97-77-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=97-77-8"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00822",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00822"
+    },
+    {
+      "database": "drugcentral",
+      "id": "928",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/928"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014960",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014960"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C01692",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00131",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5467",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "DISULFIRAM",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pesticides",
+      "id": "disulfiram",
+      "description": "pesticides",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10841824",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10841824/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11005259",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11005259/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11716515",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11716515/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14978246",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14978246/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15325261",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15325261/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15709459",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15709459/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16426571",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16426571/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16661923",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16661923/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16666414",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16666414/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16880974",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16880974/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17079463",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17079463/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17579916",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17579916/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17667894",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17667894/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18579431",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18579431/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19720750",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19720750/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19782464",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19782464/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19787200",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19787200/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21471244",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21471244/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24496638",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24496638/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25133664",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25133664/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25445071",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25445071/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25464072",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25464072/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25476326",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25476326/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25495604",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25495604/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25557293",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25557293/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25565438",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25565438/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25657800",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25657800/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25777347",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25777347/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26033731",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26033731/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26224731",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26224731/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26235918",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26235918/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26239994",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26239994/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26314552",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26314552/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26517513",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26517513/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26550292",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26550292/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31151194",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31151194/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32963852",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32963852/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32971817",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32971817/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33731397",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33731397/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34012274",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34012274/"
+    },
+    {
+      "database": "pubmed",
+      "id": "34045896",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/34045896/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8442800",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8442800/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8572926",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8572926/"
+    },
+    {
+      "database": "reaxys",
+      "id": "1712560",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Disulfiram",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1,1',1'',1'''-[disulfanediylbis(carbonothioylnitrilo)]tetraethane",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,1',1'',1'''-[disulfanediylbis(carbonothioylnitrilo)]tetraethane",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,1'-dithiobis(N,N-diethylthioformamide)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Antabuse",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Disulfiram",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N,N,N',N'-tetraethylthiuram disulfide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tetraethylthiuram disulfide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "bis(diethylthiocarbamoyl) disulfide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tetraethylthioperoxydicarbonic diamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tetraethylthiuram disulfide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tetraethylthiuram disulphide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

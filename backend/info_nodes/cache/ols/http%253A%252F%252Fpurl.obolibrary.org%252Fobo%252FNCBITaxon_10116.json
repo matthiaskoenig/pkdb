@@ -1,0 +1,120 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCBITaxon_10116",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Mus norvegicus",
+    "Norway rat",
+    "brown rat",
+    "rat",
+    "rats"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "GC_ID:1"
+    ],
+    "has_alternative_id": [
+      "NCBITaxon:36465"
+    ],
+    "has_obo_namespace": [
+      "ncbi_taxonomy"
+    ],
+    "has_rank": [
+      "http://purl.obolibrary.org/obo/TAXRANK_0000006"
+    ],
+    "obsolete has_rank": [
+      "http://purl.obolibrary.org/obo/NCBITaxon_species"
+    ]
+  },
+  "label": "Rattus norvegicus",
+  "ontology_name": "ncbitaxon",
+  "ontology_prefix": "NCBITaxon",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncbitaxon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCBITaxon_10116",
+  "obo_id": "NCBITaxon:10116",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "GC_ID",
+      "id": "1",
+      "description": null,
+      "url": "https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=cgencodes#SG1"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Norway rat",
+      "scope": "hasExactSynonym",
+      "type": "genbank common name",
+      "xrefs": []
+    },
+    {
+      "name": "brown rat",
+      "scope": "hasExactSynonym",
+      "type": "layperson synonym",
+      "xrefs": []
+    },
+    {
+      "name": "rat",
+      "scope": "hasExactSynonym",
+      "type": "layperson synonym",
+      "xrefs": []
+    },
+    {
+      "name": "rats",
+      "scope": "hasExactSynonym",
+      "type": "layperson synonym",
+      "xrefs": []
+    },
+    {
+      "name": "Mus norvegicus",
+      "scope": "hasRelatedSynonym",
+      "type": "synonym",
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10116?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10116/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10116/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10116/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10116/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10116/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10116/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10116/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10116/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10116/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10116/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

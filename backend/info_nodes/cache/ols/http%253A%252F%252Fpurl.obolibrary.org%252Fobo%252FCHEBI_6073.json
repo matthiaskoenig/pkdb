@@ -1,0 +1,446 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6073",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "DynaCirc (TN)",
+    "Dynacirc cr",
+    "Dynacirc",
+    "Isradipine",
+    "NSC-759892",
+    "PN 200-110",
+    "PN-200-110",
+    "Prescal",
+    "dynacrine",
+    "isradipin",
+    "isradipino",
+    "isrodipine"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:75695-93-1",
+      "drugcentral:1511",
+      "hmdb:HMDB0014415",
+      "kegg.drug:D00349",
+      "lincs.smallmolecule:LSM-1897",
+      "pubmed:1352973",
+      "pubmed:15646539",
+      "pubmed:16472241",
+      "pubmed:18426954",
+      "pubmed:18457386",
+      "pubmed:19445515",
+      "pubmed:20014752",
+      "pubmed:20934347",
+      "pubmed:21185626",
+      "pubmed:22194678",
+      "pubmed:22197392",
+      "pubmed:22328583",
+      "pubmed:22541068",
+      "pubmed:22761000",
+      "pubmed:23651412",
+      "pubmed:23688558",
+      "pubmed:23831812",
+      "pubmed:23956101",
+      "pubmed:26948801",
+      "pubmed:31158845",
+      "pubmed:37468498",
+      "pubmed:38318365"
+    ],
+    "generalized_empirical_formula": [
+      "C19H21N3O5"
+    ],
+    "has_alternative_id": [
+      "CHEBI:91953"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6073"
+    ],
+    "inchi_key_string": [
+      "HMJIYCCIJYRONP-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C19H21N3O5/c1-9(2)26-19(24)15-11(4)20-10(3)14(18(23)25-5)16(15)12-7-6-8-13-17(12)22-27-21-13/h6-9,16,20H,1-5H3"
+    ],
+    "mass": [
+      "371.393"
+    ],
+    "monoisotopic_mass": [
+      "371.14812"
+    ],
+    "smiles_string": [
+      "COC(=O)C1=C(C)NC(C)=C(C(=O)OC(C)C)C1c1cccc2nonc12"
+    ]
+  },
+  "label": "Isradipine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6073",
+  "obo_id": "CHEBI:6073",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "75695-93-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=75695-93-1"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1511",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1511"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014415",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014415"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00349",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-1897",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "1352973",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/1352973/"
+    },
+    {
+      "database": "pubmed",
+      "id": "15646539",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15646539/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16472241",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16472241/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18426954",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18426954/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18457386",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18457386/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19445515",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19445515/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20014752",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20014752/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20934347",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20934347/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21185626",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21185626/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22194678",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22194678/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22197392",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22197392/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22328583",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22328583/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22541068",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22541068/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22761000",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22761000/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23651412",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23651412/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23688558",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23688558/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23831812",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23831812/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23956101",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23956101/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26948801",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26948801/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31158845",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31158845/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37468498",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37468498/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38318365",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38318365/"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "DynaCirc (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dynacirc cr",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dynacirc",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Isradipine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NSC-759892",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "PN 200-110",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "PN-200-110",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Prescal",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dynacrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "isradipin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "isradipino",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "isrodipine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugcentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6073?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6073/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6073/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6073/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6073/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6073/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6073/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6073/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

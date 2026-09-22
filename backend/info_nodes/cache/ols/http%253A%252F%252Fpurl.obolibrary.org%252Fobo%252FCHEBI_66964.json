@@ -1,0 +1,476 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_66964",
+  "lang": "en",
+  "description": [
+    "A diterpenoid that is 6a,7,8,10a-tetrahydro-6<em>H</em>-benzo[<em>c</em>]chromene substituted at position 1 by a hydroxy group, positions 6, 6 and 9 by methyl groups and at position 3 by a pentyl group. The principal psychoactive constituent of the cannabis plant, it is used for treatment of anorexia associated with AIDS as well as nausea and vomiting associated with cancer chemotherapy."
+  ],
+  "synonyms": [
+    "(-)-delta9-trans-Tetrahydrocannabinol",
+    "(6aR,10aR)-6,6,9-trimethyl-3-pentyl-6a,7,8,10a-tetrahydro-6H-benzo[c]chromen-1-ol",
+    "(6aR,10aR)-6,6,9-trimethyl-3-pentyl-6a,7,8,10a-tetrahydro-6H-benzo[c]chromen-1-ol",
+    "1-trans-delta-9-Tetrahydrocannabinol",
+    "3-Pentyl-6,6,9-trimethyl-6a,7,8,10a-tetrahydro-6H-dibenzo(b,d)pyran-1-ol",
+    "6,6,9-Trimethyl-3-pentyl-6a,7,8,10a-tetrahydro-6H-benzo[c]chromen-1-ol",
+    "Delta(1)-tetrahydrocannabinol",
+    "Delta(9)-THC",
+    "Delta(9)-tetrahydrocannabinol",
+    "Dronabinol",
+    "Dronabinolum",
+    "Syndros",
+    "Tetrahydrocannabinol",
+    "delta9-Tetrahydrocannabinol",
+    "dronabinol"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:1972-08-3",
+      "drugbank:DB00470",
+      "drugcentral:4109",
+      "hmdb:HMDB0041865",
+      "kegg.compound:C06972",
+      "kegg.drug:D00306",
+      "knapsack:C00002675",
+      "metacyc.compound:CPD-7172",
+      "pdb-ccd:TCI",
+      "pubmed:15190053",
+      "pubmed:16511162",
+      "pubmed:21310551",
+      "pubmed:21590520",
+      "pubmed:21671456",
+      "pubmed:21803011",
+      "pubmed:22260337",
+      "pubmed:22288893",
+      "pubmed:22305029",
+      "pubmed:22491047",
+      "pubmed:22553980",
+      "pubmed:22680341",
+      "pubmed:22722508",
+      "pubmed:22807156",
+      "reaxys:4354308",
+      "wikipedia.en:Tetrahydrocannabinol"
+    ],
+    "generalized_empirical_formula": [
+      "C21H30O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:4716"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:66964"
+    ],
+    "inchi_key_string": [
+      "CYQFCXCEBYINGO-IAGOWNOFSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H30O2/c1-5-6-7-8-15-12-18(22)20-16-11-14(2)9-10-17(16)21(3,4)23-19(20)13-15/h11-13,16-17,22H,5-10H2,1-4H3/t16-,17-/m1/s1"
+    ],
+    "mass": [
+      "314.469"
+    ],
+    "monoisotopic_mass": [
+      "314.22458"
+    ],
+    "smiles_string": [
+      "[H][C@@]12C=C(C)CC[C@@]1([H])C(C)(C)Oc1cc(CCCCC)cc(O)c12"
+    ]
+  },
+  "label": "Delta(9)-tetrahydrocannabinol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_66964",
+  "obo_id": "CHEBI:66964",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "1972-08-3",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=1972-08-3"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00470",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00470"
+    },
+    {
+      "database": "drugcentral",
+      "id": "4109",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/4109"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0041865",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0041865"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06972",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00306",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "knapsack",
+      "id": "C00002675",
+      "description": "knapsack",
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00002675"
+    },
+    {
+      "database": "metacyc.compound",
+      "id": "CPD-7172",
+      "description": "metacyc.compound",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "TCI",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "15190053",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/15190053/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16511162",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16511162/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21310551",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21310551/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21590520",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21590520/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21671456",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21671456/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21803011",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21803011/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22260337",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22260337/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22288893",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22288893/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22305029",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22305029/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22491047",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22491047/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22553980",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22553980/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22680341",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22680341/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22722508",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22722508/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22807156",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22807156/"
+    },
+    {
+      "database": "reaxys",
+      "id": "4354308",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Tetrahydrocannabinol",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(6aR,10aR)-6,6,9-trimethyl-3-pentyl-6a,7,8,10a-tetrahydro-6H-benzo[c]chromen-1-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-delta9-trans-Tetrahydrocannabinol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(6aR,10aR)-6,6,9-trimethyl-3-pentyl-6a,7,8,10a-tetrahydro-6H-benzo[c]chromen-1-ol",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-trans-delta-9-Tetrahydrocannabinol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-Pentyl-6,6,9-trimethyl-6a,7,8,10a-tetrahydro-6H-dibenzo(b,d)pyran-1-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6,6,9-Trimethyl-3-pentyl-6a,7,8,10a-tetrahydro-6H-benzo[c]chromen-1-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "nist",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Delta(1)-tetrahydrocannabinol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "submitter",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Delta(9)-THC",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "submitter",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Delta(9)-tetrahydrocannabinol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "uniprot_ft",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dronabinol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dronabinolum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Syndros",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tetrahydrocannabinol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "delta9-Tetrahydrocannabinol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dronabinol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_66964?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_66964/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_66964/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_66964/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_66964/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_66964/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_66964/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_66964/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

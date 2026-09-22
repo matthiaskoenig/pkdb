@@ -1,0 +1,389 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9948",
+  "lang": "en",
+  "description": [
+    "A racemate comprising equimolar amounts of dexverapamil and (<i>S</i>)-verapamil. An L-type calcium channel blocker of the phenylalkylamine class, it is used (particularly as the hydrochloride salt) in the treatment of hypertension, angina pectoris and cardiac arrhythmia, and as a preventive medication for migraine."
+  ],
+  "synonyms": [
+    "Verapamil",
+    "rac-2-(3,4-dimethoxyphenyl)-5-{[2-(3,4-dimethoxyphenyl)ethyl](methyl)amino}-2-(propan-2-yl)pentanenitrile",
+    "rac-2-(3,4-dimethoxyphenyl)-5-{[2-(3,4-dimethoxyphenyl)ethyl](methyl)amino}-2-(propan-2-yl)pentanenitrile",
+    "verapamil",
+    "verapamilo",
+    "verapamilum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:52-53-9",
+      "drugbank:DB00661",
+      "hmdb:HMDB0001850",
+      "kegg.compound:C07188",
+      "kegg.drug:D02356",
+      "pubmed:11142488",
+      "pubmed:11389609",
+      "pubmed:11454724",
+      "pubmed:11975770",
+      "pubmed:12454681",
+      "pubmed:14681337",
+      "pubmed:16545584",
+      "pubmed:17525564",
+      "pubmed:17724247",
+      "pubmed:18093581",
+      "pubmed:18337499",
+      "pubmed:19125880",
+      "pubmed:24532601",
+      "pubmed:24577794",
+      "pubmed:25297337",
+      "pubmed:25331694",
+      "pubmed:25650380",
+      "pubmed:25968157",
+      "pubmed:26046259",
+      "pubmed:26504804",
+      "pubmed:26553277",
+      "pubmed:26567612",
+      "pubmed:8861548",
+      "reaxys:2825000",
+      "wikipedia.en:Verapamil"
+    ],
+    "generalized_empirical_formula": [
+      "C27H38N2O4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9948"
+    ],
+    "mass": [
+      "454.602"
+    ],
+    "monoisotopic_mass": [
+      "454.28316"
+    ]
+  },
+  "label": "verapamil",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9948",
+  "obo_id": "CHEBI:9948",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "52-53-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=52-53-9"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00661",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00661"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001850",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001850"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07188",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D02356",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "11142488",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11142488/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11389609",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11389609/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11454724",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11454724/"
+    },
+    {
+      "database": "pubmed",
+      "id": "11975770",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11975770/"
+    },
+    {
+      "database": "pubmed",
+      "id": "12454681",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/12454681/"
+    },
+    {
+      "database": "pubmed",
+      "id": "14681337",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14681337/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16545584",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16545584/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17525564",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17525564/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17724247",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17724247/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18093581",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18093581/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18337499",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18337499/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19125880",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19125880/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24532601",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24532601/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24577794",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24577794/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25297337",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25297337/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25331694",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25331694/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25650380",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25650380/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25968157",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25968157/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26046259",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26046259/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26504804",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26504804/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26553277",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26553277/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26567612",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26567612/"
+    },
+    {
+      "database": "pubmed",
+      "id": "8861548",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/8861548/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2825000",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Verapamil",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "rac-2-(3,4-dimethoxyphenyl)-5-{[2-(3,4-dimethoxyphenyl)ethyl](methyl)amino}-2-(propan-2-yl)pentanenitrile",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Verapamil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-2-(3,4-dimethoxyphenyl)-5-{[2-(3,4-dimethoxyphenyl)ethyl](methyl)amino}-2-(propan-2-yl)pentanenitrile",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "verapamil",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "verapamil",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "verapamilo",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "verapamilum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9948?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9948/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9948/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9948/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9948/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9948/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9948/graph"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9948/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9948/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,277 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8412",
+  "lang": "en",
+  "description": [
+    "A pyrimidone that is dihydropyrimidine-4,6(1<em>H</em>,5<em>H</em>)-dione substituted by an ethyl and a phenyl group at position 5. It is used as an  anticonvulsant for treatment of various types of seizures."
+  ],
+  "synonyms": [
+    "2-deoxyphenobarbital",
+    "5-Phenyl-5-ethyl-Hexahydropyrimidine-4,6-dione",
+    "5-ethyl-5-phenyldihydropyrimidine-4,6(1H,5H)-dione",
+    "5-ethyl-5-phenyldihydropyrimidine-4,6(1H,5H)-dione",
+    "primidona",
+    "primidone",
+    "primidonum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:125-33-7",
+      "drugbank:DB00794",
+      "drugcentral:2267",
+      "hmdb:HMDB0014932",
+      "kegg.compound:C07371",
+      "kegg.drug:D00474",
+      "lincs.smallmolecule:LSM-2700",
+      "pubmed:10716065",
+      "pubmed:17253477",
+      "pubmed:24712318",
+      "pubmed:24812533",
+      "reaxys:218034",
+      "wikipedia.en:Primidone"
+    ],
+    "generalized_empirical_formula": [
+      "C12H14N2O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8412"
+    ],
+    "inchi_key_string": [
+      "DQMZLTXERSFNPB-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C12H14N2O2/c1-2-12(9-6-4-3-5-7-9)10(15)13-8-14-11(12)16/h3-7H,2,8H2,1H3,(H,13,15)(H,14,16)"
+    ],
+    "mass": [
+      "218.256"
+    ],
+    "monoisotopic_mass": [
+      "218.10553"
+    ],
+    "smiles_string": [
+      "CCC1(c2ccccc2)C(=O)NCNC1=O"
+    ]
+  },
+  "label": "primidone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8412",
+  "obo_id": "CHEBI:8412",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "125-33-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=125-33-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00794",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00794"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2267",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2267"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014932",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014932"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07371",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00474",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-2700",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10716065",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10716065/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17253477",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17253477/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24712318",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24712318/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24812533",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24812533/"
+    },
+    {
+      "database": "reaxys",
+      "id": "218034",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Primidone",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-ethyl-5-phenyldihydropyrimidine-4,6(1H,5H)-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-deoxyphenobarbital",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Phenyl-5-ethyl-Hexahydropyrimidine-4,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-ethyl-5-phenyldihydropyrimidine-4,6(1H,5H)-dione",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "primidona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "primidone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "primidonum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8412?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8412/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8412/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8412/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8412/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8412/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8412/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8412/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

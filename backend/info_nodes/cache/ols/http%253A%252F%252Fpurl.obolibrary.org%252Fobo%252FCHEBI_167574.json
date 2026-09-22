@@ -1,0 +1,550 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_167574",
+  "lang": "en",
+  "description": [
+    "A polypeptide that contains a linear sequence of 31 amino acids joined together by peptide linkages. It is an agonist of glucagon-like peptide-1 receptors (GLP-1 AR) and used for the treatment of type 2 diabetes."
+  ],
+  "synonyms": [
+    "L-histidyl-2-methylalanyl-L-alpha-glutamylglycyl-L-threonyl-L-phenylalanyl-L-threonyl-L-seryl-L-alpha-aspartyl-L-valyl-L-seryl-L-seryl-L-tyrosyl-L-leucyl-L-alpha-glutamylglycyl-L-glutaminyl-L-alanyl-L-alanyl-N(6)-((N-(17-carboxyheptadecanoyl)-D-gamma-glutamyl)amino-10-oxo-3,6,12,15-tetraoxa-9-azaheptadecanan-1-oyl)-L-lysyl-L-alpha-glutamyl-L-phenylalanyl-L-isoleucyl-L-alanyl-L-tryptophyl-L-leucyl-L-valyl-L-arginylglycyl-L-arginylglycine",
+    "L-histidyl-2-methylalanyl-L-alpha-glutamylglycyl-L-threonyl-L-phenylalanyl-L-threonyl-L-seryl-L-alpha-aspartyl-L-valyl-L-seryl-L-seryl-L-tyrosyl-L-leucyl-L-alpha-glutamylglycyl-L-glutaminyl-L-alanyl-L-alanyl-N(6)-((N-(17-carboxyheptadecanoyl)-D-gamma-glutamyl)amino-10-oxo-3,6,12,15-tetraoxa-9-azaheptadecanan-1-oyl)-L-lysyl-L-alpha-glutamyl-L-phenylalanyl-L-isoleucyl-L-alanyl-L-tryptophyl-L-leucyl-L-valyl-L-arginylglycyl-L-arginylglycine",
+    "NN 9535",
+    "NN-9535",
+    "NN9535",
+    "NNC 0113-0217",
+    "NNC-0113-0217",
+    "Ozempic",
+    "Rybelsus"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:910463-68-2",
+      "chemspider:34981134",
+      "drugbank:DB13928",
+      "kegg.drug:D10025",
+      "pubmed:24608440",
+      "pubmed:29431519",
+      "pubmed:30000039",
+      "pubmed:30741689",
+      "pubmed:31305048",
+      "pubmed:31486321",
+      "pubmed:31770356",
+      "pubmed:31801807",
+      "pubmed:31952996",
+      "pubmed:31975761",
+      "pubmed:32232400",
+      "pubmed:32476529",
+      "pubmed:32890462",
+      "pubmed:32921892",
+      "pubmed:33074557",
+      "pubmed:33108617",
+      "pubmed:33159658",
+      "pubmed:33179892",
+      "pubmed:33185364",
+      "pubmed:33222922",
+      "pubmed:33257834",
+      "pubmed:33354706",
+      "pubmed:33363667",
+      "pubmed:33417950",
+      "pubmed:33439580",
+      "pubmed:33439583",
+      "pubmed:33447122",
+      "pubmed:33565043",
+      "pubmed:33567185",
+      "pubmed:33591618",
+      "pubmed:33615400",
+      "pubmed:33627989",
+      "pubmed:33627997",
+      "pubmed:37541662",
+      "pubmed:38639998",
+      "pubmed:38673931",
+      "pubmed:38685990",
+      "pubmed:38938530",
+      "pubmed:39056124",
+      "pubmed:39763244",
+      "pubmed:39848681",
+      "pubmed:40009989",
+      "pubmed:40353578",
+      "wikipedia.en:Semaglutide"
+    ],
+    "generalized_empirical_formula": [
+      "C187H291N45O59"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:167574"
+    ],
+    "inchi_key_string": [
+      "DLSWIYLPEUIQAV-CCUURXOWSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C187H291N45O59/c1-18-105(10)154(180(282)208-108(13)159(261)216-133(86-114-89-200-119-50-40-39-49-117(114)119)170(272)218-129(82-102(4)5)171(273)228-152(103(6)7)178(280)215-121(53-44-72-199-186(192)193)162(264)201-91-141(242)209-120(52-43-71-198-185(190)191)161(263)204-94-151(257)258)230-172(274)131(83-111-45-33-31-34-46-111)219-167(269)126(64-69-149(253)254)214-166(268)122(51-41-42-70-195-144(245)98-290-79-78-289-76-74-197-145(246)99-291-80-77-288-75-73-196-139(240)66-61-127(183(285)286)211-140(241)54-37-29-27-25-23-21-19-20-22-24-26-28-30-38-55-146(247)248)212-158(260)107(12)206-157(259)106(11)207-165(267)125(60-65-138(189)239)210-142(243)92-202-163(265)123(62-67-147(249)250)213-168(270)128(81-101(2)3)217-169(271)130(85-113-56-58-116(238)59-57-113)220-175(277)135(95-233)223-177(279)137(97-235)224-179(281)153(104(8)9)229-174(276)134(88-150(255)256)221-176(278)136(96-234)225-182(284)156(110(15)237)231-173(275)132(84-112-47-35-32-36-48-112)222-181(283)155(109(14)236)227-143(244)93-203-164(266)124(63-68-148(251)252)226-184(287)187(16,17)232-160(262)118(188)87-115-90-194-100-205-115/h31-36,39-40,45-50,56-59,89-90,100-110,118,120-137,152-156,200,233-238H,18-30,37-38,41-44,51-55,60-88,91-99,188H2,1-17H3,(H2,189,239)(H,194,205)(H,195,245)(H,196,240)(H,197,246)(H,201,264)(H,202,265)(H,203,266)(H,204,263)(H,206,259)(H,207,267)(H,208,282)(H,209,242)(H,210,243)(H,211,241)(H,212,260)(H,213,270)(H,214,268)(H,215,280)(H,216,261)(H,217,271)(H,218,272)(H,219,269)(H,220,277)(H,221,278)(H,222,283)(H,223,279)(H,224,281)(H,225,284)(H,226,287)(H,227,244)(H,228,273)(H,229,276)(H,230,274)(H,231,275)(H,232,262)(H,247,248)(H,249,250)(H,251,252)(H,253,254)(H,255,256)(H,257,258)(H,285,286)(H4,190,191,198)(H4,192,193,199)/t105-,106-,107-,108-,109+,110+,118-,120-,121-,122-,123-,124-,125-,126-,127+,128-,129-,130-,131-,132-,133-,134-,135-,136-,137-,152-,153-,154-,155-,156-/m0/s1"
+    ],
+    "mass": [
+      "4113.641"
+    ],
+    "monoisotopic_mass": [
+      "4111.11538"
+    ],
+    "smiles_string": [
+      "CC[C@H](C)[C@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)[C@H](CCC(=O)O)NC(=O)[C@H](CCCCNC(=O)COCCOCCNC(=O)COCCOCCNC(=O)CC[C@@H](NC(=O)CCCCCCCCCCCCCCCCC(=O)O)C(=O)O)NC(=O)[C@H](C)NC(=O)[C@H](C)NC(=O)[C@H](CCC(N)=O)NC(=O)CNC(=O)[C@H](CCC(=O)O)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](Cc1ccc(O)cc1)NC(=O)[C@H](CO)NC(=O)[C@H](CO)NC(=O)[C@@H](NC(=O)[C@H](CC(=O)O)NC(=O)[C@H](CO)NC(=O)[C@@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)[C@@H](NC(=O)CNC(=O)[C@H](CCC(=O)O)NC(=O)C(C)(C)NC(=O)[C@@H](N)Cc1cncn1)[C@@H](C)O)[C@@H](C)O)C(C)C)C(=O)N[C@@H](C)C(=O)N[C@@H](Cc1cnc2ccccc12)C(=O)N[C@@H](CC(C)C)C(=O)N[C@H](C(=O)N[C@@H](CCCNC(=N)N)C(=O)NCC(=O)N[C@@H](CCCNC(=N)N)C(=O)NCC(=O)O)C(C)C"
+    ]
+  },
+  "label": "semaglutide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_167574",
+  "obo_id": "CHEBI:167574",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "910463-68-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=910463-68-2"
+    },
+    {
+      "database": "chemspider",
+      "id": "34981134",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.34981134.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB13928",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB13928"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D10025",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "24608440",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24608440/"
+    },
+    {
+      "database": "pubmed",
+      "id": "29431519",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/29431519/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30000039",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30000039/"
+    },
+    {
+      "database": "pubmed",
+      "id": "30741689",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/30741689/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31305048",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31305048/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31486321",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31486321/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31770356",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31770356/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31801807",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31801807/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31952996",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31952996/"
+    },
+    {
+      "database": "pubmed",
+      "id": "31975761",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/31975761/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32232400",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32232400/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32476529",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32476529/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32890462",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32890462/"
+    },
+    {
+      "database": "pubmed",
+      "id": "32921892",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/32921892/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33074557",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33074557/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33108617",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33108617/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33159658",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33159658/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33179892",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33179892/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33185364",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33185364/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33222922",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33222922/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33257834",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33257834/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33354706",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33354706/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33363667",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33363667/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33417950",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33417950/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33439580",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33439580/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33439583",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33439583/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33447122",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33447122/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33565043",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33565043/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33567185",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33567185/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33591618",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33591618/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33615400",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33615400/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33627989",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33627989/"
+    },
+    {
+      "database": "pubmed",
+      "id": "33627997",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/33627997/"
+    },
+    {
+      "database": "pubmed",
+      "id": "37541662",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/37541662/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38639998",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38639998/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38673931",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38673931/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38685990",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38685990/"
+    },
+    {
+      "database": "pubmed",
+      "id": "38938530",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/38938530/"
+    },
+    {
+      "database": "pubmed",
+      "id": "39056124",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39056124/"
+    },
+    {
+      "database": "pubmed",
+      "id": "39763244",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39763244/"
+    },
+    {
+      "database": "pubmed",
+      "id": "39848681",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/39848681/"
+    },
+    {
+      "database": "pubmed",
+      "id": "40009989",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40009989/"
+    },
+    {
+      "database": "pubmed",
+      "id": "40353578",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/40353578/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Semaglutide",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "L-histidyl-2-methylalanyl-L-alpha-glutamylglycyl-L-threonyl-L-phenylalanyl-L-threonyl-L-seryl-L-alpha-aspartyl-L-valyl-L-seryl-L-seryl-L-tyrosyl-L-leucyl-L-alpha-glutamylglycyl-L-glutaminyl-L-alanyl-L-alanyl-N(6)-((N-(17-carboxyheptadecanoyl)-D-gamma-glutamyl)amino-10-oxo-3,6,12,15-tetraoxa-9-azaheptadecanan-1-oyl)-L-lysyl-L-alpha-glutamyl-L-phenylalanyl-L-isoleucyl-L-alanyl-L-tryptophyl-L-leucyl-L-valyl-L-arginylglycyl-L-arginylglycine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-histidyl-2-methylalanyl-L-alpha-glutamylglycyl-L-threonyl-L-phenylalanyl-L-threonyl-L-seryl-L-alpha-aspartyl-L-valyl-L-seryl-L-seryl-L-tyrosyl-L-leucyl-L-alpha-glutamylglycyl-L-glutaminyl-L-alanyl-L-alanyl-N(6)-((N-(17-carboxyheptadecanoyl)-D-gamma-glutamyl)amino-10-oxo-3,6,12,15-tetraoxa-9-azaheptadecanan-1-oyl)-L-lysyl-L-alpha-glutamyl-L-phenylalanyl-L-isoleucyl-L-alanyl-L-tryptophyl-L-leucyl-L-valyl-L-arginylglycyl-L-arginylglycine",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NN 9535",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NN-9535",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NN9535",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NNC 0113-0217",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NNC-0113-0217",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ozempic",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Rybelsus",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_167574?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_167574/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_167574/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_167574/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_167574/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_167574/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_167574/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_167574/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

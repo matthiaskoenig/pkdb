@@ -1,0 +1,263 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7823",
+  "lang": "en",
+  "description": [
+    "A 1,4-benzodiazepinone that is 1,3-dihydro-2<em>H</em>-1,4-benzodiazepin-2-one substituted by a chloro group at position 7, a hydroxy group at position 3 and phenyl group at position 5."
+  ],
+  "synonyms": [
+    "(+-)-Oxazepam",
+    "(RS)-Oxazepam",
+    "7-chloro-3-hydroxy-5-phenyl-1,3-dihydro-2H-1,4-benzodiazepin-2-one",
+    "7-chloro-3-hydroxy-5-phenyl-1,3-dihydro-2H-1,4-benzodiazepin-2-one",
+    "Oxazepam",
+    "Serax",
+    "Tazepam"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:604-75-1",
+      "drugbank:DB00842",
+      "drugcentral:2015",
+      "hmdb:HMDB0014980",
+      "kegg.compound:C07359",
+      "kegg.drug:D00464",
+      "patent:CN1543961",
+      "pubmed:17456431",
+      "pubmed:9811432",
+      "reaxys:754065",
+      "wikipedia.en:Oxazepam"
+    ],
+    "generalized_empirical_formula": [
+      "C15H11ClN2O2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7823"
+    ],
+    "inchi_key_string": [
+      "ADIMAYPTOBDMTL-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C15H11ClN2O2/c16-10-6-7-12-11(8-10)13(9-4-2-1-3-5-9)18-15(20)14(19)17-12/h1-8,15,20H,(H,17,19)"
+    ],
+    "mass": [
+      "286.718"
+    ],
+    "monoisotopic_mass": [
+      "286.05091"
+    ],
+    "smiles_string": [
+      "O=C1Nc2ccc(Cl)cc2C(c2ccccc2)=NC1O"
+    ]
+  },
+  "label": "oxazepam",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7823",
+  "obo_id": "CHEBI:7823",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "604-75-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=604-75-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00842",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00842"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2015",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2015"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0014980",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014980"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07359",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00464",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "CN1543961",
+      "description": "patent",
+      "url": "https://www.google.com/patents/CN1543961"
+    },
+    {
+      "database": "pubmed",
+      "id": "17456431",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17456431/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9811432",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9811432/"
+    },
+    {
+      "database": "reaxys",
+      "id": "754065",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Oxazepam",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "7-chloro-3-hydroxy-5-phenyl-1,3-dihydro-2H-1,4-benzodiazepin-2-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-Oxazepam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(RS)-Oxazepam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7-chloro-3-hydroxy-5-phenyl-1,3-dihydro-2H-1,4-benzodiazepin-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Oxazepam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Serax",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tazepam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7823?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7823/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7823/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7823/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7823/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7823/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7823/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7823/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

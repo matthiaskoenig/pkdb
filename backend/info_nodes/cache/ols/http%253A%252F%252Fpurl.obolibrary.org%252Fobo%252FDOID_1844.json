@@ -1,0 +1,81 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_1844",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Mononeuritis upper limb"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD9CM:354.9",
+      "SNOMEDCT_US_2025_09_01:58850003",
+      "UMLS_CUI:C0154746"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:1844"
+    ]
+  },
+  "label": "mononeuritis of upper limb",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "DOID_1844",
+  "obo_id": "DOID:1844",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD9CM",
+      "id": "354.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "58850003",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/58850003"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0154746",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0154746"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1844?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1844/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1844/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1844/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1844/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1844/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1844/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

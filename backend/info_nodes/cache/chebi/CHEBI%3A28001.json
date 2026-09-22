@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:28001",
+  "name": "vancomycin",
+  "definition": "A complex glycopeptide from <em>Streptomyces orientalis</em>. It inhibits a specific step in the synthesis of the peptidoglycan layer in the Gram-positive bacteria <em>Staphylococcus aureus</em> and <em>Clostridium difficile</em>.",
+  "formula": "C66H75Cl2N9O24",
+  "charge": 0,
+  "mass": "1449.271",
+  "inchikey": "MYPYJXKWCTUITO-LYRMYLQWSA-N"
+}

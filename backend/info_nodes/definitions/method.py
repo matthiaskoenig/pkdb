@@ -50,7 +50,7 @@ METHOD_NODES: list[InfoNode] = [
         "This method is often used to determine the concentration of a "
         "chemical in a solution.",
         annotations=[
-            (BQB.IS, "chmo/https://bioregistry.io/CHMO:0000001"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0000001"),
         ],
         parents=["assay"],
         synonyms=[
@@ -76,7 +76,6 @@ METHOD_NODES: list[InfoNode] = [
     ),
     Method(
         sid="immunofluorescence",
-        name="immunofluorescence",
         description="Microscopic analysis of amount, structure and/or localization of "
         "specific proteins in cells or tissues by staining with "
         "fluorescently-labeled primary or secondary antibodies.",
@@ -108,19 +107,18 @@ METHOD_NODES: list[InfoNode] = [
         "free ligand concentration, the amount bound is directly proportional to the ligand binding affinity.",
         parents=["plasma binding measurement"],
         annotations=[
-            (BQB.IS, "chmo/https://bioregistry.io/CHMO:0002405"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0002405"),
         ],
         synonyms=["equilibrium-dialysis"],
     ),
     Method(
         sid="ultra-filtration",
-        name="ultra-filtration",
         description="A separation process whereby a solution containing a solute of molecular size significantly "
         "greater than that of the solvent molecule is removed from the solvent by the application of "
         "hydraulic pressure which forces only the solvent to flow through a suitable membrane",
         parents=["plasma binding measurement"],
         annotations=[
-            (BQB.IS, "chmo/https://bioregistry.io/CHMO:0001645"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0001645"),
         ],
         synonyms=[],
     ),
@@ -189,7 +187,6 @@ METHOD_NODES: list[InfoNode] = [
         name="radiochromatography/MS/MS",
         description="Radiochromatography/MS/MS technique, combining LC MS/MS with radiodetection.",
         parents=["assay"],
-        annotations=[],
     ),
     Method(
         sid="cc",
@@ -230,7 +227,7 @@ METHOD_NODES: list[InfoNode] = [
         "the inlet pressure is relatively high.",
         parents=["cc"],
         annotations=[
-            (BQB.IS, "chmo/https://bioregistry.io/CHMO:0001009"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0001009"),
         ],
     ),
     Method(
@@ -239,7 +236,6 @@ METHOD_NODES: list[InfoNode] = [
         label="High-performance liquid chromatography (HPLC) with electrochemical detector (ECD) ",
         description="Combination of HPLC with electrochemical detection.",
         parents=["hplc"],
-        annotations=[],
     ),
     Method(
         sid="hplc-fs",
@@ -257,7 +253,6 @@ METHOD_NODES: list[InfoNode] = [
         label="High-performance liquid chromatography (HPLC) with fluorescence spectrometer (FS) and with monobromobimane (MBB). ",
         description="Combination of HPLC with fluorescence spectrometer detection and with monobromobimane (MBB) as a marker.",
         parents=["hplc-fs"],
-        annotations=[],
     ),
     Method(
         sid="hplc-fs-opa",
@@ -265,7 +260,6 @@ METHOD_NODES: list[InfoNode] = [
         label="High-performance liquid chromatography (HPLC) with fluorescence spectrometer (FS) and with o-phthaldialdehyde (OPA). ",
         description="Combination of HPLC with fluorescence spectrometer detection and with o-phthaldialdehyde (OPA) as a marker.",
         parents=["hplc-fs"],
-        annotations=[],
     ),
     Method(
         sid="rp-hplc",
@@ -278,7 +272,7 @@ METHOD_NODES: list[InfoNode] = [
         "liquid chromatography, reversed-phase HPLC ",
         parents=["hplc"],
         annotations=[
-            (BQB.IS, "chmo/https://bioregistry.io/CHMO:0001259"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0001259"),
         ],
     ),
     Method(
@@ -295,7 +289,7 @@ METHOD_NODES: list[InfoNode] = [
         parents=["hplc"],
         annotations=[
             (BQB.IS, "https://bioregistry.io/MMO:0000537"),
-            (BQB.IS, "chmo/https://bioregistry.io/CHMO:0000796"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0000796"),
         ],
         synonyms=["HPLC-MS"],
     ),
@@ -308,7 +302,7 @@ METHOD_NODES: list[InfoNode] = [
         "in order to separate, identify, and quantify substances in a sample. ",
         parents=["hplc"],
         annotations=[
-            (BQB.IS, "chmo/https://bioregistry.io/CHMO:0002876"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0002876"),
             (BQB.IS, "NCIT:C120691"),
         ],
         synonyms=["HPLC-MS/MS"],
@@ -324,7 +318,7 @@ METHOD_NODES: list[InfoNode] = [
         "fine mist of charged droplets.",
         parents=["chromatography"],
         synonyms=["LC-ESI-MS"],
-        annotations=[(BQB.IS, "chmo/https://bioregistry.io/CHMO:0000751")],
+        annotations=[(BQB.IS, "https://bioregistry.io/CHMO:0000751")],
     ),
     Method(
         sid="rplc-esi-ms",
@@ -332,7 +326,6 @@ METHOD_NODES: list[InfoNode] = [
         label="Reversed‐phase liquid chromatography coupled to electrospray ionization and mass spectrometry",
         description="Reversed‐phase liquid chromatography coupled to electrospray ionization and mass spectrometry.",
         parents=["lc-esi-ms"],
-        annotations=[],
     ),
     Method(
         sid="ms",
@@ -355,7 +348,7 @@ METHOD_NODES: list[InfoNode] = [
         "preparation and separately to the standard gas.",
         parents=["ms"],
         annotations=[
-            (BQB.IS, "chmo/https://bioregistry.io/CHMO:0000887"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0000887"),
         ],
     ),
     Method(
@@ -380,7 +373,7 @@ METHOD_NODES: list[InfoNode] = [
         "ratio and relative abundance using two mass spectrometers in series.",
         parents=["lc-ms"],
         annotations=[
-            (BQB.IS, "CHMO:0000701"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0000701"),
         ],
     ),
     Method(
@@ -390,7 +383,7 @@ METHOD_NODES: list[InfoNode] = [
         description="A method where a sample mixture is first separated by ultra-performance liquid chromatography before being converted into ions which are characterised by their mass-to-charge ratio and relative abundance.",
         parents=["lc-ms"],
         annotations=[
-            (BQB.IS, "CHMO:0000715"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0000715"),
         ],
     ),
     Method(
@@ -399,7 +392,6 @@ METHOD_NODES: list[InfoNode] = [
         label="Ultra-performance liquid chromatography-tandem mass spectrometry (UPLC MS/MS)",
         description="A method where a sample mixture is first separated by ultra-performance liquid chromatography before tandem mass spectrometry characterises the ions by their mass-to-charge ratio and fragmentation.",
         parents=["uplc-ms"],
-        annotations=[],
     ),
     Method(
         sid="es-ms-ms",
@@ -413,7 +405,7 @@ METHOD_NODES: list[InfoNode] = [
         "mist of positively charged droplets.",
         parents=["ms"],
         annotations=[
-            (BQB.IS, "chmo/https://bioregistry.io/CHMO:0001109"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0001109"),
         ],
     ),
     Method(
@@ -428,7 +420,7 @@ METHOD_NODES: list[InfoNode] = [
         "abundance by mass spectrometry.",
         parents=["ms"],
         annotations=[
-            (BQB.IS_VERSION_OF, "chmo/https://bioregistry.io/CHMO:0000482"),
+            (BQB.IS_VERSION_OF, "https://bioregistry.io/CHMO:0000482"),
         ],
     ),
     Method(
@@ -443,7 +435,7 @@ METHOD_NODES: list[InfoNode] = [
         "abundance by two mass spectrometers in series.",
         parents=["hplc-esi-ms"],
         annotations=[
-            (BQB.IS_VERSION_OF, "chmo/https://bioregistry.io/CHMO:0000578"),
+            (BQB.IS_VERSION_OF, "https://bioregistry.io/CHMO:0000578"),
         ],
     ),
     Method(
@@ -455,7 +447,7 @@ METHOD_NODES: list[InfoNode] = [
         "than the entire mass spectrum.",
         parents=["ms"],
         annotations=[
-            (BQB.IS_VERSION_OF, "chmo/https://bioregistry.io/CHMO:0000571"),
+            (BQB.IS_VERSION_OF, "https://bioregistry.io/CHMO:0000571"),
         ],
     ),
     Method(
@@ -464,7 +456,6 @@ METHOD_NODES: list[InfoNode] = [
         label="GC/MS",
         description="Gas-liquid chromatographic/mass spectrometric technique.",
         parents=["ms"],
-        annotations=[],
     ),
     Method(
         sid="uv-spectrophotometry",
@@ -473,7 +464,7 @@ METHOD_NODES: list[InfoNode] = [
         "ultraviolet region (190–400 nm) resulting in electronic "
         "transitions within the sample.",
         parents=["assay"],
-        annotations=[(BQB.IS, "chmo/https://bioregistry.io/CHMO:0001253")],
+        annotations=[(BQB.IS, "https://bioregistry.io/CHMO:0001253")],
     ),
     Method(
         sid="lc-uv",
@@ -482,7 +473,6 @@ METHOD_NODES: list[InfoNode] = [
         description="A LC-UV system is a device system that has a liquid chromatograph and an ultra-violet "
         "detector component.",
         parents=["uv-spectrophotometry"],
-        annotations=[],
     ),
     Method(
         sid="hplc-uv",
@@ -490,7 +480,6 @@ METHOD_NODES: list[InfoNode] = [
         description="A HPLC-UV system is a device system that has a liquid chromatograph and an ultra-violet "
         "detector component.",
         parents=["lc-uv"],
-        annotations=[],
     ),
     Method(
         sid="hplc-ms-uv",
@@ -499,7 +488,6 @@ METHOD_NODES: list[InfoNode] = [
         "chromatograph and an mass spectrometry ultra-violet "
         "detector component after gas chromatochraphy",
         parents=["lc-uv"],
-        annotations=[],
     ),
     Method(
         sid="gc",
@@ -513,7 +501,7 @@ METHOD_NODES: list[InfoNode] = [
         parents=["chromatography"],
         annotations=[
             (BQB.IS, "omit/0009469"),
-            (BQB.IS, "chmo/https://bioregistry.io/CHMO:0000497"),
+            (BQB.IS, "https://bioregistry.io/CHMO:0000497"),
         ],
     ),
     Method(
@@ -522,7 +510,7 @@ METHOD_NODES: list[InfoNode] = [
         label="Gas-liquid chromatography (GLC)",
         description="Gas-liquid chromatography (GLC) is gas chromatography method where the stationary phase is a liquid.",
         parents=["gc"],
-        annotations=[(BQB.IS, "chmo/https://bioregistry.io/CHMO:0001016")],
+        annotations=[(BQB.IS, "https://bioregistry.io/CHMO:0001016")],
     ),
     Method(
         sid="cgc",
@@ -576,7 +564,6 @@ METHOD_NODES: list[InfoNode] = [
     ),
     Method(
         sid="sphygmomanometer",
-        name="sphygmomanometer",
         description="An instrument used for non-invasive determination of arterial "
         "blood pressure, generally consisting of an inflatable cuff and "
         "a pressure readout device, classically, a column of mercury.",
@@ -586,7 +573,6 @@ METHOD_NODES: list[InfoNode] = [
     ),
     Method(
         sid="scale",
-        name="scale",
         description="An instrument or machine for weighing.",
         parents=["assay"],
         annotations=[(BQB.IS, "https://bioregistry.io/MMO:0000217")],
@@ -594,7 +580,6 @@ METHOD_NODES: list[InfoNode] = [
     ),
     Method(
         sid="electrocardiography",
-        name="electrocardiography",
         description="A procedure that displays the electrical activity of the heart.",
         parents=["assay"],
         annotations=[(BQB.IS, "NCIT:C38053")],
@@ -618,7 +603,6 @@ METHOD_NODES: list[InfoNode] = [
     ),
     Method(
         sid="potentiometry",
-        name="potentiometry",
         description="An electroanalytical technique in which the electrical potential "
         "of a solution is measured to determine the composition of the "
         "sample, by comparing the constant potential of the reference "
@@ -631,7 +615,6 @@ METHOD_NODES: list[InfoNode] = [
     ),
     Method(
         sid="photoplethysmography",
-        name="photoplethysmography",
         description="A technique for assessing blood flow by placing an infrared emitting diode along with a sensor, "
         "on the surface of the skin over a blood vessel with the amount of light reflected back to the "
         "sensor being inversely proportional to the number of red blood cells flowing through the vessel.",
@@ -650,7 +633,6 @@ METHOD_NODES: list[InfoNode] = [
         description="Inductively coupled plasma atomic emission spectrometry. Used "
         "for instance for the detection of gadolinium in Gd-EOB-DTPA samples.",
         parents=["assay"],
-        annotations=[],
         synonyms=[],
     ),
     Method(
@@ -676,7 +658,6 @@ METHOD_NODES: list[InfoNode] = [
         label="Magnetic resonance imaging spin echo (MRI-SE)",
         description="MRI based on spin echo technique.",
         parents=["mri"],
-        annotations=[],
         synonyms=[],
     ),
     Method(
@@ -685,7 +666,6 @@ METHOD_NODES: list[InfoNode] = [
         label="Magnetic resonance imaging gradient echo (MRI-GRE)",
         description="MRI based on gradient technique.",
         parents=["mri"],
-        annotations=[],
         synonyms=[],
     ),
     Method(
@@ -714,11 +694,9 @@ METHOD_NODES: list[InfoNode] = [
     ),
     Method(
         sid="calculated",
-        name="calculated",
         description="Calculated from other measured variables. State formula in "
         "comments if available.",
         parents=["assay"],
-        annotations=[],
         synonyms=[],
     ),
     Method(

@@ -1,0 +1,100 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CMO_0000211",
+  "lang": "en",
+  "description": [
+    "Measurement of the clotting ability of fibrinogen, prothrombin, proaccelerin, proconvertin and Stuart factor, usually given in seconds to formation of clot after the addition of a tissue factor or thromboplastin."
+  ],
+  "synonyms": [
+    "prothrombin time measurement"
+  ],
+  "annotation": {
+    "created_by": [
+      "mshimoyama"
+    ],
+    "creation_date": [
+      "2010-06-10T11:21:04Z"
+    ],
+    "database_cross_reference": [
+      "EFO:0008390",
+      "VT:0002551"
+    ],
+    "has_obo_namespace": [
+      "clinical_measurement_ontology"
+    ],
+    "id": [
+      "CMO:0000211"
+    ]
+  },
+  "label": "prothrombin time",
+  "ontology_name": "cmo",
+  "ontology_prefix": "CMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/cmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CMO_0000211",
+  "obo_id": "CMO:0000211",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "Measurement of the clotting ability of fibrinogen, prothrombin, proaccelerin, proconvertin and Stuart factor, usually given in seconds to formation of clot after the addition of a tissue factor or thromboplastin.",
+      "oboXrefs": [
+        {
+          "database": "ISBN",
+          "id": "978-0323057479",
+          "description": null,
+          "url": "https://www.worldcat.org/search?q=bn%3A978-0323057479"
+        },
+        {
+          "database": "Mosby",
+          "id": "Mosbys_Manual_of_Diagnostic_and_Laboratory_Tests--4th_Ed",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0008390",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0008390"
+    },
+    {
+      "database": "VT",
+      "id": "0002551",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/VT_0002551"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000211?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000211/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000211/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000211/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000211/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000211/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000211/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

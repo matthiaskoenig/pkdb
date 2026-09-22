@@ -1,0 +1,114 @@
+[
+  {
+    "src_id": "2",
+    "src_compound_id": "DB00802"
+  },
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:2569"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL634"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "26256"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "51263"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "1N74HM2BS7"
+  },
+  {
+    "src_id": "4",
+    "src_compound_id": "7108"
+  },
+  {
+    "src_id": "49",
+    "src_compound_id": "PD009711"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0014940"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID9022570"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00440960"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00997113"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT00997126"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01199458"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01235637"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01350037"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01470170"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01518608"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT01805726"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02022488"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02267681"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT02358057"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT03359395"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05344911"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NCT05688384"
+  },
+  {
+    "src_id": "84",
+    "src_compound_id": "Alfentanil"
+  },
+  {
+    "src_id": "34",
+    "src_compound_id": "114"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "83450"
+  }
+]

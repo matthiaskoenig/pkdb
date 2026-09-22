@@ -1,0 +1,315 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_116278",
+  "lang": "en",
+  "description": [
+    "A fluoroquinolone antibiotic, used (generally as the hydrochloride salt) to treat bacterial infections including bronchitis and urinary tract infections. It is also used to prevent urinary tract infections prior to surgery."
+  ],
+  "synonyms": [
+    "(+-)-1-ethyl-6,8-difluoro-1,4-dihydro-7-(3-methyl-1-piperazinyl)-4-oxo-3-quinolinecarboxylic acid",
+    "1,4-Dihydro-6,8-difluoro-1-ethyl-7-(3-methyl-1-piperazinyl)-4-oxo-3-quinolinecarboxylic acid",
+    "1-ethyl-6,8-difluoro-7-(3-methylpiperazin-1-yl)-4-oxo-1,4-dihydroquinoline-3-carboxylic acid",
+    "1-ethyl-6,8-difluoro-7-(3-methylpiperazin-1-yl)-4-oxo-1,4-dihydroquinoline-3-carboxylic acid",
+    "LFLX",
+    "Lomefloxacine",
+    "Lomefloxacino",
+    "Lomefloxacinum",
+    "lomefloxacin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:4210041",
+      "cas:98079-51-7",
+      "drugbank:DB00978",
+      "drugcentral:1594",
+      "kegg.compound:C07078",
+      "kegg.drug:D02318",
+      "lincs.smallmolecule:LSM-5145",
+      "patent:DE3433924",
+      "patent:US4528287",
+      "pubmed:11195849",
+      "pubmed:3134843",
+      "pubmed:3348607",
+      "pubmed:3476021",
+      "wikipedia.en:Lomefloxacin"
+    ],
+    "generalized_empirical_formula": [
+      "C17H19F2N3O3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:6517"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:116278"
+    ],
+    "inchi_key_string": [
+      "ZEKZLJVOYLTDKK-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C17H19F2N3O3/c1-3-21-8-11(17(24)25)16(23)10-6-12(18)15(13(19)14(10)21)22-5-4-20-9(2)7-22/h6,8-9,20H,3-5,7H2,1-2H3,(H,24,25)"
+    ],
+    "mass": [
+      "351.353"
+    ],
+    "monoisotopic_mass": [
+      "351.13945"
+    ],
+    "smiles_string": [
+      "CCn1cc(C(=O)O)c(=O)c2cc(F)c(N3CCNC(C)C3)c(F)c21"
+    ]
+  },
+  "label": "lomefloxacin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_116278",
+  "obo_id": "CHEBI:116278",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "4210041",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "98079-51-7",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=98079-51-7"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00978",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00978"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1594",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1594"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07078",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D02318",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5145",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "DE3433924",
+      "description": "patent",
+      "url": "https://www.google.com/patents/DE3433924"
+    },
+    {
+      "database": "patent",
+      "id": "US4528287",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4528287"
+    },
+    {
+      "database": "pubmed",
+      "id": "11195849",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/11195849/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3134843",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3134843/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3348607",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3348607/"
+    },
+    {
+      "database": "pubmed",
+      "id": "3476021",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/3476021/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Lomefloxacin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1-ethyl-6,8-difluoro-7-(3-methylpiperazin-1-yl)-4-oxo-1,4-dihydroquinoline-3-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-1-ethyl-6,8-difluoro-1,4-dihydro-7-(3-methyl-1-piperazinyl)-4-oxo-3-quinolinecarboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,4-Dihydro-6,8-difluoro-1-ethyl-7-(3-methyl-1-piperazinyl)-4-oxo-3-quinolinecarboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-ethyl-6,8-difluoro-7-(3-methylpiperazin-1-yl)-4-oxo-1,4-dihydroquinoline-3-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "LFLX",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lomefloxacine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lomefloxacino",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lomefloxacinum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lomefloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_116278?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_116278/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_116278/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_116278/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_116278/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_116278/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_116278/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_116278/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

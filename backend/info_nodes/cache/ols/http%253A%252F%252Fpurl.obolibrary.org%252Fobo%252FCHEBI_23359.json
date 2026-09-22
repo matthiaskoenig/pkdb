@@ -1,0 +1,191 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_23359",
+  "lang": "en",
+  "description": [
+    "An  alkaloid that is a carbotricyclic compound comprising 5,6,7,9-tetrahydrobenzo[<em>a</em>]heptalene having four methoxy substituents at the 1-, 2-, 3- and 10-positions as well as an oxo group at the 9-position and an acetamido group at the 7-position. It has been isolated from the plants belonging to genus <em>Colchicum</em>."
+  ],
+  "synonyms": [
+    "N-(1,2,3,10-tetramethoxy-9-oxo-5,6,7,9-tetrahydrobenzo[a]heptalen-7-yl)acetamide",
+    "N-(1,2,3,10-tetramethoxy-9-oxo-5,6,7,9-tetrahydrobenzo[a]heptalen-7-yl)acetamide"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:54192-66-4",
+      "drugbank:DB01394",
+      "hmdb:HMDB0015466",
+      "lincs.smallmolecule:LSM-6449",
+      "pubmed:10680067",
+      "pubmed:24074178",
+      "pubmed:7200520",
+      "pubmed:9819133",
+      "reaxys:2228812"
+    ],
+    "generalized_empirical_formula": [
+      "C22H25NO6"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:23359"
+    ],
+    "inchi_key_string": [
+      "IAKHMKGGTNLKSZ-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C22H25NO6/c1-12(24)23-16-8-6-13-10-19(27-3)21(28-4)22(29-5)20(13)14-7-9-18(26-2)17(25)11-15(14)16/h7,9-11,16H,6,8H2,1-5H3,(H,23,24)"
+    ],
+    "mass": [
+      "399.443"
+    ],
+    "monoisotopic_mass": [
+      "399.16819"
+    ],
+    "smiles_string": [
+      "COc1cc2c(c(OC)c1OC)-c1ccc(OC)c(=O)cc1C(NC(C)=O)CC2"
+    ]
+  },
+  "label": "colchicine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_23359",
+  "obo_id": "CHEBI:23359",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "54192-66-4",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=54192-66-4"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB01394",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB01394"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0015466",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015466"
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-6449",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "10680067",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/10680067/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24074178",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24074178/"
+    },
+    {
+      "database": "pubmed",
+      "id": "7200520",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/7200520/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9819133",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9819133/"
+    },
+    {
+      "database": "reaxys",
+      "id": "2228812",
+      "description": "reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-(1,2,3,10-tetramethoxy-9-oxo-5,6,7,9-tetrahydrobenzo[a]heptalen-7-yl)acetamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(1,2,3,10-tetramethoxy-9-oxo-5,6,7,9-tetrahydrobenzo[a]heptalen-7-yl)acetamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_23359?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_23359/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_23359/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_23359/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_23359/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_23359/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_23359/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_23359/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_23359/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_23359/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_23359/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_23359/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

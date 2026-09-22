@@ -1,0 +1,400 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_41423",
+  "lang": "en",
+  "description": [
+    "A member of the class of pyrazoles that is 1<em>H</em>-pyrazole which is substituted at positions 1, 3 and 5 by 4-sulfamoylphenyl, trifluoromethyl and <em>p</em>-tolyl groups, respectively. A cyclooxygenase-2 inhibitor, it is used in the treatment of arthritis."
+  ],
+  "synonyms": [
+    "4-[5-(4-methylphenyl)-3-(trifluoromethyl)-1H-pyrazol-1-yl]benzenesulfonamide",
+    "4-[5-(4-methylphenyl)-3-(trifluoromethyl)-1H-pyrazol-1-yl]benzenesulfonamide",
+    "Celebrex",
+    "Celecoxib",
+    "celecoxib",
+    "celecoxibum",
+    "p-(5-p-Tolyl-3-(trifluoromethyl)pyrazol-1-yl)benzenesulfonamide"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:169590-42-5",
+      "cas:184007-95-2",
+      "chemspider:2562",
+      "drugbank:DB00482",
+      "drugcentral:568",
+      "foodb.food:FDB023586",
+      "hmdb:HMDB0005014",
+      "kegg.compound:C07589",
+      "kegg.drug:D00567",
+      "lincs.smallmolecule:LSM-2032",
+      "pdb-ccd:CEL",
+      "pubmed:14736236",
+      "pubmed:16580269",
+      "pubmed:17983259",
+      "pubmed:18405470",
+      "pubmed:19137124",
+      "pubmed:19203891",
+      "pubmed:19955429",
+      "pubmed:20709553",
+      "pubmed:21348927",
+      "pubmed:21955617",
+      "pubmed:22141388",
+      "pubmed:22419293",
+      "pubmed:22971036",
+      "pubmed:23296687",
+      "pubmed:23506230",
+      "pubmed:27756840",
+      "pubmed:28166217",
+      "reaxys:8280770",
+      "wikipedia.en:Celecoxib"
+    ],
+    "generalized_empirical_formula": [
+      "C17H14F3N3O2S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:3520",
+      "CHEBI:41418"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:41423"
+    ],
+    "inchi_key_string": [
+      "RZEKVGVHFLEQIL-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C17H14F3N3O2S/c1-11-2-4-12(5-3-11)15-10-16(17(18,19)20)22-23(15)13-6-8-14(9-7-13)26(21,24)25/h2-10H,1H3,(H2,21,24,25)"
+    ],
+    "mass": [
+      "381.379"
+    ],
+    "monoisotopic_mass": [
+      "381.07588"
+    ],
+    "smiles_string": [
+      "Cc1ccc(-c2cc(C(F)(F)F)nn2-c2ccc(S(N)(=O)=O)cc2)cc1"
+    ]
+  },
+  "label": "celecoxib",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_41423",
+  "obo_id": "CHEBI:41423",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "169590-42-5",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=169590-42-5"
+    },
+    {
+      "database": "cas",
+      "id": "184007-95-2",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=184007-95-2"
+    },
+    {
+      "database": "chemspider",
+      "id": "2562",
+      "description": "chemspider",
+      "url": "http://www.chemspider.com/Chemical-Structure.2562.html"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00482",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00482"
+    },
+    {
+      "database": "drugcentral",
+      "id": "568",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/568"
+    },
+    {
+      "database": "foodb.food",
+      "id": "FDB023586",
+      "description": "foodb.food",
+      "url": null
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0005014",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0005014"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07589",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00567",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-2032",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "CEL",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "14736236",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/14736236/"
+    },
+    {
+      "database": "pubmed",
+      "id": "16580269",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/16580269/"
+    },
+    {
+      "database": "pubmed",
+      "id": "17983259",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/17983259/"
+    },
+    {
+      "database": "pubmed",
+      "id": "18405470",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18405470/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19137124",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19137124/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19203891",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19203891/"
+    },
+    {
+      "database": "pubmed",
+      "id": "19955429",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/19955429/"
+    },
+    {
+      "database": "pubmed",
+      "id": "20709553",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/20709553/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21348927",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21348927/"
+    },
+    {
+      "database": "pubmed",
+      "id": "21955617",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/21955617/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22141388",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22141388/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22419293",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22419293/"
+    },
+    {
+      "database": "pubmed",
+      "id": "22971036",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/22971036/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23296687",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23296687/"
+    },
+    {
+      "database": "pubmed",
+      "id": "23506230",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/23506230/"
+    },
+    {
+      "database": "pubmed",
+      "id": "27756840",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/27756840/"
+    },
+    {
+      "database": "pubmed",
+      "id": "28166217",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/28166217/"
+    },
+    {
+      "database": "reaxys",
+      "id": "8280770",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Celecoxib",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-[5-(4-methylphenyl)-3-(trifluoromethyl)-1H-pyrazol-1-yl]benzenesulfonamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-[5-(4-methylphenyl)-3-(trifluoromethyl)-1H-pyrazol-1-yl]benzenesulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Celebrex",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Celecoxib",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "celecoxib",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "celecoxibum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "who_mednet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "p-(5-p-Tolyl-3-(trifluoromethyl)pyrazol-1-yl)benzenesulfonamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_41423?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_41423/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_41423/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_41423/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_41423/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_41423/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_41423/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_41423/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

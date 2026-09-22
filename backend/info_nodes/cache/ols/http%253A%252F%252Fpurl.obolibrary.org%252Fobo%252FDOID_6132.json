@@ -1,0 +1,228 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_6132",
+  "lang": "en",
+  "description": [
+    "A bronchial disease that is an inflammation of the bronchial tubes. It is caused by bacteria and viruses. The disease has_symptom cough with mucus, has_symptom shortness of breath, has_symptom low fever and has_symptom chest tightness."
+  ],
+  "synonyms": [
+    "CI - Chest infection",
+    "Chest infection",
+    "acute Bronchitis",
+    "acute bronchitis and bronchiolitis",
+    "chest cold",
+    "chronic bronchitis",
+    "recurrent wheezy bronchitis"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "ICD10CM:J20",
+      "ICD10CM:J40",
+      "ICD10CM:J42",
+      "ICD9CM:466.0",
+      "ICD9CM:490",
+      "ICD9CM:491",
+      "MESH:D001991",
+      "MESH:D029481",
+      "NCI:C26722",
+      "NCI:C26932",
+      "NCI:C2911",
+      "SNOMEDCT_US_2025_09_01:155512004",
+      "SNOMEDCT_US_2025_09_01:155566007",
+      "SNOMEDCT_US_2025_09_01:32398004",
+      "UMLS_CUI:C0006277",
+      "UMLS_CUI:C0008677",
+      "UMLS_CUI:C0149514"
+    ],
+    "has_alternative_id": [
+      "DOID:13503",
+      "DOID:13504",
+      "DOID:13707",
+      "DOID:13728",
+      "DOID:13729",
+      "DOID:5049",
+      "DOID:6130",
+      "DOID:6131",
+      "DOID:9982",
+      "DOID:9983"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:6132"
+    ]
+  },
+  "label": "bronchitis",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "DOID_6132",
+  "obo_id": "DOID:6132",
+  "in_subset": [
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A bronchial disease that is an inflammation of the bronchial tubes. It is caused by bacteria and viruses. The disease has_symptom cough with mucus, has_symptom shortness of breath, has_symptom low fever and has_symptom chest tightness.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "J20",
+      "description": null,
+      "url": "https://www.icd10data.com/search?s=J20"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "J40",
+      "description": null,
+      "url": "https://www.icd10data.com/search?s=J40"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "J42",
+      "description": null,
+      "url": "https://www.icd10data.com/search?s=J42"
+    },
+    {
+      "database": "ICD9CM",
+      "id": "466.0",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "490",
+      "description": null,
+      "url": "http://icd9cm.chrisendres.com/index.php?action=search&srchtext=490"
+    },
+    {
+      "database": "ICD9CM",
+      "id": "491",
+      "description": null,
+      "url": "http://icd9cm.chrisendres.com/index.php?action=search&srchtext=491"
+    },
+    {
+      "database": "MESH",
+      "id": "D001991",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D001991"
+    },
+    {
+      "database": "MESH",
+      "id": "D029481",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D029481"
+    },
+    {
+      "database": "NCI",
+      "id": "C26722",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C26722"
+    },
+    {
+      "database": "NCI",
+      "id": "C26932",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C26932"
+    },
+    {
+      "database": "NCI",
+      "id": "C2911",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C2911"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "155512004",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/155512004"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "155566007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/155566007"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "32398004",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/32398004"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0006277",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0006277"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0008677",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0008677"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0149514",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0149514"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6132?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6132/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6132/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6132/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6132/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6132/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6132/graph"
+    },
+    "has_symptom": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6132/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002452"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

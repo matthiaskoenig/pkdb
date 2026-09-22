@@ -1,0 +1,100 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CMO_0000003",
+  "lang": "en",
+  "description": [
+    "Measurement of the pressure, or force per area, exerted by circulating blood against the walls of the blood vessels. The pressure is dependent on the energy of the heart action, elasticity of the vessel walls and volume and viscosity of the blood."
+  ],
+  "synonyms": [
+    "Not4Curation",
+    "blood pressure"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "EFO:0004325"
+    ],
+    "has_obo_namespace": [
+      "clinical_measurement_ontology"
+    ],
+    "id": [
+      "CMO:0000003"
+    ]
+  },
+  "label": "blood pressure measurement",
+  "ontology_name": "cmo",
+  "ontology_prefix": "CMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/cmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CMO_0000003",
+  "obo_id": "CMO:0000003",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "Measurement of the pressure, or force per area, exerted by circulating blood against the walls of the blood vessels. The pressure is dependent on the energy of the heart action, elasticity of the vessel walls and volume and viscosity of the blood.",
+      "oboXrefs": [
+        {
+          "database": "Berne_and_Levy",
+          "id": "Berne_and_Levy_Physiology--6th_Ed",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "ISBN",
+          "id": "978-0323073622",
+          "description": null,
+          "url": "https://www.worldcat.org/search?q=bn%3A978-0323073622"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0004325",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0004325"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000003?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000003/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000003/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000003/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000003/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000003/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000003/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000003/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000003/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000003/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000003/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

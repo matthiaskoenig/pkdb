@@ -1,0 +1,34 @@
+[
+  {
+    "src_id": "7",
+    "src_compound_id": "CHEBI:63800"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL1710849"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "11720799"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "29549743"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "107669"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0006468"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID90866753"
+  },
+  {
+    "src_id": "51",
+    "src_compound_id": "FDB023927"
+  }
+]
