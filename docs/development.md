@@ -14,7 +14,7 @@ uv run --project backend pre-commit install
 docker compose -f compose.test.yaml up -d --wait
 export PKDB_TEST_DATABASE_URL=postgresql+psycopg://pkdb_test:local-test-only@127.0.0.1:15439/pkdb_test
 uv run --project backend pytest backend/tests -q -x
-uv run --project backend pytest tools/backend_migration -q -x
+uv run --project backend python -m pytest tools/backend_migration -q -x
 uv run --project backend ruff check .
 uv run --project backend ruff format --check .
 uv run --project backend ty check --project backend
