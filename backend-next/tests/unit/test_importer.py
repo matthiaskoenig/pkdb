@@ -189,3 +189,19 @@ def test_nonfinite_in_memory_bundle_reports_source(valid_bundle):
     assert issue.source is not None
     assert issue.source.path == ("outputset", "outputs", 0, "mean")
     assert error.value.report.error_count == 1
+
+
+def test_external_characteristic_alias_preserves_values_and_source(valid_bundle):
+    from copy import deepcopy
+
+    from pkdb.importers.folder import parse_bundle
+
+    original = parse_bundle(valid_bundle)
+    changed = valid_bundle.model_copy(deep=True)
+    group = changed.study["groupset"]["groups"][0]
+    group["characteristica_ex"] = group.pop("characteristica")
+    before = deepcopy(changed.study)
+    actual = parse_bundle(changed)
+    assert actual.groups == original.groups
+    assert actual.source_digest != original.source_digest
+    assert changed.study == before

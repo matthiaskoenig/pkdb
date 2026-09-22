@@ -7,7 +7,11 @@ import pint
 
 from pkdb.domain.datasets import add_generated_timecourses, compile_datasets
 from pkdb.domain.normalization import normalize_record
-from pkdb.domain.pharmacokinetics import build_timecourses, derive_pk
+from pkdb.domain.pharmacokinetics import (
+    DEFAULT_PK_DOSE_UNITS,
+    build_timecourses,
+    derive_pk,
+)
 from pkdb.domain.statistics import complete_statistics
 from pkdb.domain.units import ureg
 from pkdb.domain.vocabulary import Vocabulary
@@ -24,7 +28,7 @@ from pkdb.schemas.validation import (
     ValidationReport,
 )
 
-PROCESSING_VERSION = "2"
+PROCESSING_VERSION = "3"
 NUMERIC_FIELDS = ("value", "mean", "median", "min", "max", "sd", "se", "cv")
 
 
@@ -371,7 +375,12 @@ def prepare_study(
             and interventions[name].substance == course.points[0].substance
         ]
         dose = candidates[0] if len(candidates) == 1 else None
-        for generated in derive_pk(course, dose):
+        restricted = rules.get("restricted dosing")
+        for generated in derive_pk(
+            course,
+            dose,
+            dose_units=restricted.units if restricted else DEFAULT_PK_DOSE_UNITS,
+        ):
             rule = rules.get(generated.measurement_type)
             if rule is None:
                 issue(

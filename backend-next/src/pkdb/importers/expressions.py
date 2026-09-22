@@ -78,3 +78,34 @@ def bind_columns(template, row: dict, source: SourceLocation | None = None):
             fail("unknown_column", f"Unknown column: {parts[1]}", source)
         return clean(row[parts[1]])
     return clean(template)
+
+
+EXTERNAL_ALIASES = {
+    "individual_exs": "individuals",
+    "individual_ex": "individual",
+    "intervention_exs": "interventions",
+    "group_exs": "groups",
+    "characteristica_ex": "characteristica",
+    "parent_ex": "parent",
+    "output_exs": "outputs",
+}
+
+
+def external_aliases(value, path=()):
+    if isinstance(value, list):
+        return [
+            external_aliases(item, (*path, index)) for index, item in enumerate(value)
+        ]
+    if not isinstance(value, dict):
+        return value
+    result = {}
+    for key, child in value.items():
+        field = EXTERNAL_ALIASES.get(key, key)
+        if field in result:
+            fail(
+                "duplicate_alias",
+                f"Multiple fields map to {field}",
+                SourceLocation(file="study.json", path=path),
+            )
+        result[field] = external_aliases(child, (*path, key))
+    return result

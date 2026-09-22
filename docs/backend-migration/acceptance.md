@@ -71,3 +71,26 @@ are not complete. The legacy backend remains unchanged and is not retired.
 - Remaining account/read details, analysis exports, legacy draft adapters, CLI,
   full rebuild, performance, image/restore/browser gates and final review remain
   outstanding. This checkpoint does not authorize cutover.
+
+## Corpus and unchanged-uploader checkpoint
+
+- 290 regular tests pass on each Python 3.13/3.14. Four real-study
+  publication/public/analysis/scatter gates pass on 3.13.
+- The full read-only scientific audit accounts for all 1,579 source folders:
+  1,047 validate, 532 return structured validation errors, zero unexpected
+  exceptions. These are validation outcomes, not accepted exclusions or a
+  successful complete rebuild. Remaining failures require compatibility review
+  and explicit source dispositions.
+- Restored external-field aliases and subject/intervention image provenance.
+  Restricted-dose eligibility follows the legacy calculation code; unsupported
+  volume/rate/area doses retain dose-independent PK results. All-zero curves
+  return source-located errors rather than crashing.
+- The unchanged uploader publishes copied Frost2014 data through actual local
+  HTTP: 782 measurements, 70 individuals and four normalized curves (eight
+  canonical reported/normalized curves). Original source hashes remain unchanged.
+  Run `corpus_tests/test_legacy_client.py` with `PKDB_LEGACY_CLIENT_PYTHON`,
+  `PKDB_LEGACY_CLIENT_ROOT`, `PKDB_STUDY_CORPUS` and `PKDB_TEST_DATABASE_URL`.
+- Legacy Hall1976 replay fails at its string-based unit-dimension lookup during
+  AUC normalization. This is not evidence of complete Hall1976 legacy parity.
+- Full compatibility coverage, corpus dispositions, matched performance,
+  container/restore/browser gates and final branch review remain outstanding.

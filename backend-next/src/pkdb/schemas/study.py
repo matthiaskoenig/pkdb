@@ -90,6 +90,7 @@ class ScientificRecord(Notes):
 
 
 class Group(Notes):
+    image: str | None = None
     key: RecordKey
     name: Identifier
     count: Annotated[int, Field(strict=True, ge=0)]
@@ -99,6 +100,7 @@ class Group(Notes):
 
 
 class Individual(Notes):
+    image: str | None = None
     key: RecordKey
     name: Identifier
     group: str | None = None
@@ -107,6 +109,7 @@ class Individual(Notes):
 
 
 class Intervention(ScientificRecord):
+    image: str | None = None
     name: Identifier
     time: Number | str | None = None
     time_end: Number | None = None

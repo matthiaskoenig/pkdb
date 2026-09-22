@@ -239,6 +239,7 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                     key=row.key,
                     name=row.name,
                     count=row.count,
+                    image=row.image,
                     parent=group_names.get(row.parent_id),
                     source=row.source,
                     characteristica=group_characteristics[row.id],
@@ -251,6 +252,7 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                     key=row.key,
                     name=row.name,
                     group=group_names.get(row.group_id),
+                    image=row.image,
                     source=row.source,
                     characteristica=individual_characteristics[row.id],
                 )
@@ -261,6 +263,7 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                     **science(row, intervention_keys),
                     name=row.name,
                     time=row.time_text if row.time_text is not None else row.time,
+                    image=row.image,
                     time_end=row.time_end,
                     time_unit=row.time_unit,
                     route=vocab.get(row.route),

@@ -8,7 +8,12 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from pkdb.importers.expressions import bind_columns, clean, split_entry
+from pkdb.importers.expressions import (
+    bind_columns,
+    clean,
+    external_aliases,
+    split_entry,
+)
 from pkdb.importers.structure import entry_structure, list_value, validate_json_tree
 from pkdb.importers.workbook import read_table
 from pkdb.schemas.source import SourceBundle, SourceLocation
@@ -151,7 +156,7 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
         fail("row_limit", "Row limit must be positive")
     validate_json_tree(bundle.study, "study.json")
     validate_json_tree(bundle.reference, "reference.json")
-    data = deepcopy(bundle.study)
+    data = external_aliases(bundle.study)
     unexpected = (
         data.keys() - META_KEYS - SECTIONS.keys() - {"sid", "reference", "files"}
     )
@@ -220,7 +225,9 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
     expanded = 0
     digest = hashlib.sha256(
         json.dumps(
-            {"study": data, "reference": reference}, sort_keys=True, allow_nan=False
+            {"study": bundle.study, "reference": reference},
+            sort_keys=True,
+            allow_nan=False,
         ).encode()
     )
     for name, file in sorted(bundle.files.items()):

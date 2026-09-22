@@ -6,6 +6,7 @@ from pkdb.db.models.base import Base, Owned, Scientific
 
 class Group(Owned, Base):
     __tablename__ = "groups"
+    image: Mapped[str | None]
     name: Mapped[str]
     count: Mapped[int]
     parent_id: Mapped[int | None] = mapped_column(index=True)
@@ -26,6 +27,7 @@ class Group(Owned, Base):
 
 class Individual(Owned, Base):
     __tablename__ = "individuals"
+    image: Mapped[str | None]
     name: Mapped[str]
     group_id: Mapped[int | None] = mapped_column(index=True)
     __table_args__ = (

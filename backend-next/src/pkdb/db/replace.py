@@ -120,7 +120,7 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
         session,
         g.Group,
         [
-            dict(**owned(group), name=group.name, count=group.count)
+            dict(**owned(group), name=group.name, count=group.count, image=group.image)
             for group in study.groups
         ],
     )
@@ -139,6 +139,7 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
             dict(
                 **owned(individual),
                 name=individual.name,
+                image=individual.image,
                 group_id=group_names.get(individual.group),
             )
             for individual in study.individuals
@@ -173,6 +174,7 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
         row = science(record)
         row.update(
             name=record.name,
+            image=record.image,
             time=record.time if isinstance(record.time, (int, float)) else None,
             time_text=record.time if isinstance(record.time, str) else None,
             time_end=record.time_end,

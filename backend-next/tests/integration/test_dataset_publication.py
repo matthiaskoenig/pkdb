@@ -81,3 +81,24 @@ def test_reported_and_normalized_outputs_share_source_identity(
         assert len(records) == 2
         assert records[0].source_id is not None
         assert records[0].source_id == records[1].source_id
+
+
+def test_subject_and_intervention_image_provenance_survives_publication(
+    ingestion_context, valid_bundle, session_factory, tmp_path
+):
+    service, principal = ingestion_context
+    image = tmp_path / "Example_Fig1.png"
+    image.write_bytes(b"source figure")
+    valid_bundle.files[image.name] = image
+    valid_bundle.study["groupset"]["groups"][0]["image"] = "Fig1"
+    valid_bundle.study["individualset"] = {
+        "individuals": [{"name": "person", "group": "all", "image": "Fig1"}]
+    }
+    valid_bundle.study["interventionset"]["interventions"][0]["image"] = "Fig1"
+    prepared = service.validate(valid_bundle, principal).study
+    result = service.replace(valid_bundle, principal)
+    restored = read_study(result.sid, principal, session_factory)
+    assert restored == prepared
+    assert restored.groups[0].image == image.name
+    assert restored.individuals[0].image == image.name
+    assert all(record.image == image.name for record in restored.interventions)

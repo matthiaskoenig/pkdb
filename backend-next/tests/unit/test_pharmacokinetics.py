@@ -151,3 +151,44 @@ def test_same_label_across_source_templates_forms_one_course(exponential_course)
 def test_single_point_cannot_form_a_timecourse(exponential_course):
     with pytest.raises(StudyValidationError):
         build_timecourses(exponential_course.points[:1])
+
+
+@pytest.mark.parametrize(
+    "unit,statistics", [("ml", {"value": 40.0}), ("mg", {"mean": 40.0})]
+)
+def test_unsupported_or_non_scalar_dose_preserves_dose_independent_pk(
+    exponential_course, unit, statistics
+):
+    from pkdb.schemas.study import Intervention
+
+    dose = Intervention(
+        key="dose",
+        name="dose",
+        measurement_type="dosing",
+        substance="drug",
+        application="single dose",
+        statistics=Statistics(**statistics),
+        unit=unit,
+        time=0,
+        time_unit="h",
+    )
+    expected = derive_pk(exponential_course)
+    actual = derive_pk(exponential_course, dose)
+    assert actual == expected
+    assert not {"clearance", "vd", "vd_ss"} & {
+        record.measurement_type for record in actual
+    }
+
+
+def test_all_zero_curve_is_a_source_located_validation_error(exponential_course):
+    from pkdb.schemas.source import SourceLocation
+
+    for point in exponential_course.points:
+        point.statistics.mean = 0
+        point.source = SourceLocation(file="curve.tsv", row=2)
+    with pytest.raises(StudyValidationError) as error:
+        derive_pk(exponential_course)
+    assert error.value.report.issues[0].code == "pk_zero_curve"
+    source = error.value.report.issues[0].source
+    assert source is not None and source.file == "curve.tsv"
+    assert all(point.statistics.mean == 0 for point in exponential_course.points)

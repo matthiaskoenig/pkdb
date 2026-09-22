@@ -21,6 +21,8 @@ CONSISTENT_FIELDS = (
     "time_unit",
     "interventions",
 )
+DEFAULT_PK_DOSE_UNITS = ("g", "g/kg", "mol", "mol/kg")
+
 PK_FIELDS = {
     "auc": "auc_end",
     "aucinf": "auc_inf",
@@ -75,7 +77,10 @@ def build_timecourses(points: list[Measurement]) -> list[Timecourse]:
 
 
 def derive_pk(
-    course: Timecourse, dose: Intervention | None = None
+    course: Timecourse,
+    dose: Intervention | None = None,
+    *,
+    dose_units=DEFAULT_PK_DOSE_UNITS,
 ) -> list[Measurement]:
     from pkdb_analysis.pk import pharmacokinetics
 
@@ -102,19 +107,26 @@ def derive_pk(
         return []
     values = [getattr(point.statistics, statistic) for point in points]
     numeric = np.array([np.nan if value is None else value for value in values])
+    if not np.any(numeric[np.isfinite(numeric)]):
+        fail(
+            "pk_zero_curve",
+            "PK parameters cannot be calculated from an all-zero concentration curve",
+            first.source,
+        )
     time = ureg.Quantity(np.array(times, dtype=float), first.time_unit)
     concentration = ureg.Quantity(numeric, first.unit)
     substance = first.substance or "substance"
     if dose and dose.application == "single dose" and dose.substance == first.substance:
-        magnitude = dose.statistics.value
-        if magnitude is None or not dose.unit:
-            fail(
-                "missing_dose",
-                "Single-dose PK requires a numeric dose and unit",
-                dose.source,
-            )
-        dose_quantity = ureg.Quantity(magnitude, dose.unit)
-        if isinstance(dose.time, (int, float)) and dose.time_unit:
+        # Legacy PK accepts only restricted dosing dimensions. Other dosing
+        # units and absent scalar values still permit dose-independent outputs.
+        eligible = bool(dose.unit) and any(
+            ureg.Unit(dose.unit).dimensionality == ureg.Unit(unit).dimensionality
+            for unit in dose_units
+        )
+        dose_quantity = ureg.Quantity(np.nan, "mg")
+        if eligible and dose.statistics.value is not None:
+            dose_quantity = ureg.Quantity(dose.statistics.value, dose.unit)
+        if eligible and isinstance(dose.time, (int, float)) and dose.time_unit:
             calculated = pharmacokinetics.TimecoursePK(
                 time=time,
                 concentration=concentration,

@@ -11,6 +11,7 @@ from pkdb.db.models.base import Base, Owned, Scientific
 
 class Intervention(Owned, Scientific, Base):
     __tablename__ = "interventions"
+    image: Mapped[str | None]
     name: Mapped[str]
     time: Mapped[float | None]
     time_text: Mapped[str | None]
