@@ -1,6 +1,6 @@
 # Frontend modernization and researcher search experience
 
-Date: 2026-09-23. Status: Written specification awaiting user review. This document describes intended behavior, not completed implementation.
+Date: 2026-09-23. Status: Implementation authorized by the user and implemented on `feat/frontend-modernization`. Verification and deployment limitations are recorded in [the implementation evidence](https://github.com/matthiaskoenig/pkdb/blob/develop/frontend/docs/modernization-verification.md).
 
 ## 1. Intent and agreed scope
 

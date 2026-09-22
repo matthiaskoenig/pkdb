@@ -145,19 +145,24 @@ jobs:
         if: always()
         run: docker compose down -v
 
+  frontend:
+    uses: ./.github/workflows/frontend.yml
+
   tests:
     name: tests
-    needs: [python, compose]
+    needs: [python, compose, frontend]
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Require Python 3.14 and local Docker setup
+      - name: Require backend, frontend, and local Docker setup
         env:
           PYTHON_RESULT: ${{ needs.python.result }}
           COMPOSE_RESULT: ${{ needs.compose.result }}
+          FRONTEND_RESULT: ${{ needs.frontend.result }}
         run: |
           test "$PYTHON_RESULT" = success
           test "$COMPOSE_RESULT" = success
+          test "$FRONTEND_RESULT" = success
 
   release:
     # the backend is not published on PyPI, a release is the tag with its

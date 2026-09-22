@@ -1,0 +1,380 @@
+{
+  "verified_on": "2026-09-23",
+  "timezone": "Europe/Berlin",
+  "verification": "Read-only public registry metadata and Node release index; no dependency installation or application compatibility test performed.",
+  "node": {
+    "source": "https://nodejs.org/dist/index.json",
+    "version": "v24.21.0",
+    "date": "2026-09-07",
+    "lts": "Krypton",
+    "npm": "11.19.0"
+  },
+  "decisions": {
+    "typescript": "6.0.3 instead of latest 7.0.2 because typescript-eslint 8.70.1 requires <6.1.0.",
+    "node_types": "24.13.6 matches selected Node 24, rather than latest Node 26 declarations.",
+    "plotly": "4.1.1 runtime with a narrow project-owned adapter declaration; do not falsely claim @types/plotly.js 3.0.13 types the full v4 API.",
+    "vega": "Do not install: currently only an unreachable component consumes this stack. Confirm reachability before removal.",
+    "compiler_versions": "Vue compiler packages should match vue 3.5.43; verify exact compiler packages during the implementation resolver gate."
+  },
+  "packages": [
+    {
+      "package": "vue",
+      "selected_version": "3.5.43",
+      "source": "https://registry.npmjs.org/vue/3.5.43",
+      "engines": {},
+      "peerDependencies": {
+        "typescript": "*"
+      },
+      "deprecated": null
+    },
+    {
+      "package": "vuetify",
+      "selected_version": "4.2.1",
+      "source": "https://registry.npmjs.org/vuetify/4.2.1",
+      "engines": {},
+      "peerDependencies": {
+        "vue": "^3.5.0 || ^3.6.0-0",
+        "typescript": ">=4.7",
+        "vite-plugin-vuetify": ">=2.1.0",
+        "webpack-plugin-vuetify": ">=3.1.0"
+      },
+      "peerDependenciesMeta": {
+        "typescript": {
+          "optional": true
+        },
+        "vite-plugin-vuetify": {
+          "optional": true
+        },
+        "webpack-plugin-vuetify": {
+          "optional": true
+        }
+      },
+      "deprecated": null
+    },
+    {
+      "package": "vue-router",
+      "selected_version": "5.3.1",
+      "source": "https://registry.npmjs.org/vue-router/5.3.1",
+      "engines": {},
+      "peerDependencies": {
+        "vue": "^3.5.34 || ^4.0.0",
+        "vite": "^7.3.0 || ^8.0.0",
+        "pinia": "^3.0.4 || ^4.0.2",
+        "@pinia/colada": ">=0.21.2",
+        "@vue/compiler-sfc": "^3.5.34 || ^4.0.0"
+      },
+      "peerDependenciesMeta": {
+        "vite": {
+          "optional": true
+        },
+        "pinia": {
+          "optional": true
+        },
+        "@pinia/colada": {
+          "optional": true
+        },
+        "@vue/compiler-sfc": {
+          "optional": true
+        }
+      },
+      "deprecated": null
+    },
+    {
+      "package": "pinia",
+      "selected_version": "4.0.3",
+      "source": "https://registry.npmjs.org/pinia/4.0.3",
+      "engines": {},
+      "peerDependencies": {
+        "vue": "^3.5.11",
+        "typescript": ">=5.6.0",
+        "@vue/devtools-api": "^8.1.5"
+      },
+      "peerDependenciesMeta": {
+        "typescript": {
+          "optional": true
+        },
+        "@vue/devtools-api": {
+          "optional": false
+        }
+      },
+      "deprecated": null
+    },
+    {
+      "package": "axios",
+      "selected_version": "1.20.0",
+      "source": "https://registry.npmjs.org/axios/1.20.0",
+      "engines": {},
+      "peerDependencies": {},
+      "deprecated": null
+    },
+    {
+      "package": "vite",
+      "selected_version": "8.3.0",
+      "source": "https://registry.npmjs.org/vite/8.3.0",
+      "engines": {
+        "node": "^20.19.0 || >=22.12.0"
+      },
+      "peerDependencies": {
+        "tsx": "^4.8.1",
+        "jiti": ">=1.21.0",
+        "less": "^4.0.0",
+        "sass": "^1.70.0",
+        "yaml": "^2.4.2",
+        "stylus": ">=0.54.8",
+        "terser": "^5.16.0",
+        "esbuild": "^0.27.0 || ^0.28.0",
+        "sugarss": "^5.0.0",
+        "@types/node": "^20.19.0 || >=22.12.0",
+        "sass-embedded": "^1.70.0",
+        "@vitejs/devtools": "^0.7.1"
+      },
+      "deprecated": null
+    },
+    {
+      "package": "@vitejs/plugin-vue",
+      "selected_version": "6.0.9",
+      "source": "https://registry.npmjs.org/@vitejs%2fplugin-vue/6.0.9",
+      "engines": {
+        "node": "^20.19.0 || >=22.12.0"
+      },
+      "peerDependencies": {
+        "vue": "^3.2.25",
+        "vite": "^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0"
+      },
+      "deprecated": null
+    },
+    {
+      "package": "vite-plugin-vuetify",
+      "selected_version": "2.1.3",
+      "source": "https://registry.npmjs.org/vite-plugin-vuetify/2.1.3",
+      "engines": {
+        "node": "^18.0.0 || >=20.0.0"
+      },
+      "peerDependencies": {
+        "vite": ">=5",
+        "vue": "^3.0.0",
+        "vuetify": ">=3"
+      },
+      "deprecated": null
+    },
+    {
+      "package": "vue-tsc",
+      "selected_version": "3.3.11",
+      "source": "https://registry.npmjs.org/vue-tsc/3.3.11",
+      "engines": {},
+      "peerDependencies": {
+        "typescript": ">=5.0.0"
+      },
+      "deprecated": null
+    },
+    {
+      "package": "vitest",
+      "selected_version": "5.0.1",
+      "source": "https://registry.npmjs.org/vitest/5.0.1",
+      "engines": {
+        "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
+      },
+      "peerDependencies": {
+        "vite": "^6.4.0 || ^7.0.0 || ^8.0.0",
+        "jsdom": "*",
+        "happy-dom": "*",
+        "@vitest/ui": "5.0.1",
+        "@types/node": "^22.0.0 || >=24.0.0",
+        "@edge-runtime/vm": "*",
+        "@opentelemetry/api": "^1.9.0",
+        "@vitest/coverage-v8": "5.0.1",
+        "@vitest/browser-preview": "5.0.1",
+        "@vitest/coverage-istanbul": "5.0.1",
+        "@vitest/browser-playwright": "5.0.1",
+        "@vitest/browser-webdriverio": "^5.0.0-beta.5 || >=5.0.0"
+      },
+      "deprecated": null
+    },
+    {
+      "package": "@vue/test-utils",
+      "selected_version": "2.5.1",
+      "source": "https://registry.npmjs.org/@vue%2ftest-utils/2.5.1",
+      "engines": {},
+      "peerDependencies": {
+        "vue": "3.x",
+        "@vue/compiler-dom": "3.x",
+        "@vue/server-renderer": "3.x"
+      },
+      "peerDependenciesMeta": {
+        "@vue/server-renderer": {
+          "optional": true
+        }
+      },
+      "deprecated": null
+    },
+    {
+      "package": "@playwright/test",
+      "selected_version": "1.63.0",
+      "source": "https://registry.npmjs.org/@playwright%2ftest/1.63.0",
+      "engines": {
+        "node": ">=20"
+      },
+      "peerDependencies": {},
+      "deprecated": null
+    },
+    {
+      "package": "eslint",
+      "selected_version": "10.11.0",
+      "source": "https://registry.npmjs.org/eslint/10.11.0",
+      "engines": {
+        "node": "^20.19.0 || ^22.13.0 || >=24"
+      },
+      "peerDependencies": {
+        "jiti": "*"
+      },
+      "deprecated": null
+    },
+    {
+      "package": "eslint-plugin-vue",
+      "selected_version": "10.11.0",
+      "source": "https://registry.npmjs.org/eslint-plugin-vue/10.11.0",
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "peerDependencies": {
+        "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0",
+        "vue-eslint-parser": "^10.3.0",
+        "@stylistic/eslint-plugin": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0",
+        "@typescript-eslint/parser": "^7.0.0 || ^8.0.0"
+      },
+      "deprecated": null
+    },
+    {
+      "package": "typescript-eslint",
+      "selected_version": "8.70.1",
+      "source": "https://registry.npmjs.org/typescript-eslint/8.70.1",
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "peerDependencies": {
+        "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0",
+        "typescript": ">=4.8.4 <6.1.0"
+      },
+      "deprecated": null
+    },
+    {
+      "package": "jsdom",
+      "selected_version": "30.1.1",
+      "source": "https://registry.npmjs.org/jsdom/30.1.1",
+      "engines": {
+        "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+      },
+      "peerDependencies": {
+        "canvas": "^3.2.3"
+      },
+      "deprecated": null
+    },
+    {
+      "package": "sass",
+      "selected_version": "1.105.0",
+      "source": "https://registry.npmjs.org/sass/1.105.0",
+      "engines": {
+        "node": ">=20.19.0"
+      },
+      "peerDependencies": {},
+      "deprecated": null
+    },
+    {
+      "package": "plotly.js-dist-min",
+      "selected_version": "4.1.1",
+      "source": "https://registry.npmjs.org/plotly.js-dist-min/4.1.1",
+      "engines": {},
+      "peerDependencies": {},
+      "deprecated": null
+    },
+    {
+      "package": "@fortawesome/fontawesome-free",
+      "selected_version": "7.3.1",
+      "source": "https://registry.npmjs.org/@fortawesome%2ffontawesome-free/7.3.1",
+      "engines": {
+        "node": ">=6"
+      },
+      "peerDependencies": {},
+      "deprecated": null
+    },
+    {
+      "package": "npm",
+      "selected_version": "12.1.0",
+      "source": "https://registry.npmjs.org/npm/12.1.0",
+      "engines": {
+        "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+      },
+      "peerDependencies": {},
+      "deprecated": null
+    },
+    {
+      "package": "@axe-core/playwright",
+      "selected_version": "4.13.0",
+      "source": "https://registry.npmjs.org/@axe-core%2fplaywright/4.13.0",
+      "engines": {},
+      "peerDependencies": {
+        "playwright-core": ">= 1.0.0"
+      },
+      "deprecated": null
+    },
+    {
+      "package": "typescript",
+      "selected_version": "6.0.3",
+      "source": "https://registry.npmjs.org/typescript/6.0.3",
+      "engines": {
+        "node": ">=14.17"
+      },
+      "peerDependencies": null,
+      "peerDependenciesMeta": null,
+      "deprecated": null
+    },
+    {
+      "package": "@types/node",
+      "selected_version": "24.13.6",
+      "source": "https://registry.npmjs.org/@types%2fnode/24.13.6",
+      "engines": null,
+      "peerDependencies": {},
+      "peerDependenciesMeta": null,
+      "deprecated": null
+    },
+    {
+      "package": "vue-eslint-parser",
+      "selected_version": "10.4.1",
+      "source": "https://registry.npmjs.org/vue-eslint-parser/10.4.1",
+      "engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "peerDependencies": {
+        "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0"
+      },
+      "peerDependenciesMeta": null,
+      "deprecated": null
+    },
+    {
+      "package": "@eslint/js",
+      "selected_version": "10.0.1",
+      "source": "https://registry.npmjs.org/@eslint%2fjs/10.0.1",
+      "engines": {
+        "node": "^20.19.0 || ^22.13.0 || >=24"
+      },
+      "peerDependencies": {
+        "eslint": "^10.0.0"
+      },
+      "peerDependenciesMeta": {
+        "eslint": {
+          "optional": true
+        }
+      },
+      "deprecated": null
+    },
+    {
+      "package": "jiti",
+      "selected_version": "2.7.0",
+      "source": "https://registry.npmjs.org/jiti/2.7.0",
+      "engines": null,
+      "peerDependencies": null,
+      "peerDependenciesMeta": null,
+      "deprecated": null
+    }
+  ]
+}

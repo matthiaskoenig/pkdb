@@ -1,0 +1,44 @@
+name: Frontend
+on:
+  workflow_call:
+permissions:
+  contents: read
+jobs:
+  frontend:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24.21.0
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm install --global npm@12.1.0
+      - run: test "$(node --version)" = v24.21.0 && test "$(npm --version)" = 12.1.0
+      - run: npm ci
+      - run: npm run test:source
+      - run: npm run typecheck
+      - run: npm run lint
+      - run: npm run test:unit -- --run
+      - run: npm run build
+      - run: npx playwright install --with-deps
+      - run: npm run test:e2e
+      - uses: actions/upload-artifact@v6
+        if: failure()
+        with:
+          name: frontend-browser-failures
+          path: |
+            frontend/playwright-report
+            frontend/test-results
+          retention-days: 7
+      - uses: actions/upload-artifact@v6
+        with:
+          name: frontend-static
+          path: frontend/dist
+          retention-days: 14

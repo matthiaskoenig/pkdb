@@ -91,3 +91,9 @@ Stop with `docker compose stop`; resume with `docker compose up --wait`. Databas
 ## Add an allowed term
 
 Edit the [vocabulary definitions](vocabulary.md) and run the JSON update script, then rebuild the Docker backend before validating the study again.
+
+## Isolated frontend browser checks
+
+Build the frontend with its pinned Node/npm versions (`npm ci`, `npm run build` under `frontend/`), install Playwright browsers (`npx playwright install --with-deps`), then run `npm run test:e2e`. The harness starts `compose.frontend-test.yaml` under the distinct `pkdb-frontend-test` project, serves the production artifact at `http://127.0.0.1:18184`, and cleans up only that project's disposable resources. It neither uploads to nor removes the local development deployment.
+
+The fixture loader fails closed unless its database is exactly `pkdb_frontend_test` on the isolated Compose database host with the dedicated test username and explicit fixture flag. Scientific data are artificial and shared with backend scope contract tests. Test-only accounts use the documented fixture password; do not reuse it for any deployment. Provider credentials and real mail delivery are not required by the harness and remain separate staging checks.
