@@ -1,0 +1,52 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DRON_00016775",
+  "lang": "en",
+  "description": [],
+  "synonyms": [],
+  "annotation": {
+    "has_RxCUI": [
+      "259421"
+    ]
+  },
+  "label": "kava root",
+  "ontology_name": "dron",
+  "ontology_prefix": "DRON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/dron.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "DRON_00016775",
+  "obo_id": "DRON:00016775",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00016775?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00016775/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00016775/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00016775/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00016775/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00016775/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/dron/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDRON_00016775/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

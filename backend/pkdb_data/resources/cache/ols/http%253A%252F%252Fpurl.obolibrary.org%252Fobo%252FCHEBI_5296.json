@@ -1,0 +1,291 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_5296",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "5-(2,5-dimethylphenoxy)-2,2-dimethylpentanoic acid",
+    "Gemfibrozil",
+    "2,2-Dimethyl-5-(2,5-dimethylphenoxy)valeriansaeure",
+    "2,2-Dimethyl-5-(2,5-xylyloxy)valeriansaeure",
+    "2,2-Dimethyl-5-(2,5-xylyloxy)valeric acid",
+    "Gemfibrozilo",
+    "Lopid",
+    "gemfibrozil",
+    "gemfibrozilum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C15H22O3"
+    ],
+    "has_dbxref": [
+      "Beilstein:1881200",
+      "CAS:25812-30-0",
+      "DrugBank:DB01241",
+      "Drug_Central:1285",
+      "KEGG:D00334",
+      "LINCS:LSM-2227",
+      "Patent:DE1925423",
+      "Patent:US3674836",
+      "Patent:US4126637",
+      "Wikipedia:Gemfibrozil"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:5296"
+    ],
+    "inchi": [
+      "InChI=1S/C15H22O3/c1-11-6-7-12(2)13(10-11)18-9-5-8-15(3,4)14(16)17/h6-7,10H,5,8-9H2,1-4H3,(H,16,17)"
+    ],
+    "inchikey": [
+      "HEMJJKBWTPKOJG-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "250.33338"
+    ],
+    "monoisotopicmass": [
+      "250.15689"
+    ],
+    "smiles": [
+      "Cc1ccc(C)c(OCCCC(C)(C)C(O)=O)c1"
+    ]
+  },
+  "label": "gemfibrozil",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_5296",
+  "obo_id": "CHEBI:5296",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "1881200",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "25812-30-0",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "25812-30-0",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01241",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01241"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1285",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1285"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00334",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00334"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-2227",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "Patent",
+      "id": "DE1925423",
+      "description": null,
+      "url": "https://www.google.com/patents/DE1925423"
+    },
+    {
+      "database": "Patent",
+      "id": "US3674836",
+      "description": null,
+      "url": "https://www.google.com/patents/US3674836"
+    },
+    {
+      "database": "Patent",
+      "id": "US4126637",
+      "description": null,
+      "url": "https://www.google.com/patents/US4126637"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Gemfibrozil",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Gemfibrozil"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-(2,5-dimethylphenoxy)-2,2-dimethylpentanoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Gemfibrozil",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2,2-Dimethyl-5-(2,5-dimethylphenoxy)valeriansaeure",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2,2-Dimethyl-5-(2,5-xylyloxy)valeriansaeure",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2,2-Dimethyl-5-(2,5-xylyloxy)valeric acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Gemfibrozilo",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lopid",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "gemfibrozil",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "gemfibrozilum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5296?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5296/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5296/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5296/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5296/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5296/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5296/graph"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5296/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5296/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

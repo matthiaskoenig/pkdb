@@ -1,0 +1,298 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3306",
+  "lang": "en",
+  "description": [
+    "A 32-membered heterodetic cyclic peptide comprising the sequence Cys-Ser-Asn-Leu-Ser-Thr-Cys-Val-Leu-Gly-Lys-Leu-Ser-Gln-Glu-Leu-His-Lys-Leu-Gln-Thr-Tyr-Pro-Arg-Thr-Asn-Thr-Gly-Ser-Gly-Thr-Pro-NH2 cyclised by a disulfide bridge between the two Cys residues at positions 1 and 7."
+  ],
+  "synonyms": [
+    "Calcitonin",
+    "Calcitonin, salmon",
+    "Cibacalcin",
+    "N-{[(4R,7S,10S,13S,16S,19S,22R)-22-amino-16-(2-amino-2-oxoethyl)-7-[(1R)-1-hydroxyethyl]-10,19-bis(hydroxymethyl)-13-isobutyl-6,9,12,15,18,21-hexaoxo-1,2-dithia-5,8,11,14,17,20-hexaazacyclotricosan-4-yl]carbonyl}-L-valyl-L-leucylglycyl-L-lysyl-L-leucyl-L-seryl-L-glutaminyl-L-alpha-glutamyl-L-leucyl-L-histidyl-L-lysyl-L-leucyl-L-glutaminyl-L-threonyl-L-tyrosyl-L-prolyl-L-arginyl-L-threonyl-L-asparaginyl-L-threonylglycyl-L-serylglycyl-L-threonyl-L-prolinamide",
+    "N-{[(4R,7S,10S,13S,16S,19S,22R)-22-amino-16-(2-amino-2-oxoethyl)-7-[(1R)-1-hydroxyethyl]-10,19-bis(hydroxymethyl)-13-isobutyl-6,9,12,15,18,21-hexaoxo-1,2-dithia-5,8,11,14,17,20-hexaazacyclotricosan-4-yl]carbonyl}-L-valyl-L-leucylglycyl-L-lysyl-L-leucyl-L-seryl-L-glutaminyl-L-alpha-glutamyl-L-leucyl-L-histidyl-L-lysyl-L-leucyl-L-glutaminyl-L-threonyl-L-tyrosyl-L-prolyl-L-arginyl-L-threonyl-L-asparaginyl-L-threonylglycyl-L-serylglycyl-L-threonyl-L-prolinamide",
+    "Salmon calcitonin",
+    "Salmon calcitonin-(1-32)",
+    "Salmotonin",
+    "Thyrocalcitonin (salmon)",
+    "calcitonin",
+    "cyclo-[Cys-Ser-Asn-Leu-Ser-Thr-Cys]-Val-Leu-Gly-Lys-Leu-Ser-Gln-Glu-Leu-His-Lys-Leu-Gln-Thr-Tyr-Pro-Arg-Thr-Asn-Thr-Gly-Ser-Gly-Thr-Pro-NH2"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:47931-85-1",
+      "cas:9007-12-9",
+      "drugbank:DB00017",
+      "drugcentral:2989",
+      "kegg.compound:C06865",
+      "kegg.drug:D00249",
+      "reaxys:8186880",
+      "wikipedia.en:Calcitonin"
+    ],
+    "generalized_empirical_formula": [
+      "C145H240N44O48S2"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3306"
+    ],
+    "inchi_key_string": [
+      "BBBFJLBPOGFECG-VJVYQDLKSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C145H240N44O48S2/c1-65(2)45-86(175-139(232)110(70(11)12)183-136(229)99-63-239-238-62-79(148)117(210)178-96(59-191)134(227)174-92(52-104(151)202)131(224)172-90(49-69(9)10)129(222)180-98(61-193)135(228)187-114(74(16)197)142(235)181-99)118(211)158-55-106(204)162-80(25-18-20-40-146)120(213)169-89(48-68(7)8)128(221)179-97(60-192)133(226)167-83(34-37-102(149)200)122(215)165-85(36-39-109(207)208)123(216)171-88(47-67(5)6)127(220)173-91(51-77-54-156-64-161-77)130(223)164-81(26-19-21-41-147)121(214)170-87(46-66(3)4)126(219)166-84(35-38-103(150)201)125(218)186-113(73(15)196)141(234)177-94(50-76-30-32-78(199)33-31-76)143(236)189-44-24-29-101(189)137(230)168-82(27-22-42-157-145(154)155)124(217)185-112(72(14)195)140(233)176-93(53-105(152)203)132(225)184-111(71(13)194)138(231)160-56-107(205)163-95(58-190)119(212)159-57-108(206)182-115(75(17)198)144(237)188-43-23-28-100(188)116(153)209/h30-33,54,64-75,79-101,110-115,190-199H,18-29,34-53,55-63,146-148H2,1-17H3,(H2,149,200)(H2,150,201)(H2,151,202)(H2,152,203)(H2,153,209)(H,156,161)(H,158,211)(H,159,212)(H,160,231)(H,162,204)(H,163,205)(H,164,223)(H,165,215)(H,166,219)(H,167,226)(H,168,230)(H,169,213)(H,170,214)(H,171,216)(H,172,224)(H,173,220)(H,174,227)(H,175,232)(H,176,233)(H,177,234)(H,178,210)(H,179,221)(H,180,222)(H,181,235)(H,182,206)(H,183,229)(H,184,225)(H,185,217)(H,186,218)(H,187,228)(H,207,208)(H4,154,155,157)/t71-,72-,73-,74-,75-,79+,80+,81+,82+,83+,84+,85+,86+,87+,88+,89+,90+,91+,92+,93+,94+,95+,96+,97+,98+,99+,100+,101+,110+,111+,112+,113+,114+,115+/m1/s1"
+    ],
+    "mass": [
+      "3431.909"
+    ],
+    "monoisotopic_mass": [
+      "3429.71331"
+    ],
+    "smiles_string": [
+      "CC(C)C[C@H](NC(=O)[C@H](CCCCN)NC(=O)CNC(=O)[C@H](CC(C)C)NC(=O)[C@@H](NC(=O)[C@@H]1CSSC[C@H](N)C(=O)N[C@@H](CO)C(=O)N[C@@H](CC(N)=O)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CO)C(=O)N[C@@H]([C@@H](C)O)C(=O)N1)C(C)C)C(=O)N[C@@H](CO)C(=O)N[C@@H](CCC(N)=O)C(=O)N[C@@H](CCC(=O)O)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](Cc1cncn1)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCC(N)=O)C(=O)N[C@H](C(=O)N[C@@H](Cc1ccc(O)cc1)C(=O)N1CCC[C@H]1C(=O)N[C@@H](CCCNC(=N)N)C(=O)N[C@H](C(=O)N[C@@H](CC(N)=O)C(=O)N[C@H](C(=O)NCC(=O)N[C@@H](CO)C(=O)NCC(=O)N[C@H](C(=O)N1CCC[C@H]1C(N)=O)[C@@H](C)O)[C@@H](C)O)[C@@H](C)O)[C@@H](C)O"
+    ]
+  },
+  "label": "calcitonin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3306",
+  "obo_id": "CHEBI:3306",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "47931-85-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=47931-85-1"
+    },
+    {
+      "database": "cas",
+      "id": "9007-12-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=9007-12-9"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00017",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00017"
+    },
+    {
+      "database": "drugcentral",
+      "id": "2989",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/2989"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C06865",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00249",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "reaxys",
+      "id": "8186880",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Calcitonin",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-{[(4R,7S,10S,13S,16S,19S,22R)-22-amino-16-(2-amino-2-oxoethyl)-7-[(1R)-1-hydroxyethyl]-10,19-bis(hydroxymethyl)-13-isobutyl-6,9,12,15,18,21-hexaoxo-1,2-dithia-5,8,11,14,17,20-hexaazacyclotricosan-4-yl]carbonyl}-L-valyl-L-leucylglycyl-L-lysyl-L-leucyl-L-seryl-L-glutaminyl-L-alpha-glutamyl-L-leucyl-L-histidyl-L-lysyl-L-leucyl-L-glutaminyl-L-threonyl-L-tyrosyl-L-prolyl-L-arginyl-L-threonyl-L-asparaginyl-L-threonylglycyl-L-serylglycyl-L-threonyl-L-prolinamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Calcitonin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Calcitonin, salmon",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cibacalcin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-{[(4R,7S,10S,13S,16S,19S,22R)-22-amino-16-(2-amino-2-oxoethyl)-7-[(1R)-1-hydroxyethyl]-10,19-bis(hydroxymethyl)-13-isobutyl-6,9,12,15,18,21-hexaoxo-1,2-dithia-5,8,11,14,17,20-hexaazacyclotricosan-4-yl]carbonyl}-L-valyl-L-leucylglycyl-L-lysyl-L-leucyl-L-seryl-L-glutaminyl-L-alpha-glutamyl-L-leucyl-L-histidyl-L-lysyl-L-leucyl-L-glutaminyl-L-threonyl-L-tyrosyl-L-prolyl-L-arginyl-L-threonyl-L-asparaginyl-L-threonylglycyl-L-serylglycyl-L-threonyl-L-prolinamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salmon calcitonin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salmon calcitonin-(1-32)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salmotonin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Thyrocalcitonin (salmon)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "calcitonin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cyclo-[Cys-Ser-Asn-Leu-Ser-Thr-Cys]-Val-Leu-Gly-Lys-Leu-Ser-Gln-Glu-Leu-His-Lys-Leu-Gln-Thr-Tyr-Pro-Arg-Thr-Asn-Thr-Gly-Ser-Gly-Thr-Pro-NH2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3306?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3306/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3306/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3306/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3306/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3306/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3306/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3306/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

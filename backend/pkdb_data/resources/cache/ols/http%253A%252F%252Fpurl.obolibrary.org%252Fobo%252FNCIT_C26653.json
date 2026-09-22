@@ -1,0 +1,188 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C26653",
+  "lang": "en",
+  "description": [
+    "A synthetic, orally-active quinazoline with potential antineoplastic properties. Lapatinib reversibly blocks phosphorylation of the epidermal growth factor receptor (EGFR), ErbB2, and the Erk-1 and-2 and AKT kinases; it also inhibits cyclin D protein levels in human tumor cell lines and xenografts. EGFR and ErbB2 have been implicated in the growth of various tumor types."
+  ],
+  "synonyms": [
+    "GSK572016",
+    "GW 2016",
+    "GW 572016",
+    "GW-572016",
+    "GW2016",
+    "GW572016",
+    "LAPATINIB",
+    "Lapatinib",
+    "lapatinib"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used with another anticancer drug to treat breast cancer that is HER2 positive and has advanced or metastasized (spread to other parts of the body) after treatment with other drugs. Lapatinib is also being studied in the treatment of other types of cancer. It is a type of ErbB-2 and EGFR dual tyrosine kinase inhibitor."
+    ],
+    "CAS_Registry": [
+      "231277-92-2"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:49603"
+    ],
+    "Chemical_Formula": [
+      "C29H26ClFN4O4S"
+    ],
+    "Contributing_Source": [
+      "FDA",
+      "GDC",
+      "HemOnc"
+    ],
+    "FDA_UNII_Code": [
+      "0VUA21238F"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C66878"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C17068",
+      "http://purl.obolibrary.org/obo/NCIT_C17319",
+      "http://purl.obolibrary.org/obo/NCIT_C41625"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "GW572016"
+    ],
+    "Maps_To": [
+      "Lapatinib"
+    ],
+    "NSC Number": [
+      "727989"
+    ],
+    "Preferred_Name": [
+      "Lapatinib"
+    ],
+    "PubMedID_Primary_Reference": [
+      "12214266"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C1506770"
+    ],
+    "code": [
+      "C26653"
+    ]
+  },
+  "label": "Lapatinib",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C26653",
+  "obo_id": "NCIT:C26653",
+  "in_subset": [
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C177537",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "GSK572016",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "GW 2016",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "GW 572016",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "GW-572016",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "GW2016",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "GW572016",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "LAPATINIB",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lapatinib",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "lapatinib",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26653?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26653/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26653/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26653/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26653/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26653/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26653/graph"
+    },
+    "Chemical_Or_Drug_Has_Mechanism_Of_Action": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26653/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R124"
+    },
+    "Chemical_Or_Drug_Has_Physiologic_Effect": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26653/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R125"
+    },
+    "Chemical_Or_Drug_Affects_Gene_Product": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26653/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R146"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

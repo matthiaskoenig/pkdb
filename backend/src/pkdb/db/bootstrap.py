@@ -66,6 +66,44 @@ class BootstrapReport(BaseModel):
     errors: list[ValidationIssue] = Field(default_factory=list)
 
 
+def validate_snapshot(snapshot: Snapshot) -> dict[str, NodeInput]:
+    """Validate node identities, scientific definitions, parents and cycles offline."""
+    nodes = {node.sid: node for node in snapshot.nodes}
+    if len(nodes) != len(snapshot.nodes):
+        raise ValueError("Duplicate vocabulary SID")
+    for node in snapshot.nodes:
+        if len(node.parents) != len(set(node.parents)):
+            raise ValueError(f"Duplicate parent of {node.sid}")
+        for parent in node.parents:
+            if parent not in nodes:
+                raise ValueError(f"Unknown parent {parent}")
+        if node.kind == "measurement":
+            MeasurementRule.model_validate(
+                {**node.definition, "name": node.name, "sid": node.sid}
+            )
+        if node.kind == "substance":
+            SubstanceDefinition.model_validate(
+                {**node.definition, "name": node.name, "sid": node.sid}
+            )
+    done: set[str] = set()
+    visiting: set[str] = set()
+
+    def visit(sid: str):
+        if sid in visiting:
+            raise ValueError(f"Vocabulary cycle at {sid}")
+        if sid in done:
+            return
+        visiting.add(sid)
+        for parent in nodes[sid].parents:
+            visit(parent)
+        visiting.remove(sid)
+        done.add(sid)
+
+    for sid in nodes:
+        visit(sid)
+    return nodes
+
+
 def bootstrap(directory: Path, session: Session) -> BootstrapReport:
     if not session.in_transaction():
         raise RuntimeError("Bootstrap requires an explicit caller-owned transaction")
@@ -80,39 +118,7 @@ def bootstrap(directory: Path, session: Session) -> BootstrapReport:
         )
         if len({user.username for user in users}) != len(users):
             raise ValueError("Duplicate username")
-        nodes = {node.sid: node for node in snapshot.nodes}
-        if len(nodes) != len(snapshot.nodes):
-            raise ValueError("Duplicate vocabulary SID")
-        for node in snapshot.nodes:
-            if len(node.parents) != len(set(node.parents)):
-                raise ValueError(f"Duplicate parent of {node.sid}")
-            for parent in node.parents:
-                if parent not in nodes:
-                    raise ValueError(f"Unknown parent {parent}")
-            if node.kind == "measurement":
-                MeasurementRule.model_validate(
-                    {**node.definition, "name": node.name, "sid": node.sid}
-                )
-            if node.kind == "substance":
-                SubstanceDefinition.model_validate(
-                    {**node.definition, "name": node.name, "sid": node.sid}
-                )
-        done: set[str] = set()
-        visiting: set[str] = set()
-
-        def visit(sid: str):
-            if sid in visiting:
-                raise ValueError(f"Vocabulary cycle at {sid}")
-            if sid in done:
-                return
-            visiting.add(sid)
-            for parent in nodes[sid].parents:
-                visit(parent)
-            visiting.remove(sid)
-            done.add(sid)
-
-        for sid in nodes:
-            visit(sid)
+        nodes = validate_snapshot(snapshot)
     except (OSError, ValueError, TypeError, ValidationError) as error:
         report.errors.append(
             ValidationIssue(code="invalid_bootstrap", message=str(error))

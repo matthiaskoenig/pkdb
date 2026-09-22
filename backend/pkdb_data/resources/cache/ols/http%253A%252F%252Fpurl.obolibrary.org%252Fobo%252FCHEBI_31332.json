@@ -1,0 +1,143 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_31332",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "1,3,7-trimethyl-3,7-dihydro-1H-purine-2,6-dione hydrate",
+    "3,7-Dihydro-1,3,7-trimethyl-1H-purine-2,6-dione monohydrate"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C8H10N4O2.H2O",
+      "C8H12N4O3"
+    ],
+    "has_dbxref": [
+      "Beilstein:4033904",
+      "CAS:5743-12-4",
+      "DrugBank:DB00201",
+      "KEGG:D01453"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:31332"
+    ],
+    "inchi": [
+      "InChI=1S/C8H10N4O2.H2O/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2;/h4H,1-3H3;1H2"
+    ],
+    "inchikey": [
+      "LCHGOKZNRDAXEK-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "212.20604"
+    ],
+    "monoisotopicmass": [
+      "212.09094"
+    ],
+    "smiles": [
+      "O.Cn1cnc2n(C)c(=O)n(C)c(=O)c12"
+    ]
+  },
+  "label": "caffeine monohydrate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_31332",
+  "obo_id": "CHEBI:31332",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "4033904",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "5743-12-4",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00201",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00201"
+    },
+    {
+      "database": "KEGG",
+      "id": "D01453",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D01453"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1,3,7-trimethyl-3,7-dihydro-1H-purine-2,6-dione hydrate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,7-Dihydro-1,3,7-trimethyl-1H-purine-2,6-dione monohydrate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31332?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31332/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31332/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31332/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31332/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31332/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31332/graph"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31332/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

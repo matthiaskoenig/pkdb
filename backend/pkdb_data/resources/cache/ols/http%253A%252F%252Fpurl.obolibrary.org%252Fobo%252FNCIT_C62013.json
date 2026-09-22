@@ -1,0 +1,115 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C62013",
+  "lang": "en",
+  "description": [
+    "An anxiolytic agent chemically and pharmacologically unrelated to benzodiazepines, barbiturates, or other sedative/hypnotic drugs.  Although its exact mechanism of action is unknown, buspirone may exert its anti-anxiety effects via serotonin (5-HT1A) and dopamine receptors (D2) and may indirectly affect other neurotransmitter systems. Unlike typical benzodiazepine anxiolytics, this agent does not exert anticonvulsant or muscle relaxant effects and lacks prominent sedative effects."
+  ],
+  "synonyms": [
+    "BUSPIRONE",
+    "Buspirone",
+    "buspirone"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug that is used to treat certain anxiety disorders. It belongs to the family of drugs called antianxiety agents."
+    ],
+    "CAS_Registry": [
+      "36505-84-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:3223"
+    ],
+    "Chemical_Formula": [
+      "C21H31N5O2"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "TK65WKS8HL"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C26641"
+    ],
+    "Legacy Concept Name": [
+      "Buspirone_Base"
+    ],
+    "Preferred_Name": [
+      "Buspirone"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0006462"
+    ],
+    "code": [
+      "C62013"
+    ]
+  },
+  "label": "Buspirone",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C62013",
+  "obo_id": "NCIT:C62013",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "BUSPIRONE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Buspirone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "buspirone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62013?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62013/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62013/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62013/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62013/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62013/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62013/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62013/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

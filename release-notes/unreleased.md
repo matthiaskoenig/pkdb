@@ -1,5 +1,8 @@
 # Unreleased
 
+- Restore the authoritative `pkdb_data` vocabulary definitions and cached metadata.
+  Regenerate backend JSON with `uv run --project backend --python 3.14 python scripts/update_vocabulary.py`; CI checks for stale outputs.
+
 - Remove the previous Django backend, Elasticsearch setup, old uploader, nginx
   deployment configuration, and obsolete administration scripts.
 - Move the current FastAPI backend to `backend/`. Start the backend and PostgreSQL

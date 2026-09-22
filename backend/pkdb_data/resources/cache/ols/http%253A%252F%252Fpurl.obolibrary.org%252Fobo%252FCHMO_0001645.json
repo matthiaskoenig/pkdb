@@ -1,0 +1,69 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHMO_0001645",
+  "lang": "en",
+  "description": [
+    "A separation process whereby a solution containing a solute of molecular size significantly greater than that of the solvent molecule is removed from the solvent by the application of hydraulic pressure which forces only the solvent to flow through a suitable membrane, usually having a pore size in the range 0.001\u20130.1 \u03bcm."
+  ],
+  "synonyms": [
+    "UF",
+    "ultrafiltration"
+  ],
+  "annotation": {
+    "id": [
+      "CHMO:0001645"
+    ]
+  },
+  "label": "ultra-filtration",
+  "ontology_name": "chmo",
+  "ontology_prefix": "CHMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHMO_0001645",
+  "obo_id": "CHMO:0001645",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A separation process whereby a solution containing a solute of molecular size significantly greater than that of the solvent molecule is removed from the solvent by the application of hydraulic pressure which forces only the solvent to flow through a suitable membrane, usually having a pore size in the range 0.001\u20130.1 \u03bcm.",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "https://doi.org/10.1351/goldbook.U06548",
+          "description": null,
+          "url": "https://doi.org/10.1351/goldbook.U06548"
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001645?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001645/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001645/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001645/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001645/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001645/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001645/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

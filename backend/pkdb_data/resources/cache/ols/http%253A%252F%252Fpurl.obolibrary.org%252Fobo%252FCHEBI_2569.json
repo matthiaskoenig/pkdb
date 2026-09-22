@@ -1,0 +1,275 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_2569",
+  "lang": "en",
+  "description": [
+    "A member of the class of piperidines that is piperidine having a 2-(4-ethyl-5-oxo-4,5-dihydro-1H-tetrazol-1-yl)ethyl group at the 1-position as well as N-phenylpropanamido- and methoxymethyl groups at the 4-position."
+  ],
+  "synonyms": [
+    "N-{1-[2-(4-ethyl-5-oxo-4,5-dihydro-1H-tetrazol-1-yl)ethyl]-4-(methoxymethyl)piperidin-4-yl}-N-phenylpropanamide",
+    "Alfentanyl",
+    "N-(1-(2-(4-Ethyl-5-oxo-2-tetrazolin-1-yl)ethyl)-4-(methoxymethyl)-4-piperidyl)propionanilide",
+    "alfentanil",
+    "alfentanilum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C21H32N6O3"
+    ],
+    "has_dbxref": [
+      "CAS:71195-58-9",
+      "DrugBank:DB00802",
+      "Drug_Central:114",
+      "HMDB:HMDB0014940",
+      "KEGG:C08005",
+      "KEGG:D07122",
+      "PMID:11240593",
+      "PMID:11999595",
+      "PMID:16621415",
+      "PMID:23446076",
+      "Patent:DE2819873",
+      "Patent:US2014005223",
+      "Patent:US4167574",
+      "Reaxys:1188293",
+      "Wikipedia:Alfentanil"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:2569"
+    ],
+    "inchi": [
+      "InChI=1S/C21H32N6O3/c1-4-19(28)27(18-9-7-6-8-10-18)21(17-30-3)11-13-24(14-12-21)15-16-26-20(29)25(5-2)22-23-26/h6-10H,4-5,11-17H2,1-3H3"
+    ],
+    "inchikey": [
+      "IDBPHNDTYPBSNI-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "416.51720"
+    ],
+    "monoisotopicmass": [
+      "416.25359"
+    ],
+    "smiles": [
+      "CCC(=O)N(c1ccccc1)C1(CCN(CCn2nnn(CC)c2=O)CC1)COC"
+    ]
+  },
+  "label": "alfentanil",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_2569",
+  "obo_id": "CHEBI:2569",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "71195-58-9",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "71195-58-9",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "71195-58-9",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00802",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00802"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "114",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/114"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014940",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014940"
+    },
+    {
+      "database": "KEGG",
+      "id": "C08005",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C08005"
+    },
+    {
+      "database": "KEGG",
+      "id": "D07122",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D07122"
+    },
+    {
+      "database": "PMID",
+      "id": "11240593",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11240593"
+    },
+    {
+      "database": "PMID",
+      "id": "11999595",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11999595"
+    },
+    {
+      "database": "PMID",
+      "id": "16621415",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16621415"
+    },
+    {
+      "database": "PMID",
+      "id": "23446076",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23446076"
+    },
+    {
+      "database": "Patent",
+      "id": "DE2819873",
+      "description": null,
+      "url": "https://www.google.com/patents/DE2819873"
+    },
+    {
+      "database": "Patent",
+      "id": "US2014005223",
+      "description": null,
+      "url": "https://www.google.com/patents/US2014005223"
+    },
+    {
+      "database": "Patent",
+      "id": "US4167574",
+      "description": null,
+      "url": "https://www.google.com/patents/US4167574"
+    },
+    {
+      "database": "Reaxys",
+      "id": "1188293",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Alfentanil",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Alfentanil"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-{1-[2-(4-ethyl-5-oxo-4,5-dihydro-1H-tetrazol-1-yl)ethyl]-4-(methoxymethyl)piperidin-4-yl}-N-phenylpropanamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Alfentanyl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(1-(2-(4-Ethyl-5-oxo-2-tetrazolin-1-yl)ethyl)-4-(methoxymethyl)-4-piperidyl)propionanilide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alfentanil",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alfentanilum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2569?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2569/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2569/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2569/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2569/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2569/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2569/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2569/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

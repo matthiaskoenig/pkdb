@@ -1,0 +1,291 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0004911",
+  "lang": "en",
+  "description": [
+    "An inheritable form of hyperlipidemia, in which there are excess lipids in the blood.",
+    "Familial hypercholesterolaemia is an autosomal inherited disorder characterized by markedly elevated LDL-cholesterol levels and an increased risk of premature atherosclerotic cardiovascular disease",
+    "Familial hypercholesterolemia is is an autosomal dominant disorder characterized by elevation of serum cholesterol bound to low density lipoprotein (OMIM)",
+    "PMID:26076948"
+  ],
+  "synonyms": [
+    "Fredrickson type IIa hyperlipoproteinemia",
+    "Fredrickson type IIa lipidaemia",
+    "Hyperlipoproteinemia Type II",
+    "familial hyperbetalipoproteinaemia",
+    "familial hypercholesteremia",
+    "familial hypercholesterolaemia",
+    "familial hypercholesterolemia",
+    "hyperbetalipoproteinemia",
+    "hyperlipoproteinemia type II",
+    "type II hyperlipidemia"
+  ],
+  "annotation": {
+    "gwas_trait": [
+      true
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/5688",
+      "http://identifiers.org/snomedct/190773008",
+      "http://linkedlifedata.com/resource/umls/id/C0020445",
+      "http://purl.obolibrary.org/obo/DOID_13810",
+      "http://purl.obolibrary.org/obo/NCIT_C34704",
+      "http://www.ebi.ac.uk/efo/EFO_0004911",
+      "https://omim.org/phenotypicSeries/PS143890"
+    ],
+    "has_dbxref": [
+      "DOID:13810",
+      "ICD9:V19.8",
+      "MEDGEN:5688",
+      "MESH:D006938",
+      "MONDO:0005439",
+      "MedDRA:10054380",
+      "NANDO:2200602",
+      "NCIT:C34704",
+      "OMIM:143890",
+      "OMIM:144010",
+      "OMIM:603776",
+      "OMIMPS:143890",
+      "SCTID:190773008",
+      "SNOMEDCT:398036000",
+      "UMLS:C0020445"
+    ],
+    "id": [
+      "EFO:0004911"
+    ],
+    "term editor": [
+      "Laura Huerta"
+    ]
+  },
+  "label": "familial hypercholesterolemia",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "EFO_0004911",
+  "obo_id": "EFO:0004911",
+  "in_subset": [
+    "gard_rare",
+    "otar",
+    "rare"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "An inheritable form of hyperlipidemia, in which there are excess lipids in the blood.",
+      "oboXrefs": [
+        {
+          "database": "NCIT",
+          "id": "C34704",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C34704"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "13810",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/DOID_13810"
+    },
+    {
+      "database": "ICD9",
+      "id": "V19.8",
+      "description": "MONDO:relatedTo",
+      "url": null
+    },
+    {
+      "database": "MEDGEN",
+      "id": "5688",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/5688"
+    },
+    {
+      "database": "MESH",
+      "id": "D006938",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D006938"
+    },
+    {
+      "database": "MONDO",
+      "id": "0005439",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MONDO_0005439"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10054380",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10054380"
+    },
+    {
+      "database": "NANDO",
+      "id": "2200602",
+      "description": "https://orcid.org/0000-0003-0011-764X",
+      "url": "https://nanbyodata.jp/disease/NANDO:2200602"
+    },
+    {
+      "database": "NCIT",
+      "id": "C34704",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/NCIT_C34704"
+    },
+    {
+      "database": "OMIM",
+      "id": "143890",
+      "description": null,
+      "url": "https://omim.org/entry/143890"
+    },
+    {
+      "database": "OMIM",
+      "id": "144010",
+      "description": null,
+      "url": "https://omim.org/entry/144010"
+    },
+    {
+      "database": "OMIM",
+      "id": "603776",
+      "description": null,
+      "url": "https://omim.org/entry/603776"
+    },
+    {
+      "database": "OMIMPS",
+      "id": "143890",
+      "description": "MONDO:equivalentTo",
+      "url": "https://omim.org/MIM:PS143890"
+    },
+    {
+      "database": "SCTID",
+      "id": "190773008",
+      "description": "MONDO:equivalentTo",
+      "url": "http://snomed.info/id/190773008"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "398036000",
+      "description": null,
+      "url": "http://snomed.info/id/398036000"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0020445",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0020445"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Fredrickson type IIa hyperlipoproteinemia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "13810",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_13810"
+        }
+      ]
+    },
+    {
+      "name": "Fredrickson type IIa lipidaemia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "13810",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_13810"
+        }
+      ]
+    },
+    {
+      "name": "familial hyperbetalipoproteinaemia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "13810",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_13810"
+        }
+      ]
+    },
+    {
+      "name": "familial hypercholesteremia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "13810",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_13810"
+        }
+      ]
+    },
+    {
+      "name": "familial hypercholesterolemia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "hyperbetalipoproteinemia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "13810",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_13810"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004911?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004911/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004911/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004911/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004911/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004911/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004911/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004911/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004911/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004911/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004911/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

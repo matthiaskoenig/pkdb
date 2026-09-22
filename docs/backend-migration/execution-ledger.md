@@ -215,3 +215,21 @@ Execution: native, authorized by user.
   restoration are verified separately.
 - Existing operational services, source data and volumes are preserved. Historical
   corpus failures and acceptance gaps are not reclassified as passing.
+
+
+## 2026-09-22: restore vocabulary authoring
+
+The `pkdb_data` definitions are authoritative scientific source data and should not
+have been removed with the previous backend. Restore the focused authoring package,
+its ontology/chemical metadata caches, and the full cached identifiers.org registry.
+Django, the uploader, and deployment utilities remain retired.
+
+`scripts/update_vocabulary.py` regenerates vocabulary and provenance JSON offline.
+The complete 2,147-node content is preserved byte-for-byte; only the snapshot version
+changes to a hash of generated node content. Scientific policy constants are restored
+from the original source without changing their semantics. Source validation reuses
+the current bootstrap validator. CI checks generated output against editable sources.
+
+A source-to-database regression test adds a categorical measurement, its allowed
+choice, and a substance with explicit chemical properties and no cached ChEBI entry.
+It also verifies that an invalid parent leaves generated JSON and users unchanged.

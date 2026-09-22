@@ -1,0 +1,146 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_74125",
+  "lang": "en",
+  "description": [
+    "A biphenylyltetrazole that is losartan with the hydroxymethyl group at position 5 on the imidazole ring replaced with a carboxylic acid."
+  ],
+  "synonyms": [
+    "2-butyl-4-chloro-1-{[2'-(1H-tetrazol-5-yl)biphenyl-4-yl]methyl}-1H-imidazole-5-carboxylic acid",
+    "EXP 3174"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C22H21ClN6O2"
+    ],
+    "has_dbxref": [
+      "CAS:124750-92-1",
+      "KEGG:C15554",
+      "Reaxys:6164851"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:74125"
+    ],
+    "inchi": [
+      "InChI=1S/C22H21ClN6O2/c1-2-3-8-18-24-20(23)19(22(30)31)29(18)13-14-9-11-15(12-10-14)16-6-4-5-7-17(16)21-25-27-28-26-21/h4-7,9-12H,2-3,8,13H2,1H3,(H,30,31)(H,25,26,27,28)"
+    ],
+    "inchikey": [
+      "ZEUXAIYYDDCIRX-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "436.89400"
+    ],
+    "monoisotopicmass": [
+      "436.14145"
+    ],
+    "smiles": [
+      "CCCCc1nc(Cl)c(C(O)=O)n1Cc1ccc(cc1)-c1ccccc1-c1nnn[nH]1"
+    ]
+  },
+  "label": "losartan carboxylic acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_74125",
+  "obo_id": "CHEBI:74125",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "124750-92-1",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "124750-92-1",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "KEGG",
+      "id": "C15554",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C15554"
+    },
+    {
+      "database": "Reaxys",
+      "id": "6164851",
+      "description": "Reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-butyl-4-chloro-1-{[2'-(1H-tetrazol-5-yl)biphenyl-4-yl]methyl}-1H-imidazole-5-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "EXP 3174",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_74125?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_74125/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_74125/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_74125/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_74125/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_74125/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_74125/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_74125/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_74125/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

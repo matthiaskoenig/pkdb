@@ -1,0 +1,740 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3387",
+  "lang": "en",
+  "description": [
+    "A dibenzoazepine that is 5H-dibenzo[b,f]azepine carrying a carbamoyl substituent at the azepine nitrogen, used as an anticonvulsant."
+  ],
+  "synonyms": [
+    "5H-dibenzo[b,f]azepine-5-carboxamide",
+    "5-Carbamoyl-5H-dibenz(b,f)azepine",
+    "5-Carbamoyl-5H-dibenzo(b,f)azepine",
+    "5-Carbamyl-5H-dibenzo(b,f)azepine",
+    "5-carbamoyl-5H-dibenz[b,f]azepine",
+    "5H-Dibenz(b,f)azepine-5-carboxamide",
+    "Carbamazepen",
+    "Carnexiv",
+    "carbamazepina",
+    "carbamazepine",
+    "carbamazepinum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C15H12N2O"
+    ],
+    "has_alternative_id": [
+      "CHEBI:115086"
+    ],
+    "has_dbxref": [
+      "CAS:298-46-4",
+      "DrugBank:DB00564",
+      "Drug_Central:489",
+      "HMDB:HMDB0014704",
+      "KEGG:C06868",
+      "KEGG:D00252",
+      "LINCS:LSM-3610",
+      "PMID:10411478",
+      "PMID:11071486",
+      "PMID:11129121",
+      "PMID:11240598",
+      "PMID:11475584",
+      "PMID:11595204",
+      "PMID:11888243",
+      "PMID:11891095",
+      "PMID:12073283",
+      "PMID:12228880",
+      "PMID:12475188",
+      "PMID:12749779",
+      "PMID:12799799",
+      "PMID:12957643",
+      "PMID:14160216",
+      "PMID:14572037",
+      "PMID:14581052",
+      "PMID:14713026",
+      "PMID:14723323",
+      "PMID:15165631",
+      "PMID:15557493",
+      "PMID:15665743",
+      "PMID:15683742",
+      "PMID:15739418",
+      "PMID:15820347",
+      "PMID:15850602",
+      "PMID:16033627",
+      "PMID:16150575",
+      "PMID:16245817",
+      "PMID:16380297",
+      "PMID:16394456",
+      "PMID:16437428",
+      "PMID:16538175",
+      "PMID:16562645",
+      "PMID:16616830",
+      "PMID:16990009",
+      "PMID:17027750",
+      "PMID:17028629",
+      "PMID:17207414",
+      "PMID:17582711",
+      "PMID:17873967",
+      "PMID:17949959",
+      "PMID:18163657",
+      "PMID:18415623",
+      "PMID:18637155",
+      "PMID:18652684",
+      "PMID:18656520",
+      "PMID:18969759",
+      "PMID:19135617",
+      "PMID:19473818",
+      "PMID:19741433",
+      "PMID:19921623",
+      "PMID:22322005",
+      "PMID:27967303",
+      "PMID:7602118",
+      "Patent:US2004220187",
+      "Patent:US2007167446",
+      "Patent:US2011177136",
+      "Patent:US2011245283",
+      "Patent:US2948718",
+      "Reaxys:1246090",
+      "Wikipedia:Carbamazepine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3387"
+    ],
+    "inchi": [
+      "InChI=1S/C15H12N2O/c16-15(18)17-13-7-3-1-5-11(13)9-10-12-6-2-4-8-14(12)17/h1-10H,(H2,16,18)"
+    ],
+    "inchikey": [
+      "FFGPTBGBLSHEPO-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "236.26860"
+    ],
+    "monoisotopicmass": [
+      "236.09496"
+    ],
+    "smiles": [
+      "NC(=O)N1c2ccccc2C=Cc2ccccc12"
+    ]
+  },
+  "label": "carbamazepine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3387",
+  "obo_id": "CHEBI:3387",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "298-46-4",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "298-46-4",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "298-46-4",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00564",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00564"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "489",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/489"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014704",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014704"
+    },
+    {
+      "database": "KEGG",
+      "id": "C06868",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C06868"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00252",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00252"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-3610",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "10411478",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10411478"
+    },
+    {
+      "database": "PMID",
+      "id": "11071486",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11071486"
+    },
+    {
+      "database": "PMID",
+      "id": "11129121",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11129121"
+    },
+    {
+      "database": "PMID",
+      "id": "11240598",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11240598"
+    },
+    {
+      "database": "PMID",
+      "id": "11475584",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11475584"
+    },
+    {
+      "database": "PMID",
+      "id": "11595204",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11595204"
+    },
+    {
+      "database": "PMID",
+      "id": "11888243",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11888243"
+    },
+    {
+      "database": "PMID",
+      "id": "11891095",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11891095"
+    },
+    {
+      "database": "PMID",
+      "id": "12073283",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12073283"
+    },
+    {
+      "database": "PMID",
+      "id": "12228880",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12228880"
+    },
+    {
+      "database": "PMID",
+      "id": "12475188",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12475188"
+    },
+    {
+      "database": "PMID",
+      "id": "12749779",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12749779"
+    },
+    {
+      "database": "PMID",
+      "id": "12799799",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12799799"
+    },
+    {
+      "database": "PMID",
+      "id": "12957643",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12957643"
+    },
+    {
+      "database": "PMID",
+      "id": "14160216",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14160216"
+    },
+    {
+      "database": "PMID",
+      "id": "14572037",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14572037"
+    },
+    {
+      "database": "PMID",
+      "id": "14581052",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14581052"
+    },
+    {
+      "database": "PMID",
+      "id": "14713026",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14713026"
+    },
+    {
+      "database": "PMID",
+      "id": "14723323",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14723323"
+    },
+    {
+      "database": "PMID",
+      "id": "15165631",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15165631"
+    },
+    {
+      "database": "PMID",
+      "id": "15557493",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15557493"
+    },
+    {
+      "database": "PMID",
+      "id": "15665743",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15665743"
+    },
+    {
+      "database": "PMID",
+      "id": "15683742",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15683742"
+    },
+    {
+      "database": "PMID",
+      "id": "15739418",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15739418"
+    },
+    {
+      "database": "PMID",
+      "id": "15820347",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15820347"
+    },
+    {
+      "database": "PMID",
+      "id": "15850602",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15850602"
+    },
+    {
+      "database": "PMID",
+      "id": "16033627",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16033627"
+    },
+    {
+      "database": "PMID",
+      "id": "16150575",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16150575"
+    },
+    {
+      "database": "PMID",
+      "id": "16245817",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16245817"
+    },
+    {
+      "database": "PMID",
+      "id": "16380297",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16380297"
+    },
+    {
+      "database": "PMID",
+      "id": "16394456",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16394456"
+    },
+    {
+      "database": "PMID",
+      "id": "16437428",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16437428"
+    },
+    {
+      "database": "PMID",
+      "id": "16538175",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16538175"
+    },
+    {
+      "database": "PMID",
+      "id": "16562645",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16562645"
+    },
+    {
+      "database": "PMID",
+      "id": "16616830",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16616830"
+    },
+    {
+      "database": "PMID",
+      "id": "16990009",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16990009"
+    },
+    {
+      "database": "PMID",
+      "id": "17027750",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17027750"
+    },
+    {
+      "database": "PMID",
+      "id": "17028629",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17028629"
+    },
+    {
+      "database": "PMID",
+      "id": "17207414",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17207414"
+    },
+    {
+      "database": "PMID",
+      "id": "17582711",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17582711"
+    },
+    {
+      "database": "PMID",
+      "id": "17873967",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17873967"
+    },
+    {
+      "database": "PMID",
+      "id": "17949959",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17949959"
+    },
+    {
+      "database": "PMID",
+      "id": "18163657",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18163657"
+    },
+    {
+      "database": "PMID",
+      "id": "18415623",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18415623"
+    },
+    {
+      "database": "PMID",
+      "id": "18637155",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18637155"
+    },
+    {
+      "database": "PMID",
+      "id": "18652684",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18652684"
+    },
+    {
+      "database": "PMID",
+      "id": "18656520",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18656520"
+    },
+    {
+      "database": "PMID",
+      "id": "18969759",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18969759"
+    },
+    {
+      "database": "PMID",
+      "id": "19135617",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19135617"
+    },
+    {
+      "database": "PMID",
+      "id": "19473818",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19473818"
+    },
+    {
+      "database": "PMID",
+      "id": "19741433",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19741433"
+    },
+    {
+      "database": "PMID",
+      "id": "19921623",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19921623"
+    },
+    {
+      "database": "PMID",
+      "id": "22322005",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22322005"
+    },
+    {
+      "database": "PMID",
+      "id": "27967303",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27967303"
+    },
+    {
+      "database": "PMID",
+      "id": "7602118",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7602118"
+    },
+    {
+      "database": "Patent",
+      "id": "US2004220187",
+      "description": null,
+      "url": "https://www.google.com/patents/US2004220187"
+    },
+    {
+      "database": "Patent",
+      "id": "US2007167446",
+      "description": null,
+      "url": "https://www.google.com/patents/US2007167446"
+    },
+    {
+      "database": "Patent",
+      "id": "US2011177136",
+      "description": null,
+      "url": "https://www.google.com/patents/US2011177136"
+    },
+    {
+      "database": "Patent",
+      "id": "US2011245283",
+      "description": null,
+      "url": "https://www.google.com/patents/US2011245283"
+    },
+    {
+      "database": "Patent",
+      "id": "US2948718",
+      "description": null,
+      "url": "https://www.google.com/patents/US2948718"
+    },
+    {
+      "database": "Reaxys",
+      "id": "1246090",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Carbamazepine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Carbamazepine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5H-dibenzo[b,f]azepine-5-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Carbamoyl-5H-dibenz(b,f)azepine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Carbamoyl-5H-dibenzo(b,f)azepine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Carbamyl-5H-dibenzo(b,f)azepine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-carbamoyl-5H-dibenz[b,f]azepine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5H-Dibenz(b,f)azepine-5-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Carbamazepen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Carnexiv",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbamazepina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbamazepine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbamazepinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3387/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

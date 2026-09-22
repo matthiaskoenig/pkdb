@@ -1,0 +1,112 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C16357",
+  "lang": "en",
+  "description": [
+    "A laboratory procedure for the detection or identification of proteins or peptides that have been separated by gel electrophoresis and transferred onto nitrocellulose or other type of paper or nylon membrane. The proteins are then detected by reaction with enzymatically labeled or radiolabeled antibody probes."
+  ],
+  "synonyms": [
+    "Blotting, Western",
+    "WESTERN BLOT",
+    "Western Blot",
+    "Western Blotting"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A method for the detection or identification of proteins or peptides that have been separated by gel electrophoresis and transferred onto nitrocellulose or other type of paper or nylon membrane. The proteins are then detected by reaction with enzymatically labeled or radiolabeled antibody probes."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CTRP"
+    ],
+    "Display_Name": [
+      "Western Blotting"
+    ],
+    "Legacy Concept Name": [
+      "Blotting_Western"
+    ],
+    "Preferred_Name": [
+      "Western Blotting"
+    ],
+    "Semantic_Type": [
+      "Laboratory Procedure"
+    ],
+    "UMLS_CUI": [
+      "C0949466"
+    ],
+    "code": [
+      "C16357"
+    ]
+  },
+  "label": "Western Blotting",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C16357",
+  "obo_id": "NCIT:C16357",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118169",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C85492"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Blotting, Western",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "WESTERN BLOT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Western Blot",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Western Blotting",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16357?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16357/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16357/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16357/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16357/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16357/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16357/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

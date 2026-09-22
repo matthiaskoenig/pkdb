@@ -1,0 +1,120 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C765",
+  "lang": "en",
+  "description": [
+    "An element with atomic symbol K, atomic number 19, and atomic weight 39.10."
+  ],
+  "synonyms": [
+    "K",
+    "POTASSIUM",
+    "Potassium",
+    "Potassium (NOS)",
+    "potassium"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A metallic element that is important in body functions such as regulation of blood pressure and of water content in cells, transmission of nerve impulses, digestion, muscle contraction, and heartbeat."
+    ],
+    "CAS_Registry": [
+      "7440-09-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:26216"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "RWP5GA015D"
+    ],
+    "Legacy Concept Name": [
+      "Potassium"
+    ],
+    "Preferred_Name": [
+      "Potassium"
+    ],
+    "Semantic_Type": [
+      "Element, Ion, or Isotope"
+    ],
+    "UMLS_CUI": [
+      "C0032821"
+    ],
+    "code": [
+      "C765"
+    ]
+  },
+  "label": "Potassium",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C765",
+  "obo_id": "NCIT:C765",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "K",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "POTASSIUM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Potassium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Potassium (NOS)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "potassium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C765?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C765/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C765/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C765/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C765/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C765/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C765/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

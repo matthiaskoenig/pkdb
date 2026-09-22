@@ -1,0 +1,92 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C13309",
+  "lang": "en",
+  "description": [
+    "Of or relating to the vagina."
+  ],
+  "synonyms": [
+    "Vaginal",
+    "vaginal"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Having to do with the vagina (the birth canal).",
+      "Relating to the vagina as the intended site of administration, where the pharmaceutical product is administered via the vaginal opening, usually for local action in the vagina but sometimes for systemic action after absorption via the vagina."
+    ],
+    "Contributing_Source": [
+      "EDQM-HC"
+    ],
+    "Legacy Concept Name": [
+      "Vaginal"
+    ],
+    "NCI_META_CUI": [
+      "CL318016"
+    ],
+    "Preferred_Name": [
+      "Vaginal"
+    ],
+    "Semantic_Type": [
+      "Qualitative Concept"
+    ],
+    "code": [
+      "C13309"
+    ]
+  },
+  "label": "Vaginal",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C13309",
+  "obo_id": "NCIT:C13309",
+  "in_subset": [
+    "NCIT_C148636",
+    "NCIT_C150114"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Vaginal",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "vaginal",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13309?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13309/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13309/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13309/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13309/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13309/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13309/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

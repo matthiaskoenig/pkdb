@@ -1,0 +1,124 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C47527",
+  "lang": "en",
+  "description": [
+    "An imidazole derivative with short-acting sedative, hypnotic, and general anesthetic properties. Etomidate appears to have gamma-aminobutyric acid (GABA) like effects, mediated through GABA-A receptor. The action enhances the inhibitory effect of GABA on the central nervous system by causing chloride channel opening events which leads to membrane hyperpolarization."
+  ],
+  "synonyms": [
+    "1H-Imidazole-5-Carboxylic Acid, 1-((1R)-1-phenylethyl)-, Ethyl Ester",
+    "Amidate",
+    "ETOMIDATE",
+    "Etomidate",
+    "R-(+)-Ethyl 1-(1-phenylethyl)-1H-imidazole-5-carboxylate"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "33125-97-2"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:4910"
+    ],
+    "Chemical_Formula": [
+      "C14H16N2O2"
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "Z22628B598"
+    ],
+    "Legacy Concept Name": [
+      "Etomidate"
+    ],
+    "Preferred_Name": [
+      "Etomidate"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0015131"
+    ],
+    "code": [
+      "C47527"
+    ]
+  },
+  "label": "Etomidate",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C47527",
+  "obo_id": "NCIT:C47527",
+  "in_subset": [
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C159412",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "1H-Imidazole-5-Carboxylic Acid, 1-((1R)-1-phenylethyl)-, Ethyl Ester",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Amidate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ETOMIDATE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Etomidate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "R-(+)-Ethyl 1-(1-phenylethyl)-1H-imidazole-5-carboxylate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47527?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47527/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47527/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47527/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47527/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47527/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47527/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

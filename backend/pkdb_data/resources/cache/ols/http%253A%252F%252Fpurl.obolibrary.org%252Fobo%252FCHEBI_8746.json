@@ -1,0 +1,243 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8746",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "4-[(1R)-2-(tert-butylamino)-1-hydroxyethyl]-2-(hydroxymethyl)phenol",
+    "(-)-Albuterol",
+    "(-)-Salbutamol",
+    "(R)-albuterol",
+    "Levalbuterol",
+    "Levosalbutamol",
+    "R-Salbutamol"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C13H21NO3"
+    ],
+    "has_dbxref": [
+      "Beilstein:5741175",
+      "CAS:34391-04-3",
+      "Drug_Central:1575",
+      "KEGG:C11770",
+      "KEGG:D08124",
+      "LINCS:LSM-5480",
+      "PDBeChem:68H",
+      "Wikipedia:Levalbuterol"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8746"
+    ],
+    "inchi": [
+      "InChI=1S/C13H21NO3/c1-13(2,3)14-7-12(17)9-4-5-11(16)10(6-9)8-15/h4-6,12,14-17H,7-8H2,1-3H3/t12-/m0/s1"
+    ],
+    "inchikey": [
+      "NDAUXUAQIAJITI-LBPRGKRZSA-N"
+    ],
+    "mass": [
+      "239.31070"
+    ],
+    "monoisotopicmass": [
+      "239.15214"
+    ],
+    "smiles": [
+      "CC(C)(C)NC[C@H](O)c1ccc(O)c(CO)c1"
+    ]
+  },
+  "label": "(R)-salbutamol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8746",
+  "obo_id": "CHEBI:8746",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "5741175",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "34391-04-3",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "34391-04-3",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1575",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1575"
+    },
+    {
+      "database": "KEGG",
+      "id": "C11770",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C11770"
+    },
+    {
+      "database": "KEGG",
+      "id": "D08124",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D08124"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5480",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "68H",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/68H"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Levalbuterol",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Levalbuterol"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-[(1R)-2-(tert-butylamino)-1-hydroxyethyl]-2-(hydroxymethyl)phenol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-Albuterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-Salbutamol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-albuterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Levalbuterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Levosalbutamol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "R-Salbutamol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8746?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8746/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8746/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8746/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8746/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8746/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8746/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

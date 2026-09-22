@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:41423",
+  "name": "celecoxib",
+  "definition": "A member of the class of pyrazoles that is 1H-pyrazole which is substituted at positions 1, 3 and 5 by 4-sulfamoylphenyl, trifluoromethyl and p-tolyl groups, respectively. A cyclooxygenase-2 inhibitor, it is used in the treatment of arthritis.",
+  "formula": "C17H14F3N3O2S",
+  "charge": "0",
+  "mass": "381.370",
+  "inchikey": "RZEKVGVHFLEQIL-UHFFFAOYSA-N"
+}

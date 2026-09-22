@@ -1,0 +1,152 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C14201",
+  "lang": "en",
+  "description": [
+    "The domestic dog, Canis familiaris."
+  ],
+  "synonyms": [
+    "CANIS FAMILIARIS",
+    "Canine",
+    "Canine Species",
+    "Canis canis",
+    "Canis domesticus",
+    "Canis familiaris",
+    "Canis lupus familiaris",
+    "DOG",
+    "Dog",
+    "Mammals, Dogs"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "The domestic dog, Canis familiaris. (NCI)"
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "Legacy Concept Name": [
+      "Dog"
+    ],
+    "NCBI_Taxon_ID": [
+      "9615"
+    ],
+    "Preferred_Name": [
+      "Dog"
+    ],
+    "Semantic_Type": [
+      "Mammal"
+    ],
+    "UMLS_CUI": [
+      "C0012984"
+    ],
+    "code": [
+      "C14201"
+    ]
+  },
+  "label": "Dog",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C14201",
+  "obo_id": "NCIT:C14201",
+  "in_subset": [
+    "NCIT_C160931",
+    "NCIT_C61410",
+    "NCIT_C77526",
+    "NCIT_C77808"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CANIS FAMILIARIS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Canine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Canine Species",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Canis canis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Canis domesticus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Canis familiaris",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Canis lupus familiaris",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "DOG",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Dog",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Mammals, Dogs",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14201?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14201/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14201/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14201/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14201/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14201/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14201/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:63589",
+  "name": "etravirine",
+  "definition": "An aminopyrimidine that consists of 2,6-diaminopyrimidine bearing a bromo substituent at position 5, a 4-cyano-2,6-dimethylphenoxy substituent at position 4 and having a 4-cyanophenyl substituent attached to the 2-amino group. NNRTI of HIV-1, binds directly to RT and blocks RNA-dependent and DNA-dependent DNA polymerase activities",
+  "formula": "C20H15BrN6O",
+  "charge": "0",
+  "mass": "435.27700",
+  "inchikey": "PYGWGZALEOIKDF-UHFFFAOYSA-N"
+}

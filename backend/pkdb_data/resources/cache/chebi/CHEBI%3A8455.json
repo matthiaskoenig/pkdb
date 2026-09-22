@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:8455",
+  "name": "proguanil",
+  "definition": "A biguanide compound which has isopropyl and p-chlorophenyl substituents on the terminal N atoms. A prophylactic antimalarial drug, it works by inhibiting the enzyme dihydrofolate reductase, which is involved in the reproduction of the malaria parasites Plasmodium falciparum and P. vivax within the red blood cells.",
+  "formula": "C11H16ClN5",
+  "charge": "0",
+  "mass": "253.73100",
+  "inchikey": "SSOLNOMRVKKSON-UHFFFAOYSA-N"
+}

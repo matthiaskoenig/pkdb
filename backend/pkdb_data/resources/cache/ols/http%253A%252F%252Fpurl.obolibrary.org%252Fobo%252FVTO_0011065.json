@@ -1,0 +1,98 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/VTO_0011065",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Bos bovis",
+    "Bos primigenius taurus"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "NCBITaxon:9913"
+    ],
+    "has_obo_namespace": [
+      "vto-namespace"
+    ],
+    "has_rank": [
+      "http://purl.obolibrary.org/obo/TAXRANK_0000006"
+    ],
+    "id": [
+      "VTO:0011065"
+    ]
+  },
+  "label": "Bos taurus",
+  "ontology_name": "vto",
+  "ontology_prefix": "VTO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/vto.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "VTO_0011065",
+  "obo_id": "VTO:0011065",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "NCBITaxon",
+      "id": "9913",
+      "description": null,
+      "url": "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9913"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Bos bovis",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCBITaxon",
+          "id": "9913",
+          "description": null,
+          "url": "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9913"
+        }
+      ]
+    },
+    {
+      "name": "Bos primigenius taurus",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCBITaxon",
+          "id": "9913",
+          "description": null,
+          "url": "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9913"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011065?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011065/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011065/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011065/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011065/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011065/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011065/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

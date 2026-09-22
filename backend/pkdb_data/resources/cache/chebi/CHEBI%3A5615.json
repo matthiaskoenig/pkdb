@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:5615",
+  "name": "halothane",
+  "definition": "A haloalkane comprising ethane having three flouro substituents at the 1-position as well as bromo- and chloro substituents at the 2-position.",
+  "formula": "C2HBrClF3",
+  "charge": "0",
+  "mass": "197.38125",
+  "inchikey": "BCQZXOMGPXTTIC-UHFFFAOYSA-N"
+}

@@ -1,0 +1,140 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C47703",
+  "lang": "en",
+  "description": [
+    "A nonsulfonylurea insulin secretagogue belonging to the melgitinide class with hypoglycemic activity. Repaglinide is rapidly absorbed and has a rapid onset and short duration of action. This agent is metabolized in the liver by CYP2C8 and CYP3A4 and its metabolites are excreted in the bile. Repaglinide has a half-life of one hour."
+  ],
+  "synonyms": [
+    "(+)-2-Ethoxy-alpha-(((S)-alpha-isobutyl-o-piperidinobenzyl)carbamoyl)-p-toluic Acid",
+    "AG-EE 623 ZW",
+    "Benzoic Acid, 2-ethoxy-4-(2-((3-methyl-1-(2-(1-piperidinyl)phenyl)butyl)amino)-2-oxoethyl)-,(S)-",
+    "Prandin",
+    "REPAGLINIDE",
+    "Repaglinide"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "135062-02-1"
+    ],
+    "Chemical_Formula": [
+      "C27H36N2O4"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Repaglinide"
+    ],
+    "FDA_UNII_Code": [
+      "668Z8C33LU"
+    ],
+    "Legacy Concept Name": [
+      "Repaglinide"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "775334"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "775334"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "775334"
+    ],
+    "Preferred_Name": [
+      "Repaglinide"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0246689"
+    ],
+    "code": [
+      "C47703"
+    ]
+  },
+  "label": "Repaglinide",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C47703",
+  "obo_id": "NCIT:C47703",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(+)-2-Ethoxy-alpha-(((S)-alpha-isobutyl-o-piperidinobenzyl)carbamoyl)-p-toluic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "AG-EE 623 ZW",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Benzoic Acid, 2-ethoxy-4-(2-((3-methyl-1-(2-(1-piperidinyl)phenyl)butyl)amino)-2-oxoethyl)-,(S)-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Prandin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "REPAGLINIDE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Repaglinide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47703?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47703/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47703/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47703/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47703/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47703/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47703/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

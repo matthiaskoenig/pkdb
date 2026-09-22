@@ -1,0 +1,252 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_139271",
+  "lang": "en",
+  "description": [
+    "A C21-steroid that is cortisol bearing an additional hydroxy substituent at the 6beta-position. In humans, it is produced as a metabolite of cortisol by cytochrome p450-3A4 (CYP3A4, an important enzyme involved in the metabolism of a variety of exogenous and endogenous compounds) and can be used to detect moderate and potent CYP3A4 inhibition in vivo."
+  ],
+  "synonyms": [
+    "6beta,11beta,17,21-tetrahydroxypregn-4-ene-3,20-dione",
+    "6beta-hydroxycortisol",
+    "(6beta,11beta)-6,11,17,21-tetrahydroxypregn-4-ene-3,20-dione",
+    "6beta,11beta,17alpha,21-tetrahydroxypregn-4-ene-3,20-dione",
+    "6beta-HO-cortisol",
+    "6beta-OH-cortisol",
+    "NSC 76163"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C21H30O6"
+    ],
+    "has_dbxref": [
+      "CAS:53-35-0",
+      "PMID:14605790",
+      "PMID:16149517",
+      "PMID:16792464",
+      "PMID:17386716",
+      "PMID:19959402",
+      "PMID:20963880",
+      "PMID:21490593",
+      "Reaxys:2512454"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:139271"
+    ],
+    "inchi": [
+      "InChI=1S/C21H30O6/c1-19-5-3-11(23)7-14(19)15(24)8-12-13-4-6-21(27,17(26)10-22)20(13,2)9-16(25)18(12)19/h7,12-13,15-16,18,22,24-25,27H,3-6,8-10H2,1-2H3/t12-,13-,15+,16-,18+,19-,20-,21-/m0/s1"
+    ],
+    "inchikey": [
+      "GNFTWPCIRXSCQF-UJXAPRPESA-N"
+    ],
+    "mass": [
+      "378.460"
+    ],
+    "monoisotopicmass": [
+      "378.20424"
+    ],
+    "smiles": [
+      "C1[C@@]2([C@@]([C@@]3(C([C@@H]1O)=CC(CC3)=O)C)([C@H](C[C@@]4([C@@](CC[C@@]24[H])(O)C(CO)=O)C)O)[H])[H]"
+    ]
+  },
+  "label": "6beta-hydroxycortisol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_139271",
+  "obo_id": "CHEBI:139271",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "53-35-0",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "14605790",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14605790"
+    },
+    {
+      "database": "PMID",
+      "id": "16149517",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16149517"
+    },
+    {
+      "database": "PMID",
+      "id": "16792464",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16792464"
+    },
+    {
+      "database": "PMID",
+      "id": "17386716",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17386716"
+    },
+    {
+      "database": "PMID",
+      "id": "19959402",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19959402"
+    },
+    {
+      "database": "PMID",
+      "id": "20963880",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20963880"
+    },
+    {
+      "database": "PMID",
+      "id": "21490593",
+      "description": "SUBMITTER",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21490593"
+    },
+    {
+      "database": "Reaxys",
+      "id": "2512454",
+      "description": "Reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "6beta,11beta,17,21-tetrahydroxypregn-4-ene-3,20-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6beta-hydroxycortisol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(6beta,11beta)-6,11,17,21-tetrahydroxypregn-4-ene-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6beta,11beta,17alpha,21-tetrahydroxypregn-4-ene-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "SUBMITTER",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6beta-HO-cortisol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6beta-OH-cortisol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NSC 76163",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139271?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139271/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139271/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139271/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139271/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139271/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139271/graph"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139271/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139271/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

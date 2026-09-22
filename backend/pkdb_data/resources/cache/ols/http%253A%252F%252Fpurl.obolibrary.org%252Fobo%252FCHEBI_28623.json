@@ -1,0 +1,177 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_28623",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Campesterol",
+    "campest-5-en-3beta-ol",
+    "campesterol",
+    "(24R)ergost-5-en-3beta-ol"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C28H48O"
+    ],
+    "has_alternative_id": [
+      "CHEBI:22994",
+      "CHEBI:3342"
+    ],
+    "has_dbxref": [
+      "CAS:474-62-4",
+      "KEGG:C01789",
+      "KNApSAcK:C00003647",
+      "LIPID_MAPS_instance:LMST01030097"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:28623"
+    ],
+    "inchi": [
+      "InChI=1S/C28H48O/c1-18(2)19(3)7-8-20(4)24-11-12-25-23-10-9-21-17-22(29)13-15-27(21,5)26(23)14-16-28(24,25)6/h9,18-20,22-26,29H,7-8,10-17H2,1-6H3/t19-,20-,22+,23+,24-,25+,26+,27+,28-/m1/s1"
+    ],
+    "inchikey": [
+      "SGNBVLSWZMBQTH-PODYLUTMSA-N"
+    ],
+    "mass": [
+      "400.68012"
+    ],
+    "monoisotopicmass": [
+      "400.37052"
+    ],
+    "smiles": [
+      "[H][C@@]1(CC[C@@]2([H])[C@]3([H])CC=C4C[C@@H](O)CC[C@]4(C)[C@@]3([H])CC[C@]12C)[C@H](C)CC[C@@H](C)C(C)C"
+    ]
+  },
+  "label": "campesterol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_28623",
+  "obo_id": "CHEBI:28623",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "474-62-4",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "KEGG",
+      "id": "C01789",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C01789"
+    },
+    {
+      "database": "KNApSAcK",
+      "id": "C00003647",
+      "description": null,
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00003647"
+    },
+    {
+      "database": "LIPID_MAPS_instance",
+      "id": "LMST01030097",
+      "description": "LIPID MAPS",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMST01030097"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Campesterol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "campest-5-en-3beta-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "campesterol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(24R)ergost-5-en-3beta-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28623?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28623/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28623/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28623/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28623/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28623/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28623/graph"
+    },
+    "has_parent_hydride": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28623/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_parent_hydride"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28623/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

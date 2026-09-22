@@ -1,0 +1,64 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/FMA_7196",
+  "lang": "en",
+  "description": [],
+  "synonyms": [],
+  "annotation": {
+    "has_obo_namespace": [
+      "fma"
+    ],
+    "id": [
+      "FMA:7196"
+    ]
+  },
+  "label": "Spleen",
+  "ontology_name": "fma",
+  "ontology_prefix": "FMA",
+  "ontology_iri": "http://purl.obolibrary.org/obo/fma.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "FMA_7196",
+  "obo_id": "FMA:7196",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_7196?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_7196/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_7196/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_7196/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_7196/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_7196/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_7196/graph"
+    },
+    "systemic_part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_7196/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Ffma%2523systemic_part_of"
+    },
+    "constitutional_part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_7196/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Ffma%2523constitutional_part_of"
+    },
+    "regional_part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_7196/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Ffma%2523regional_part_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

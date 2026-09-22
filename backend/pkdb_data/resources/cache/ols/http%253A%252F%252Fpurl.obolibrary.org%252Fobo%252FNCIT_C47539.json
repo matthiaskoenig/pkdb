@@ -1,0 +1,155 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C47539",
+  "lang": "en",
+  "description": [
+    "The sodium salt form of fondaparinux, a synthetic glucopyranoside with antithrombotic activity. Fondaparinux sodium selectively binds to antithrombin III, thereby potentiating the innate neutralization of activated factor X (Factor Xa) by antithrombin. Neutralization of Factor Xa inhibits its activity and interrupts the blood coagulation cascade, thereby preventing thrombin formation and thrombus development. (NCI05)"
+  ],
+  "synonyms": [
+    "Arixtra",
+    "FONDAPARINUX SODIUM",
+    "Fondaparinux Sodium",
+    "Methyl O-2-deoxy-6-O-sulfo-2-(sulfoamino)-alpha-D-glucopyranosyl-(1->4)-O-beta-D-glucopyra-nuronosyl-(1->4)-O-2-deoxy-3,6-di-O-sulfo-2-(sulfoamino)-alpha-D-glucopyranosyl-(1->4)-O-2-O-sulfo-alpha-L-idopyranuronosyl-(1->4)-2-deoxy-6-O-sulfo-2-(sulfoamino)-alpha-D-glucopyranoside, decasodium salt",
+    "fondaparinux",
+    "fondaparinux sodium"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to prevent blood clots from forming inside blood vessels in the leg. It is being studied in the prevention of blood clots in some cancer patients, including women having surgery for cancer of the reproductive tract. It is a type of anticoagulant."
+    ],
+    "CAS_Registry": [
+      "114870-03-0"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:31632"
+    ],
+    "Chemical_Formula": [
+      "C31H43N3O49S8.10Na"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Fondaparinux Sodium"
+    ],
+    "FDA_UNII_Code": [
+      "X0Q6N9USOZ"
+    ],
+    "Has_Free_Acid_Or_Base_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C73142"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C104683"
+    ],
+    "Legacy Concept Name": [
+      "Fondaparinux_Sodium"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "510285"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "510285"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "510285"
+    ],
+    "Preferred_Name": [
+      "Fondaparinux Sodium"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C1099664"
+    ],
+    "code": [
+      "C47539"
+    ]
+  },
+  "label": "Fondaparinux Sodium",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C47539",
+  "obo_id": "NCIT:C47539",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Arixtra",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "FONDAPARINUX SODIUM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Fondaparinux Sodium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Methyl O-2-deoxy-6-O-sulfo-2-(sulfoamino)-alpha-D-glucopyranosyl-(1->4)-O-beta-D-glucopyra-nuronosyl-(1->4)-O-2-deoxy-3,6-di-O-sulfo-2-(sulfoamino)-alpha-D-glucopyranosyl-(1->4)-O-2-O-sulfo-alpha-L-idopyranuronosyl-(1->4)-2-deoxy-6-O-sulfo-2-(sulfoamino)-alpha-D-glucopyranoside, decasodium salt",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "fondaparinux",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "fondaparinux sodium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47539?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47539/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47539/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47539/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47539/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47539/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47539/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

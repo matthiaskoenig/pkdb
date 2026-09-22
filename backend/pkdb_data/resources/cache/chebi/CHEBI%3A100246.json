@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:100246",
+  "name": "norfloxacin",
+  "definition": "A quinolinemonocarboxylic acid with broad-spectrum antibacterial activity against most gram-negative and gram-positive bacteria. Norfloxacin is bactericidal and its mode of action depends on blocking of bacterial DNA replication by binding itself to an enzyme called DNA gyrase.",
+  "formula": "C16H18FN3O3",
+  "charge": "0",
+  "mass": "319.33080",
+  "inchikey": "OGJPXUAPXNRGGI-UHFFFAOYSA-N"
+}

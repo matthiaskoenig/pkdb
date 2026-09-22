@@ -1,0 +1,494 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_43602",
+  "lang": "en",
+  "description": [
+    "A dihydroxy-5beta-cholanic acid that is chenodeoxycholic acid carrying an additional ethyl substituent at the 6alpha-position. A semi-synthetic bile acid which acts as a farnesoid X receptor agonist and is used for treatment of primary biliary cholangitis."
+  ],
+  "synonyms": [
+    "6alpha-ethyl-3alpha,7alpha-dihydroxy-5beta-cholan-24-oic acid",
+    "(3alpha,5beta,6alpha,7alpha)-6-ethyl-3,7-dihydroxycholan-24-oic acid",
+    "6-ECDCA",
+    "6-Ethyl-CDCA",
+    "6-Ethylchenodeoxycholic acid",
+    "6alpha-Ethyl-chenodeoxycholic acid",
+    "6alpha-ethylchenodeoxycholic acid",
+    "INT 747",
+    "INT-747",
+    "INT747",
+    "Ocaliva",
+    "obeticholic acid"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C26H44O4"
+    ],
+    "has_alternative_id": [
+      "CHEBI:132971",
+      "CHEBI:41467",
+      "CHEBI:43599"
+    ],
+    "has_dbxref": [
+      "CAS:459789-99-2",
+      "Drug_Central:5155",
+      "KEGG:C15636",
+      "KEGG:D09360",
+      "PDBeChem:CHC",
+      "PMID:22406511",
+      "PMID:23593273",
+      "PMID:24382005",
+      "PMID:24623154",
+      "PMID:25329562",
+      "PMID:25421586",
+      "PMID:25468160",
+      "PMID:25500425",
+      "PMID:25592258",
+      "PMID:25726736",
+      "PMID:25753820",
+      "PMID:25864227",
+      "PMID:26136168",
+      "PMID:26169860",
+      "PMID:26169861",
+      "PMID:26169862",
+      "PMID:26549695",
+      "PMID:26723896",
+      "PMID:26811456",
+      "PMID:26812075",
+      "PMID:27109453",
+      "PMID:27406083",
+      "PMID:27425465",
+      "PMID:27468093",
+      "PMID:27475255",
+      "Reaxys:9238543",
+      "Wikipedia:Obeticholic_acid"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:43602"
+    ],
+    "inchi": [
+      "InChI=1S/C26H44O4/c1-5-17-21-14-16(27)10-12-26(21,4)20-11-13-25(3)18(15(2)6-9-22(28)29)7-8-19(25)23(20)24(17)30/h15-21,23-24,27,30H,5-14H2,1-4H3,(H,28,29)/t15-,16-,17-,18-,19+,20+,21+,23+,24-,25-,26-/m1/s1"
+    ],
+    "inchikey": [
+      "ZXERDUOLZKYMJM-ZWECCWDJSA-N"
+    ],
+    "mass": [
+      "420.626"
+    ],
+    "monoisotopicmass": [
+      "420.32396"
+    ],
+    "smiles": [
+      "C1[C@@]2([C@]3(CC[C@]4([C@]([C@@]3([C@@H]([C@@H]([C@@]2(C[C@@H](C1)O)[H])CC)O)[H])(CC[C@@]4([C@@H](CCC(O)=O)C)[H])[H])C)[H])C"
+    ]
+  },
+  "label": "obeticholic acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_43602",
+  "obo_id": "CHEBI:43602",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "459789-99-2",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "459789-99-2",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "5155",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/5155"
+    },
+    {
+      "database": "KEGG",
+      "id": "C15636",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C15636"
+    },
+    {
+      "database": "KEGG",
+      "id": "D09360",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D09360"
+    },
+    {
+      "database": "PDBeChem",
+      "id": "CHC",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/CHC"
+    },
+    {
+      "database": "PMID",
+      "id": "22406511",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22406511"
+    },
+    {
+      "database": "PMID",
+      "id": "23593273",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23593273"
+    },
+    {
+      "database": "PMID",
+      "id": "24382005",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24382005"
+    },
+    {
+      "database": "PMID",
+      "id": "24623154",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24623154"
+    },
+    {
+      "database": "PMID",
+      "id": "25329562",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25329562"
+    },
+    {
+      "database": "PMID",
+      "id": "25421586",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25421586"
+    },
+    {
+      "database": "PMID",
+      "id": "25468160",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25468160"
+    },
+    {
+      "database": "PMID",
+      "id": "25500425",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25500425"
+    },
+    {
+      "database": "PMID",
+      "id": "25592258",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25592258"
+    },
+    {
+      "database": "PMID",
+      "id": "25726736",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25726736"
+    },
+    {
+      "database": "PMID",
+      "id": "25753820",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25753820"
+    },
+    {
+      "database": "PMID",
+      "id": "25864227",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25864227"
+    },
+    {
+      "database": "PMID",
+      "id": "26136168",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26136168"
+    },
+    {
+      "database": "PMID",
+      "id": "26169860",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26169860"
+    },
+    {
+      "database": "PMID",
+      "id": "26169861",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26169861"
+    },
+    {
+      "database": "PMID",
+      "id": "26169862",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26169862"
+    },
+    {
+      "database": "PMID",
+      "id": "26549695",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26549695"
+    },
+    {
+      "database": "PMID",
+      "id": "26723896",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26723896"
+    },
+    {
+      "database": "PMID",
+      "id": "26811456",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26811456"
+    },
+    {
+      "database": "PMID",
+      "id": "26812075",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26812075"
+    },
+    {
+      "database": "PMID",
+      "id": "27109453",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27109453"
+    },
+    {
+      "database": "PMID",
+      "id": "27406083",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27406083"
+    },
+    {
+      "database": "PMID",
+      "id": "27425465",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27425465"
+    },
+    {
+      "database": "PMID",
+      "id": "27468093",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27468093"
+    },
+    {
+      "database": "PMID",
+      "id": "27475255",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27475255"
+    },
+    {
+      "database": "Reaxys",
+      "id": "9238543",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Obeticholic_acid",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Obeticholic_acid"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "6alpha-ethyl-3alpha,7alpha-dihydroxy-5beta-cholan-24-oic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3alpha,5beta,6alpha,7alpha)-6-ethyl-3,7-dihydroxycholan-24-oic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-ECDCA",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-Ethyl-CDCA",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-Ethylchenodeoxycholic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6alpha-Ethyl-chenodeoxycholic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6alpha-ethylchenodeoxycholic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "INT 747",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "INT-747",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "INT747",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ocaliva",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "obeticholic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_43602?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_43602/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_43602/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_43602/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_43602/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_43602/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_43602/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_43602/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_43602/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,126 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C219",
+  "lang": "en",
+  "description": [
+    "A mineralocorticoid hormone produced by aldosterone synthase (CYP11B2) in the zona glomerulosa of the adrenal cortex. Aldosterone binds to mineralocorticoid receptors (MR; NR3C2) and MR-aldosterone complexes regulate the expression of genes involved in the retention of sodium, the secretion of potassium, and water reabsorption, all of which may result increased blood pressure."
+  ],
+  "synonyms": [
+    "(+)-Aldosterone",
+    "ALDOSTERONE",
+    "Aldosterone",
+    "aldosterone"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A steroid hormone made by the adrenal cortex (the outer layer of the adrenal gland). It helps control the balance of water and salts in the kidney by keeping sodium in and releasing potassium from the body. Too much aldosterone can cause high blood pressure and a build-up of fluid in body tissues. Aldosterone is a type of mineralocorticoid hormone."
+    ],
+    "CAS_Registry": [
+      "52-39-1"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:27584"
+    ],
+    "Chemical_Formula": [
+      "C21H28O5"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Aldosterone"
+    ],
+    "FDA_UNII_Code": [
+      "4964P6T9RB"
+    ],
+    "Legacy Concept Name": [
+      "Aldosterone"
+    ],
+    "NSC Number": [
+      "73856"
+    ],
+    "Preferred_Name": [
+      "Aldosterone"
+    ],
+    "Semantic_Type": [
+      "Hormone",
+      "Organic Chemical"
+    ],
+    "UMLS_CUI": [
+      "C0002006"
+    ],
+    "code": [
+      "C219"
+    ]
+  },
+  "label": "Aldosterone",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C219",
+  "obo_id": "NCIT:C219",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(+)-Aldosterone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ALDOSTERONE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Aldosterone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "aldosterone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C219?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C219/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C219/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C219/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C219/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C219/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C219/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

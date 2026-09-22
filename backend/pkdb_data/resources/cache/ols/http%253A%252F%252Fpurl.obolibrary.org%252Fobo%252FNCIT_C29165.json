@@ -1,0 +1,152 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29165",
+  "lang": "en",
+  "description": [
+    "The potassium salt of losartan, a non-peptide angiotensin II receptor antagonist with antihypertensive activity. Losartan selectively and competitively binds to the angiotensin II receptor (type AT1) and blocks the binding of angiotensin II to the receptor, thus promoting vasodilatation and counteracting the effects of aldosterone. Converted from angiotensin I by angiotensin-converting enzyme (ACE), angiotensin II stimulates the adrenal cortex to synthesize and secrete aldosterone, decreasing sodium excretion and increasing potassium excretion, and acts as a vasoconstrictor in vascular smooth muscle."
+  ],
+  "synonyms": [
+    "2-Butyl-4-chloro-1-[[2'-(1H-tetrazol-5-yl)[1,1'-biphenyl]-4-yl]methyl]-1H-imidazole-5-methanol, Monopotassium Salt",
+    "Cozaar",
+    "LOSARTAN POTASSIUM",
+    "Losartan Potassium",
+    "losartan",
+    "losartan potassium"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to treat high blood pressure. Cozaar blocks the action of chemicals that make blood vessels constrict (get narrower). It is a type of angiotensin II receptor antagonist."
+    ],
+    "CAS_Registry": [
+      "124750-99-8"
+    ],
+    "Chemical_Formula": [
+      "C22H22ClN6O.K"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Losartan Potassium"
+    ],
+    "FDA_UNII_Code": [
+      "3ST302B24A"
+    ],
+    "Has_Free_Acid_Or_Base_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C66869"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C179874"
+    ],
+    "Legacy Concept Name": [
+      "Losartan_Potassium"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "640981"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "640981"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "640981"
+    ],
+    "Preferred_Name": [
+      "Losartan Potassium"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0700492"
+    ],
+    "code": [
+      "C29165"
+    ]
+  },
+  "label": "Losartan Potassium",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29165",
+  "obo_id": "NCIT:C29165",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "2-Butyl-4-chloro-1-[[2'-(1H-tetrazol-5-yl)[1,1'-biphenyl]-4-yl]methyl]-1H-imidazole-5-methanol, Monopotassium Salt",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cozaar",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "LOSARTAN POTASSIUM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Losartan Potassium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "losartan",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "losartan potassium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29165?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29165/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29165/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29165/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29165/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29165/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29165/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

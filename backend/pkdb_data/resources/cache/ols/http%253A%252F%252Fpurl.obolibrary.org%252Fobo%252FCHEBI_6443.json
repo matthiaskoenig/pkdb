@@ -1,0 +1,739 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6443",
+  "lang": "en",
+  "description": [
+    "The (-)-enantiomer of norgestrel."
+  ],
+  "synonyms": [
+    "17alpha-ethynyl-17beta-hydroxy-18a-homoestr-4-en-3-one",
+    "(-)-13-ethyl-17-hydroxy-18,19-dinor-17alpha-pregn-4-en-20-yn-3-one",
+    "(-)-norgestrel",
+    "13-beta-ethyl-17alpha-ethynyl-17beta-hydroxygon-4-en-3-one",
+    "13-ethyl-17-alpha-ethynyl-17-beta-hydroxy-4-gonen-3-one",
+    "13-ethyl-17-alpha-ethynylgon-4-en-17-beta-ol-3-one",
+    "17-Ethynyl-18-methyl-19-nortestosterone",
+    "17-alpha-ethinyl-13-beta-ethyl-17-beta-hydroxy-4-estren-3-one",
+    "17-alpha-ethynyl-13-ethyl-19-nortestosterone",
+    "17alpha-Ethynyl-17-hydroxy-18-methylestr-4-en-3-one",
+    "17alpha-Ethynyl-18-homo-19-nortestosterone",
+    "17alpha-ethynyl-13-ethyl-19-nortestosterone",
+    "17alpha-ethynyl-13beta-ethyl-3-oxo-4-estren-17beta-ol",
+    "18-Methyl-17-alpha-ethynyl-19-nortestosterone",
+    "18-Methylnorethisterone",
+    "D-(-)-norgestrel",
+    "D-norgestrel",
+    "Jadelle",
+    "Levonelle",
+    "Levonova",
+    "Microlut",
+    "Microluton",
+    "Microval",
+    "Mirena",
+    "NorLevo",
+    "Plan B",
+    "Postinor",
+    "d(-)-norgestrel",
+    "levonorgestrel",
+    "levonorgestrelum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C21H28O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:44593",
+      "CHEBI:94795"
+    ],
+    "has_dbxref": [
+      "Beilstein:6067808",
+      "CAS:797-63-7",
+      "DrugBank:DB00367",
+      "Drug_Central:1572",
+      "HMDB:HMDB0014511",
+      "KEGG:C08149",
+      "KEGG:D00950",
+      "LINCS:LSM-5955",
+      "LIPID_MAPS_instance:LMST02030119",
+      "PDBeChem:NOG",
+      "PMID:12042264",
+      "PMID:16860047",
+      "PMID:26353967",
+      "PMID:3400986",
+      "PMID:35039074",
+      "PMID:36044657",
+      "PMID:36096186",
+      "PMID:3660438",
+      "PMID:37648421",
+      "PMID:37691755",
+      "PMID:38128094",
+      "PMID:38289806",
+      "PMID:38836931",
+      "PMID:4031432",
+      "PMID:7188238",
+      "PMID:720062",
+      "PMID:720077",
+      "PMID:808983",
+      "PMID:8200219",
+      "PMID:975814",
+      "Patent:US3959322",
+      "Wikipedia:Levonorgestrel"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6443"
+    ],
+    "inchi": [
+      "InChI=1S/C21H28O2/c1-3-20-11-9-17-16-8-6-15(22)13-14(16)5-7-18(17)19(20)10-12-21(20,23)4-2/h2,13,16-19,23H,3,5-12H2,1H3/t16-,17+,18+,19-,20-,21-/m0/s1"
+    ],
+    "inchikey": [
+      "WWYNJERNGUHSAO-XUDSTZEESA-N"
+    ],
+    "mass": [
+      "312.453"
+    ],
+    "monoisotopicmass": [
+      "312.20893"
+    ],
+    "smiles": [
+      "[H][C@@]12CC[C@@](O)(C#C)[C@@]1(CC)CC[C@]1([H])[C@@]3([H])CCC(=O)C=C3CC[C@@]21[H]"
+    ]
+  },
+  "label": "levonorgestrel",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6443",
+  "obo_id": "CHEBI:6443",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "6067808",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "797-63-7",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00367",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00367"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1572",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1572"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014511",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014511"
+    },
+    {
+      "database": "KEGG",
+      "id": "C08149",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C08149"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00950",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00950"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5955",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "LIPID_MAPS_instance",
+      "id": "LMST02030119",
+      "description": "LIPID MAPS",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMST02030119"
+    },
+    {
+      "database": "PDBeChem",
+      "id": "NOG",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/NOG"
+    },
+    {
+      "database": "PMID",
+      "id": "12042264",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12042264"
+    },
+    {
+      "database": "PMID",
+      "id": "16860047",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16860047"
+    },
+    {
+      "database": "PMID",
+      "id": "26353967",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26353967"
+    },
+    {
+      "database": "PMID",
+      "id": "3400986",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3400986"
+    },
+    {
+      "database": "PMID",
+      "id": "35039074",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35039074"
+    },
+    {
+      "database": "PMID",
+      "id": "36044657",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36044657"
+    },
+    {
+      "database": "PMID",
+      "id": "36096186",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36096186"
+    },
+    {
+      "database": "PMID",
+      "id": "3660438",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3660438"
+    },
+    {
+      "database": "PMID",
+      "id": "37648421",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37648421"
+    },
+    {
+      "database": "PMID",
+      "id": "37691755",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37691755"
+    },
+    {
+      "database": "PMID",
+      "id": "38128094",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38128094"
+    },
+    {
+      "database": "PMID",
+      "id": "38289806",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38289806"
+    },
+    {
+      "database": "PMID",
+      "id": "38836931",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38836931"
+    },
+    {
+      "database": "PMID",
+      "id": "4031432",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/4031432"
+    },
+    {
+      "database": "PMID",
+      "id": "7188238",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7188238"
+    },
+    {
+      "database": "PMID",
+      "id": "720062",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/720062"
+    },
+    {
+      "database": "PMID",
+      "id": "720077",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/720077"
+    },
+    {
+      "database": "PMID",
+      "id": "808983",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/808983"
+    },
+    {
+      "database": "PMID",
+      "id": "8200219",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8200219"
+    },
+    {
+      "database": "PMID",
+      "id": "975814",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/975814"
+    },
+    {
+      "database": "Patent",
+      "id": "US3959322",
+      "description": null,
+      "url": "https://www.google.com/patents/US3959322"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Levonorgestrel",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Levonorgestrel"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "17alpha-ethynyl-17beta-hydroxy-18a-homoestr-4-en-3-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-13-ethyl-17-hydroxy-18,19-dinor-17alpha-pregn-4-en-20-yn-3-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-norgestrel",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "13-beta-ethyl-17alpha-ethynyl-17beta-hydroxygon-4-en-3-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "13-ethyl-17-alpha-ethynyl-17-beta-hydroxy-4-gonen-3-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "13-ethyl-17-alpha-ethynylgon-4-en-17-beta-ol-3-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17-Ethynyl-18-methyl-19-nortestosterone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17-alpha-ethinyl-13-beta-ethyl-17-beta-hydroxy-4-estren-3-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17-alpha-ethynyl-13-ethyl-19-nortestosterone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17alpha-Ethynyl-17-hydroxy-18-methylestr-4-en-3-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17alpha-Ethynyl-18-homo-19-nortestosterone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17alpha-ethynyl-13-ethyl-19-nortestosterone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17alpha-ethynyl-13beta-ethyl-3-oxo-4-estren-17beta-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "18-Methyl-17-alpha-ethynyl-19-nortestosterone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "18-Methylnorethisterone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "D-(-)-norgestrel",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "D-norgestrel",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Jadelle",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Levonelle",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Levonova",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Microlut",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Microluton",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Microval",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mirena",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NorLevo",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Plan B",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Postinor",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "d(-)-norgestrel",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levonorgestrel",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levonorgestrelum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6443?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6443/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6443/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6443/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6443/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6443/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6443/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6443/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_enantiomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6443/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_enantiomer_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

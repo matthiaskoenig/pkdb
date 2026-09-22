@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:71193",
+  "name": "liraglutide",
+  "definition": "A lipopeptide that is an analogue of human GLP-1 in which the lysine residue at position 27 is replaced by arginine and a hexadecanoyl group attached to the remaining lysine via a glutamic acid spacer. Used as an adjunct to diet and exercise to improve glycemic control in adults with type 2 diabetes mellitus.",
+  "formula": "C172H265N43O51",
+  "charge": "0",
+  "mass": "3751.20200",
+  "inchikey": "YSDQQAXHVYUZIW-QCIJIYAXSA-N"
+}

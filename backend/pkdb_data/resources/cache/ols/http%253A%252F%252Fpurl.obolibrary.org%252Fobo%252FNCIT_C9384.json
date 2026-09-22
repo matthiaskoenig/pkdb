@@ -1,0 +1,167 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C9384",
+  "lang": "en",
+  "description": [
+    "A carcinoma arising from the epithelium of the renal parenchyma or the renal pelvis.  The majority are renal cell carcinomas.  Kidney carcinomas usually affect middle aged and elderly adults.  Hematuria, abdominal pain, and a palpable mass are common symptoms."
+  ],
+  "synonyms": [
+    "Kidney (including Renal Cell) Cancer",
+    "Kidney Cancer",
+    "Kidney Carcinoma",
+    "Kidney cancer, NOS",
+    "Renal Cancer",
+    "Renal Carcinoma",
+    "kidney cancer"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Cancer that forms in tissues of the kidneys. Kidney cancer includes renal cell carcinoma (cancer that forms in the lining of very small tubes in the kidney that filter the blood and remove waste products) and renal pelvis carcinoma (cancer that forms in the center of the kidney where urine collects). It also includes Wilms tumor, which is a type of kidney cancer that usually develops in children under the age of 5."
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "CTEP",
+      "CTRP",
+      "GDC"
+    ],
+    "Display_Name": [
+      "Kidney Cancer"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C178243"
+    ],
+    "Legacy Concept Name": [
+      "Renal_Carcinoma"
+    ],
+    "Maps_To": [
+      "Kidney Cancer"
+    ],
+    "Neoplasm_Has_Special_Category": [
+      "http://purl.obolibrary.org/obo/NCIT_C9292"
+    ],
+    "Neoplastic_Status": [
+      "Malignant"
+    ],
+    "Preferred_Name": [
+      "Kidney Carcinoma"
+    ],
+    "Semantic_Type": [
+      "Neoplastic Process"
+    ],
+    "UMLS_CUI": [
+      "C1378703"
+    ],
+    "code": [
+      "C9384"
+    ]
+  },
+  "label": "Kidney Carcinoma",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C9384",
+  "obo_id": "NCIT:C9384",
+  "in_subset": [
+    "NCIT_C102905",
+    "NCIT_C103083",
+    "NCIT_C116977",
+    "NCIT_C118168",
+    "NCIT_C126659",
+    "NCIT_C138188",
+    "NCIT_C138190",
+    "NCIT_C156952",
+    "NCIT_C156966",
+    "NCIT_C157711",
+    "NCIT_C158035",
+    "NCIT_C158520",
+    "NCIT_C177537"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Kidney (including Renal Cell) Cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Kidney Cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Kidney Carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Kidney cancer, NOS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Renal Cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Renal Carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "kidney cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9384?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9384/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9384/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9384/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9384/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9384/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9384/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9384/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9384/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9384/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9384/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:4785",
+  "name": "enalapril maleate",
+  "definition": "The maleic acid salt of enalapril. It contains one molecule of maleic acid for each molecule of enalapril. Following oral administration, the ethyl ester group of enalapril is hydrolysed to afford the corresponding carboxylic acid, enalaprilat, an angiotensin-converting enzyme (ACE) inhibitor. Enalapril is thus a prodrug for enalaprilat (which, unlike enalapril, is not absorbed by mouth), and its maleate is used in the treatment of hypertension and heart failure, for reduction of proteinuria and renal disease in patients with nephropathies, and for the prevention of stroke, myocardial infarction, and cardiac death in high-risk patients.",
+  "formula": "C24H32N2O9",
+  "charge": "0",
+  "mass": "492.51890",
+  "inchikey": "OYFJQPXVCSSHAI-QFPUQLAESA-N"
+}

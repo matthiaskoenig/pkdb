@@ -1,0 +1,175 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C7558",
+  "lang": "en",
+  "description": [
+    "A malignant tumor arising from the epithelium that lines the cavity of the uterine body.  The vast majority of endometrial carcinomas are adenocarcinomas; squamous cell and adenosquamous carcinomas represent a minority of the cases.  Endometrioid adenocarcinoma is the most frequently seen variant of endometrial adenocarcinoma.  Uterine bleeding is an initial clinical sign.  The prognosis depends on the stage of the tumor, the depth of myometrial wall invasion, and the degree of differentiation."
+  ],
+  "synonyms": [
+    "CARCINOMA, ENDOMETRIAL, MALIGNANT",
+    "Carcinoma of Endometrium",
+    "Carcinoma of the Endometrium",
+    "Endometrial Cancer",
+    "Endometrial Carcinoma",
+    "UCEC",
+    "Uterine Corpus Endomential Carcinoma",
+    "endometrial cancer"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A malignant epithelial neoplasm arising from the lining of the uterine body cavity.",
+      "Cancer that forms in the tissue lining the uterus (the small, hollow, pear-shaped organ in a woman's pelvis in which a fetus develops). Most endometrial cancers are adenocarcinomas (cancers that begin in cells that make and release mucus and other fluids)."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CPTAC",
+      "CTRP",
+      "Cellosaurus",
+      "GDC"
+    ],
+    "Display_Name": [
+      "Endometrial Carcinoma"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C177584"
+    ],
+    "Legacy Concept Name": [
+      "Endometrial_Carcinoma"
+    ],
+    "Maps_To": [
+      "81"
+    ],
+    "Neoplastic_Status": [
+      "Malignant"
+    ],
+    "Preferred_Name": [
+      "Endometrial Carcinoma"
+    ],
+    "Semantic_Type": [
+      "Neoplastic Process"
+    ],
+    "UMLS_CUI": [
+      "C0476089"
+    ],
+    "code": [
+      "C7558"
+    ]
+  },
+  "label": "Endometrial Carcinoma",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C7558",
+  "obo_id": "NCIT:C7558",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118168",
+    "NCIT_C126659",
+    "NCIT_C156952",
+    "NCIT_C156955",
+    "NCIT_C156966",
+    "NCIT_C157711",
+    "NCIT_C158520",
+    "NCIT_C159330",
+    "NCIT_C165258",
+    "NCIT_C177537",
+    "NCIT_C61410",
+    "NCIT_C77526",
+    "NCIT_C88025",
+    "oncotree_slim"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CARCINOMA, ENDOMETRIAL, MALIGNANT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Carcinoma of Endometrium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Carcinoma of the Endometrium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Endometrial Cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Endometrial Carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "UCEC",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Uterine Corpus Endomential Carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "endometrial cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C7558?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C7558/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C7558/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C7558/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C7558/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C7558/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C7558/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C7558/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C7558/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C7558/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C7558/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

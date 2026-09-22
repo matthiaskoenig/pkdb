@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:28304",
+  "name": "heparin",
+  "definition": "A highly sulfated linear glycosaminoglycan comprising complex patterns of uronic acid-(1->4)-D-glucosamine repeating subunits. Used as an injectable anticoagulant, it has the highest negative charge density of any known biological molecule.",
+  "formula": "(C26H40N2O36S5)n",
+  "charge": null,
+  "mass": null,
+  "inchikey": null
+}

@@ -1,0 +1,88 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CMO_0000020",
+  "lang": "en",
+  "description": [
+    "The circumference of the body at the level of the navel divided by the circumference at the widest point around the buttocks, often used to assess distribution of sub-cutaneous and intra-abdominal adipose tissue."
+  ],
+  "synonyms": [
+    "waist-hip ratio",
+    "waist/hip ratio"
+  ],
+  "annotation": {
+    "created_by": [
+      "mshimoyama"
+    ],
+    "creation_date": [
+      "2010-06-18T10:40:52Z"
+    ],
+    "has_dbxref": [
+      "EFO:0004343"
+    ],
+    "has_obo_namespace": [
+      "clinical_measurement_ontology"
+    ],
+    "id": [
+      "CMO:0000020"
+    ]
+  },
+  "label": "waist to hip ratio (WHR)",
+  "ontology_name": "cmo",
+  "ontology_prefix": "CMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/cmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CMO_0000020",
+  "obo_id": "CMO:0000020",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "The circumference of the body at the level of the navel divided by the circumference at the widest point around the buttocks, often used to assess distribution of sub-cutaneous and intra-abdominal adipose tissue.",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "http://en.wikipedia.org/wiki/Waist-hip_ratio",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Waist-hip_ratio"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0004343",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0004343"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000020?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000020/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000020/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000020/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000020/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000020/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000020/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

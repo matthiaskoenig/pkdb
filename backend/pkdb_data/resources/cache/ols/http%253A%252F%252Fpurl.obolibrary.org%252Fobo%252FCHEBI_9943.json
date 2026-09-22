@@ -1,0 +1,275 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9943",
+  "lang": "en",
+  "description": [
+    "A tertiary amino compound that is N,N-dimethylethanamine substituted at position 1 by a 1-hydroxycyclohexyl and 4-methoxyphenyl group."
+  ],
+  "synonyms": [
+    "1-[2-(dimethylamino)-1-(4-methoxyphenyl)ethyl]cyclohexanol",
+    "Venlafaxine",
+    "Elafax",
+    "venlafaxina",
+    "venlafaxine",
+    "venlafaxinum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C17H27NO2"
+    ],
+    "has_dbxref": [
+      "CAS:93413-69-5",
+      "DrugBank:DB00285",
+      "Drug_Central:2813",
+      "HMDB:HMDB0005016",
+      "KEGG:C07187",
+      "KEGG:D08670",
+      "LINCS:LSM-1616",
+      "PMID:11098420",
+      "PMID:12409680",
+      "PMID:18321472",
+      "Reaxys:4234848",
+      "Wikipedia:Venlafaxine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9943"
+    ],
+    "inchi": [
+      "InChI=1S/C17H27NO2/c1-18(2)13-16(17(19)11-5-4-6-12-17)14-7-9-15(20-3)10-8-14/h7-10,16,19H,4-6,11-13H2,1-3H3"
+    ],
+    "inchikey": [
+      "PNVNVHUZROJLTJ-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "277.40182"
+    ],
+    "monoisotopicmass": [
+      "277.20418"
+    ],
+    "smiles": [
+      "COc1ccc(cc1)C(CN(C)C)C1(O)CCCCC1"
+    ]
+  },
+  "label": "venlafaxine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9943",
+  "obo_id": "CHEBI:9943",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "93413-69-5",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "93413-69-5",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00285",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00285"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2813",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2813"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0005016",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0005016"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07187",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07187"
+    },
+    {
+      "database": "KEGG",
+      "id": "D08670",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D08670"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-1616",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "11098420",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11098420"
+    },
+    {
+      "database": "PMID",
+      "id": "12409680",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12409680"
+    },
+    {
+      "database": "PMID",
+      "id": "18321472",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18321472"
+    },
+    {
+      "database": "Reaxys",
+      "id": "4234848",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Venlafaxine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Venlafaxine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1-[2-(dimethylamino)-1-(4-methoxyphenyl)ethyl]cyclohexanol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Venlafaxine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Elafax",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "venlafaxina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "venlafaxine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "venlafaxine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "venlafaxinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9943?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9943/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9943/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9943/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9943/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9943/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9943/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9943/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

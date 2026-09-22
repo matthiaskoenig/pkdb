@@ -1,0 +1,416 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_45979",
+  "lang": "en",
+  "description": [
+    "A member of the class of benzimidazoles carrying a 1,3-thiazol-4-yl substituent at position 2. A mainly post-harvest fungicide used to control a wide range of diseases including Aspergillus, Botrytis, Cladosporium and Fusarium."
+  ],
+  "synonyms": [
+    "2-(1,3-thiazol-4-yl)-1H-benzimidazole",
+    "Thiabendazole",
+    "2-(1,3-THIAZOL-4-YL)-1H-BENZIMIDAZOLE",
+    "2-(1,3-thiazol-4-yl)benzimidazole",
+    "2-(4-thiazolyl)-1H-benzimidazole",
+    "2-(thiazol-4-yl)benzimidazole",
+    "4-(2-benzimidazolyl)thiazole",
+    "Equizole",
+    "MK 360",
+    "Mintezol",
+    "TBZ",
+    "Thibenzole",
+    "Tiabendazole"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C10H7N3S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:45977",
+      "CHEBI:9526"
+    ],
+    "has_dbxref": [
+      "Beilstein:611403",
+      "CAS:148-79-8",
+      "DrugBank:DB00730",
+      "Drug_Central:2621",
+      "HMDB:HMDB0014868",
+      "KEGG:D00372",
+      "LINCS:LSM-3741",
+      "MetaCyc:THIABENDAZOLE",
+      "PDBeChem:TMG",
+      "PMID:11226373",
+      "PMID:13900465",
+      "PMID:23790859",
+      "PMID:9009055",
+      "PPDB:629",
+      "Patent:US3017415",
+      "Pesticides:thiabendazole",
+      "Reaxys:611403",
+      "VSDB:629",
+      "Wikipedia:Thiabendazole"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:45979"
+    ],
+    "inchi": [
+      "InChI=1S/C10H7N3S/c1-2-4-8-7(3-1)12-10(13-8)9-5-14-6-11-9/h1-6H,(H,12,13)"
+    ],
+    "inchikey": [
+      "WJCNZQLZVWNLKY-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "201.24800"
+    ],
+    "monoisotopicmass": [
+      "201.03607"
+    ],
+    "smiles": [
+      "c1nc(cs1)-c1nc2ccccc2[nH]1"
+    ]
+  },
+  "label": "thiabendazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_45979",
+  "obo_id": "CHEBI:45979",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "611403",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "148-79-8",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "148-79-8",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00730",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00730"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2621",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2621"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014868",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014868"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00372",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00372"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-3741",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MetaCyc",
+      "id": "THIABENDAZOLE",
+      "description": null,
+      "url": "https://biocyc.org/META/NEW-IMAGE?type=NIL&object=THIABENDAZOLE"
+    },
+    {
+      "database": "PDBeChem",
+      "id": "TMG",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/TMG"
+    },
+    {
+      "database": "PMID",
+      "id": "11226373",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11226373"
+    },
+    {
+      "database": "PMID",
+      "id": "13900465",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/13900465"
+    },
+    {
+      "database": "PMID",
+      "id": "23790859",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23790859"
+    },
+    {
+      "database": "PMID",
+      "id": "9009055",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9009055"
+    },
+    {
+      "database": "PPDB",
+      "id": "629",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/ppdb/en/Reports/629.htm"
+    },
+    {
+      "database": "Patent",
+      "id": "US3017415",
+      "description": null,
+      "url": "https://www.google.com/patents/US3017415"
+    },
+    {
+      "database": "Pesticides",
+      "id": "thiabendazole",
+      "description": "Alan Wood's Pesticides",
+      "url": null
+    },
+    {
+      "database": "Reaxys",
+      "id": "611403",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "VSDB",
+      "id": "629",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/629.htm"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Thiabendazole",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Thiabendazole"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-(1,3-thiazol-4-yl)-1H-benzimidazole",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Thiabendazole",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(1,3-THIAZOL-4-YL)-1H-BENZIMIDAZOLE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(1,3-thiazol-4-yl)benzimidazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "Alan_Wood's_Pesticides",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(4-thiazolyl)-1H-benzimidazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "Alan_Wood's_Pesticides",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(thiazol-4-yl)benzimidazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "Alan_Wood's_Pesticides",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(2-benzimidazolyl)thiazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Equizole",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "MK 360",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mintezol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "TBZ",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Thibenzole",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tiabendazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45979?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45979/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45979/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45979/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45979/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45979/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45979/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45979/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_parent_hydride": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_45979/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_parent_hydride"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

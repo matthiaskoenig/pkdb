@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:31709",
+  "name": "iohexol",
+  "definition": "A benzenedicarboxamide compound having N-(2,3-dihydroxypropyl)carbamoyl groups at the 1- and 3-positions, iodo substituents at the 2-, 4- and 6-positions and an N-(2,3-dihydroxypropyl)acetamido group at the 5-position.",
+  "formula": "C19H26I3N3O9",
+  "charge": "0",
+  "mass": "821.13790",
+  "inchikey": "NTHXOOBQLCIOLC-UHFFFAOYSA-N"
+}

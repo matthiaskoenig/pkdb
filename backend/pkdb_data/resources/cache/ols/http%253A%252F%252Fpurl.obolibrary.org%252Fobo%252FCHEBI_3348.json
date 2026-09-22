@@ -1,0 +1,160 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3348",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Candesartan cilexetil",
+    "TCV 116",
+    "TCV-116"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C33H34N6O6"
+    ],
+    "has_dbxref": [
+      "CAS:145040-37-5",
+      "Drug_Central:475",
+      "KEGG:C07709",
+      "KEGG:D00626",
+      "LINCS:LSM-1716"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3348"
+    ],
+    "inchi": [
+      "InChI=1S/C33H34N6O6/c1-3-42-32-34-28-15-9-14-27(31(40)43-21(2)44-33(41)45-24-10-5-4-6-11-24)29(28)39(32)20-22-16-18-23(19-17-22)25-12-7-8-13-26(25)30-35-37-38-36-30/h7-9,12-19,21,24H,3-6,10-11,20H2,1-2H3,(H,35,36,37,38)"
+    ],
+    "inchikey": [
+      "GHOSNRCGJFBJIB-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "610.661"
+    ],
+    "monoisotopicmass": [
+      "610.25398"
+    ],
+    "smiles": [
+      "CCOc1nc2cccc(C(=O)OC(C)OC(=O)OC3CCCCC3)c2n1Cc1ccc(cc1)-c1ccccc1-c1nnn[nH]1"
+    ]
+  },
+  "label": "Candesartan cilexetil",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3348",
+  "obo_id": "CHEBI:3348",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "145040-37-5",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "475",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/475"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07709",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07709"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00626",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00626"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-1716",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Candesartan cilexetil",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "TCV 116",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "TCV-116",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3348/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

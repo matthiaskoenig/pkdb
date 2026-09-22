@@ -1,0 +1,242 @@
+[
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL112"
+  },
+  {
+    "src_id": "6",
+    "src_compound_id": "C06804"
+  },
+  {
+    "src_id": "2",
+    "src_compound_id": "DB00316"
+  },
+  {
+    "src_id": "5",
+    "src_compound_id": "24714721"
+  },
+  {
+    "src_id": "3",
+    "src_compound_id": "TYL"
+  },
+  {
+    "src_id": "10",
+    "src_compound_id": "27677450"
+  },
+  {
+    "src_id": "10",
+    "src_compound_id": "474380"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "1983"
+  },
+  {
+    "src_id": "21",
+    "src_compound_id": "15321628"
+  },
+  {
+    "src_id": "12",
+    "src_compound_id": "paracetamol"
+  },
+  {
+    "src_id": "12",
+    "src_compound_id": "acetaminophen"
+  },
+  {
+    "src_id": "25",
+    "src_compound_id": "LSM-5533"
+  },
+  {
+    "src_id": "26",
+    "src_compound_id": "103-90-2"
+  },
+  {
+    "src_id": "17",
+    "src_compound_id": "PA448015"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "362O9ITL9D"
+  },
+  {
+    "src_id": "9",
+    "src_compound_id": "ZINC000013550868"
+  },
+  {
+    "src_id": "34",
+    "src_compound_id": "52"
+  },
+  {
+    "src_id": "39",
+    "src_compound_id": "CB24796965"
+  },
+  {
+    "src_id": "45",
+    "src_compound_id": "ACETAMINOPHEN"
+  },
+  {
+    "src_id": "47",
+    "src_compound_id": "PANADOL"
+  },
+  {
+    "src_id": "47",
+    "src_compound_id": "OFIRMEV"
+  },
+  {
+    "src_id": "47",
+    "src_compound_id": "TYLENOL"
+  },
+  {
+    "src_id": "47",
+    "src_compound_id": "ACETAMINOPHEN"
+  },
+  {
+    "src_id": "47",
+    "src_compound_id": "ACEPHEN"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "DAFALGAN"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "PARACETAMOL"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "PANADOL"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "NEOPAP"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "TYLENOL"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "ACETAMINOPHEN"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "PERFALGAN"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "ACEPHEN"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "OFIRMEV"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "EFFERALGAN"
+  },
+  {
+    "src_id": "48",
+    "src_compound_id": "HY-66005"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID2020006"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "26197"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "SCHEMBL3480"
+  },
+  {
+    "src_id": "24",
+    "src_compound_id": "89614"
+  },
+  {
+    "src_id": "7",
+    "src_compound_id": "46195"
+  },
+  {
+    "src_id": "23",
+    "src_compound_id": "MCULE-3844920617"
+  },
+  {
+    "src_id": "4",
+    "src_compound_id": "5239"
+  },
+  {
+    "src_id": "29",
+    "src_compound_id": "J4.025H"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "114965"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "111868"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "111608"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "111336"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "2541"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "143804"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "69698"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "19996"
+  },
+  {
+    "src_id": "36",
+    "src_compound_id": "MTBLC46195"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "7459"
+  },
+  {
+    "src_id": "39",
+    "src_compound_id": "CB61261439"
+  },
+  {
+    "src_id": "40",
+    "src_compound_id": "acetaminophen"
+  },
+  {
+    "src_id": "39",
+    "src_compound_id": "CB1413658"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "84044"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0001859"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "MolPort-000-150-777"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "SCHEMBL19474893"
+  }
+]

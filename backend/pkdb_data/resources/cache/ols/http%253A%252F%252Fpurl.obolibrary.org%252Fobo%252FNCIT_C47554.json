@@ -1,0 +1,116 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C47554",
+  "lang": "en",
+  "description": [
+    "A nonflammable, halogenated, hydrocarbon and general inhalation anesthetic. Although the exact mechanism of action is unknown, halothane provides relatively rapid induction of anesthesia by depressing the central nervous system, thereby producing a reversible loss of consciousness and sensation. (NCI05)"
+  ],
+  "synonyms": [
+    "1,1,1-Trifluoro-2-bromo-2-chloroethane",
+    "HALOTHANE",
+    "Halothane",
+    "Narcotan"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "151-67-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:5615"
+    ],
+    "Chemical_Formula": [
+      "C2HBrClF3"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "UQT9G45D1P"
+    ],
+    "Legacy Concept Name": [
+      "Halothane"
+    ],
+    "NSC Number": [
+      "143490"
+    ],
+    "Preferred_Name": [
+      "Halothane"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0018549"
+    ],
+    "code": [
+      "C47554"
+    ]
+  },
+  "label": "Halothane",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C47554",
+  "obo_id": "NCIT:C47554",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "1,1,1-Trifluoro-2-bromo-2-chloroethane",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "HALOTHANE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Halothane",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Narcotan",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47554?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47554/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47554/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47554/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47554/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47554/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47554/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

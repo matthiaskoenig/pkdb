@@ -1,0 +1,365 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3699",
+  "lang": "en",
+  "description": [
+    "A member of the class of  guanidines that consists of guanidine carrying a methyl substituent at position 1, a cyano group at position 2 and a 2-{[(5-methyl-1H-imidazol-4-yl)methyl]sulfanyl}ethyl group at position 3. It is a  H2-receptor antagonist that inhibits the production of acid in stomach."
+  ],
+  "synonyms": [
+    "2-cyano-1-methyl-3-(2-{[(5-methyl-1H-imidazol-4-yl)methyl]sulfanyl}ethyl)guanidine",
+    "1-Cyano-2-methyl-3-(2-(((5-methyl-4-imidazolyl)methyl)thio)ethyl)guanidine",
+    "2-cyano-1-methyl-3-(2-(((5-methylimidazol-4-yl)methyl)thio)ethyl)guanidine",
+    "Cimetag",
+    "N''-cyano-N-methyl-N'-(2-{[(5-methyl-1H-imidazol-4-yl)methyl]thio}ethyl)guanidine",
+    "N-cyano-N'-methyl-N''-(2-([(5-methyl-1H-imidazol-4-yl)methyl]sulfanyl)ethyl)guanidine",
+    "Tagamet HB 200",
+    "Ulcerfen",
+    "cimetidina",
+    "cimetidine",
+    "cimetidinum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C10H16N6S"
+    ],
+    "has_dbxref": [
+      "CAS:51481-61-9",
+      "DrugBank:DB00501",
+      "Drug_Central:645",
+      "HMDB:HMDB0014644",
+      "KEGG:D00295",
+      "LINCS:LSM-2404",
+      "PMID:11910267",
+      "PMID:15637527",
+      "PMID:7229121",
+      "Patent:BE804144",
+      "Patent:US3950333",
+      "Reaxys:6516325",
+      "VSDB:1892",
+      "Wikipedia:Cimetidine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3699"
+    ],
+    "inchi": [
+      "InChI=1S/C10H16N6S/c1-8-9(16-7-15-8)5-17-4-3-13-10(12-2)14-6-11/h7H,3-5H2,1-2H3,(H,15,16)(H2,12,13,14)"
+    ],
+    "inchikey": [
+      "AQIXAKUUQRKLND-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "252.34048"
+    ],
+    "monoisotopicmass": [
+      "252.11572"
+    ],
+    "smiles": [
+      "CN\\C(NCCSCc1nc[nH]c1C)=N\\C#N"
+    ]
+  },
+  "label": "cimetidine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3699",
+  "obo_id": "CHEBI:3699",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "51481-61-9",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "51481-61-9",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "51481-61-9",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00501",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00501"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "645",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/645"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014644",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014644"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00295",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00295"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-2404",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "11910267",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11910267"
+    },
+    {
+      "database": "PMID",
+      "id": "15637527",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15637527"
+    },
+    {
+      "database": "PMID",
+      "id": "7229121",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7229121"
+    },
+    {
+      "database": "Patent",
+      "id": "BE804144",
+      "description": null,
+      "url": "https://www.google.com/patents/BE804144"
+    },
+    {
+      "database": "Patent",
+      "id": "US3950333",
+      "description": null,
+      "url": "https://www.google.com/patents/US3950333"
+    },
+    {
+      "database": "Reaxys",
+      "id": "6516325",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "VSDB",
+      "id": "1892",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1892.htm"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Cimetidine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Cimetidine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-cyano-1-methyl-3-(2-{[(5-methyl-1H-imidazol-4-yl)methyl]sulfanyl}ethyl)guanidine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Cyano-2-methyl-3-(2-(((5-methyl-4-imidazolyl)methyl)thio)ethyl)guanidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-cyano-1-methyl-3-(2-(((5-methylimidazol-4-yl)methyl)thio)ethyl)guanidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cimetag",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N''-cyano-N-methyl-N'-(2-{[(5-methyl-1H-imidazol-4-yl)methyl]thio}ethyl)guanidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-cyano-N'-methyl-N''-(2-([(5-methyl-1H-imidazol-4-yl)methyl]sulfanyl)ethyl)guanidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tagamet HB 200",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ulcerfen",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cimetidina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cimetidine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cimetidine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cimetidinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3699?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3699/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3699/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3699/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3699/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3699/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3699/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3699/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

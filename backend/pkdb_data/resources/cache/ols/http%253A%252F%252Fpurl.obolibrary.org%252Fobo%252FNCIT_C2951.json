@@ -1,0 +1,154 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C2951",
+  "lang": "en",
+  "description": [
+    "A disorder characterized by replacement of the liver parenchyma with fibrous tissue and regenerative nodules. It is usually caused by alcoholism, hepatitis B, and hepatitis C. Complications include the development of ascites, esophageal varices, bleeding, and hepatic encephalopathy."
+  ],
+  "synonyms": [
+    "Cirrhosis",
+    "Cirrhosis of the Liver",
+    "Liver Cirrhosis",
+    "Unspecified cirrhosis of liver",
+    "cirrhosis"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A chronic degenerative disease of the liver characterized by parenchymal nodularity and fibrosis.",
+      "A type of chronic, progressive liver disease in which liver cells are replaced by scar tissue."
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "Cellosaurus",
+      "GDC",
+      "MedDRA",
+      "NICHD",
+      "mCode"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C158809",
+      "http://purl.obolibrary.org/obo/NCIT_C16457",
+      "http://purl.obolibrary.org/obo/NCIT_C17103"
+    ],
+    "Legacy Concept Name": [
+      "Cirrhosis"
+    ],
+    "Maps_To": [
+      "Cirrhosis",
+      "Cirrhosis of liver",
+      "Cirrhosis, Unknown Etiology",
+      "Liver Cirrhosis (Liver Disease)"
+    ],
+    "Preferred_Name": [
+      "Cirrhosis"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C4228437"
+    ],
+    "code": [
+      "C2951"
+    ]
+  },
+  "label": "Cirrhosis",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C2951",
+  "obo_id": "NCIT:C2951",
+  "in_subset": [
+    "NCIT_C118464",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C157528",
+    "NCIT_C157711",
+    "NCIT_C158034",
+    "NCIT_C158035",
+    "NCIT_C158520",
+    "NCIT_C165258",
+    "NCIT_C177537",
+    "NCIT_C189762",
+    "NCIT_C192842",
+    "NCIT_C193006",
+    "NCIT_C193192",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Cirrhosis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cirrhosis of the Liver",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver Cirrhosis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Unspecified cirrhosis of liver",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "cirrhosis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2951?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2951/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2951/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2951/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2951/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2951/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2951/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2951/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2951/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2951/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2951/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

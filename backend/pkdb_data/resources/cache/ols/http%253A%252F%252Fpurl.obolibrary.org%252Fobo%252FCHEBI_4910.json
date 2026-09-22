@@ -1,0 +1,330 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_4910",
+  "lang": "en",
+  "description": [
+    "The ethyl ester of 1-[(1R)-1-phenylethyl]-1H-imidazole-5-carboxylic acid. It is an intravenous general anaesthetic with no analgesic activity."
+  ],
+  "synonyms": [
+    "Etomidate",
+    "ethyl 1-[(1R)-1-phenylethyl]-1H-imidazole-5-carboxylate",
+    "(+)-ethyl 1-(alpha-methylbenzyl)imidazole-5-carboxylate",
+    "(+)-etomidate",
+    "(R)-(+)-1-(alpha-methylbenzyl)imidazole-5-carboxylic acid ethyl ester",
+    "(R)-1-(1-phenylethyl)-1H-imidazole-5-carboxylic acid ethyl ester",
+    "3-((R)-1-Phenyl-ethyl)-3H-imidazole-4-carboxylic acid ethyl ester",
+    "R-(+)-ethyl 1-(1-phenylethyl)-1H-imidazole-5-carboxylate",
+    "etomidate",
+    "etomidato",
+    "etomidatum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C14H16N2O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:129090"
+    ],
+    "has_dbxref": [
+      "CAS:33125-97-2",
+      "DrugBank:DB00292",
+      "Drug_Central:1109",
+      "KEGG:C07522",
+      "KEGG:D00548",
+      "LINCS:LSM-37126",
+      "PMID:12646036",
+      "PMID:18348518",
+      "Patent:DE2609573",
+      "Patent:US3991072"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:4910"
+    ],
+    "inchi": [
+      "InChI=1S/C14H16N2O2/c1-3-18-14(17)13-9-15-10-16(13)11(2)12-7-5-4-6-8-12/h4-11H,3H2,1-2H3/t11-/m1/s1"
+    ],
+    "inchikey": [
+      "NPUKDXXFDDZOKR-LLVKDONJSA-N"
+    ],
+    "mass": [
+      "244.28900"
+    ],
+    "monoisotopicmass": [
+      "244.12118"
+    ],
+    "smiles": [
+      "CCOC(=O)c1cncn1[C@H](C)c1ccccc1"
+    ]
+  },
+  "label": "etomidate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_4910",
+  "obo_id": "CHEBI:4910",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "33125-97-2",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "33125-97-2",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "33125-97-2",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00292",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00292"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1109",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1109"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07522",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07522"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00548",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00548"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-37126",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "12646036",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12646036"
+    },
+    {
+      "database": "PMID",
+      "id": "18348518",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18348518"
+    },
+    {
+      "database": "Patent",
+      "id": "DE2609573",
+      "description": null,
+      "url": "https://www.google.com/patents/DE2609573"
+    },
+    {
+      "database": "Patent",
+      "id": "US3991072",
+      "description": null,
+      "url": "https://www.google.com/patents/US3991072"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Etomidate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ethyl 1-[(1R)-1-phenylethyl]-1H-imidazole-5-carboxylate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-ethyl 1-(alpha-methylbenzyl)imidazole-5-carboxylate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-etomidate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-(+)-1-(alpha-methylbenzyl)imidazole-5-carboxylic acid ethyl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-1-(1-phenylethyl)-1H-imidazole-5-carboxylic acid ethyl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-((R)-1-Phenyl-ethyl)-3H-imidazole-4-carboxylic acid ethyl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "R-(+)-ethyl 1-(1-phenylethyl)-1H-imidazole-5-carboxylate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "etomidate",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "etomidato",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "etomidatum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4910?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4910/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4910/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4910/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4910/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4910/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4910/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4910/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4910/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,65 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/FMA_10951",
+  "lang": "en",
+  "description": [
+    "Trunk of systemic vein which is formed by the union of the right common iliac vein and the left common iliac vein and  terminates in  the right atrium."
+  ],
+  "synonyms": [
+    "Posterior vena cava"
+  ],
+  "annotation": {
+    "has_obo_namespace": [
+      "fma"
+    ],
+    "id": [
+      "FMA:10951"
+    ]
+  },
+  "label": "Inferior vena cava",
+  "ontology_name": "fma",
+  "ontology_prefix": "FMA",
+  "ontology_iri": "http://purl.obolibrary.org/obo/fma.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "FMA_10951",
+  "obo_id": "FMA:10951",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_10951?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_10951/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_10951/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_10951/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_10951/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_10951/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_10951/graph"
+    },
+    "regional_part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_10951/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Ffma%2523regional_part_of"
+    },
+    "attaches_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_10951/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Ffma%2523attaches_to"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

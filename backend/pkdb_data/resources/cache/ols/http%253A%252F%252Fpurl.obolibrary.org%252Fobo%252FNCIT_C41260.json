@@ -1,0 +1,174 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C41260",
+  "lang": "en",
+  "description": [
+    "Individuals with origins in any of the original peoples of Central or East Asia, Southeast Asia, or South Asia including, for example, Chinese, Asian Indian, Filipino, Vietnamese, Korean, and Japanese."
+  ],
+  "synonyms": [
+    "ASIAN",
+    "Asian",
+    "Asian Ancestry",
+    "Asians",
+    "asian"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A person having origins in any of the original peoples of the Far East, Southeast Asia, or the Indian subcontinent including, for example, Cambodia, China, India, Japan, Korea, Malaysia, Pakistan, the Philippine Islands, Thailand, and Vietnam. (FDA)"
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CTDC",
+      "DIPG/DMG",
+      "FDA",
+      "GDC",
+      "OORO",
+      "PCDC",
+      "SeroNet"
+    ],
+    "Is_PCDC_ALL_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C17049"
+    ],
+    "Is_PCDC_AML_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C17049"
+    ],
+    "Is_PCDC_EWS_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C17049"
+    ],
+    "Is_PCDC_GCT_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C17049"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C17049"
+    ],
+    "Legacy Concept Name": [
+      "Asian"
+    ],
+    "Maps_To": [
+      "asian"
+    ],
+    "Preferred_Name": [
+      "Asian"
+    ],
+    "Semantic_Type": [
+      "Population Group"
+    ],
+    "UMLS_CUI": [
+      "C0078988"
+    ],
+    "code": [
+      "C41260"
+    ]
+  },
+  "label": "Asian",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C41260",
+  "obo_id": "NCIT:C41260",
+  "in_subset": [
+    "NCIT_C107675",
+    "NCIT_C128689",
+    "NCIT_C157711",
+    "NCIT_C173073",
+    "NCIT_C173230",
+    "NCIT_C174019",
+    "NCIT_C174237",
+    "NCIT_C174243",
+    "NCIT_C177383",
+    "NCIT_C177390",
+    "NCIT_C177537",
+    "NCIT_C178115",
+    "NCIT_C178122",
+    "NCIT_C178718",
+    "NCIT_C179027",
+    "NCIT_C179478",
+    "NCIT_C179533",
+    "NCIT_C183061",
+    "NCIT_C186313",
+    "NCIT_C186341",
+    "NCIT_C189083",
+    "NCIT_C192234",
+    "NCIT_C54452",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C74457",
+    "NCIT_C77527"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "ASIAN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Asian",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Asian Ancestry",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Asians",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "asian",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41260?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41260/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41260/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41260/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41260/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41260/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41260/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41260/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41260/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41260/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41260/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,88 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHMO_0000578",
+  "lang": "en",
+  "description": [
+    "A method where the sample mixture is first separated by high-performance liquid chromatography before being ionised by forcing a solution (usually in an organic solvent) of it through a small heated capillary (at a flow rate of 1\u201310 uL min1) into an electric field to produce a very fine mist of charged droplets. The ions are then characterised according to mass-to-charge ratio and relative abundance by two mass spectrometers in series."
+  ],
+  "synonyms": [
+    "HPLC ESI MS-MS",
+    "HPLC ESI MS/MS",
+    "HPLC-ESI-MS-MS",
+    "HPLC-ESI-MS/MS",
+    "HPLC-ESI-MS2",
+    "high performance liquid chromatography electrospray ionisation tandem mass spectrometry",
+    "high performance liquid chromatography electrospray ionisation tandem mass spectroscopy",
+    "high pressure liquid chromatography electrospray ionisation tandem mass spectroscopy",
+    "high pressure liquid chromatography electrospray ionization tandem mass spectroscopy"
+  ],
+  "annotation": {
+    "id": [
+      "CHMO:0000578"
+    ]
+  },
+  "label": "high-performance liquid chromatography-electrospray ionisation tandem mass spectrometry",
+  "ontology_name": "chmo",
+  "ontology_prefix": "CHMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHMO_0000578",
+  "obo_id": "CHMO:0000578",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A method where the sample mixture is first separated by high-performance liquid chromatography before being ionised by forcing a solution (usually in an organic solvent) of it through a small heated capillary (at a flow rate of 1\u201310 uL min1) into an electric field to produce a very fine mist of charged droplets. The ions are then characterised according to mass-to-charge ratio and relative abundance by two mass spectrometers in series.",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "https://doi.org/10.1039/b813118j",
+          "description": null,
+          "url": "https://doi.org/10.1039/b813118j"
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000578?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000578/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000578/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000578/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000578/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000578/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000578/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000578/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000578/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000578/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000578/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

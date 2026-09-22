@@ -1,0 +1,119 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C16738",
+  "lang": "en",
+  "description": [
+    "A device by means of which a medicinal product can be administered by inspiration through the nose or the mouth."
+  ],
+  "synonyms": [
+    "INHALER",
+    "Inhaler",
+    "inhaler"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A device by means of which a medicinal product can be administered by inspiration through the nose or the mouth.",
+      "A device for giving medicines in the form of a spray that is inhaled (breathed in) through the nose or mouth. Inhalers are used to treat medical problems such as bronchitis, angina, emphysema, and asthma. They are also used to help relieve symptoms that occur when a person is trying to quit smoking.",
+      "Device for administration of a medicinal product for inhalation. Nebuliser is excluded."
+    ],
+    "Contributing_Source": [
+      "EDQM-HC",
+      "FDA"
+    ],
+    "FDA_Table": [
+      "Package Type (C-DRG-00907)"
+    ],
+    "Legacy Concept Name": [
+      "Inhaler"
+    ],
+    "Preferred_Name": [
+      "Inhaler"
+    ],
+    "Semantic_Type": [
+      "Medical Device"
+    ],
+    "UMLS_CUI": [
+      "C0021461"
+    ],
+    "code": [
+      "C16738"
+    ]
+  },
+  "label": "Inhaler",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C16738",
+  "obo_id": "NCIT:C16738",
+  "in_subset": [
+    "NCIT_C133853",
+    "NCIT_C148636",
+    "NCIT_C150110",
+    "NCIT_C54452",
+    "NCIT_C54457"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "INHALER",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Inhaler",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "inhaler",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16738?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16738/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16738/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16738/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16738/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16738/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16738/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16738/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16738/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16738/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16738/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
