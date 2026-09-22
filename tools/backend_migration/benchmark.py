@@ -47,7 +47,7 @@ def matches(response, case):
         if "count" in case:
             return value["data"]["count"] == case["count"]
         return value.get("sid") == case["sid"]
-    except (ValueError, KeyError, TypeError, AttributeError):
+    except ValueError, KeyError, TypeError, AttributeError:
         return False
 
 

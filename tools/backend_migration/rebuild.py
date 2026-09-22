@@ -182,7 +182,7 @@ def rebuild(corpus, url, report_path, token, client, *, resume=True):
                     "Publication is missing or has outdated processing/vocabulary"
                 )
             record.update(status="published", publication=publication, resumed=resumed)
-        except (OSError, ValueError, ValidationError, httpx.RequestError):
+        except OSError, ValueError, ValidationError, httpx.RequestError:
             record.update(
                 status="failed", reason="Publication or source could not be verified"
             )
@@ -212,7 +212,7 @@ def main():
                 client,
                 resume=not args.no_resume,
             )
-    except (OSError, ValueError):
+    except OSError, ValueError:
         print(
             "Rebuild could not start; check source, report, API URL and token configuration.",
             file=sys.stderr,
