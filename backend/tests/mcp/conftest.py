@@ -39,7 +39,7 @@ def mcp_http(ingestion_context, session_factory):
     url = f"http://127.0.0.1:{sock.getsockname()[1]}"
     server = uvicorn.Server(
         uvicorn.Config(
-            app, log_level="critical", lifespan="on", timeout_graceful_shutdown=5
+            app, log_level="error", lifespan="on", timeout_graceful_shutdown=5
         )
     )
     thread = threading.Thread(

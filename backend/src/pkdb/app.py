@@ -18,6 +18,7 @@ from starlette.exceptions import HTTPException
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse, RedirectResponse
 
+from pkdb import __version__
 from pkdb.api import (
     accounts,
     admin_roles,
@@ -86,7 +87,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         finally:
             session_factory.kw["bind"].dispose()
 
-    app = FastAPI(title="PK-DB", version="0.10.0", lifespan=lifespan)
+    app = FastAPI(title="PK-DB", version=__version__, lifespan=lifespan)
     app.add_exception_handler(RequestValidationError, account_validation_error)
     app.state.accounts = AccountService(session_factory, SMTPMailer(settings))
     app.state.invitations = InvitationService(
