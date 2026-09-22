@@ -16,7 +16,7 @@ from starlette.datastructures import UploadFile
 from starlette.exceptions import HTTPException
 from starlette.responses import JSONResponse
 
-from pkdb.api import accounts, media
+from pkdb.api import accounts, media, reads
 from pkdb.api.limits import UploadLimits
 from pkdb.config import Settings
 from pkdb.db.read import read_study
@@ -30,6 +30,7 @@ from pkdb.services.authentication import AuthenticationFailed, authenticate_toke
 from pkdb.services.authorization import AuthorizationDenied
 from pkdb.services.ingestion import IngestionService, PublicationConflict
 from pkdb.services.mailer import SMTPMailer
+from pkdb.services.queries import QueryService
 
 log = logging.getLogger(__name__)
 SCHEMA_REVISION = "24471de5f5a4"
@@ -52,6 +53,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.accounts = AccountService(session_factory, SMTPMailer(settings))
     app.state.file_store = file_store
     app.state.ingestion = ingestion
+    app.state.queries = QueryService(session_factory)
     app.state.session_factory = session_factory
     app.add_middleware(
         UploadLimits,
@@ -229,4 +231,5 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.principal = principal
     app.include_router(accounts.router)
     app.include_router(media.router)
+    app.include_router(reads.router)
     return app

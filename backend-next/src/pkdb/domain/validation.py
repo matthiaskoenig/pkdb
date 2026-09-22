@@ -43,6 +43,10 @@ def prepare_study(
                 and "sample mean" in vocabulary.calculation_types
             ):
                 record.calculation_type = "sample mean"
+    for individual in study.individuals:
+        for record in individual.characteristica:
+            if record.statistics.count is None:
+                record.statistics.count = 1
     for record in study.measurements:
         if record.group:
             if (
