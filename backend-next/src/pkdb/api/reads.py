@@ -44,9 +44,19 @@ INTEGERS = {
 def query_spec(request: Request, entity: str, *, analysis=False) -> QuerySpec:
     predicates = []
     params = request.query_params
+    if params.get("format", "json") != "json":
+        raise HTTPException(404, "Unsupported response format")
     try:
         for key, raw in params.multi_items():
-            if key in {"page", "page_size", "ordering", "search", "uuid"}:
+            if key in {
+                "page",
+                "page_size",
+                "ordering",
+                "search",
+                "uuid",
+                "format",
+                "search_multi_match",
+            }:
                 continue
             field, separator, operator = key.partition("__")
             name_fields = {
@@ -117,7 +127,7 @@ def query_spec(request: Request, entity: str, *, analysis=False) -> QuerySpec:
             dict(
                 entity=entity,
                 predicates=predicates,
-                search=params.get("search"),
+                search=params.get("search", params.get("search_multi_match")),
                 sort=params.get("ordering", "sid"),
                 page=int(params.get("page", "1")),
                 page_size=int(params.get("page_size", "20")),

@@ -1,7 +1,7 @@
 name: Backend replacement
 on:
   pull_request:
-    paths: ['backend-next/**', '.github/workflows/backend-next.yml']
+    paths: ['backend-next/**', 'tools/backend_migration/**', '.github/workflows/backend-next.yml']
   workflow_dispatch:
 permissions:
   contents: read
@@ -53,3 +53,18 @@ jobs:
           uv pip install --python /tmp/pkdb-wheel/bin/python dist/*.whl
           cd /tmp
           /tmp/pkdb-wheel/bin/python -c 'import pkdb, numpy, scipy, pandas, pint; from pkdb_analysis.pk import pharmacokinetics'
+      - name: Build pinned runtime image
+        run: docker build --build-arg PYTHON_VERSION=${{ matrix.python }} -t pkdb-next:py${{ matrix.python }} .
+      - name: Verify installed container runtime
+        env:
+          PKDB_TEST_IMAGE: pkdb-next:py${{ matrix.python }}
+          PKDB_TEST_IMAGE_PYTHON: ${{ matrix.python }}
+        run: uv run --python ${{ matrix.python }} --locked pytest system_tests/test_runtime.py -q
+      - name: Verify rebuild accounting tooling
+        run: |
+          cd ..
+          PYTHONPATH=. backend-next/.venv/bin/python -m pytest tools/backend_migration/test_rebuild.py tools/backend_migration/test_manifest.py -q
+      - name: Verify PostgreSQL and attachment restore
+        env:
+          PKDB_TEST_POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: uv run --python ${{ matrix.python }} --locked pytest system_tests/test_restore.py -q

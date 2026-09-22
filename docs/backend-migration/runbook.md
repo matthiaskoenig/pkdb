@@ -17,9 +17,13 @@ Prepare a reviewed offline bootstrap directory containing `vocabulary.json` and
 User entries contain username, optional email and role; imported identities start
 disabled, without passwords. Bootstrap never changes existing credentials or roles.
 Run `uv run --project backend-next --locked pkdb bootstrap DIRECTORY`.
-An explicitly provisioned active administrator must obtain an API token through
-normal authentication before the remote rebuild. Administrator provisioning and
-complete account compatibility are still acceptance work.
+Provision a new administrator locally with
+`uv run --project backend-next --locked pkdb create-admin OPERATOR --email EMAIL`.
+The password is read without echo from the terminal; automation can use
+`--password-stdin` with protected standard input. The command hashes the password,
+creates a verified email and refuses to alter an existing username or email.
+Use an operator identity distinct from disabled imported study identities.
+Obtain an API token through normal authentication before the remote rebuild.
 
 Start `uv run --project backend-next --locked uvicorn pkdb.app:create_app --factory`.
 `/health/live` checks process availability; `/health/ready` checks the exact schema
@@ -67,7 +71,9 @@ apply the matching application revision, then check readiness, scientific reads,
 protected attachment access and a new atomic upload. Keep the original backup and
 legacy deployment until restore and cutover acceptance are signed off.
 
-The actual container, shutdown and restore rehearsal evidence remains pending.
+Both Python container variants pass local non-root REST/MCP, analytical PK,
+protected attachment and graceful shutdown gates. The full database and file
+restore rehearsal remains pending.
 Production deployment, data deletion and retiring the legacy runtime are separate
 operations and are not performed by this runbook's rebuild command.
 

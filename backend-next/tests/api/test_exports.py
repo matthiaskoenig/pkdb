@@ -222,3 +222,31 @@ def test_subject_analysis_distinguishes_measurement_sid_from_name(
         )
         assert response.status_code == 200
         assert response.json()["data"]["count"] == 1
+
+
+def test_frontend_json_format_parameter_is_transport_metadata(client):
+    for path in ("filter", "studies", "outputs", "info_nodes", "pkdata/groups"):
+        response = client.get(f"/api/v1/{path}/", params={"format": "json"})
+        assert response.status_code == 200, (path, response.text)
+
+
+def test_frontend_multi_match_search_alias_filters_study_membership(
+    client, creator_headers, valid_bundle
+):
+    response = client.put(
+        f"/api/v2/studies/{valid_bundle.study['sid']}",
+        headers=creator_headers,
+        data={
+            "study": json.dumps(valid_bundle.study),
+            "reference": json.dumps(valid_bundle.reference),
+        },
+    )
+    assert response.status_code == 201
+    for term, count in [("Example", 1), ("unmatchedstudyname", 0)]:
+        response = client.get(
+            "/api/v1/studies/",
+            headers=creator_headers,
+            params={"format": "json", "search_multi_match": term},
+        )
+        assert response.status_code == 200
+        assert response.json()["data"]["count"] == count

@@ -94,3 +94,27 @@ are not complete. The legacy backend remains unchanged and is not retired.
   AUC normalization. This is not evidence of complete Hall1976 legacy parity.
 - Full compatibility coverage, corpus dispositions, matched performance,
   container/restore/browser gates and final branch review remain outstanding.
+
+## Full rebuild and runtime checkpoint
+
+- 305 regular tests pass on each actual Python 3.13 and 3.14. Ruff, formatting
+  and ty pass. Both pinned, non-root container builds pass REST publication,
+  authenticated attachment access, MCP, analytical PK and graceful shutdown.
+- Real PostgreSQL dump plus attachment restore passes on both interpreters,
+  preserving scientific records and authorization and accepting another atomic
+  replacement. This is a small fixture rehearsal; full-corpus restore remains open.
+- Full HTTP rebuild accounts for all 1,579 folders: 1,072 published, 446 failed
+  (400 API validation rejections and 46 local bundle failures), 61 blocked
+  (41 duplicate-SID folders and 20 malformed identities), zero pending and zero
+  HTTP 500 responses. See rebuild-checkpoint.json for report fingerprint. These
+  outcomes are not accepted exclusions; complete remains false.
+- Existing frontend browser checks pass login, study browsing, Frost2014 search,
+  detail/figure display, scientific output rows and selected-study archive HTTP
+  response. Compatibility fixes accept format=json and search_multi_match;
+  explicit CORS also covers upload-limit errors. Browser tests use a temporary
+  frontend copy with node-sass replaced by sass for Node 22; application source
+  remains unchanged. Downloaded archive contents remain covered by API tests.
+- Local create-admin bootstraps a verified administrator using a hidden prompt
+  or explicit stdin, rejecting existing identities instead of changing accounts.
+- Full compatibility coverage, source dispositions, matched performance, full
+  corpus restore and final branch review still block cutover and legacy retirement.

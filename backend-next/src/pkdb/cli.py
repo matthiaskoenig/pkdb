@@ -3,7 +3,9 @@
 import argparse
 import json
 import os
+import sys
 from contextlib import nullcontext
+from getpass import getpass
 from pathlib import Path
 
 import httpx
@@ -20,8 +22,12 @@ def main(argv=None, *, client=None):
         command.add_argument("--api-url", required=True)
     commands.add_parser("bootstrap").add_argument("path", type=Path)
     commands.add_parser("cleanup")
+    admin = commands.add_parser("create-admin")
+    admin.add_argument("username")
+    admin.add_argument("--email", required=True)
+    admin.add_argument("--password-stdin", action="store_true")
     args = parser.parse_args(argv)
-    if args.command in {"bootstrap", "cleanup"}:
+    if args.command in {"bootstrap", "cleanup", "create-admin"}:
         return local_command(args)
 
     token = os.environ.get("PKDB_API_TOKEN")
@@ -63,6 +69,7 @@ def main(argv=None, *, client=None):
 def local_command(args):
     from sqlalchemy.exc import SQLAlchemyError
 
+    from pkdb.commands.admin import create_admin
     from pkdb.commands.bootstrap import bootstrap
     from pkdb.commands.cleanup import cleanup
     from pkdb.config import Settings
@@ -73,7 +80,16 @@ def local_command(args):
     try:
         settings = Settings()
         factory = make_session_factory(settings.database_url)
-        if args.command == "bootstrap":
+        if args.command == "create-admin":
+            if args.password_stdin:
+                password = sys.stdin.readline(1026).rstrip("\r\n")
+            elif sys.stdin.isatty():
+                password = getpass("Administrator password: ")
+            else:
+                raise ValueError("Use an interactive terminal or --password-stdin")
+            create_admin(factory, args.username, args.email, password)
+            result = {"ok": True, "username": args.username}
+        elif args.command == "bootstrap":
             report = bootstrap(args.path, factory)
             result = {"ok": not report.errors, **report.model_dump(mode="json")}
         else:

@@ -11,6 +11,7 @@ class Settings(BaseSettings):
 
     database_url: str
     file_root: Path
+    cors_origins: list[str] = Field(default_factory=list)
     upload_max_bytes: int = Field(default=256 * 1024 * 1024, gt=0)
     upload_max_files: int = Field(default=256, gt=0)
     upload_max_rows: int = Field(default=1_000_000, gt=0)

@@ -67,6 +67,8 @@ def filter_studies(request: Request):
 
     actor = request.app.state.principal(request, required=False)
     params = request.query_params
+    if params.get("format", "json") != "json":
+        raise HTTPException(404, "Unsupported response format")
     concise = params.get("concise", "true")
     if concise not in {"true", "false"} or params.get("download", "false") not in {
         "true",
@@ -82,7 +84,7 @@ def filter_studies(request: Request):
         "subsets",
     }
     for key in params:
-        if key in {"concise", "download"}:
+        if key in {"concise", "download", "format"}:
             continue
         prefix, separator, field = key.partition("__")
         if prefix not in entities or not separator or not field:

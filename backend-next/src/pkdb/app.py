@@ -14,7 +14,8 @@ from sqlalchemy import text
 from starlette.concurrency import run_in_threadpool
 from starlette.datastructures import UploadFile
 from starlette.exceptions import HTTPException
-from starlette.responses import JSONResponse
+from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import JSONResponse, RedirectResponse
 
 from pkdb.api import accounts, exports, legacy_uploads, media, reads, staging
 from pkdb.api.limits import UploadLimits
@@ -73,6 +74,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         UploadLimits,
         max_bytes=settings.upload_max_bytes,
         concurrency=settings.upload_concurrency,
+    )
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.cors_origins,
+        allow_credentials=False,
+        allow_methods=["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+        allow_headers=["Authorization", "Content-Type"],
+        expose_headers=["Content-Disposition", "Retry-After"],
     )
 
     @app.exception_handler(StudyValidationError)
@@ -229,6 +238,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             return publication_state(sid, actor, session_factory)
         except LookupError:
             raise HTTPException(404, "Study not found") from None
+
+    @app.get("/api/v1/swagger/", include_in_schema=False)
+    def legacy_documentation():
+        return RedirectResponse("/docs")
 
     @app.get("/health/live")
     def liveness():

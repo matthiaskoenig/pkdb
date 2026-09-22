@@ -112,3 +112,24 @@ replacement and should use the complete-bundle CLI. Failed staged finalization
 itself leaves the previous publication unchanged. Editable reads of already
 published source templates, PUT and remaining reference adapter contracts are
 still under implementation.
+
+
+## Browser and container configuration
+
+Set `PKDB_CORS_ORIGINS` to a JSON list of exact frontend origins, for example
+`["http://localhost:8080"]`. Authentication uses the Authorization header;
+cookie credentials are not enabled. Allowed browsers can read upload-limit errors
+and download disposition headers.
+
+Build `docker build -t pkdb-next .` from this directory. Python 3.14 is the default;
+`--build-arg PYTHON_VERSION=3.13` selects the other supported interpreter. Python
+and uv base digests are pinned. The runtime contains an installed wheel and locked
+runtime dependencies, runs as UID/GID 10001, and needs a writable attachment volume
+at `/data/files` plus `PKDB_DATABASE_URL`. Apply Alembic explicitly before startup;
+application startup never changes the schema.
+
+Provision the first operator locally with
+`pkdb create-admin OPERATOR --email EMAIL`. Password input is hidden in a terminal;
+`--password-stdin` supports protected automation input. Existing identities are
+never upgraded or rekeyed by this command. See the migration runbook for rebuild
+accounting and remaining cutover gates.
