@@ -63,7 +63,7 @@ jobs:
       - name: Verify rebuild accounting tooling
         run: |
           cd ..
-          PYTHONPATH=. backend-next/.venv/bin/python -m pytest tools/backend_migration/test_rebuild.py tools/backend_migration/test_manifest.py -q
+          PYTHONPATH=. backend-next/.venv/bin/python -m pytest tools/backend_migration/test_rebuild.py tools/backend_migration/test_manifest.py tools/backend_migration/test_benchmark.py -q
       - name: Verify PostgreSQL and attachment restore
         env:
           PKDB_TEST_POSTGRES_CONTAINER: ${{ job.services.postgres.id }}

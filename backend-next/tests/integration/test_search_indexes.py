@@ -60,3 +60,42 @@ def test_vocabulary_page_loading_has_fixed_query_count(session_factory):
         assert len(statements) == small <= 5
     finally:
         event.remove(engine, "before_cursor_execute", capture)
+
+
+def test_study_page_query_count_is_independent_of_page_length(
+    ingestion_context, valid_bundle, session_factory
+):
+    from copy import deepcopy
+
+    from sqlalchemy import event
+
+    from pkdb.schemas.queries import QuerySpec
+    from pkdb.services.queries import QueryService
+
+    ingestion, principal = ingestion_context
+    for number in range(6):
+        bundle = deepcopy(valid_bundle)
+        bundle.study["sid"] = f"PAGE{number}"
+        bundle.study["name"] = f"Page {number}"
+        bundle.reference["sid"] = f"PAGEREF{number}"
+        bundle.study["reference"] = bundle.reference["sid"]
+        ingestion.replace(bundle, principal)
+    engine = session_factory.kw["bind"]
+    statements = []
+
+    def capture(*args):
+        statements.append(args[2])
+
+    service = QueryService(session_factory)
+    event.listen(engine, "before_cursor_execute", capture)
+    try:
+        first = service.search(QuerySpec(entity="studies", page_size=1), principal)
+        small = len(statements)
+        statements.clear()
+        full = service.search(QuerySpec(entity="studies", page_size=20), principal)
+        large = len(statements)
+    finally:
+        event.remove(engine, "before_cursor_execute", capture)
+    assert len(first.items) == 1 and len(full.items) == 6
+    assert small == large
+    assert large <= 20
