@@ -133,7 +133,7 @@ def query_spec(request: Request, entity: str, *, analysis=False) -> QuerySpec:
                 page_size=int(params.get("page_size", "20")),
             )
         )
-    except (ValidationError, ValueError):
+    except ValidationError, ValueError:
         raise HTTPException(400, "Invalid query parameters") from None
 
 

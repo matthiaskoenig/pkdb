@@ -110,7 +110,7 @@ def local_command(args):
             result = {"ok": True, **cleanup(factory, store)}
         print(json.dumps(result))
         return int(not result["ok"])
-    except (ValueError, OSError, SQLAlchemyError):
+    except ValueError, OSError, SQLAlchemyError:
         # Connection/configuration exceptions can contain database credentials.
         print(
             json.dumps(

@@ -80,7 +80,7 @@ class AccountService:
             )
             try:
                 valid = password_hash.verify(password, encoded)
-            except (ValueError, TypeError):
+            except ValueError, TypeError:
                 valid = False
             if not valid or user is None or not user.active:
                 raise AuthenticationFailed("Invalid credentials")

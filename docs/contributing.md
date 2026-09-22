@@ -62,7 +62,7 @@ Open the pull request against `develop`, either with the link git prints after t
 ## 4. Get the checks green
 
 `tests`
-:   Backend tests with PostgreSQL on Python 3.13 and 3.14, container tests, and Compose startup. Follow [Development](development.md) to run them locally.
+:   Backend tests with PostgreSQL on Python 3.14, container tests, and Compose startup. Follow [Development](development.md) to run them locally.
 
 `ruff`
 :   Lint and format of `backend/`. Run it locally: `uv run --project backend ruff check .`, `uv run --project backend ruff format --check .`.
@@ -112,3 +112,7 @@ If you are not comfortable with a rebase, the button "Update branch" on the pull
 - credentials: the deployment env files (`.env`, `.env.develop`, `.env.production`, `.env.alpha`) are gitignored; `.env.example` documents local defaults
 - generated caches and local data; commit schema migrations under `backend/alembic/versions/`
 - files above 2 MB are rejected by the git hook
+
+## Markdown formatting
+
+Keep each prose paragraph on a single source line and use soft wrapping in your editor. Do not insert line breaks to fit a column width. Keep the structural line breaks required by headings, separate list items, tables, and code blocks.

@@ -67,7 +67,7 @@ def authenticate_password(username: str, password: str, session: Session) -> Use
         raise AuthenticationFailed("Invalid credentials")
     try:
         valid = password_hash.verify(password, user.password_hash)
-    except (ValueError, TypeError):
+    except ValueError, TypeError:
         valid = False
     if not valid:
         raise AuthenticationFailed("Invalid credentials")

@@ -113,7 +113,7 @@ def _numeric(value, *, integer=False):
         fail("invalid_number", "Boolean values are not scientific numbers")
     try:
         number = float(value)
-    except (ValueError, TypeError):
+    except ValueError, TypeError:
         fail("invalid_number", f"Not a numeric value: {value!r}")
     if not math.isfinite(number):
         fail("invalid_number", "Scientific numbers must be finite")

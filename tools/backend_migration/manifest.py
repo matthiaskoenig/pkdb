@@ -51,7 +51,7 @@ def build_manifest(root: Path) -> dict:
                 record["sid"] = str(data["sid"])
                 record["name"] = data.get("name")
                 identifiers.setdefault(str(data["sid"]), []).append(relative)
-        except (ValueError, UnicodeError):
+        except ValueError, UnicodeError:
             record["status"] = "invalid_json"
         studies.append(record)
     for sid, paths in sorted(identifiers.items()):

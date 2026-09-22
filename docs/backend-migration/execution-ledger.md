@@ -1,9 +1,6 @@
 # SDD ledger — plan: docs/superpowers/plans/2026-09-21-backend-replacement.md
 
-Branch: backend/fastapi-replacement
-Worktree: /tmp/pkdb-backend-replacement
-Base: 75e29fd4
-Execution: native, authorized by user.
+Branch: backend/fastapi-replacement Worktree: /tmp/pkdb-backend-replacement Base: 75e29fd4 Execution: native, authorized by user.
 
 ## Pre-flight interfaces
 - F1 -> F3/F4/A2: contracts and baseline define source/response semantics; consistent.
@@ -196,40 +193,18 @@ Execution: native, authorized by user.
 
 ## 2026-09-22: retire the previous backend source
 
-- Explicit user instruction supersedes the earlier source-retirement hold: remove
-  the previous backend and simplify local setup. This is repository cleanup, not
-  production cutover or approval of unresolved scientific/compatibility gates.
-- The current implementation moves from `backend-next/` to `backend/`. Django,
-  Elasticsearch deployment, the old uploader/client tests, old environment
-  templates, destructive deployment helpers, nginx configuration, and legacy-only
-  export/benchmark tooling are removed. Historical evidence and provenance remain.
-- Root Compose starts only FastAPI and PostgreSQL, with distinct persistent volumes,
-  automatic Alembic migrations and vocabulary bootstrap. It binds localhost:18083.
-- `pkdb bootstrap-study` creates disabled attribution identities from read-only
-  study folders without changing existing accounts. Zensical documents the complete
-  Docker validation/upload workflow.
-- Python 3.13 and 3.14: 382 regular/tooling tests pass on each. Ruff and ty pass.
-  Zensical builds successfully. Real Frost2014 Docker validation, first upload (201),
-  replacement (200), authentication after restart, persisted study equality and
-  source-file hash preservation pass. Image lifecycle and database/attachment
-  restoration are verified separately.
-- Existing operational services, source data and volumes are preserved. Historical
-  corpus failures and acceptance gaps are not reclassified as passing.
+- Explicit user instruction supersedes the earlier source-retirement hold: remove the previous backend and simplify local setup. This is repository cleanup, not production cutover or approval of unresolved scientific/compatibility gates.
+- The current implementation moves from `backend-next/` to `backend/`. Django, Elasticsearch deployment, the old uploader/client tests, old environment templates, destructive deployment helpers, nginx configuration, and legacy-only export/benchmark tooling are removed. Historical evidence and provenance remain.
+- Root Compose starts only FastAPI and PostgreSQL, with distinct persistent volumes, automatic Alembic migrations and vocabulary bootstrap. It binds localhost:18083.
+- `pkdb bootstrap-study` creates disabled attribution identities from read-only study folders without changing existing accounts. Zensical documents the complete Docker validation/upload workflow.
+- Python 3.13 and 3.14: 382 regular/tooling tests pass on each. Ruff and ty pass. Zensical builds successfully. Real Frost2014 Docker validation, first upload (201), replacement (200), authentication after restart, persisted study equality and source-file hash preservation pass. Image lifecycle and database/attachment restoration are verified separately.
+- Existing operational services, source data and volumes are preserved. Historical corpus failures and acceptance gaps are not reclassified as passing.
 
 
 ## 2026-09-22: restore vocabulary authoring
 
-The `pkdb_data` definitions are authoritative scientific source data and should not
-have been removed with the previous backend. Restore the focused authoring package,
-its ontology/chemical metadata caches, and the full cached identifiers.org registry.
-Django, the uploader, and deployment utilities remain retired.
+The `pkdb_data` definitions are authoritative scientific source data and should not have been removed with the previous backend. Restore the focused authoring package, its ontology/chemical metadata caches, and the full cached identifiers.org registry. Django, the uploader, and deployment utilities remain retired.
 
-`scripts/update_vocabulary.py` regenerates vocabulary and provenance JSON offline.
-The complete 2,147-node content is preserved byte-for-byte; only the snapshot version
-changes to a hash of generated node content. Scientific policy constants are restored
-from the original source without changing their semantics. Source validation reuses
-the current bootstrap validator. CI checks generated output against editable sources.
+`scripts/update_vocabulary.py` regenerates vocabulary and provenance JSON offline. The complete 2,147-node content is preserved byte-for-byte; only the snapshot version changes to a hash of generated node content. Scientific policy constants are restored from the original source without changing their semantics. Source validation reuses the current bootstrap validator. CI checks generated output against editable sources.
 
-A source-to-database regression test adds a categorical measurement, its allowed
-choice, and a substance with explicit chemical properties and no cached ChEBI entry.
-It also verifies that an invalid parent leaves generated JSON and users unchanged.
+A source-to-database regression test adds a categorical measurement, its allowed choice, and a substance with explicit chemical properties and no cached ChEBI entry. It also verifies that an invalid parent leaves generated JSON and users unchanged.

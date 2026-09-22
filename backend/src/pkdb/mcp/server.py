@@ -21,7 +21,7 @@ def create_mcp(ingestion, queries, file_store, session_factory):
             return operation(authentication.current_principal(), *args)
         except StudyValidationError as error:
             return {**error.report.model_dump(mode="json"), "valid": False}
-        except (AuthenticationFailed, AuthorizationDenied):
+        except AuthenticationFailed, AuthorizationDenied:
             raise ToolError("Action not permitted") from None
         except LookupError:
             raise ToolError("Not found") from None

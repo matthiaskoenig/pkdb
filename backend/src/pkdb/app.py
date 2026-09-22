@@ -164,7 +164,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             return json.loads(
                 value, object_pairs_hook=unique_pairs, parse_constant=invalid_constant
             )
-        except (json.JSONDecodeError, RecursionError):
+        except json.JSONDecodeError, RecursionError:
             fail("invalid_json", "Malformed JSON form field")
 
     async def upload(request: Request, sid: str | None = None):
@@ -222,7 +222,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                         result.model_dump(mode="json"),
                         status_code=201 if result.created else 200,
                     )
-        except (ValidationError, HTTPException):
+        except ValidationError, HTTPException:
             fail("invalid_bundle", "Malformed study bundle")
 
     def copy_upload(source, path):
