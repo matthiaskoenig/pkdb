@@ -56,3 +56,18 @@ are not complete. The legacy backend remains unchanged and is not retired.
   query-count evidence, not a matched end-to-end performance claim.
 - Remaining interfaces, full corpus dispositions, measured workload parity,
   MCP, exports, legacy drafts, containers and cutover gates remain open.
+
+## Validated-upload and MCP checkpoint
+
+- 245 regular tests pass on each Python 3.13/3.14, including 11 real HTTP MCP
+  transport tests. Exactly four explicit authenticated tools are exposed.
+- MCP reuses REST scientific validation, query, authorization and publication
+  services. Tests cover bearer-token revocation, private-study isolation,
+  cross-owner/expired handles, filesystem-path rejection, byte limits, integrity,
+  cancellation, responsive health checks and clean ASGI shutdown.
+- Malformed nested uploads return structured errors with accurate counts and
+  preserve existing publications. Full real-study golden/publication checks
+  remain green after stricter input validation.
+- Remaining account/read details, analysis exports, legacy draft adapters, CLI,
+  full rebuild, performance, image/restore/browser gates and final review remain
+  outstanding. This checkpoint does not authorize cutover.

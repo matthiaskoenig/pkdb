@@ -16,12 +16,13 @@ from starlette.datastructures import UploadFile
 from starlette.exceptions import HTTPException
 from starlette.responses import JSONResponse
 
-from pkdb.api import accounts, media, reads
+from pkdb.api import accounts, media, reads, staging
 from pkdb.api.limits import UploadLimits
 from pkdb.config import Settings
 from pkdb.db.read import read_study
 from pkdb.db.session import make_session_factory
 from pkdb.files.store import FileStore, FileTooLarge
+from pkdb.mcp.server import create_mcp
 from pkdb.schemas.security import Principal
 from pkdb.schemas.source import SourceBundle
 from pkdb.schemas.validation import StudyValidationError, fail
@@ -44,16 +45,23 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     )
     ingestion = IngestionService(session_factory, file_store, settings)
 
+    queries = QueryService(session_factory)
+    mcp = create_mcp(ingestion, queries, file_store, session_factory)
+    mcp_app = mcp.http_app(path="/", json_response=True, stateless_http=False)
+
     @asynccontextmanager
     async def lifespan(app):
-        yield
-        session_factory.kw["bind"].dispose()
+        try:
+            async with mcp_app.lifespan(app):
+                yield
+        finally:
+            session_factory.kw["bind"].dispose()
 
     app = FastAPI(title="PK-DB", version="0.10.0", lifespan=lifespan)
     app.state.accounts = AccountService(session_factory, SMTPMailer(settings))
     app.state.file_store = file_store
     app.state.ingestion = ingestion
-    app.state.queries = QueryService(session_factory)
+    app.state.queries = queries
     app.state.session_factory = session_factory
     app.add_middleware(
         UploadLimits,
@@ -232,4 +240,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(accounts.router)
     app.include_router(media.router)
     app.include_router(reads.router)
+    app.include_router(staging.router)
+    app.mount("/mcp", mcp_app)
     return app

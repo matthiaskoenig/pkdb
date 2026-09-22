@@ -186,5 +186,6 @@ def test_nonfinite_in_memory_bundle_reports_source(valid_bundle):
         parse_bundle(valid_bundle)
     issue = error.value.report.issues[0]
     assert issue.code == "invalid_number"
+    assert issue.source is not None
     assert issue.source.path == ("outputset", "outputs", 0, "mean")
     assert error.value.report.error_count == 1
