@@ -5,7 +5,7 @@ import re
 import secrets
 from datetime import UTC, datetime, timedelta
 
-from authlib.integrations.requests_client import OAuth2Session
+from authlib.integrations.httpx_client import OAuth2Client
 from sqlalchemy import delete, func, select, text
 from sqlalchemy.exc import IntegrityError
 
@@ -43,7 +43,7 @@ class ProviderService:
         *,
         origin,
         providers,
-        client_factory=OAuth2Session,
+        client_factory=OAuth2Client,
     ):
         self.session_factory = session_factory
         self.accounts = accounts
@@ -70,7 +70,7 @@ class ProviderService:
             scope=PROVIDERS[provider]["scope"],
             token_endpoint_auth_method="client_secret_post",
             code_challenge_method="S256" if provider == "github" else None,
-            default_timeout=15,
+            timeout=15,
         )
 
     def start(self, provider, *, principal=None, intent="login"):
@@ -121,14 +121,14 @@ class ProviderService:
                 PROVIDERS[provider]["token"],
                 code=code,
                 headers={"Accept": "application/json"},
-                allow_redirects=False,
+                follow_redirects=False,
                 **kwargs,
             )
             if provider == "github":
                 response = client.get(
                     "https://api.github.com/user",
                     headers={"Accept": "application/vnd.github+json"},
-                    allow_redirects=False,
+                    follow_redirects=False,
                 )
                 response.raise_for_status()
                 user = response.json()

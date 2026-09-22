@@ -1,6 +1,6 @@
 """Benchmark correctness: partial or unsuccessful responses are never success."""
 
-import httpx
+import httpx2
 import pytest
 
 from tools.backend_migration.benchmark import measure_reads, summarize, wait_visible
@@ -13,10 +13,10 @@ def test_visibility_waits_for_complete_expected_rows():
 
     def handler(request):
         seen.append(str(request.url))
-        return httpx.Response(200, json={"data": {"count": next(counts), "data": []}})
+        return httpx2.Response(200, json={"data": {"count": next(counts), "data": []}})
 
-    with httpx.Client(
-        base_url="http://example.test", transport=httpx.MockTransport(handler)
+    with httpx2.Client(
+        base_url="http://example.test", transport=httpx2.MockTransport(handler)
     ) as client:
         wait_visible(
             client,
@@ -30,9 +30,9 @@ def test_visibility_waits_for_complete_expected_rows():
 def test_read_failures_cannot_be_reported_as_fast_successes():
     """Reject a fast error response."""
     with (
-        httpx.Client(
+        httpx2.Client(
             base_url="http://example.test",
-            transport=httpx.MockTransport(lambda _: httpx.Response(500)),
+            transport=httpx2.MockTransport(lambda _: httpx2.Response(500)),
         ) as client,
         pytest.raises(ValueError, match="outputs"),
     ):
@@ -43,10 +43,10 @@ def test_visibility_timeout_is_bounded():
     """An incomplete index must reach the timeout."""
     times = iter([0, 0, 2])
     with (
-        httpx.Client(
+        httpx2.Client(
             base_url="http://example.test",
-            transport=httpx.MockTransport(
-                lambda _: httpx.Response(200, json={"data": {"count": 1}})
+            transport=httpx2.MockTransport(
+                lambda _: httpx2.Response(200, json={"data": {"count": 1}})
             ),
         ) as client,
         pytest.raises(TimeoutError),
@@ -111,9 +111,9 @@ def test_each_uploaded_study_requires_a_visibility_probe(tmp_path, monkeypatch):
 def test_invalid_visibility_request_fails_without_polling():
     """An invalid query cannot become visible by waiting for indexing."""
     with (
-        httpx.Client(
+        httpx2.Client(
             base_url="http://example.test",
-            transport=httpx.MockTransport(lambda _: httpx.Response(400)),
+            transport=httpx2.MockTransport(lambda _: httpx2.Response(400)),
         ) as client,
         pytest.raises(ValueError, match="outputs"),
     ):
@@ -149,14 +149,14 @@ def test_cold_and_warmup_samples_are_separate_from_five_measured_runs(
         return {"ok": True}
 
     monkeypatch.setattr(benchmark, "send_folder", upload)
-    original = httpx.Client
+    original = httpx2.Client
     monkeypatch.setattr(
-        benchmark.httpx,
+        benchmark.httpx2,
         "Client",
         lambda **kwargs: original(
             **kwargs,
-            transport=httpx.MockTransport(
-                lambda _: httpx.Response(200, json={"sid": "S"})
+            transport=httpx2.MockTransport(
+                lambda _: httpx2.Response(200, json={"sid": "S"})
             ),
         ),
     )

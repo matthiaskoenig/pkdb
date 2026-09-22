@@ -3,7 +3,7 @@ import threading
 import time
 from contextlib import asynccontextmanager
 
-import httpx
+import httpx2
 import pytest
 import uvicorn
 from mcp import ClientSession
@@ -61,13 +61,12 @@ def mcp_http(ingestion_context, session_factory):
 
 @asynccontextmanager
 async def connect(url, token):
-    async with httpx.AsyncClient(
+    async with httpx2.AsyncClient(
         headers={"Authorization": f"Bearer {token}"}, timeout=15
     ) as http:
         async with streamable_http_client(url + "/mcp/", http_client=http) as (
             read,
             write,
-            _,
         ):
             async with ClientSession(read, write) as session:
                 await session.initialize()

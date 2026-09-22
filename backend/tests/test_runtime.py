@@ -1,6 +1,7 @@
 """The declared interpreter support must include usable scientific dependencies."""
 
 import importlib
+import importlib.util
 import sys
 
 import pytest
@@ -15,9 +16,10 @@ def test_supported_runtime_and_scientific_imports():
         "scipy",
         "pandas",
         "pint",
-        "pkdb_analysis.pk.pharmacokinetics",
+        "pkpdutils.nca",
     ):
         importlib.import_module(name)
+    assert importlib.util.find_spec("pkdb_analysis") is None
 
 
 def test_settings_reject_invalid_resource_limits(tmp_path):

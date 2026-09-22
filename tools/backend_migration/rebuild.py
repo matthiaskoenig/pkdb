@@ -9,7 +9,7 @@ from pathlib import Path
 from tempfile import NamedTemporaryFile
 from urllib.parse import quote
 
-import httpx
+import httpx2
 from pydantic import ValidationError
 
 from pkdb.commands.upload import api_root, send_folder
@@ -182,7 +182,7 @@ def rebuild(corpus, url, report_path, token, client, *, resume=True):
                     "Publication is missing or has outdated processing/vocabulary"
                 )
             record.update(status="published", publication=publication, resumed=resumed)
-        except OSError, ValueError, ValidationError, httpx.RequestError:
+        except OSError, ValueError, ValidationError, httpx2.RequestError:
             record.update(
                 status="failed", reason="Publication or source could not be verified"
             )
@@ -203,7 +203,7 @@ def main():
     parser.add_argument("--no-resume", action="store_true")
     args = parser.parse_args()
     try:
-        with httpx.Client(timeout=300, follow_redirects=False) as client:
+        with httpx2.Client(timeout=300, follow_redirects=False) as client:
             report = rebuild(
                 args.corpus,
                 args.api_url,

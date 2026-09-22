@@ -20,12 +20,12 @@ async def test_tools_share_rest_validation_and_atomic_publication(
 ):
     import json
 
-    import httpx
+    import httpx2
 
     _, url, token = mcp_http
     bundle = {"study": valid_bundle.study, "reference": valid_bundle.reference}
     headers = {"Authorization": f"Bearer {token}"}
-    async with httpx.AsyncClient(base_url=url, headers=headers) as rest:
+    async with httpx2.AsyncClient(base_url=url, headers=headers) as rest:
         response = await rest.post(
             "/api/v2/studies/validate",
             data={
@@ -36,19 +36,19 @@ async def test_tools_share_rest_validation_and_atomic_publication(
         assert response.status_code == 200
         async with mcp_connect(url, token) as client:
             report = await client.call_tool("validate_study", {"bundle": bundle})
-            assert not report.isError
-            assert report.structuredContent == response.json()
+            assert not report.is_error
+            assert report.structured_content == response.json()
             published = await client.call_tool(
                 "replace_study", {"sid": valid_bundle.study["sid"], "bundle": bundle}
             )
-            assert not published.isError
-            assert published.structuredContent["created"] is True
+            assert not published.is_error
+            assert published.structured_content["created"] is True
             study = await client.call_tool(
                 "get_study", {"sid": valid_bundle.study["sid"]}
             )
-            assert not study.isError
+            assert not study.is_error
             assert (
-                study.structuredContent
+                study.structured_content
                 == (
                     await rest.get("/api/v2/studies/" + valid_bundle.study["sid"])
                 ).json()
@@ -56,24 +56,24 @@ async def test_tools_share_rest_validation_and_atomic_publication(
             matches = await client.call_tool(
                 "search_studies", {"query": {"entity": "studies"}}
             )
-            assert matches.structuredContent["count"] == 1
-            before = study.structuredContent
+            assert matches.structured_content["count"] == 1
+            before = study.structured_content
             bundle["study"]["outputset"]["outputs"] = False
             report = await client.call_tool(
                 "replace_study", {"sid": valid_bundle.study["sid"], "bundle": bundle}
             )
-            assert report.structuredContent["valid"] is False
-            assert report.structuredContent["error_count"] == 1
+            assert report.structured_content["valid"] is False
+            assert report.structured_content["error_count"] == 1
             assert (
                 await client.call_tool("get_study", {"sid": valid_bundle.study["sid"]})
-            ).structuredContent == before
+            ).structured_content == before
 
 
 @pytest.mark.anyio
 async def test_transport_requires_current_bearer_token(mcp_http, session_factory):
     from datetime import UTC, datetime
 
-    import httpx
+    import httpx2
     from sqlalchemy import update
 
     from pkdb.db.models.users import Token
@@ -89,7 +89,7 @@ async def test_transport_requires_current_bearer_token(mcp_http, session_factory
             "clientInfo": {"name": "test", "version": "1"},
         },
     }
-    async with httpx.AsyncClient(
+    async with httpx2.AsyncClient(
         base_url=url, headers={"Accept": "application/json, text/event-stream"}
     ) as client:
         assert (await client.post("/mcp/", json=payload)).status_code == 401
@@ -126,13 +126,13 @@ async def test_transport_requires_current_bearer_token(mcp_http, session_factory
 async def test_staged_handles_require_owner_and_never_accept_paths(
     mcp_http, mcp_connect, valid_bundle, session_factory
 ):
-    import httpx
+    import httpx2
 
     from pkdb.db.models.users import User
     from pkdb.services.authentication import issue_token
 
     _, url, token = mcp_http
-    async with httpx.AsyncClient(
+    async with httpx2.AsyncClient(
         base_url=url, headers={"Authorization": f"Bearer {token}"}
     ) as rest:
         response = await rest.post(
@@ -153,23 +153,23 @@ async def test_staged_handles_require_owner_and_never_accept_paths(
         other_token = issue_token(other, session)
     async with mcp_connect(url, other_token) as client:
         response = await client.call_tool("validate_study", {"bundle": bundle})
-        assert response.isError
+        assert response.is_error
         assert "Action not permitted" in response.content[0].text
     async with mcp_connect(url, token) as client:
         response = await client.call_tool(
             "replace_study", {"sid": valid_bundle.study["sid"], "bundle": bundle}
         )
-        assert not response.isError
+        assert not response.is_error
         study = await client.call_tool("get_study", {"sid": valid_bundle.study["sid"]})
-        assert study.structuredContent["attachments"][0]["name"] == "figure.png"
+        assert study.structured_content["attachments"][0]["name"] == "figure.png"
         response = await client.call_tool(
             "validate_study", {"bundle": {**bundle, "handles": ["/etc/passwd"]}}
         )
-        assert response.isError
+        assert response.is_error
         response = await client.call_tool(
             "validate_study", {"bundle": {**bundle, "files": {"secret": "/etc/passwd"}}}
         )
-        assert response.isError
+        assert response.is_error
 
 
 @pytest.mark.anyio
@@ -180,7 +180,7 @@ async def test_blocking_scientific_work_keeps_http_responsive(
     import threading
 
     import anyio
-    import httpx
+    import httpx2
 
     app, url, token = mcp_http
     entered, release = threading.Event(), threading.Event()
@@ -206,11 +206,11 @@ async def test_blocking_scientific_work_keeps_http_responsive(
         )
         try:
             assert await anyio.to_thread.run_sync(entered.wait, 2)
-            async with httpx.AsyncClient(base_url=url, timeout=1) as rest:
+            async with httpx2.AsyncClient(base_url=url, timeout=1) as rest:
                 assert (await rest.get("/health/live")).status_code == 200
         finally:
             release.set()
-        assert not (await task).isError
+        assert not (await task).is_error
 
 
 @pytest.mark.anyio
@@ -261,10 +261,10 @@ async def test_concurrent_calls_keep_principals_separate(
             second_client.call_tool("search_studies", {"query": {"entity": "studies"}}),
         )
         assert [
-            [row["sid"] for row in result.structuredContent["items"]]
+            [row["sid"] for row in result.structured_content["items"]]
             for result in results
         ] == [[valid_bundle.study["sid"]], ["SECOND"]]
-        assert (await first.call_tool("get_study", {"sid": "SECOND"})).isError
+        assert (await first.call_tool("get_study", {"sid": "SECOND"})).is_error
 
 
 @pytest.mark.anyio
@@ -323,12 +323,12 @@ async def test_staged_file_integrity_is_checked(
 ):
     from uuid import UUID
 
-    import httpx
+    import httpx2
 
     from pkdb.db.models.files import StoredFile
 
     app, url, token = mcp_http
-    async with httpx.AsyncClient(
+    async with httpx2.AsyncClient(
         base_url=url, headers={"Authorization": f"Bearer {token}"}
     ) as client:
         response = await client.post(
@@ -349,8 +349,8 @@ async def test_staged_file_integrity_is_checked(
                 }
             },
         )
-        assert response.structuredContent["valid"] is False
-        assert response.structuredContent["issues"][0]["code"] == "source_changed"
+        assert response.structured_content["valid"] is False
+        assert response.structured_content["issues"][0]["code"] == "source_changed"
 
 
 @pytest.mark.anyio
@@ -364,12 +364,12 @@ async def test_handle_limits_and_expiry(
     from datetime import UTC, datetime, timedelta
     from uuid import UUID
 
-    import httpx
+    import httpx2
 
     from pkdb.db.models.files import StoredFile
 
     app, url, token = mcp_http
-    async with httpx.AsyncClient(
+    async with httpx2.AsyncClient(
         base_url=url, headers={"Authorization": f"Bearer {token}"}
     ) as rest:
         response = await rest.post(
@@ -398,7 +398,7 @@ async def test_handle_limits_and_expiry(
             },
         )
         if code:
-            assert response.structuredContent["valid"] is False
-            assert response.structuredContent["issues"][0]["code"] == code
+            assert response.structured_content["valid"] is False
+            assert response.structured_content["issues"][0]["code"] == code
         else:
-            assert response.isError
+            assert response.is_error
