@@ -1,0 +1,116 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCBITaxon_9615",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "dog",
+    "dogs",
+    "Canis borealis",
+    "Canis canis",
+    "Canis domesticus",
+    "Canis familiaris",
+    "Canis lupus borealis"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "GC_ID:1"
+    ],
+    "has_obo_namespace": [
+      "ncbi_taxonomy"
+    ],
+    "has_rank": [
+      "http://purl.obolibrary.org/obo/NCBITaxon_subspecies"
+    ]
+  },
+  "label": "Canis lupus familiaris",
+  "ontology_name": "ncbitaxon",
+  "ontology_prefix": "NCBITaxon",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncbitaxon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCBITaxon_9615",
+  "obo_id": "NCBITaxon:9615",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "GC_ID",
+      "id": "1",
+      "description": null,
+      "url": "https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=cgencodes#SG1"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "dog",
+      "scope": "hasExactSynonym",
+      "type": "genbank common name",
+      "xrefs": []
+    },
+    {
+      "name": "dogs",
+      "scope": "hasExactSynonym",
+      "type": "layperson synonym",
+      "xrefs": []
+    },
+    {
+      "name": "Canis borealis",
+      "scope": "hasRelatedSynonym",
+      "type": "synonym",
+      "xrefs": []
+    },
+    {
+      "name": "Canis canis",
+      "scope": "hasRelatedSynonym",
+      "type": "synonym",
+      "xrefs": []
+    },
+    {
+      "name": "Canis domesticus",
+      "scope": "hasRelatedSynonym",
+      "type": "synonym",
+      "xrefs": []
+    },
+    {
+      "name": "Canis familiaris",
+      "scope": "hasRelatedSynonym",
+      "type": "synonym",
+      "xrefs": []
+    },
+    {
+      "name": "Canis lupus borealis",
+      "scope": "hasRelatedSynonym",
+      "type": "synonym",
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_9615?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_9615/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_9615/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_9615/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_9615/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_9615/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_9615/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

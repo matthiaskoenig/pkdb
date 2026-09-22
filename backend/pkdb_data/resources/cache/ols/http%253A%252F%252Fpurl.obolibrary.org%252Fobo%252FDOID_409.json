@@ -1,0 +1,123 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_409",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "disorder of liver",
+    "hepatic disorder"
+  ],
+  "annotation": {
+    "has_alternative_id": [
+      "DOID:2164",
+      "DOID:2165",
+      "DOID:46"
+    ],
+    "has_dbxref": [
+      "ICD10CM:K76.9",
+      "ICD9CM:573.9",
+      "MESH:D008107",
+      "NCI:C3196",
+      "SNOMEDCT_US_2023_03_01:62857009",
+      "UMLS_CUI:C0023895"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:409"
+    ]
+  },
+  "label": "liver disease",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_409",
+  "obo_id": "DOID:409",
+  "in_subset": [
+    "DO_RAD_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "K76.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "573.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D008107",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D008107"
+    },
+    {
+      "database": "NCI",
+      "id": "C3196",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3196"
+    },
+    {
+      "database": "SNOMEDCT_US_2023_03_01",
+      "id": "62857009",
+      "description": null,
+      "url": "http://snomed.info/id/62857009"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0023895",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0023895"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_409?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_409/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_409/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_409/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_409/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_409/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_409/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_409/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_409/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_409/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_409/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,334 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6916",
+  "lang": "en",
+  "description": [
+    "An aromatic ether which is 2,6-dimethylphenyl ether of 2-aminopropan-1-ol."
+  ],
+  "synonyms": [
+    "1-(2,6-dimethylphenoxy)propan-2-amine",
+    "Mexiletine",
+    "(+-)-1-(2,6-dimethylphenoxy)propan-2-amine",
+    "(2RS)-1-(2,6-dimethylphenoxy)-2-aminopropane",
+    "1-(2',6'-dimethylphenoxy)-2-aminopropane",
+    "1-(2,6-dimethylphenoxy)-2-propanamine",
+    "1-methyl-2-(2,6-xylyloxy)ethanamine",
+    "mexiletina",
+    "mexiletine",
+    "mexiletinum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C11H17NO"
+    ],
+    "has_alternative_id": [
+      "CHEBI:115958"
+    ],
+    "has_dbxref": [
+      "CAS:31828-71-4",
+      "DrugBank:DB00379",
+      "Drug_Central:1794",
+      "HMDB:HMDB0014523",
+      "KEGG:C07220",
+      "KEGG:D08215",
+      "LINCS:LSM-1700",
+      "PMID:10883344",
+      "PMID:11009230",
+      "Patent:FR1551055",
+      "Patent:US3954872",
+      "Reaxys:2092205",
+      "Wikipedia:Mexiletine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6916"
+    ],
+    "inchi": [
+      "InChI=1S/C11H17NO/c1-8-5-4-6-9(2)11(8)13-7-10(3)12/h4-6,10H,7,12H2,1-3H3"
+    ],
+    "inchikey": [
+      "VLPIATFUUWWMKC-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "179.25880"
+    ],
+    "monoisotopicmass": [
+      "179.13101"
+    ],
+    "smiles": [
+      "CC(N)COc1c(C)cccc1C"
+    ]
+  },
+  "label": "mexiletine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6916",
+  "obo_id": "CHEBI:6916",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "31828-71-4",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "31828-71-4",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "31828-71-4",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00379",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00379"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1794",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1794"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014523",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014523"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07220",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07220"
+    },
+    {
+      "database": "KEGG",
+      "id": "D08215",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D08215"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-1700",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "10883344",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10883344"
+    },
+    {
+      "database": "PMID",
+      "id": "11009230",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11009230"
+    },
+    {
+      "database": "Patent",
+      "id": "FR1551055",
+      "description": null,
+      "url": "https://www.google.com/patents/FR1551055"
+    },
+    {
+      "database": "Patent",
+      "id": "US3954872",
+      "description": null,
+      "url": "https://www.google.com/patents/US3954872"
+    },
+    {
+      "database": "Reaxys",
+      "id": "2092205",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Mexiletine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Mexiletine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1-(2,6-dimethylphenoxy)propan-2-amine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mexiletine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-1-(2,6-dimethylphenoxy)propan-2-amine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2RS)-1-(2,6-dimethylphenoxy)-2-aminopropane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(2',6'-dimethylphenoxy)-2-aminopropane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(2,6-dimethylphenoxy)-2-propanamine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-methyl-2-(2,6-xylyloxy)ethanamine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mexiletina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mexiletine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mexiletinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6916?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6916/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6916/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6916/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6916/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6916/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6916/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6916/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

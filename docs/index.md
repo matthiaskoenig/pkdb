@@ -1,4 +1,4 @@
-![PK-DB logo](pkdb_logo_transparent.png)
+![PK-DB logo](pkdb_logo.png)
 
 # PK-DB - the pharmacokinetics database
 
@@ -23,17 +23,16 @@ PK-DB is available at [https://pk-db.com](https://pk-db.com) and [https://alpha.
 
 If you use PK-DB data or the web interface cite
 
-> Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M.
-> *PK-DB: pharmacokinetics database for individualized and stratified computational modeling*.
-> Nucleic Acids Res. 2020 Nov 5:gkaa990. doi: [10.1093/nar/gkaa990](https://doi.org/10.1093/nar/gkaa990). Epub ahead of print. PMID: [33151297](https://pubmed.ncbi.nlm.nih.gov/33151297/).
+> Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M. *PK-DB: pharmacokinetics database for individualized and stratified computational modeling*. Nucleic Acids Res. 2020 Nov 5:gkaa990. doi: [10.1093/nar/gkaa990](https://doi.org/10.1093/nar/gkaa990). Epub ahead of print. PMID: [33151297](https://pubmed.ncbi.nlm.nih.gov/33151297/).
 
 If you use PK-DB code cite in addition the archived source code: [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
 
 ## Contents
 
 - **[Installation](installation.md)** - run a local development stack with docker compose.
-- **[Deployment](deployment.md)** - the develop and production compose stacks, the operational scripts and nginx.
+- **[Deployment](deployment.md)** - runtime configuration, persistent storage, and backup requirements.
 - **[Development](development.md)** - branch model, repository policies, tooling and release.
+- **[Local upload testing](local-upload-testing.md)** - validate and upload your own study with Docker.
 - **[Contributing](contributing.md)** - step by step guide for a first contribution.
 
 ## Data

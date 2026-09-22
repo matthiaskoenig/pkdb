@@ -1,0 +1,83 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHMO_0001259",
+  "lang": "en",
+  "description": [
+    "Liquid chromatography where the inlet pressure is relatively high and the mobile phase is significantly more polar than the stationary phase (which consists of very small particles), for example a microporous silica-based material with chemically bonded alkyl chains."
+  ],
+  "synonyms": [
+    "RHPLC",
+    "RP-HPLC",
+    "gradient reverse HPLC",
+    "gradient reverse high-performance liquid chromatography",
+    "reverse phase  high performance liquid chromatography",
+    "reverse-phase HPLC",
+    "reversed phase high-performance liquid chromatography",
+    "reversed-phase HPLC",
+    "reversed-phase high pressure liquid chromatography",
+    "reversed-phase high-pressure liquid chromatography"
+  ],
+  "annotation": {
+    "created_by": [
+      "https://orcid.org/0000-0001-5985-7429"
+    ],
+    "creation_date": [
+      "2009-04-03T04:11:45Z"
+    ],
+    "id": [
+      "CHMO:0001259"
+    ]
+  },
+  "label": "reversed-phase high-performance liquid chromatography",
+  "ontology_name": "chmo",
+  "ontology_prefix": "CHMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHMO_0001259",
+  "obo_id": "CHMO:0001259",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "Liquid chromatography where the inlet pressure is relatively high and the mobile phase is significantly more polar than the stationary phase (which consists of very small particles), for example a microporous silica-based material with chemically bonded alkyl chains.",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "https://orcid.org/0000-0002-0640-0422",
+          "description": null,
+          "url": "https://orcid.org/0000-0002-0640-0422"
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001259?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001259/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001259/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001259/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001259/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001259/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001259/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,174 @@
+[
+  {
+    "src_id": "2",
+    "src_compound_id": "DB00425"
+  },
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL911"
+  },
+  {
+    "src_id": "7",
+    "src_compound_id": "10125"
+  },
+  {
+    "src_id": "6",
+    "src_compound_id": "C07219"
+  },
+  {
+    "src_id": "39",
+    "src_compound_id": "CB82558860"
+  },
+  {
+    "src_id": "10",
+    "src_compound_id": "596284"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "26266"
+  },
+  {
+    "src_id": "29",
+    "src_compound_id": "J33.161I"
+  },
+  {
+    "src_id": "4",
+    "src_compound_id": "4362"
+  },
+  {
+    "src_id": "4",
+    "src_compound_id": "4348"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "SCHEMBL80516"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0005023"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "146004"
+  },
+  {
+    "src_id": "40",
+    "src_compound_id": "zolpidem"
+  },
+  {
+    "src_id": "39",
+    "src_compound_id": "CB83360349"
+  },
+  {
+    "src_id": "37",
+    "src_compound_id": "145090"
+  },
+  {
+    "src_id": "39",
+    "src_compound_id": "CB44188704"
+  },
+  {
+    "src_id": "9",
+    "src_compound_id": "ZINC000000003876"
+  },
+  {
+    "src_id": "39",
+    "src_compound_id": "CB14188703"
+  },
+  {
+    "src_id": "39",
+    "src_compound_id": "CB84188702"
+  },
+  {
+    "src_id": "47",
+    "src_compound_id": "INTERMEZZO"
+  },
+  {
+    "src_id": "47",
+    "src_compound_id": "ZOLPIDEM TARTRATE"
+  },
+  {
+    "src_id": "47",
+    "src_compound_id": "ZOLPIDEM"
+  },
+  {
+    "src_id": "47",
+    "src_compound_id": "EDLUAR"
+  },
+  {
+    "src_id": "47",
+    "src_compound_id": "AMBIEN"
+  },
+  {
+    "src_id": "47",
+    "src_compound_id": "ZOLPIMIST"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "INTERMEZZO"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "AMBIEN"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "SL-80.0750"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "STILNOCT"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "STILNOX"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "MYSLEE"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "ZOLPIDEM"
+  },
+  {
+    "src_id": "46",
+    "src_compound_id": "ZOLPIDEM TARTRATE"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID7045946"
+  },
+  {
+    "src_id": "34",
+    "src_compound_id": "2870"
+  },
+  {
+    "src_id": "45",
+    "src_compound_id": "ZOLPIDEM"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "5732"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "7K383OQI23"
+  },
+  {
+    "src_id": "25",
+    "src_compound_id": "LSM-5560"
+  },
+  {
+    "src_id": "21",
+    "src_compound_id": "14874110"
+  },
+  {
+    "src_id": "17",
+    "src_compound_id": "PA451976"
+  },
+  {
+    "src_id": "26",
+    "src_compound_id": "82626-48-0"
+  }
+]

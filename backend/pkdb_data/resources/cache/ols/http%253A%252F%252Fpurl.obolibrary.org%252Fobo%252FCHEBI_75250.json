@@ -1,0 +1,290 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_75250",
+  "lang": "en",
+  "description": [
+    "A pyridopyrimidine that is 5-oxo-5,8-dihydropyrido[2,3-d]pyrimidine-6-carboxylic acid substituted at position 2 by a piperazin-1-yl group and at position 8 by an ethyl group. A synthetic broad-spectrum antibacterial, it is used for treatment of gastrointestinal, biliary, and urinary infections."
+  ],
+  "synonyms": [
+    "-ethyl-5-oxo-2-(piperazin-1-yl)-5,8-dihydropyrido[2,3-d]pyrimidine-6-carboxylic acid",
+    "5,8-Dihydro-8-ethyl-5-oxo-2-(1-piperazinyl)pyrido(2,3-d)pyrimidine-6-carboxylic acid",
+    "8-Ethyl-5,8-dihydro-5-oxo-2-(1-piperazinyl)pyrido(2,3-d)pyrimidine-6-carboxylic acid",
+    "acide pipemidique",
+    "acido pipemidico",
+    "acidum pipemidicum",
+    "pipemidic acid"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C14H17N5O3"
+    ],
+    "has_dbxref": [
+      "CAS:51940-44-4",
+      "Drug_Central:2184",
+      "HMDB:HMDB0041989",
+      "KEGG:D08379",
+      "LINCS:LSM-5267",
+      "PMID:16259938",
+      "PMID:16908137",
+      "PMID:20872568",
+      "PMID:23799358",
+      "PMID:28166217",
+      "PMID:7178752",
+      "Reaxys:626575",
+      "VSDB:1904",
+      "Wikipedia:Pipemidic_acid"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:75250"
+    ],
+    "inchi": [
+      "InChI=1S/C14H17N5O3/c1-2-18-8-10(13(21)22)11(20)9-7-16-14(17-12(9)18)19-5-3-15-4-6-19/h7-8,15H,2-6H2,1H3,(H,21,22)"
+    ],
+    "inchikey": [
+      "JOHZPMXAZQZXHR-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "303.31650"
+    ],
+    "monoisotopicmass": [
+      "303.13314"
+    ],
+    "smiles": [
+      "CCn1cc(C(O)=O)c(=O)c2cnc(nc12)N1CCNCC1"
+    ]
+  },
+  "label": "pipemidic acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_75250",
+  "obo_id": "CHEBI:75250",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "51940-44-4",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "51940-44-4",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2184",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2184"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0041989",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0041989"
+    },
+    {
+      "database": "KEGG",
+      "id": "D08379",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D08379"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5267",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "16259938",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16259938"
+    },
+    {
+      "database": "PMID",
+      "id": "16908137",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16908137"
+    },
+    {
+      "database": "PMID",
+      "id": "20872568",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20872568"
+    },
+    {
+      "database": "PMID",
+      "id": "23799358",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23799358"
+    },
+    {
+      "database": "PMID",
+      "id": "28166217",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28166217"
+    },
+    {
+      "database": "PMID",
+      "id": "7178752",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7178752"
+    },
+    {
+      "database": "Reaxys",
+      "id": "626575",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "VSDB",
+      "id": "1904",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1904.htm"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Pipemidic_acid",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Pipemidic_acid"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "-ethyl-5-oxo-2-(piperazin-1-yl)-5,8-dihydropyrido[2,3-d]pyrimidine-6-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5,8-Dihydro-8-ethyl-5-oxo-2-(1-piperazinyl)pyrido(2,3-d)pyrimidine-6-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-Ethyl-5,8-dihydro-5-oxo-2-(1-piperazinyl)pyrido(2,3-d)pyrimidine-6-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acide pipemidique",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acido pipemidico",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acidum pipemidicum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pipemidic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75250?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75250/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75250/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75250/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75250/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75250/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75250/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_75250/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

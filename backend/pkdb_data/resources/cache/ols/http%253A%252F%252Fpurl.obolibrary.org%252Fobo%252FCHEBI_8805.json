@@ -1,0 +1,181 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8805",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Repaglinide",
+    "(S)-(+)-Repaglinide",
+    "enyglid",
+    "surepost"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C27H36N2O4"
+    ],
+    "has_dbxref": [
+      "CAS:135062-02-1",
+      "Drug_Central:2366",
+      "HMDB:HMDB0015048",
+      "KEGG:C07670",
+      "KEGG:D00594",
+      "LINCS:LSM-3863"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8805"
+    ],
+    "inchi": [
+      "InChI=1S/C27H36N2O4/c1-4-33-25-17-20(12-13-22(25)27(31)32)18-26(30)28-23(16-19(2)3)21-10-6-7-11-24(21)29-14-8-5-9-15-29/h6-7,10-13,17,19,23H,4-5,8-9,14-16,18H2,1-3H3,(H,28,30)(H,31,32)/t23-/m0/s1"
+    ],
+    "inchikey": [
+      "FAEKWTJYAYMJKF-QHCPKHFHSA-N"
+    ],
+    "mass": [
+      "452.587"
+    ],
+    "monoisotopicmass": [
+      "452.26751"
+    ],
+    "smiles": [
+      "CCOc1cc(CC(=O)N[C@@H](CC(C)C)c2ccccc2N2CCCCC2)ccc1C(O)=O"
+    ]
+  },
+  "label": "Repaglinide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8805",
+  "obo_id": "CHEBI:8805",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "135062-02-1",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2366",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2366"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0015048",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015048"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07670",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07670"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00594",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00594"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-3863",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Repaglinide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-(+)-Repaglinide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enyglid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "surepost",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8805?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8805/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8805/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8805/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8805/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8805/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8805/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

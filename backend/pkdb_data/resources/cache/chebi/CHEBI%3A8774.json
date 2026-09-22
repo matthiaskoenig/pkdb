@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:8774",
+  "name": "ramipril",
+  "definition": "A dipeptide that is the prodrug for ramiprilat, the active metabolite obtained by hydrolysis of the ethyl ester group. An angiotensin-converting enzyme (ACE) inhibitor, used to treat high blood pressure and congestive heart failure.",
+  "formula": "C23H32N2O5",
+  "charge": "0",
+  "mass": "416.51060",
+  "inchikey": "HDACQVRGBOVJII-JBDAPHQKSA-N"
+}

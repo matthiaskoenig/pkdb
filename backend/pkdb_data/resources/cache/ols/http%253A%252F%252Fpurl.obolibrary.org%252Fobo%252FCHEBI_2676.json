@@ -1,0 +1,569 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_2676",
+  "lang": "en",
+  "description": [
+    "A penicillin in which the substituent at position 6 of the penam ring is a 2-amino-2-(4-hydroxyphenyl)acetamido group."
+  ],
+  "synonyms": [
+    "6beta-[(2R)-2-amino-2-(4-hydroxyphenyl)acetamido]-2,2-dimethylpenam-3alpha-carboxylic acid",
+    "Amoxicillin",
+    "(2S,5R,6R)-6-{[(2R)-2-amino-2-(4-hydroxyphenyl)acetyl]amino}-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0]heptane-2-carboxylic acid",
+    "6-(p-hydroxy-alpha-aminophenylacetamido)penicillanic acid",
+    "AMPC",
+    "AX",
+    "Amolin",
+    "Amopenixin",
+    "Amoxicillin anhydrous",
+    "Clamoxyl",
+    "Moxal",
+    "alpha-amino-p-hydroxybenzylpenicillin",
+    "amoxicilina",
+    "amoxicillin",
+    "amoxicilline",
+    "amoxicillinum",
+    "amoxycilin",
+    "amoxycillin",
+    "p-hydroxyampicillin"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C16H19N3O5S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:133770"
+    ],
+    "has_dbxref": [
+      "CAS:26787-78-0",
+      "DrugBank:DB01060",
+      "Drug_Central:192",
+      "HMDB:HMDB0015193",
+      "KEGG:C06827",
+      "KEGG:D07452",
+      "LINCS:LSM-5654",
+      "PMID:10930630",
+      "PMID:11431418",
+      "PMID:11906332",
+      "PMID:12569987",
+      "PMID:12833570",
+      "PMID:12850488",
+      "PMID:16033609",
+      "PMID:2083978",
+      "PMID:24595455",
+      "PMID:24631718",
+      "PMID:24759068",
+      "PMID:25998949",
+      "PMID:27731424",
+      "PMID:28987997",
+      "PMID:29017833",
+      "Patent:DE1942693",
+      "Patent:GB1241844",
+      "Patent:GB978178",
+      "Patent:US3192198",
+      "Reaxys:4274654",
+      "VSDB:1741",
+      "Wikipedia:Amoxicillin"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:2676"
+    ],
+    "inchi": [
+      "InChI=1S/C16H19N3O5S/c1-16(2)11(15(23)24)19-13(22)10(14(19)25-16)18-12(21)9(17)7-3-5-8(20)6-4-7/h3-6,9-11,14,20H,17H2,1-2H3,(H,18,21)(H,23,24)/t9-,10-,11+,14-/m1/s1"
+    ],
+    "inchikey": [
+      "LSQZJLSUYDQPKJ-NJBDSQKTSA-N"
+    ],
+    "mass": [
+      "365.40400"
+    ],
+    "monoisotopicmass": [
+      "365.10454"
+    ],
+    "smiles": [
+      "[H][C@]12SC(C)(C)[C@@H](N1C(=O)[C@H]2NC(=O)[C@H](N)c1ccc(O)cc1)C(O)=O"
+    ]
+  },
+  "label": "amoxicillin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_2676",
+  "obo_id": "CHEBI:2676",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "26787-78-0",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "26787-78-0",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01060",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01060"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "192",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/192"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0015193",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015193"
+    },
+    {
+      "database": "KEGG",
+      "id": "C06827",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C06827"
+    },
+    {
+      "database": "KEGG",
+      "id": "D07452",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D07452"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5654",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "10930630",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10930630"
+    },
+    {
+      "database": "PMID",
+      "id": "11431418",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11431418"
+    },
+    {
+      "database": "PMID",
+      "id": "11906332",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11906332"
+    },
+    {
+      "database": "PMID",
+      "id": "12569987",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12569987"
+    },
+    {
+      "database": "PMID",
+      "id": "12833570",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12833570"
+    },
+    {
+      "database": "PMID",
+      "id": "12850488",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12850488"
+    },
+    {
+      "database": "PMID",
+      "id": "16033609",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16033609"
+    },
+    {
+      "database": "PMID",
+      "id": "2083978",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2083978"
+    },
+    {
+      "database": "PMID",
+      "id": "24595455",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24595455"
+    },
+    {
+      "database": "PMID",
+      "id": "24631718",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24631718"
+    },
+    {
+      "database": "PMID",
+      "id": "24759068",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24759068"
+    },
+    {
+      "database": "PMID",
+      "id": "25998949",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25998949"
+    },
+    {
+      "database": "PMID",
+      "id": "27731424",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27731424"
+    },
+    {
+      "database": "PMID",
+      "id": "28987997",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28987997"
+    },
+    {
+      "database": "PMID",
+      "id": "29017833",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/29017833"
+    },
+    {
+      "database": "Patent",
+      "id": "DE1942693",
+      "description": null,
+      "url": "https://www.google.com/patents/DE1942693"
+    },
+    {
+      "database": "Patent",
+      "id": "GB1241844",
+      "description": null,
+      "url": "https://www.google.com/patents/GB1241844"
+    },
+    {
+      "database": "Patent",
+      "id": "GB978178",
+      "description": null,
+      "url": "https://www.google.com/patents/GB978178"
+    },
+    {
+      "database": "Patent",
+      "id": "US3192198",
+      "description": null,
+      "url": "https://www.google.com/patents/US3192198"
+    },
+    {
+      "database": "Reaxys",
+      "id": "4274654",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "VSDB",
+      "id": "1741",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1741.htm"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Amoxicillin",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Amoxicillin"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "6beta-[(2R)-2-amino-2-(4-hydroxyphenyl)acetamido]-2,2-dimethylpenam-3alpha-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Amoxicillin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S,5R,6R)-6-{[(2R)-2-amino-2-(4-hydroxyphenyl)acetyl]amino}-3,3-dimethyl-7-oxo-4-thia-1-azabicyclo[3.2.0]heptane-2-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-(p-hydroxy-alpha-aminophenylacetamido)penicillanic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AMPC",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AX",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Amolin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Amopenixin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Amoxicillin anhydrous",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Clamoxyl",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Moxal",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-amino-p-hydroxybenzylpenicillin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amoxicilina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amoxicillin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amoxicilline",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amoxicillinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amoxycilin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "amoxycillin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "p-hydroxyampicillin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2676?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2676/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2676/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2676/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2676/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2676/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2676/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2676/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_conjugate_acid_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2676/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_acid_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

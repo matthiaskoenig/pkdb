@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:145335",
+  "name": "4-hydroxymidazolam beta-D-glucuronide",
+  "definition": "A beta-D-glucosiduronic acid that is beta-D-glucuronic acid in which the anomeric hydroxyl hydrogen has been replaced by a 8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepin-4-yl group. It is the glucuronidated conjugate of the midazolam metabolite, 4-hydroxymidazolam.",
+  "formula": "C24H21ClFN3O7",
+  "charge": "0",
+  "mass": "517.890",
+  "inchikey": "MPHAZAPYEZYBRV-UOPHVPOOSA-N"
+}

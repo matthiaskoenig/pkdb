@@ -1,0 +1,70 @@
+[
+  {
+    "src_id": "1",
+    "src_compound_id": "CHEMBL1188"
+  },
+  {
+    "src_id": "10",
+    "src_compound_id": "595097"
+  },
+  {
+    "src_id": "39",
+    "src_compound_id": "CB3147586"
+  },
+  {
+    "src_id": "9",
+    "src_compound_id": "ZINC000002570878"
+  },
+  {
+    "src_id": "28",
+    "src_compound_id": "MolPort-003-847-951"
+  },
+  {
+    "src_id": "18",
+    "src_compound_id": "HMDB0061089"
+  },
+  {
+    "src_id": "14",
+    "src_compound_id": "E5142BN92Z"
+  },
+  {
+    "src_id": "22",
+    "src_compound_id": "107917"
+  },
+  {
+    "src_id": "29",
+    "src_compound_id": "J344.583F"
+  },
+  {
+    "src_id": "31",
+    "src_compound_id": "50134248"
+  },
+  {
+    "src_id": "15",
+    "src_compound_id": "SCHEMBL7310758"
+  },
+  {
+    "src_id": "26",
+    "src_compound_id": "59468-90-5"
+  },
+  {
+    "src_id": "21",
+    "src_compound_id": "14851557"
+  },
+  {
+    "src_id": "7",
+    "src_compound_id": "145330"
+  },
+  {
+    "src_id": "36",
+    "src_compound_id": "MTBLC145330"
+  },
+  {
+    "src_id": "48",
+    "src_compound_id": "HY-118645"
+  },
+  {
+    "src_id": "32",
+    "src_compound_id": "DTXSID50208175"
+  }
+]

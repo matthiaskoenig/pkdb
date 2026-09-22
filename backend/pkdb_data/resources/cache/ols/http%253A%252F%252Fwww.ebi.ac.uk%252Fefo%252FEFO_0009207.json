@@ -1,0 +1,46 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0009207",
+  "lang": "en",
+  "description": [],
+  "synonyms": [],
+  "annotation": {
+    "obsoleted_in_version": [
+      "3.18.0"
+    ],
+    "organizational_class": [
+      true
+    ],
+    "reason_for_obsolescence": [
+      "Duplicate of http://www.ebi.ac.uk/efo/EFO_0004541."
+    ],
+    "term replaced by": [
+      "http://www.ebi.ac.uk/efo/EFO_0004541"
+    ]
+  },
+  "label": "obsolete_Glycosylated Hemoglobin Measurement",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://www.ebi.ac.uk/efo/EFO_0004541",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0009207",
+  "obo_id": "EFO:0009207",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009207?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009207/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

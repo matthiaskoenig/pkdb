@@ -1,0 +1,288 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0003144",
+  "lang": "en",
+  "description": [
+    "Inability of the heart to pump blood at an adequate rate to meet tissue metabolic requirements. Clinical symptoms of heart failure include: unusual dyspnea on light exertion, recurrent dyspnea occurring in the supine position, fluid retention or rales, jugular venous distension, pulmonary edema on physical exam, or pulmonary edema on chest x-ray presumed to be cardiac dysfunction."
+  ],
+  "synonyms": [
+    "Heart failure (disorder)",
+    "Heart failure NOS",
+    "Heart failure NOS (disorder)",
+    "Heart failure, unspecified",
+    "Heart: [weak] or [failure NOS]",
+    "Weak heart",
+    "cardiac dysfunction",
+    "cardiac failure",
+    "cardiac insufficiency",
+    "failure, heart",
+    "heart failure",
+    "insufficiency, Cardiac"
+  ],
+  "annotation": {
+    "gwas_trait": [
+      true
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/6749",
+      "http://identifiers.org/mesh/D006333",
+      "http://identifiers.org/snomedct/84114007",
+      "http://linkedlifedata.com/resource/umls/id/C0018801",
+      "http://purl.obolibrary.org/obo/NCIT_C50577",
+      "http://purl.obolibrary.org/obo/mondo/sources/icd11foundation/1458683894",
+      "http://www.ebi.ac.uk/efo/EFO_0003144"
+    ],
+    "has_dbxref": [
+      "ICD10:I50",
+      "ICD9:428",
+      "ICD9:428.9",
+      "MEDGEN:6749",
+      "MESH:D006333",
+      "MONDO:0005252",
+      "MedDRA:10007554",
+      "MedDRA:10007564",
+      "MedDRA:10019279",
+      "MedDRA:10019284",
+      "MedDRA:10019285",
+      "NCIT:C50577",
+      "NCIt:C50577",
+      "SCTID:84114007",
+      "SNOMEDCT:84114007",
+      "UMLS:C0018801",
+      "icd11.foundation:1458683894"
+    ],
+    "id": [
+      "EFO:0003144"
+    ],
+    "term editor": [
+      "Catherine Leroy",
+      "Tomasz Adamusiak"
+    ]
+  },
+  "label": "heart failure",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "EFO_0003144",
+  "obo_id": "EFO:0003144",
+  "in_subset": [
+    "otar"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "Inability of the heart to pump blood at an adequate rate to meet tissue metabolic requirements. Clinical symptoms of heart failure include: unusual dyspnea on light exertion, recurrent dyspnea occurring in the supine position, fluid retention or rales, jugular venous distension, pulmonary edema on physical exam, or pulmonary edema on chest x-ray presumed to be cardiac dysfunction.",
+      "oboXrefs": [
+        {
+          "database": "EFO",
+          "id": "0003144",
+          "description": null,
+          "url": "http://www.ebi.ac.uk/efo/EFO_0003144"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10",
+      "id": "I50",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/I50"
+    },
+    {
+      "database": "ICD9",
+      "id": "428",
+      "description": "EFO:0003144",
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=428"
+    },
+    {
+      "database": "ICD9",
+      "id": "428.9",
+      "description": "MONDO:i2s",
+      "url": null
+    },
+    {
+      "database": "MEDGEN",
+      "id": "6749",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/6749"
+    },
+    {
+      "database": "MESH",
+      "id": "D006333",
+      "description": "MONDO:equivalentTo",
+      "url": "http://id.nlm.nih.gov/mesh/D006333"
+    },
+    {
+      "database": "MONDO",
+      "id": "0005252",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MONDO_0005252"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10007554",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10007554"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10007564",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10007564"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10019279",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10019279"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10019284",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10019284"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10019285",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10019285"
+    },
+    {
+      "database": "NCIT",
+      "id": "C50577",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/NCIT_C50577"
+    },
+    {
+      "database": "NCIt",
+      "id": "C50577",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C50577"
+    },
+    {
+      "database": "SCTID",
+      "id": "84114007",
+      "description": "MONDO:equivalentTo",
+      "url": "http://snomed.info/id/84114007"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "84114007",
+      "description": null,
+      "url": "http://snomed.info/id/84114007"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0018801",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0018801"
+    },
+    {
+      "database": "icd11.foundation",
+      "id": "1458683894",
+      "description": "MONDO:equivalentTo",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "cardiac failure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C50577",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C50577"
+        },
+        {
+          "database": "icd11.foundation",
+          "id": "1458683894",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "heart failure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C50577",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C50577"
+        },
+        {
+          "database": "Wikipedia",
+          "id": "Heart_failure",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Heart_failure"
+        },
+        {
+          "database": "icd11.foundation",
+          "id": "1458683894",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "heart failure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/graph"
+    },
+    "disease_has_location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0004026"
+    },
+    "has_disease_location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003144/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000784"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

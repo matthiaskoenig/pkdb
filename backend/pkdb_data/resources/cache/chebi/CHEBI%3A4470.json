@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:4470",
+  "name": "dextromethorphan",
+  "definition": "A 6-methoxy-11-methyl-1,3,4,9,10,10a-hexahydro-2H-10,4a-(epiminoethano)phenanthrene in which the sterocenters at positions 4a, 10 and 10a have S-configuration. It is a prodrug of dextrorphan and used as an antitussive drug for suppressing cough.",
+  "formula": "C18H25NO",
+  "charge": "0",
+  "mass": "271.404",
+  "inchikey": "MKXZASYAUGDDCJ-NJAFHUGGSA-N"
+}

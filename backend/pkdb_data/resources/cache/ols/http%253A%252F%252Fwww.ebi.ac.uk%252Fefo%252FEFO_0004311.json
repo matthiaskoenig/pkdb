@@ -1,0 +1,61 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0004311",
+  "lang": "en",
+  "description": [
+    "A heart function measurement is a measurement of some heart function or process typically used to establish normal heart function or in process of diagnosis"
+  ],
+  "synonyms": [
+    "cardiac function tests",
+    "heart function tests"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "MESH:D006334"
+    ],
+    "obsoleted_in_version": [
+      "3.74.0"
+    ],
+    "reason_for_obsolescence": [
+      "Project to replace EFO measurement branch with enriched OBA branch. Please use: OBA:2045275"
+    ],
+    "term editor": [
+      "Dani Welter"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/OBA_2045275"
+    ]
+  },
+  "label": "obsolete_heart function measurement",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/OBA_2045275",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0004311",
+  "obo_id": "EFO:0004311",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "MESH",
+      "id": "D006334",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D006334"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004311?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004311/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

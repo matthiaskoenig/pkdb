@@ -1,0 +1,148 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C385",
+  "lang": "en",
+  "description": [
+    "An alkaloid isolated from Colchicum autumnale with anti-gout and anti-inflammatory activities. The exact mechanism of action by which colchicines exerts its effect has not been completely established. Colchicine binds to tubulin, thereby interfering with the polymerization of tubulin, interrupting microtubule dynamics, and disrupting mitosis. This leads to an inhibition of migration of leukocytes and other inflammatory cells, thereby reducing the inflammatory response to deposited urate crystals.  Colchicine may also interrupt the cycle of monosodium urate crystal deposition in joint tissues, thereby also preventing the resultant inflammatory response. Overall, colchicine decreases leukocyte chemotaxis/migration and phagocytosis to inflamed areas, and inhibits the formation and release of a chemotactic glycoprotein that is produced during phagocytosis of urate crystals."
+  ],
+  "synonyms": [
+    "(S)-N-(5,6,7,9-Tetrahydro-1,2,3,10-tetramethoxy-9-oxobenzo[a]heptalen-7-yl)acetamide",
+    "COLCHICINE",
+    "Colchicine",
+    "Colcrys",
+    "Mitigare",
+    "colchicine"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to treat gout (inflamed joints caused by a buildup of uric acid). It comes from the crocus plant Colchicum autumnale. Colchicine blocks cell division and the movement of certain immune cells to areas that are inflamed. It is a type of alkaloid and a type of mitotic inhibitor."
+    ],
+    "CAS_Registry": [
+      "64-86-8"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:27882"
+    ],
+    "Chemical_Formula": [
+      "C22H25NO6"
+    ],
+    "Contributing_Source": [
+      "FDA",
+      "HemOnc"
+    ],
+    "FDA_UNII_Code": [
+      "SML2Y3J35T"
+    ],
+    "Legacy Concept Name": [
+      "Colchicine"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "39188"
+    ],
+    "NSC Number": [
+      "757"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "39188"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "39188"
+    ],
+    "Preferred_Name": [
+      "Colchicine"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0009262"
+    ],
+    "code": [
+      "C385"
+    ]
+  },
+  "label": "Colchicine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C385",
+  "obo_id": "NCIT:C385",
+  "in_subset": [
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C176424",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(S)-N-(5,6,7,9-Tetrahydro-1,2,3,10-tetramethoxy-9-oxobenzo[a]heptalen-7-yl)acetamide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "COLCHICINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Colchicine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Colcrys",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Mitigare",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "colchicine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C385?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C385/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C385/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C385/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C385/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C385/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C385/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

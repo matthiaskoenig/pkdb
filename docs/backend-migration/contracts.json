@@ -1,0 +1,4430 @@
+{
+  "schema_version": 1,
+  "routes": [
+    {
+      "path": "/^accounts/^emails/$",
+      "method": "GET",
+      "view": "rest_email_auth.views.EmailListView",
+      "action": null,
+      "serializer": "EmailSerializer",
+      "fields": [
+        "id",
+        "created_at",
+        "email",
+        "is_primary",
+        "is_verified"
+      ],
+      "permissions": [
+        "IsAuthenticated"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^emails/$",
+      "method": "OPTIONS",
+      "view": "rest_email_auth.views.EmailListView",
+      "action": null,
+      "serializer": "EmailSerializer",
+      "fields": [
+        "id",
+        "created_at",
+        "email",
+        "is_primary",
+        "is_verified"
+      ],
+      "permissions": [
+        "IsAuthenticated"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^emails/$",
+      "method": "POST",
+      "view": "rest_email_auth.views.EmailListView",
+      "action": null,
+      "serializer": "EmailSerializer",
+      "fields": [
+        "id",
+        "created_at",
+        "email",
+        "is_primary",
+        "is_verified"
+      ],
+      "permissions": [
+        "IsAuthenticated"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^emails/(?P<pk>[0-9]+)/$",
+      "method": "DELETE",
+      "view": "rest_email_auth.views.EmailDetailView",
+      "action": null,
+      "serializer": "EmailSerializer",
+      "fields": [
+        "id",
+        "created_at",
+        "email",
+        "is_primary",
+        "is_verified"
+      ],
+      "permissions": [
+        "IsAuthenticated"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^emails/(?P<pk>[0-9]+)/$",
+      "method": "GET",
+      "view": "rest_email_auth.views.EmailDetailView",
+      "action": null,
+      "serializer": "EmailSerializer",
+      "fields": [
+        "id",
+        "created_at",
+        "email",
+        "is_primary",
+        "is_verified"
+      ],
+      "permissions": [
+        "IsAuthenticated"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^emails/(?P<pk>[0-9]+)/$",
+      "method": "OPTIONS",
+      "view": "rest_email_auth.views.EmailDetailView",
+      "action": null,
+      "serializer": "EmailSerializer",
+      "fields": [
+        "id",
+        "created_at",
+        "email",
+        "is_primary",
+        "is_verified"
+      ],
+      "permissions": [
+        "IsAuthenticated"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^emails/(?P<pk>[0-9]+)/$",
+      "method": "PATCH",
+      "view": "rest_email_auth.views.EmailDetailView",
+      "action": null,
+      "serializer": "EmailSerializer",
+      "fields": [
+        "id",
+        "created_at",
+        "email",
+        "is_primary",
+        "is_verified"
+      ],
+      "permissions": [
+        "IsAuthenticated"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^emails/(?P<pk>[0-9]+)/$",
+      "method": "PUT",
+      "view": "rest_email_auth.views.EmailDetailView",
+      "action": null,
+      "serializer": "EmailSerializer",
+      "fields": [
+        "id",
+        "created_at",
+        "email",
+        "is_primary",
+        "is_verified"
+      ],
+      "permissions": [
+        "IsAuthenticated"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^register/$",
+      "method": "OPTIONS",
+      "view": "rest_email_auth.views.RegistrationView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^register/$",
+      "method": "POST",
+      "view": "rest_email_auth.views.RegistrationView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^request-password-reset/$",
+      "method": "OPTIONS",
+      "view": "rest_email_auth.views.PasswordResetRequestView",
+      "action": null,
+      "serializer": "PasswordResetRequestSerializer",
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^request-password-reset/$",
+      "method": "POST",
+      "view": "rest_email_auth.views.PasswordResetRequestView",
+      "action": null,
+      "serializer": "PasswordResetRequestSerializer",
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^resend-verification/$",
+      "method": "OPTIONS",
+      "view": "rest_email_auth.views.ResendVerificationView",
+      "action": null,
+      "serializer": "ResendVerificationSerializer",
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^resend-verification/$",
+      "method": "POST",
+      "view": "rest_email_auth.views.ResendVerificationView",
+      "action": null,
+      "serializer": "ResendVerificationSerializer",
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^reset-password/$",
+      "method": "OPTIONS",
+      "view": "rest_email_auth.views.PasswordResetView",
+      "action": null,
+      "serializer": "PasswordResetSerializer",
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^reset-password/$",
+      "method": "POST",
+      "view": "rest_email_auth.views.PasswordResetView",
+      "action": null,
+      "serializer": "PasswordResetSerializer",
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^verify-email/$",
+      "method": "OPTIONS",
+      "view": "rest_email_auth.views.EmailVerificationView",
+      "action": null,
+      "serializer": "EmailVerificationSerializer",
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^accounts/^verify-email/$",
+      "method": "POST",
+      "view": "rest_email_auth.views.EmailVerificationView",
+      "action": null,
+      "serializer": "EmailVerificationSerializer",
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^api/v1/redoc/$",
+      "method": "GET",
+      "view": "drf_yasg.views.SchemaView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^api/v1/redoc/$",
+      "method": "OPTIONS",
+      "view": "drf_yasg.views.SchemaView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^api/v1/swagger(?P<format>\\.json|\\.yaml)$",
+      "method": "GET",
+      "view": "drf_yasg.views.SchemaView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^api/v1/swagger(?P<format>\\.json|\\.yaml)$",
+      "method": "OPTIONS",
+      "view": "drf_yasg.views.SchemaView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^api/v1/swagger/$",
+      "method": "GET",
+      "view": "drf_yasg.views.SchemaView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^api/v1/swagger/$",
+      "method": "OPTIONS",
+      "view": "drf_yasg.views.SchemaView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/^media/(?P<file>.*)$",
+      "method": "GET",
+      "view": "pkdb_app.views.serve_protected_document",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api-auth/login/",
+      "method": "GET",
+      "view": "django.contrib.auth.views.LoginView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api-auth/login/",
+      "method": "OPTIONS",
+      "view": "django.contrib.auth.views.LoginView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api-auth/login/",
+      "method": "POST",
+      "view": "django.contrib.auth.views.LoginView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api-auth/login/",
+      "method": "PUT",
+      "view": "django.contrib.auth.views.LoginView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api-auth/logout/",
+      "method": "GET",
+      "view": "django.contrib.auth.views.LogoutView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api-auth/logout/",
+      "method": "OPTIONS",
+      "view": "django.contrib.auth.views.LogoutView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api-auth/logout/",
+      "method": "POST",
+      "view": "django.contrib.auth.views.LogoutView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api-token-auth/",
+      "method": "OPTIONS",
+      "view": "pkdb_app.users.views.ObtainAuthTokenCustom",
+      "action": null,
+      "serializer": "AuthTokenSerializerCostum",
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api-token-auth/",
+      "method": "POST",
+      "view": "pkdb_app.users.views.ObtainAuthTokenCustom",
+      "action": null,
+      "serializer": "AuthTokenSerializerCostum",
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^$",
+      "method": "GET",
+      "view": "rest_framework.routers.APIRootView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^$",
+      "method": "OPTIONS",
+      "view": "rest_framework.routers.APIRootView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "rest_framework.routers.APIRootView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "OPTIONS",
+      "view": "rest_framework.routers.APIRootView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_datafiles/$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.DataFileViewSet",
+      "action": "list",
+      "serializer": "DataFileSerializer",
+      "fields": [
+        "file",
+        "filetype",
+        "id"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_datafiles/$",
+      "method": "POST",
+      "view": "pkdb_app.subjects.views.DataFileViewSet",
+      "action": "create",
+      "serializer": "DataFileSerializer",
+      "fields": [
+        "file",
+        "filetype",
+        "id"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_datafiles/(?P<pk>[^/.]+)/$",
+      "method": "DELETE",
+      "view": "pkdb_app.subjects.views.DataFileViewSet",
+      "action": "destroy",
+      "serializer": "DataFileSerializer",
+      "fields": [
+        "file",
+        "filetype",
+        "id"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_datafiles/(?P<pk>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.DataFileViewSet",
+      "action": "retrieve",
+      "serializer": "DataFileSerializer",
+      "fields": [
+        "file",
+        "filetype",
+        "id"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_datafiles/(?P<pk>[^/.]+)/$",
+      "method": "PATCH",
+      "view": "pkdb_app.subjects.views.DataFileViewSet",
+      "action": "partial_update",
+      "serializer": "DataFileSerializer",
+      "fields": [
+        "file",
+        "filetype",
+        "id"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_datafiles/(?P<pk>[^/.]+)/$",
+      "method": "PUT",
+      "view": "pkdb_app.subjects.views.DataFileViewSet",
+      "action": "update",
+      "serializer": "DataFileSerializer",
+      "fields": [
+        "file",
+        "filetype",
+        "id"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_datafiles/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "DELETE",
+      "view": "pkdb_app.subjects.views.DataFileViewSet",
+      "action": "destroy",
+      "serializer": "DataFileSerializer",
+      "fields": [
+        "file",
+        "filetype",
+        "id"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_datafiles/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.DataFileViewSet",
+      "action": "retrieve",
+      "serializer": "DataFileSerializer",
+      "fields": [
+        "file",
+        "filetype",
+        "id"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_datafiles/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "PATCH",
+      "view": "pkdb_app.subjects.views.DataFileViewSet",
+      "action": "partial_update",
+      "serializer": "DataFileSerializer",
+      "fields": [
+        "file",
+        "filetype",
+        "id"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_datafiles/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "PUT",
+      "view": "pkdb_app.subjects.views.DataFileViewSet",
+      "action": "update",
+      "serializer": "DataFileSerializer",
+      "fields": [
+        "file",
+        "filetype",
+        "id"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_datafiles\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.DataFileViewSet",
+      "action": "list",
+      "serializer": "DataFileSerializer",
+      "fields": [
+        "file",
+        "filetype",
+        "id"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_datafiles\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "POST",
+      "view": "pkdb_app.subjects.views.DataFileViewSet",
+      "action": "create",
+      "serializer": "DataFileSerializer",
+      "fields": [
+        "file",
+        "filetype",
+        "id"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_info_nodes/$",
+      "method": "GET",
+      "view": "pkdb_app.info_nodes.views.InfoNodeViewSet",
+      "action": "list",
+      "serializer": "InfoNodeSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "ntype",
+        "dtype",
+        "parents",
+        "description",
+        "synonyms",
+        "annotations",
+        "measurement_type",
+        "substance",
+        "choice",
+        "deprecated",
+        "label",
+        "xrefs"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_info_nodes/$",
+      "method": "POST",
+      "view": "pkdb_app.info_nodes.views.InfoNodeViewSet",
+      "action": "create",
+      "serializer": "InfoNodeSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "ntype",
+        "dtype",
+        "parents",
+        "description",
+        "synonyms",
+        "annotations",
+        "measurement_type",
+        "substance",
+        "choice",
+        "deprecated",
+        "label",
+        "xrefs"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_info_nodes/(?P<url_slug>[^/.]+)/$",
+      "method": "DELETE",
+      "view": "pkdb_app.info_nodes.views.InfoNodeViewSet",
+      "action": "destroy",
+      "serializer": "InfoNodeSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "ntype",
+        "dtype",
+        "parents",
+        "description",
+        "synonyms",
+        "annotations",
+        "measurement_type",
+        "substance",
+        "choice",
+        "deprecated",
+        "label",
+        "xrefs"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_info_nodes/(?P<url_slug>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.info_nodes.views.InfoNodeViewSet",
+      "action": "retrieve",
+      "serializer": "InfoNodeSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "ntype",
+        "dtype",
+        "parents",
+        "description",
+        "synonyms",
+        "annotations",
+        "measurement_type",
+        "substance",
+        "choice",
+        "deprecated",
+        "label",
+        "xrefs"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_info_nodes/(?P<url_slug>[^/.]+)/$",
+      "method": "PATCH",
+      "view": "pkdb_app.info_nodes.views.InfoNodeViewSet",
+      "action": "partial_update",
+      "serializer": "InfoNodeSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "ntype",
+        "dtype",
+        "parents",
+        "description",
+        "synonyms",
+        "annotations",
+        "measurement_type",
+        "substance",
+        "choice",
+        "deprecated",
+        "label",
+        "xrefs"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_info_nodes/(?P<url_slug>[^/.]+)/$",
+      "method": "PUT",
+      "view": "pkdb_app.info_nodes.views.InfoNodeViewSet",
+      "action": "update",
+      "serializer": "InfoNodeSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "ntype",
+        "dtype",
+        "parents",
+        "description",
+        "synonyms",
+        "annotations",
+        "measurement_type",
+        "substance",
+        "choice",
+        "deprecated",
+        "label",
+        "xrefs"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_info_nodes/(?P<url_slug>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "DELETE",
+      "view": "pkdb_app.info_nodes.views.InfoNodeViewSet",
+      "action": "destroy",
+      "serializer": "InfoNodeSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "ntype",
+        "dtype",
+        "parents",
+        "description",
+        "synonyms",
+        "annotations",
+        "measurement_type",
+        "substance",
+        "choice",
+        "deprecated",
+        "label",
+        "xrefs"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_info_nodes/(?P<url_slug>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.info_nodes.views.InfoNodeViewSet",
+      "action": "retrieve",
+      "serializer": "InfoNodeSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "ntype",
+        "dtype",
+        "parents",
+        "description",
+        "synonyms",
+        "annotations",
+        "measurement_type",
+        "substance",
+        "choice",
+        "deprecated",
+        "label",
+        "xrefs"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_info_nodes/(?P<url_slug>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "PATCH",
+      "view": "pkdb_app.info_nodes.views.InfoNodeViewSet",
+      "action": "partial_update",
+      "serializer": "InfoNodeSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "ntype",
+        "dtype",
+        "parents",
+        "description",
+        "synonyms",
+        "annotations",
+        "measurement_type",
+        "substance",
+        "choice",
+        "deprecated",
+        "label",
+        "xrefs"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_info_nodes/(?P<url_slug>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "PUT",
+      "view": "pkdb_app.info_nodes.views.InfoNodeViewSet",
+      "action": "update",
+      "serializer": "InfoNodeSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "ntype",
+        "dtype",
+        "parents",
+        "description",
+        "synonyms",
+        "annotations",
+        "measurement_type",
+        "substance",
+        "choice",
+        "deprecated",
+        "label",
+        "xrefs"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_info_nodes\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.info_nodes.views.InfoNodeViewSet",
+      "action": "list",
+      "serializer": "InfoNodeSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "ntype",
+        "dtype",
+        "parents",
+        "description",
+        "synonyms",
+        "annotations",
+        "measurement_type",
+        "substance",
+        "choice",
+        "deprecated",
+        "label",
+        "xrefs"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_info_nodes\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "POST",
+      "view": "pkdb_app.info_nodes.views.InfoNodeViewSet",
+      "action": "create",
+      "serializer": "InfoNodeSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "ntype",
+        "dtype",
+        "parents",
+        "description",
+        "synonyms",
+        "annotations",
+        "measurement_type",
+        "substance",
+        "choice",
+        "deprecated",
+        "label",
+        "xrefs"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_references/$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.ReferencesViewSet",
+      "action": "list",
+      "serializer": "ReferenceSerializer",
+      "fields": [
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_references/$",
+      "method": "POST",
+      "view": "pkdb_app.studies.views.ReferencesViewSet",
+      "action": "create",
+      "serializer": "ReferenceSerializer",
+      "fields": [
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/legacy_uploads.py",
+      "verification": {
+        "status": "implemented_draft_authentication_checkpoint",
+        "tests": [
+          "tests/api/test_legacy_upload.py"
+        ],
+        "remaining": [
+          "full permission and error compatibility matrix",
+          "published editable source roundtrip and administrative write contracts"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^_references/(?P<sid>[^/.]+)/$",
+      "method": "DELETE",
+      "view": "pkdb_app.studies.views.ReferencesViewSet",
+      "action": "destroy",
+      "serializer": "ReferenceSerializer",
+      "fields": [
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_references/(?P<sid>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.ReferencesViewSet",
+      "action": "retrieve",
+      "serializer": "ReferenceSerializer",
+      "fields": [
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_references/(?P<sid>[^/.]+)/$",
+      "method": "PATCH",
+      "view": "pkdb_app.studies.views.ReferencesViewSet",
+      "action": "partial_update",
+      "serializer": "ReferenceSerializer",
+      "fields": [
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/legacy_uploads.py",
+      "verification": {
+        "status": "implemented_draft_authentication_checkpoint",
+        "tests": [
+          "tests/api/test_legacy_upload.py"
+        ],
+        "remaining": [
+          "full permission and error compatibility matrix",
+          "published editable source roundtrip and administrative write contracts"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^_references/(?P<sid>[^/.]+)/$",
+      "method": "PUT",
+      "view": "pkdb_app.studies.views.ReferencesViewSet",
+      "action": "update",
+      "serializer": "ReferenceSerializer",
+      "fields": [
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_references/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "DELETE",
+      "view": "pkdb_app.studies.views.ReferencesViewSet",
+      "action": "destroy",
+      "serializer": "ReferenceSerializer",
+      "fields": [
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_references/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.ReferencesViewSet",
+      "action": "retrieve",
+      "serializer": "ReferenceSerializer",
+      "fields": [
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_references/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "PATCH",
+      "view": "pkdb_app.studies.views.ReferencesViewSet",
+      "action": "partial_update",
+      "serializer": "ReferenceSerializer",
+      "fields": [
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_references/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "PUT",
+      "view": "pkdb_app.studies.views.ReferencesViewSet",
+      "action": "update",
+      "serializer": "ReferenceSerializer",
+      "fields": [
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_references\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.ReferencesViewSet",
+      "action": "list",
+      "serializer": "ReferenceSerializer",
+      "fields": [
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_references\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "POST",
+      "view": "pkdb_app.studies.views.ReferencesViewSet",
+      "action": "create",
+      "serializer": "ReferenceSerializer",
+      "fields": [
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_studies/$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.StudyViewSet",
+      "action": "list",
+      "serializer": "StudySerializer",
+      "fields": [
+        "sid",
+        "name",
+        "date",
+        "reference",
+        "creator",
+        "curators",
+        "collaborators",
+        "descriptions",
+        "licence",
+        "access",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset",
+        "files",
+        "comments",
+        "warnings"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_studies/$",
+      "method": "POST",
+      "view": "pkdb_app.studies.views.StudyViewSet",
+      "action": "create",
+      "serializer": "StudySerializer",
+      "fields": [
+        "sid",
+        "name",
+        "date",
+        "reference",
+        "creator",
+        "curators",
+        "collaborators",
+        "descriptions",
+        "licence",
+        "access",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset",
+        "files",
+        "comments",
+        "warnings"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/legacy_uploads.py",
+      "verification": {
+        "status": "implemented_draft_authentication_checkpoint",
+        "tests": [
+          "tests/api/test_legacy_upload.py"
+        ],
+        "remaining": [
+          "full permission and error compatibility matrix",
+          "published editable source roundtrip and administrative write contracts"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^_studies/(?P<sid>[^/.]+)/$",
+      "method": "DELETE",
+      "view": "pkdb_app.studies.views.StudyViewSet",
+      "action": "destroy",
+      "serializer": "StudySerializer",
+      "fields": [
+        "sid",
+        "name",
+        "date",
+        "reference",
+        "creator",
+        "curators",
+        "collaborators",
+        "descriptions",
+        "licence",
+        "access",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset",
+        "files",
+        "comments",
+        "warnings"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_studies/(?P<sid>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.StudyViewSet",
+      "action": "retrieve",
+      "serializer": "StudySerializer",
+      "fields": [
+        "sid",
+        "name",
+        "date",
+        "reference",
+        "creator",
+        "curators",
+        "collaborators",
+        "descriptions",
+        "licence",
+        "access",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset",
+        "files",
+        "comments",
+        "warnings"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_studies/(?P<sid>[^/.]+)/$",
+      "method": "PATCH",
+      "view": "pkdb_app.studies.views.StudyViewSet",
+      "action": "partial_update",
+      "serializer": "StudySerializer",
+      "fields": [
+        "sid",
+        "name",
+        "date",
+        "reference",
+        "creator",
+        "curators",
+        "collaborators",
+        "descriptions",
+        "licence",
+        "access",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset",
+        "files",
+        "comments",
+        "warnings"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/legacy_uploads.py",
+      "verification": {
+        "status": "implemented_draft_authentication_checkpoint",
+        "tests": [
+          "tests/api/test_legacy_upload.py"
+        ],
+        "remaining": [
+          "full permission and error compatibility matrix",
+          "published editable source roundtrip and administrative write contracts"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^_studies/(?P<sid>[^/.]+)/$",
+      "method": "PUT",
+      "view": "pkdb_app.studies.views.StudyViewSet",
+      "action": "update",
+      "serializer": "StudySerializer",
+      "fields": [
+        "sid",
+        "name",
+        "date",
+        "reference",
+        "creator",
+        "curators",
+        "collaborators",
+        "descriptions",
+        "licence",
+        "access",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset",
+        "files",
+        "comments",
+        "warnings"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_studies/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "DELETE",
+      "view": "pkdb_app.studies.views.StudyViewSet",
+      "action": "destroy",
+      "serializer": "StudySerializer",
+      "fields": [
+        "sid",
+        "name",
+        "date",
+        "reference",
+        "creator",
+        "curators",
+        "collaborators",
+        "descriptions",
+        "licence",
+        "access",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset",
+        "files",
+        "comments",
+        "warnings"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_studies/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.StudyViewSet",
+      "action": "retrieve",
+      "serializer": "StudySerializer",
+      "fields": [
+        "sid",
+        "name",
+        "date",
+        "reference",
+        "creator",
+        "curators",
+        "collaborators",
+        "descriptions",
+        "licence",
+        "access",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset",
+        "files",
+        "comments",
+        "warnings"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_studies/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "PATCH",
+      "view": "pkdb_app.studies.views.StudyViewSet",
+      "action": "partial_update",
+      "serializer": "StudySerializer",
+      "fields": [
+        "sid",
+        "name",
+        "date",
+        "reference",
+        "creator",
+        "curators",
+        "collaborators",
+        "descriptions",
+        "licence",
+        "access",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset",
+        "files",
+        "comments",
+        "warnings"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_studies/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "PUT",
+      "view": "pkdb_app.studies.views.StudyViewSet",
+      "action": "update",
+      "serializer": "StudySerializer",
+      "fields": [
+        "sid",
+        "name",
+        "date",
+        "reference",
+        "creator",
+        "curators",
+        "collaborators",
+        "descriptions",
+        "licence",
+        "access",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset",
+        "files",
+        "comments",
+        "warnings"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_studies\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.StudyViewSet",
+      "action": "list",
+      "serializer": "StudySerializer",
+      "fields": [
+        "sid",
+        "name",
+        "date",
+        "reference",
+        "creator",
+        "curators",
+        "collaborators",
+        "descriptions",
+        "licence",
+        "access",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset",
+        "files",
+        "comments",
+        "warnings"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_studies\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "POST",
+      "view": "pkdb_app.studies.views.StudyViewSet",
+      "action": "create",
+      "serializer": "StudySerializer",
+      "fields": [
+        "sid",
+        "name",
+        "date",
+        "reference",
+        "creator",
+        "curators",
+        "collaborators",
+        "descriptions",
+        "licence",
+        "access",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset",
+        "files",
+        "comments",
+        "warnings"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_user_groups/$",
+      "method": "GET",
+      "view": "pkdb_app.users.views.UserGroupViewSet",
+      "action": "list",
+      "serializer": "UserGroupSerializer",
+      "fields": [
+        "name",
+        "permissions"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/admin_roles.py",
+      "verification_checkpoint": "tests/api/test_admin_roles.py",
+      "remaining_compatibility": "Fixed roles only; historical group IDs not retained; custom group and permission mutations unresolved."
+    },
+    {
+      "path": "/api/v1/^_user_groups/$",
+      "method": "POST",
+      "view": "pkdb_app.users.views.UserGroupViewSet",
+      "action": "create",
+      "serializer": "UserGroupSerializer",
+      "fields": [
+        "name",
+        "permissions"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_user_groups/(?P<pk>[^/.]+)/$",
+      "method": "DELETE",
+      "view": "pkdb_app.users.views.UserGroupViewSet",
+      "action": "destroy",
+      "serializer": "UserGroupSerializer",
+      "fields": [
+        "name",
+        "permissions"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_user_groups/(?P<pk>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.users.views.UserGroupViewSet",
+      "action": "retrieve",
+      "serializer": "UserGroupSerializer",
+      "fields": [
+        "name",
+        "permissions"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/admin_roles.py",
+      "verification_checkpoint": "tests/api/test_admin_roles.py",
+      "remaining_compatibility": "Fixed roles only; historical group IDs not retained; custom group and permission mutations unresolved."
+    },
+    {
+      "path": "/api/v1/^_user_groups/(?P<pk>[^/.]+)/$",
+      "method": "PATCH",
+      "view": "pkdb_app.users.views.UserGroupViewSet",
+      "action": "partial_update",
+      "serializer": "UserGroupSerializer",
+      "fields": [
+        "name",
+        "permissions"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_user_groups/(?P<pk>[^/.]+)/$",
+      "method": "PUT",
+      "view": "pkdb_app.users.views.UserGroupViewSet",
+      "action": "update",
+      "serializer": "UserGroupSerializer",
+      "fields": [
+        "name",
+        "permissions"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_user_groups/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "DELETE",
+      "view": "pkdb_app.users.views.UserGroupViewSet",
+      "action": "destroy",
+      "serializer": "UserGroupSerializer",
+      "fields": [
+        "name",
+        "permissions"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_user_groups/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.users.views.UserGroupViewSet",
+      "action": "retrieve",
+      "serializer": "UserGroupSerializer",
+      "fields": [
+        "name",
+        "permissions"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/admin_roles.py",
+      "verification_checkpoint": "tests/api/test_admin_roles.py",
+      "remaining_compatibility": "Fixed roles only; historical group IDs not retained; custom group and permission mutations unresolved."
+    },
+    {
+      "path": "/api/v1/^_user_groups/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "PATCH",
+      "view": "pkdb_app.users.views.UserGroupViewSet",
+      "action": "partial_update",
+      "serializer": "UserGroupSerializer",
+      "fields": [
+        "name",
+        "permissions"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_user_groups/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "PUT",
+      "view": "pkdb_app.users.views.UserGroupViewSet",
+      "action": "update",
+      "serializer": "UserGroupSerializer",
+      "fields": [
+        "name",
+        "permissions"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_user_groups\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.users.views.UserGroupViewSet",
+      "action": "list",
+      "serializer": "UserGroupSerializer",
+      "fields": [
+        "name",
+        "permissions"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/admin_roles.py",
+      "verification_checkpoint": "tests/api/test_admin_roles.py",
+      "remaining_compatibility": "Fixed roles only; historical group IDs not retained; custom group and permission mutations unresolved."
+    },
+    {
+      "path": "/api/v1/^_user_groups\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "POST",
+      "view": "pkdb_app.users.views.UserGroupViewSet",
+      "action": "create",
+      "serializer": "UserGroupSerializer",
+      "fields": [
+        "name",
+        "permissions"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^_users/$",
+      "method": "POST",
+      "view": "pkdb_app.users.views.UserCreateViewSet",
+      "action": "create",
+      "serializer": "CreateUserSerializer",
+      "fields": [
+        "id",
+        "username",
+        "password",
+        "first_name",
+        "last_name",
+        "email",
+        "auth_token",
+        "groups"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
+        ],
+        "remaining": [
+          "complete legacy validation-error edge-case matrix",
+          "fixed-role mapping review"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^_users/(?P<pk>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.users.views.UserViewSet",
+      "action": "retrieve",
+      "serializer": "UserSerializer",
+      "fields": [
+        "id",
+        "username",
+        "first_name",
+        "last_name",
+        "groups"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
+        ],
+        "remaining": [
+          "complete legacy validation-error edge-case matrix",
+          "fixed-role mapping review"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^_users/(?P<pk>[^/.]+)/$",
+      "method": "PATCH",
+      "view": "pkdb_app.users.views.UserViewSet",
+      "action": "partial_update",
+      "serializer": "UserSerializer",
+      "fields": [
+        "id",
+        "username",
+        "first_name",
+        "last_name",
+        "groups"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
+        ],
+        "remaining": [
+          "complete legacy validation-error edge-case matrix",
+          "fixed-role mapping review"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^_users/(?P<pk>[^/.]+)/$",
+      "method": "PUT",
+      "view": "pkdb_app.users.views.UserViewSet",
+      "action": "update",
+      "serializer": "UserSerializer",
+      "fields": [
+        "id",
+        "username",
+        "first_name",
+        "last_name",
+        "groups"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
+        ],
+        "remaining": [
+          "complete legacy validation-error edge-case matrix",
+          "fixed-role mapping review"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^_users/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.users.views.UserViewSet",
+      "action": "retrieve",
+      "serializer": "UserSerializer",
+      "fields": [
+        "id",
+        "username",
+        "first_name",
+        "last_name",
+        "groups"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
+        ],
+        "remaining": [
+          "complete legacy validation-error edge-case matrix",
+          "fixed-role mapping review"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^_users/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "PATCH",
+      "view": "pkdb_app.users.views.UserViewSet",
+      "action": "partial_update",
+      "serializer": "UserSerializer",
+      "fields": [
+        "id",
+        "username",
+        "first_name",
+        "last_name",
+        "groups"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
+        ],
+        "remaining": [
+          "complete legacy validation-error edge-case matrix",
+          "fixed-role mapping review"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^_users/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "PUT",
+      "view": "pkdb_app.users.views.UserViewSet",
+      "action": "update",
+      "serializer": "UserSerializer",
+      "fields": [
+        "id",
+        "username",
+        "first_name",
+        "last_name",
+        "groups"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
+        ],
+        "remaining": [
+          "complete legacy validation-error edge-case matrix",
+          "fixed-role mapping review"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^_users\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "POST",
+      "view": "pkdb_app.users.views.UserCreateViewSet",
+      "action": "create",
+      "serializer": "CreateUserSerializer",
+      "fields": [
+        "id",
+        "username",
+        "password",
+        "first_name",
+        "last_name",
+        "email",
+        "auth_token",
+        "groups"
+      ],
+      "permissions": [
+        "IsAdminUser"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py",
+          "tests/api/test_legacy_errors.py"
+        ],
+        "remaining": [
+          "complete legacy validation-error edge-case matrix",
+          "fixed-role mapping review"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^groups/$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.GroupViewSet",
+      "action": "list",
+      "serializer": "GroupElasticSerializer",
+      "fields": [
+        "pk",
+        "name",
+        "parent",
+        "count",
+        "study",
+        "characteristica"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^groups/(?P<id>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.GroupViewSet",
+      "action": "retrieve",
+      "serializer": "GroupElasticSerializer",
+      "fields": [
+        "pk",
+        "name",
+        "parent",
+        "count",
+        "study",
+        "characteristica"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^groups/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.GroupViewSet",
+      "action": "retrieve",
+      "serializer": "GroupElasticSerializer",
+      "fields": [
+        "pk",
+        "name",
+        "parent",
+        "count",
+        "study",
+        "characteristica"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^groups\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.GroupViewSet",
+      "action": "list",
+      "serializer": "GroupElasticSerializer",
+      "fields": [
+        "pk",
+        "name",
+        "parent",
+        "count",
+        "study",
+        "characteristica"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^individuals/$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.IndividualViewSet",
+      "action": "list",
+      "serializer": "IndividualElasticSerializer",
+      "fields": [
+        "pk",
+        "name",
+        "study",
+        "group",
+        "characteristica"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^individuals/(?P<id>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.IndividualViewSet",
+      "action": "retrieve",
+      "serializer": "IndividualElasticSerializer",
+      "fields": [
+        "pk",
+        "name",
+        "study",
+        "group",
+        "characteristica"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^individuals/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.IndividualViewSet",
+      "action": "retrieve",
+      "serializer": "IndividualElasticSerializer",
+      "fields": [
+        "pk",
+        "name",
+        "study",
+        "group",
+        "characteristica"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^individuals\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.IndividualViewSet",
+      "action": "list",
+      "serializer": "IndividualElasticSerializer",
+      "fields": [
+        "pk",
+        "name",
+        "study",
+        "group",
+        "characteristica"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^info_nodes/$",
+      "method": "GET",
+      "view": "pkdb_app.info_nodes.views.InfoNodeElasticViewSet",
+      "action": "list",
+      "serializer": "InfoNodeElasticSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "label",
+        "deprecated",
+        "ntype",
+        "dtype",
+        "description",
+        "synonyms",
+        "parents",
+        "annotations",
+        "xrefs",
+        "measurement_type",
+        "substance"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^info_nodes/(?P<sid>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.info_nodes.views.InfoNodeElasticViewSet",
+      "action": "retrieve",
+      "serializer": "InfoNodeElasticSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "label",
+        "deprecated",
+        "ntype",
+        "dtype",
+        "description",
+        "synonyms",
+        "parents",
+        "annotations",
+        "xrefs",
+        "measurement_type",
+        "substance"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^info_nodes/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.info_nodes.views.InfoNodeElasticViewSet",
+      "action": "retrieve",
+      "serializer": "InfoNodeElasticSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "label",
+        "deprecated",
+        "ntype",
+        "dtype",
+        "description",
+        "synonyms",
+        "parents",
+        "annotations",
+        "xrefs",
+        "measurement_type",
+        "substance"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^info_nodes\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.info_nodes.views.InfoNodeElasticViewSet",
+      "action": "list",
+      "serializer": "InfoNodeElasticSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "label",
+        "deprecated",
+        "ntype",
+        "dtype",
+        "description",
+        "synonyms",
+        "parents",
+        "annotations",
+        "xrefs",
+        "measurement_type",
+        "substance"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^interventions/$",
+      "method": "GET",
+      "view": "pkdb_app.interventions.views.ElasticInterventionViewSet",
+      "action": "list",
+      "serializer": "InterventionElasticSerializer",
+      "fields": [
+        "pk",
+        "normed",
+        "name",
+        "route",
+        "form",
+        "application",
+        "time",
+        "time_end",
+        "time_unit",
+        "study",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^interventions/(?P<id>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.interventions.views.ElasticInterventionViewSet",
+      "action": "retrieve",
+      "serializer": "InterventionElasticSerializer",
+      "fields": [
+        "pk",
+        "normed",
+        "name",
+        "route",
+        "form",
+        "application",
+        "time",
+        "time_end",
+        "time_unit",
+        "study",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^interventions/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.interventions.views.ElasticInterventionViewSet",
+      "action": "retrieve",
+      "serializer": "InterventionElasticSerializer",
+      "fields": [
+        "pk",
+        "normed",
+        "name",
+        "route",
+        "form",
+        "application",
+        "time",
+        "time_end",
+        "time_unit",
+        "study",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^interventions\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.interventions.views.ElasticInterventionViewSet",
+      "action": "list",
+      "serializer": "InterventionElasticSerializer",
+      "fields": [
+        "pk",
+        "normed",
+        "name",
+        "route",
+        "form",
+        "application",
+        "time",
+        "time_end",
+        "time_unit",
+        "study",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^outputs/$",
+      "method": "GET",
+      "view": "pkdb_app.outputs.views.ElasticOutputViewSet",
+      "action": "list",
+      "serializer": "OutputElasticSerializer",
+      "fields": [
+        "pk",
+        "normed",
+        "calculated",
+        "tissue",
+        "method",
+        "label",
+        "output_type",
+        "study",
+        "group",
+        "individual",
+        "interventions",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit",
+        "time",
+        "time_unit",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^outputs/(?P<id>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.outputs.views.ElasticOutputViewSet",
+      "action": "retrieve",
+      "serializer": "OutputElasticSerializer",
+      "fields": [
+        "pk",
+        "normed",
+        "calculated",
+        "tissue",
+        "method",
+        "label",
+        "output_type",
+        "study",
+        "group",
+        "individual",
+        "interventions",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit",
+        "time",
+        "time_unit",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^outputs/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.outputs.views.ElasticOutputViewSet",
+      "action": "retrieve",
+      "serializer": "OutputElasticSerializer",
+      "fields": [
+        "pk",
+        "normed",
+        "calculated",
+        "tissue",
+        "method",
+        "label",
+        "output_type",
+        "study",
+        "group",
+        "individual",
+        "interventions",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit",
+        "time",
+        "time_unit",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^outputs\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.outputs.views.ElasticOutputViewSet",
+      "action": "list",
+      "serializer": "OutputElasticSerializer",
+      "fields": [
+        "pk",
+        "normed",
+        "calculated",
+        "tissue",
+        "method",
+        "label",
+        "output_type",
+        "study",
+        "group",
+        "individual",
+        "interventions",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit",
+        "time",
+        "time_unit",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/data/$",
+      "method": "GET",
+      "view": "pkdb_app.data.views.DataAnalysisViewSet",
+      "action": "list",
+      "serializer": "DataAnalysisSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "data_pk",
+        "data_name",
+        "data_type",
+        "subset_pk",
+        "subset_name",
+        "data_point_pk",
+        "output_pk",
+        "dimension"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "analysis detail aliases"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/data/(?P<id>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.data.views.DataAnalysisViewSet",
+      "action": "retrieve",
+      "serializer": "DataAnalysisSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "data_pk",
+        "data_name",
+        "data_type",
+        "subset_pk",
+        "subset_name",
+        "data_point_pk",
+        "output_pk",
+        "dimension"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/data/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.data.views.DataAnalysisViewSet",
+      "action": "retrieve",
+      "serializer": "DataAnalysisSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "data_pk",
+        "data_name",
+        "data_type",
+        "subset_pk",
+        "subset_name",
+        "data_point_pk",
+        "output_pk",
+        "dimension"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/data\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.data.views.DataAnalysisViewSet",
+      "action": "list",
+      "serializer": "DataAnalysisSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "data_pk",
+        "data_name",
+        "data_type",
+        "subset_pk",
+        "subset_name",
+        "data_point_pk",
+        "output_pk",
+        "dimension"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/groups/$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.GroupCharacteristicaViewSet",
+      "action": "list",
+      "serializer": "GroupCharacteristicaSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "group_pk",
+        "group_name",
+        "group_count",
+        "group_parent_pk",
+        "characteristica_pk",
+        "count",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "analysis detail aliases"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/groups/(?P<id>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.GroupCharacteristicaViewSet",
+      "action": "retrieve",
+      "serializer": "GroupCharacteristicaSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "group_pk",
+        "group_name",
+        "group_count",
+        "group_parent_pk",
+        "characteristica_pk",
+        "count",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/groups/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.GroupCharacteristicaViewSet",
+      "action": "retrieve",
+      "serializer": "GroupCharacteristicaSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "group_pk",
+        "group_name",
+        "group_count",
+        "group_parent_pk",
+        "characteristica_pk",
+        "count",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/groups\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.GroupCharacteristicaViewSet",
+      "action": "list",
+      "serializer": "GroupCharacteristicaSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "group_pk",
+        "group_name",
+        "group_count",
+        "group_parent_pk",
+        "characteristica_pk",
+        "count",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/individuals/$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.IndividualCharacteristicaViewSet",
+      "action": "list",
+      "serializer": "IndividualCharacteristicaSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "individual_pk",
+        "individual_name",
+        "individual_group_pk",
+        "characteristica_pk",
+        "count",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "analysis detail aliases"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/individuals/(?P<id>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.IndividualCharacteristicaViewSet",
+      "action": "retrieve",
+      "serializer": "IndividualCharacteristicaSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "individual_pk",
+        "individual_name",
+        "individual_group_pk",
+        "characteristica_pk",
+        "count",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/individuals/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.IndividualCharacteristicaViewSet",
+      "action": "retrieve",
+      "serializer": "IndividualCharacteristicaSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "individual_pk",
+        "individual_name",
+        "individual_group_pk",
+        "characteristica_pk",
+        "count",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/individuals\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.subjects.views.IndividualCharacteristicaViewSet",
+      "action": "list",
+      "serializer": "IndividualCharacteristicaSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "individual_pk",
+        "individual_name",
+        "individual_group_pk",
+        "characteristica_pk",
+        "count",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/interventions/$",
+      "method": "GET",
+      "view": "pkdb_app.interventions.views.ElasticInterventionAnalysisViewSet",
+      "action": "list",
+      "serializer": "InterventionElasticSerializerAnalysis",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "intervention_pk",
+        "raw_pk",
+        "normed",
+        "name",
+        "route",
+        "form",
+        "application",
+        "time",
+        "time_end",
+        "time_unit",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/interventions/(?P<id>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.interventions.views.ElasticInterventionAnalysisViewSet",
+      "action": "retrieve",
+      "serializer": "InterventionElasticSerializerAnalysis",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "intervention_pk",
+        "raw_pk",
+        "normed",
+        "name",
+        "route",
+        "form",
+        "application",
+        "time",
+        "time_end",
+        "time_unit",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_detail_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py::test_analysis_details_match_list_rows_and_enforce_saved_visibility"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/interventions/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.interventions.views.ElasticInterventionAnalysisViewSet",
+      "action": "retrieve",
+      "serializer": "InterventionElasticSerializerAnalysis",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "intervention_pk",
+        "raw_pk",
+        "normed",
+        "name",
+        "route",
+        "form",
+        "application",
+        "time",
+        "time_end",
+        "time_unit",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_detail_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py::test_analysis_details_match_list_rows_and_enforce_saved_visibility"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/interventions\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.interventions.views.ElasticInterventionAnalysisViewSet",
+      "action": "list",
+      "serializer": "InterventionElasticSerializerAnalysis",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "intervention_pk",
+        "raw_pk",
+        "normed",
+        "name",
+        "route",
+        "form",
+        "application",
+        "time",
+        "time_end",
+        "time_unit",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/outputs/$",
+      "method": "GET",
+      "view": "pkdb_app.outputs.views.OutputInterventionViewSet",
+      "action": "list",
+      "serializer": "OutputInterventionSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "output_pk",
+        "intervention_pk",
+        "group_pk",
+        "individual_pk",
+        "normed",
+        "calculated",
+        "tissue",
+        "method",
+        "label",
+        "output_type",
+        "time",
+        "time_unit",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "analysis detail aliases"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/outputs/(?P<id>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.outputs.views.OutputInterventionViewSet",
+      "action": "retrieve",
+      "serializer": "OutputInterventionSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "output_pk",
+        "intervention_pk",
+        "group_pk",
+        "individual_pk",
+        "normed",
+        "calculated",
+        "tissue",
+        "method",
+        "label",
+        "output_type",
+        "time",
+        "time_unit",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/outputs/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.outputs.views.OutputInterventionViewSet",
+      "action": "retrieve",
+      "serializer": "OutputInterventionSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "output_pk",
+        "intervention_pk",
+        "group_pk",
+        "individual_pk",
+        "normed",
+        "calculated",
+        "tissue",
+        "method",
+        "label",
+        "output_type",
+        "time",
+        "time_unit",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/outputs\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.outputs.views.OutputInterventionViewSet",
+      "action": "list",
+      "serializer": "OutputInterventionSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "output_pk",
+        "intervention_pk",
+        "group_pk",
+        "individual_pk",
+        "normed",
+        "calculated",
+        "tissue",
+        "method",
+        "label",
+        "output_type",
+        "time",
+        "time_unit",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/studies/$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.StudyAnalysisViewSet",
+      "action": "list",
+      "serializer": "StudyAnalysisSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "licence",
+        "access",
+        "date",
+        "creator",
+        "curators",
+        "substances",
+        "reference_pmid",
+        "reference_title",
+        "reference_date"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/studies/(?P<sid>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.StudyAnalysisViewSet",
+      "action": "retrieve",
+      "serializer": "StudyAnalysisSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "licence",
+        "access",
+        "date",
+        "creator",
+        "curators",
+        "substances",
+        "reference_pmid",
+        "reference_title",
+        "reference_date"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_detail_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py::test_analysis_details_match_list_rows_and_enforce_saved_visibility"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/studies/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.StudyAnalysisViewSet",
+      "action": "retrieve",
+      "serializer": "StudyAnalysisSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "licence",
+        "access",
+        "date",
+        "creator",
+        "curators",
+        "substances",
+        "reference_pmid",
+        "reference_title",
+        "reference_date"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_detail_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py::test_analysis_details_match_list_rows_and_enforce_saved_visibility"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/studies\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.StudyAnalysisViewSet",
+      "action": "list",
+      "serializer": "StudyAnalysisSerializer",
+      "fields": [
+        "sid",
+        "name",
+        "licence",
+        "access",
+        "date",
+        "creator",
+        "curators",
+        "substances",
+        "reference_pmid",
+        "reference_title",
+        "reference_date"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^pkdata/timecourses/$",
+      "method": "GET",
+      "view": "pkdb_app.data.views.TimecourseViewSet",
+      "action": "list",
+      "serializer": "TimecourseSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "output_pk",
+        "intervention_pk",
+        "group_pk",
+        "individual_pk",
+        "normed",
+        "calculated",
+        "tissue",
+        "method",
+        "label",
+        "output_type",
+        "time",
+        "time_unit",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/timecourses/(?P<id>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.data.views.TimecourseViewSet",
+      "action": "retrieve",
+      "serializer": "TimecourseSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "output_pk",
+        "intervention_pk",
+        "group_pk",
+        "individual_pk",
+        "normed",
+        "calculated",
+        "tissue",
+        "method",
+        "label",
+        "output_type",
+        "time",
+        "time_unit",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_detail_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py::test_analysis_details_match_list_rows_and_enforce_saved_visibility"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/timecourses/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.data.views.TimecourseViewSet",
+      "action": "retrieve",
+      "serializer": "TimecourseSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "output_pk",
+        "intervention_pk",
+        "group_pk",
+        "individual_pk",
+        "normed",
+        "calculated",
+        "tissue",
+        "method",
+        "label",
+        "output_type",
+        "time",
+        "time_unit",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_detail_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py::test_analysis_details_match_list_rows_and_enforce_saved_visibility"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/^pkdata/timecourses\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.data.views.TimecourseViewSet",
+      "action": "list",
+      "serializer": "TimecourseSerializer",
+      "fields": [
+        "study_sid",
+        "study_name",
+        "output_pk",
+        "intervention_pk",
+        "group_pk",
+        "individual_pk",
+        "normed",
+        "calculated",
+        "tissue",
+        "method",
+        "label",
+        "output_type",
+        "time",
+        "time_unit",
+        "measurement_type",
+        "calculation_type",
+        "choice",
+        "substance",
+        "value",
+        "mean",
+        "median",
+        "min",
+        "max",
+        "sd",
+        "se",
+        "cv",
+        "unit"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py"
+    },
+    {
+      "path": "/api/v1/^references/$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.ElasticReferenceViewSet",
+      "action": "list",
+      "serializer": "ReferenceElasticSerializer",
+      "fields": [
+        "pk",
+        "study",
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^references/(?P<sid>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.ElasticReferenceViewSet",
+      "action": "retrieve",
+      "serializer": "ReferenceElasticSerializer",
+      "fields": [
+        "pk",
+        "study",
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^references/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.ElasticReferenceViewSet",
+      "action": "retrieve",
+      "serializer": "ReferenceElasticSerializer",
+      "fields": [
+        "pk",
+        "study",
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^references\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.ElasticReferenceViewSet",
+      "action": "list",
+      "serializer": "ReferenceElasticSerializer",
+      "fields": [
+        "pk",
+        "study",
+        "pmid",
+        "sid",
+        "name",
+        "doi",
+        "title",
+        "abstract",
+        "journal",
+        "date",
+        "authors"
+      ],
+      "permissions": [
+        "IsAdminOrCreatorOrCurator"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^statistics/$",
+      "method": "GET",
+      "view": "pkdb_app.statistics.StatisticsViewSet",
+      "action": "list",
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^statistics/substances/$",
+      "method": "GET",
+      "view": "pkdb_app.statistics.SubstanceStatisticsViewSet",
+      "action": "list",
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^statistics/substances\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.statistics.SubstanceStatisticsViewSet",
+      "action": "list",
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^statistics\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.statistics.StatisticsViewSet",
+      "action": "list",
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^studies/$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.ElasticStudyViewSet",
+      "action": "list",
+      "serializer": "StudyElasticSerializer",
+      "fields": [
+        "pk",
+        "sid",
+        "name",
+        "licence",
+        "access",
+        "date",
+        "group_count",
+        "individual_count",
+        "intervention_count",
+        "output_count",
+        "output_calculated_count",
+        "subset_count",
+        "timecourse_count",
+        "scatter_count",
+        "reference",
+        "reference_date",
+        "creator",
+        "curators",
+        "collaborators",
+        "comments",
+        "descriptions",
+        "files",
+        "substances",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^studies/(?P<sid>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.ElasticStudyViewSet",
+      "action": "retrieve",
+      "serializer": "StudyElasticSerializer",
+      "fields": [
+        "pk",
+        "sid",
+        "name",
+        "licence",
+        "access",
+        "date",
+        "group_count",
+        "individual_count",
+        "intervention_count",
+        "output_count",
+        "output_calculated_count",
+        "subset_count",
+        "timecourse_count",
+        "scatter_count",
+        "reference",
+        "reference_date",
+        "creator",
+        "curators",
+        "collaborators",
+        "comments",
+        "descriptions",
+        "files",
+        "substances",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^studies/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.ElasticStudyViewSet",
+      "action": "retrieve",
+      "serializer": "StudyElasticSerializer",
+      "fields": [
+        "pk",
+        "sid",
+        "name",
+        "licence",
+        "access",
+        "date",
+        "group_count",
+        "individual_count",
+        "intervention_count",
+        "output_count",
+        "output_calculated_count",
+        "subset_count",
+        "timecourse_count",
+        "scatter_count",
+        "reference",
+        "reference_date",
+        "creator",
+        "curators",
+        "collaborators",
+        "comments",
+        "descriptions",
+        "files",
+        "substances",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^studies\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.ElasticStudyViewSet",
+      "action": "list",
+      "serializer": "StudyElasticSerializer",
+      "fields": [
+        "pk",
+        "sid",
+        "name",
+        "licence",
+        "access",
+        "date",
+        "group_count",
+        "individual_count",
+        "intervention_count",
+        "output_count",
+        "output_calculated_count",
+        "subset_count",
+        "timecourse_count",
+        "scatter_count",
+        "reference",
+        "reference_date",
+        "creator",
+        "curators",
+        "collaborators",
+        "comments",
+        "descriptions",
+        "files",
+        "substances",
+        "groupset",
+        "individualset",
+        "interventionset",
+        "outputset",
+        "dataset"
+      ],
+      "permissions": [
+        "StudyPermission"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^subsets/$",
+      "method": "GET",
+      "view": "pkdb_app.data.views.SubSetViewSet",
+      "action": "list",
+      "serializer": "SubSetElasticSerializer",
+      "fields": [
+        "pk",
+        "study",
+        "name",
+        "data_type",
+        "array",
+        "timecourse"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^subsets/(?P<id>[^/.]+)/$",
+      "method": "GET",
+      "view": "pkdb_app.data.views.SubSetViewSet",
+      "action": "retrieve",
+      "serializer": "SubSetElasticSerializer",
+      "fields": [
+        "pk",
+        "study",
+        "name",
+        "data_type",
+        "array",
+        "timecourse"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^subsets/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.data.views.SubSetViewSet",
+      "action": "retrieve",
+      "serializer": "SubSetElasticSerializer",
+      "fields": [
+        "pk",
+        "study",
+        "name",
+        "data_type",
+        "array",
+        "timecourse"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/^subsets\\.(?P<format>[a-z0-9]+)/?$",
+      "method": "GET",
+      "view": "pkdb_app.data.views.SubSetViewSet",
+      "action": "list",
+      "serializer": "SubSetElasticSerializer",
+      "fields": [
+        "pk",
+        "study",
+        "name",
+        "data_type",
+        "array",
+        "timecourse"
+      ],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/filter/",
+      "method": "GET",
+      "view": "pkdb_app.studies.views.PKDataView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_archive_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "tests/integration/test_saved_queries.py",
+          "tests/integration/test_filter_selection.py"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "maintenance cleanup command"
+        ]
+      }
+    },
+    {
+      "path": "/api/v1/filter/",
+      "method": "OPTIONS",
+      "view": "pkdb_app.studies.views.PKDataView",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "AllowAny"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/update_index/",
+      "method": "OPTIONS",
+      "view": "pkdb_app.studies.views.update_index_study",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "IsAuthenticated"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/api/v1/update_index/",
+      "method": "POST",
+      "view": "pkdb_app.studies.views.update_index_study",
+      "action": null,
+      "serializer": null,
+      "fields": [],
+      "permissions": [
+        "IsAuthenticated"
+      ],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/legacy_uploads.py",
+      "verification": {
+        "status": "implemented_draft_authentication_checkpoint",
+        "tests": [
+          "tests/api/test_legacy_upload.py"
+        ],
+        "remaining": [
+          "full permission and error compatibility matrix",
+          "published editable source roundtrip and administrative write contracts"
+        ]
+      }
+    },
+    {
+      "path": "/reset/?P<key>[-\\w]+)",
+      "method": "OPTIONS",
+      "view": "rest_framework.authtoken.views.ObtainAuthToken",
+      "action": null,
+      "serializer": "AuthTokenSerializer",
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/reset/?P<key>[-\\w]+)",
+      "method": "POST",
+      "view": "rest_framework.authtoken.views.ObtainAuthToken",
+      "action": null,
+      "serializer": "AuthTokenSerializer",
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/verify/?P<key>[-\\w]+)",
+      "method": "OPTIONS",
+      "view": "rest_framework.authtoken.views.ObtainAuthToken",
+      "action": null,
+      "serializer": "AuthTokenSerializer",
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    },
+    {
+      "path": "/verify/?P<key>[-\\w]+)",
+      "method": "POST",
+      "view": "rest_framework.authtoken.views.ObtainAuthToken",
+      "action": null,
+      "serializer": "AuthTokenSerializer",
+      "fields": [],
+      "permissions": [],
+      "characterization": "resolver_inventory",
+      "new_owner": "api/reads.py"
+    }
+  ]
+}

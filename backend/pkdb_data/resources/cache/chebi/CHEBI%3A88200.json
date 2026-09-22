@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:88200",
+  "name": "benazeprilat",
+  "definition": "A benzazepine that is 1,3,4,5-tetrahydro-2H-1-benzazepin-2-one in which the hydrogen attached to the nitrogen is replaced by a carboxy methyl group and in which the 3-pro-S hydrogen is replaced by the amino group of (2S)-2-amino-4-phenylbutanoic acid. An angiotensin-converting enzyme inhibitor, it is used as its monoester prodrug benazepril in the treatment of hypertension and heart failure.",
+  "formula": "C22H24N2O5",
+  "charge": "0",
+  "mass": "396.437",
+  "inchikey": "MADRIHWFJGRSBP-ROUUACIJSA-N"
+}

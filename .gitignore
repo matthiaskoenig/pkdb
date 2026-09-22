@@ -1,129 +1,32 @@
-# ----------------------------
-# Byte-compiled
-# ----------------------------
 __pycache__/
 *.py[cod]
-*$py.class
-
-# ----------------------------
-# Log & tmp files
-# ----------------------------
 *.log
 *.ods#
 *.xlsx#
-
-# ----------------------------
-# Database dump
-# ----------------------------
-pkdb.dump
-
-# ----------------------------
-# Environments
-# ----------------------------
 .env
-.env.alpha
-.env.develop
-.env.production
-frontend/.env.production
-
-# ----------------------------
-# Distribution / packaging
-# ----------------------------
-.Python
-develop-eggs/
-downloads/
-eggs/
-.eggs/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-web/*.egg-info/
-
-.installed.cfg
-*.egg
-MANIFEST
-*.manifest
-*.spec
-
-# ----------------------------
-# IDEA
-# ----------------------------
-.idea
-
-# ----------------------------
-# django static & media
-# ----------------------------
-/static
-.static_storage/
-media/
-
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-.hypothesis/
-
-# Translations
-*.mo
-*.pot
-
-# Flask stuff:
-instance/
-.webassets-cache
-
-# Scrapy stuff:
-.scrapy
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# celery beat schedule file
-celerybeat-schedule
-
-# SageMath parsed files
-*.sage.py
-
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-# C extensions
-*.so
-
-.git-credentials
-
-# ----------------------------
-# uv / ruff / ty / tox tooling
-# ----------------------------
+.env.*
+!.env.example
+.venv*/
 .cache/
-.tox/
 .pytest_cache/
 .ruff_cache/
-.venv/
+.coverage*
+coverage.xml
+htmlcov/
 dist/
+*.egg-info/
+.ipynb_checkpoints/
+.idea/
+/site/
+node_modules/
+.git-credentials
+*.dump
+*.sql.gz
+
+# Preserve ignored local data and caches from existing checkouts.
+/volumes/
+/static/
+media/
+.static_storage/
+.tox/
+.hypothesis/

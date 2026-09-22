@@ -1,0 +1,153 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_31302",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Bromazepam",
+    "Lectopam (TN)",
+    "durazanil"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C14H10BrN3O"
+    ],
+    "has_dbxref": [
+      "CAS:1812-30-2",
+      "Drug_Central:399",
+      "HMDB:HMDB0015511",
+      "KEGG:D01245"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:31302"
+    ],
+    "inchi": [
+      "InChI=1S/C14H10BrN3O/c15-9-4-5-11-10(7-9)14(17-8-13(19)18-11)12-3-1-2-6-16-12/h1-7H,8H2,(H,18,19)"
+    ],
+    "inchikey": [
+      "VMIYHDSEFNYJSL-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "316.153"
+    ],
+    "monoisotopicmass": [
+      "315.00072"
+    ],
+    "smiles": [
+      "BrC=1C=C2C(=NCC(NC2=CC1)=O)C3=CC=CC=N3"
+    ]
+  },
+  "label": "Bromazepam",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_31302",
+  "obo_id": "CHEBI:31302",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "1812-30-2",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "399",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/399"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0015511",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015511"
+    },
+    {
+      "database": "KEGG",
+      "id": "D01245",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D01245"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Bromazepam",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lectopam (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "durazanil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31302?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31302/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31302/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31302/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31302/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31302/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31302/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

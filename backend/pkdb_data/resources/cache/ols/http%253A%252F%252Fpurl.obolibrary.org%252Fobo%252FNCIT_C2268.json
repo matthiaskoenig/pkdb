@@ -1,0 +1,143 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C2268",
+  "lang": "en",
+  "description": [
+    "Glucagon (29 aa, ~3 kDa) is encoded by the human GCG gene. This protein plays a role in the regulation of blood sugar levels through the stimulation of hepatic glycogenolysis and gluconeogenesis."
+  ],
+  "synonyms": [
+    "GCG",
+    "Glucagon",
+    "HG Factor",
+    "HG-Factor",
+    "Hyperglycemic Glycogenolytic Factor",
+    "Hyperglycemic-Glycogenolytic Factor",
+    "glucagon"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A hormone produced by the pancreas that increases the level of glucose (sugar) in the blood."
+    ],
+    "Contributing_Source": [
+      "CTRP"
+    ],
+    "DesignNote": [
+      "Glucagon is comprised of amino acids 53-81 of the full length proglucagon precursor protein. (UniProt)"
+    ],
+    "Display_Name": [
+      "Glucagon"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C87236"
+    ],
+    "Legacy Concept Name": [
+      "Glucagon"
+    ],
+    "OMIM_Number": [
+      "138030"
+    ],
+    "Preferred_Name": [
+      "Glucagon"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein",
+      "Hormone"
+    ],
+    "Swiss_Prot": [
+      "P01275"
+    ],
+    "UMLS_CUI": [
+      "C0017687"
+    ],
+    "code": [
+      "C2268"
+    ]
+  },
+  "label": "Glucagon",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C2268",
+  "obo_id": "NCIT:C2268",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C142800"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "GCG",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Glucagon",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "HG Factor",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "HG-Factor",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hyperglycemic Glycogenolytic Factor",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hyperglycemic-Glycogenolytic Factor",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "glucagon",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2268?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2268/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2268/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2268/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2268/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2268/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2268/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

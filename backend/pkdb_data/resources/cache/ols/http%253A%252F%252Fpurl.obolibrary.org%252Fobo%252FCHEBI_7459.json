@@ -1,0 +1,336 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7459",
+  "lang": "en",
+  "description": [
+    "A synthetic morphinane alkaloid that is morphinone in which the enone double bond has been reduced to a single bond, the hydrogen at position 14 has been replaced by a hydroxy group, and the methyl group attached to the nitrogen has been replaced by an allyl group. A specific opioid antagonist, it is used (commonly as its hydrochloride salt) to reverse the effects of opioids, both following their use of opioids during surgery and in cases of known or suspected opioid overdose."
+  ],
+  "synonyms": [
+    "3,14-dihydroxy-17-(prop-2-en-1-yl)-4,5alpha-epoxymorphinan-6-one",
+    "(-)-naloxone",
+    "1-N-Allyl-14-hydroxynordihydromorphinone",
+    "17-allyl-3,14-dihydroxy-4,5alpha-epoxymorphinan-6-one",
+    "naloxona",
+    "naloxone",
+    "naloxonum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C19H21NO4"
+    ],
+    "has_dbxref": [
+      "CAS:465-65-6",
+      "DrugBank:DB01183",
+      "Drug_Central:1878",
+      "HMDB:HMDB0015314",
+      "KEGG:C07252",
+      "KEGG:D08249",
+      "LINCS:LSM-3504",
+      "PMID:17023477",
+      "PMID:24868924",
+      "PMID:25468814",
+      "PMID:26469689",
+      "PMID:26604818",
+      "PMID:26634308",
+      "Patent:GB939287",
+      "Patent:US3254088",
+      "Reaxys:1089071",
+      "Wikipedia:Naloxone"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7459"
+    ],
+    "inchi": [
+      "InChI=1S/C19H21NO4/c1-2-8-20-9-7-18-15-11-3-4-12(21)16(15)24-17(18)13(22)5-6-19(18,23)14(20)10-11/h2-4,14,17,21,23H,1,5-10H2/t14-,17+,18+,19-/m1/s1"
+    ],
+    "inchikey": [
+      "UZHSEJADLWPNLE-GRGSLBFTSA-N"
+    ],
+    "mass": [
+      "327.37430"
+    ],
+    "monoisotopicmass": [
+      "327.14706"
+    ],
+    "smiles": [
+      "Oc1ccc2C[C@H]3N(CC[C@@]45[C@@H](Oc1c24)C(=O)CC[C@@]35O)CC=C"
+    ]
+  },
+  "label": "naloxone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7459",
+  "obo_id": "CHEBI:7459",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "465-65-6",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "465-65-6",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "465-65-6",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01183",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01183"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1878",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1878"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0015314",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015314"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07252",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07252"
+    },
+    {
+      "database": "KEGG",
+      "id": "D08249",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D08249"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-3504",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "17023477",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17023477"
+    },
+    {
+      "database": "PMID",
+      "id": "24868924",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24868924"
+    },
+    {
+      "database": "PMID",
+      "id": "25468814",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25468814"
+    },
+    {
+      "database": "PMID",
+      "id": "26469689",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26469689"
+    },
+    {
+      "database": "PMID",
+      "id": "26604818",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26604818"
+    },
+    {
+      "database": "PMID",
+      "id": "26634308",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26634308"
+    },
+    {
+      "database": "Patent",
+      "id": "GB939287",
+      "description": null,
+      "url": "https://www.google.com/patents/GB939287"
+    },
+    {
+      "database": "Patent",
+      "id": "US3254088",
+      "description": null,
+      "url": "https://www.google.com/patents/US3254088"
+    },
+    {
+      "database": "Reaxys",
+      "id": "1089071",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Naloxone",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Naloxone"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3,14-dihydroxy-17-(prop-2-en-1-yl)-4,5alpha-epoxymorphinan-6-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-naloxone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-N-Allyl-14-hydroxynordihydromorphinone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17-allyl-3,14-dihydroxy-4,5alpha-epoxymorphinan-6-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "naloxona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "naloxone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "naloxone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "naloxonum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7459?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7459/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7459/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7459/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7459/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7459/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7459/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7459/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_conjugate_base_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7459/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_base_of"
+    },
+    "has_parent_hydride": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7459/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_parent_hydride"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

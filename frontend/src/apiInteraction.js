@@ -22,9 +22,6 @@ let ApiInteractionMixin = {
             // object is an InfoNode
             let url = `${this.$store.state.endpoints.api}studies/${sid}/?format=json`;
             let headers = {};
-            if (localStorage.getItem('token')) {
-                headers = {Authorization: 'Token ' + localStorage.getItem('token')}
-            }
             // get data (FIXME: caching of InfoNodes in store)
             axios.get(url, {headers: headers})
                 .then(response => {
@@ -68,9 +65,6 @@ let ApiInteractionMixin = {
         },
         fetch_data(url) {
             let headers = {};
-            if (localStorage.getItem('token')) {
-                headers = {Authorization: 'Token ' + localStorage.getItem('token')}
-            }
             // get data (FIXME: caching of InfoNodes in store)
             axios.get(url, {headers: headers})
                 .then(response => {

@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:50275",
+  "name": "esomeprazole",
+  "definition": "A 5-methoxy-2-{[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole that has S configuration at the sulfur atom. An inhibitor of gastric acid secretion, it is used (generally as its sodium or magnesium salt) for the treatment of gastro-oesophageal reflux disease, dyspepsia, peptic ulcer disease, and Zollinger-Ellison syndrome.",
+  "formula": "C17H19N3O3S",
+  "charge": "0",
+  "mass": "345.41600",
+  "inchikey": "SUBDBMMJDZJVOS-DEOSSOPVSA-N"
+}

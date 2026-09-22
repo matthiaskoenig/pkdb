@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:16199",
+  "name": "urea",
+  "definition": "A carbonyl group with two C-bound amine groups. The commercially available fertilizer has an analysis of 46-0-0 (N-P2O5-K2O).",
+  "formula": "CH4N2O",
+  "charge": "0",
+  "mass": "60.05534",
+  "inchikey": "XSQUKJJJFZCRTK-UHFFFAOYSA-N"
+}

@@ -1,0 +1,487 @@
+{
+  "schema_version": 1,
+  "complete": true,
+  "profile": "replacement",
+  "hardware": {
+    "machine": "x86_64",
+    "system": "Linux",
+    "cpu_count": 20,
+    "memory_kib": 65521024
+  },
+  "client_python": "3.13.1",
+  "manifest": {
+    "schema_version": 1,
+    "study_count": 1,
+    "studies": [
+      {
+        "path": ".",
+        "status": "inventoried",
+        "files": {
+          ".Frost2014_Fig2.tsv": {
+            "sha256": "f1f322c6e7510954274a7cfcd8d99f19f30e296f9bb0b34fbdf9b0c7fd59ad0c",
+            "bytes": 5056
+          },
+          ".Frost2014_Fig3.tsv": {
+            "sha256": "10b5b148e8034af75a535747c3c1c351c841dc34c979f54a5d5cef207d304297",
+            "bytes": 5464
+          },
+          ".Frost2014_Fig4.tsv": {
+            "sha256": "de5f58673bdc56725706d941bc8689ee5602bd1d5c1e50b7cfc481133d5e5eb3",
+            "bytes": 20030
+          },
+          ".Frost2014_Fig4Mean.tsv": {
+            "sha256": "20c5a8eeb2f7d9eee8d1487e48ae7f274d6e90ae524c3950850d3f98dcb943b9",
+            "bytes": 6363
+          },
+          ".Frost2014_Tab2.tsv": {
+            "sha256": "73d67b04ee04c3406cd7e8fa0ff32b7489a92dd9bad33fa57f69259d102cee7e",
+            "bytes": 1229
+          },
+          ".Frost2014_Tab3.tsv": {
+            "sha256": "dc6374a9c6a9c0fedb96890e750f91012a7ab9bab2c9b48721ef29df6eb4062b",
+            "bytes": 989
+          },
+          ".Frost2014_TabGroups.tsv": {
+            "sha256": "dfaab6207c67509e8b8b0ec2ebbf17577b914061b53e51e73efda54211bcfceb",
+            "bytes": 757
+          },
+          ".Frost2014_TabIndividuals.tsv": {
+            "sha256": "6cef70f6b7649c28c1dd095afb757be2fac775f0df66abdfae633ea1fa4b2115",
+            "bytes": 3927
+          },
+          ".Frost2014_TabInterventions.tsv": {
+            "sha256": "5f030dcf7a008f787865562401613cda4e6f30cf8dd842e93cb304e7898038e1",
+            "bytes": 297
+          },
+          "Frost2014.pdf": {
+            "sha256": "2dfb9114fd2f43ad9c8260637f9b79030c19804ba9b43cc33efdcc63a1a623a2",
+            "bytes": 1335448
+          },
+          "Frost2014.xlsx": {
+            "sha256": "250dbde5aaae2c45d3b37babbff31e7661ec5c95a649e63e45065fdb44021897",
+            "bytes": 3041200
+          },
+          "Frost2014_Fig2.png": {
+            "sha256": "8a42cf1f17a8588ca08918cb2fb8e8668938d9deaf39d80d87f7a42bb80b547d",
+            "bytes": 634285
+          },
+          "Frost2014_Fig3.png": {
+            "sha256": "df69752aba1ba07363ef6b65c3af92e255f99f9a2cd93e223452107753730119",
+            "bytes": 601834
+          },
+          "Frost2014_Fig4.png": {
+            "sha256": "79063097f8fb36ecb668efa723ed7bdffe0fd1e0b3511e6e6b35357d7923b25e",
+            "bytes": 416872
+          },
+          "Frost2014_Tab1.png": {
+            "sha256": "cb9a81b63e8623747ecdff281f03e295c270fce1a5918636173bb854b92ee950",
+            "bytes": 132366
+          },
+          "Frost2014_Tab2.png": {
+            "sha256": "d6bced8bdad7fee953e0f8d2d17ae4c54d398c9257d40132865f151cc83713ed",
+            "bytes": 232887
+          },
+          "Frost2014_Tab3.png": {
+            "sha256": "bb5a1fb938fb3c9c112c54d1f5694a56eebc90baff8af1d1590343a771963a74",
+            "bytes": 271103
+          },
+          "reference.json": {
+            "sha256": "2f6920a8d4ccc40c120cdebff39a8fceb2f15074971e6371b890ce83676ef648",
+            "bytes": 986
+          },
+          "study.json": {
+            "sha256": "0c9c0ed9f857a571d1e30795f4e9638b8be95de58396b72a0da4d7687ebd712f",
+            "bytes": 4949
+          }
+        },
+        "sid": "PKDB01110",
+        "name": "Frost2014"
+      }
+    ],
+    "issues": []
+  },
+  "workload": [
+    {
+      "name": "study",
+      "path": "/api/v1/studies/PKDB01110/",
+      "sid": "PKDB01110"
+    },
+    {
+      "name": "outputs",
+      "path": "/api/v1/outputs/?study_sid=PKDB01110&normed=true&page_size=100",
+      "count": 391
+    },
+    {
+      "name": "analysis",
+      "path": "/api/v1/pkdata/outputs/?study_sid=PKDB01110&page_size=100",
+      "count": 782
+    },
+    {
+      "name": "timecourses",
+      "path": "/api/v1/pkdata/timecourses/?study_sid=PKDB01110&page_size=100",
+      "count": 4
+    },
+    {
+      "name": "search",
+      "path": "/api/v1/studies/?search_multi_match=Frost2014",
+      "count": 1
+    }
+  ],
+  "runs": [
+    {
+      "phase": "measured",
+      "iteration": 1,
+      "upload_visible_seconds": 1.8090244150080252,
+      "reads": {
+        "study": {
+          "seconds": 0.015076876996317878,
+          "bytes": 7494
+        },
+        "outputs": {
+          "seconds": 0.01711935200728476,
+          "bytes": 81019
+        },
+        "analysis": {
+          "seconds": 0.02184907699120231,
+          "bytes": 70480
+        },
+        "timecourses": {
+          "seconds": 0.014621356007410213,
+          "bytes": 4415
+        },
+        "search": {
+          "seconds": 0.019962049991590902,
+          "bytes": 7597
+        }
+      },
+      "memory_before": {
+        "observed": true,
+        "VmHWM_kib": 298236,
+        "VmRSS_kib": 298236
+      },
+      "memory_after": {
+        "observed": true,
+        "VmHWM_kib": 298324,
+        "VmRSS_kib": 296656
+      }
+    },
+    {
+      "phase": "measured",
+      "iteration": 2,
+      "upload_visible_seconds": 1.7659138159942813,
+      "reads": {
+        "study": {
+          "seconds": 0.011564388987608254,
+          "bytes": 7494
+        },
+        "outputs": {
+          "seconds": 0.023201133008114994,
+          "bytes": 81019
+        },
+        "analysis": {
+          "seconds": 0.020848607004154474,
+          "bytes": 70480
+        },
+        "timecourses": {
+          "seconds": 0.014336286025354639,
+          "bytes": 4415
+        },
+        "search": {
+          "seconds": 0.019055971992202103,
+          "bytes": 7597
+        }
+      },
+      "memory_before": {
+        "observed": true,
+        "VmHWM_kib": 298324,
+        "VmRSS_kib": 296656
+      },
+      "memory_after": {
+        "observed": true,
+        "VmHWM_kib": 301012,
+        "VmRSS_kib": 301012
+      }
+    },
+    {
+      "phase": "measured",
+      "iteration": 3,
+      "upload_visible_seconds": 1.7748013130039908,
+      "reads": {
+        "study": {
+          "seconds": 0.01036897100857459,
+          "bytes": 7494
+        },
+        "outputs": {
+          "seconds": 0.01999513799091801,
+          "bytes": 81019
+        },
+        "analysis": {
+          "seconds": 0.018590934021631256,
+          "bytes": 70480
+        },
+        "timecourses": {
+          "seconds": 0.015362934005679563,
+          "bytes": 4415
+        },
+        "search": {
+          "seconds": 0.01698289401247166,
+          "bytes": 7597
+        }
+      },
+      "memory_before": {
+        "observed": true,
+        "VmHWM_kib": 301012,
+        "VmRSS_kib": 301012
+      },
+      "memory_after": {
+        "observed": true,
+        "VmHWM_kib": 301116,
+        "VmRSS_kib": 301116
+      }
+    },
+    {
+      "phase": "measured",
+      "iteration": 4,
+      "upload_visible_seconds": 1.6531447080196813,
+      "reads": {
+        "study": {
+          "seconds": 0.012589199002832174,
+          "bytes": 7494
+        },
+        "outputs": {
+          "seconds": 0.020776359015144408,
+          "bytes": 81019
+        },
+        "analysis": {
+          "seconds": 0.019206439988920465,
+          "bytes": 70480
+        },
+        "timecourses": {
+          "seconds": 0.014646419993368909,
+          "bytes": 4415
+        },
+        "search": {
+          "seconds": 0.016578426002524793,
+          "bytes": 7597
+        }
+      },
+      "memory_before": {
+        "observed": true,
+        "VmHWM_kib": 301116,
+        "VmRSS_kib": 301116
+      },
+      "memory_after": {
+        "observed": true,
+        "VmHWM_kib": 301624,
+        "VmRSS_kib": 301624
+      }
+    },
+    {
+      "phase": "measured",
+      "iteration": 5,
+      "upload_visible_seconds": 1.8008377740043215,
+      "reads": {
+        "study": {
+          "seconds": 0.012287430989090353,
+          "bytes": 7494
+        },
+        "outputs": {
+          "seconds": 0.017645515006734058,
+          "bytes": 81019
+        },
+        "analysis": {
+          "seconds": 0.01905439398251474,
+          "bytes": 70480
+        },
+        "timecourses": {
+          "seconds": 0.016191285976674408,
+          "bytes": 4415
+        },
+        "search": {
+          "seconds": 0.016373669990571216,
+          "bytes": 7597
+        }
+      },
+      "memory_before": {
+        "observed": true,
+        "VmHWM_kib": 301624,
+        "VmRSS_kib": 301624
+      },
+      "memory_after": {
+        "observed": true,
+        "VmHWM_kib": 302064,
+        "VmRSS_kib": 302064
+      }
+    }
+  ],
+  "cache_note": "One excluded warmup precedes five or more measured warm runs. Optional cold run requires a fresh application process; OS/database caches are not flushed.",
+  "memory_note": "Server process RSS and lifetime high-water mark, before and after each iteration; excludes database/search sidecars.",
+  "cold": {
+    "phase": "cold",
+    "iteration": 0,
+    "upload_visible_seconds": 2.808906627004035,
+    "reads": {
+      "study": {
+        "seconds": 0.012761682999553159,
+        "bytes": 7453
+      },
+      "outputs": {
+        "seconds": 0.01734204200329259,
+        "bytes": 80897
+      },
+      "analysis": {
+        "seconds": 0.02097812300780788,
+        "bytes": 70258
+      },
+      "timecourses": {
+        "seconds": 0.01930899897706695,
+        "bytes": 4407
+      },
+      "search": {
+        "seconds": 0.021197274996666238,
+        "bytes": 7556
+      }
+    },
+    "memory_before": {
+      "observed": true,
+      "VmHWM_kib": 245392,
+      "VmRSS_kib": 183032
+    },
+    "memory_after": {
+      "observed": true,
+      "VmHWM_kib": 294320,
+      "VmRSS_kib": 294320
+    }
+  },
+  "warmup": {
+    "phase": "warmup",
+    "iteration": 0,
+    "upload_visible_seconds": 1.8078757839975879,
+    "reads": {
+      "study": {
+        "seconds": 0.011598031007451937,
+        "bytes": 7493
+      },
+      "outputs": {
+        "seconds": 0.01706674601882696,
+        "bytes": 81019
+      },
+      "analysis": {
+        "seconds": 0.020808453991776332,
+        "bytes": 70480
+      },
+      "timecourses": {
+        "seconds": 0.015971395012456924,
+        "bytes": 4414
+      },
+      "search": {
+        "seconds": 0.01640649198088795,
+        "bytes": 7596
+      }
+    },
+    "memory_before": {
+      "observed": true,
+      "VmHWM_kib": 294320,
+      "VmRSS_kib": 294320
+    },
+    "memory_after": {
+      "observed": true,
+      "VmHWM_kib": 298236,
+      "VmRSS_kib": 298236
+    }
+  },
+  "upload": {
+    "samples_seconds": [
+      1.8090244150080252,
+      1.7659138159942813,
+      1.7748013130039908,
+      1.6531447080196813,
+      1.8008377740043215
+    ],
+    "first_seconds": 1.8090244150080252,
+    "warm_median_seconds": 1.7748013130039908,
+    "median_seconds": 1.7748013130039908,
+    "p95_seconds": 1.8090244150080252,
+    "budget_median_seconds": 1.952281444,
+    "budget_p95_seconds": 1.989926857
+  },
+  "reads": {
+    "study": {
+      "samples_seconds": [
+        0.015076876996317878,
+        0.011564388987608254,
+        0.01036897100857459,
+        0.012589199002832174,
+        0.012287430989090353
+      ],
+      "first_seconds": 0.015076876996317878,
+      "warm_median_seconds": 0.012287430989090353,
+      "median_seconds": 0.012287430989090353,
+      "p95_seconds": 0.015076876996317878,
+      "budget_median_seconds": 0.013516174,
+      "budget_p95_seconds": 0.016584565
+    },
+    "outputs": {
+      "samples_seconds": [
+        0.01711935200728476,
+        0.023201133008114994,
+        0.01999513799091801,
+        0.020776359015144408,
+        0.017645515006734058
+      ],
+      "first_seconds": 0.01711935200728476,
+      "warm_median_seconds": 0.01999513799091801,
+      "median_seconds": 0.01999513799091801,
+      "p95_seconds": 0.023201133008114994,
+      "budget_median_seconds": 0.021994652,
+      "budget_p95_seconds": 0.025521246
+    },
+    "analysis": {
+      "samples_seconds": [
+        0.02184907699120231,
+        0.020848607004154474,
+        0.018590934021631256,
+        0.019206439988920465,
+        0.01905439398251474
+      ],
+      "first_seconds": 0.02184907699120231,
+      "warm_median_seconds": 0.019206439988920465,
+      "median_seconds": 0.019206439988920465,
+      "p95_seconds": 0.02184907699120231,
+      "budget_median_seconds": 0.021127084,
+      "budget_p95_seconds": 0.024033985
+    },
+    "timecourses": {
+      "samples_seconds": [
+        0.014621356007410213,
+        0.014336286025354639,
+        0.015362934005679563,
+        0.014646419993368909,
+        0.016191285976674408
+      ],
+      "first_seconds": 0.014621356007410213,
+      "warm_median_seconds": 0.014646419993368909,
+      "median_seconds": 0.014646419993368909,
+      "p95_seconds": 0.016191285976674408,
+      "budget_median_seconds": 0.016111062,
+      "budget_p95_seconds": 0.017810415
+    },
+    "search": {
+      "samples_seconds": [
+        0.019962049991590902,
+        0.019055971992202103,
+        0.01698289401247166,
+        0.016578426002524793,
+        0.016373669990571216
+      ],
+      "first_seconds": 0.019962049991590902,
+      "warm_median_seconds": 0.01698289401247166,
+      "median_seconds": 0.01698289401247166,
+      "p95_seconds": 0.019962049991590902,
+      "budget_median_seconds": 0.018681183,
+      "budget_p95_seconds": 0.021958255
+    }
+  },
+  "server_python": "3.13.1",
+  "initial_state": "Prepublished Frost2014, fresh application process; no HTTP preparation request. OS/database/search caches were not flushed."
+}

@@ -1,0 +1,17 @@
+name: pkdb-tests
+services:
+  db:
+    image: postgres:18.6
+    environment:
+      POSTGRES_DB: pkdb_test
+      POSTGRES_USER: pkdb_test
+      POSTGRES_PASSWORD: local-test-only
+    ports:
+      - "127.0.0.1:${PKDB_TEST_DB_PORT:-15439}:5432"
+    tmpfs:
+      - /var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pkdb_test -d pkdb_test"]
+      interval: 2s
+      timeout: 5s
+      retries: 30

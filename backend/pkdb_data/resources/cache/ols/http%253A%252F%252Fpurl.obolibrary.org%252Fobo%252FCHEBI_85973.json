@@ -1,0 +1,342 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_85973",
+  "lang": "en",
+  "description": [
+    "A monocarboxylic acid amide that is used (as its tosylate monohydrate) for the treatment of deep vein thrombosis and pulmonary embolism."
+  ],
+  "synonyms": [
+    "N(1)-(5-chloropyridin-2-yl)-N(2)-{(1S,2R,4S)-4-(dimethylcarbamoyl)-2-[(5-methyl-4,5,6,7-tetrahydro[1,3]thiazolo[5,4-c]pyridine-2-carbonyl)amino]cyclohexyl}ethanediamide",
+    "DU-176",
+    "edoxaban"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "database_cross_reference": [
+      "CAS:480449-70-5",
+      "Drug_Central:4897",
+      "KEGG:D09710",
+      "PMID:24911450",
+      "PMID:24973057",
+      "PMID:25311731",
+      "PMID:25403645",
+      "PMID:25416564",
+      "PMID:25419685",
+      "PMID:25566930",
+      "PMID:25596250",
+      "PMID:25653574",
+      "PMID:25669624",
+      "PMID:25687352",
+      "PMID:25732432",
+      "PMID:25769357",
+      "PMID:25769361",
+      "PMID:25791908",
+      "PMID:25809373",
+      "PMID:25855704",
+      "PMID:25925842",
+      "PMID:25965706",
+      "PMID:25966665",
+      "PMID:25969414",
+      "PMID:25971288",
+      "PMID:26011596",
+      "PMID:26019695",
+      "Reaxys:11407476",
+      "Wikipedia:Edoxaban"
+    ],
+    "formula": [
+      "C24H30ClN7O4S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:85973"
+    ],
+    "inchi": [
+      "InChI=1S/C24H30ClN7O4S/c1-31(2)24(36)13-4-6-15(27-20(33)21(34)30-19-7-5-14(25)11-26-19)17(10-13)28-22(35)23-29-16-8-9-32(3)12-18(16)37-23/h5,7,11,13,15,17H,4,6,8-10,12H2,1-3H3,(H,27,33)(H,28,35)(H,26,30,34)/t13-,15-,17+/m0/s1"
+    ],
+    "inchikey": [
+      "HGVDHZBSSITLCT-JLJPHGGASA-N"
+    ],
+    "mass": [
+      "548.05800"
+    ],
+    "monoisotopicmass": [
+      "547.17685"
+    ],
+    "smiles": [
+      "CN(C)C(=O)[C@H]1CC[C@H](NC(=O)C(=O)Nc2ccc(Cl)cn2)[C@@H](C1)NC(=O)c1nc2CCN(C)Cc2s1"
+    ]
+  },
+  "label": "edoxaban",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_85973",
+  "obo_id": "CHEBI:85973",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "480449-70-5",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "480449-70-5",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "4897",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/4897"
+    },
+    {
+      "database": "KEGG",
+      "id": "D09710",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D09710"
+    },
+    {
+      "database": "PMID",
+      "id": "24911450",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24911450"
+    },
+    {
+      "database": "PMID",
+      "id": "24973057",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24973057"
+    },
+    {
+      "database": "PMID",
+      "id": "25311731",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25311731"
+    },
+    {
+      "database": "PMID",
+      "id": "25403645",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25403645"
+    },
+    {
+      "database": "PMID",
+      "id": "25416564",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25416564"
+    },
+    {
+      "database": "PMID",
+      "id": "25419685",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25419685"
+    },
+    {
+      "database": "PMID",
+      "id": "25566930",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25566930"
+    },
+    {
+      "database": "PMID",
+      "id": "25596250",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25596250"
+    },
+    {
+      "database": "PMID",
+      "id": "25653574",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25653574"
+    },
+    {
+      "database": "PMID",
+      "id": "25669624",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25669624"
+    },
+    {
+      "database": "PMID",
+      "id": "25687352",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25687352"
+    },
+    {
+      "database": "PMID",
+      "id": "25732432",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25732432"
+    },
+    {
+      "database": "PMID",
+      "id": "25769357",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25769357"
+    },
+    {
+      "database": "PMID",
+      "id": "25769361",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25769361"
+    },
+    {
+      "database": "PMID",
+      "id": "25791908",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25791908"
+    },
+    {
+      "database": "PMID",
+      "id": "25809373",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25809373"
+    },
+    {
+      "database": "PMID",
+      "id": "25855704",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25855704"
+    },
+    {
+      "database": "PMID",
+      "id": "25925842",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25925842"
+    },
+    {
+      "database": "PMID",
+      "id": "25965706",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25965706"
+    },
+    {
+      "database": "PMID",
+      "id": "25966665",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25966665"
+    },
+    {
+      "database": "PMID",
+      "id": "25969414",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25969414"
+    },
+    {
+      "database": "PMID",
+      "id": "25971288",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25971288"
+    },
+    {
+      "database": "PMID",
+      "id": "26011596",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26011596"
+    },
+    {
+      "database": "PMID",
+      "id": "26019695",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26019695"
+    },
+    {
+      "database": "Reaxys",
+      "id": "11407476",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Edoxaban",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Edoxaban"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N(1)-(5-chloropyridin-2-yl)-N(2)-{(1S,2R,4S)-4-(dimethylcarbamoyl)-2-[(5-methyl-4,5,6,7-tetrahydro[1,3]thiazolo[5,4-c]pyridine-2-carbonyl)amino]cyclohexyl}ethanediamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DU-176",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "edoxaban",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85973?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85973/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85973/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85973/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85973/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85973/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85973/graph"
+    },
+    "is_conjugate_base_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85973/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_base_of"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85973/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

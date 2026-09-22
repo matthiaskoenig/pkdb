@@ -1,0 +1,319 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/UBERON_0000947",
+  "lang": "en",
+  "description": [
+    "The main trunk of the systemic arterial system that carries blood from the heart to all the organs and other structures of the body, bringing oxygenated blood to all parts of the body in the systemic circulation."
+  ],
+  "synonyms": [
+    "trunk of aortic tree",
+    "trunk of systemic arterial tree",
+    "dorsal aorta",
+    "arteria maxima"
+  ],
+  "annotation": {
+    "depiction": [
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/blood-vasculature-female/v1.3/assets/3d-vh-f-blood-vasculature.glb",
+      "https://cdn.humanatlas.io/digital-objects/ref-organ/blood-vasculature-male/v1.3/assets/3d-vh-m-blood-vasculature.glb",
+      "https://upload.wikimedia.org/wikipedia/commons/9/91/Aorta_scheme.jpg"
+    ],
+    "editor note": [
+      "This class is currently a mixed bag, encompassing (1) the entirety of the mammalian aorta together with (2) the developmental and phylogenetic homologs of its segments: the ventral aorta and dorsal aortae."
+    ],
+    "external_definition": [
+      "The main artery of the circulatory system which carries oxygenated blood from the heart to all the arteries of the body except those of the lungs.[AAO]"
+    ],
+    "has_dbxref": [
+      "AAO:0010213",
+      "BTO:0000135",
+      "CALOHA:TS-0046",
+      "EFO:0000265",
+      "EMAPA:18601",
+      "EV:0100027",
+      "FMA:3734",
+      "GAID:469",
+      "MA:0000062",
+      "MAT:0000035",
+      "MESH:D001011",
+      "MIAA:0000035",
+      "NCIT:C12669",
+      "SCTID:181298001",
+      "UMLS:C0003483",
+      "VHOG:0001523",
+      "Wikipedia:Aorta",
+      "XAO:0003010",
+      "galen:Aorta"
+    ],
+    "has_obo_namespace": [
+      "uberon"
+    ],
+    "has_relational_adjective": [
+      "aortic"
+    ],
+    "homology_notes": [
+      "When vertebrates first appeared, they must have possessed a ventral and dorsal aorta with aortic arches between them.[well established][VHOG]"
+    ],
+    "id": [
+      "UBERON:0000947"
+    ],
+    "present in taxon": [
+      "http://purl.obolibrary.org/obo/NCBITaxon_9606"
+    ],
+    "taxon_notes": [
+      "All amniotes have a broadly similar arrangement to that of humans, albeit with a number of individual variations. In fish, however, there are two separate vessels referred to as aortas. The ventral aorta carries de-oxygenated blood from the heart to the gills; part of this vessel forms the ascending aorta in tetrapods (the remainder forms the pulmonary artery). A second, dorsal aorta carries oxygenated blood from the gills to the rest of the body, and is homologous with the descending aorta of tetrapods. The two aortas are connected by a number of vessels, one passing through each of the gills. Amphibians also retain the fifth connecting vessel, so that the aorta has two parallel arches"
+    ]
+  },
+  "label": "aorta",
+  "ontology_name": "uberon",
+  "ontology_prefix": "UBERON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/uberon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "UBERON_0000947",
+  "obo_id": "UBERON:0000947",
+  "in_subset": [
+    "efo_slim",
+    "grouping_class",
+    "human_reference_atlas",
+    "human_subset",
+    "mouse_subset",
+    "pheno_slim",
+    "uberon_slim"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "The main trunk of the systemic arterial system that carries blood from the heart to all the organs and other structures of the body, bringing oxygenated blood to all parts of the body in the systemic circulation.",
+      "oboXrefs": [
+        {
+          "database": "ISBN",
+          "id": "0-683-40008-8",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "MESH",
+          "id": "A07.231.114.056",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "MP",
+          "id": "0000272",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/MP_0000272"
+        },
+        {
+          "database": "Wikipedia",
+          "id": "Aorta",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Aorta"
+        },
+        {
+          "database": null,
+          "id": "http://orcid.org/0000-0002-6601-2165",
+          "description": null,
+          "url": "http://orcid.org/0000-0002-6601-2165"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "AAO",
+      "id": "0010213",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/AAO_0010213"
+    },
+    {
+      "database": "BTO",
+      "id": "0000135",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/BTO_0000135"
+    },
+    {
+      "database": "CALOHA",
+      "id": "TS-0046",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "EFO",
+      "id": "0000265",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0000265"
+    },
+    {
+      "database": "EMAPA",
+      "id": "18601",
+      "description": null,
+      "url": "http://www.informatics.jax.org/vocab/gxd/anatomy/EMAPA:18601"
+    },
+    {
+      "database": "EV",
+      "id": "0100027",
+      "description": null,
+      "url": "http://www.evocontology.org/site/Main/BrowseEvoc?x_termid=0100027"
+    },
+    {
+      "database": "FMA",
+      "id": "3734",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/ols4/ontologies/fma/terms?obo_id=FMA:3734"
+    },
+    {
+      "database": "GAID",
+      "id": "469",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MA",
+      "id": "0000062",
+      "description": null,
+      "url": "http://www.informatics.jax.org/searches/AMA.cgi?id=MA:0000062"
+    },
+    {
+      "database": "MAT",
+      "id": "0000035",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MAT_0000035"
+    },
+    {
+      "database": "MESH",
+      "id": "D001011",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D001011"
+    },
+    {
+      "database": "MIAA",
+      "id": "0000035",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "NCIT",
+      "id": "C12669",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C12669"
+    },
+    {
+      "database": "SCTID",
+      "id": "181298001",
+      "description": null,
+      "url": "http://snomed.info/id/181298001"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0003483",
+      "description": "ncithesaurus:Aorta",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0003483"
+    },
+    {
+      "database": "VHOG",
+      "id": "0001523",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/VHOG_0001523"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Aorta",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Aorta"
+    },
+    {
+      "database": "XAO",
+      "id": "0003010",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/XAO_0003010"
+    },
+    {
+      "database": "galen",
+      "id": "Aorta",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "arteria maxima",
+      "scope": "hasRelatedSynonym",
+      "type": "latin term",
+      "xrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Aorta",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Aorta"
+        }
+      ]
+    },
+    {
+      "name": "dorsal aorta",
+      "scope": "hasNarrowSynonym",
+      "type": "taxonomic disambiguation",
+      "xrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Aorta#In_other_animals",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "ZFA",
+          "id": "0000014",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/ZFA_0000014"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/graph"
+    },
+    "part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000050"
+    },
+    "located_in": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0001025"
+    },
+    "connected_to": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0000947/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002170"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,60 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0010604",
+  "lang": "en",
+  "description": [
+    "Quantification of the amount of urine voided"
+  ],
+  "synonyms": [
+    "urinary volume measurement"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "PMID:31993563"
+    ],
+    "obsoleted_in_version": [
+      "3.74.0"
+    ],
+    "reason_for_obsolescence": [
+      "Project to replace EFO measurement branch with enriched OBA branch. Please use: OBA:0000173"
+    ],
+    "term editor": [
+      "Laura Harris"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/OBA_0000173"
+    ]
+  },
+  "label": "obsolete_urine volume measurement",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/OBA_0000173",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0010604",
+  "obo_id": "EFO:0010604",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "PMID",
+      "id": "31993563",
+      "description": null,
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/31993563"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0010604?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0010604/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

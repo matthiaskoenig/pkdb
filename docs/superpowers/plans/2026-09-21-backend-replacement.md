@@ -32,8 +32,7 @@
 
 ## Plan boundaries and order
 
-This change spans independently testable subsystems. Execute the following linked
-plans in order; do not treat the first phase as completion of the migration.
+This change spans independently testable subsystems. Execute the following linked plans in order; do not treat the first phase as completion of the migration.
 
 | Plan | Tasks | Deliverable | Entry requirement |
 | --- | --- | --- | --- |
@@ -41,52 +40,27 @@ plans in order; do not treat the first phase as completion of the migration.
 | [02: Ingestion](2026-09-21-backend-02-ingestion.md) | I1–I5 | Fresh PostgreSQL schema and authenticated atomic complete-study API | Foundation artifacts and numerical parity |
 | [03: Interfaces and cutover](2026-09-21-backend-03-interfaces-cutover.md) | A1–A6 | Compatible reads/writes, MCP, full rebuild, production-ready replacement | Ingestion transaction and authorization gates |
 
-Each task owns its failing test, implementation, passing verification, and focused
-commit. Within broad domain tasks, work one entity/rule/route at a time using the
-listed test loop. Do not write a whole subsystem before running its first test.
-No deployment, production deletion, or automatic merge is part of plan execution.
+Each task owns its failing test, implementation, passing verification, and focused commit. Within broad domain tasks, work one entity/rule/route at a time using the listed test loop. Do not write a whole subsystem before running its first test. No deployment, production deletion, or automatic merge is part of plan execution.
 
 ## Workspace and package transition
 
-- At execution time use an isolated branch/worktree. Existing untracked files
-  include `backend/pkdb_data/`, some tests, and `.env.template`; preserve them.
-  Inventory their ownership before copying required sources into an isolated
-  checkout. Do not sweep them into commits or discard them.
-- Characterize the old application in its existing Python 3.9 environment.
-  Its current dependencies must not constrain the new interpreter matrix.
-- Build a temporary `backend-next/` project with `src/pkdb/`, `tests/`,
-  `pyproject.toml`, `uv.lock`, and Alembic. It is a temporary migration directory,
-  not a second long-term service. Name its distribution `pkdb` in its isolated
-  environment. Never install it alongside the old distribution in one environment.
-- Keep the old deployment runnable from its existing checkout/release while
-  comparing. In A6 move the replacement into `backend/` and remove obsolete
-  tracked code only after parity gates; preserve unrelated/untracked sources.
-- Keep private PDFs, source data, credentials, and account exports outside git.
-  Commit synthetic fixtures and manifests/hashes where sharing is permitted.
+- At execution time use an isolated branch/worktree. Existing untracked files include `backend/pkdb_data/`, some tests, and `.env.template`; preserve them. Inventory their ownership before copying required sources into an isolated checkout. Do not sweep them into commits or discard them.
+- Characterize the old application in its existing Python 3.9 environment. Its current dependencies must not constrain the new interpreter matrix.
+- Build a temporary `backend-next/` project with `src/pkdb/`, `tests/`, `pyproject.toml`, `uv.lock`, and Alembic. It is a temporary migration directory, not a second long-term service. Name its distribution `pkdb` in its isolated environment. Never install it alongside the old distribution in one environment.
+- Keep the old deployment runnable from its existing checkout/release while comparing. In A6 move the replacement into `backend/` and remove obsolete tracked code only after parity gates; preserve unrelated/untracked sources.
+- Keep private PDFs, source data, credentials, and account exports outside git. Commit synthetic fixtures and manifests/hashes where sharing is permitted.
 
 ## Dependency and security decisions
 
-Resolve stable releases during F2 and record exact versions in `backend-next/uv.lock`
-and `docs/backend-migration/dependencies.md`; versions are not guessed in this
-planning document. The resolution/install/import test on both Pythons is the first
-executable gate, before schema or ingestion work. Require SQLAlchemy 2.x and
-Pydantic 2.x. Add dependencies only in the task that needs them.
+Resolve stable releases during F2 and record exact versions in `backend-next/uv.lock` and `docs/backend-migration/dependencies.md`; versions are not guessed in this planning document. The resolution/install/import test on both Pythons is the first executable gate, before schema or ingestion work. Require SQLAlchemy 2.x and Pydantic 2.x. Add dependencies only in the task that needs them.
 
-Use `pwdlib[argon2]` for password hashing and Python `secrets` for high-entropy
-opaque tokens; store token hashes and explicit expiry/revocation state in SQL.
-These choices preserve the existing `Authorization: Token ...` contract without
-adding JWT, an identity microservice, or a new auth framework. Reset/verification
-tokens are single-use and purpose-bound. Email uses configured SMTP with an
-injected test transport. Do not send real messages during tests.
+Use `pwdlib[argon2]` for password hashing and Python `secrets` for high-entropy opaque tokens; store token hashes and explicit expiry/revocation state in SQL. These choices preserve the existing `Authorization: Token ...` contract without adding JWT, an identity microservice, or a new auth framework. Reset/verification tokens are single-use and purpose-bound. Email uses configured SMTP with an injected test transport. Do not send real messages during tests.
 
-Use PostgreSQL 18 as the initial test/deployment major, matching the current test
-service. Pin a supported patch image/digest at execution and record it. No new
-runtime requires Elasticsearch, even during comparison.
+Use PostgreSQL 18 as the initial test/deployment major, matching the current test service. Pin a supported patch image/digest at execution and record it. No new runtime requires Elasticsearch, even during comparison.
 
 ## Test commands and artifact contracts
 
-Run commands from the repository root unless stated otherwise. Tests must use
-separate test database credentials; never fall back to production defaults.
+Run commands from the repository root unless stated otherwise. Tests must use separate test database credentials; never fall back to production defaults.
 
 ```bash
 uv run --project backend-next --python 3.13 --locked pytest backend-next/tests -q
@@ -97,31 +71,17 @@ uv run --project backend-next --locked ruff format --check backend-next
 (cd backend-next && uv run --python 3.14 --locked ty check)
 ```
 
-Set ty's project root explicitly in its configuration or run its command from
-`backend-next/`; it must not accidentally check the old package. After A6 the
-same commands use `backend` instead of `backend-next`. Separate matrix jobs have
-separate virtual environments and databases.
+Set ty's project root explicitly in its configuration or run its command from `backend-next/`; it must not accidentally check the old package. After A6 the same commands use `backend` instead of `backend-next`. Separate matrix jobs have separate virtual environments and databases.
 
 Required recorded artifacts:
 
-- `docs/backend-migration/contracts.json`: method/path/query, request/response
-  shape, status, permissions, old owner, new owner, test, intentional exceptions.
-- `docs/backend-migration/corpus-manifest.json`: file hashes, study counts,
-  expected dispositions, fixture provenance; no confidential file contents.
-- `docs/backend-migration/dependencies.md`: resolved versions, both-interpreter
-  evidence, scientific package compatibility and replacement decisions.
-- `docs/backend-migration/performance.json`: baseline hardware, corpus hashes,
-  stage timings, peak RSS, query counts, repetitions, and executable budgets.
-- `docs/backend-migration/acceptance.md`: every spec requirement mapped to tests,
-  corpus results, compatibility exceptions, and release evidence.
+- `docs/backend-migration/contracts.json`: method/path/query, request/response shape, status, permissions, old owner, new owner, test, intentional exceptions.
+- `docs/backend-migration/corpus-manifest.json`: file hashes, study counts, expected dispositions, fixture provenance; no confidential file contents.
+- `docs/backend-migration/dependencies.md`: resolved versions, both-interpreter evidence, scientific package compatibility and replacement decisions.
+- `docs/backend-migration/performance.json`: baseline hardware, corpus hashes, stage timings, peak RSS, query counts, repetitions, and executable budgets.
+- `docs/backend-migration/acceptance.md`: every spec requirement mapped to tests, corpus results, compatibility exceptions, and release evidence.
 
-Performance policy: five warm measured runs after one warmup, plus a separately
-reported cold run. At matched load, new median complete-upload time and p95 read
-latency must be no more than 1.10 times the legacy baseline; a larger difference
-requires explanation and review, not automatic acceptance. The 10% band is a
-noise allowance, not the target. Record absolute baseline values before ingestion
-implementation. Measure RSS against the configured memory limit and upload
-concurrency; do not infer memory safety from a successful small fixture.
+Performance policy: five warm measured runs after one warmup, plus a separately reported cold run. At matched load, new median complete-upload time and p95 read latency must be no more than 1.10 times the legacy baseline; a larger difference requires explanation and review, not automatic acceptance. The 10% band is a noise allowance, not the target. Record absolute baseline values before ingestion implementation. Measure RSS against the configured memory limit and upload concurrency; do not infer memory safety from a successful small fixture.
 
 ## Specification coverage
 
@@ -141,12 +101,9 @@ concurrency; do not infer memory safety from a successful small fixture.
 
 ## Completion and handoff
 
-- [ ] Review all three plans against the specification; approve intentional
-  compatibility limits around destructive legacy clients and generated IDs.
+- [ ] Review all three plans against the specification; approve intentional compatibility limits around destructive legacy clients and generated IDs.
 - [ ] Choose native execution or subagent-driven task execution.
 - [ ] Execute F1–A6 with focused commits and evidence; update completed checkboxes.
 - [ ] Review the entire implementation and acceptance report before deployment.
 
-Native execution is recommended initially: contracts, canonical schemas, and the
-scientific code have closely coupled interfaces. Review gates remain between
-phases, with a final independent review before integration.
+Native execution is recommended initially: contracts, canonical schemas, and the scientific code have closely coupled interfaces. Review gates remain between phases, with a final independent review before integration.

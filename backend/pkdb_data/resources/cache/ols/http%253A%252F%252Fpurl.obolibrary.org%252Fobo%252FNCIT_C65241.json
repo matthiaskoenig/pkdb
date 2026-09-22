@@ -1,0 +1,139 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C65241",
+  "lang": "en",
+  "description": [
+    "The R-enantiomer of the racemic synthetic agent modafinil with central nervous system (CNS) stimulant and wakefulness-promoting activities. Although the exact mechanism of action has yet to be fully elucidated, armodafinil appears to inhibit the reuptake of dopamine by binding to the dopamine-reuptake pump, which leads to an increase in extracellular dopamine levels in some brain regions. This agent does not bind to or inhibit several receptors and enzymes that may be involved in sleep/wake regulation and is not a direct- or indirect-acting dopamine receptor agonist. Armodafinil has a longer half-life than modafinil."
+  ],
+  "synonyms": [
+    "(-)-2-((R)-(Diphenylmethyl)sulfinyl)acetamide",
+    "ARMODAFINIL",
+    "Armodafinil",
+    "Nuvigil",
+    "armodafinil"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug that is used to treat certain sleep disorders, such as narcolepsy. It makes patients feel more alert and awake. It is also being studied in the treatment of insomnia and fatigue in patients treated for cancer. Armodafinil acts in a part of the brain that controls sleep and wakefulness. It is a type of wakefulness-promoting agent."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Excessive sleepiness"
+    ],
+    "CAS_Registry": [
+      "112111-43-0"
+    ],
+    "Chemical_Formula": [
+      "C15H15NO2S"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Armodafinil"
+    ],
+    "FDA_UNII_Code": [
+      "V63XWA605I"
+    ],
+    "Legacy Concept Name": [
+      "Armodafinil"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "617902"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "617902"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "617902"
+    ],
+    "Preferred_Name": [
+      "Armodafinil"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C1701455"
+    ],
+    "code": [
+      "C65241"
+    ]
+  },
+  "label": "Armodafinil",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C65241",
+  "obo_id": "NCIT:C65241",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(-)-2-((R)-(Diphenylmethyl)sulfinyl)acetamide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ARMODAFINIL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Armodafinil",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Nuvigil",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "armodafinil",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65241?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65241/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65241/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65241/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65241/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65241/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65241/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

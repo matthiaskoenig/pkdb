@@ -1,0 +1,123 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C94668",
+  "lang": "en",
+  "description": [
+    "Gastrin (101 aa, ~11 kDa) is encoded by the human GAST gene. This protein plays a role in the modulation of gastric acid and pancreatic digestive enzyme secretion."
+  ],
+  "synonyms": [
+    "(Prepro)Gastrin",
+    "GAST",
+    "Gastrin",
+    "Preprogastrin",
+    "gastrin"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A hormone released from special cells in the lining of the stomach after eating. Gastrin causes the stomach to release an acid that helps digest food."
+    ],
+    "Contributing_Source": [
+      "CTRP"
+    ],
+    "DesignNote": [
+      "The 101 amino acid prepro-form of gastrin can be cleaved between alanine residue 21 and serine 22 to generate the 80 amino acid progastrin. Intracellular gastrointestinal progastrin can be further cleaved to form the main circulating biologically active forms gastrin-34 (big gastrin) and gastrin-17 (little gastrin). Other processed forms are possible including gastrin-71, gastrin-52, gastrin-14, and gastrin-6. (UniProt)"
+    ],
+    "Display_Name": [
+      "Gastrin"
+    ],
+    "OMIM_Number": [
+      "137250"
+    ],
+    "Preferred_Name": [
+      "Gastrin"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein",
+      "Hormone"
+    ],
+    "Swiss_Prot": [
+      "P01350"
+    ],
+    "UMLS_CUI": [
+      "C0376180"
+    ],
+    "code": [
+      "C94668"
+    ]
+  },
+  "label": "Gastrin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C94668",
+  "obo_id": "NCIT:C94668",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C142800"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(Prepro)Gastrin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "GAST",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gastrin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Preprogastrin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "gastrin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94668?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94668/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94668/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94668/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94668/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94668/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94668/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

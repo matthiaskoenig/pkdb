@@ -1,25 +1,18 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
-[![MIT License](https://img.shields.io/pypi/l/pymetadata.svg)](https://opensource.org/licenses/MIT)
+# PK-DB backend
 
-# PK-DB - The Pharmacokinetics Database
+This is the sole backend implementation: FastAPI, SQLAlchemy, PostgreSQL, and the `pkdb` command-line interface. Python 3.14 is required.
 
-<img src="./docs/pkdb_logo.png" width="200">
+From the repository root, run `docker compose up --build --wait`. Startup applies migrations and imports the bundled vocabulary. The API documentation is available at <http://localhost:18083/docs>.
 
-[PK-DB](https://pk-db.com) is a database and web interface for pharmacokinetics data and information from clinical trials as well as pre-clinical research.  
-PK-DB allows the curation of pharmacokinetics data integrated with the corresponding meta-information, including:
+See [installation](../docs/installation.md), [local study upload testing](../docs/local-upload-testing.md), and [development](../docs/development.md) for complete commands.
 
-- characteristics of studied patient collectives and individuals (e.g., age, body weight, smoking status, …)  
-- applied interventions (e.g., dosing, substance, route of administration)  
-- measured pharmacokinetics time courses and pharmacokinetics parameters (e.g., clearance, half-life, …)  
+## Layout
 
-Important features include:
+- `src/pkdb`: API, CLI, scientific validation, persistence, and attachment storage.
+- `alembic`: versioned schema migrations.
+- `bootstrap`: offline vocabulary and provenance; no credentials.
+- `tests`: regular scientific, API, CLI, and PostgreSQL tests.
+- `system_tests`: container lifecycle and database/attachment restore tests.
+- `corpus_tests`: opt-in source corpus verification.
 
-- representation of experimental errors and variation  
-- normalization and consistent representation of units  
-- annotation of information with biological ontologies  
-- calculation of pharmacokinetics information from time courses (e.g., apparent clearance, half-life, …)  
-- workflows for collaborative data curation  
-- strong validation rules on data and simple access via a REST API  
-
-PK-DB is available at [https://pk-db.com](https://pk-db.com) and [https://alpha.pk-db.com](https://alpha.pk-db.com).  
-The terms of use are listed in the [`TERMS_OF_USE.md`](./TERMS_OF_USE.md).
+`pkdb validate` checks a study without persisting it. `pkdb upload` stores a valid study atomically and replaces an existing study with the same SID. Both authenticate using `PKDB_API_TOKEN`. Local administration commands are `create-admin`, `bootstrap`, `bootstrap-study`, and `cleanup`. The last command removes eligible orphaned attachments; it is not a database reset command.

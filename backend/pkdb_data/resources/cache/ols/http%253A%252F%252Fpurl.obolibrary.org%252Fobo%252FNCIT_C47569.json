@@ -1,0 +1,128 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C47569",
+  "lang": "en",
+  "description": [
+    "The sodium salt form of iothalamate, an organic iodine compound and a radiographic contrast medium. Iothalamate sodium blocks x-rays as they pass through the body, thereby allowing body structures not containing iodine to be visualized. The degree of opacity produced by iothalamate sodium is directly proportional to the total amount of the iodinated contrast agent in the path of the x-rays. The visualization of body structures is dependent upon the distribution and elimination of iothalamate sodium. (NCI05)"
+  ],
+  "synonyms": [
+    "Angio-Conray",
+    "Benzoic Acid, 3-(acetylamino)-2,4,6-triiodo-5-((methylamino)carbonyl)-, Monosodium Salt",
+    "IOTHALAMATE SODIUM",
+    "Iothalamate Sodium",
+    "Isophthalamic Acid, 5-acetamido-2,4,6-triiodo-N-methyl-, Monosodium Salt",
+    "Mediocontrix"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "1225-20-3"
+    ],
+    "Chemical_Formula": [
+      "C11H8I3N2O4.Na"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "KDN276D83N"
+    ],
+    "Has_Free_Acid_Or_Base_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C61792"
+    ],
+    "Legacy Concept Name": [
+      "Iothalamate_Sodium"
+    ],
+    "Preferred_Name": [
+      "Iothalamate Sodium"
+    ],
+    "Semantic_Type": [
+      "Indicator, Reagent, or Diagnostic Aid",
+      "Organic Chemical"
+    ],
+    "UMLS_CUI": [
+      "C0037523"
+    ],
+    "code": [
+      "C47569"
+    ]
+  },
+  "label": "Iothalamate Sodium",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C47569",
+  "obo_id": "NCIT:C47569",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Angio-Conray",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Benzoic Acid, 3-(acetylamino)-2,4,6-triiodo-5-((methylamino)carbonyl)-, Monosodium Salt",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "IOTHALAMATE SODIUM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Iothalamate Sodium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Isophthalamic Acid, 5-acetamido-2,4,6-triiodo-N-methyl-, Monosodium Salt",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Mediocontrix",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47569?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47569/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47569/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47569/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47569/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47569/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47569/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

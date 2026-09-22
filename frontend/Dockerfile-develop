@@ -1,4 +1,5 @@
-FROM node:14.11.0 as build-stage
+FROM node:22-slim AS build-stage
+ENV NODE_OPTIONS=--openssl-legacy-provider
 WORKDIR /app
 COPY package*.json /app/
 RUN npm install

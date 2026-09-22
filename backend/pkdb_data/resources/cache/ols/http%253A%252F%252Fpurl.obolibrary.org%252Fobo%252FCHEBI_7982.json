@@ -1,0 +1,207 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7982",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Pentazocine",
+    "cis-(+/-)-Pentazocine",
+    "dl-Pentazocine",
+    "pentazocin",
+    "pentazocine HCl",
+    "pentazocine hydrochloride",
+    "pentazocine lactate"
+  ],
+  "annotation": {
+    "formula": [
+      "C19H27NO"
+    ],
+    "has_dbxref": [
+      "CAS:359-83-1",
+      "Drug_Central:3424",
+      "HMDB:HMDB0014790",
+      "KEGG:C07421",
+      "KEGG:D00498"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7982"
+    ],
+    "inchi": [
+      "InChI=1S/C19H27NO/c1-13(2)7-9-20-10-8-19(4)14(3)18(20)11-15-5-6-16(21)12-17(15)19/h5-7,12,14,18,21H,8-11H2,1-4H3/t14-,18+,19+/m0/s1"
+    ],
+    "inchikey": [
+      "VOKSWYLNZZRQPF-GDIGMMSISA-N"
+    ],
+    "smiles": [
+      "C[C@H]1[C@H]2Cc3ccc(O)cc3[C@]1(C)CCN2CC=C(C)C"
+    ]
+  },
+  "label": "pentazocine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7982",
+  "obo_id": "CHEBI:7982",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "359-83-1",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "3424",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/3424"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014790",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014790"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07421",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07421"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00498",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00498"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Pentazocine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cis-(+/-)-Pentazocine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dl-Pentazocine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentazocin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentazocine HCl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentazocine hydrochloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentazocine lactate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7982/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:90943",
+  "name": "osimertinib",
+  "definition": "A member of the class of aminopyrimidines that is 4-(1-methylindol-3-yl)pyrimidin-2-amine in which one of the amino hydrogens is replaced by a 2-methoxy-4-[2-(dimethylamino)ethyl](methyl)amino-5-acrylamidophenyl group. Used (as the mesylate salt) for treatment of EGFR T790M mutation positive non-small cell lung cancer.",
+  "formula": "C28H33N7O2",
+  "charge": "0",
+  "mass": "499.608",
+  "inchikey": "DUYJMQONPNNFPI-UHFFFAOYSA-N"
+}

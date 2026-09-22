@@ -1,0 +1,180 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C4908",
+  "lang": "en",
+  "description": [
+    "An invasive carcinoma that arises from the surface ovarian epithelium. The vast majority of cases are adenocarcinomas. The most common sites of involvement are the contralateral ovary, peritoneal cavity, para-aortic and pelvic lymph nodes, and liver.  Lung and pleura are the most common sites of extra-abdominal spread. The primary form of therapy is surgical.  The overall prognosis of ovarian carcinoma remains poor, a direct result of its rapid growth rate and the lack of early symptoms."
+  ],
+  "synonyms": [
+    "Carcinoma of Ovary",
+    "Carcinoma of the Ovary",
+    "Epithelial Ovarian Cancer",
+    "Invasive Ovarian Carcinoma",
+    "Ovarian Cancer",
+    "Ovarian Carcinoma",
+    "Ovarian Epithelial Cancer",
+    "Ovarian epithelial cancer",
+    "epithelial ovarian cancer",
+    "ovarian epithelial cancer"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Cancer that occurs in the cells lining the ovaries."
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "CTEP",
+      "CTRP",
+      "Cellosaurus"
+    ],
+    "Display_Name": [
+      "Ovarian Epithelial Cancer"
+    ],
+    "Legacy Concept Name": [
+      "Ovarian_Carcinoma"
+    ],
+    "Neoplasm_Has_Special_Category": [
+      "http://purl.obolibrary.org/obo/NCIT_C9292"
+    ],
+    "Neoplastic_Status": [
+      "Malignant"
+    ],
+    "Preferred_Name": [
+      "Ovarian Carcinoma"
+    ],
+    "Semantic_Type": [
+      "Neoplastic Process"
+    ],
+    "UMLS_CUI": [
+      "C0677886"
+    ],
+    "code": [
+      "C4908"
+    ]
+  },
+  "label": "Ovarian Carcinoma",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C4908",
+  "obo_id": "NCIT:C4908",
+  "in_subset": [
+    "NCIT_C102905",
+    "NCIT_C103102",
+    "NCIT_C116977",
+    "NCIT_C118168",
+    "NCIT_C126659",
+    "NCIT_C138188",
+    "NCIT_C138190",
+    "NCIT_C156952",
+    "NCIT_C156966",
+    "NCIT_C158520",
+    "NCIT_C165258"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Carcinoma of Ovary",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Carcinoma of the Ovary",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Epithelial Ovarian Cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Invasive Ovarian Carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ovarian Cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ovarian Carcinoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ovarian Epithelial Cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ovarian epithelial cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "epithelial ovarian cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ovarian epithelial cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C4908?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C4908/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C4908/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C4908/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C4908/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C4908/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C4908/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C4908/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C4908/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C4908/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C4908/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

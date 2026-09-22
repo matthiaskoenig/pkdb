@@ -1,0 +1,85 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/OBA_0000173",
+  "lang": "en",
+  "description": [
+    "The volume of a urine."
+  ],
+  "synonyms": [
+    "volume of urine"
+  ],
+  "annotation": {
+    "has_obo_namespace": [
+      "oba"
+    ],
+    "id": [
+      "OBA:0000173"
+    ]
+  },
+  "label": "urinary volume",
+  "ontology_name": "oba",
+  "ontology_prefix": "OBA",
+  "ontology_iri": "http://purl.obolibrary.org/obo/oba.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "OBA_0000173",
+  "obo_id": "OBA:0000173",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "The volume of a urine.",
+      "oboXrefs": [
+        {
+          "database": "AUTO",
+          "id": "patterns/patterns/entity_attribute",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "volume of urine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "AUTO",
+          "id": "patterns/patterns/entity_attribute",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/oba/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOBA_0000173?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/oba/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOBA_0000173/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/oba/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOBA_0000173/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/oba/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOBA_0000173/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/oba/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOBA_0000173/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/oba/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOBA_0000173/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/oba/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOBA_0000173/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

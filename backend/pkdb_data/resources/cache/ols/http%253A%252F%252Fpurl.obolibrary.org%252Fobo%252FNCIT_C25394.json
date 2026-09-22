@@ -1,0 +1,122 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C25394",
+  "lang": "en",
+  "description": [
+    "A solid composed of a small, round object composed of active and/or inert ingredient(s)."
+  ],
+  "synonyms": [
+    "PILL",
+    "Pill",
+    "Pill Dosage Form",
+    "Pill Dose Form"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A dose of medicine in the form of a small pellet. (NCI)"
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "FDA",
+      "NCPDP"
+    ],
+    "FDA_Table": [
+      "Dosage Form (C-DRG-00201)"
+    ],
+    "Has_Pharmaceutical_Basic_Dose_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C154592"
+    ],
+    "Has_Pharmaceutical_State_Of_Matter": [
+      "http://purl.obolibrary.org/obo/NCIT_C45300"
+    ],
+    "Legacy Concept Name": [
+      "Pill"
+    ],
+    "Preferred_Name": [
+      "Pill Dosage Form"
+    ],
+    "Semantic_Type": [
+      "Biomedical or Dental Material"
+    ],
+    "UMLS_CUI": [
+      "C0994475"
+    ],
+    "code": [
+      "C25394"
+    ]
+  },
+  "label": "Pill Dosage Form",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C25394",
+  "obo_id": "NCIT:C25394",
+  "in_subset": [
+    "NCIT_C54452",
+    "NCIT_C54456",
+    "NCIT_C61410",
+    "NCIT_C66726",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C89415",
+    "NCIT_C89508"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "PILL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pill",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pill Dosage Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pill Dose Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25394?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25394/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25394/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25394/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25394/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25394/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25394/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

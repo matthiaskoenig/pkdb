@@ -1,0 +1,298 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_40237",
+  "lang": "en",
+  "description": [
+    "A  triazolopyrazine that exhibits  hypoglycemic activity."
+  ],
+  "synonyms": [
+    "(3R)-3-amino-1-[3-(trifluoromethyl)-5,6-dihydro[1,2,4]triazolo[4,3-a]pyrazin-7(8H)-yl]-4-(2,4,5-trifluorophenyl)butan-1-one",
+    "(2R)-4-OXO-4-[3-(TRIFLUOROMETHYL)-5,6-DIHYDRO[1,2,4]TRIAZOLO[4,3-A]PYRAZIN-7(8H)-YL]-1-(2,4,5-TRIFLUOROPHENYL)BUTAN-2-AMINE",
+    "MK-0431",
+    "sitagliptin",
+    "sitagliptina",
+    "sitagliptine",
+    "sitagliptinum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C16H15F6N5O"
+    ],
+    "has_dbxref": [
+      "CAS:486460-32-6",
+      "DrugBank:DB01261",
+      "Drug_Central:2448",
+      "HMDB:HMDB0015390",
+      "KEGG:D08516",
+      "LINCS:LSM-5363",
+      "PDBeChem:715",
+      "PMID:23286208",
+      "PMID:23331339",
+      "PMID:23432786",
+      "PMID:23489256",
+      "PMID:23927568",
+      "PMID:24039399",
+      "PMID:24041927",
+      "Reaxys:9962060",
+      "Wikipedia:Sitagliptin"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:40237"
+    ],
+    "inchi": [
+      "InChI=1S/C16H15F6N5O/c17-10-6-12(19)11(18)4-8(10)3-9(23)5-14(28)26-1-2-27-13(7-26)24-25-15(27)16(20,21)22/h4,6,9H,1-3,5,7,23H2/t9-/m1/s1"
+    ],
+    "inchikey": [
+      "MFFMDFFZMYYVKS-SECBINFHSA-N"
+    ],
+    "mass": [
+      "407.31382"
+    ],
+    "monoisotopicmass": [
+      "407.11808"
+    ],
+    "smiles": [
+      "N[C@@H](CC(=O)N1CCn2c(C1)nnc2C(F)(F)F)Cc1cc(F)c(F)cc1F"
+    ]
+  },
+  "label": "sitagliptin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_40237",
+  "obo_id": "CHEBI:40237",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "486460-32-6",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01261",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01261"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2448",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2448"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0015390",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015390"
+    },
+    {
+      "database": "KEGG",
+      "id": "D08516",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D08516"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5363",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "715",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/715"
+    },
+    {
+      "database": "PMID",
+      "id": "23286208",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23286208"
+    },
+    {
+      "database": "PMID",
+      "id": "23331339",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23331339"
+    },
+    {
+      "database": "PMID",
+      "id": "23432786",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23432786"
+    },
+    {
+      "database": "PMID",
+      "id": "23489256",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23489256"
+    },
+    {
+      "database": "PMID",
+      "id": "23927568",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23927568"
+    },
+    {
+      "database": "PMID",
+      "id": "24039399",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24039399"
+    },
+    {
+      "database": "PMID",
+      "id": "24041927",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24041927"
+    },
+    {
+      "database": "Reaxys",
+      "id": "9962060",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Sitagliptin",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Sitagliptin"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3R)-3-amino-1-[3-(trifluoromethyl)-5,6-dihydro[1,2,4]triazolo[4,3-a]pyrazin-7(8H)-yl]-4-(2,4,5-trifluorophenyl)butan-1-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2R)-4-OXO-4-[3-(TRIFLUOROMETHYL)-5,6-DIHYDRO[1,2,4]TRIAZOLO[4,3-A]PYRAZIN-7(8H)-YL]-1-(2,4,5-TRIFLUOROPHENYL)BUTAN-2-AMINE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "MK-0431",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sitagliptin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sitagliptina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sitagliptine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sitagliptinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40237?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40237/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40237/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40237/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40237/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40237/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40237/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_40237/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

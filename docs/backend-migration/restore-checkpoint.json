@@ -1,0 +1,141 @@
+{
+  "success": true,
+  "tables": {
+    "account_throttles": {
+      "rows": 1,
+      "sha256": "9203214cc98e231f3eb22c427b7ae25849435add1a73f7196f832a97d28f6ed9"
+    },
+    "alembic_version": {
+      "rows": 1,
+      "sha256": "98ff8da6d8c40a3d72536682e6802d9762e65f85c85a997278ae1c296e902da4"
+    },
+    "characteristics": {
+      "rows": 68008,
+      "sha256": "108b9e9c152fdce4eedcb440f98937d8d5055960269091a56d334c555408764e"
+    },
+    "email_addresses": {
+      "rows": 1,
+      "sha256": "c24d92cbccb62e67e55c6953559f527abeba6577de66dba1a79f308633638345"
+    },
+    "files": {
+      "rows": 11916,
+      "sha256": "880ae71add68ea449d17fba0ca8e584da81a298974ee3d3c7c808879c0690508"
+    },
+    "groups": {
+      "rows": 3298,
+      "sha256": "cdcdb6dbc8a4426dc5b55e19e50ffe7b3416b997b6a922b72c521ea9c260831f"
+    },
+    "individuals": {
+      "rows": 17565,
+      "sha256": "91d24eae37febbcd8faeaab95dd521d6a3b1d0e62cde285c0dda1b9ef9ed1d9c"
+    },
+    "interventions": {
+      "rows": 6380,
+      "sha256": "78df259004e423c8517f2123c05a6ddbf940a114e25db158c425300b353fcf2d"
+    },
+    "legacy_file_handles": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "measurement_interventions": {
+      "rows": 556756,
+      "sha256": "9b17ff4fd66930bfb3e241c2e196f82a6f899189ea41afddb20c0b5d9681a8ec"
+    },
+    "measurement_sources": {
+      "rows": 3972,
+      "sha256": "11f2c03050d986bb4887b1d9b3ce8734c7aa82d5514631746a048f0180965440"
+    },
+    "measurements": {
+      "rows": 360880,
+      "sha256": "6fc2c6af4d66aa4cc5b9b945ae0956ec406a142d068818f02ffa59fbfaae1c4f"
+    },
+    "notes": {
+      "rows": 9643,
+      "sha256": "455b9fec4f9b56682dde8c468352c08cc5b40cb85378be3f544360bb391878c1"
+    },
+    "reference_authors": {
+      "rows": 6150,
+      "sha256": "bda560a45854f364b41e420f755305ab12b7a2831865fec2e55c58d070264c03"
+    },
+    "reference_drafts": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "references": {
+      "rows": 1072,
+      "sha256": "cd7aad0d87e1fb5ef0d3409f7e3a3a26330be3b0d009e1cd6bcaf452ca4d0715"
+    },
+    "saved_queries": {
+      "rows": 5,
+      "sha256": "ba2637fcc3a8dbfc13f147938eef7ef64bc97d865754893b511412a7e64f683a"
+    },
+    "scatters": {
+      "rows": 930,
+      "sha256": "44454d707ade416ce7a76064be76fa99e81a2db3e7ba7dd602e9fa0e920dcd5e"
+    },
+    "studies": {
+      "rows": 1072,
+      "sha256": "d502af0051ed84ab59339a0e5608a43cace119236b091b4867df221a69c5a763"
+    },
+    "study_attachments": {
+      "rows": 11916,
+      "sha256": "c42df08facb5cbcaae0077b68e5c9e8e6c5cbaf101fe46dd86e2231ddadac10d"
+    },
+    "study_drafts": {
+      "rows": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "study_users": {
+      "rows": 2151,
+      "sha256": "3c736118c4799a7319f0ae7e847e986ec67392b623a318420a0d0e0cd2de99f5"
+    },
+    "subset_dimensions": {
+      "rows": 89680,
+      "sha256": "654cbc7ddeee7813199cc453a55e5b47ff5a8dde07d832ca797427a16a92e3a6"
+    },
+    "subset_points": {
+      "rows": 86200,
+      "sha256": "b07ebf04c5720a83b5ad943b33ada83a2f6716162b2f76eb6fdb74560fddaaf5"
+    },
+    "subsets": {
+      "rows": 8918,
+      "sha256": "40a574587ec94b1eef9c7228cf96ee9e1bc416926827b7eca29d78d439a8d1f6"
+    },
+    "timecourse_points": {
+      "rows": 165440,
+      "sha256": "bac6a975aa5047cafeccd303950d270de0582a8c934056ed121a727837d7b1b2"
+    },
+    "timecourses": {
+      "rows": 17558,
+      "sha256": "ce66ea5c68e6799ee281ff4826e815b55365f99883773c44cafd36f37bdb56af"
+    },
+    "tokens": {
+      "rows": 2,
+      "sha256": "d3bf3b77a33e490ef508821c225d75f3a1e76d5b54c85e7feeb872327ae61998"
+    },
+    "users": {
+      "rows": 61,
+      "sha256": "e5580828f8303594b2c7c52e2be9997fd35a862afadc406b8e246ab7dbb48112"
+    },
+    "vocabulary_edges": {
+      "rows": 1677,
+      "sha256": "e30defe5ffafedf5ff1bdec83ecd4597a8e190c29a7fd5594c95b418a45738b9"
+    },
+    "vocabulary_nodes": {
+      "rows": 2147,
+      "sha256": "85abe93fab0f736d06dc732c81005f4421a802a0f81e71fda9aa9a4c967f5ed1"
+    },
+    "vocabulary_terms": {
+      "rows": 37486,
+      "sha256": "db8879b921dfc8c41391291f2ca63a4ef66e4ef8fd9b7cb4e9e18585ad23c4ba"
+    },
+    "vocabulary_version": {
+      "rows": 1,
+      "sha256": "96c2693d3c67c1fec8671142e57fcd473edb1f0e52a878613c9f1fb8c10df321"
+    }
+  },
+  "files": 11916,
+  "file_bytes": 2618745722,
+  "elapsed_seconds": 26.33,
+  "verification": "Consistent PostgreSQL snapshot; every table row fingerprint equal; every stored file size and SHA256 equal; restored API ready."
+}

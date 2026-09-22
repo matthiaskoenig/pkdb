@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:3756",
+  "name": "clonazepam",
+  "definition": "1,3-Dihydro-2H-1,4-benzodiazepin-2-one in which the hydrogens at positions 5 and 7 are substituted by 2-chlorophenyl and nitro groups, respectively. It is used in the treatment of all types of epilepsy and seizures, as well as myoclonus and associated abnormal movements, and panic disorders. However, its use can be limited by the development of tolerance and by sedation.",
+  "formula": "C15H10ClN3O3",
+  "charge": "0",
+  "mass": "315.71100",
+  "inchikey": "DGBIGWXXNGSACT-UHFFFAOYSA-N"
+}

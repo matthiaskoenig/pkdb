@@ -1,0 +1,111 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_81005",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(1S,9S)-9-((S)-1-Carboxy-3-phenylpropylamino)-10-oxo-4,6,7,8,9,10-hexahydro-1H-pyridazino[1,2-a][1,2]diazepine-1-carboxylic acid"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C20H27N3O5"
+    ],
+    "has_dbxref": [
+      "CAS:90139-06-3",
+      "KEGG:C17309"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:81005"
+    ],
+    "inchi": [
+      "InChI=1S/C20H27N3O5/c24-18-15(8-4-12-22-13-5-9-17(20(27)28)23(18)22)21-16(19(25)26)11-10-14-6-2-1-3-7-14/h1-3,6-7,15-17,21H,4-5,8-13H2,(H,25,26)(H,27,28)/t15-,16-,17-/m0/s1"
+    ],
+    "inchikey": [
+      "UVAUYSRYXACKSC-ULQDDVLXSA-N"
+    ],
+    "mass": [
+      "389.44550"
+    ],
+    "monoisotopicmass": [
+      "389.19507"
+    ],
+    "smiles": [
+      "OC(=O)[C@H](CCc1ccccc1)N[C@H]1CCCN2CCC[C@H](N2C1=O)C(O)=O"
+    ]
+  },
+  "label": "Cilazaprilat",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_81005",
+  "obo_id": "CHEBI:81005",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "90139-06-3",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "KEGG",
+      "id": "C17309",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C17309"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(1S,9S)-9-((S)-1-Carboxy-3-phenylpropylamino)-10-oxo-4,6,7,8,9,10-hexahydro-1H-pyridazino[1,2-a][1,2]diazepine-1-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_81005?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_81005/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_81005/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_81005/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_81005/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_81005/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_81005/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

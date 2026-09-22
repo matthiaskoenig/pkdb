@@ -1,0 +1,233 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C12392",
+  "lang": "en",
+  "description": [
+    "A triangular-shaped organ located under the diaphragm in the right hypochondrium. It is the largest internal organ of the body, weighting up to 2 kg. Metabolism and bile secretion are its main functions. It is composed of cells which have the ability to regenerate."
+  ],
+  "synonyms": [
+    "Body System, Hepatic",
+    "Gastrointestinal Tract, Liver",
+    "Hepatic Body System",
+    "Hepatic Organ System",
+    "LIVER",
+    "Liver",
+    "Liver structure (body structure)",
+    "Organ System, Hepatic",
+    "liver"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A large organ located in the upper abdomen. The liver cleanses the blood and aids in digestion by secreting bile.",
+      "An abdominal organ that has variable lobation which are composed mainly of hepatic lobules.",
+      "An exocrine gland which secretes bile and functions in metabolism of protein and carbohydrate and fat, synthesizes substances involved in the clotting of the blood, synthesizes vitamin A, detoxifies poisonous substances, stores glycogen, and breaks down worn-out erythrocytes."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CPTAC",
+      "CTDC",
+      "GDC",
+      "PCDC",
+      "UBERON",
+      "mCode"
+    ],
+    "Display_Name": [
+      "Liver"
+    ],
+    "Is_PCDC_AML_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C168883"
+    ],
+    "Is_PCDC_EWS_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C119940",
+      "http://purl.obolibrary.org/obo/NCIT_C157120"
+    ],
+    "Is_PCDC_GCT_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C157120",
+      "http://purl.obolibrary.org/obo/NCIT_C164323",
+      "http://purl.obolibrary.org/obo/NCIT_C173281"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C156421",
+      "http://purl.obolibrary.org/obo/NCIT_C156422",
+      "http://purl.obolibrary.org/obo/NCIT_C171435",
+      "http://purl.obolibrary.org/obo/NCIT_C173263",
+      "http://purl.obolibrary.org/obo/NCIT_C177570",
+      "http://purl.obolibrary.org/obo/NCIT_C188396",
+      "http://purl.obolibrary.org/obo/NCIT_C200442",
+      "http://purl.obolibrary.org/obo/NCIT_C70729"
+    ],
+    "Legacy Concept Name": [
+      "Liver"
+    ],
+    "Maps_To": [
+      "Liver"
+    ],
+    "Preferred_Name": [
+      "Liver"
+    ],
+    "Semantic_Type": [
+      "Body Part, Organ, or Organ Component"
+    ],
+    "UMLS_CUI": [
+      "C0023884"
+    ],
+    "code": [
+      "C12392"
+    ],
+    "has_dbxref": [
+      "UBERON:0002107"
+    ]
+  },
+  "label": "Liver",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C12392",
+  "obo_id": "NCIT:C12392",
+  "in_subset": [
+    "NCIT_C156952",
+    "NCIT_C156955",
+    "NCIT_C157711",
+    "NCIT_C159328",
+    "NCIT_C159330",
+    "NCIT_C159331",
+    "NCIT_C159332",
+    "NCIT_C159333",
+    "NCIT_C159336",
+    "NCIT_C159337",
+    "NCIT_C168655",
+    "NCIT_C168656",
+    "NCIT_C168659",
+    "NCIT_C168660",
+    "NCIT_C168663",
+    "NCIT_C168664",
+    "NCIT_C173073",
+    "NCIT_C173217",
+    "NCIT_C174019",
+    "NCIT_C174237",
+    "NCIT_C174241",
+    "NCIT_C174261",
+    "NCIT_C177383",
+    "NCIT_C177394",
+    "NCIT_C177402",
+    "NCIT_C177403",
+    "NCIT_C177537",
+    "NCIT_C179478",
+    "NCIT_C179481",
+    "NCIT_C179482",
+    "NCIT_C179483",
+    "NCIT_C186320",
+    "NCIT_C186321",
+    "NCIT_C186341",
+    "NCIT_C193006",
+    "NCIT_C193234",
+    "NCIT_C198975",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C74456",
+    "NCIT_C77526",
+    "NCIT_C77529",
+    "oncotree_slim"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "UBERON",
+      "id": "0002107",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/UBERON_0002107"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Body System, Hepatic",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gastrointestinal Tract, Liver",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hepatic Body System",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hepatic Organ System",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "LIVER",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver structure (body structure)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Organ System, Hepatic",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "liver",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12392?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12392/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12392/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12392/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12392/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12392/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12392/graph"
+    },
+    "Anatomic_Structure_Is_Physical_Part_Of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12392/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R82"
+    },
+    "Anatomic_Structure_Has_Location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12392/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R81"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

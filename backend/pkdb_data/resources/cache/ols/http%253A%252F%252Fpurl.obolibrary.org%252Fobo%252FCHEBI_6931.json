@@ -1,0 +1,310 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6931",
+  "lang": "en",
+  "description": [
+    "An imidazobenzodiazepine that is 4H-imidazo[1,5-a][1,4]benzodiazepine which is substituted by a methyl, 2-fluorophenyl and chloro groups at positions 1, 6 and 8, respectively."
+  ],
+  "synonyms": [
+    "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepine",
+    "Buccolam",
+    "Dormicum",
+    "mezolam",
+    "midazolam",
+    "midazolamum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C18H13ClFN3"
+    ],
+    "has_dbxref": [
+      "CAS:59467-70-8",
+      "DrugBank:DB00683",
+      "Drug_Central:1802",
+      "HMDB:HMDB0014821",
+      "KEGG:C07524",
+      "KEGG:D00550",
+      "LINCS:LSM-5200",
+      "MetaCyc:CPD-20500",
+      "PDBeChem:08J",
+      "PMID:1832310",
+      "PMID:26032507",
+      "PMID:28706559",
+      "PMID:29516686",
+      "PMID:30076807",
+      "PMID:30113394",
+      "PMID:30157038",
+      "Reaxys:625572",
+      "Wikipedia:Midazolam"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6931"
+    ],
+    "inchi": [
+      "InChI=1S/C18H13ClFN3/c1-11-21-9-13-10-22-18(14-4-2-3-5-16(14)20)15-8-12(19)6-7-17(15)23(11)13/h2-9H,10H2,1H3"
+    ],
+    "inchikey": [
+      "DDLIGBOFAVUZHB-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "325.768"
+    ],
+    "monoisotopicmass": [
+      "325.07820"
+    ],
+    "smiles": [
+      "C1(=NCC=2N(C=3C1=CC(=CC3)Cl)C(=NC2)C)C=4C=CC=CC4F"
+    ]
+  },
+  "label": "midazolam",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6931",
+  "obo_id": "CHEBI:6931",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "59467-70-8",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "59467-70-8",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "59467-70-8",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00683",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00683"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1802",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1802"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014821",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014821"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07524",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07524"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00550",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00550"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5200",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MetaCyc",
+      "id": "CPD-20500",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "08J",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/08J"
+    },
+    {
+      "database": "PMID",
+      "id": "1832310",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/1832310"
+    },
+    {
+      "database": "PMID",
+      "id": "26032507",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26032507"
+    },
+    {
+      "database": "PMID",
+      "id": "28706559",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28706559"
+    },
+    {
+      "database": "PMID",
+      "id": "29516686",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/29516686"
+    },
+    {
+      "database": "PMID",
+      "id": "30076807",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/30076807"
+    },
+    {
+      "database": "PMID",
+      "id": "30113394",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/30113394"
+    },
+    {
+      "database": "PMID",
+      "id": "30157038",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/30157038"
+    },
+    {
+      "database": "Reaxys",
+      "id": "625572",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Midazolam",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Midazolam"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Buccolam",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dormicum",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mezolam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "midazolam",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "midazolamum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6931/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

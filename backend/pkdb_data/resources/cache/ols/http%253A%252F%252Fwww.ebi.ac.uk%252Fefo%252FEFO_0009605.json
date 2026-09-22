@@ -1,0 +1,319 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0009605",
+  "lang": "en",
+  "description": [
+    "A non-neoplastic or neoplastic disorder that affects the pancreas. Representative examples of non-neoplastic disorders include pancreatitis and pancreatic insufficiency. Representative examples of neoplastic disorders include cystadenomas, carcinomas, lymphomas, and neuroendocrine neoplasms.",
+    "A non-neoplastic or neoplastic disorder that affects the pancreas. Representative examples of non-neoplastic disorders include pancreatitis and pancreatic insufficiency. Representative examples of neoplastic disorders include cystadenomas, carcinomas, lymphomas, and neuroendocrine neoplasms. [ NCIt:C26842 ]"
+  ],
+  "synonyms": [
+    "disease of pancreas",
+    "disease or disorder of pancreas",
+    "disorder of pancreas",
+    "pancreas disease",
+    "pancreas disease or disorder",
+    "pancreas disorder",
+    "pancreas problem",
+    "pancreatic disorder",
+    "disease, pancreatic",
+    "diseases, pancreatic",
+    "pancreatic disease"
+  ],
+  "annotation": {
+    "gwas_trait": [
+      true
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/14583",
+      "http://identifiers.org/mesh/D010182",
+      "http://identifiers.org/snomedct/3855007",
+      "http://linkedlifedata.com/resource/umls/id/C0030286",
+      "http://purl.obolibrary.org/obo/DOID_26",
+      "http://purl.obolibrary.org/obo/NCIT_C26842",
+      "http://www.ebi.ac.uk/efo/EFO_0009605"
+    ],
+    "has_dbxref": [
+      "DOID:26",
+      "ICD10:E16",
+      "ICD10:K86",
+      "ICD9:577.8",
+      "ICD9:577.9",
+      "MEDGEN:14583",
+      "MESH:D010182",
+      "MONDO:0002356",
+      "MedDRA:10033616",
+      "NCIT:C26842",
+      "SCTID:3855007",
+      "UMLS:C0030286"
+    ],
+    "id": [
+      "EFO:0009605"
+    ]
+  },
+  "label": "pancreas disease",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "EFO_0009605",
+  "obo_id": "EFO:0009605",
+  "in_subset": [
+    "otar",
+    "rare_grouping"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A non-neoplastic or neoplastic disorder that affects the pancreas. Representative examples of non-neoplastic disorders include pancreatitis and pancreatic insufficiency. Representative examples of neoplastic disorders include cystadenomas, carcinomas, lymphomas, and neuroendocrine neoplasms.",
+      "oboXrefs": [
+        {
+          "database": "NCIT",
+          "id": "C26842",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C26842"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "26",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/DOID_26"
+    },
+    {
+      "database": "ICD10",
+      "id": "E16",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/E16"
+    },
+    {
+      "database": "ICD10",
+      "id": "K86",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/K86"
+    },
+    {
+      "database": "ICD9",
+      "id": "577.8",
+      "description": "DOID:26",
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "577.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MEDGEN",
+      "id": "14583",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/14583"
+    },
+    {
+      "database": "MESH",
+      "id": "D010182",
+      "description": "MONDO:equivalentTo",
+      "url": "http://id.nlm.nih.gov/mesh/D010182"
+    },
+    {
+      "database": "MONDO",
+      "id": "0002356",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MONDO_0002356"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10033616",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10033616"
+    },
+    {
+      "database": "NCIT",
+      "id": "C26842",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/NCIT_C26842"
+    },
+    {
+      "database": "SCTID",
+      "id": "3855007",
+      "description": "MONDO:equivalentTo",
+      "url": "http://snomed.info/id/3855007"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0030286",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0030286"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "disease of pancreas",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MONDO",
+          "id": "patterns/location_top",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "disorder of pancreas",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MONDO",
+          "id": "patterns/location_top",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pancreas disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "26",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_26"
+        },
+        {
+          "database": "MONDO",
+          "id": "patterns/location",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pancreas disease or disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MONDO",
+          "id": "design_pattern",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "MONDO",
+          "id": "patterns/location",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pancreas disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "pancreatic disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C26842",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C26842"
+        }
+      ]
+    },
+    {
+      "name": "disease, pancreatic",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MESH",
+          "id": "D010182",
+          "description": null,
+          "url": "http://id.nlm.nih.gov/mesh/D010182"
+        }
+      ]
+    },
+    {
+      "name": "diseases, pancreatic",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MESH",
+          "id": "D010182",
+          "description": null,
+          "url": "http://id.nlm.nih.gov/mesh/D010182"
+        }
+      ]
+    },
+    {
+      "name": "pancreatic disease",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MESH",
+          "id": "D010182",
+          "description": null,
+          "url": "http://id.nlm.nih.gov/mesh/D010182"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605/graph"
+    },
+    "disease_has_location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009605/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0004026"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

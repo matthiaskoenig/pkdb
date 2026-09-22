@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:82467",
+  "name": "Evans blue",
+  "definition": "An organic sodium salt that is the tetrasodium salt of 6,6'-{(3,3'-dimethyl[1,1'-biphenyl]-4,4'-diyl)bis[diazene-2,1-diyl]}bis(4-amino-5-hydroxynaphthalene-1,3-disulfonate). It is sometimes used as a counterstain, especially in fluorescent methods to suppress background autofluorescence.",
+  "formula": "C34H24N6Na4O14S4",
+  "charge": "0",
+  "mass": "960.80500",
+  "inchikey": "ATNOAWAQFYGAOY-UHFFFAOYSA-J"
+}

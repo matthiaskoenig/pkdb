@@ -1,0 +1,208 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C669",
+  "lang": "en",
+  "description": [
+    "The sulfate salt of morphine, an opiate alkaloid isolated from the plant Papaver somniferum and produced synthetically. Morphine binds to and activates specific opiate receptors (delta, mu and kappa), each of which are involved in controlling different brain functions. In the central nervous and gastrointestinal systems, this agent has widespread effects including analgesia, anxiolysis, euphoria, sedation, respiratory depression, and gastrointestinal system smooth muscle contraction."
+  ],
+  "synonyms": [
+    "Avinza",
+    "Infumorph",
+    "Kadian",
+    "MORPHINE SULFATE",
+    "MS Contin",
+    "MSir",
+    "Morphine",
+    "Morphine Sulfate",
+    "Oramorph",
+    "Oramorph SR",
+    "Roxanol",
+    "Statex SR",
+    "morphine sulfate"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to treat moderate to severe pain. It binds to opioid receptors in the central nervous system and some other tissues. Morphine sulfate is made from opium. It is a type of opiate and a type of analgesic agent."
+    ],
+    "CAS_Registry": [
+      "6211-15-0",
+      "64-31-3"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:50731",
+      "CHEBI:7003"
+    ],
+    "Chemical_Formula": [
+      "2C17H19NO3.5H2O.H2SO4"
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Morphine Sulfate"
+    ],
+    "FDA_UNII_Code": [
+      "X3P646A2J0"
+    ],
+    "Has_Free_Acid_Or_Base_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C62051"
+    ],
+    "Legacy Concept Name": [
+      "Morphine"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "41804"
+    ],
+    "NSC Number": [
+      "11441"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "41804"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "41804"
+    ],
+    "Preferred_Name": [
+      "Morphine Sulfate"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0722208"
+    ],
+    "code": [
+      "C669"
+    ]
+  },
+  "label": "Morphine Sulfate",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C669",
+  "obo_id": "NCIT:C669",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C159412",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Avinza",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Infumorph",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Kadian",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "MORPHINE SULFATE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "MS Contin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "MSir",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Morphine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Morphine Sulfate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Oramorph",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Oramorph SR",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Roxanol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Statex SR",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "morphine sulfate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C669?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C669/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C669/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C669/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C669/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C669/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C669/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

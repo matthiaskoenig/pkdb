@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:45863",
+  "name": "paclitaxel",
+  "definition": "A tetracyclic diterpenoid isolated originally from the bark of the Pacific yew tree, Taxus brevifolia. It is a mitotic inhibitor used in cancer chemotherapy. Note that the use of the former generic name 'taxol' is now limited, as Taxol is a registered trade mark.",
+  "formula": "C47H51NO14",
+  "charge": "0",
+  "mass": "853.90618",
+  "inchikey": "RCINICONZNJXQF-MZXODVADSA-N"
+}

@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:16526",
+  "name": "carbon dioxide",
+  "definition": "A one-carbon compound with formula CO2 in which the carbon is attached to each oxygen atom by a double bond. A colourless, odourless gas under normal conditions, it is produced during respiration by all animals, fungi and microorganisms that depend directly or indirectly on living or decaying plants for food.",
+  "formula": "CO2",
+  "charge": "0",
+  "mass": "44.010",
+  "inchikey": "CURLTUGMZLYLDI-UHFFFAOYSA-N"
+}

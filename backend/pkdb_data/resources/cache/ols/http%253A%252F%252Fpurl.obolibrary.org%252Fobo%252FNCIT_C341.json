@@ -1,0 +1,140 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C341",
+  "lang": "en",
+  "description": [
+    "A tricyclic compound chemically related to tricyclic antidepressants (TCA) with anticonvulsant and analgesic properties. Carbamazepine exerts its anticonvulsant activity by reducing polysynaptic responses and blocking post-tetanic potentiation. Its analgesic activity is not understood; however, carbamazepine is commonly used to treat pain associated with trigeminal neuralgia."
+  ],
+  "synonyms": [
+    "5H-Dibenz(b,f)azepine-5-carboxamide",
+    "CARBAMAZEPINE",
+    "Carbamazepine",
+    "Epitol",
+    "Tegretol"
+  ],
+  "annotation": {
+    "Accepted_Therapeutic_Use_For": [
+      "Epilepsy"
+    ],
+    "CAS_Registry": [
+      "298-46-4"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:3387"
+    ],
+    "Chemical_Formula": [
+      "C15H12N2O"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "33CM23913M"
+    ],
+    "Legacy Concept Name": [
+      "Carbamazepine"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "42418"
+    ],
+    "NSC Number": [
+      "169864"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "42418"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "42418"
+    ],
+    "Preferred_Name": [
+      "Carbamazepine"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0006949"
+    ],
+    "code": [
+      "C341"
+    ]
+  },
+  "label": "Carbamazepine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C341",
+  "obo_id": "NCIT:C341",
+  "in_subset": [
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "5H-Dibenz(b,f)azepine-5-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CARBAMAZEPINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Carbamazepine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Epitol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Tegretol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C341?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C341/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C341/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C341/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C341/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C341/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C341/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C341/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

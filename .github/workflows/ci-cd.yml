@@ -1,121 +1,163 @@
 name: CI-CD
-
 on:
   push:
-    # feature branches are tested through their pull request, tags release
     branches: [develop, main]
     tags: ['v*']
   pull_request:
     branches: [develop, main]
   workflow_dispatch:
-
-# least privilege by default, the release and sync jobs raise what they need
 permissions:
   contents: read
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  # superseded branch runs are cancelled, release runs are never cancelled
   cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
-
 jobs:
-  test:
-    name: test
+  python:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ['3.14']
     services:
       postgres:
-        image: postgres:18.0
+        image: postgres:18.6
         env:
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
+          POSTGRES_DB: pkdb_test
+          POSTGRES_USER: pkdb_test
+          POSTGRES_PASSWORD: local-test-only
+        ports: ['5432:5432']
         options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s --health-timeout 5s --health-retries 10
-      elasticsearch:
-        image: elasticsearch:7.9.2
-        env:
-          discovery.type: single-node
-          ES_JAVA_OPTS: -Xms512m -Xmx512m
-        ports:
-          - 9200:9200
-        options: >-
-          --health-cmd "curl -fs http://localhost:9200/_cluster/health"
-          --health-interval 10s --health-timeout 5s --health-retries 20
+          --health-cmd "pg_isready -U pkdb_test -d pkdb_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
     env:
-      # every variable pkdb_app/settings.py reads at import time; pytest itself
-      # gets these from [tool.pytest_env] in backend/pyproject.toml, but
-      # manage.py does not read that table, so the job sets all of them
-      PKDB_DJANGO_CONFIGURATION: local
-      PKDB_API_BASE: http://localhost:8000
-      PKDB_SECRET_KEY: test-secret-key-not-used-anywhere-else
-      PKDB_DB_NAME: postgres
-      PKDB_DB_USER: postgres
-      PKDB_DB_PASSWORD: postgres
-      PKDB_DB_SERVICE: localhost
-      PKDB_DB_PORT: "5432"
-      PKDB_ELASTICSEARCH_HOST: localhost:9200
-      PKDB_EMAIL_HOST_USER: ""
-      PKDB_EMAIL_HOST_PASSWORD: ""
+      PKDB_TEST_DATABASE_URL: postgresql+psycopg://pkdb_test:local-test-only@localhost:5432/pkdb_test
+      PKDB_DATABASE_URL: postgresql+psycopg://pkdb_test:local-test-only@localhost:5432/pkdb_test
+    defaults:
+      run:
+        working-directory: backend
     steps:
-    - uses: actions/checkout@v7
-      with:
-        persist-credentials: false
-    - name: Install uv and set the python version
-      # astral-sh/setup-uv publishes no floating major tag beyond v7
-      uses: astral-sh/setup-uv@v10.1.0
-      with:
-        python-version: "3.9"
-        enable-cache: true
-    - name: Install the backend
-      working-directory: backend
-      run: uv sync --extra dev --locked
-    - name: Create the migrations
-      # migrations are git-ignored and generated per deployment (see
-      # docker-purge.sh); a fresh checkout has none, so pytest-django would
-      # find no tables to test against without this step
-      working-directory: backend
-      run: uv run python manage.py makemigrations
-    - name: Test with tox
-      working-directory: backend
-      run: uv run tox -e py3.9
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          python-version: ${{ matrix.python }}
+          enable-cache: true
+      - run: uv sync --locked --python ${{ matrix.python }}
+      - run: uv run --python ${{ matrix.python }} --locked alembic upgrade head
+      - run: uv run --python ${{ matrix.python }} --locked alembic check
+      - run: uv run --python ${{ matrix.python }} --locked alembic downgrade base
+      - run: uv run --python ${{ matrix.python }} --locked alembic upgrade head
+      - name: Verify generated vocabulary matches authoring sources
+        run: uv run --python ${{ matrix.python }} --locked python ../scripts/update_vocabulary.py --check
+      - run: uv run --python ${{ matrix.python }} --locked pytest -q
+      - run: uv run --python ${{ matrix.python }} --locked ruff check .
+      - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
+      - run: uv run --python ${{ matrix.python }} --locked ty check
+      - run: uv build --python ${{ matrix.python }}
+      - name: Install wheel in clean environment
+        run: |
+          uv venv --python ${{ matrix.python }} /tmp/pkdb-wheel
+          uv pip install --python /tmp/pkdb-wheel/bin/python dist/*.whl
+          cd /tmp
+          /tmp/pkdb-wheel/bin/python -c 'import pkdb, numpy, scipy, pandas, pint; from pkpdutils import Timecourse, nca_single'
+      - name: Build pinned runtime image
+        run: docker build --build-arg PYTHON_VERSION=${{ matrix.python }} -t pkdb:py${{ matrix.python }} .
+      - name: Verify installed container runtime
+        env:
+          PKDB_TEST_IMAGE: pkdb:py${{ matrix.python }}
+          PKDB_TEST_IMAGE_PYTHON: ${{ matrix.python }}
+        run: uv run --python ${{ matrix.python }} --locked pytest system_tests/test_runtime.py -q
+      - name: Verify rebuild accounting tooling
+        run: |
+          cd ..
+          PYTHONPATH=. backend/.venv/bin/python -m pytest tools/backend_migration -q
+      - name: Verify PostgreSQL and attachment restore
+        env:
+          PKDB_TEST_POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
+        run: uv run --python ${{ matrix.python }} --locked pytest system_tests/test_restore.py -q
 
-  docker:
-    name: docker
+  compose:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      COMPOSE_PROJECT_NAME: pkdb-ci
     steps:
-    - uses: actions/checkout@v7
-      with:
-        persist-credentials: false
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v4
-    - name: Build the backend image
-      uses: docker/build-push-action@v7
-      with:
-        context: backend
-        push: false
-        cache-from: type=gha
-        cache-to: type=gha,mode=max
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Start the documented local stack
+        run: docker compose up --build --wait --wait-timeout 180
+      - name: Verify automatic schema and vocabulary bootstrap
+        run: |
+          curl --fail http://127.0.0.1:18083/health/ready
+          curl --fail 'http://127.0.0.1:18083/api/v1/info_nodes/?page_size=1'
+          printf '%s\n' 'Local-CI-password-42!' | docker compose exec -T backend pkdb create-admin mkoenig --email ci@example.org --password-stdin
+          docker compose restart backend
+          docker compose up -d --wait --wait-timeout 180
+          python - <<'PYTHON'
+          import http.cookiejar
+          import json
+          import urllib.error
+          import urllib.request
+
+          base = "http://127.0.0.1:18083"
+          browser = urllib.request.build_opener(
+              urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar())
+          )
+          with browser.open(base + "/api/v1/auth/csrf", timeout=30) as response:
+              csrf = json.load(response)["csrf_token"]
+          request = urllib.request.Request(
+              base + "/api/v1/auth/login",
+              data=json.dumps({"username": "mkoenig", "password": "Local-CI-password-42!"}).encode(),
+              headers={
+                  "Content-Type": "application/json",
+                  "Origin": "http://localhost:8080",
+                  "X-CSRF-Token": csrf,
+              },
+          )
+          with browser.open(request, timeout=30) as response:
+              account = json.load(response)
+              assert account == {"username": "mkoenig", "role": "admin"}
+              assert "HttpOnly" in response.headers["Set-Cookie"]
+          with browser.open(base + "/api/v1/me", timeout=30) as response:
+              profile = json.load(response)
+              assert profile["mfa_required"] and not profile["mfa_enrolled"]
+          for path, expected in (("/api/v1/admin/users", 403), ("/api-token-auth/", 410)):
+              request = urllib.request.Request(base + path)
+              if path == "/api-token-auth/":
+                  request.data = json.dumps({"username": "mkoenig", "password": "Local-CI-password-42!"}).encode()
+                  request.add_header("Content-Type", "application/json")
+                  request.add_header("Origin", "http://localhost:8080")
+                  request.add_header("X-CSRF-Token", csrf)
+              try:
+                  browser.open(request, timeout=30)
+              except urllib.error.HTTPError as error:
+                  assert error.code == expected, (path, error.code)
+              else:
+                  raise AssertionError(f"{path} did not return {expected}")
+          PYTHON
+      - name: Show logs on failure
+        if: failure()
+        run: docker compose logs --tail 100
+      - name: Remove disposable CI stack
+        if: always()
+        run: docker compose down -v
 
   tests:
-    # the one check the branch protection requires
     name: tests
-    needs: [test, docker]
+    needs: [python, compose]
     if: always()
     runs-on: ubuntu-latest
-    timeout-minutes: 5
     steps:
-    - name: Check the result of the test and docker jobs
-      env:
-        TEST_RESULT: ${{ needs.test.result }}
-        DOCKER_RESULT: ${{ needs.docker.result }}
-      run: |
-        echo "test: $TEST_RESULT"
-        echo "docker: $DOCKER_RESULT"
-        test "$TEST_RESULT" = "success"
-        test "$DOCKER_RESULT" = "success"
+      - name: Require Python 3.14 and local Docker setup
+        env:
+          PYTHON_RESULT: ${{ needs.python.result }}
+          COMPOSE_RESULT: ${{ needs.compose.result }}
+        run: |
+          test "$PYTHON_RESULT" = success
+          test "$COMPOSE_RESULT" = success
 
   release:
     # the backend is not published on PyPI, a release is the tag with its

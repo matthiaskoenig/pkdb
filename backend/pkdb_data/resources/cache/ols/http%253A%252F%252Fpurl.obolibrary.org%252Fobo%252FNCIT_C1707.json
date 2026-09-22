@@ -1,0 +1,146 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C1707",
+  "lang": "en",
+  "description": [
+    "A synthetic triazole with antifungal activity. Voriconazole selectively inhibits 14-alpha-lanosterol demethylation in fungi, preventing the production of ergosterol, an essential constituent of the fungal cell membrane, and resulting in fungal cell lysis. (NCI04)"
+  ],
+  "synonyms": [
+    "(2R,3S)-2-(2,4-Difluorophenyl)-3-(5-fluoropyrimidin-4-yl)-1-(1,2,4-triazol-1-yl)butan-2-ol",
+    "VORICONAZOLE",
+    "Vfend",
+    "Voriconazole",
+    "voriconazole"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug that treats infections caused by fungi."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Aspergillosis, invasive; Esophageal candidiasis; Fungal infections, non-aspergillosis"
+    ],
+    "CAS_Registry": [
+      "137234-62-9"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:10023"
+    ],
+    "Chemical_Formula": [
+      "C16H14F3N5O"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "HemOnc"
+    ],
+    "Display_Name": [
+      "Voriconazole"
+    ],
+    "FDA_UNII_Code": [
+      "JFU09I87TR"
+    ],
+    "Legacy Concept Name": [
+      "Voriconazole"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "42690"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "42690"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "42690"
+    ],
+    "Preferred_Name": [
+      "Voriconazole"
+    ],
+    "Semantic_Type": [
+      "Antibiotic",
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0393080"
+    ],
+    "code": [
+      "C1707"
+    ]
+  },
+  "label": "Voriconazole",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C1707",
+  "obo_id": "NCIT:C1707",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(2R,3S)-2-(2,4-Difluorophenyl)-3-(5-fluoropyrimidin-4-yl)-1-(1,2,4-triazol-1-yl)butan-2-ol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "VORICONAZOLE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Vfend",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Voriconazole",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "voriconazole",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1707?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1707/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1707/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1707/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1707/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1707/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1707/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

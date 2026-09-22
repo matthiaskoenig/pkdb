@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:4551",
+  "name": "digoxin",
+  "definition": "A  cardenolide glycoside that is digitoxin beta-hydroxylated at C-12. A cardiac glycoside extracted from the foxglove plant, Digitalis lanata, it is used to control ventricular rate in atrial fibrillation and in the management of congestive heart failure with atrial fibrillation, but the margin between toxic and therapeutic doses is small.",
+  "formula": "C41H64O14",
+  "charge": "0",
+  "mass": "780.93850",
+  "inchikey": "LTMHDMANZUZIPE-PUGKRICDSA-N"
+}

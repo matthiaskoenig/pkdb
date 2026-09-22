@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:3638",
+  "name": "chloroquine",
+  "definition": "An aminoquinoline that is quinoline which is substituted at position 4 by a [5-(diethylamino)pentan-2-yl]amino group at at position 7 by chlorine. It is used for the treatment of malaria, hepatic amoebiasis, lupus erythematosus, light-sensitive skin eruptions, and rheumatoid arthritis.",
+  "formula": "C18H26ClN3",
+  "charge": "0",
+  "mass": "319.87200",
+  "inchikey": "WHTVZRBIWZFKQO-UHFFFAOYSA-N"
+}

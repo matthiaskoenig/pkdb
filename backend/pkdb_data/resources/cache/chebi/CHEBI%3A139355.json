@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:139355",
+  "name": "methacetin-(methoxy-(13)C)",
+  "definition": "A (13)C-modified compound that is methacetin which has (13)C as the predominant isotope of the methoxy carbon. In normal subjects, methacetin is rapidly metabolised in the liver, being dealkylated by hepatic CYP1A2 to give paracetamol (acetaminophen); the methyl of the methoxy group is eliminated as CO2. Administering methacetin-(methoxy-(13)C) to a patient enables the liver (cytochrome P-450 1A2) function to be determined quickly and precisely by measuring the (13)CO2 in the breath (e.g. by isotope-selective non-dispersive infrared spectrometry (NDIRS)).",
+  "formula": "C8[13C]H11NO2",
+  "charge": "0",
+  "mass": "166.184",
+  "inchikey": "XVAIDCNLVLTVFM-VQEHIDDOSA-N"
+}

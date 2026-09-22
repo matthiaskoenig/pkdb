@@ -1,0 +1,60 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NBO_0000067",
+  "lang": "en",
+  "description": [
+    "Behavior related to reduced or absent consciousness, relatively suspended sensory activity, and inactivity of nearly all voluntary muscles."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "Date": [
+      "2011-04-14T01:20:02Z"
+    ],
+    "created_by": [
+      "George Gkoutos"
+    ],
+    "has_obo_namespace": [
+      "behavior_ontology"
+    ]
+  },
+  "label": "asleep",
+  "ontology_name": "nbo",
+  "ontology_prefix": "NBO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/nbo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NBO_0000067",
+  "obo_id": "NBO:0000067",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/nbo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNBO_0000067?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/nbo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNBO_0000067/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/nbo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNBO_0000067/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/nbo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNBO_0000067/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/nbo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNBO_0000067/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/nbo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNBO_0000067/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/nbo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNBO_0000067/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

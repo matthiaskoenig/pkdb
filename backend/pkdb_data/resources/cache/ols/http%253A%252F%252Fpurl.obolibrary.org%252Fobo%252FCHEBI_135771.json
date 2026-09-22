@@ -1,0 +1,160 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_135771",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "CS-622",
+    "temocapril HCl",
+    "temocapril hydrochloride",
+    "temocaprilat"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C23H28N2O5S2"
+    ],
+    "has_dbxref": [
+      "CAS:111902-57-9",
+      "Drug_Central:2586",
+      "HMDB:HMDB0061720"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:135771"
+    ],
+    "inchi": [
+      "InChI=1S/C23H28N2O5S2/c1-2-30-23(29)17(11-10-16-7-4-3-5-8-16)24-18-15-32-20(19-9-6-12-31-19)13-25(22(18)28)14-21(26)27/h3-9,12,17-18,20,24H,2,10-11,13-15H2,1H3,(H,26,27)/t17-,18-,20-/m0/s1"
+    ],
+    "inchikey": [
+      "FIQOFIRCTOWDOW-BJLQDIEVSA-N"
+    ],
+    "mass": [
+      "476.612"
+    ],
+    "monoisotopicmass": [
+      "476.14396"
+    ],
+    "smiles": [
+      "C(C(O)=O)N1C[C@H](SC[C@@H](C1=O)N[C@@H](CCC2=CC=CC=C2)C(OCC)=O)C3=CC=CS3"
+    ]
+  },
+  "label": "temocapril",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_135771",
+  "obo_id": "CHEBI:135771",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "111902-57-9",
+      "description": "DrugCentral",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2586",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2586"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0061720",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0061720"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "CS-622",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "temocapril HCl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "temocapril hydrochloride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "temocaprilat",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135771?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135771/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135771/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135771/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135771/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135771/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135771/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

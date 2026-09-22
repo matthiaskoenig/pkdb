@@ -1,0 +1,174 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_80473",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "5-Ammu",
+    "AAMU",
+    "N-(6-amino-3-methyl-2,4-dioxo-1,2,3,4-tetrahydropyrimidin-5-yl)acetamide"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C7H10N4O3"
+    ],
+    "has_dbxref": [
+      "CAS:19893-78-8",
+      "HMDB:HMDB0004400",
+      "KEGG:C16366",
+      "PMID:11393735",
+      "PMID:12534641",
+      "PMID:15685651",
+      "PMID:3506820"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:80473"
+    ],
+    "inchi": [
+      "InChI=1S/C7H10N4O3/c1-3(12)9-4-5(8)10-7(14)11(2)6(4)13/h8H2,1-2H3,(H,9,12)(H,10,14)"
+    ],
+    "inchikey": [
+      "POQOTWQIYYNXAT-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "198.17930"
+    ],
+    "monoisotopicmass": [
+      "198.07529"
+    ],
+    "smiles": [
+      "CC(=O)Nc1c(N)[nH]c(=O)n(C)c1=O"
+    ]
+  },
+  "label": "5-Acetylamino-6-amino-3-methyluracil",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_80473",
+  "obo_id": "CHEBI:80473",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "19893-78-8",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0004400",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0004400"
+    },
+    {
+      "database": "KEGG",
+      "id": "C16366",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C16366"
+    },
+    {
+      "database": "PMID",
+      "id": "11393735",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11393735"
+    },
+    {
+      "database": "PMID",
+      "id": "12534641",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12534641"
+    },
+    {
+      "database": "PMID",
+      "id": "15685651",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15685651"
+    },
+    {
+      "database": "PMID",
+      "id": "3506820",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3506820"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-Ammu",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "HMDB",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AAMU",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(6-amino-3-methyl-2,4-dioxo-1,2,3,4-tetrahydropyrimidin-5-yl)acetamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "HMDB",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80473?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80473/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80473/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80473/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80473/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80473/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80473/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

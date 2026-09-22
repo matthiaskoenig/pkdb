@@ -1,0 +1,57 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/FMA_59862",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Salivary gland secretion"
+  ],
+  "annotation": {
+    "has_obo_namespace": [
+      "fma"
+    ],
+    "id": [
+      "FMA:59862"
+    ]
+  },
+  "label": "Saliva",
+  "ontology_name": "fma",
+  "ontology_prefix": "FMA",
+  "ontology_iri": "http://purl.obolibrary.org/obo/fma.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "FMA_59862",
+  "obo_id": "FMA:59862",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_59862?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_59862/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_59862/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_59862/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_59862/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_59862/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_59862/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

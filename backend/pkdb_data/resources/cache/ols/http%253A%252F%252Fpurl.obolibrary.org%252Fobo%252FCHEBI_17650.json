@@ -1,0 +1,410 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_17650",
+  "lang": "en",
+  "description": [
+    "A 17alpha-hydroxy-C21-steroid that is pregn-4-ene substituted by oxo groups at positions 3 and 20 and hydroxy groups at positions 11, 17 and 21. Cortisol is a corticosteroid hormone or glucocorticoid produced by zona fasciculata of the adrenal cortex, which is a part of the adrenal gland. It is usually referred to as the \"stress hormone\" as it is involved in response to stress and anxiety, controlled by corticotropin-releasing hormone (CRH). It increases blood pressure and blood sugar, and reduces immune responses."
+  ],
+  "synonyms": [
+    "11beta,17,21-trihydroxypregn-4-ene-3,20-dione",
+    "Cortisol",
+    "cortisol",
+    "(11beta)-11,17,21-trihydroxypregn-4-ene-3,20-dione",
+    "11beta,17alpha,21-Trihydroxy-4-pregnene-3,20-dione",
+    "11beta,17alpha,21-trihydroxy-4-pregnene-3,20-dione",
+    "11beta-hydrocortisone",
+    "17-hydroxycorticosterone",
+    "4-pregnen-11beta,17alpha,21-triol-3,20-dione",
+    "Hydrocortisone",
+    "Kendall's compound F",
+    "Reichstein's substance M",
+    "hidrocortisona",
+    "hydrocortisone",
+    "hydrocortisonum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C21H30O5"
+    ],
+    "has_alternative_id": [
+      "CHEBI:14023",
+      "CHEBI:24633",
+      "CHEBI:3893",
+      "CHEBI:58221"
+    ],
+    "has_dbxref": [
+      "Beilstein:1354819",
+      "CAS:50-23-7",
+      "DrugBank:DB00741",
+      "Drug_Central:1388",
+      "KEGG:C00735",
+      "KEGG:D00088",
+      "LINCS:LSM-5980",
+      "LIPID_MAPS_instance:LMST02030001",
+      "PDBeChem:HCY",
+      "PMID:10438974",
+      "PMID:2268561",
+      "Patent:US2602769",
+      "Wikipedia:Hydrocortisone"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:17650"
+    ],
+    "inchi": [
+      "InChI=1S/C21H30O5/c1-19-7-5-13(23)9-12(19)3-4-14-15-6-8-21(26,17(25)11-22)20(15,2)10-16(24)18(14)19/h9,14-16,18,22,24,26H,3-8,10-11H2,1-2H3/t14-,15-,16-,18+,19-,20-,21-/m0/s1"
+    ],
+    "inchikey": [
+      "JYGXADMDTFJGBT-VWUMJDOOSA-N"
+    ],
+    "mass": [
+      "362.45990"
+    ],
+    "monoisotopicmass": [
+      "362.20932"
+    ],
+    "smiles": [
+      "[H][C@@]12CCC3=CC(=O)CC[C@]3(C)[C@@]1([H])[C@@H](O)C[C@@]1(C)[C@@]2([H])CC[C@]1(O)C(=O)CO"
+    ]
+  },
+  "label": "cortisol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_17650",
+  "obo_id": "CHEBI:17650",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "1354819",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "50-23-7",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "50-23-7",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "50-23-7",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00741",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00741"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1388",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1388"
+    },
+    {
+      "database": "KEGG",
+      "id": "C00735",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C00735"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00088",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00088"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5980",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "LIPID_MAPS_instance",
+      "id": "LMST02030001",
+      "description": "LIPID MAPS",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMST02030001"
+    },
+    {
+      "database": "PDBeChem",
+      "id": "HCY",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/HCY"
+    },
+    {
+      "database": "PMID",
+      "id": "10438974",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10438974"
+    },
+    {
+      "database": "PMID",
+      "id": "2268561",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2268561"
+    },
+    {
+      "database": "Patent",
+      "id": "US2602769",
+      "description": null,
+      "url": "https://www.google.com/patents/US2602769"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Hydrocortisone",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Hydrocortisone"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "11beta,17,21-trihydroxypregn-4-ene-3,20-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cortisol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cortisol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(11beta)-11,17,21-trihydroxypregn-4-ene-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "11beta,17alpha,21-Trihydroxy-4-pregnene-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "11beta,17alpha,21-trihydroxy-4-pregnene-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "11beta-hydrocortisone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17-hydroxycorticosterone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-pregnen-11beta,17alpha,21-triol-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Hydrocortisone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Kendall's compound F",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Reichstein's substance M",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hidrocortisona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hydrocortisone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hydrocortisonum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17650?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17650/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17650/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17650/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17650/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17650/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17650/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17650/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_parent_hydride": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17650/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_parent_hydride"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

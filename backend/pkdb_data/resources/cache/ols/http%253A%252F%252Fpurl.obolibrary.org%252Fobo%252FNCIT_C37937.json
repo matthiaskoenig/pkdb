@@ -1,0 +1,122 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C37937",
+  "lang": "en",
+  "description": [
+    "An endogenous amino acid derivative produced by vertebrate animals and occurring primarily in muscle cells.  Creatine is important for energy storage; it is phosphorylated to creatine phosphate, which serves as a phosphate donor in the conversion of ADP to ATP and supplies energy necessary for muscle contraction.  Dietary supplementation with creatine may improve muscle wasting associated with cancer and other chronic diseases."
+  ],
+  "synonyms": [
+    "CREATINE",
+    "Creatine",
+    "Glycine, N-(aminoiminomethyl)-N-methyl-",
+    "creatine"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A substance that is made by the body and used to store energy. It is being studied in the treatment of weight loss related to cancer. It is derived from the amino acid arginine."
+    ],
+    "CAS_Registry": [
+      "57-00-1"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:16919"
+    ],
+    "Chemical_Formula": [
+      "C4H9N3O2"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Creatine"
+    ],
+    "FDA_UNII_Code": [
+      "MU72812GK0"
+    ],
+    "Legacy Concept Name": [
+      "Creatine"
+    ],
+    "Preferred_Name": [
+      "Creatine"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical"
+    ],
+    "UMLS_CUI": [
+      "C0010286"
+    ],
+    "code": [
+      "C37937"
+    ]
+  },
+  "label": "Creatine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C37937",
+  "obo_id": "NCIT:C37937",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CREATINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Creatine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Glycine, N-(aminoiminomethyl)-N-methyl-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "creatine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37937?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37937/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37937/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37937/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37937/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37937/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C37937/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

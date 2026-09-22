@@ -1,0 +1,114 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C61769",
+  "lang": "en",
+  "description": [
+    "A 2-aminoethyl oxime ether of aralkylketones, with antidepressant, antiobsessive-compulsive, and anxiolytic properties. Fluvoxamine, chemically unrelated to other selective serotonin reuptake inhibitors, selectively blocks serotonin reuptake by inhibiting the serotonin reuptake pump at the presynaptic neuronal membrane. This increases serotonin levels within the synaptic cleft, prolongs serotonergic transmission and decreased serotonin turnover, thereby leading to antidepressant, anxiolytic and antiobsessive-compulsive effects. Fluvoxamine shows no significant affinity for histaminergic, alpha or beta adrenergic, muscarinic, or dopaminergic receptors in vitro."
+  ],
+  "synonyms": [
+    "FLUVOXAMINE",
+    "Fluvoxamine",
+    "fluvoxamine"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to treat obsessive-compulsive disorder. It is a type of antidepressant agent and selective serotonin reuptake inhibitor (SSRI)."
+    ],
+    "CAS_Registry": [
+      "54739-18-3"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:5138"
+    ],
+    "Chemical_Formula": [
+      "C15H21F3N2O2"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "O4L1XPO44W"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C29063"
+    ],
+    "Legacy Concept Name": [
+      "Fluvoxamine"
+    ],
+    "Preferred_Name": [
+      "Fluvoxamine"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0085228"
+    ],
+    "code": [
+      "C61769"
+    ]
+  },
+  "label": "Fluvoxamine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C61769",
+  "obo_id": "NCIT:C61769",
+  "in_subset": [
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "FLUVOXAMINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Fluvoxamine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "fluvoxamine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61769?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61769/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61769/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61769/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61769/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61769/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61769/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

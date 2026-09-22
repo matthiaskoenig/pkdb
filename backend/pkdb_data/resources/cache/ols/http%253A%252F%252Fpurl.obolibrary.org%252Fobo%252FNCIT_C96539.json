@@ -1,0 +1,128 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C96539",
+  "lang": "en",
+  "description": [
+    "An orally active inhibitor of coagulation factor Xa (activated factor X) with anticoagulant activity. Edoxaban is administered as edoxaban tosylate. This agent has an elimination half-life of 9-11 hours and undergoes renal excretion."
+  ],
+  "synonyms": [
+    "DU-176",
+    "EDOXABAN",
+    "Edoxaban",
+    "Ethanediamide, n1-(5-chloro-2-pyridinyl)-n2-((1s,2r,4s)-4- ((dimethylamino)carbonyl)- 2-(((4,5,6,7-tetrahydro-5-methylthiazolo(5,4-c)pyridin-2-yl)carbonyl)amino)cyclohexyl)-",
+    "N-(5-chloropyridin-2-yl)-N'-[(1S,2R,4S)-4-(N,N-dimethylcarbamoyl)-2-(5-methyl-4,5,6,7- tetrahydro[1,3]thiazolo[5,4-c]pyridine-2-carboxamido)cyclohexyl]oxamide"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "480449-70-5"
+    ],
+    "Chemical_Formula": [
+      "C24H30ClN7O4S"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "HemOnc"
+    ],
+    "Display_Name": [
+      "Edoxaban"
+    ],
+    "FDA_UNII_Code": [
+      "NDU3J18APO"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C96542"
+    ],
+    "Preferred_Name": [
+      "Edoxaban"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C2975435"
+    ],
+    "code": [
+      "C96539"
+    ]
+  },
+  "label": "Edoxaban",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C96539",
+  "obo_id": "NCIT:C96539",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "DU-176",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "EDOXABAN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Edoxaban",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ethanediamide, n1-(5-chloro-2-pyridinyl)-n2-((1s,2r,4s)-4- ((dimethylamino)carbonyl)- 2-(((4,5,6,7-tetrahydro-5-methylthiazolo(5,4-c)pyridin-2-yl)carbonyl)amino)cyclohexyl)-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "N-(5-chloropyridin-2-yl)-N'-[(1S,2R,4S)-4-(N,N-dimethylcarbamoyl)-2-(5-methyl-4,5,6,7- tetrahydro[1,3]thiazolo[5,4-c]pyridine-2-carboxamido)cyclohexyl]oxamide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96539?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96539/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96539/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96539/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96539/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96539/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C96539/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

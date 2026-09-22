@@ -17,9 +17,6 @@ let SearchMixin = {
 
             this.cancelDownload();
             this.cancelSource = axios.CancelToken.source();
-            if (localStorage.getItem('token')) {
-                headers = {Authorization: 'Token ' + localStorage.getItem('token')}
-            }
             axios.get(this.url + "&download=true",
                 {
                     headers: headers,

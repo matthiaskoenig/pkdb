@@ -1,0 +1,150 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29159",
+  "lang": "en",
+  "description": [
+    "An orally bioavailable, long-acting angiotensin-converting enzyme (ACE) inhibitor with antihypertensive activity. Lisinopril, a synthetic peptide derivative, specifically and competitively inhibits ACE, which results in a decrease in the production of the potent vasoconstrictor angiotensin II and, so, diminished vasopressor activity. In addition, angiotensin II-stimulated aldosterone secretion by the adrenal cortex is decreased which results in a decrease in sodium and water retention and an increase in serum potassium."
+  ],
+  "synonyms": [
+    "LISINOPRIL",
+    "Lisinopril",
+    "N2-[(1S)-1-Carboxy-3-phenylpropyl]-L-lysyl-L-proline, Dihydrate",
+    "Prinivil",
+    "Zestril",
+    "lisinopril"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to treat high blood pressure and certain heart conditions. It is also being studied in the prevention and treatment of side effects caused by some anticancer drugs. It blocks certain enzymes that cause blood vessels to constrict (narrow). It is a type of angiotensin-converting enzyme (ACE) inhibitor."
+    ],
+    "CAS_Registry": [
+      "83915-83-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:6503"
+    ],
+    "Chemical_Formula": [
+      "C21H31N3O5.2H2O"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Lisinopril"
+    ],
+    "FDA_UNII_Code": [
+      "E7199S1YWR"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C91297"
+    ],
+    "Legacy Concept Name": [
+      "Lisinopril"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "658710"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "658710"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "658710"
+    ],
+    "Preferred_Name": [
+      "Lisinopril"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0065374"
+    ],
+    "code": [
+      "C29159"
+    ]
+  },
+  "label": "Lisinopril",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29159",
+  "obo_id": "NCIT:C29159",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "LISINOPRIL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lisinopril",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "N2-[(1S)-1-Carboxy-3-phenylpropyl]-L-lysyl-L-proline, Dihydrate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Prinivil",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Zestril",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "lisinopril",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29159?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29159/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29159/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29159/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29159/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29159/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29159/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

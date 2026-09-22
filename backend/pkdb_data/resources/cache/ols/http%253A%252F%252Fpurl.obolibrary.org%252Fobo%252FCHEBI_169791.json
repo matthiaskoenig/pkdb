@@ -1,0 +1,118 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_169791",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "2-[(4-methoxy-3,5-dimethylpyridin-2-yl)methylsulinyl]-3H-benzimidazol-5-ol"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C16H17N3O3S"
+    ],
+    "has_dbxref": [
+      "CAS:151602-49-2",
+      "Chemspider:8579886",
+      "HMDB:HMDB0014011"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:169791"
+    ],
+    "inchi": [
+      "InChI=1S/C16H17N3O3S/c1-9-7-17-14(10(2)15(9)22-3)8-23(21)16-18-12-5-4-11(20)6-13(12)19-16/h4-7,20H,8H2,1-3H3,(H,18,19)"
+    ],
+    "inchikey": [
+      "TWXDTVZNDQKCOS-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "331.390"
+    ],
+    "monoisotopicmass": [
+      "331.09906"
+    ],
+    "smiles": [
+      "S(=O)(CC1=NC=C(C(OC)=C1C)C)C=2NC3=C(N2)C=CC(O)=C3"
+    ]
+  },
+  "label": "5'-O-Desmethyl omeprazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_169791",
+  "obo_id": "CHEBI:169791",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "151602-49-2",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "Chemspider",
+      "id": "8579886",
+      "description": null,
+      "url": "http://www.chemspider.com/Chemical-Structure.8579886.html"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014011",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014011"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-[(4-methoxy-3,5-dimethylpyridin-2-yl)methylsulinyl]-3H-benzimidazol-5-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "SUBMITTER",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_169791/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

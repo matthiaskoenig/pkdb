@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:48991",
+  "name": "7-methylxanthine",
+  "definition": "An oxopurine that is xanthine in which the hydrogen attached to the nitrogen at position 7 is replaced by a methyl group. It is an intermediate metabolite in the synthesis of caffeine.",
+  "formula": "C6H6N4O2",
+  "charge": "0",
+  "mass": "166.13760",
+  "inchikey": "PFWLFWPASULGAN-UHFFFAOYSA-N"
+}

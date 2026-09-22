@@ -17,7 +17,7 @@ git fetch --prune origin
 Then sync the backend environment and install the git hook:
 
 ```bash
-cd backend && uv sync --extra dev && cd ..
+cd backend && uv sync --locked --python 3.14 && cd ..
 uv run --project backend pre-commit install
 ```
 
@@ -30,7 +30,7 @@ Start every piece of work from the current `develop`:
 ```bash
 git switch develop
 git pull
-git switch -c fix-elasticsearch-host
+git switch -c improve-study-validation
 ```
 
 Name the branch after the change. Keep a branch small and short lived: one topic per branch, merged within days. Small branches are reviewed faster and rarely conflict.
@@ -54,7 +54,7 @@ uv run pytest -k <keyword> -q
 ## 3. Push and open the pull request
 
 ```bash
-git push -u origin fix-elasticsearch-host
+git push -u origin improve-study-validation
 ```
 
 Open the pull request against `develop`, either with the link git prints after the push or on the GitHub page of the repository. Fill in the template. The maintainer is requested as reviewer automatically.
@@ -62,7 +62,7 @@ Open the pull request against `develop`, either with the link git prints after t
 ## 4. Get the checks green
 
 `tests`
-:   The backend tests against postgres and elasticsearch, and the docker build. Run it locally: `cd backend && uv run tox -e py3.9`.
+:   Backend tests with PostgreSQL on Python 3.14, container tests, and Compose startup. Follow [Development](development.md) to run them locally.
 
 `ruff`
 :   Lint and format of `backend/`. Run it locally: `uv run --project backend ruff check .`, `uv run --project backend ruff format --check .`.
@@ -77,7 +77,7 @@ A red check shows the reason in its log on the pull request page ("Details"). Fi
 
 The most common cases:
 
-- **`tests` fails.** Start the test services if they are not running (`docker compose -f docker-compose-test.yml up -d --wait`) and run `cd backend && uv run pytest -q` to see the failure directly.
+- **`tests` fails.** Start the test services if they are not running (`docker compose -f compose.test.yaml up -d --wait`) and run `cd backend && uv run pytest -q` to see the failure directly.
 - **`ruff` fails.** Run `uv run --project backend ruff check --fix .`, fix what remains by hand, and `uv run --project backend ruff format .`; commit the result.
 - **`ty` fails.** Run `cd backend && uv run ty check` and fix the diagnostic, or suppress an unavoidable one with a rule specific `# ty: ignore[rule-name]`.
 
@@ -88,7 +88,7 @@ When the checks are green and all review comments are resolved the pull request 
 ```bash
 git switch develop
 git pull
-git branch -D fix-elasticsearch-host
+git branch -D improve-study-validation
 ```
 
 `-D` instead of `-d`: after a squash or rebase merge the commits on `develop` are new ones, so git does not recognize the local branch as merged.
@@ -109,6 +109,10 @@ If you are not comfortable with a rebase, the button "Update branch" on the pull
 
 ## What does not belong in a commit
 
-- credentials: the deployment env files (`.env`, `.env.develop`, `.env.production`, `.env.alpha`) are gitignored; `.env.local` in the repository holds development values only
-- generated migrations: `*/migrations/` under `backend/` is gitignored, see [Migrations](development.md#migrations)
+- credentials: the deployment env files (`.env`, `.env.develop`, `.env.production`, `.env.alpha`) are gitignored; `.env.example` documents local defaults
+- generated caches and local data; commit schema migrations under `backend/alembic/versions/`
 - files above 2 MB are rejected by the git hook
+
+## Markdown formatting
+
+Keep each prose paragraph on a single source line and use soft wrapping in your editor. Do not insert line breaks to fit a column width. Keep the structural line breaks required by headings, separate list items, tables, and code blocks.

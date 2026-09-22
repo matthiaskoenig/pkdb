@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:17650",
+  "name": "cortisol",
+  "definition": "A 17alpha-hydroxy-C21-steroid that is pregn-4-ene substituted by oxo groups at positions 3 and 20 and hydroxy groups at positions 11, 17 and 21. Cortisol is a corticosteroid hormone or glucocorticoid produced by zona fasciculata of the adrenal cortex, which is a part of the adrenal gland. It is usually referred to as the \"stress hormone\" as it is involved in response to stress and anxiety, controlled by corticotropin-releasing hormone (CRH). It increases blood pressure and blood sugar, and reduces immune responses",
+  "formula": "C21H30O5",
+  "charge": "0",
+  "mass": "362.45990",
+  "inchikey": "JYGXADMDTFJGBT-VWUMJDOOSA-N"
+}

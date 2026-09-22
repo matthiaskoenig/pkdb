@@ -1,0 +1,114 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C65495",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "DULOXETINE",
+    "Duloxetine",
+    "duloxetine"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to treat depression and peripheral neuropathy (pain, numbness, tingling, burning, or weakness in the hands or feet) that can occur with diabetes. It is also being studied in the treatment of peripheral neuropathy caused by certain anticancer drugs. Cymbalta increases the amount of certain chemicals in the brain that help relieve depression and pain. It is a type of serotonin and norepinephrine reuptake inhibitor.",
+      "An orally bioavailable fluoxetine derivative belonging to the class of selective serotonin (5-HT) and norepinephrine (NE) reuptake inhibitors (SNRIs), with central pain inhibitory, anxiolytic and antidepressant activities. Upon oral administration, duloxetine selectively prevents the reuptake of 5-HT and NE via transporter complexes on the pre-synaptic membrane, thereby increasing the level of these neurotransmitters within the synaptic cleft. This potentiates serotonergic and noradrenergic activities in the central nervous system (CNS), and alleviates anxiety, depression, and neuropathy sensations, such as neuropathic pain."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Generalized Anxiety Disorder, Diabetic Peripheral Neuropathic Pain, Major Depressive Disorder"
+    ],
+    "CAS_Registry": [
+      "116539-59-4"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:36795"
+    ],
+    "Chemical_Formula": [
+      "C18H19NOS"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "O5TNM5N07U"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C65496"
+    ],
+    "Legacy Concept Name": [
+      "Duloxetine"
+    ],
+    "Preferred_Name": [
+      "Duloxetine"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0245561"
+    ],
+    "code": [
+      "C65495"
+    ]
+  },
+  "label": "Duloxetine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C65495",
+  "obo_id": "NCIT:C65495",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "DULOXETINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Duloxetine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "duloxetine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65495?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65495/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65495/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65495/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65495/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65495/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65495/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

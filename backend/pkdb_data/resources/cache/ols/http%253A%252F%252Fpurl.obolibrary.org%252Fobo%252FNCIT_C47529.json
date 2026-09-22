@@ -1,0 +1,149 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C47529",
+  "lang": "en",
+  "description": [
+    "An azetidinone derivative and a cholesterol absorption inhibitor with lipid-lowering activity. Ezetimibe appears to interact physically with cholesterol transporters at the brush border of the small intestine and inhibits the intestinal absorption of cholesterol and related phytosterols. As a result, ezetimibe causes a decrease in the level of blood cholesterol or an increase in the clearance of cholesterol from the bloodstream. Overall, the following effects observed are a reduction of hepatic cholesterol stores and a reduction of total cholesterol, LDL cholesterol, and other triglycerides in the blood."
+  ],
+  "synonyms": [
+    "1-(4-fluorophenyl)-3(R)-[3-(4-fluorophenyl)-3(S)-hydroxypropyl]-4(S)-(4-hydroxyphenyl)-2-azetidinone",
+    "EZETIMIBE",
+    "Ezedoc",
+    "Ezetimibe",
+    "Zetia"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A cholesterol absorption inhibitor with lipid-lowering activity"
+    ],
+    "CAS_Registry": [
+      "163222-33-1"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:49040"
+    ],
+    "Chemical_Formula": [
+      "C24H21F2NO3"
+    ],
+    "Contributing_Source": [
+      "ACC/AHA",
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Ezetimibe"
+    ],
+    "FDA_UNII_Code": [
+      "EOR26LQQ24"
+    ],
+    "Has_ACC-AHA_SARS2_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C49487",
+      "http://purl.obolibrary.org/obo/NCIT_C49488"
+    ],
+    "Legacy Concept Name": [
+      "Ezetimibe"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "754008"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "754008"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "754008"
+    ],
+    "Preferred_Name": [
+      "Ezetimibe"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C1142985"
+    ],
+    "code": [
+      "C47529"
+    ]
+  },
+  "label": "Ezetimibe",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C47529",
+  "obo_id": "NCIT:C47529",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C191200",
+    "NCIT_C191387",
+    "NCIT_C191405",
+    "NCIT_C191670",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "1-(4-fluorophenyl)-3(R)-[3-(4-fluorophenyl)-3(S)-hydroxypropyl]-4(S)-(4-hydroxyphenyl)-2-azetidinone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "EZETIMIBE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ezedoc",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ezetimibe",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Zetia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47529?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47529/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47529/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47529/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47529/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47529/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47529/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

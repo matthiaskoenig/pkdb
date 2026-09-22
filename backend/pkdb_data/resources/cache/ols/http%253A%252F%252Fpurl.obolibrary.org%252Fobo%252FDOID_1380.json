@@ -1,0 +1,183 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_1380",
+  "lang": "en",
+  "description": [
+    "A uterine cancer that is located_in tissues lining the uterus."
+  ],
+  "synonyms": [
+    "endometrial Ca",
+    "endometrial neoplasm",
+    "malignant endometrial neoplasm",
+    "malignant neoplasm of endometrium",
+    "neoplasm of endometrium",
+    "primary malignant neoplasm of endometrium",
+    "tumor of Endometrium"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "EFO:0004230",
+      "GARD:11981",
+      "ICD10CM:C54.1",
+      "KEGG:05213",
+      "MESH:D016889",
+      "MIM:608089",
+      "NCI:C27815",
+      "NCI:C3012",
+      "SNOMEDCT_US_2025_09_01:123844007",
+      "SNOMEDCT_US_2025_09_01:188192002",
+      "UMLS_CUI:C0007103",
+      "UMLS_CUI:C0014170"
+    ],
+    "has_alternative_id": [
+      "DOID:5654"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:1380"
+    ]
+  },
+  "label": "endometrial cancer",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid/translations/doid-international.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_1380",
+  "obo_id": "DOID:1380",
+  "in_subset": [
+    "DO_cancer_slim",
+    "DO_rare_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A uterine cancer that is located_in tissues lining the uterus.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0004230",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0004230"
+    },
+    {
+      "database": "GARD",
+      "id": "11981",
+      "description": null,
+      "url": "https://rarediseases.info.nih.gov/diseases/11981/index"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "C54.1",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "KEGG",
+      "id": "05213",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D016889",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D016889"
+    },
+    {
+      "database": "MIM",
+      "id": "608089",
+      "description": null,
+      "url": "https://omim.org/MIM:608089"
+    },
+    {
+      "database": "NCI",
+      "id": "C27815",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C27815"
+    },
+    {
+      "database": "NCI",
+      "id": "C3012",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3012"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "123844007",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/123844007"
+    },
+    {
+      "database": "SNOMEDCT_US_2025_09_01",
+      "id": "188192002",
+      "description": null,
+      "url": "http://purl.bioontology.org/ontology/SNOMEDCT/188192002"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0007103",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0007103"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0014170",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0014170"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1380?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1380/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1380/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1380/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1380/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1380/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1380/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1380/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1380/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1380/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_1380/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

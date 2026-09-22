@@ -11,7 +11,7 @@
     </v-btn>
 
     <v-dialog v-model="dialog" max-width="500">
-      <user-login></user-login>
+      <user-login @close="dialog=false"></user-login>
     </v-dialog>
   </div>
 </template>
@@ -22,7 +22,7 @@ import {IconsMixin} from "../../icons";
 
 export default {
 name: "Account",
-  components:[UserLogin],
+  components: {UserLogin},
   mixins: [IconsMixin],
   data: () => ({
     dialog: false,

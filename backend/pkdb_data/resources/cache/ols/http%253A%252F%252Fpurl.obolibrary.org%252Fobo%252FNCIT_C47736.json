@@ -1,0 +1,141 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C47736",
+  "lang": "en",
+  "description": [
+    "A broad-spectrum sulfanilamide and a synthetic analog of para-aminobenzoic acid (PABA) with antibacterial property. Sulfamethizole competes with PABA for the bacterial enzyme dihydropteroate synthase, thereby preventing the incorporation of PABA into dihydrofolic acid, the immediate precursor of folic acid. This leads to an inhibition of bacterial folic acid synthesis and de novo synthesis of purines and pyrimidines, ultimately resulting in cell growth arrest and cell death."
+  ],
+  "synonyms": [
+    "2-(p-Aminobenzenesulfonamido)-5-methylthiadiazole",
+    "4-Amino-N-(5-methyl-1,3,4-thiadiazol-2-yl)benzenesulfonamide",
+    "Microsul",
+    "N(sup 1)-(5-Methyl-1,3,4-thiadiazol-2-yl)sulfanilamide",
+    "Proklar",
+    "SULFAMETHIZOLE",
+    "Sulfamethizole",
+    "Thiosulfil"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "144-82-1"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:9331"
+    ],
+    "Chemical_Formula": [
+      "C9H10N4O2S2"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "25W8454H16"
+    ],
+    "Legacy Concept Name": [
+      "Sulfamethizole"
+    ],
+    "Preferred_Name": [
+      "Sulfamethizole"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0038687"
+    ],
+    "code": [
+      "C47736"
+    ]
+  },
+  "label": "Sulfamethizole",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C47736",
+  "obo_id": "NCIT:C47736",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "2-(p-Aminobenzenesulfonamido)-5-methylthiadiazole",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "4-Amino-N-(5-methyl-1,3,4-thiadiazol-2-yl)benzenesulfonamide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Microsul",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "N(sup 1)-(5-Methyl-1,3,4-thiadiazol-2-yl)sulfanilamide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Proklar",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SULFAMETHIZOLE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sulfamethizole",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Thiosulfil",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47736?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47736/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47736/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47736/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47736/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47736/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47736/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

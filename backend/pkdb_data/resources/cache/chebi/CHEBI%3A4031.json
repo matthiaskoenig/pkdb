@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:4031",
+  "name": "cyclosporin A",
+  "definition": "A cyclic nonribosomal peptide of eleven amino acids; an immunosuppressant drug widely used in post-allogeneic organ transplant to reduce the activity of the patient's immune system, and therefore the risk of organ rejection. Also causes reversible inhibition of immunocompetent lymphocytes in the G0- and G1-phase of the cell cycle.",
+  "formula": "C62H111N11O12",
+  "charge": "0",
+  "mass": "1202.635",
+  "inchikey": "PMATZTZNYRCHOR-CGLBZJNRSA-N"
+}
