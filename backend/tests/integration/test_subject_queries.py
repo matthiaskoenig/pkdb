@@ -12,7 +12,7 @@ def test_individual_inherits_group_characteristics_with_local_override(
     ingestion_context, valid_bundle, session_factory
 ):
     service, creator = ingestion_context
-    valid_bundle.study["access"] = "public"
+    valid_bundle.study["access"] = "private"
     service.replace(valid_bundle, creator)
     with session_factory.begin() as session:
         session.add(
@@ -20,6 +20,7 @@ def test_individual_inherits_group_characteristics_with_local_override(
         )
         session.flush()
         root = session.scalar(select(Study))
+        root.access = "public"  # Administrative publication in this read fixture.
         parent = session.scalar(select(Group).where(Group.study_id == root.id))
         child = Group(
             study_id=root.id, key="child", name="child", count=1, parent_id=parent.id

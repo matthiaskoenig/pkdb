@@ -25,7 +25,7 @@ def test_legacy_upload_authentication_precedes_body_validation(
 
 
 def test_legacy_draft_is_invisible_until_finalization(
-    client, creator_headers, valid_bundle
+    client, admin_headers, valid_bundle
 ):
     study = deepcopy(valid_bundle.study)
     study["access"] = "public"
@@ -41,41 +41,39 @@ def test_legacy_draft_is_invisible_until_finalization(
     }
     assert (
         client.post(
-            "/api/v1/_references/", headers=creator_headers, json=valid_bundle.reference
+            "/api/v1/_references/", headers=admin_headers, json=valid_bundle.reference
         ).status_code
         == 201
     )
     study["files"] = []
-    response = client.post("/api/v1/_studies/", headers=creator_headers, json=study)
+    response = client.post("/api/v1/_studies/", headers=admin_headers, json=study)
     assert response.status_code == 201
     sid = study["sid"]
     assert client.get(f"/api/v1/studies/{sid}/").status_code == 404
     assert (
-        client.post(
-            "/api/v1/_studies/", headers=creator_headers, json=study
-        ).status_code
+        client.post("/api/v1/_studies/", headers=admin_headers, json=study).status_code
         == 409
     )
     assert (
         client.post(
-            "/api/v1/update_index/", headers=creator_headers, json={"sid": sid}
+            "/api/v1/update_index/", headers=admin_headers, json={"sid": sid}
         ).status_code
         == 409
     )
     for key, value in sections.items():
         response = client.patch(
-            f"/api/v1/_studies/{sid}/", headers=creator_headers, json={key: value or {}}
+            f"/api/v1/_studies/{sid}/", headers=admin_headers, json={key: value or {}}
         )
         assert response.status_code == 200
     response = client.post(
-        "/api/v1/update_index/", headers=creator_headers, json={"sid": sid}
+        "/api/v1/update_index/", headers=admin_headers, json={"sid": sid}
     )
     assert response.status_code == 200
     assert client.get(f"/api/v1/studies/{sid}/").status_code == 200
     assert (
         client.post(
             "/api/v1/update_index/",
-            headers=creator_headers,
+            headers=admin_headers,
             json={"sid": sid, "action": "delete"},
         ).status_code
         == 422
@@ -84,7 +82,7 @@ def test_legacy_draft_is_invisible_until_finalization(
 
 
 def test_legacy_integer_file_handles_publish_and_explicit_delete_removes_study(
-    client, creator_headers, valid_bundle
+    client, admin_headers, valid_bundle
 ):
     study = deepcopy(valid_bundle.study)
     study["access"] = "public"
@@ -100,7 +98,7 @@ def test_legacy_integer_file_handles_publish_and_explicit_delete_removes_study(
     }
     uploaded = client.post(
         "/api/v1/_datafiles/",
-        headers=creator_headers,
+        headers=admin_headers,
         files={"file": ("Example_note.txt", b"original attachment")},
     )
     assert uploaded.status_code == 201
@@ -108,33 +106,31 @@ def test_legacy_integer_file_handles_publish_and_explicit_delete_removes_study(
     study["files"] = [uploaded.json()["id"]]
     assert (
         client.post(
-            "/api/v1/_references/", headers=creator_headers, json=valid_bundle.reference
+            "/api/v1/_references/", headers=admin_headers, json=valid_bundle.reference
         ).status_code
         == 201
     )
     assert (
-        client.post(
-            "/api/v1/_studies/", headers=creator_headers, json=study
-        ).status_code
+        client.post("/api/v1/_studies/", headers=admin_headers, json=study).status_code
         == 201
     )
     sid = study["sid"]
     assert (
         client.patch(
-            f"/api/v1/_studies/{sid}/", headers=creator_headers, json=sections
+            f"/api/v1/_studies/{sid}/", headers=admin_headers, json=sections
         ).status_code
         == 200
     )
     assert (
         client.post(
-            "/api/v1/update_index/", headers=creator_headers, json={"sid": sid}
+            "/api/v1/update_index/", headers=admin_headers, json={"sid": sid}
         ).status_code
         == 200
     )
-    canonical = client.get(f"/api/v2/studies/{sid}", headers=creator_headers).json()
+    canonical = client.get(f"/api/v2/studies/{sid}", headers=admin_headers).json()
     assert canonical["attachments"][0]["name"] == "Example_note.txt"
     assert (
-        client.get(uploaded.json()["file"], headers=creator_headers).content
+        client.get(uploaded.json()["file"], headers=admin_headers).content
         == b"original attachment"
     )
     from sqlalchemy import func, select
@@ -145,7 +141,7 @@ def test_legacy_integer_file_handles_publish_and_explicit_delete_removes_study(
         assert session.scalar(select(func.count()).select_from(StoredFile)) == 1
     assert client.delete(f"/api/v1/_studies/{sid}/").status_code == 401
     assert (
-        client.delete(f"/api/v1/_studies/{sid}/", headers=creator_headers).status_code
+        client.delete(f"/api/v1/_studies/{sid}/", headers=admin_headers).status_code
         == 204
     )
     assert client.get(f"/api/v1/studies/{sid}/").status_code == 404

@@ -9,7 +9,7 @@ from sqlalchemy import select, union
 from pkdb.db.models.files import StoredFile, StudyAttachment
 from pkdb.db.models.interventions import Intervention
 from pkdb.db.models.measurements import Measurement, Scatter, Subset
-from pkdb.db.models.studies import Note, Reference, StudyUser
+from pkdb.db.models.studies import Note, Reference, StudyGrant, StudyUser
 from pkdb.db.models.subjects import Group, Individual
 from pkdb.db.models.users import User
 from pkdb.db.models.vocabulary import VocabularyEdge, VocabularyNode, VocabularyTerm
@@ -17,6 +17,7 @@ from pkdb.db.serialize import reference_responses
 from pkdb.schemas.responses import StudyResponse
 from pkdb.schemas.security import StudyAccess
 from pkdb.services.authorization import AuthorizationDenied, authorize
+from pkdb.services.profiles import public_profile
 
 
 def study_responses(session, rows, principal):
@@ -53,7 +54,7 @@ def study_responses(session, rows, principal):
     )
     users = {
         row.id: {
-            "username": row.username,
+            **public_profile(row),
             "first_name": row.first_name,
             "last_name": row.last_name,
         }
@@ -171,6 +172,11 @@ def study_responses(session, rows, principal):
             select(VocabularyNode).where(VocabularyNode.sid.in_(substance_ids))
         )
     }
+    grants = defaultdict(list)
+    for grant in session.scalars(
+        select(StudyGrant).where(StudyGrant.study_id.in_(study_ids))
+    ):
+        grants[grant.study_id].append(grant)
     allowed_files = []
     for row in rows:
         if row.creator_id is None:
@@ -181,11 +187,11 @@ def study_responses(session, rows, principal):
             licence=row.licence,
             creator_id=row.creator_id,
             curator_ids=frozenset(
-                member.user_id for member in members[row.id] if member.role == "curator"
+                member.user_id for member in grants[row.id] if member.role == "curator"
             ),
             collaborator_ids=frozenset(
                 member.user_id
-                for member in members[row.id]
+                for member in grants[row.id]
                 if member.role == "collaborator"
             ),
         )

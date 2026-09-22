@@ -29,13 +29,13 @@ def test_draft_is_invisible_and_replacement_failure_preserves_publication(
     from pkdb.services.drafts import DraftConflict, DraftService
 
     ingestion, creator = ingestion_context
-    valid_bundle.study["access"] = "public"
+    valid_bundle.study["access"] = "private"
     service = DraftService(session_factory, ingestion)
     service.stage_reference(valid_bundle.reference, creator)
     core, sections = core_and_sections(valid_bundle)
     service.begin(core["sid"], creator, core)
     with pytest.raises(LookupError):
-        read_study(core["sid"], Principal(), session_factory)
+        read_study(core["sid"], creator, session_factory)
     with pytest.raises(DraftConflict):
         service.begin(core["sid"], creator, core)
     service.patch(
@@ -52,14 +52,14 @@ def test_draft_is_invisible_and_replacement_failure_preserves_publication(
     service.patch(core["sid"], creator, {"dataset": sections["dataset"] or {}})
     result = service.finalize(core["sid"], creator)
     assert result.sid == core["sid"]
-    published = read_study(core["sid"], Principal(), session_factory)
+    published = read_study(core["sid"], creator, session_factory)
     assert service.finalize(core["sid"], creator).sid == core["sid"]
     service.begin(core["sid"], creator, core)
     sections["outputset"]["outputs"][0]["unit"] = "invalid-unit"
     service.patch(core["sid"], creator, sections)
     with pytest.raises(StudyValidationError):
         service.finalize(core["sid"], creator)
-    assert read_study(core["sid"], Principal(), session_factory) == published
+    assert read_study(core["sid"], creator, session_factory) == published
 
 
 def test_overlapping_finalize_rejects_new_generation(

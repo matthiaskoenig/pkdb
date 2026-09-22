@@ -33,6 +33,20 @@ def field_message(error, field):
 
 async def account_validation_error(request, error):
     path = request.url.path
+    if path.startswith(("/api/v1/auth/", "/api/v1/me")):
+        return JSONResponse(
+            {
+                "detail": [
+                    {
+                        "loc": list(item["loc"]),
+                        "type": item["type"],
+                        "msg": "Invalid request field",
+                    }
+                    for item in error.errors()
+                ]
+            },
+            status_code=422,
+        )
     endpoint = request.scope.get("endpoint")
     module = getattr(endpoint, "__module__", "")
     if module == "pkdb.api.legacy_uploads" and any(

@@ -36,11 +36,7 @@
         },
         methods: {
             downloadItem(url){
-                if (localStorage.getItem('token'))
-                { var headers = {Authorization :  'Token ' + localStorage.getItem('token')}}
-                else {
-                    headers = {}
-                }
+                const headers = {};
                 axios.get(url,{ headers: headers, responseType: 'arraybuffer'})
                     .then(response => {
                         let url_data = window.URL.createObjectURL(new Blob([response.data]));

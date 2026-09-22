@@ -93,19 +93,50 @@ jobs:
         run: |
           curl --fail http://127.0.0.1:18083/health/ready
           curl --fail 'http://127.0.0.1:18083/api/v1/info_nodes/?page_size=1'
-          printf '%s\n' 'Local-CI-password-42!' | docker compose exec -T backend pkdb create-admin ci-operator --email ci@example.org --password-stdin
+          printf '%s\n' 'Local-CI-password-42!' | docker compose exec -T backend pkdb create-admin mkoenig --email ci@example.org --password-stdin
           docker compose restart backend
           docker compose up -d --wait --wait-timeout 180
           python - <<'PYTHON'
+          import http.cookiejar
           import json
+          import urllib.error
           import urllib.request
-          request = urllib.request.Request(
-              "http://127.0.0.1:18083/api-token-auth/",
-              data=json.dumps({"username": "ci-operator", "password": "Local-CI-password-42!"}).encode(),
-              headers={"Content-Type": "application/json"},
+
+          base = "http://127.0.0.1:18083"
+          browser = urllib.request.build_opener(
+              urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar())
           )
-          with urllib.request.urlopen(request, timeout=30) as response:
-              assert json.load(response)["token"]
+          with browser.open(base + "/api/v1/auth/csrf", timeout=30) as response:
+              csrf = json.load(response)["csrf_token"]
+          request = urllib.request.Request(
+              base + "/api/v1/auth/login",
+              data=json.dumps({"username": "mkoenig", "password": "Local-CI-password-42!"}).encode(),
+              headers={
+                  "Content-Type": "application/json",
+                  "Origin": "http://localhost:8080",
+                  "X-CSRF-Token": csrf,
+              },
+          )
+          with browser.open(request, timeout=30) as response:
+              account = json.load(response)
+              assert account == {"username": "mkoenig", "role": "admin"}
+              assert "HttpOnly" in response.headers["Set-Cookie"]
+          with browser.open(base + "/api/v1/me", timeout=30) as response:
+              profile = json.load(response)
+              assert profile["mfa_required"] and not profile["mfa_enrolled"]
+          for path, expected in (("/api/v1/admin/users", 403), ("/api-token-auth/", 410)):
+              request = urllib.request.Request(base + path)
+              if path == "/api-token-auth/":
+                  request.data = json.dumps({"username": "mkoenig", "password": "Local-CI-password-42!"}).encode()
+                  request.add_header("Content-Type", "application/json")
+                  request.add_header("Origin", "http://localhost:8080")
+                  request.add_header("X-CSRF-Token", csrf)
+              try:
+                  browser.open(request, timeout=30)
+              except urllib.error.HTTPError as error:
+                  assert error.code == expected, (path, error.code)
+              else:
+                  raise AssertionError(f"{path} did not return {expected}")
           PYTHON
       - name: Show logs on failure
         if: failure()

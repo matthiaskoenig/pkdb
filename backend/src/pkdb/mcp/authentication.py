@@ -11,7 +11,7 @@ class DatabaseTokenVerifier(TokenVerifier):
         self.session_factory = session_factory
 
     def principal(self, raw):
-        with self.session_factory() as session:
+        with self.session_factory.begin() as session:
             return authenticate_token(raw, session)
 
     async def verify_token(self, token: str) -> AccessToken | None:

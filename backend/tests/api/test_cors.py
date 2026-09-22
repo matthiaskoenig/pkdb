@@ -30,7 +30,7 @@ def test_explicit_browser_origin_can_send_authorization(
         assert (
             response.headers["access-control-allow-origin"] == "http://localhost:8080"
         )
-        assert "access-control-allow-credentials" not in response.headers
+        assert response.headers["access-control-allow-credentials"] == "true"
         response = client.options(
             "/api/v1/studies/",
             headers={

@@ -164,6 +164,14 @@ class NotesResponse(ResponseModel):
 
 
 class UserResponse(ResponseModel):
+    display_name: str | None = None
+    affiliation: str | None = None
+    title: str | None = None
+    github: str | None = None
+    github_provenance: str | None = None
+    orcid: str | None = None
+    orcid_provenance: str | None = None
+    avatar_url: str | None = None
     username: str
     first_name: str
     last_name: str

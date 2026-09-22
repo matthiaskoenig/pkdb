@@ -1,5 +1,8 @@
 # Unreleased
 
+- Add verified account registration, GitHub/ORCID sign-in, browser sessions, scoped personal API keys, and administrator MFA. Retire `/api-token-auth/`; migrate legacy tokens within the documented 30-day transition.
+- Introduce ordinary users, assigned-study curators, global reviewers, and the designated `mkoenig` administrator. Add reviewed historical-user import with avatars, invitations, profile privacy, study assignments, and account security history. See `docs/authentication.md` for required configuration and migration steps (#775).
+
 - Restore the authoritative `pkdb_data` vocabulary definitions and cached metadata. Regenerate backend JSON with `uv run --project backend --python 3.14 python scripts/update_vocabulary.py`; CI checks for stale outputs.
 
 - Remove the previous Django backend, Elasticsearch setup, old uploader, nginx deployment configuration, and obsolete administration scripts.

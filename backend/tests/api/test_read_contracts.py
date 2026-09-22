@@ -1,8 +1,8 @@
-def test_public_output_pagination_and_statistics(client, valid_bundle, creator_headers):
+def test_public_output_pagination_and_statistics(client, valid_bundle, admin_headers):
     valid_bundle.study["access"] = "public"
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
-        headers=creator_headers,
+        headers=admin_headers,
         data={
             "study": __import__("json").dumps(valid_bundle.study),
             "reference": __import__("json").dumps(valid_bundle.reference),
@@ -57,13 +57,13 @@ def test_output_filters_do_not_expose_private_counts(
     )
 
 
-def test_group_and_individual_routes(client, valid_bundle, creator_headers):
+def test_group_and_individual_routes(client, valid_bundle, admin_headers):
     import json
 
     valid_bundle.study["access"] = "public"
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
-        headers=creator_headers,
+        headers=admin_headers,
         data={
             "study": json.dumps(valid_bundle.study),
             "reference": json.dumps(valid_bundle.reference),
@@ -78,13 +78,13 @@ def test_group_and_individual_routes(client, valid_bundle, creator_headers):
     assert client.get("/api/v1/individuals/").json()["data"]["count"] == 0
 
 
-def test_intervention_routes(client, valid_bundle, creator_headers):
+def test_intervention_routes(client, valid_bundle, admin_headers):
     import json
 
     valid_bundle.study["access"] = "public"
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
-        headers=creator_headers,
+        headers=admin_headers,
         data={
             "study": json.dumps(valid_bundle.study),
             "reference": json.dumps(valid_bundle.reference),
@@ -100,7 +100,7 @@ def test_intervention_routes(client, valid_bundle, creator_headers):
 
 
 def test_reference_read_preserves_authors_and_visibility(
-    client, valid_bundle, creator_headers
+    client, valid_bundle, admin_headers
 ):
     import json
 
@@ -108,7 +108,7 @@ def test_reference_read_preserves_authors_and_visibility(
     valid_bundle.reference["authors"] = [{"first_name": "First", "last_name": "Last"}]
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
-        headers=creator_headers,
+        headers=admin_headers,
         data={
             "study": json.dumps(valid_bundle.study),
             "reference": json.dumps(valid_bundle.reference),
@@ -124,7 +124,7 @@ def test_reference_read_preserves_authors_and_visibility(
     valid_bundle.study["access"] = "private"
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
-        headers=creator_headers,
+        headers=admin_headers,
         data={
             "study": json.dumps(valid_bundle.study),
             "reference": json.dumps(valid_bundle.reference),
@@ -136,7 +136,7 @@ def test_reference_read_preserves_authors_and_visibility(
 
 
 def test_scatter_subset_routes_preserve_dimension_order(
-    client, valid_bundle, creator_headers
+    client, valid_bundle, admin_headers
 ):
     import json
     from copy import deepcopy
@@ -161,7 +161,7 @@ def test_scatter_subset_routes_preserve_dimension_order(
     }
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
-        headers=creator_headers,
+        headers=admin_headers,
         data={
             "study": json.dumps(valid_bundle.study),
             "reference": json.dumps(valid_bundle.reference),
@@ -181,7 +181,7 @@ def test_scatter_subset_routes_preserve_dimension_order(
 
 
 def test_study_detail_contains_complete_sets_and_metadata(
-    client, valid_bundle, creator_headers
+    client, valid_bundle, admin_headers
 ):
     import json
 
@@ -189,7 +189,7 @@ def test_study_detail_contains_complete_sets_and_metadata(
     valid_bundle.study["descriptions"] = ["Study description"]
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
-        headers=creator_headers,
+        headers=admin_headers,
         data={
             "study": json.dumps(valid_bundle.study),
             "reference": json.dumps(valid_bundle.reference),
@@ -210,7 +210,7 @@ def test_study_detail_contains_complete_sets_and_metadata(
 
 
 def test_legacy_name_and_sid_filters_are_distinct(
-    client, valid_bundle, creator_headers, session_factory
+    client, valid_bundle, admin_headers, session_factory
 ):
     import json
 
@@ -228,7 +228,7 @@ def test_legacy_name_and_sid_filters_are_distinct(
                 row["substance"] = "Drug display name"
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
-        headers=creator_headers,
+        headers=admin_headers,
         data={
             "study": json.dumps(valid_bundle.study),
             "reference": json.dumps(valid_bundle.reference),
@@ -272,13 +272,13 @@ def test_legacy_name_and_sid_filters_are_distinct(
     )
 
 
-def test_subject_measurement_filter_alias(client, valid_bundle, creator_headers):
+def test_subject_measurement_filter_alias(client, valid_bundle, admin_headers):
     import json
 
     valid_bundle.study["access"] = "public"
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
-        headers=creator_headers,
+        headers=admin_headers,
         data={
             "study": json.dumps(valid_bundle.study),
             "reference": json.dumps(valid_bundle.reference),

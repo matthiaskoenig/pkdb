@@ -1499,6 +1499,8 @@ version = "0.10.0"
 source = { editable = "." }
 dependencies = [
     { name = "alembic" },
+    { name = "authlib" },
+    { name = "cryptography" },
     { name = "fastapi" },
     { name = "fastmcp" },
     { name = "httpx" },
@@ -1506,13 +1508,16 @@ dependencies = [
     { name = "numpy" },
     { name = "openpyxl" },
     { name = "pandas" },
+    { name = "pillow" },
     { name = "pint" },
     { name = "pkdb-analysis" },
     { name = "psycopg", extra = ["binary"] },
     { name = "pwdlib", extra = ["argon2"] },
     { name = "pydantic" },
     { name = "pydantic-settings" },
+    { name = "pyotp" },
     { name = "python-multipart" },
+    { name = "requests" },
     { name = "scipy" },
     { name = "sqlalchemy" },
     { name = "uvicorn" },
@@ -1536,6 +1541,8 @@ vocabulary = [
 [package.metadata]
 requires-dist = [
     { name = "alembic", specifier = ">=1,<2" },
+    { name = "authlib", specifier = ">=1.6,<2" },
+    { name = "cryptography", specifier = ">=46" },
     { name = "fastapi", specifier = ">=0.115,<1" },
     { name = "fastmcp", specifier = ">=3,<4" },
     { name = "httpx", specifier = ">=0.28" },
@@ -1543,13 +1550,16 @@ requires-dist = [
     { name = "numpy", specifier = ">=2.3,<3" },
     { name = "openpyxl", specifier = ">=3.1,<4" },
     { name = "pandas", specifier = ">=2.3,<4" },
+    { name = "pillow", specifier = ">=11,<13" },
     { name = "pint", specifier = ">=0.25,<1" },
     { name = "pkdb-analysis", git = "https://github.com/matthiaskoenig/pkdb_analysis.git?rev=6e010ca987bc43995da99b826064581bf201e731" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3,<4" },
     { name = "pwdlib", extras = ["argon2"], specifier = ">=0.3,<1" },
     { name = "pydantic", specifier = ">=2,<3" },
     { name = "pydantic-settings", specifier = ">=2,<3" },
+    { name = "pyotp", specifier = ">=2.9,<3" },
     { name = "python-multipart", specifier = ">=0.0.20" },
+    { name = "requests", specifier = ">=2.32,<3" },
     { name = "scipy", specifier = ">=1.16,<2" },
     { name = "sqlalchemy", specifier = ">=2,<3" },
     { name = "uvicorn", specifier = ">=0.34,<1" },
@@ -1892,6 +1902,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/16/66/ff7e234c246889a043b7a3b83968f98b0af48d94a269cdc71f36aba38a1b/pymetadata-0.6.4.tar.gz", hash = "sha256:ad54c33759a1faecf84ed1402791ae423c189819406e1d4f39c63bbe6ab7001a", size = 5767591, upload-time = "2026-09-20T23:48:37.131Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/be/37/136ebd81024f7da12e22eaaa3b32959ece3b04e48bcbb9893ebb288e4f97/pymetadata-0.6.4-py3-none-any.whl", hash = "sha256:b3b93627cc8b171a53c13ce098079777f8db2115fb7a5321a4ae700cef5b844c", size = 323019, upload-time = "2026-09-20T23:48:35.219Z" },
+]
+
+[[package]]
+name = "pyotp"
+version = "2.10.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/2d/c6/c5d96a86fd0bf6fa1bbb5c5c341ff3208638b692727a683c8289068d9a11/pyotp-2.10.0.tar.gz", hash = "sha256:d01e9703443616b03c57c700b5cbffd56a1f929c1b0f8f03131bc78c1fca9d3f", size = 18625, upload-time = "2026-06-14T03:48:49.221Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/65/33/7b83bde70eddaaaaef487751a9c3a5cc0c0be54620ded0e120ebdc401ff9/pyotp-2.10.0-py3-none-any.whl", hash = "sha256:1df2f6a1bcc3bb0716172a5215ddc2f8c7c7fd26a13df9927d52e1746934836c", size = 13768, upload-time = "2026-06-14T03:48:47.831Z" },
 ]
 
 [[package]]

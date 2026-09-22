@@ -72,6 +72,20 @@ class StudyUser(Base):
     )
 
 
+class StudyGrant(Base):
+    """Effective access, independent of replaceable contributor attribution."""
+
+    __tablename__ = "study_grants"
+    study_id: Mapped[int] = mapped_column(
+        ForeignKey("studies.id", ondelete="CASCADE"), primary_key=True
+    )
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
+    role: Mapped[str] = mapped_column(String(16), primary_key=True)
+    __table_args__ = (
+        CheckConstraint("role IN ('curator', 'collaborator')", name="role"),
+    )
+
+
 class Note(Identity, Base):
     __tablename__ = "notes"
     study_id: Mapped[int] = mapped_column(

@@ -7,7 +7,7 @@ from sqlalchemy import String, and_, case, exists, func, or_, select, true
 
 from pkdb.db.models.interventions import Intervention
 from pkdb.db.models.measurements import Measurement, Scatter, Subset
-from pkdb.db.models.studies import Reference, Study, StudyUser
+from pkdb.db.models.studies import Reference, Study, StudyGrant, StudyUser
 from pkdb.db.models.subjects import Group, Individual
 from pkdb.db.models.users import User
 from pkdb.db.models.vocabulary import VocabularyEdge, VocabularyNode, VocabularyTerm
@@ -187,6 +187,9 @@ def fields_for(entity):
 
 
 def visibility(principal: Principal):
+    from pkdb.services.authorization import require_scope
+
+    require_scope(principal, "read")
     if principal.role not in {"admin", "curator", "reviewer", "user", "anonymous"}:
         raise AuthorizationDenied("Unknown role")
     authenticated = principal.user_id is not None and principal.role != "anonymous"
@@ -195,8 +198,8 @@ def visibility(principal: Principal):
     if not authenticated:
         return Study.access == "public"
     membership = exists(
-        select(StudyUser.study_id).where(
-            StudyUser.study_id == Study.id, StudyUser.user_id == principal.user_id
+        select(StudyGrant.study_id).where(
+            StudyGrant.study_id == Study.id, StudyGrant.user_id == principal.user_id
         )
     )
     return or_(

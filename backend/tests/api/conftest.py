@@ -15,6 +15,7 @@ def client(ingestion_context, session_factory):
             hide_password=False
         ),
         file_root=ingestion.file_store.root,
+        rate_limits_enabled=False,
     )
     with TestClient(create_app(settings)) as client:
         yield client
@@ -30,9 +31,37 @@ def creator_headers(ingestion_context, session_factory):
 
 @pytest.fixture
 def admin_headers(session_factory):
+    import secrets
+    from datetime import UTC, datetime, timedelta
+
+    from pkdb.db.models.credentials import BrowserSession
+    from pkdb.db.models.security import SecurityConfiguration
+    from pkdb.services.credentials import digest
+
     with session_factory.begin() as session:
-        user = User(username="operator", role="admin", active=True)
+        user = User(username="mkoenig", role="admin", active=True)
         session.add(user)
         session.flush()
-        token = issue_token(user, session)
-    return {"Authorization": f"Token {token}"}
+        config = session.get(SecurityConfiguration, 1)
+        if config is None:
+            config = SecurityConfiguration(id=1)
+            session.add(config)
+        config.designated_administrator_id = user.id
+        raw = secrets.token_urlsafe(32)
+        now = datetime.now(UTC)
+        session.add(
+            BrowserSession(
+                user_id=user.id,
+                digest=digest(raw),
+                last_seen_at=now,
+                authenticated_at=now,
+                mfa_at=now,
+                expires_at=now + timedelta(days=7),
+                device="test",
+            )
+        )
+    return {
+        "Cookie": f"pkdb_dev_session={raw}; pkdb_dev_csrf=test-csrf",
+        "X-CSRF-Token": "test-csrf",
+        "Origin": "http://localhost:8080",
+    }

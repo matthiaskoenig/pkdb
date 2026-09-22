@@ -21,10 +21,11 @@ def private_study():
     [
         ("anonymous", None, False, False),
         ("user", 9, False, False),
-        ("curator", 1, True, True),
+        ("curator", 1, True, False),
         ("curator", 2, True, True),
         ("user", 3, True, False),
-        ("reviewer", 4, True, False),
+        ("reviewer", 4, True, True),
+        ("user", 2, True, False),
         ("admin", 5, True, True),
         ("unexpected", 1, False, False),
     ],
@@ -40,9 +41,9 @@ def test_private_authorization_matrix(
     )
     allowed = (
         role == "admin"
-        if action == "administer"
+        if action in {"administer", "delete"}
         else can_write
-        if action in {"write", "delete"}
+        if action == "write"
         else can_read
     )
     if allowed:
@@ -67,7 +68,7 @@ def test_public_access_does_not_grant_write_or_closed_files(private_study):
     [
         ("anonymous", False),
         ("user", False),
-        ("reviewer", False),
+        ("reviewer", True),
         ("curator", True),
         ("admin", True),
     ],

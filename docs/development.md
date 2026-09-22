@@ -2,6 +2,8 @@
 
 The backend lives in `backend/`: FastAPI, Pydantic, SQLAlchemy, Alembic, PostgreSQL, and the `pkdb` CLI. Python 3.14 is required and tested in CI.
 
+See [Accounts, authentication, and API keys](authentication.md) for same-origin browser configuration, provider setup, administrator recovery, and curator migration.
+
 ## Environment and tests
 
 Install uv and Python 3.14 for the application, tests, and development hooks. Run from the repository root:

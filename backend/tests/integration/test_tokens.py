@@ -47,3 +47,19 @@ def test_unusable_token_is_rejected(db_session, active_user, state):
 def test_unknown_token_is_rejected(db_session):
     with pytest.raises(AuthenticationFailed):
         authenticate_token("invalid", db_session)
+
+
+@pytest.mark.parametrize("cutoff", [None, datetime(2020, 1, 1, tzinfo=UTC)])
+def test_legacy_tokens_fail_closed_after_transition(db_session, active_user, cutoff):
+    from pkdb.db.models.security import SecurityConfiguration
+    from pkdb.services.authentication import revalidate_principal
+
+    raw = issue_token(active_user, db_session)
+    actor = authenticate_token(raw, db_session)
+    config = db_session.get(SecurityConfiguration, 1)
+    config.legacy_token_cutoff = cutoff
+    db_session.flush()
+    with pytest.raises(AuthenticationFailed):
+        authenticate_token(raw, db_session)
+    with pytest.raises(AuthenticationFailed):
+        revalidate_principal(actor, db_session)

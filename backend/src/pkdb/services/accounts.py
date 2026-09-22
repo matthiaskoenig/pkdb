@@ -1,12 +1,13 @@
 """Transactional account actions with one-use tokens and PostgreSQL throttles."""
 
 import hashlib
+import re
 import secrets
 from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from typing import Protocol
 
-from sqlalchemy import delete, select, text, update
+from sqlalchemy import delete, func, select, text, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -170,9 +171,12 @@ class AccountService:
         encoded = password_hash.hash(new_password)
         with self.session_factory.begin() as session:
             user, _ = self._consume(token, "reset_password", session)
-            if not user.active:
+            if not user.active or user.suspended_at is not None:
                 raise AuthenticationFailed("Inactive account")
             user.password_hash = encoded
+            from pkdb.services.credentials import revoke_user_credentials
+
+            revoke_user_credentials(session, user.id, self.clock())
             session.execute(
                 update(Token)
                 .where(Token.user_id == user.id, Token.revoked_at.is_(None))
@@ -183,11 +187,36 @@ class AccountService:
         self._password(password)
         if not username or len(username) > 150 or "@" not in email or len(email) > 320:
             raise ValueError("Valid username and email required")
+        username = username.strip()
+        if (
+            not re.fullmatch(r"[A-Za-z0-9_.-]{1,150}", username)
+            or username.casefold() == "mkoenig"
+        ):
+            raise ValueError("Username unavailable")
         address = email.strip().casefold()
         self._throttle("register", address, 3, timedelta(hours=1))
         encoded = password_hash.hash(password)
         try:
             with self.session_factory.begin() as session:
+                lock = int.from_bytes(
+                    hashlib.sha256(
+                        f"register-user:{username.casefold()}".encode()
+                    ).digest()[:8],
+                    "big",
+                    signed=True,
+                )
+                session.execute(
+                    text("SELECT pg_advisory_xact_lock(:key)"), {"key": lock}
+                )
+                if (
+                    session.scalar(
+                        select(User.id).where(
+                            func.lower(User.username) == username.casefold()
+                        )
+                    )
+                    is not None
+                ):
+                    return
                 if (
                     session.scalar(
                         select(EmailAddress.id).where(EmailAddress.email == address)
@@ -219,6 +248,8 @@ class AccountService:
     def verify_email(self, token: str) -> str:
         with self.session_factory.begin() as session:
             user, action = self._consume(token, "verify_email", session)
+            if user.suspended_at is not None:
+                raise AuthenticationFailed("Inactive account")
             email = session.get(EmailAddress, action.email_id)
             if email is None or email.user_id != user.id:
                 raise AuthenticationFailed("Invalid verification token")
@@ -256,14 +287,14 @@ class AccountService:
         }
 
     @staticmethod
-    def _account(session: Session, principal: Principal) -> User:
-        user = session.scalar(
-            select(User)
-            .where(User.id == principal.user_id, User.active.is_(True))
-            .with_for_update()
-        )
-        if user is None:
-            raise AuthenticationFailed("Inactive account")
+    def _account(session: Session, principal: Principal, *, recent=False) -> User:
+        from pkdb.services.credentials import require_session
+
+        user, _ = require_session(principal, session, recent=recent, lock=True)
+        if recent and user.role == "admin":
+            from pkdb.services.mfa import require_admin_session
+
+            require_admin_session(principal, session)
         return user
 
     def emails(self, principal: Principal, email_id: int | None = None):
@@ -287,7 +318,7 @@ class AccountService:
         self._throttle("add_email", str(principal.user_id), 3, timedelta(hours=1))
         try:
             with self.session_factory.begin() as session:
-                user = self._account(session, principal)
+                user = self._account(session, principal, recent=True)
                 existing = session.scalar(
                     select(EmailAddress).where(EmailAddress.email == address)
                 )
@@ -300,6 +331,21 @@ class AccountService:
                         "is_primary": False,
                         "is_verified": False,
                     }
+                if (
+                    len(
+                        list(
+                            session.scalars(
+                                select(EmailAddress.id).where(
+                                    EmailAddress.user_id == user.id
+                                )
+                            )
+                        )
+                    )
+                    >= 2
+                ):
+                    raise ValueError(
+                        "Only a primary and one secondary email are supported"
+                    )
                 entry = EmailAddress(
                     user_id=user.id, email=address, is_primary=False, is_verified=False
                 )
@@ -314,7 +360,7 @@ class AccountService:
         self, principal: Principal, email_id: int, values: dict, remove: bool = False
     ):
         with self.session_factory.begin() as session:
-            user = self._account(session, principal)
+            user = self._account(session, principal, recent=True)
             entry = session.scalar(
                 select(EmailAddress).where(
                     EmailAddress.user_id == user.id, EmailAddress.id == email_id
@@ -324,7 +370,9 @@ class AccountService:
                 raise LookupError("Email not found")
             if remove:
                 if entry.is_primary:
-                    user.email = None
+                    raise ValueError(
+                        "Select another verified primary email before removing this address"
+                    )
                 session.delete(entry)
                 return None
             if "email" in values and values["email"].strip().casefold() != entry.email:
@@ -332,6 +380,18 @@ class AccountService:
             if values.get("is_primary"):
                 if not entry.is_verified:
                     raise ValueError("Unverified email cannot be primary")
+                if entry.is_primary:
+                    return self._email_data(entry)
+                previous = session.scalar(
+                    select(EmailAddress).where(
+                        EmailAddress.user_id == user.id,
+                        EmailAddress.is_primary.is_(True),
+                    )
+                )
+                recipients = []
+                if previous is not None and previous.is_verified:
+                    recipients.append(previous.email)
+                recipients.append(entry.email)
                 session.execute(
                     update(EmailAddress)
                     .where(EmailAddress.user_id == user.id)
@@ -339,4 +399,21 @@ class AccountService:
                 )
                 entry.is_primary = True
                 user.email = entry.email
+                # Flush constraints before delivery. A delivery failure rolls back
+                # the contact change; an already delivered notification describes
+                # the request, never falsely promises that it committed.
+                session.flush()
+                try:
+                    for recipient in dict.fromkeys(recipients):
+                        self.mailer.send(
+                            recipient,
+                            "PK-DB primary email change requested",
+                            f"A primary email change was requested for your PK-DB account {user.username}. "
+                            "Sign in and review Account settings to check your current primary email. "
+                            "If you did not request this change, reset your password and review your active sessions and API keys.",
+                        )
+                except Exception as error:
+                    raise MailDeliveryFailed(
+                        "Primary email notifications could not be delivered; the existing primary email was retained"
+                    ) from error
             return self._email_data(entry)

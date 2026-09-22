@@ -29,7 +29,7 @@ class Input(BaseModel):
 
 class UserInput(Input):
     username: str = Field(min_length=1, max_length=150)
-    role: Literal["admin", "curator", "reviewer", "user"] = "curator"
+    role: Literal["admin", "curator", "reviewer", "user"] = "user"
     email: str | None = None
 
 
