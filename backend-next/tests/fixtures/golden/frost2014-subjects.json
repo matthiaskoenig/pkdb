@@ -20287,5 +20287,55 @@
       "cv": null,
       "unit": "gram"
     }
+  ],
+  "references": [
+    {
+      "pk": 2,
+      "pmid": "25419161",
+      "sid": "25419161",
+      "name": "Frost2014",
+      "doi": null,
+      "title": "A randomized direct comparison of the pharmacokinetics and pharmacodynamics of apixaban and rivaroxaban.",
+      "abstract": "Currently, there are no direct comparisons of apixaban and rivaroxaban, two new oral direct factor Xa inhibitors approved for management of thromboembolic disorders.",
+      "journal": "Clinical pharmacology : advances and applications",
+      "date": "2014-11-24",
+      "authors": [
+        {
+          "pk": 8,
+          "first_name": "Charles",
+          "last_name": "Frost"
+        },
+        {
+          "pk": 9,
+          "first_name": "Yan",
+          "last_name": "Song"
+        },
+        {
+          "pk": 10,
+          "first_name": "Yu Chen",
+          "last_name": "Barrett"
+        },
+        {
+          "pk": 11,
+          "first_name": "Jessie",
+          "last_name": "Wang"
+        },
+        {
+          "pk": 12,
+          "first_name": "Janice",
+          "last_name": "Pursley"
+        },
+        {
+          "pk": 13,
+          "first_name": "Rebecca A",
+          "last_name": "Boyd"
+        },
+        {
+          "pk": 14,
+          "first_name": "Frank",
+          "last_name": "LaCreta"
+        }
+      ]
+    }
   ]
 }

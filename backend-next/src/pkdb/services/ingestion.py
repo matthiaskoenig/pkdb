@@ -14,6 +14,7 @@ from pkdb.db.models.files import StoredFile, StudyAttachment
 from pkdb.db.models.studies import Study
 from pkdb.db.models.users import User
 from pkdb.db.models.vocabulary import VocabularyVersion
+from pkdb.domain.provenance import comment_authors
 from pkdb.domain.validation import prepare_study
 from pkdb.files.store import FileStore, StagedFile, study_access
 from pkdb.importers.folder import parse_bundle
@@ -125,6 +126,7 @@ class IngestionService:
                     study.metadata.creator,
                     *study.metadata.collaborators,
                     *(curator.user for curator in study.metadata.curators),
+                    *comment_authors(study),
                 }
                 users = {
                     user.username: user

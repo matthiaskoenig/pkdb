@@ -26,8 +26,8 @@ def conversion(
     substance_power = quantity.dimensionality.get("[substance]", 0)
     if substance_power and molar_mass is not None:
         quantity = quantity * ureg.Quantity(molar_mass, "g/mol") ** substance_power
-    by_dimension = {str(ureg(unit).dimensionality): unit for unit in targets}
-    target = by_dimension.get(str(quantity.dimensionality))
+    by_dimension = {ureg(unit).dimensionality: unit for unit in targets}
+    target = by_dimension.get(quantity.dimensionality)
     if target is None:
         raise UnitDimensionError(f"No normalized unit for {source}")
     target_quantity = ureg(target)

@@ -4,6 +4,7 @@ from sqlalchemy import (
     ForeignKeyConstraint,
     UniqueConstraint,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from pkdb.db.models.base import Base, Owned, Scientific
@@ -122,6 +123,12 @@ class Scatter(Owned, Base):
 class Subset(Owned, Base):
     __tablename__ = "subsets"
     scatter_id: Mapped[int]
+    shared_fields: Mapped[list] = mapped_column(
+        JSONB, default=list, server_default="[]"
+    )
+    dimension_labels: Mapped[list] = mapped_column(
+        JSONB, default=list, server_default="[]"
+    )
     name: Mapped[str]
     position: Mapped[int]
     __table_args__ = (

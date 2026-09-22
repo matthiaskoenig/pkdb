@@ -38,10 +38,16 @@ def build_timecourses(points: list[Measurement]) -> list[Timecourse]:
     grouped = defaultdict(list)
     for point in points:
         if point.output_type == "timecourse":
-            grouped[(point.series_key, point.label, point.origin)].append(point)
+            grouped[(point.label, point.origin)].append(point)
     courses = []
     for identity, series in grouped.items():
         first = series[0]
+        if len(series) < 2 or len({point.time for point in series}) != len(series):
+            fail(
+                "timecourse_points",
+                "Timecourses require at least two distinct times",
+                first.source,
+            )
         for point in series:
             if any(
                 getattr(point, field) != getattr(first, field)

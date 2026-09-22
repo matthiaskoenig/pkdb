@@ -138,6 +138,7 @@ class Subset(Notes):
     name: str
     dimensions: list[Dimension] = Field(default_factory=list)
     shared: list[str] = Field(default_factory=list)
+    points: list[list[str]] = Field(default_factory=list)
 
 
 class DataRecord(Notes):

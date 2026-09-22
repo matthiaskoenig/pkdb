@@ -7,7 +7,7 @@ from sqlalchemy import and_, exists, or_, select, true
 
 from pkdb.db.models.interventions import Intervention
 from pkdb.db.models.measurements import Measurement
-from pkdb.db.models.studies import Study, StudyUser
+from pkdb.db.models.studies import Reference, Study, StudyUser
 from pkdb.db.models.subjects import Group, Individual
 from pkdb.schemas.queries import Predicate, QuerySpec
 from pkdb.schemas.security import Principal
@@ -54,6 +54,7 @@ MODELS = {
     "groups": Group,
     "individuals": Individual,
     "interventions": Intervention,
+    "references": Reference,
 }
 
 
@@ -61,6 +62,22 @@ def fields_for(entity):
     if entity == "studies":
         return STUDY_FIELDS
     fields = {"study_sid": Study.sid, "study_name": Study.name}
+    if entity == "references":
+        return {
+            **fields,
+            **{
+                name: getattr(Reference, name)
+                for name in (
+                    "sid",
+                    "name",
+                    "pmid",
+                    "doi",
+                    "title",
+                    "abstract",
+                    "journal",
+                )
+            },
+        }
     if entity == "outputs":
         return {**fields, **OUTPUT_FIELDS}
     if entity == "interventions":
@@ -196,7 +213,7 @@ def conditions(query: QuerySpec):
 def ordering(query: QuerySpec):
     descending = query.sort.startswith("-")
     name = query.sort.removeprefix("-")
-    fields = {**fields_for(query.entity), "sid": Study.sid}
+    fields = {"sid": Study.sid, **fields_for(query.entity)}
     if name not in fields:
         raise ValueError("Unknown ordering field")
     column = fields[name]

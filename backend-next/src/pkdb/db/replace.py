@@ -248,9 +248,56 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
     ]
     if points:
         session.execute(insert(m.TimecoursePoint), points)
-    if study.scatters:
-        # Dataset output-label resolution needs the complete importer contract.
-        raise ValueError("Scatter publication is not implemented yet")
+    datasets = bulk(
+        session,
+        m.Scatter,
+        [
+            dict(
+                **owned(dataset),
+                name=dataset.name,
+                data_type=dataset.data_type,
+                image=dataset.image,
+            )
+            for dataset in study.scatters
+        ],
+    )
+    subset_records = [
+        (dataset, index, subset, f"{dataset.key}:subset:{index}")
+        for dataset in study.scatters
+        for index, subset in enumerate(dataset.subsets)
+    ]
+    subsets = bulk(
+        session,
+        m.Subset,
+        [
+            dict(
+                study_id=sid,
+                key=key,
+                scatter_id=datasets[dataset.key],
+                name=subset.name,
+                position=index,
+                shared_fields=subset.shared,
+                dimension_labels=[
+                    dimension.model_dump(mode="json") for dimension in subset.dimensions
+                ],
+            )
+            for dataset, index, subset, key in subset_records
+        ],
+    )
+    dimensions = [
+        dict(
+            study_id=sid,
+            subset_id=subsets[key],
+            position=point_index * len(subset.dimensions) + dimension,
+            dimension=subset.dimensions[dimension].dimension,
+            measurement_id=measurement_ids[measurement_key],
+        )
+        for _, _, subset, key in subset_records
+        for point_index, point in enumerate(subset.points)
+        for dimension, measurement_key in enumerate(point)
+    ]
+    if dimensions:
+        session.execute(insert(m.SubsetDimension), dimensions)
     notes = []
     records = [
         ("study", study),
@@ -271,6 +318,8 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
         for subject in [*study.groups, *study.individuals]
         for record in subject.characteristica
     )
+    records.extend((dataset.key, dataset) for dataset in study.scatters)
+    records.extend((key, subset) for _, _, subset, key in subset_records)
     for key, record in records:
         notes.extend(
             dict(
@@ -289,7 +338,7 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
                 kind="comment",
                 position=index,
                 text=note.text,
-                user_id=users.get(note.user),
+                user_id=users[note.user] if note.user is not None else None,
             )
             for index, note in enumerate(record.comments)
         )

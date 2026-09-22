@@ -85,7 +85,13 @@ def _notes(data: dict) -> dict:
     for key in ("comments", "descriptions"):
         if key in result:
             result[key] = [
-                {"text": item} if isinstance(item, str) else item
+                {"text": item}
+                if isinstance(item, str)
+                else (
+                    {"user": item[0], "text": item[1]}
+                    if key == "comments" and isinstance(item, list) and len(item) == 2
+                    else item
+                )
                 for item in (result[key] or [])
             ]
     return result
@@ -323,6 +329,29 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
                                         location,
                                     )
                                 grouped[name] = (entry, location)
+                        elif entity == "data" and source:
+                            name = entry.get("name")
+                            if name in grouped:
+                                existing = grouped[name][0]
+                                if {
+                                    key: value
+                                    for key, value in existing.items()
+                                    if key != "subsets"
+                                } != {
+                                    key: value
+                                    for key, value in entry.items()
+                                    if key != "subsets"
+                                }:
+                                    fail(
+                                        "dataset_metadata",
+                                        "Mapped dataset rows contain inconsistent metadata",
+                                        location,
+                                    )
+                                existing.setdefault("subsets", []).extend(
+                                    entry.get("subsets", [])
+                                )
+                            else:
+                                grouped[name] = (entry, location)
                         else:
                             grouped[len(grouped)] = (entry, location)
                 if subset and not grouped:
@@ -337,7 +366,13 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
                             entry["count"] = _numeric(entry["count"], integer=True)
                         entry["characteristica"] = [
                             _scientific(c, f"{key}:characteristic:{i}", location)
-                            for i, c in enumerate(entry.get("characteristica") or [])
+                            for i, c in enumerate(
+                                [
+                                    part
+                                    for original in (entry.get("characteristica") or [])
+                                    for part in split_entry(original)
+                                ]
+                            )
                         ]
                     elif entity in {"interventions", "outputs"}:
                         entry = _scientific(
@@ -368,6 +403,38 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
                     else:
                         entry["key"] = key
                         entry["source"] = location
+                        if entry.get("data_type") == "timecourse":
+                            fail(
+                                "explicit_timecourse",
+                                "Timecourses are generated from labeled timecourse outputs",
+                                location,
+                            )
+                        entry["subsets"] = [
+                            _notes(value) for value in entry.get("subsets", [])
+                        ]
+                        for subset_entry in entry["subsets"]:
+                            if "points" in subset_entry:
+                                fail(
+                                    "reserved_field",
+                                    "Dataset points are server-generated",
+                                    location,
+                                )
+                            for field in ("dimensions", "shared"):
+                                value = subset_entry.get(field, [])
+                                if isinstance(value, str):
+                                    value = [
+                                        item.strip()
+                                        for item in value.split(",")
+                                        if item.strip()
+                                    ]
+                                if field == "dimensions" and isinstance(value, list):
+                                    value = [
+                                        {"dimension": str(index), "output": item}
+                                        if isinstance(item, str)
+                                        else item
+                                        for index, item in enumerate(value)
+                                    ]
+                                subset_entry[field] = value
                     if "image" in entry:
                         entry["image"] = image_name(entry["image"])
                     records[destination].append(entry)

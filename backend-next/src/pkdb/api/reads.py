@@ -157,3 +157,20 @@ def interventions(request: Request):
 @router.get("/interventions/{identifier}/")
 def intervention_detail(identifier: int, request: Request):
     return subject_detail("interventions", identifier, request)
+
+
+@router.get("/references/")
+def references(request: Request):
+    return result_page(request, query_spec(request, "references"))
+
+
+@router.get("/references/{sid}/")
+def reference_detail(sid: str, request: Request):
+    actor = request.app.state.principal(request, required=False)
+    page = request.app.state.queries.search(
+        QuerySpec(entity="references", predicates=[Predicate(field="sid", value=sid)]),
+        actor,
+    )
+    if not page.items:
+        raise HTTPException(404, "Not found")
+    return page.items[0]

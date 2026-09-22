@@ -54,9 +54,20 @@ def split_entry(entry: dict) -> list[dict]:
 
 def bind_columns(template, row: dict, source: SourceLocation | None = None):
     if isinstance(template, dict):
-        return {
+        result = {
             key: bind_columns(value, row, source) for key, value in template.items()
         }
+        for key, original in template.items():
+            if (
+                key in LIST_FIELDS
+                and isinstance(original, list)
+                and any(
+                    isinstance(value, str) and value.strip().startswith("col==")
+                    for value in original
+                )
+            ):
+                result[key] = [value for value in result[key] if value is not None]
+        return result
     if isinstance(template, list):
         return [bind_columns(value, row, source) for value in template]
     if isinstance(template, str) and "==" in template:

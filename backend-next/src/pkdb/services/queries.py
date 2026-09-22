@@ -6,15 +6,17 @@ from pkdb.db.models.interventions import Intervention
 from pkdb.db.models.measurements import (
     Measurement,
     Scatter,
+    Subset,
     Timecourse,
     TimecoursePoint,
 )
-from pkdb.db.models.studies import Study
+from pkdb.db.models.studies import Reference, Study
 from pkdb.db.models.subjects import Group, Individual
 from pkdb.db.queries import MODELS, conditions, ordering, visibility
 from pkdb.db.serialize import (
     intervention_responses,
     output_responses,
+    reference_responses,
     subject_responses,
 )
 from pkdb.schemas.queries import Page, QuerySpec
@@ -29,7 +31,9 @@ class QueryService:
         where, order = conditions(query), ordering(query)
         model = MODELS[query.entity]
         statement = select(model)
-        if model is not Study:
+        if model is Reference:
+            statement = statement.join(Study, Study.reference_id == Reference.id)
+        elif model is not Study:
             statement = statement.join(Study, model.study_id == Study.id)
         statement = statement.where(visibility(principal), where)
         with self.session_factory() as session:
@@ -56,6 +60,8 @@ class QueryService:
                 ]
             elif model is Measurement:
                 items = output_responses(session, rows)
+            elif model is Reference:
+                items = reference_responses(session, rows)
             elif model is Intervention:
                 items = intervention_responses(session, rows)
             else:
@@ -111,7 +117,12 @@ class QueryService:
                 )
                 .exists(),
             ).label("timecourse_count"),
-            owned(Scatter).label("scatter_count"),
+            owned(
+                Subset,
+                Subset.scatter_id.in_(
+                    select(Scatter.id).where(Scatter.data_type == "scatter")
+                ),
+            ).label("scatter_count"),
         )
         with self.session_factory() as session:
             return dict(session.execute(statement).mappings().one())

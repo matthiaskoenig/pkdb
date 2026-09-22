@@ -297,3 +297,11 @@ def test_frost2014_postgresql_outputs_match_legacy(
         Principal(),
     )
     assert stable(page.items) == subjects["interventions"]
+
+    page = QueryService(session_factory).search(
+        QuerySpec(entity="references"), Principal()
+    )
+    assert stable(page.items) == stable(subjects["references"])
+    assert [author["first_name"] for author in page.items[0]["authors"]] == [
+        author["first_name"] for author in subjects["references"][0]["authors"]
+    ]

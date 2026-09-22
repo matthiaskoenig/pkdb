@@ -93,6 +93,12 @@ def test_preparation_derives_validated_pk_outputs(
     ]
     prepared = prepare_study(valid_study, vocabulary)
     assert len(prepared.study.timecourses) == 2
+    assert len(prepared.study.scatters) == 1
+    dataset = prepared.study.scatters[0]
+    assert dataset.name == "AutoGenerate"
+    assert dataset.data_type == "timecourse"
+    assert dataset.subsets[0].name == "curve"
+    assert len(dataset.subsets[0].points) == 7
     calculated = [p for p in prepared.study.measurements if p.origin == "calculated"]
     assert any(p.measurement_type == "thalf" for p in calculated)
 
@@ -134,3 +140,14 @@ def test_calculated_outputs_also_have_normalized_copies(
     )
     assert normalized.origin == "normalized"
     assert normalized.calculated
+
+
+def test_same_label_across_source_templates_forms_one_course(exponential_course):
+    for index, point in enumerate(exponential_course.points):
+        point.series_key = f"template:{index % 2}"
+    assert len(build_timecourses(exponential_course.points)) == 1
+
+
+def test_single_point_cannot_form_a_timecourse(exponential_course):
+    with pytest.raises(StudyValidationError):
+        build_timecourses(exponential_course.points[:1])

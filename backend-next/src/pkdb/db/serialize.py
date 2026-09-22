@@ -306,3 +306,42 @@ def intervention_responses(session, rows):
         ).model_dump()
         for row in rows
     ]
+
+
+def reference_responses(session, rows):
+    from pkdb.db.models.studies import Author
+    from pkdb.schemas.responses import ReferenceResponse
+
+    if not rows:
+        return []
+    authors = defaultdict(list)
+    for row in session.scalars(
+        select(Author)
+        .where(Author.reference_id.in_([r.id for r in rows]))
+        .order_by(Author.position)
+    ):
+        authors[row.reference_id].append(
+            {"pk": row.id, "first_name": row.first_name, "last_name": row.last_name}
+        )
+    return [
+        ReferenceResponse.model_validate(
+            {
+                "pk": row.id,
+                **{
+                    key: getattr(row, key)
+                    for key in (
+                        "sid",
+                        "name",
+                        "pmid",
+                        "doi",
+                        "title",
+                        "abstract",
+                        "journal",
+                    )
+                },
+                "date": row.date.isoformat() if row.date else None,
+                "authors": authors[row.id],
+            }
+        ).model_dump()
+        for row in rows
+    ]

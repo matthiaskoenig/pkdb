@@ -33,7 +33,7 @@ from pkdb.services.mailer import SMTPMailer
 from pkdb.services.queries import QueryService
 
 log = logging.getLogger(__name__)
-SCHEMA_REVISION = "24471de5f5a4"
+SCHEMA_REVISION = "bac319560da2"
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:

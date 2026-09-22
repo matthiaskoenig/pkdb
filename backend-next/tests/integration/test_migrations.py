@@ -15,7 +15,23 @@ def test_forward_migrations_preserve_existing_users(session_factory):
     config.set_main_option("sqlalchemy.url", url.replace("%", "%%"))
     command.downgrade(config, "4fc4c2157761")
     command.upgrade(config, "head")
+    command.check(config)
     with session_factory() as session:
         user = session.scalar(select(User).where(User.username == "existing"))
         assert user.first_name == ""
         assert not user.pending_verification
+
+
+def test_reference_authors_have_public_identifiers(session_factory):
+    from pkdb.db.models.studies import Author, Reference
+
+    with session_factory.begin() as session:
+        reference = Reference(sid="r", name="reference")
+        session.add(reference)
+        session.flush()
+        author = Author(
+            reference_id=reference.id, position=0, first_name="First", last_name="Last"
+        )
+        session.add(author)
+        session.flush()
+        assert author.id > 0

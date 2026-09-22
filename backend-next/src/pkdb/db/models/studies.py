@@ -1,6 +1,7 @@
 from datetime import date as Date
 
 from sqlalchemy import CheckConstraint, ForeignKey, String
+from sqlalchemy import Identity as AutoIdentity
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -21,6 +22,7 @@ class Reference(Identity, Base):
 
 class Author(Base):
     __tablename__ = "reference_authors"
+    id: Mapped[int] = mapped_column(AutoIdentity(), unique=True)
     reference_id: Mapped[int] = mapped_column(
         ForeignKey("references.id", ondelete="CASCADE"), primary_key=True
     )

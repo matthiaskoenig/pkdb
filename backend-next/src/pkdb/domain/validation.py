@@ -5,6 +5,7 @@ from collections import Counter
 
 import pint
 
+from pkdb.domain.datasets import add_generated_timecourses, compile_datasets
 from pkdb.domain.normalization import normalize_record
 from pkdb.domain.pharmacokinetics import build_timecourses, derive_pk
 from pkdb.domain.statistics import complete_statistics
@@ -23,7 +24,7 @@ from pkdb.schemas.validation import (
     ValidationReport,
 )
 
-PROCESSING_VERSION = "1"
+PROCESSING_VERSION = "2"
 NUMERIC_FIELDS = ("value", "mean", "median", "min", "max", "sd", "se", "cv")
 
 
@@ -358,6 +359,8 @@ def prepare_study(
             normalized[record.key] for record in originals if record.key in normalized
         )
     prepared.timecourses = build_timecourses(prepared.measurements)
+    add_generated_timecourses(prepared)
+    compile_datasets(prepared)
     for course in prepared.timecourses:
         if not course.points or course.points[0].origin != "normalized":
             continue

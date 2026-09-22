@@ -86,3 +86,22 @@ class InterventionResponse(ScientificResponse):
     time_end: float | None
     time_unit: str | None
     study: StudySummary
+
+
+class AuthorResponse(ResponseModel):
+    pk: int
+    first_name: str
+    last_name: str
+
+
+class ReferenceResponse(ResponseModel):
+    pk: int
+    sid: str
+    name: str
+    pmid: str | None
+    doi: str | None
+    title: str | None
+    abstract: str | None
+    journal: str | None
+    date: str | None
+    authors: list[AuthorResponse]

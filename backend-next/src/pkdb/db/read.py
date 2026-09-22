@@ -143,6 +143,33 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
         course_points[row.timecourse_id].append(
             by_key[measurement_keys[row.measurement_id]]
         )
+    datasets = rows(m.Scatter)
+    subset_rows = rows(m.Subset)
+    dimensions = defaultdict(list)
+    for row in session.scalars(
+        select(m.SubsetDimension)
+        .where(m.SubsetDimension.study_id == root.id)
+        .order_by(m.SubsetDimension.position)
+    ):
+        dimensions[row.subset_id].append(measurement_keys[row.measurement_id])
+    dataset_subsets = defaultdict(list)
+    for row in sorted(subset_rows, key=lambda item: item.position):
+        width = len(row.dimension_labels)
+        values = dimensions[row.id]
+        points = (
+            [values[index : index + width] for index in range(0, len(values), width)]
+            if width
+            else []
+        )
+        dataset_subsets[row.scatter_id].append(
+            dict(
+                **notes[row.key],
+                name=row.name,
+                dimensions=row.dimension_labels,
+                shared=row.shared_fields,
+                points=points,
+            )
+        )
     members = list(
         session.scalars(
             select(s.StudyUser)
@@ -164,7 +191,7 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
         select(StudyAttachment, StoredFile)
         .join(StoredFile)
         .where(StudyAttachment.study_id == root.id)
-        .order_by(StudyAttachment.name)
+        .order_by(StudyAttachment.name.collate("C"))
     )
     return CanonicalStudy.model_validate(
         dict(
@@ -243,6 +270,18 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                 for row in interventions
             ],
             measurements=outputs,
+            scatters=[
+                dict(
+                    **notes[row.key],
+                    key=row.key,
+                    name=row.name,
+                    data_type=row.data_type,
+                    image=row.image,
+                    source=row.source,
+                    subsets=dataset_subsets[row.id],
+                )
+                for row in datasets
+            ],
             timecourses=[
                 dict(key=row.key, points=course_points[row.id]) for row in courses
             ],
