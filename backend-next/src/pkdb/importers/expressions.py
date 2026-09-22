@@ -8,6 +8,7 @@ from pkdb.schemas.validation import fail
 
 NA_VALUES = {"na", "NA", "nan", "NAN"}
 LIST_FIELDS = {"interventions", "dimensions", "shared"}
+TEXT_IDENTITIES = {"name", "group", "individual", "parent"}
 
 
 def clean(value):
@@ -48,6 +49,14 @@ def split_entry(entry: dict) -> list[dict]:
                     for item in value
                     for part in (item.split(",") if isinstance(item, str) else [item])
                 ]
+            if (
+                key in TEXT_IDENTITIES
+                and isinstance(value, (int, float))
+                and not isinstance(value, bool)
+            ):
+                if not math.isfinite(value):
+                    fail("invalid_number", "Identity numbers must be finite")
+                value = str(value)
             result[index][key] = deepcopy(value)
     return result
 

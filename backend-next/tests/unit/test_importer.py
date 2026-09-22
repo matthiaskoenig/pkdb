@@ -205,3 +205,29 @@ def test_external_characteristic_alias_preserves_values_and_source(valid_bundle)
     assert actual.groups == original.groups
     assert actual.source_digest != original.source_digest
     assert changed.study == before
+
+
+@pytest.mark.parametrize("name", [1, 1.5])
+def test_numeric_subject_names_and_references_use_legacy_text_conversion(
+    study_folder, name
+):
+    path = study_folder / "study.json"
+    data = json.loads(path.read_text())
+    data["individualset"] = {"individuals": [{"name": name, "group": "all"}]}
+    output = data["outputset"]["outputs"][0]
+    output.pop("group")
+    output["individual"] = name
+    path.write_text(json.dumps(data))
+    study = parse_bundle(load_folder(study_folder))
+    assert study.individuals[0].name == str(name)
+    assert study.individuals[0].key == str(name)
+    assert all(record.individual == str(name) for record in study.measurements)
+
+
+def test_boolean_subject_name_is_not_coerced_to_text(study_folder):
+    path = study_folder / "study.json"
+    data = json.loads(path.read_text())
+    data["individualset"] = {"individuals": [{"name": True, "group": "all"}]}
+    path.write_text(json.dumps(data))
+    with pytest.raises(StudyValidationError):
+        parse_bundle(load_folder(study_folder))

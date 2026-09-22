@@ -43,6 +43,8 @@ def entry_structure(entry, source):
         fail("invalid_entry", "Entries must be objects", source)
     for field in ("name", "source", "subset", "image"):
         value = entry.get(field)
+        if field == "name" and type(value) in (int, float) and math.isfinite(value):
+            continue
         if value is not None and not isinstance(value, str):
             fail("invalid_field", f"{field} must be text", source)
     for field in ("comments", "descriptions"):
