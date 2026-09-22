@@ -11,6 +11,11 @@
 
 [PK-DB](https://pk-db.com) is an open database and web platform for the **curation, integration, validation, and analysis of pharmacokinetic (PK) data** from clinical studies and preclinical research.
 
+> [!IMPORTANT]
+> **PK-DB update in progress**
+>
+> PK-DB and its API are currently being updated. A new release with an improved data model, validation, documentation, and API will be available shortly.
+
 PK-DB connects pharmacokinetic measurements with their complete experimental and study context. It supports the structured representation of:
 
 - **Study populations and individuals**, including characteristics such as age, sex, body weight, health status, and smoking status
