@@ -184,7 +184,7 @@ ADMINISTRATION_ROUTE_NODES: list[InfoNode] = [
         sid="oral",
         name="oral",
         label="oral (po)",
-        description="Extravascular oral route of administration of substance."
+        description="Extravascular oral route of administration of substance. "
         "The introduction of a substance to the mouth or into the "
         "gastrointestinal tract by the way of the mouth, usually for "
         "systemic action. It is the most common, convenient, and usually "
@@ -210,7 +210,7 @@ ADMINISTRATION_ROUTE_NODES: list[InfoNode] = [
     ),
     Route(
         sid="rectal",
-        description="Extravascular rectal administration of substance."
+        description="Extravascular rectal administration of substance. "
         "The introduction of a substance into the gastrointestinal tract by "
         "the way of the rectum, usually for systemic action. Depending on "
         "the molecular structure, drugs cross the rectal wall via either "
@@ -234,7 +234,7 @@ ADMINISTRATION_ROUTE_NODES: list[InfoNode] = [
     ),
     Route(
         sid="inhalation",
-        description="Extravascular pulmonary application via inhalation of substance."
+        description="Extravascular pulmonary application via inhalation of substance. "
         "Administration of a substance in the form of a gas, aerosol, "
         "or fine powder via the respiratory tract, usually by oral or "
         "nasal inhalation, for local or systemic effect.",
@@ -255,7 +255,7 @@ ADMINISTRATION_ROUTE_NODES: list[InfoNode] = [
     ),
     Route(
         sid="buccal",
-        description="Extravascular administration between the cheek and the gum."
+        description="Extravascular administration between the cheek and the gum. "
         "Administration of a substance through the mucosal membrane on the "
         "inside of the cheek or the back of the mouth. Buccal route "
         "bypasses first pass metabolism and avoids pre-systemic elimination "
@@ -319,7 +319,7 @@ ADMINISTRATION_ROUTE_NODES: list[InfoNode] = [
         "administration of active ingredients through the skin to "
         "achieve systemic effects. Transdermal systems, such as patches, "
         "are designed to penetrate the skin barrier, allowing drugs to "
-        "enter the bloodstream and exert effects throughout the body."
+        "enter the bloodstream and exert effects throughout the body. "
         "Also see 'cutaneous'.",
         parents=["administration route"],
         annotations=[],
@@ -466,7 +466,7 @@ APPLICATION_NODES: list[InfoNode] = [
     Application(
         sid="multiple-dose",
         name="multiple dose",
-        description="Multiple dosing of substance. More then one dose is applied at"
+        description="Multiple dosing of substance. More then one dose is applied at "
         "multiple time points.",
         parents=["administration method"],
         annotations=[],

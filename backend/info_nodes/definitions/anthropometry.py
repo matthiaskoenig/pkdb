@@ -240,7 +240,7 @@ ANTHROPOMETRY_NODES: list[InfoNode] = [
         name="weight (categorial)",
         description="body weight as class often defined via body mass index: "
         "below 18.5 (underweight); 18.5-24.9 (normal); "
-        "25.0-29.9 (overweight); 30.0 and above (obese)."
+        "25.0-29.9 (overweight); 30.0 and above (obese). "
         "(see also `bmi`).",
         parents=["weight status"],
         dtype=DType.CATEGORICAL,
@@ -251,9 +251,9 @@ ANTHROPOMETRY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="obese",
-        description="Subject is obese. Weighing well above a person's ideal weight."
-        "Often defined via BMI 30.0 and above."
-        "See also `obesity index` and `body fat (percent)`.",
+        description="Subject is obese. Weighing well above a person's ideal weight. "
+        "Often defined via BMI 30.0 and above. "
+        "See also `obesity index` and `body fat percentage`.",
         parents=["weight (categorial)"],
         annotations=[
             (BQB.IS, "NCIT:C159658"),
@@ -263,8 +263,8 @@ ANTHROPOMETRY_NODES: list[InfoNode] = [
     ),
     Choice(
         sid="overweight",
-        description="Subject is overweight. Often defined via BMI 25.0-29.9"
-        "See also `obesity index` and `body fat (percent)`.",
+        description="Subject is overweight. Often defined via BMI 25.0-29.9. "
+        "See also `obesity index` and `body fat percentage`.",
         parents=["weight (categorial)"],
         annotations=[
             (BQB.IS, "NCIT:C94250"),
@@ -277,14 +277,14 @@ ANTHROPOMETRY_NODES: list[InfoNode] = [
         sid="normal-weight",
         name="normal",
         label="normal weight",
-        description="Subject is normal weight. Often defined via BMI 18.5-24.9"
-        "See also `obesity index` and `body fat (percent)`.",
+        description="Subject is normal weight. Often defined via BMI 18.5-24.9. "
+        "See also `obesity index` and `body fat percentage`.",
         parents=["weight (categorial)"],
     ),
     Choice(
         sid="underweight",
-        description="Subject is underweight. Often defined via BMI below 18.5"
-        "See also `obesity index` and `body fat (percent)`.",
+        description="Subject is underweight. Often defined via BMI below 18.5. "
+        "See also `obesity index` and `body fat percentage`.",
         parents=["weight (categorial)"],
         annotations=[(BQB.IS, "efo/0005936")],
     ),
@@ -355,7 +355,7 @@ ANTHROPOMETRY_NODES: list[InfoNode] = [
     MeasurementType(
         sid="body-fat-percentage",
         name="body fat percentage",
-        description="Amount of fat in percent of whole-body weight."
+        description="Amount of fat in percent of whole-body weight. "
         "Formerly `percent fat`",
         parents=["anthropometric measurement"],
         dtype=DType.NUMERIC,

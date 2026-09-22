@@ -1,0 +1,72 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/FOODON_03400139",
+  "lang": "en",
+  "description": [
+    "A multiple-component food product typically containing a protein source, a vegetable, and a potato, rice or cereal-based component packaged to be served after heating, either as separate items or courses or mixed as recipe components; see 21 CFR 102.26, 102.28 and 104.47 for nutritional quality guidelines."
+  ],
+  "synonyms": [
+    "compartmentalized dinner",
+    "dinner with components separated in serving containers",
+    "dinner, compartmentalized",
+    "food packs with separate components",
+    "heat and serve dinner",
+    "multiple-course dinner",
+    "tv dinner"
+  ],
+  "annotation": {
+    "database_cross_reference": [
+      "http://www.langual.org/langual_thesaurus.asp?termid=A0139"
+    ],
+    "has curation status": [
+      "http://purl.obolibrary.org/obo/IAO_0000428"
+    ]
+  },
+  "label": "multicomponent meal (us cfr)",
+  "ontology_name": "foodon",
+  "ontology_prefix": "FOODON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/foodon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "FOODON_03400139",
+  "obo_id": "FOODON:03400139",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": null,
+      "id": "http://www.langual.org/langual_thesaurus.asp?termid=A0139",
+      "description": null,
+      "url": "http://www.langual.org/langual_thesaurus.asp?termid=A0139"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03400139?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03400139/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03400139/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03400139/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03400139/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03400139/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03400139/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

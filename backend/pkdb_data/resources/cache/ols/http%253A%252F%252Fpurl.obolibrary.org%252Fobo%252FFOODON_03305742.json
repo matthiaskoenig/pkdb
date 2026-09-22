@@ -1,0 +1,64 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/FOODON_03305742",
+  "lang": "en",
+  "description": [
+    "SIREN DB annotation:\n* liquid, low viscosity FOODON:03430109\n* fruit, peel present, core, pit or seed present FOODON:03420140"
+  ],
+  "synonyms": [],
+  "annotation": {
+    "database_cross_reference": [
+      "https://bioregistry.io/reference/siren:F5742"
+    ],
+    "has curation status": [
+      "http://purl.obolibrary.org/obo/IAO_0000428"
+    ]
+  },
+  "label": "citrus juice",
+  "ontology_name": "foodon",
+  "ontology_prefix": "FOODON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/foodon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "FOODON_03305742",
+  "obo_id": "FOODON:03305742",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": null,
+      "id": "https://bioregistry.io/reference/siren:F5742",
+      "description": null,
+      "url": "https://bioregistry.io/reference/siren:F5742"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03305742?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03305742/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03305742/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03305742/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03305742/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03305742/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03305742/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

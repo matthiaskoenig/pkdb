@@ -37,7 +37,7 @@ pkdb = "pkdb.cli:main"
 
 [dependency-groups]
 vocabulary = [
-    "pymetadata==0.6.4",
+    "pymetadata==0.6.5",
     "python-slugify==9.1.0",
 ]
 dev = [

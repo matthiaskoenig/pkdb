@@ -1,4 +1,4 @@
-"""Compile editable pkdb_data definitions into the backend's offline JSON files.
+"""Compile editable info_nodes definitions into the backend's offline JSON files.
 
 Run: uv run --project backend python scripts/update_vocabulary.py
 Use --check in CI to detect stale generated files without changing them.
@@ -17,6 +17,7 @@ from tempfile import TemporaryDirectory
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "backend" / "pkdb_data"
+DEFINITIONS = ROOT / "backend" / "info_nodes"
 
 
 def encode(value):
@@ -60,15 +61,23 @@ def compile_vocabulary():
         import pkdb_data
 
         pkdb_data.CACHE_PATH = cache
-        from pkdb_data.convert import convert_vocabulary
-        from pkdb_data.info_nodes.nodes import collect_nodes
-        from pkdb_data.info_nodes.policies import (
+        from info_nodes.audit import audit_nodes
+        from info_nodes.nodes import collect_nodes
+        from info_nodes.policies import (
             CAN_NEGATIVE,
             TIME_REQUIRED_MEASUREMENT_TYPES,
         )
+        from pkdb_data.convert import convert_vocabulary
 
         nodes = collect_nodes()
         serialized = [node.serialize(nodes) for node in nodes]
+        issues = audit_nodes(
+            nodes,
+            policies={
+                "time_required": TIME_REQUIRED_MEASUREMENT_TYPES,
+                "can_negative": CAN_NEGATIVE,
+            },
+        )
     snapshot = convert_vocabulary(
         serialized,
         time_required=set(TIME_REQUIRED_MEASUREMENT_TYPES),
@@ -80,7 +89,12 @@ def compile_vocabulary():
     from pkdb.db.bootstrap import Snapshot, validate_snapshot
 
     validate_snapshot(Snapshot.model_validate(snapshot))
-    inputs = [*SOURCE.rglob("*.py"), *SOURCE.rglob("*.json"), Path(__file__).resolve()]
+    inputs = [
+        *SOURCE.rglob("*.py"),
+        *SOURCE.rglob("*.json"),
+        *DEFINITIONS.rglob("*.py"),
+        Path(__file__).resolve(),
+    ]
     hashes = {
         str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest()
         for path in sorted(inputs)
@@ -96,6 +110,7 @@ def compile_vocabulary():
             name: digest for name, digest in hashes.items() if name.endswith(".py")
         },
         "uncached_optional_metadata": sorted(misses),
+        "metadata_issues": issues,
     }
     return {"vocabulary.json": encode(snapshot), "provenance.json": encode(provenance)}
 
@@ -108,6 +123,12 @@ def main():
     args = parser.parse_args()
     try:
         outputs = compile_vocabulary()
+        issues = json.loads(outputs["provenance.json"])["metadata_issues"]
+        if issues:
+            print(
+                f"Metadata review: {len(issues)} issues recorded in provenance.json.",
+                file=sys.stderr,
+            )
         if args.check:
             stale = [
                 name

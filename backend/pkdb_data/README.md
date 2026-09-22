@@ -1,8 +1,8 @@
-# Vocabulary authoring sources
+# Vocabulary metadata caches and conversion
 
-This package is the authoritative source of allowed PK-DB terms. It is development input, separate from the application runtime. It contains no Django application or study uploader.
+This package contains offline ontology and chemical metadata caches and the bootstrap snapshot converter. The authoritative definitions live in the sibling `info_nodes` package. Both are development inputs, separate from the application runtime.
 
-Edit `info_nodes/definitions/*.py`, with units in `info_nodes/units.py` and scientific policies in `info_nodes/policies.py`. From the repository root, run:
+Edit `../info_nodes/definitions/*.py`, with units in `../info_nodes/units.py` and scientific policies in `../info_nodes/policies.py`. From the repository root, run:
 
 ```bash
 uv run --project backend --python 3.14 python scripts/update_vocabulary.py

@@ -102,7 +102,7 @@ SPECIE_NODES: list[InfoNode] = [
     MeasurementType(
         "strain",
         description="Strain. An identifier of a group of animals that is genetically uniform. "
-        "A population of organisms that is geneticaly different from others of the same species and possessing a set of defined characteristics.",
+        "A population of organisms that is genetically different from others of the same species and possessing a set of defined characteristics.",
         parents=["measurement"],
         dtype=DType.CATEGORICAL,
         annotations=[

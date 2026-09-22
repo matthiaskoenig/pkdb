@@ -1,0 +1,67 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/FOODON_03309417",
+  "lang": "en",
+  "description": [
+    "SIREN DB annotation:\n* liquid, high viscosity FOODON:03430102\n* essential oil, oleoresin or other flavoring substance FOODON:03420260\n* water removal process FOODON:03460138"
+  ],
+  "synonyms": [],
+  "annotation": {
+    "database_cross_reference": [
+      "https://bioregistry.io/reference/siren:F9417"
+    ],
+    "has curation status": [
+      "http://purl.obolibrary.org/obo/IAO_0000428"
+    ]
+  },
+  "label": "garlic oil",
+  "ontology_name": "foodon",
+  "ontology_prefix": "FOODON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/foodon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "FOODON_03309417",
+  "obo_id": "FOODON:03309417",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": null,
+      "id": "https://bioregistry.io/reference/siren:F9417",
+      "description": null,
+      "url": "https://bioregistry.io/reference/siren:F9417"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03309417?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03309417/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03309417/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03309417/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03309417/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03309417/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03309417/graph"
+    },
+    "derives_from": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/foodon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFOODON_03309417/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0001000"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

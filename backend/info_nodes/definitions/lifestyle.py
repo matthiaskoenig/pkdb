@@ -145,7 +145,7 @@ LIFESTYLE_NODES: list[InfoNode] = [
     MeasurementType(
         "alcohol",
         description="Does subject or group drink alcohol? (use in combination with "
-        "'abstinence' and 'consumption' with choice 'alcohol' to provide"
+        "'abstinence' and 'consumption' with choice 'alcohol' to provide "
         "details about duration of abstinence or consumed amount). Use to encode 'drinker' or "
         "'non-drinker'.",
         parents=["alcohol status"],
@@ -235,7 +235,7 @@ LIFESTYLE_NODES: list[InfoNode] = [
         "oral contraceptives",
         description="Subjects took oral contraceptives (details about the used oral "
         "contraceptive, should be encoded via "
-        "'medication amount' and/or 'medication duration'). See also"
+        "'medication amount' and/or 'medication duration'). See also "
         "'abstinence oral contraceptives' or 'oral contraceptives duration'.",
         parents=["oral contraceptive status"],
         dtype=DType.BOOLEAN,
@@ -390,7 +390,7 @@ LIFESTYLE_NODES: list[InfoNode] = [
         "overall-appetite-score",
         name="overall appetite score",
         label="overall appetite score (OAS)",
-        description="Overall appetite rating (assessed by visual analog scale, VAS)."
+        description="Overall appetite rating (assessed by visual analog scale, VAS). "
         "OAS = (satiety + fullness + (100 - hunger) + (100 - prospective food consumption))/4",
         parents=["appetite rating"],
         dtype=DType.NUMERIC,
@@ -521,7 +521,7 @@ LIFESTYLE_NODES: list[InfoNode] = [
     ),
     MeasurementType(
         "exercise (categorial)",
-        description="What kind of exercise was performed."
+        description="What kind of exercise was performed. "
         "Activity that requires physical or mental exertion, especially when "
         "performed to develop or maintain fitness.",
         parents=["physiological status"],
@@ -533,7 +533,7 @@ LIFESTYLE_NODES: list[InfoNode] = [
     ),
     Choice(
         "rest",
-        description="Rest. Subjects rested. Often default or control group which must not"
+        description="Rest. Subjects rested. Often default or control group which must not "
         "be encoded.",
         parents=["exercise (categorial)"],
     ),
@@ -572,7 +572,7 @@ LIFESTYLE_NODES: list[InfoNode] = [
     MeasurementType(
         "pregnancy status",
         description="Abstract status in regard to pregnancy. Use either the boolean "
-        "'pregnant' or the categorial 'pregnant (categorial)' to "
+        "'pregnant' or the categorical 'pregnant (categorial)' to "
         "encode information related to the pregnancy status.",
         parents=["physiological status"],
         dtype=DType.ABSTRACT,

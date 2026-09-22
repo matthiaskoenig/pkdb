@@ -1,0 +1,63 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/SCDO_1000201",
+  "lang": "en",
+  "description": [
+    "An abnormal albumin excretion rate of more than 300 mg/g urine creatinine."
+  ],
+  "synonyms": [
+    "Macro-albuminuria",
+    "Macroalbuminuria"
+  ],
+  "annotation": {
+    "curator note": [
+      "Request inclusion into relevant ontology"
+    ],
+    "definition source": [
+      "https://www.phenxtoolkit.org/protocols/view/141501"
+    ],
+    "existence in other ontologies": [
+      "Few but definitions not freely available"
+    ]
+  },
+  "label": "High Level Albuminuria",
+  "ontology_name": "scdo",
+  "ontology_prefix": "SCDO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/scdo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "SCDO_1000201",
+  "obo_id": "SCDO:1000201",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/scdo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSCDO_1000201?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/scdo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSCDO_1000201/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/scdo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSCDO_1000201/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/scdo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSCDO_1000201/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/scdo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSCDO_1000201/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/scdo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSCDO_1000201/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/scdo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSCDO_1000201/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

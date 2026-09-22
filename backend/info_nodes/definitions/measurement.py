@@ -89,7 +89,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
         "state of a patient's liver. Liver function tests include the "
         "measurement of albumin, alanine transaminase, aspartate "
         "transaminase, alkaline phosphatase, bilirubin, and gamma "
-        "glutamyl transferase."
+        "glutamyl transferase. "
         "To encode numerical results for the individual enzymes use the "
         "`concentration` "
         "or `amount` with the respective substance. Also used for general "
@@ -115,7 +115,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
     MeasurementType(
         "concentration",
         description="Concentration of substance. The quantity of a substance per unit "
-        "volume or weight;"
+        "volume or weight; "
         "See also `amount` for amount of substance, "
         "`cumulative amount` for cumulative amount, and "
         "`concentration unbound` for "
@@ -283,7 +283,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
         name="excretion rate",
         label="excretion rate",
         description="Excretion rate of substance. The speed relative to time that an exogenous compound is removed "
-        "from a body system."
+        "from a body system. "
         "Rate of removal of substance from body for instance via urinary "
         "excretion, excretion via the fecal route or via sweat. Use with the respective tissue to encode the route of "
         "excretion, e.g. with the tissue urine. For secretion within the body use 'secretion rate'.",
@@ -318,10 +318,10 @@ MEASUREMENT_NODES: list[InfoNode] = [
         label="delta over baseline (DOB)",
         description="Delta over baseline. The ratio is reported in units delta13 CO2 "
         "relative to the PDB (Belemnitella americana) standard (1.1235% 13C) "
-        "and is defined as 'delta13C(o/oo) = [(13C/12C) sample / (13C/12C) standard) -1] *1000'."
-        "The value of the baseline was subtracted from each value resulting"
+        "and is defined as 'delta13C(o/oo) = [(13C/12C) sample / (13C/12C) standard) -1] *1000'. "
+        "The value of the baseline was subtracted from each value resulting "
         "in a net change in delta (delta over baseline; DOB). DOB can be "
-        "converted to an equivalent excess spepcific activity (excess 13CO2/total CO2)"
+        "converted to an equivalent excess specific activity (excess 13CO2/total CO2) "
         "by multiplying DOB by 1.123 E-5.",
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
@@ -332,7 +332,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
         sid="pdr",
         name="pdr",
         label="plasma disappearance rate (PDR)",
-        description="plasma disappearance rate (PDR). Calculated from backward extrapolation of k from fitted curve."
+        description="plasma disappearance rate (PDR). Calculated from backward extrapolation of k from fitted curve. "
         "E.g. ICG-PDR",
         parents=["chemistry measurement"],
         dtype=DType.NUMERIC,
@@ -860,7 +860,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
         "measurement_type, e.g., "
         "to define that the blood insulin was elevated use "
         "`substance: insulin` and `choice: biochemistry elevated`. "
-        "To specify the actual amount or concentration use the numerical types"
+        "To specify the actual amount or concentration use the numerical types "
         "`concentration` and `amount`.",
         parents=["chemistry measurement"],
         dtype=DType.CATEGORICAL,
@@ -869,7 +869,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
         "kidney function test",
         description="Statical kidney function test(s) or renal function test (e.g., urea "
         "or creatinine clearance). A laboratory procedure that evaluates the "
-        "kidney function."
+        "kidney function. "
         "To encode numerical results for the individual enzymes use the "
         "`concentration` "
         "or `amount` with the respective substance. Also used for general "
@@ -1039,7 +1039,7 @@ MEASUREMENT_NODES: list[InfoNode] = [
     Choice(
         "child-pugh class B",
         label="Child-Pugh class B (CPT B)",
-        description="Child-Pugh Classification - Child-Pugh Class B, Grade B (7-9 points)."
+        description="Child-Pugh Classification - Child-Pugh Class B, Grade B (7-9 points). "
         "Significant Functional Compromise",
         parents=["child-pugh score"],
         annotations=[
@@ -1278,7 +1278,7 @@ MEASUREMENT_NODES.extend(
             sid="auc_ratio",
             name="auc_ratio",
             label="AUC ratio",
-            description="Ratio of arithmetic AUC. Use with substance ratios (i.e. derived substances such as px/caf)."
+            description="Ratio of arithmetic AUC. Use with substance ratios (i.e. derived substances such as px/caf). "
             "Often these ratios are given as geometric ratios and must be encoded accordingly. "
             "Units are in AUC units.",
             parents=["pharmacokinetic measurement"],
@@ -1304,9 +1304,9 @@ MEASUREMENT_NODES.extend(
             sid="clearance",
             label="clearance (CL)",
             description="Total/apparent clearance of given substance (mostly from blood or "
-            "plasma)."
+            "plasma). "
             "This is the rate with which a volume is cleared of a given substance "
-            "(see also rate of disappearance `ra`)"
+            "(see also rate of disappearance `ra`) "
             "If the clearance is based on the unbound substance use "
             "clearance_unbound. If the clearance refers to renal "
             "clearance use clearance_renal.",
@@ -1330,7 +1330,7 @@ MEASUREMENT_NODES.extend(
             name="oral clearance",
             label="oral clearance (CL/F)",
             description="Oral clearance (clearance/bioavailability) of given substance (mostly from blood or "
-            "plasma)."
+            "plasma). "
             "If the clearance is based on the unbound substance use "
             "clearance_unbound. If the clearance refers to renal "
             "clearance use clearance_renal.",
@@ -1341,7 +1341,7 @@ MEASUREMENT_NODES.extend(
         MeasurementType(
             "clearance_unbound",
             label="clearance unbound",
-            description="Clearance of unbound substance, i.e., of the free substance"
+            description="Clearance of unbound substance, i.e., of the free substance "
             "not bound by proteins (see also `fraction_unbound`)",
             parents=["clearance measurement"],
             dtype=DType.NUMERIC,
@@ -1381,7 +1381,7 @@ MEASUREMENT_NODES.extend(
             "clearance_renal_unbound",
             label="clearance renal unbound",
             description="Clearance of unbound substance by the kidneys. For blood and "
-            "plasma clearance and clearance"
+            "plasma clearance and clearance "
             "by other tissues use `clearance` with respective tissue.",
             parents=["clearance measurement"],
             dtype=DType.NUMERIC,
@@ -1449,7 +1449,7 @@ MEASUREMENT_NODES.extend(
             "vd_ss",
             label="volume of distribution steady state",
             description="Volume of distribution in steady state. This includes for "
-            "instance the volume of distribution of the terminal phase of"
+            "instance the volume of distribution of the terminal phase of "
             "a constant infusion. If vd is calculated via beta from the "
             "exponential decay phase use 'vd' instead.",
             parents=["pharmacokinetic measurement"],
@@ -1460,7 +1460,7 @@ MEASUREMENT_NODES.extend(
         MeasurementType(
             "vd0",
             label="initial volume of distribution",
-            description="Initial volume of distribution (D/C0) calculated from dose D"
+            description="Initial volume of distribution (D/C0) calculated from dose D "
             "and initial concentration C0.",
             parents=["pharmacokinetic measurement"],
             dtype=DType.NUMERIC,
@@ -1689,7 +1689,7 @@ MEASUREMENT_NODES.extend(
             sid="fraction_absorbed",
             label="fraction absorbed",
             description="Fraction absorbed of given substance. This often corresponds to the "
-            "bioavailability if there is no strong first pass effect (see also"
+            "bioavailability if there is no strong first pass effect (see also "
             "bioavailability).",
             parents=["pharmacokinetic measurement"],
             dtype=DType.NUMERIC,
@@ -1706,7 +1706,7 @@ MEASUREMENT_NODES.extend(
         MeasurementType(
             sid="fraction_unbound",
             label="fraction unbound",
-            description="Unbound fraction of given substance (see also `plasma_binding`). Often"
+            description="Unbound fraction of given substance (see also `plasma_binding`). Often "
             "abbreviated as `fu`.",
             parents=["pharmacokinetic measurement"],
             dtype=DType.NUMERIC,
@@ -1994,7 +1994,7 @@ MEASUREMENT_NODES.extend(
             "elasticity of the vessel walls and volume and viscosity of "
             "the blood. For systolic and diastolic blood pressure see "
             "'blood pressure systolic' and 'blood pressure diastolic'. To encode "
-            "categories see 'blood pressure (categorial)'.",
+            "categories see 'blood pressure (categorical)'.",
             parents=["cardiovascular measurement"],
             dtype=DType.NUMERIC,
             units=PRESSURE_UNITS,
@@ -2142,7 +2142,7 @@ MEASUREMENT_NODES.extend(
             description="Mean arterial pressure (MAP). The mean pressure of the blood within the arterial circulation. "
             "The arterial pressure may be directly measured by insertion of an intra-arterial catheter "
             "connected to a transducer. The mean arterial pressure (MAP) can be calculated by subsequent "
-            "analysis of the waveform. For relative change see 'MAP (change relative)'."
+            "analysis of the waveform. For relative change see 'MAP (change relative)'. "
             "MAP can be calculated using the following formula: MAP = Diastolic Pressure + 1/3(Systolic Pressure - Diastolic Pressure)",
             parents=["cardiovascular measurement"],
             dtype=DType.NUMERIC,
@@ -2320,8 +2320,8 @@ MEASUREMENT_NODES.extend(
             name="hbf",
             label="Hepatic blood flow",
             description="(Total) Hepatic blood flow (HBF). The volume of blood flowing "
-            "through the liver per unit of time."
-            "Can be caluclated as THBF = PBF + HABF",
+            "through the liver per unit of time. "
+            "Can be calculated as THBF = PBF + HABF",
             parents=["blood flow"],
             dtype=DType.NUMERIC,
             units=["l/min", "l/min/kg", "l/min/m^2"],
@@ -2442,7 +2442,7 @@ MEASUREMENT_NODES.extend(
             sid="heart-rate",
             name="heart rate",
             description="The number of contractions of the cardiac ventricles per "
-            "unit of time. This is the resting heart rate, for heart rate in"
+            "unit of time. This is the resting heart rate, for heart rate in "
             "exercise use 'Exercise heart rate (EHR)'. Often reported in beats per minute (bpm).",
             parents=["heart measurement"],
             dtype=DType.NUMERIC,
@@ -2566,7 +2566,7 @@ MEASUREMENT_NODES.extend(
             sid="cardiac output",
             name="cardiac output",
             label="cardiac output (CO)",
-            description="Cardiac output (CO). The amount of blood pumped by the heart per unit of time."
+            description="Cardiac output (CO). The amount of blood pumped by the heart per unit of time. "
             "The total volume of blood pumped by the heart over a set period of time, conventionally one "
             "minute; it is calculated as heart rate times stroke volume (CO= HR x SV), and is additionally "
             "dependent on preload and afterload for functional output.",
@@ -2688,7 +2688,7 @@ MEASUREMENT_NODES.extend(
             sid="fractional_liver_remnant_volume",
             name="fractional liver remnant volume",
             description="Measurement of the size of the three dimensional space occupied "
-            "by the liver remnant after hepatectomy in percent of pre-operative"
+            "by the liver remnant after hepatectomy in percent of pre-operative "
             "liver volume. See also 'liver resection rate'.",
             parents=["liver volume"],
             dtype=DType.NUMERIC,
@@ -2699,7 +2699,7 @@ MEASUREMENT_NODES.extend(
             sid="liver_resection_rate",
             name="liver resection rate",
             description="Fraction of removed liver volume in hepatectomy. The following "
-            "relationship holds 'liver resection rate = 1 - fractional liver remnant volume'."
+            "relationship holds 'liver resection rate = 1 - fractional liver remnant volume'. "
             "See also 'fractional liver remnant volume'.",
             parents=["liver volume"],
             dtype=DType.NUMERIC,
@@ -2737,8 +2737,8 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             "metabolic_fraction",
-            description="Fraction of the dose that was metabolized. Typically estimated by area under the curve."
-            "The material given in the dose should be known given the intervention name, and the metabolite"
+            description="Fraction of the dose that was metabolized. Typically estimated by area under the curve. "
+            "The material given in the dose should be known given the intervention name, and the metabolite "
             "in question should be specified in the 'substance' column",
             parents=["metabolic measurement"],
             dtype=DType.NUMERIC,
@@ -2749,7 +2749,7 @@ MEASUREMENT_NODES.extend(
             name="cumulative metabolic ratio",
             description="Cumulative ratio between substances. The ratio of the cumulative "
             "amount of substances is calculated. This is for instance used "
-            "for ratios in the urine, where urine is collected over given period"
+            "for ratios in the urine, where urine is collected over given period "
             "and then the ratios are calculated (see also 'cumulative amount' "
             "and 'recovery').",
             parents=["metabolic measurement"],
@@ -2759,8 +2759,7 @@ MEASUREMENT_NODES.extend(
         MeasurementType(
             sid="metabolic-phenotype",
             name="metabolic phenotype",
-            description="Ratio between substances. Often used to characterize enzyme or "
-            "pathway. Use a derived substance which defines the ratio.",
+            description="Categorical metabolizer phenotype determined by a metabolic measurement.",
             parents=["metabolic measurement"],
             dtype=DType.CATEGORICAL,
             units=[NO_UNIT],
@@ -2902,8 +2901,8 @@ MEASUREMENT_NODES.extend(
         ),
         MeasurementType(
             "relative-peak-area",
-            description="Relative peak area. Area of peak relative to a reference peak."
-            "E.g. relative concentrations in mass spectrometry via relative peak"
+            description="Relative peak area. Area of peak relative to a reference peak. "
+            "E.g. relative concentrations in mass spectrometry via relative peak "
             "areas.",
             parents=["measurement"],
             dtype=DType.NUMERIC,
