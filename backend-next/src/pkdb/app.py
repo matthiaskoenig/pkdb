@@ -17,7 +17,15 @@ from starlette.exceptions import HTTPException
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse, RedirectResponse
 
-from pkdb.api import accounts, exports, legacy_uploads, media, reads, staging
+from pkdb.api import (
+    accounts,
+    admin_users,
+    exports,
+    legacy_uploads,
+    media,
+    reads,
+    staging,
+)
 from pkdb.api.limits import UploadLimits
 from pkdb.config import Settings
 from pkdb.db.read import publication_state, read_study
@@ -28,6 +36,7 @@ from pkdb.schemas.security import Principal
 from pkdb.schemas.source import SourceBundle
 from pkdb.schemas.validation import StudyValidationError, fail
 from pkdb.services.accounts import AccountService
+from pkdb.services.admin_users import AdminUserService
 from pkdb.services.analysis import AnalysisService
 from pkdb.services.authentication import AuthenticationFailed, authenticate_token
 from pkdb.services.authorization import AuthorizationDenied
@@ -63,6 +72,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app = FastAPI(title="PK-DB", version="0.10.0", lifespan=lifespan)
     app.state.accounts = AccountService(session_factory, SMTPMailer(settings))
+    app.state.admin_users = AdminUserService(session_factory)
     app.state.file_store = file_store
     app.state.ingestion = ingestion
     app.state.queries = queries
@@ -267,6 +277,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app.state.principal = principal
     include_legacy_router(app, accounts.router)
+    include_legacy_router(app, admin_users.router)
     app.include_router(media.router)
     include_legacy_router(app, reads.router)
     include_legacy_router(app, staging.router)

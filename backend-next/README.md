@@ -133,3 +133,12 @@ Provision the first operator locally with
 `--password-stdin` supports protected automation input. Existing identities are
 never upgraded or rekeyed by this command. See the migration runbook for rebuild
 accounting and remaining cutover gates.
+
+Legacy administrator account routes support `POST /api/v1/_users/` and
+`GET`, `PATCH`, `PUT /api/v1/_users/{id}/` (including JSON suffixes). Creation
+returns a new API token once; subsequent reads omit credentials and email, matching
+the legacy read serializer. Existing tokens immediately observe role changes.
+The new schema has one application role: legacy `basic` maps to `user`;
+`curator`, `reviewer`, and `admin` map directly. Multiple or unknown groups are
+rejected. Username remains read-only during updates. Arbitrary Django permission
+group CRUD is not implemented by this adapter.

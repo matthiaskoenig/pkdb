@@ -1935,7 +1935,17 @@
         "IsAdminUser"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py"
+        ],
+        "remaining": [
+          "legacy validation-error status/shape parity",
+          "fixed-role mapping review"
+        ]
+      }
     },
     {
       "path": "/api/v1/^_users/(?P<pk>[^/.]+)/$",
@@ -1954,7 +1964,17 @@
         "IsAdminUser"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py"
+        ],
+        "remaining": [
+          "legacy validation-error status/shape parity",
+          "fixed-role mapping review"
+        ]
+      }
     },
     {
       "path": "/api/v1/^_users/(?P<pk>[^/.]+)/$",
@@ -1973,7 +1993,17 @@
         "IsAdminUser"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py"
+        ],
+        "remaining": [
+          "legacy validation-error status/shape parity",
+          "fixed-role mapping review"
+        ]
+      }
     },
     {
       "path": "/api/v1/^_users/(?P<pk>[^/.]+)/$",
@@ -1992,7 +2022,17 @@
         "IsAdminUser"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py"
+        ],
+        "remaining": [
+          "legacy validation-error status/shape parity",
+          "fixed-role mapping review"
+        ]
+      }
     },
     {
       "path": "/api/v1/^_users/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -2011,7 +2051,17 @@
         "IsAdminUser"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py"
+        ],
+        "remaining": [
+          "legacy validation-error status/shape parity",
+          "fixed-role mapping review"
+        ]
+      }
     },
     {
       "path": "/api/v1/^_users/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -2030,7 +2080,17 @@
         "IsAdminUser"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py"
+        ],
+        "remaining": [
+          "legacy validation-error status/shape parity",
+          "fixed-role mapping review"
+        ]
+      }
     },
     {
       "path": "/api/v1/^_users/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -2049,7 +2109,17 @@
         "IsAdminUser"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py"
+        ],
+        "remaining": [
+          "legacy validation-error status/shape parity",
+          "fixed-role mapping review"
+        ]
+      }
     },
     {
       "path": "/api/v1/^_users\\.(?P<format>[a-z0-9]+)/?$",
@@ -2071,7 +2141,17 @@
         "IsAdminUser"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/admin_users.py",
+      "verification": {
+        "status": "implemented_admin_user_checkpoint",
+        "tests": [
+          "tests/api/test_admin_users.py"
+        ],
+        "remaining": [
+          "legacy validation-error status/shape parity",
+          "fixed-role mapping review"
+        ]
+      }
     },
     {
       "path": "/api/v1/^groups/$",
