@@ -118,3 +118,18 @@ are not complete. The legacy backend remains unchanged and is not retired.
   or explicit stdin, rejecting existing identities instead of changing accounts.
 - Full compatibility coverage, source dispositions, matched performance, full
   corpus restore and final branch review still block cutover and legacy retirement.
+
+## Full snapshot restore checkpoint
+
+- Restored the complete rebuild snapshot into a separate PostgreSQL database:
+  all 33 tables and 1,470,887 rows have identical ordered row fingerprints.
+  All 11,916 stored files (2,618,745,722 bytes) match their database size and
+  SHA256 metadata. The restored application readiness endpoint succeeds.
+  Evidence: restore-checkpoint.json. The dump uses an exported repeatable-read
+  snapshot shared with the source fingerprint queries. Original publications
+  and source files remain unchanged.
+- This closes the full snapshot integrity rehearsal, not corpus acceptance: the
+  507 failed/blocked source folders still require compatibility review and
+  disposition. Other compatibility, performance and final-review gates remain.
+- CLI redaction regressions for JSON literals and escaped strings fail before
+  the fix and pass afterward on both interpreters; all 12 CLI upload tests pass.

@@ -59,11 +59,22 @@ def main(argv=None, *, client=None):
                 validate=args.command == "validate",
             )
             print(
-                json.dumps(result, ensure_ascii=False).replace(token, "[redacted]"),
+                json.dumps(redact_values(result, token), ensure_ascii=False),
                 flush=True,
             )
             failed |= not result["ok"]
     return int(failed)
+
+
+def redact_values(value, token):
+    """Redact before JSON escaping without changing field names or scalar types."""
+    if isinstance(value, str):
+        return value.replace(token, "[redacted]")
+    if isinstance(value, list):
+        return [redact_values(item, token) for item in value]
+    if isinstance(value, dict):
+        return {key: redact_values(item, token) for key, item in value.items()}
+    return value
 
 
 def local_command(args):

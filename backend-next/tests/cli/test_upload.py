@@ -149,3 +149,30 @@ def test_integer_study_sid_is_uploaded_as_canonical_text(tmp_path):
     assert result["ok"]
     assert result["sid"] == "123"
     assert calls == ["/api/v2/studies/123"]
+
+
+@pytest.mark.parametrize("token", ["false", 'test"secret', "test\\secret"])
+def test_redaction_preserves_json_types_and_hides_escaped_tokens(
+    tmp_path, monkeypatch, capsys, token
+):
+    from pkdb.cli import main
+
+    root = folder(tmp_path)
+    monkeypatch.setenv("PKDB_API_TOKEN", token)
+
+    def handler(request):
+        return httpx.Response(
+            422,
+            json={"issues": [{"message": "Rejected " + token, "retry": False}]},
+        )
+
+    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+        assert (
+            main(
+                ["upload", str(root), "--api-url", "http://example.test"], client=client
+            )
+            == 1
+        )
+    result = json.loads(capsys.readouterr().out)
+    assert result["ok"] is False
+    assert result["issues"] == [{"message": "Rejected [redacted]", "retry": False}]
