@@ -1,5 +1,28 @@
 from copy import deepcopy
 
+import pytest
+
+
+@pytest.mark.parametrize(
+    ("method", "path"),
+    [
+        ("POST", "/api/v1/_references/"),
+        ("PATCH", "/api/v1/_references/REF1/"),
+        ("POST", "/api/v1/_studies/"),
+        ("PATCH", "/api/v1/_studies/TEST1/"),
+        ("POST", "/api/v1/update_index/"),
+    ],
+)
+@pytest.mark.parametrize("body", ["{", "[]"])
+def test_legacy_upload_authentication_precedes_body_validation(
+    client, method, path, body
+):
+    response = client.request(
+        method, path, content=body, headers={"Content-Type": "application/json"}
+    )
+    assert response.status_code == 401
+    assert response.json() == {"detail": "Invalid or missing credentials"}
+
 
 def test_legacy_draft_is_invisible_until_finalization(
     client, creator_headers, valid_bundle

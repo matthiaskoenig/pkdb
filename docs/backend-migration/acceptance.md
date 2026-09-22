@@ -189,3 +189,21 @@ are not complete. The legacy backend remains unchanged and is not retired.
   Full suites and images must be rerun for this final addition. Custom group writes
   remain unresolved. No complete compatibility or cutover acceptance is claimed.
 - Work stopped at the user's request. See handoff.md and execution-ledger.md.
+
+
+## Transferred-machine native verification (2026-09-22)
+
+- Deferred role-catalogue verification is complete: 343 regular tests pass on each
+  Python before the next fix, and both runtime/restore gates pass on each image.
+- Legacy upload authentication now precedes malformed/non-object body validation
+  across reference POST/PATCH, study POST/PATCH and update_index. Ten HTTP
+  regressions cover the observed 422-before-401 defect. Existing successful upload
+  and staged publication tests remain green.
+- After this fix, 353 regular tests pass on each CPython 3.13.15 and 3.14.6.
+  Ruff/format, both type checks, sdist/wheel builds, clean-wheel scientific imports
+  and Alembic upgrade/check/downgrade/upgrade pass. Each rebuilt image passes two
+  runtime/restore system tests. The independent migration tooling suite passes
+  16 tests per interpreter. Image IDs and test-environment caveats are in the ledger.
+- Published editable source roundtrips, remaining administrative and association
+  contracts, corpus dispositions, a current complete HTTP rebuild and final review
+  remain open. This checkpoint does not authorize legacy retirement or deployment.

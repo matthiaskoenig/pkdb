@@ -2,7 +2,7 @@
 
 import json
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from starlette.concurrency import run_in_threadpool
 from starlette.datastructures import UploadFile
 
@@ -11,7 +11,12 @@ from pkdb.schemas.legacy import FinalizeRequest
 from pkdb.schemas.validation import fail
 from pkdb.services.drafts import DraftConflict
 
-router = APIRouter(prefix="/api/v1")
+
+def require_upload_account(request: Request):
+    request.app.state.principal(request)
+
+
+router = APIRouter(prefix="/api/v1", dependencies=[Depends(require_upload_account)])
 
 
 async def payload(request):

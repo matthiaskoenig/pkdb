@@ -1107,7 +1107,17 @@
         "IsAdminOrCreatorOrCurator"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/legacy_uploads.py",
+      "verification": {
+        "status": "implemented_draft_authentication_checkpoint",
+        "tests": [
+          "tests/api/test_legacy_upload.py"
+        ],
+        "remaining": [
+          "full permission and error compatibility matrix",
+          "published editable source roundtrip and administrative write contracts"
+        ]
+      }
     },
     {
       "path": "/api/v1/^_references/(?P<sid>[^/.]+)/$",
@@ -1176,7 +1186,17 @@
         "IsAdminOrCreatorOrCurator"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/legacy_uploads.py",
+      "verification": {
+        "status": "implemented_draft_authentication_checkpoint",
+        "tests": [
+          "tests/api/test_legacy_upload.py"
+        ],
+        "remaining": [
+          "full permission and error compatibility matrix",
+          "published editable source roundtrip and administrative write contracts"
+        ]
+      }
     },
     {
       "path": "/api/v1/^_references/(?P<sid>[^/.]+)/$",
@@ -1401,7 +1421,17 @@
         "StudyPermission"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/legacy_uploads.py",
+      "verification": {
+        "status": "implemented_draft_authentication_checkpoint",
+        "tests": [
+          "tests/api/test_legacy_upload.py"
+        ],
+        "remaining": [
+          "full permission and error compatibility matrix",
+          "published editable source roundtrip and administrative write contracts"
+        ]
+      }
     },
     {
       "path": "/api/v1/^_studies/(?P<sid>[^/.]+)/$",
@@ -1497,7 +1527,17 @@
         "StudyPermission"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/legacy_uploads.py",
+      "verification": {
+        "status": "implemented_draft_authentication_checkpoint",
+        "tests": [
+          "tests/api/test_legacy_upload.py"
+        ],
+        "remaining": [
+          "full permission and error compatibility matrix",
+          "published editable source roundtrip and administrative write contracts"
+        ]
+      }
     },
     {
       "path": "/api/v1/^_studies/(?P<sid>[^/.]+)/$",
@@ -4330,7 +4370,17 @@
         "IsAuthenticated"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/legacy_uploads.py",
+      "verification": {
+        "status": "implemented_draft_authentication_checkpoint",
+        "tests": [
+          "tests/api/test_legacy_upload.py"
+        ],
+        "remaining": [
+          "full permission and error compatibility matrix",
+          "published editable source roundtrip and administrative write contracts"
+        ]
+      }
     },
     {
       "path": "/reset/?P<key>[-\\w]+)",

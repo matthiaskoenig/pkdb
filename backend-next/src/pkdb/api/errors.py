@@ -33,6 +33,16 @@ def field_message(error, field):
 
 async def account_validation_error(request, error):
     path = request.url.path
+    endpoint = request.scope.get("endpoint")
+    module = getattr(endpoint, "__module__", "")
+    if module == "pkdb.api.legacy_uploads" and any(
+        item["type"] == "json_invalid" for item in error.errors()
+    ):
+        # FastAPI decodes model bodies before running router dependencies.
+        try:
+            await run_in_threadpool(request.app.state.principal, request)
+        except (AuthenticationFailed, AuthorizationDenied) as denied:
+            return await request.app.exception_handlers[type(denied)](request, denied)
     legacy = path == "/api-token-auth/" or path.startswith(
         ("/accounts/", "/api/v1/_users")
     )
@@ -41,8 +51,6 @@ async def account_validation_error(request, error):
     # JSON decoding precedes FastAPI dependencies. Preserve the legacy permission
     # boundary even for malformed bodies, without blocking the event loop.
     if any(item["type"] == "json_invalid" for item in error.errors()):
-        endpoint = request.scope.get("endpoint")
-        module = getattr(endpoint, "__module__", "")
         check = None
         if module == "pkdb.api.admin_users":
             check = require_administrator
