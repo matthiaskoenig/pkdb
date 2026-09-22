@@ -43,6 +43,14 @@ def normalize_record[T: ScientificRecord](
 ) -> T:
     normalized = record.model_copy(deep=True)
     normalized.key = f"{record.key}:normalized"
+    from pkdb.schemas.study import MAX_RECORD_KEY_LENGTH
+
+    if len(normalized.key) > MAX_RECORD_KEY_LENGTH:
+        fail(
+            "record_key_length",
+            "Normalized record key exceeds storage limit",
+            record.source,
+        )
     normalized.origin = "normalized"
     normalized.derived_from = record.key
     if not record.unit:

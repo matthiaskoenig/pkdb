@@ -108,10 +108,9 @@ def filter_studies(request: Request):
 
 
 def download_response(service, identifier, actor):
-    from anyio import CancelScope
     from starlette.concurrency import run_in_threadpool
-    from starlette.responses import StreamingResponse
 
+    from pkdb.api.streaming import ClosingStreamingResponse
     from pkdb.services.exports import ExportBusy, ExportLimit
 
     iterator = service.stream_export(identifier, "zip", actor)
@@ -129,17 +128,9 @@ def download_response(service, identifier, actor):
         while (chunk := await run_in_threadpool(next, iterator, None)) is not None:
             yield chunk
 
-    class ExportResponse(StreamingResponse):
-        async def __call__(self, scope, receive, send):
-            try:
-                await super().__call__(scope, receive, send)
-            finally:
-                # Also runs if sending headers fails before chunks() starts.
-                with CancelScope(shield=True):
-                    await run_in_threadpool(iterator.close)
-
-    return ExportResponse(
+    return ClosingStreamingResponse(
         chunks(),
+        close=iterator.close,
         media_type="application/x-zip-compressed",
         headers={"Content-Disposition": "attachment; filename=pkdata.zip"},
     )

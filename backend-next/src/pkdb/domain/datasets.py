@@ -47,6 +47,14 @@ def compile_datasets(study: CanonicalStudy) -> None:
             names.add(subset.name)
             labels = [dimension.output for dimension in subset.dimensions]
             expected = 2 if dataset.data_type == "scatter" else 1
+            if [dimension.dimension for dimension in subset.dimensions] != [
+                str(axis) for axis in range(expected)
+            ]:
+                fail(
+                    "dataset_dimensions",
+                    "Dataset dimension indices must be ordered from zero",
+                    dataset.source,
+                )
             if len(labels) != expected or len(set(labels)) != expected:
                 fail(
                     "dataset_dimensions",

@@ -9,6 +9,9 @@ from pkdb.schemas.source import SourceLocation
 
 Number = Annotated[float, Field(strict=True, allow_inf_nan=False)]
 Identifier = Annotated[str, Field(min_length=1)]
+Sid = Annotated[str, Field(min_length=1, max_length=255)]
+MAX_RECORD_KEY_LENGTH = 512
+RecordKey = Annotated[str, Field(min_length=1, max_length=MAX_RECORD_KEY_LENGTH)]
 
 
 class Record(BaseModel):
@@ -49,7 +52,7 @@ class Author(Record):
 
 
 class Reference(Record):
-    sid: Identifier
+    sid: Sid
     name: str
     pmid: str | None = None
     doi: str | None = None
@@ -73,7 +76,7 @@ class Statistics(Record):
 
 
 class ScientificRecord(Notes):
-    key: Identifier
+    key: RecordKey
     measurement_type: Identifier
     calculation_type: str | None = None
     choice: str | None = None
@@ -87,7 +90,7 @@ class ScientificRecord(Notes):
 
 
 class Group(Notes):
-    key: Identifier
+    key: RecordKey
     name: Identifier
     count: Annotated[int, Field(strict=True, ge=0)]
     parent: str | None = None
@@ -96,7 +99,7 @@ class Group(Notes):
 
 
 class Individual(Notes):
-    key: Identifier
+    key: RecordKey
     name: Identifier
     group: str | None = None
     characteristica: list[ScientificRecord] = Field(default_factory=list)
@@ -142,7 +145,7 @@ class Subset(Notes):
 
 
 class DataRecord(Notes):
-    key: Identifier
+    key: RecordKey
     name: str
     data_type: str
     image: str | None = None
@@ -151,7 +154,7 @@ class DataRecord(Notes):
 
 
 class Timecourse(Record):
-    key: Identifier
+    key: RecordKey
     points: list[Measurement]
 
 
@@ -162,7 +165,7 @@ class Attachment(Record):
 
 
 class CanonicalStudy(Notes):
-    sid: Identifier
+    sid: Sid
     metadata: Metadata
     reference: Reference
     groups: list[Group] = Field(default_factory=list)

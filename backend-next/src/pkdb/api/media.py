@@ -6,8 +6,8 @@ from uuid import UUID
 
 from fastapi import APIRouter, HTTPException, Request
 from sqlalchemy import select
-from starlette.responses import StreamingResponse
 
+from pkdb.api.streaming import ClosingStreamingResponse
 from pkdb.db.models.files import StoredFile
 
 router = APIRouter()
@@ -41,8 +41,9 @@ def download(attachment_id: UUID, filename: str, request: Request):
         finally:
             handle.close()
 
-    return StreamingResponse(
+    return ClosingStreamingResponse(
         chunks(),
+        close=handle.close,
         media_type=mimetypes.guess_type(name)[0] or "application/octet-stream",
         headers={
             "Content-Length": str(size),

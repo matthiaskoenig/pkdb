@@ -171,3 +171,11 @@ def test_workbook_dataset_rows_group_subsets_by_data_name(valid_bundle, tmp_path
     parsed = parse_bundle(valid_bundle)
     assert len(parsed.scatters) == 1
     assert [subset.name for subset in parsed.scatters[0].subsets] == ["a", "b"]
+
+
+@pytest.mark.parametrize("axis", ["x", "1", "2"])
+def test_scatter_rejects_noncanonical_axis_order(valid_study, vocabulary, axis):
+    study = scatter_study(valid_study)
+    study.scatters[0].subsets[0].dimensions[0].dimension = axis
+    with pytest.raises(StudyValidationError, match="dimension"):
+        prepare_study(study, vocabulary)

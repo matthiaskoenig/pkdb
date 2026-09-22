@@ -169,3 +169,52 @@ def test_json_recursion_is_a_validation_error(client, creator_headers):
     )
     assert response.status_code == 422
     assert response.json()["error_count"] == 1
+
+
+@pytest.mark.parametrize("field", ["study_sid", "reference_sid", "group_name"])
+def test_oversized_identifiers_are_validation_errors(
+    client, creator_headers, valid_bundle, field
+):
+    original_sid = valid_bundle.study["sid"]
+    assert (
+        client.put(
+            f"/api/v2/studies/{original_sid}",
+            headers=creator_headers,
+            **multipart(valid_bundle),
+        ).status_code
+        == 201
+    )
+    old = client.get(f"/api/v2/studies/{original_sid}", headers=creator_headers).json()
+    value = "x" * 513
+    if field == "study_sid":
+        valid_bundle.study["sid"] = value
+    elif field == "reference_sid":
+        valid_bundle.study["reference"] = value
+        valid_bundle.reference["sid"] = value
+    else:
+        valid_bundle.study["groupset"]["groups"][0]["name"] = value
+        valid_bundle.study["outputset"]["outputs"][0]["group"] = value
+    response = client.put(
+        f"/api/v2/studies/{valid_bundle.study['sid']}",
+        headers=creator_headers,
+        **multipart(valid_bundle),
+    )
+    assert response.status_code == 422
+    assert (
+        client.get(f"/api/v2/studies/{original_sid}", headers=creator_headers).json()
+        == old
+    )
+
+
+def test_normalized_key_overflow_is_a_validation_error(
+    client, creator_headers, valid_bundle
+):
+    name = "x" * 502
+    valid_bundle.study["interventionset"]["interventions"][0]["name"] = name
+    valid_bundle.study["outputset"]["outputs"][0]["interventions"] = [name]
+    response = client.put(
+        f"/api/v2/studies/{valid_bundle.study['sid']}",
+        headers=creator_headers,
+        **multipart(valid_bundle),
+    )
+    assert response.status_code == 422

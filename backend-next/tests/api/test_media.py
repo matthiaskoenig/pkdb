@@ -65,3 +65,48 @@ def test_draft_media_is_not_public(client, ingestion_context, creator_headers):
         client.get(f"/media/{staged.id}/wrong.pdf", headers=creator_headers).status_code
         == 404
     )
+
+
+def test_media_closes_file_when_headers_cannot_be_sent(
+    client, ingestion_context, creator_headers, monkeypatch
+):
+    import asyncio
+
+    from starlette.requests import Request
+
+    from pkdb.api.media import download
+
+    ingestion, principal = ingestion_context
+    staged = ingestion.file_store.stage(
+        principal, "paper.pdf", io.BytesIO(b"%PDF-test")
+    )
+    store = client.app.state.file_store
+    original = store.open_authorized
+    handles = []
+
+    def opened(*args):
+        handle = original(*args)
+        handles.append(handle)
+        return handle
+
+    monkeypatch.setattr(store, "open_authorized", opened)
+    request = Request(
+        {
+            "type": "http",
+            "app": client.app,
+            "headers": [(b"authorization", creator_headers["Authorization"].encode())],
+        }
+    )
+    response = download(staged.id, "paper.pdf", request)
+
+    async def send(message):
+        raise OSError("disconnected")
+
+    async def receive():
+        return {"type": "http.disconnect"}
+
+    with pytest.raises(Exception):
+        asyncio.run(
+            response({"type": "http", "asgi": {"spec_version": "2.4"}}, receive, send)
+        )
+    assert handles[0].closed
