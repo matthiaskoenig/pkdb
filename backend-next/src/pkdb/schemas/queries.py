@@ -26,6 +26,7 @@ class QuerySpec(BaseModel):
         "interventions",
         "references",
         "subsets",
+        "info_nodes",
     ]
     predicates: list[Predicate] = Field(default_factory=list, max_length=50)
     search: str | None = Field(default=None, max_length=500)

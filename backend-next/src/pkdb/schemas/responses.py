@@ -230,3 +230,27 @@ class StudyResponse(NotesResponse):
     interventionset: InterventionSetResponse
     outputset: OutputSetResponse
     dataset: DatasetResponse
+
+
+class SubstanceProperties(ResponseModel):
+    mass: float | None
+    charge: int | None
+    formula: str | None
+
+
+class MeasurementProperties(ResponseModel):
+    units: list[str]
+    choices: list[NodeResponse]
+
+
+class VocabularyResponse(NodeResponse):
+    deprecated: bool
+    ntype: str
+    dtype: str
+    description: str | None
+    synonyms: list[str]
+    parents: list[NodeResponse]
+    annotations: list[dict]
+    xrefs: list[dict]
+    measurement_type: MeasurementProperties | None
+    substance: SubstanceProperties | None

@@ -15,6 +15,12 @@ ALIASES = {
     "tissue_sid": "tissue",
     "method_sid": "method",
     "output_pk": "id",
+    "pk": "id",
+    "min": "minimum",
+    "max": "maximum",
+    "form_sid": "form",
+    "route_sid": "route",
+    "application_sid": "application",
 }
 BOOLEANS = {"normed", "calculated"}
 NUMBERS = {"value", "mean", "median", "sd", "se", "cv", "minimum", "maximum", "time"}
@@ -29,7 +35,30 @@ def query_spec(request: Request, entity: str) -> QuerySpec:
             if key in {"page", "page_size", "ordering", "search"}:
                 continue
             field, separator, operator = key.partition("__")
-            field = ALIASES.get(field, field)
+            name_fields = {
+                "studies": {"substance"},
+                "outputs": {"substance", "tissue"},
+                "interventions": {
+                    "substance",
+                    "measurement_type",
+                    "form",
+                    "route",
+                    "application",
+                },
+            }.get(entity, set())
+            if entity in {"groups", "individuals"} and field in {
+                "choice_sid",
+                "measurement_type_sid",
+            }:
+                field = "characteristics." + (
+                    "measurement_type" if field == "measurement_type_sid" else field
+                )
+            else:
+                field = (
+                    field + "_name"
+                    if field in name_fields
+                    else ALIASES.get(field, field)
+                )
             operator = operator if separator else "eq"
 
             def scalar(value):
@@ -196,6 +225,23 @@ def study_detail(sid: str, request: Request):
     actor = request.app.state.principal(request, required=False)
     page = request.app.state.queries.search(
         QuerySpec(entity="studies", predicates=[Predicate(field="sid", value=sid)]),
+        actor,
+    )
+    if not page.items:
+        raise HTTPException(404, "Not found")
+    return page.items[0]
+
+
+@router.get("/info_nodes/")
+def info_nodes(request: Request):
+    return result_page(request, query_spec(request, "info_nodes"))
+
+
+@router.get("/info_nodes/{sid}/")
+def info_node_detail(sid: str, request: Request):
+    actor = request.app.state.principal(request, required=False)
+    page = request.app.state.queries.search(
+        QuerySpec(entity="info_nodes", predicates=[Predicate(field="sid", value=sid)]),
         actor,
     )
     if not page.items:

@@ -1,11 +1,12 @@
 from datetime import date as Date
 
-from sqlalchemy import CheckConstraint, ForeignKey, String
+from sqlalchemy import CheckConstraint, ForeignKey, Index, String
 from sqlalchemy import Identity as AutoIdentity
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from pkdb.db.models.base import Base, Identity, Timestamped
+from pkdb.db.textsearch import vector
 
 
 class Reference(Identity, Base):
@@ -81,3 +82,24 @@ class Note(Identity, Base):
     position: Mapped[int]
     text: Mapped[str]
     user_id: Mapped[int | None] = mapped_column(ForeignKey("users.id"))
+
+
+Base.metadata.tables["studies"].append_constraint(
+    Index("ix_studies_search", vector([Study.sid, Study.name]), postgresql_using="gin")
+)
+
+Base.metadata.tables["references"].append_constraint(
+    Index(
+        "ix_references_search",
+        vector(
+            [
+                Reference.sid,
+                Reference.name,
+                Reference.pmid,
+                Reference.title,
+                Reference.abstract,
+            ]
+        ),
+        postgresql_using="gin",
+    )
+)

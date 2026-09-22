@@ -12,6 +12,7 @@ from pkdb.db.models.measurements import (
 )
 from pkdb.db.models.studies import Reference, Study
 from pkdb.db.models.subjects import Group, Individual
+from pkdb.db.models.vocabulary import VocabularyNode
 from pkdb.db.queries import MODELS, conditions, ordering, visibility
 from pkdb.db.serialize import (
     intervention_responses,
@@ -21,6 +22,7 @@ from pkdb.db.serialize import (
     subset_responses,
 )
 from pkdb.db.study_responses import study_responses
+from pkdb.db.vocabulary_responses import vocabulary_responses
 from pkdb.schemas.queries import Page, QuerySpec
 from pkdb.schemas.security import Principal
 
@@ -35,11 +37,13 @@ class QueryService:
         statement = select(model)
         if model is Reference:
             statement = statement.join(Study, Study.reference_id == Reference.id)
-        elif model is not Study:
+        elif model is not Study and model is not VocabularyNode:
             statement = statement.join(Study, model.study_id == Study.id)
         if model is Subset:
             statement = statement.join(Scatter, Subset.scatter_id == Scatter.id)
-        statement = statement.where(visibility(principal), where)
+        statement = statement.where(where)
+        if model is not VocabularyNode:
+            statement = statement.where(visibility(principal))
         with self.session_factory() as session:
             session.connection(execution_options={"isolation_level": "REPEATABLE READ"})
             count = session.scalar(
@@ -52,7 +56,9 @@ class QueryService:
                     .limit(query.page_size)
                 )
             )
-            if model is Study:
+            if model is VocabularyNode:
+                items = vocabulary_responses(session, rows)
+            elif model is Study:
                 items = study_responses(session, rows, principal)
             elif model is Measurement:
                 items = output_responses(session, rows)

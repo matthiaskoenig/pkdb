@@ -1,8 +1,9 @@
-from sqlalchemy import CheckConstraint, ForeignKey, String
+from sqlalchemy import CheckConstraint, ForeignKey, Index, String
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from pkdb.db.models.base import Base
+from pkdb.db.textsearch import vector
 
 
 class VocabularyVersion(Base):
@@ -44,3 +45,20 @@ class VocabularyTerm(Base):
     )
     kind: Mapped[str] = mapped_column(String(32), primary_key=True)
     value: Mapped[str] = mapped_column(primary_key=True)
+
+
+Base.metadata.tables["vocabulary_nodes"].append_constraint(
+    Index(
+        "ix_vocabulary_nodes_search",
+        vector([VocabularyNode.sid, VocabularyNode.name]),
+        postgresql_using="gin",
+    )
+)
+
+Base.metadata.tables["vocabulary_terms"].append_constraint(
+    Index(
+        "ix_vocabulary_terms_search",
+        vector([VocabularyTerm.value]),
+        postgresql_using="gin",
+    )
+)

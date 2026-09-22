@@ -40,3 +40,19 @@ are not complete. The legacy backend remains unchanged and is not retired.
 - Updated apixaban gate: 28/30 parse; 24/30 pass scientific validation.
   No source studies were edited or excluded. Full-corpus and legacy-output parity
   remain open; these counts are not cutover acceptance.
+
+## Public-read and search checkpoint (2026-09-22)
+
+- 218 regular tests pass on both supported interpreters; Ruff and ty pass.
+- Persisted Frost2014 public study, reference, subject, intervention, output and
+  timecourse arrays match captured legacy goldens. Scientific output comparison
+  covers all 782 records with explicit numeric tolerances.
+- Three real caffeine studies publish with exact scatter pairings, attachments,
+  comments and canonical readback on both interpreters.
+- Vocabulary reads match captured legacy serializer examples. PostgreSQL handles
+  text search, synonym lookup, inherited-characteristic filters and visibility.
+  Four GIN expression indexes pass upgrade/downgrade/schema-drift checks.
+- Vocabulary pages use five SQL statements for both 1 and 100 results. This is
+  query-count evidence, not a matched end-to-end performance claim.
+- Remaining interfaces, full corpus dispositions, measured workload parity,
+  MCP, exports, legacy drafts, containers and cutover gates remain open.
