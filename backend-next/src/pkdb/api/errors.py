@@ -1,7 +1,13 @@
 """Translate legacy account input errors without echoing credentials or inputs."""
 
 from fastapi.exception_handlers import request_validation_exception_handler
+from starlette.concurrency import run_in_threadpool
 from starlette.responses import JSONResponse
+
+from pkdb.api.accounts import require_account
+from pkdb.api.admin_users import require_administrator
+from pkdb.services.authentication import AuthenticationFailed
+from pkdb.services.authorization import AuthorizationDenied
 
 
 def field_message(error, field):
@@ -32,6 +38,24 @@ async def account_validation_error(request, error):
     )
     if not legacy:
         return await request_validation_exception_handler(request, error)
+    # JSON decoding precedes FastAPI dependencies. Preserve the legacy permission
+    # boundary even for malformed bodies, without blocking the event loop.
+    if any(item["type"] == "json_invalid" for item in error.errors()):
+        endpoint = request.scope.get("endpoint")
+        module = getattr(endpoint, "__module__", "")
+        check = None
+        if module == "pkdb.api.admin_users":
+            check = require_administrator
+        elif module == "pkdb.api.accounts" and path.startswith("/accounts/emails/"):
+            check = require_account
+        if check:
+            try:
+                await run_in_threadpool(check, request)
+            except (AuthenticationFailed, AuthorizationDenied) as denied:
+                return await request.app.exception_handlers[type(denied)](
+                    request, denied
+                )
+        return JSONResponse({"non_field_errors": ["Invalid JSON."]}, status_code=400)
     fields = {}
     for item in error.errors():
         location = item["loc"]

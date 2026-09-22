@@ -1,6 +1,6 @@
 """Legacy account route names with shared transactional account services."""
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Depends, Request
 from starlette.responses import JSONResponse, Response
 
 from pkdb.schemas.accounts import (
@@ -16,6 +16,13 @@ from pkdb.services.accounts import AccountThrottled, MailDeliveryFailed
 from pkdb.services.authentication import AuthenticationFailed
 
 router = APIRouter()
+
+
+def require_account(request: Request):
+    request.state.account_actor = request.app.state.principal(request)
+
+
+email_router = APIRouter(dependencies=[Depends(require_account)])
 
 
 def perform(request, operation, data, result=None):
@@ -90,32 +97,32 @@ def resend_verification(data: EmailRequest, request: Request):
     )
 
 
-@router.get("/accounts/emails/")
+@email_router.get("/accounts/emails/")
 def emails(request: Request):
-    actor = request.app.state.principal(request)
+    actor = request.state.account_actor
     return perform(request, "emails", {"principal": actor}, lambda rows: rows)
 
 
-@router.post("/accounts/emails/", status_code=201)
+@email_router.post("/accounts/emails/", status_code=201)
 def add_email(data: EmailCreate, request: Request):
-    actor = request.app.state.principal(request)
+    actor = request.state.account_actor
     return perform(
         request, "add_email", {"principal": actor, **data.model_dump()}, lambda row: row
     )
 
 
-@router.get("/accounts/emails/{email_id}/")
+@email_router.get("/accounts/emails/{email_id}/")
 def email_detail(email_id: int, request: Request):
-    actor = request.app.state.principal(request)
+    actor = request.state.account_actor
     return perform(
         request, "emails", {"principal": actor, "email_id": email_id}, lambda row: row
     )
 
 
-@router.put("/accounts/emails/{email_id}/")
-@router.patch("/accounts/emails/{email_id}/")
+@email_router.put("/accounts/emails/{email_id}/")
+@email_router.patch("/accounts/emails/{email_id}/")
 def change_email(email_id: int, data: EmailUpdate, request: Request):
-    actor = request.app.state.principal(request)
+    actor = request.state.account_actor
     return perform(
         request,
         "change_email",
@@ -128,12 +135,15 @@ def change_email(email_id: int, data: EmailUpdate, request: Request):
     )
 
 
-@router.delete("/accounts/emails/{email_id}/", status_code=204)
+@email_router.delete("/accounts/emails/{email_id}/", status_code=204)
 def delete_email(email_id: int, request: Request):
-    actor = request.app.state.principal(request)
+    actor = request.state.account_actor
     return perform(
         request,
         "change_email",
         {"principal": actor, "email_id": email_id, "values": {}, "remove": True},
         lambda _: Response(status_code=204),
     )
+
+
+router.include_router(email_router)
