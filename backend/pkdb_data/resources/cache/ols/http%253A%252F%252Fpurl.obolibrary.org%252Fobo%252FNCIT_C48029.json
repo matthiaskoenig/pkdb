@@ -1,0 +1,123 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C48029",
+  "lang": "en",
+  "description": [
+    "The sodium salt form of valproic acid with anti-epileptic activity. Valproate sodium is converted into its active form, valproate ion, in blood. Although the mechanism of action remains to be elucidated, valproate sodium increases concentrations of gamma-aminobutyric acid (GABA) in the brain, probably due to inhibition of the enzymes responsible for the catabolism of GABA. This potentiates the synaptic actions of GABA. Valproate sodium may also affect potassium channels, thereby creating a direct membrane-stabilizing effect."
+  ],
+  "synonyms": [
+    "2-Propylpentanoic Acid Sodium Salt",
+    "Depacon",
+    "Ergenyl",
+    "VALPROATE SODIUM",
+    "Valproate Sodium"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "1069-66-5"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:9925"
+    ],
+    "Chemical_Formula": [
+      "C8H15O2.Na"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "5VOM6GYJ0D"
+    ],
+    "Has_Free_Acid_Or_Base_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C29536"
+    ],
+    "Legacy Concept Name": [
+      "Valproate_Sodium"
+    ],
+    "Preferred_Name": [
+      "Valproate Sodium"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0037567"
+    ],
+    "code": [
+      "C48029"
+    ]
+  },
+  "label": "Valproate Sodium",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C48029",
+  "obo_id": "NCIT:C48029",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "2-Propylpentanoic Acid Sodium Salt",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Depacon",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ergenyl",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "VALPROATE SODIUM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Valproate Sodium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C48029?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C48029/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C48029/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C48029/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C48029/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C48029/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C48029/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

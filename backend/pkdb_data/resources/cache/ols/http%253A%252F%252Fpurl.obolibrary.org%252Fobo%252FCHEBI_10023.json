@@ -1,0 +1,360 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_10023",
+  "lang": "en",
+  "description": [
+    "A triazole-based antifungal agent used for the treatment of esophageal candidiasis, invasive pulmonary aspergillosis, and serious fungal infections caused by Scedosporium apiospermum and Fusarium spp. It is an inhibitor of cytochrome P450 2C9 (CYP2C9) and CYP3A4."
+  ],
+  "synonyms": [
+    "(2R,3S)-2-(2,4-difluorophenyl)-3-(5-fluoropyrimidin-4-yl)-1-(1H-1,2,4-triazol-1-yl)butan-2-ol",
+    "voriconazole",
+    "(R-(R*,S*))-alpha-(2,4-difluorophenyl)-5-fluoro-beta-methyl-alpha-(1H-1,2,4-triazol-1-ylmethyl)-4-pyrimidineethanol",
+    "(alphaR,betaS)-alpha-(2,4-difluorophenyl)-5-fluoro-beta-methyl-alpha(1H-1,2,4-triazol-1-ylmethyl)-4-pyrimidineethanol",
+    "VCZ",
+    "Vfend",
+    "voriconazol",
+    "voriconazole",
+    "voriconazolum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C16H14F3N5O"
+    ],
+    "has_alternative_id": [
+      "CHEBI:127308"
+    ],
+    "has_dbxref": [
+      "Beilstein:7694998",
+      "CAS:137234-62-9",
+      "DrugBank:DB00582",
+      "Drug_Central:2846",
+      "KEGG:C07622",
+      "KEGG:D00578",
+      "LINCS:LSM-5244",
+      "PMID:12940129",
+      "PMID:22718362",
+      "PMID:23392902",
+      "PMID:23527908",
+      "PMID:23766489",
+      "PMID:24102553",
+      "Patent:EP440372",
+      "Patent:US5278175",
+      "Wikipedia:Voriconazole"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:10023"
+    ],
+    "inchi": [
+      "InChI=1S/C16H14F3N5O/c1-10(15-14(19)5-20-7-22-15)16(25,6-24-9-21-8-23-24)12-3-2-11(17)4-13(12)18/h2-5,7-10,25H,6H2,1H3/t10-,16+/m0/s1"
+    ],
+    "inchikey": [
+      "BCEHBSKCWLPMDN-MGPLVRAMSA-N"
+    ],
+    "mass": [
+      "349.31050"
+    ],
+    "monoisotopicmass": [
+      "349.11504"
+    ],
+    "smiles": [
+      "C[C@@H](c1ncncc1F)[C@](O)(Cn1cncn1)c1ccc(F)cc1F"
+    ]
+  },
+  "label": "voriconazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_10023",
+  "obo_id": "CHEBI:10023",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "7694998",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "137234-62-9",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "137234-62-9",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "137234-62-9",
+      "description": "DrugBank",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "137234-62-9",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00582",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00582"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2846",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2846"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07622",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07622"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00578",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00578"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5244",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "12940129",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12940129"
+    },
+    {
+      "database": "PMID",
+      "id": "22718362",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22718362"
+    },
+    {
+      "database": "PMID",
+      "id": "23392902",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23392902"
+    },
+    {
+      "database": "PMID",
+      "id": "23527908",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23527908"
+    },
+    {
+      "database": "PMID",
+      "id": "23766489",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23766489"
+    },
+    {
+      "database": "PMID",
+      "id": "24102553",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24102553"
+    },
+    {
+      "database": "Patent",
+      "id": "EP440372",
+      "description": null,
+      "url": "https://www.google.com/patents/EP440372"
+    },
+    {
+      "database": "Patent",
+      "id": "US5278175",
+      "description": null,
+      "url": "https://www.google.com/patents/US5278175"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Voriconazole",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Voriconazole"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2R,3S)-2-(2,4-difluorophenyl)-3-(5-fluoropyrimidin-4-yl)-1-(1H-1,2,4-triazol-1-yl)butan-2-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "voriconazole",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R-(R*,S*))-alpha-(2,4-difluorophenyl)-5-fluoro-beta-methyl-alpha-(1H-1,2,4-triazol-1-ylmethyl)-4-pyrimidineethanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(alphaR,betaS)-alpha-(2,4-difluorophenyl)-5-fluoro-beta-methyl-alpha(1H-1,2,4-triazol-1-ylmethyl)-4-pyrimidineethanol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "VCZ",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Vfend",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "voriconazol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "voriconazole",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "voriconazole",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "voriconazolum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10023?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10023/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10023/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10023/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10023/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10023/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10023/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_10023/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

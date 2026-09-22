@@ -1,0 +1,123 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C28926",
+  "lang": "en",
+  "description": [
+    "A benzoxazolone derivative with mild sedative and centrally-acting muscle relaxant activities. Although its exact mechanism of action is unknown, chlorzoxazone (CZ) appears to act at the spinal cord and subcortical levels of the brain to inhibit multisynaptic reflex arcs involved in producing and maintaining muscle spasms. This agent is extensively hydroxylated by cytochrome P450 2E1 (CYP2E1) to 6-hydroxychlorzoxazone (HCZ),11,12 which is subsequently glucuronidated and eliminated renally. Highly selective for CYP2E1, CZ may be used as a selective probe for phenotyping CYP2E1 in humans; the ratio of HCZ-to-CZ plasma concentrations obtained 2 to 4 hours after oral administration of CZ may be used as a phenotypic measure of CYP2E1 enzymatic activity."
+  ],
+  "synonyms": [
+    "CHLORZOXAZONE",
+    "Chlorzoxazone",
+    "Paraflex"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "95-25-0"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:3655"
+    ],
+    "Chemical_Formula": [
+      "C7H4ClNO2"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "H0DE420U8G"
+    ],
+    "Legacy Concept Name": [
+      "Chlorzoxazone"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "577391"
+    ],
+    "NSC Number": [
+      "26189"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "577391"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "577391"
+    ],
+    "Preferred_Name": [
+      "Chlorzoxazone"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0008296"
+    ],
+    "code": [
+      "C28926"
+    ]
+  },
+  "label": "Chlorzoxazone",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C28926",
+  "obo_id": "NCIT:C28926",
+  "in_subset": [
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CHLORZOXAZONE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Chlorzoxazone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Paraflex",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28926?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28926/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28926/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28926/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28926/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28926/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28926/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28926/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,108 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C65284",
+  "lang": "en",
+  "description": [
+    "A synthetic, benzimidazole-derived angiotensin II receptor antagonist prodrug with antihypertensive activity. Candesartan selectively competes with angiotensin II for the binding of the angiotensin II receptor subtype 1 (AT1) in vascular smooth muscle, blocking angiotensin II-mediated vasoconstriction and inducing vasodilatation. In addition, antagonism of AT1 in the adrenal gland inhibits angiotensin II-stimulated aldosterone synthesis and secretion by the adrenal cortex; sodium and water excretion increase, followed by a reduction in plasma volume and blood pressure."
+  ],
+  "synonyms": [
+    "2-Ethoxy-3-[[4-[2-(2H-tetrazol-5-yl)phenyl]phenyl]methyl]-3H-benzoimidazole-4-carboxylic Acid",
+    "CANDESARTAN",
+    "Candesartan"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "139481-59-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:3347"
+    ],
+    "Chemical_Formula": [
+      "C24H20N6O3"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "S8Q36MD2XX"
+    ],
+    "Legacy Concept Name": [
+      "Candesartan"
+    ],
+    "Preferred_Name": [
+      "Candesartan"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0717550"
+    ],
+    "code": [
+      "C65284"
+    ]
+  },
+  "label": "Candesartan",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C65284",
+  "obo_id": "NCIT:C65284",
+  "in_subset": [
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "2-Ethoxy-3-[[4-[2-(2H-tetrazol-5-yl)phenyl]phenyl]methyl]-3H-benzoimidazole-4-carboxylic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CANDESARTAN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Candesartan",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65284?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65284/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65284/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65284/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65284/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65284/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65284/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

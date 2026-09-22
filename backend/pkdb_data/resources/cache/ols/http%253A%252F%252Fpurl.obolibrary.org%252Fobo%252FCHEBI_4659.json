@@ -1,0 +1,618 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_4659",
+  "lang": "en",
+  "description": [
+    "An organic disulfide that results from the formal oxidative dimerisation of N,N-diethyldithiocarbamic acid.  A multi-enzyme inhibitor that is used in alcohol aversion therapy and also exhibits anticancer properties."
+  ],
+  "synonyms": [
+    "1,1',1'',1'''-[disulfanediylbis(carbonothioylnitrilo)]tetraethane",
+    "Disulfiram",
+    "1,1'-dithiobis(N,N-diethylthioformamide)",
+    "Antabuse",
+    "N,N,N',N'-tetraethylthiuram disulfide",
+    "Tetraethylthiuram disulfide",
+    "bis(diethylthiocarbamoyl) disulfide",
+    "tetraethylthioperoxydicarbonic diamide",
+    "tetraethylthiuram disulfide",
+    "tetraethylthiuram disulphide"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C10H20N2S4"
+    ],
+    "has_dbxref": [
+      "CAS:97-77-8",
+      "DrugBank:DB00822",
+      "Drug_Central:928",
+      "HMDB:HMDB0014960",
+      "KEGG:C01692",
+      "KEGG:D00131",
+      "LINCS:LSM-5467",
+      "MetaCyc:DISULFIRAM",
+      "PMID:10841824",
+      "PMID:11005259",
+      "PMID:11716515",
+      "PMID:14978246",
+      "PMID:15325261",
+      "PMID:15709459",
+      "PMID:16426571",
+      "PMID:16661923",
+      "PMID:16666414",
+      "PMID:16880974",
+      "PMID:17079463",
+      "PMID:17579916",
+      "PMID:17667894",
+      "PMID:18579431",
+      "PMID:19720750",
+      "PMID:19782464",
+      "PMID:19787200",
+      "PMID:21471244",
+      "PMID:24496638",
+      "PMID:25133664",
+      "PMID:25445071",
+      "PMID:25464072",
+      "PMID:25476326",
+      "PMID:25495604",
+      "PMID:25557293",
+      "PMID:25565438",
+      "PMID:25657800",
+      "PMID:25777347",
+      "PMID:26033731",
+      "PMID:26224731",
+      "PMID:26235918",
+      "PMID:26239994",
+      "PMID:26314552",
+      "PMID:26517513",
+      "PMID:26550292",
+      "PMID:31151194",
+      "PMID:32963852",
+      "PMID:32971817",
+      "PMID:33731397",
+      "PMID:34012274",
+      "PMID:34045896",
+      "PMID:8442800",
+      "PMID:8572926",
+      "Pesticides:disulfiram",
+      "Reaxys:1712560",
+      "Wikipedia:Disulfiram"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:4659"
+    ],
+    "inchi": [
+      "InChI=1S/C10H20N2S4/c1-5-11(6-2)9(13)15-16-10(14)12(7-3)8-4/h5-8H2,1-4H3"
+    ],
+    "inchikey": [
+      "AUZONCFQVSMFAP-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "296.544"
+    ],
+    "monoisotopicmass": [
+      "296.05093"
+    ],
+    "smiles": [
+      "S(SC(N(CC)CC)=S)C(N(CC)CC)=S"
+    ]
+  },
+  "label": "disulfiram",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_4659",
+  "obo_id": "CHEBI:4659",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "97-77-8",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "97-77-8",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "97-77-8",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00822",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00822"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "928",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/928"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014960",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014960"
+    },
+    {
+      "database": "KEGG",
+      "id": "C01692",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C01692"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00131",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00131"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5467",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MetaCyc",
+      "id": "DISULFIRAM",
+      "description": null,
+      "url": "https://biocyc.org/META/NEW-IMAGE?type=NIL&object=DISULFIRAM"
+    },
+    {
+      "database": "PMID",
+      "id": "10841824",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10841824"
+    },
+    {
+      "database": "PMID",
+      "id": "11005259",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11005259"
+    },
+    {
+      "database": "PMID",
+      "id": "11716515",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11716515"
+    },
+    {
+      "database": "PMID",
+      "id": "14978246",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14978246"
+    },
+    {
+      "database": "PMID",
+      "id": "15325261",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15325261"
+    },
+    {
+      "database": "PMID",
+      "id": "15709459",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15709459"
+    },
+    {
+      "database": "PMID",
+      "id": "16426571",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16426571"
+    },
+    {
+      "database": "PMID",
+      "id": "16661923",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16661923"
+    },
+    {
+      "database": "PMID",
+      "id": "16666414",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16666414"
+    },
+    {
+      "database": "PMID",
+      "id": "16880974",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16880974"
+    },
+    {
+      "database": "PMID",
+      "id": "17079463",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17079463"
+    },
+    {
+      "database": "PMID",
+      "id": "17579916",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17579916"
+    },
+    {
+      "database": "PMID",
+      "id": "17667894",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17667894"
+    },
+    {
+      "database": "PMID",
+      "id": "18579431",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18579431"
+    },
+    {
+      "database": "PMID",
+      "id": "19720750",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19720750"
+    },
+    {
+      "database": "PMID",
+      "id": "19782464",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19782464"
+    },
+    {
+      "database": "PMID",
+      "id": "19787200",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19787200"
+    },
+    {
+      "database": "PMID",
+      "id": "21471244",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21471244"
+    },
+    {
+      "database": "PMID",
+      "id": "24496638",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24496638"
+    },
+    {
+      "database": "PMID",
+      "id": "25133664",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25133664"
+    },
+    {
+      "database": "PMID",
+      "id": "25445071",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25445071"
+    },
+    {
+      "database": "PMID",
+      "id": "25464072",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25464072"
+    },
+    {
+      "database": "PMID",
+      "id": "25476326",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25476326"
+    },
+    {
+      "database": "PMID",
+      "id": "25495604",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25495604"
+    },
+    {
+      "database": "PMID",
+      "id": "25557293",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25557293"
+    },
+    {
+      "database": "PMID",
+      "id": "25565438",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25565438"
+    },
+    {
+      "database": "PMID",
+      "id": "25657800",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25657800"
+    },
+    {
+      "database": "PMID",
+      "id": "25777347",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25777347"
+    },
+    {
+      "database": "PMID",
+      "id": "26033731",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26033731"
+    },
+    {
+      "database": "PMID",
+      "id": "26224731",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26224731"
+    },
+    {
+      "database": "PMID",
+      "id": "26235918",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26235918"
+    },
+    {
+      "database": "PMID",
+      "id": "26239994",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26239994"
+    },
+    {
+      "database": "PMID",
+      "id": "26314552",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26314552"
+    },
+    {
+      "database": "PMID",
+      "id": "26517513",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26517513"
+    },
+    {
+      "database": "PMID",
+      "id": "26550292",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26550292"
+    },
+    {
+      "database": "PMID",
+      "id": "31151194",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/31151194"
+    },
+    {
+      "database": "PMID",
+      "id": "32963852",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32963852"
+    },
+    {
+      "database": "PMID",
+      "id": "32971817",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32971817"
+    },
+    {
+      "database": "PMID",
+      "id": "33731397",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33731397"
+    },
+    {
+      "database": "PMID",
+      "id": "34012274",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/34012274"
+    },
+    {
+      "database": "PMID",
+      "id": "34045896",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/34045896"
+    },
+    {
+      "database": "PMID",
+      "id": "8442800",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8442800"
+    },
+    {
+      "database": "PMID",
+      "id": "8572926",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8572926"
+    },
+    {
+      "database": "Pesticides",
+      "id": "disulfiram",
+      "description": "Alan Wood's Pesticides",
+      "url": null
+    },
+    {
+      "database": "Reaxys",
+      "id": "1712560",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Disulfiram",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Disulfiram"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1,1',1'',1'''-[disulfanediylbis(carbonothioylnitrilo)]tetraethane",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Disulfiram",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,1'-dithiobis(N,N-diethylthioformamide)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Antabuse",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N,N,N',N'-tetraethylthiuram disulfide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tetraethylthiuram disulfide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "bis(diethylthiocarbamoyl) disulfide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tetraethylthioperoxydicarbonic diamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tetraethylthiuram disulfide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tetraethylthiuram disulphide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4659/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

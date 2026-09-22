@@ -1,0 +1,93 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/MMO_0000198",
+  "lang": "en",
+  "description": [
+    "Technique using visualization of deep structures of the body by recording the reflections of pulses of ultrasonic waves directed into the tissues. It uses the shifts in frequency between emitted ultrasonic waves and their echoes to measure the velocities of moving objects."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "created_by": [
+      "mshimoyama"
+    ],
+    "creation_date": [
+      "2011-02-03T04:26:58Z"
+    ],
+    "has_obo_namespace": [
+      "measurement_method_ontology"
+    ],
+    "id": [
+      "MMO:0000198"
+    ]
+  },
+  "label": "doppler ultrasound",
+  "ontology_name": "mmo",
+  "ontology_prefix": "MMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/mmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "MMO_0000198",
+  "obo_id": "MMO:0000198",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "Technique using visualization of deep structures of the body by recording the reflections of pulses of ultrasonic waves directed into the tissues. It uses the shifts in frequency between emitted ultrasonic waves and their echoes to measure the velocities of moving objects.",
+      "oboXrefs": [
+        {
+          "database": "Dorland",
+          "id": "Dorlands_Illustrated_Medical_Dictionary--31st_Ed",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "ISBN",
+          "id": "978-1416049982",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000198?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000198/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000198/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000198/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000198/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000198/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000198/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000198/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000198/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000198/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000198/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

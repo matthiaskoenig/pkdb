@@ -1,0 +1,141 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CMO_0000094",
+  "lang": "en",
+  "description": [
+    "A measurement to assess the morphological or physiological state of the respiratory system or portion of the respiratory system."
+  ],
+  "synonyms": [
+    "FEV change measurement",
+    "FVC change measurement",
+    "airway imaging measurement",
+    "airway responsiveness measurement",
+    "maximal voluntary ventilation",
+    "respiratory symptom change measurement",
+    "respiratory symptom measurement"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "EFO:0005921",
+      "EFO:0006897",
+      "EFO:0007627",
+      "EFO:0007939",
+      "EFO:0008431",
+      "EFO:0010068",
+      "EFO:0010339"
+    ],
+    "has_obo_namespace": [
+      "clinical_measurement_ontology"
+    ],
+    "id": [
+      "CMO:0000094"
+    ]
+  },
+  "label": "respiratory system measurement",
+  "ontology_name": "cmo",
+  "ontology_prefix": "CMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/cmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CMO_0000094",
+  "obo_id": "CMO:0000094",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A measurement to assess the morphological or physiological state of the respiratory system or portion of the respiratory system.",
+      "oboXrefs": [
+        {
+          "database": "RGD",
+          "id": "MS",
+          "description": null,
+          "url": "https://rgd.mcw.edu/rgdweb/search/search.html?term=MS"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0005921",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0005921"
+    },
+    {
+      "database": "EFO",
+      "id": "0006897",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0006897"
+    },
+    {
+      "database": "EFO",
+      "id": "0007627",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0007627"
+    },
+    {
+      "database": "EFO",
+      "id": "0007939",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0007939"
+    },
+    {
+      "database": "EFO",
+      "id": "0008431",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0008431"
+    },
+    {
+      "database": "EFO",
+      "id": "0010068",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0010068"
+    },
+    {
+      "database": "EFO",
+      "id": "0010339",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0010339"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000094?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000094/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000094/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000094/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000094/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000094/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000094/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000094/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000094/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000094/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000094/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

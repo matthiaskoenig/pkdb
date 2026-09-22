@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:2659",
+  "name": "aminophylline",
+  "definition": "A mixture comprising of theophylline and ethylenediamine in a 2:1 ratio.",
+  "formula": "C7H8N4O2.C7H8N4O2.C2H8N2",
+  "charge": "0",
+  "mass": "420.434",
+  "inchikey": "FQPFAHBPWDRTLU-UHFFFAOYSA-N"
+}

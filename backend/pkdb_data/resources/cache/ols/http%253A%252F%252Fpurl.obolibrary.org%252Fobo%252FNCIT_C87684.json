@@ -1,0 +1,108 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C87684",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "3,7-Dihydro-3,7-Dimethyl-1H-Purine-2,6-Dione",
+    "3,7-Dimethylxanthine",
+    "THEOBROMINE",
+    "Theobromine"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "83-67-0"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:28946"
+    ],
+    "Chemical_Formula": [
+      "C7H8N4O2"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "OBD445WZ5P"
+    ],
+    "Preferred_Name": [
+      "Theobromine"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0039763"
+    ],
+    "code": [
+      "C87684"
+    ]
+  },
+  "label": "Theobromine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C87684",
+  "obo_id": "NCIT:C87684",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "3,7-Dihydro-3,7-Dimethyl-1H-Purine-2,6-Dione",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "3,7-Dimethylxanthine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "THEOBROMINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Theobromine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87684?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87684/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87684/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87684/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87684/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87684/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87684/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

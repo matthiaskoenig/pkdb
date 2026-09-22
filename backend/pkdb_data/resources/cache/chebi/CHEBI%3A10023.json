@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:10023",
+  "name": "voriconazole",
+  "definition": "A triazole-based antifungal agent used for the treatment of esophageal candidiasis, invasive pulmonary aspergillosis, and serious fungal infections caused by Scedosporium apiospermum and Fusarium spp. It is an inhibitor of cytochrome P450 2C9 (CYP2C9) and CYP3A4.",
+  "formula": "C16H14F3N5O",
+  "charge": "0",
+  "mass": "349.31050",
+  "inchikey": "BCEHBSKCWLPMDN-MGPLVRAMSA-N"
+}

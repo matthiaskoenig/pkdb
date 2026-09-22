@@ -1,0 +1,307 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_28044",
+  "lang": "en",
+  "description": [
+    "An aromatic amino acid that is alanine in which one of the methyl hydrogens is substituted by a phenyl group."
+  ],
+  "synonyms": [
+    "2-amino-3-phenylpropanoic acid",
+    "Phenylalanine",
+    "phenylalanine",
+    "DL-Phenylalanine",
+    "F",
+    "PHE",
+    "Phenylalanin",
+    "alpha-Amino-beta-phenylpropionic acid",
+    "fenilalanina"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C9H11NO2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:25984",
+      "CHEBI:8089"
+    ],
+    "has_dbxref": [
+      "CAS:150-30-1",
+      "Gmelin:50836",
+      "KEGG:C02057",
+      "PMID:17439666",
+      "PMID:22264337",
+      "Reaxys:1910407",
+      "Wikipedia:Phenylalanine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:28044"
+    ],
+    "inchi": [
+      "InChI=1S/C9H11NO2/c10-8(9(11)12)6-7-4-2-1-3-5-7/h1-5,8H,6,10H2,(H,11,12)"
+    ],
+    "inchikey": [
+      "COLNVLDHVKWLRT-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "165.18918"
+    ],
+    "monoisotopicmass": [
+      "165.07898"
+    ],
+    "smiles": [
+      "NC(Cc1ccccc1)C(O)=O"
+    ]
+  },
+  "label": "phenylalanine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_28044",
+  "obo_id": "CHEBI:28044",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "150-30-1",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "150-30-1",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "Gmelin",
+      "id": "50836",
+      "description": "Gmelin",
+      "url": null
+    },
+    {
+      "database": "KEGG",
+      "id": "C02057",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C02057"
+    },
+    {
+      "database": "PMID",
+      "id": "17439666",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17439666"
+    },
+    {
+      "database": "PMID",
+      "id": "22264337",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22264337"
+    },
+    {
+      "database": "Reaxys",
+      "id": "1910407",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Phenylalanine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Phenylalanine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-amino-3-phenylpropanoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenylalanine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenylalanine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenylalanine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DL-Phenylalanine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "F",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "PHE",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenylalanin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-Amino-beta-phenylpropionic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fenilalanina",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/graph"
+    },
+    "is_conjugate_base_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_base_of"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    },
+    "is_conjugate_acid_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_acid_of"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_28044/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

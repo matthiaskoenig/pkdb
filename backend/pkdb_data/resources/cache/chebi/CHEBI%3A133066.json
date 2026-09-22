@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:133066",
+  "name": "S-(5-acetamido-2-hydroxyphenyl)cysteine",
+  "definition": "A cysteine derivative in which the thiol hydrogen of cysteine is replaced by a 5-acetamido-2-hydroxyphenyl group.",
+  "formula": "C11H14N2O4S",
+  "charge": "0",
+  "mass": "270.306",
+  "inchikey": "LLHICPSCVFRWDT-UHFFFAOYSA-N"
+}

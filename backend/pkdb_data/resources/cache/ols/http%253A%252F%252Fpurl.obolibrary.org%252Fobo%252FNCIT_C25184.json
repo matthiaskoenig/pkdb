@@ -1,0 +1,160 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C25184",
+  "lang": "en",
+  "description": [
+    "A family of homotetrameric cytoplasmic enzymes involved in the conversion of L-lactate and NAD to pyruvate and NADH in the final step of anaerobic glycolysis. In vertebrates, genes for three different subunits (LDH-A, LDH-B and LDH-C) exist."
+  ],
+  "synonyms": [
+    "EC 1.1.1.27",
+    "L-(+)-Lactate Dehydrogenase",
+    "L-Lactic Acid Dehydrogenase",
+    "LDH",
+    "Lactate Dehydrogenase",
+    "Lactic Acid Dehydrogenase",
+    "NAD-Lactate Dehydrogenase",
+    "lactate dehydrogenase",
+    "lactic acid dehydrogenase"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "One of a group of enzymes found in the blood and other body tissues and involved in energy production in cells. An increased amount of lactate dehydrogenase in the blood may be a sign of tissue damage and some types of cancer or other diseases."
+    ],
+    "Contributing_Source": [
+      "CTRP"
+    ],
+    "Display_Name": [
+      "Lactate Dehydrogenase"
+    ],
+    "Legacy Concept Name": [
+      "Lactate_Dehydrogenase"
+    ],
+    "Preferred_Name": [
+      "Lactate Dehydrogenase"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein",
+      "Enzyme"
+    ],
+    "UMLS_CUI": [
+      "C0022917"
+    ],
+    "code": [
+      "C25184"
+    ]
+  },
+  "label": "Lactate Dehydrogenase",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C25184",
+  "obo_id": "NCIT:C25184",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C142800"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "EC 1.1.1.27",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "L-(+)-Lactate Dehydrogenase",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "L-Lactic Acid Dehydrogenase",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "LDH",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lactate Dehydrogenase",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lactic Acid Dehydrogenase",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "NAD-Lactate Dehydrogenase",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "lactate dehydrogenase",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "lactic acid dehydrogenase",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25184?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25184/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25184/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25184/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25184/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25184/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25184/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25184/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25184/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25184/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25184/graph"
+    },
+    "Gene_Product_Has_Biochemical_Function": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25184/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R52"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

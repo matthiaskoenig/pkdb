@@ -1,0 +1,178 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C576",
+  "lang": "en",
+  "description": [
+    "A synthetic nonsteroidal indole derivative with anti-inflammatory activity and chemopreventive properties. As a nonsteroidal anti-inflammatory drug (NSAID), indomethacin inhibits the enzyme cyclooxygenase, thereby preventing cyclooxygenase-mediated DNA adduct formation by heterocyclic aromatic amines. This agent also may inhibit the expression of multidrug-resistant protein type 1, resulting in increased efficacies of some antineoplastic agents in treating multi-drug resistant tumors. In addition, indomethacin activates phosphatases that inhibit the migration and proliferation of cancer cells and downregulates survivin, which may result in tumor cell apoptosis. (NCI04)"
+  ],
+  "synonyms": [
+    "1-(4-chlorobenzoyl)-5-methoxy- 2-methyl-1-H-indole-3-acetic acid",
+    "INDOMETHACIN",
+    "Indocin",
+    "Indometacin",
+    "Indomethacin",
+    "indomethacin"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug that reduces pain, fever, swelling, and redness. It is also being used to reduce tumor-induced suppression of the immune system and to increase the effectiveness of anticancer drugs. It is a type of nonsteroidal anti-inflammatory drug (NSAID)."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Dysmennorhea; Inflammatory disorders; Pain"
+    ],
+    "CAS_Registry": [
+      "53-86-1"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:49662"
+    ],
+    "Chemical_Formula": [
+      "C19H16ClNO4"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "GDC",
+      "HemOnc"
+    ],
+    "Display_Name": [
+      "Indomethacin"
+    ],
+    "FDA_UNII_Code": [
+      "XXE1CET956"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C47999"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C17984",
+      "http://purl.obolibrary.org/obo/NCIT_C19705"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Indomethacin"
+    ],
+    "Maps_To": [
+      "Indomethacin"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "39489"
+    ],
+    "NSC Number": [
+      "77541"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "39489"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "39489"
+    ],
+    "Preferred_Name": [
+      "Indomethacin"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0021246"
+    ],
+    "code": [
+      "C576"
+    ]
+  },
+  "label": "Indomethacin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C576",
+  "obo_id": "NCIT:C576",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C176424",
+    "NCIT_C177537",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "1-(4-chlorobenzoyl)-5-methoxy- 2-methyl-1-H-indole-3-acetic acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "INDOMETHACIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Indocin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Indometacin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Indomethacin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "indomethacin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C576?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C576/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C576/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C576/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C576/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C576/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C576/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C576/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

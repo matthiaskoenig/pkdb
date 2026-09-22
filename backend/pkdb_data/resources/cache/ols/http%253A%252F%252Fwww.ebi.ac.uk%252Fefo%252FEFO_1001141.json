@@ -1,0 +1,224 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_1001141",
+  "lang": "en",
+  "description": [
+    "An inflammatory process affecting the kidney. The cause is most often bacterial, but may also be fungal in nature. Signs and symptoms may include fever, chills, flank pain, painful and frequent urination, cloudy or bloody urine, and confusion.",
+    "Inflammation of the KIDNEY involving the renal parenchyma (the NEPHRONS); KIDNEY PELVIS; and KIDNEY CALICES. It is characterized by ABDOMINAL PAIN; FEVER; NAUSEA; VOMITING; and occasionally DIARRHEA."
+  ],
+  "synonyms": [
+    "Pyelonephritis",
+    "kidney infection",
+    "pyelonephritis",
+    "pyometrium"
+  ],
+  "annotation": {
+    "gwas_trait": [
+      true
+    ],
+    "has close match": [
+      "http://identifiers.org/meddra/10037596"
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/19590",
+      "http://identifiers.org/mesh/D011704",
+      "http://identifiers.org/snomedct/45816000",
+      "http://linkedlifedata.com/resource/umls/id/C0034186",
+      "http://purl.obolibrary.org/obo/DOID_11400",
+      "http://purl.obolibrary.org/obo/NCIT_C34965",
+      "http://www.ebi.ac.uk/efo/EFO_1001141"
+    ],
+    "has_dbxref": [
+      "DOID:11400",
+      "ICD9:590.80",
+      "MEDGEN:19590",
+      "MESH:D011704",
+      "MONDO:0006939",
+      "MedDRA:10037596",
+      "MedDRA:10037606",
+      "NCIT:C34965",
+      "NCIt:C34965",
+      "SCTID:45816000",
+      "SNOMEDCT:45816000",
+      "UMLS:C0034186"
+    ],
+    "id": [
+      "EFO:1001141"
+    ],
+    "term editor": [
+      "Sirarat Sarntivijai"
+    ]
+  },
+  "label": "pyelonephritis",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "EFO_1001141",
+  "obo_id": "EFO:1001141",
+  "in_subset": [
+    "otar"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "An inflammatory process affecting the kidney. The cause is most often bacterial, but may also be fungal in nature. Signs and symptoms may include fever, chills, flank pain, painful and frequent urination, cloudy or bloody urine, and confusion.",
+      "oboXrefs": [
+        {
+          "database": "NCIT",
+          "id": "C34965",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C34965"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "11400",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/DOID_11400"
+    },
+    {
+      "database": "ICD9",
+      "id": "590.80",
+      "description": "MONDO:i2s",
+      "url": null
+    },
+    {
+      "database": "MEDGEN",
+      "id": "19590",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/19590"
+    },
+    {
+      "database": "MESH",
+      "id": "D011704",
+      "description": "MONDO:equivalentTo",
+      "url": "http://id.nlm.nih.gov/mesh/D011704"
+    },
+    {
+      "database": "MONDO",
+      "id": "0006939",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MONDO_0006939"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10037596",
+      "description": "EFO:1001141",
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10037596"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10037606",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10037606"
+    },
+    {
+      "database": "NCIT",
+      "id": "C34965",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/NCIT_C34965"
+    },
+    {
+      "database": "NCIt",
+      "id": "C34965",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C34965"
+    },
+    {
+      "database": "SCTID",
+      "id": "45816000",
+      "description": "MONDO:equivalentTo",
+      "url": "http://snomed.info/id/45816000"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "45816000",
+      "description": null,
+      "url": "http://snomed.info/id/45816000"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0034186",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0034186"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "kidney infection",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C34965",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C34965"
+        }
+      ]
+    },
+    {
+      "name": "pyelonephritis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "pyometrium",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "https://orcid.org/0000-0002-6601-2165",
+          "description": null,
+          "url": "https://orcid.org/0000-0002-6601-2165"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001141/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

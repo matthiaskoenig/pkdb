@@ -1,0 +1,109 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29046",
+  "lang": "en",
+  "description": [
+    "A dihydropyridine calcium channel blocking agent. Felodipine inhibits the influx of extracellular calcium ions into myocardial and vascular smooth muscle cells, causing dilatation of the main coronary and systemic arteries and decreasing myocardial contractility. This agent also inhibits the drug efflux pump P-glycoprotein which is overexpressed in some multi-drug resistant tumors and may improve the efficacy of some antineoplastic agents. (NCI04)"
+  ],
+  "synonyms": [
+    "FELODIPINE",
+    "Felodipine",
+    "Plendil"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "72509-76-3"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:585948"
+    ],
+    "Chemical_Formula": [
+      "C18H19Cl2NO4"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "OL961R6O2C"
+    ],
+    "Legacy Concept Name": [
+      "Felodipine"
+    ],
+    "Preferred_Name": [
+      "Felodipine"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0015772"
+    ],
+    "code": [
+      "C29046"
+    ]
+  },
+  "label": "Felodipine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29046",
+  "obo_id": "NCIT:C29046",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "FELODIPINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Felodipine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Plendil",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29046?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29046/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29046/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29046/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29046/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29046/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29046/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29046/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

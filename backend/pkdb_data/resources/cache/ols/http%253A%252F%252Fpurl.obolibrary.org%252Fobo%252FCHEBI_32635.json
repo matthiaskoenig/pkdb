@@ -1,0 +1,210 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_32635",
+  "lang": "en",
+  "description": [
+    "An aryl sulfate that is paracetamol in which the hydroxy group has been replaced by a sulfooxy group."
+  ],
+  "synonyms": [
+    "4-acetamidophenyl hydrogen sulfate",
+    "4-acetaminophen sulfate",
+    "N-(4-(sulfooxy)phenyl)acetamide",
+    "N-acetyl-4-aminophenol sulfate",
+    "acetaminophen sulfate",
+    "acetaminophen sulfate ester"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C8H9NO5S"
+    ],
+    "has_dbxref": [
+      "Beilstein:6457132",
+      "CAS:10066-90-7",
+      "PMID:12831506",
+      "PMID:24401842",
+      "Reaxys:3331457"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:32635"
+    ],
+    "inchi": [
+      "InChI=1S/C8H9NO5S/c1-6(10)9-7-2-4-8(5-3-7)14-15(11,12)13/h2-5H,1H3,(H,9,10)(H,11,12,13)"
+    ],
+    "inchikey": [
+      "IGTYILLPRJOVFY-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "231.22680"
+    ],
+    "monoisotopicmass": [
+      "231.02014"
+    ],
+    "smiles": [
+      "CC(=O)Nc1ccc(OS(O)(=O)=O)cc1"
+    ]
+  },
+  "label": "paracetamol sulfate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_32635",
+  "obo_id": "CHEBI:32635",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "6457132",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "10066-90-7",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "12831506",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12831506"
+    },
+    {
+      "database": "PMID",
+      "id": "24401842",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24401842"
+    },
+    {
+      "database": "Reaxys",
+      "id": "3331457",
+      "description": "Reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-acetamidophenyl hydrogen sulfate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-acetaminophen sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(4-(sulfooxy)phenyl)acetamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-acetyl-4-aminophenol sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acetaminophen sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acetaminophen sulfate ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32635/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,123 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C131680",
+  "lang": "en",
+  "description": [
+    "Surgical removal of a part of a lesion; some portion of the lesion is detectable on post-operative evaluation."
+  ],
+  "synonyms": [
+    "Incomplete Resection",
+    "Partial Resection",
+    "Subtotal Resection"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Surgical removal of a part of a lesion; some portion of the lesion is detectable on post-operative evaluation."
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "GDC",
+      "NICHD",
+      "PCDC"
+    ],
+    "Is_PCDC_EWS_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C157443"
+    ],
+    "Is_PCDC_GCT_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C123560"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C70700"
+    ],
+    "Maps_To": [
+      "Subtotal Resection"
+    ],
+    "NCI_META_CUI": [
+      "CL514546"
+    ],
+    "Preferred_Name": [
+      "Partial Resection"
+    ],
+    "Semantic_Type": [
+      "Therapeutic or Preventive Procedure"
+    ],
+    "code": [
+      "C131680"
+    ]
+  },
+  "label": "Partial Resection",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C131680",
+  "obo_id": "NCIT:C131680",
+  "in_subset": [
+    "NCIT_C132009",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C157531",
+    "NCIT_C157711",
+    "NCIT_C174237",
+    "NCIT_C174241",
+    "NCIT_C177383",
+    "NCIT_C177402",
+    "NCIT_C177537",
+    "NCIT_C179478",
+    "NCIT_C179482",
+    "NCIT_C186321",
+    "NCIT_C186341",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Incomplete Resection",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Partial Resection",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Subtotal Resection",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C131680?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C131680/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C131680/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C131680/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C131680/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C131680/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C131680/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,160 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_31974",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Pentagastrin",
+    "ICI 50123",
+    "pentavlon",
+    "peptavlon"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C37H49N7O9S"
+    ],
+    "has_dbxref": [
+      "CAS:5534-95-2",
+      "Drug_Central:2088",
+      "KEGG:D01631"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:31974"
+    ],
+    "inchi": [
+      "InChI=1S/C37H49N7O9S/c1-37(2,3)53-36(52)39-16-14-30(45)41-28(19-23-21-40-25-13-9-8-12-24(23)25)34(50)42-26(15-17-54-4)33(49)44-29(20-31(46)47)35(51)43-27(32(38)48)18-22-10-6-5-7-11-22/h5-13,21,26-29,40H,14-20H2,1-4H3,(H2,38,48)(H,39,52)(H,41,45)(H,42,50)(H,43,51)(H,44,49)(H,46,47)/t26-,27-,28-,29-/m0/s1"
+    ],
+    "inchikey": [
+      "NEYNJQRKHLUJRU-DZUOILHNSA-N"
+    ],
+    "mass": [
+      "767.894"
+    ],
+    "monoisotopicmass": [
+      "767.33125"
+    ],
+    "smiles": [
+      "C(N[C@@H](CC1=CNC2=C1C=CC=C2)C(N[C@@H](CCSC)C(N[C@@H](CC(O)=O)C(N[C@@H](CC3=CC=CC=C3)C(N)=O)=O)=O)=O)(=O)CCNC(=O)OC(C)(C)C"
+    ]
+  },
+  "label": "Pentagastrin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_31974",
+  "obo_id": "CHEBI:31974",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "5534-95-2",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2088",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2088"
+    },
+    {
+      "database": "KEGG",
+      "id": "D01631",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D01631"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Pentagastrin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ICI 50123",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pentavlon",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "peptavlon",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31974/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

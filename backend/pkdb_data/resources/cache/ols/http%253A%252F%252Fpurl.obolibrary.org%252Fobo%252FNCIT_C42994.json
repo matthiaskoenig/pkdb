@@ -1,0 +1,165 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C42994",
+  "lang": "en",
+  "description": [
+    "Insoluble solid particles composed of active and/or inert ingredient(s) that are dispersed in a liquid."
+  ],
+  "synonyms": [
+    "Ready to Use Suspension",
+    "SUSP",
+    "SUSPENSION",
+    "Susp",
+    "Suspension",
+    "Suspension Dosage Form",
+    "Suspension Dose Form",
+    "susp"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A liquid dosage form that contains solid particles dispersed in a liquid vehicle. Note: A liquid is pourable; it flows and conforms to its container at room temperature. It displays Newtonian or pseudoplastic flow behavior."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "FDA",
+      "NCPDP"
+    ],
+    "FDA_Table": [
+      "Dosage Form (C-DRG-00201)"
+    ],
+    "Has_Pharmaceutical_Basic_Dose_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C154602"
+    ],
+    "Has_Pharmaceutical_State_Of_Matter": [
+      "http://purl.obolibrary.org/obo/NCIT_C45298"
+    ],
+    "Legacy Concept Name": [
+      "Suspension_Dosage_Form"
+    ],
+    "Preferred_Name": [
+      "Suspension Dosage Form"
+    ],
+    "Semantic_Type": [
+      "Biomedical or Dental Material"
+    ],
+    "UMLS_CUI": [
+      "C0038960"
+    ],
+    "code": [
+      "C42994"
+    ]
+  },
+  "label": "Suspension Dosage Form",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C42994",
+  "obo_id": "NCIT:C42994",
+  "in_subset": [
+    "NCIT_C54452",
+    "NCIT_C54456",
+    "NCIT_C61410",
+    "NCIT_C66726",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C77527",
+    "NCIT_C78418",
+    "NCIT_C78426",
+    "NCIT_C89415",
+    "NCIT_C89508"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Ready to Use Suspension",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SUSP",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SUSPENSION",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Susp",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Suspension",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Suspension Dosage Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Suspension Dose Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "susp",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42994?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42994/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42994/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42994/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42994/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42994/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42994/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42994/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42994/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42994/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42994/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

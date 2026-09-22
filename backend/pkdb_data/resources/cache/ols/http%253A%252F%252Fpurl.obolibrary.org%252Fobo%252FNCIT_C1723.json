@@ -1,0 +1,229 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C1723",
+  "lang": "en",
+  "description": [
+    "A recombinant, chimeric monoclonal antibody directed against the epidermal growth factor (EGFR) with antineoplastic activity. Cetuximab binds to the extracellular domain of the EGFR, thereby preventing the activation and subsequent dimerization of the receptor; the decrease in receptor activation and dimerization may result in an inhibition in signal transduction and anti-proliferative effects. This agent may inhibit EGFR-dependent primary tumor growth and metastasis. EGFR is overexpressed on the cell surfaces of various solid tumors."
+  ],
+  "synonyms": [
+    "C 225",
+    "C-225",
+    "C225",
+    "CETUXIMAB",
+    "Cetuximab Biosimilar CDP-1",
+    "Cetuximab Biosimilar CMAB009",
+    "Cetuximab Biosimilar KL 140",
+    "Cetuximab",
+    "Chimeric Anti-EGFR Monoclonal Antibody",
+    "Chimeric MoAb C225",
+    "Chimeric Monoclonal Antibody C225",
+    "Erbitux",
+    "IMC-C225",
+    "cetuximab"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A monoclonal antibody used to treat certain types of head and neck cancer, and colorectal cancer that has spread to other parts of the body. It is also being studied in the treatment of other types of cancer. Monoclonal antibodies are made in the laboratory and can locate and bind to cancer cells. Erbitux binds to the epidermal growth factor receptor (EGFR), which is found on the surface of some types of cancer cells."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Advanced colorectal cancer; Head and neck cancer"
+    ],
+    "CAS_Registry": [
+      "205923-56-4"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "GDC",
+      "HemOnc"
+    ],
+    "Display_Name": [
+      "Cetuximab"
+    ],
+    "FDA_UNII_Code": [
+      "PQX0D8J21J"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C17068"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Cetuximab"
+    ],
+    "Maps_To": [
+      "Cetuximab"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "42384"
+    ],
+    "NSC Number": [
+      "714692"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "42384"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "42384"
+    ],
+    "Preferred_Name": [
+      "Cetuximab"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein",
+      "Immunologic Factor",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0995188"
+    ],
+    "code": [
+      "C1723"
+    ]
+  },
+  "label": "Cetuximab",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C1723",
+  "obo_id": "NCIT:C1723",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C176424",
+    "NCIT_C177537",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "C 225",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "C-225",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "C225",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CETUXIMAB",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cetuximab Biosimilar CDP-1",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cetuximab Biosimilar CMAB009",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cetuximab Biosimilar KL 140",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cetuximab",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Chimeric Anti-EGFR Monoclonal Antibody",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Chimeric MoAb C225",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Chimeric Monoclonal Antibody C225",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Erbitux",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "IMC-C225",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "cetuximab",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1723?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1723/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1723/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1723/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1723/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1723/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1723/graph"
+    },
+    "Chemical_Or_Drug_Has_Mechanism_Of_Action": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1723/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R124"
+    },
+    "Chemical_Or_Drug_Has_Physiologic_Effect": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1723/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R125"
+    },
+    "Chemical_Or_Drug_Affects_Gene_Product": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1723/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R146"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,76 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C16601",
+  "lang": "en",
+  "description": [
+    "A type of globulin in plasma that in electrically charged solutions exhibits slowest colloidal mobility after that of the alpha and beta globulins. All immunoglobulins belong to this group of serum protein."
+  ],
+  "synonyms": [
+    "Gamma Globulin"
+  ],
+  "annotation": {
+    "Legacy Concept Name": [
+      "Gamma_Globulin"
+    ],
+    "Preferred_Name": [
+      "Gamma Globulin"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein",
+      "Immunologic Factor"
+    ],
+    "UMLS_CUI": [
+      "C0017007"
+    ],
+    "code": [
+      "C16601"
+    ]
+  },
+  "label": "Gamma Globulin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C16601",
+  "obo_id": "NCIT:C16601",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Gamma Globulin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16601?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16601/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16601/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16601/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16601/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16601/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16601/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

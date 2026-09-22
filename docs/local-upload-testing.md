@@ -96,3 +96,8 @@ not automatically excluded or repaired.
 
 Stop with `docker compose stop`; resume with `docker compose up --wait`. Database
 and attachments persist across restarts. Finish with `unset PKDB_API_TOKEN`.
+
+## Add an allowed term
+
+Edit the [vocabulary definitions](vocabulary.md) and run the JSON update script,
+then rebuild the Docker backend before validating the study again.

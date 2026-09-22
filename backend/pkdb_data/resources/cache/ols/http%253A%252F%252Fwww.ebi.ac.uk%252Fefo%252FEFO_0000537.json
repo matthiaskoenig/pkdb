@@ -1,0 +1,317 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000537",
+  "lang": "en",
+  "description": [
+    "Persistently high systemic arterial blood pressure. Based on multiple readings (blood pressure determination), hypertension is currently defined as when systolic pressure is consistently greater than 140 mm Hg or when diastolic pressure is consistently 90 mm Hg or more."
+  ],
+  "synonyms": [
+    "HTN",
+    "(hypertensive disease) or (hypertension)",
+    "Blood Pressure, High",
+    "Blood Pressures, High",
+    "HTN",
+    "HTN - hypertension",
+    "HYPERTENSIVE DISEASE",
+    "High Blood Pressure",
+    "High Blood Pressures",
+    "High blood pressure (& [essential hypertension])",
+    "Hypertensive disease (disorder)",
+    "Hypertensive disease NOS (disorder)",
+    "SURG COMP - HYPERTENSION",
+    "[X]Hypertensive diseases",
+    "[X]Hypertensive diseases (disorder)",
+    "blood pressure, high",
+    "blood pressure, increased",
+    "high blood pressure",
+    "hyperpiesia",
+    "hypertension NOS",
+    "hypertensive disease",
+    "hypertensive disease NOS",
+    "hypertensive disorder",
+    "increased blood pressure",
+    "pressure, high blood",
+    "vascular hypertensive disorder",
+    "hypertension"
+  ],
+  "annotation": {
+    "gwas_trait": [
+      true
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/6969",
+      "http://identifiers.org/mesh/D006973",
+      "http://identifiers.org/snomedct/38341003",
+      "http://linkedlifedata.com/resource/umls/id/C0020538",
+      "http://purl.bioontology.org/ontology/ICD10CM/I10-I16",
+      "http://purl.bioontology.org/ontology/ICD10CM/I15",
+      "http://purl.obolibrary.org/obo/DOID_10763",
+      "http://purl.obolibrary.org/obo/NCIT_C3117",
+      "http://www.ebi.ac.uk/efo/EFO_0000537"
+    ],
+    "has_dbxref": [
+      "DOID:10763",
+      "HP:0000822",
+      "ICD10:O10",
+      "ICD10CM:I10-I16",
+      "ICD10CM:I15",
+      "ICD9:401-405.99",
+      "ICD9:997.91",
+      "MEDGEN:6969",
+      "MESH:D006973",
+      "MONDO:0005044",
+      "MedDRA:10020772",
+      "NCIT:C3117",
+      "NCIt:C3117",
+      "OMIM:145500",
+      "SCTID:38341003",
+      "UMLS:C0020538"
+    ],
+    "id": [
+      "EFO:0000537"
+    ],
+    "term editor": [
+      "James Malone"
+    ]
+  },
+  "label": "hypertension",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "EFO_0000537",
+  "obo_id": "EFO:0000537",
+  "in_subset": [
+    "otar"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "Persistently high systemic arterial blood pressure. Based on multiple readings (blood pressure determination), hypertension is currently defined as when systolic pressure is consistently greater than 140 mm Hg or when diastolic pressure is consistently 90 mm Hg or more.",
+      "oboXrefs": [
+        {
+          "database": "MESH",
+          "id": "D006973",
+          "description": null,
+          "url": "http://id.nlm.nih.gov/mesh/D006973"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "10763",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/DOID_10763"
+    },
+    {
+      "database": "HP",
+      "id": "0000822",
+      "description": "MONDO:otherHierarchy",
+      "url": "http://purl.obolibrary.org/obo/HP_0000822"
+    },
+    {
+      "database": "ICD10",
+      "id": "O10",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/O10"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "I10-I16",
+      "description": "https://orcid.org/0000-0002-4142-7153",
+      "url": null
+    },
+    {
+      "database": "ICD10CM",
+      "id": "I15",
+      "description": "MONDO:equivalentTo",
+      "url": "https://icd.codes/icd10cm/I15"
+    },
+    {
+      "database": "ICD9",
+      "id": "401-405.99",
+      "description": "EFO:0000537",
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "997.91",
+      "description": "DOID:10763",
+      "url": null
+    },
+    {
+      "database": "MEDGEN",
+      "id": "6969",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/6969"
+    },
+    {
+      "database": "MESH",
+      "id": "D006973",
+      "description": "MONDO:equivalentTo",
+      "url": "http://id.nlm.nih.gov/mesh/D006973"
+    },
+    {
+      "database": "MONDO",
+      "id": "0005044",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MONDO_0005044"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10020772",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10020772"
+    },
+    {
+      "database": "NCIT",
+      "id": "C3117",
+      "description": "MONDO:otherHierarchy",
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3117"
+    },
+    {
+      "database": "NCIt",
+      "id": "C3117",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3117"
+    },
+    {
+      "database": "OMIM",
+      "id": "145500",
+      "description": null,
+      "url": "https://omim.org/entry/145500"
+    },
+    {
+      "database": "SCTID",
+      "id": "38341003",
+      "description": "MONDO:equivalentTo",
+      "url": "http://snomed.info/id/38341003"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0020538",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0020538"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "high blood pressure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C3117",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C3117"
+        }
+      ]
+    },
+    {
+      "name": "hyperpiesia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "10763",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_10763"
+        }
+      ]
+    },
+    {
+      "name": "hypertensive disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MTH",
+          "id": "NOCODE",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "hypertensive disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "vascular hypertensive disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "10763",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_10763"
+        },
+        {
+          "database": "NCIT",
+          "id": "C3117",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C3117"
+        }
+      ]
+    },
+    {
+      "name": "HTN",
+      "scope": "hasBroadSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/graph"
+    },
+    "disease_has_basis_in_feature": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0004022"
+    },
+    "disease_has_location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000537/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0004026"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,120 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C62054",
+  "lang": "en",
+  "description": [
+    "A thebaine derivate with competitive opioid antagonistic properties. Naloxone reverses the effects of opioid analgesics by binding to the opioid receptors in the CNS, and inhibiting the typical actions of opioid analgesics, including analgesia, euphoria, sedation, respiratory depression, miosis, bradycardia, and physical dependence. Naloxone binds to mu-opioid receptors with a high affinity, and a lesser degree to kappa- and gamma-opioid receptors in the CNS."
+  ],
+  "synonyms": [
+    "(-)-Naloxone",
+    "NALOXONE",
+    "Naloxone",
+    "naloxone"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A substance that is being studied as a treatment for constipation caused by narcotic medications.  It belongs to the family of drugs called narcotic antagonists."
+    ],
+    "CAS_Registry": [
+      "465-65-6"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:7459"
+    ],
+    "Chemical_Formula": [
+      "C19H21NO4"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "36B82AMQ7N"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C678"
+    ],
+    "Legacy Concept Name": [
+      "Naloxone_Base"
+    ],
+    "Preferred_Name": [
+      "Naloxone"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0027358"
+    ],
+    "code": [
+      "C62054"
+    ]
+  },
+  "label": "Naloxone",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C62054",
+  "obo_id": "NCIT:C62054",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(-)-Naloxone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "NALOXONE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Naloxone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "naloxone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62054?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62054/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62054/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62054/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62054/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62054/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62054/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,265 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_4786",
+  "lang": "en",
+  "description": [
+    "Enalapril in which the ethyl ester group has been hydrolysed to the corresponding carboxylic acid. Enalaprilat is an angiotensin-converting enzyme (ACE) inhibitor and is used (often in the form of its prodrug, enalapril) in the treatment of hypertension and heart failure, for reduction of proteinuria and renal disease in patients with nephropathies, and for the prevention of stroke, myocardial infarction, and cardiac death in high-risk patients. Unlike enalapril, enalaprilat is not absorbed by mouth but is given by intravenous injection, usually as the dihydrate."
+  ],
+  "synonyms": [
+    "N-[(1S)-1-carboxy-3-phenylpropyl]-L-alanyl-L-proline",
+    "Enalaprilat",
+    "enalapril acid",
+    "enalapril diacid",
+    "enalaprilat",
+    "enalaprilat anhydrous",
+    "enalaprilate",
+    "enalaprilatum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C18H24N2O5"
+    ],
+    "has_alternative_id": [
+      "CHEBI:123355"
+    ],
+    "has_dbxref": [
+      "Beilstein:3656856",
+      "CAS:76420-72-9",
+      "DrugBank:DB00584",
+      "KEGG:C11720",
+      "LINCS:LSM-6026",
+      "PDBeChem:EAL",
+      "Patent:EP12401",
+      "Patent:US4374829"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:4786"
+    ],
+    "inchi": [
+      "InChI=1S/C18H24N2O5/c1-12(16(21)20-11-5-8-15(20)18(24)25)19-14(17(22)23)10-9-13-6-3-2-4-7-13/h2-4,6-7,12,14-15,19H,5,8-11H2,1H3,(H,22,23)(H,24,25)/t12-,14-,15-/m0/s1"
+    ],
+    "inchikey": [
+      "LZFZMUMEGBBDTC-QEJZJMRPSA-N"
+    ],
+    "mass": [
+      "348.39360"
+    ],
+    "monoisotopicmass": [
+      "348.16852"
+    ],
+    "smiles": [
+      "C[C@H](N[C@@H](CCc1ccccc1)C(O)=O)C(=O)N1CCC[C@H]1C(O)=O"
+    ]
+  },
+  "label": "enalaprilat (anhydrous)",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_4786",
+  "obo_id": "CHEBI:4786",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "3656856",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "76420-72-9",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "76420-72-9",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00584",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00584"
+    },
+    {
+      "database": "KEGG",
+      "id": "C11720",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C11720"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-6026",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "EAL",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/EAL"
+    },
+    {
+      "database": "Patent",
+      "id": "EP12401",
+      "description": null,
+      "url": "https://www.google.com/patents/EP12401"
+    },
+    {
+      "database": "Patent",
+      "id": "US4374829",
+      "description": null,
+      "url": "https://www.google.com/patents/US4374829"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-[(1S)-1-carboxy-3-phenylpropyl]-L-alanyl-L-proline",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Enalaprilat",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enalapril acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enalapril diacid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enalaprilat",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enalaprilat anhydrous",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enalaprilate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enalaprilatum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4786?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4786/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4786/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4786/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4786/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4786/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4786/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4786/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

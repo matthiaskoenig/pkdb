@@ -1,0 +1,440 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_17026",
+  "lang": "en",
+  "description": [
+    "A C21-steroid hormone in which a pregnane skeleton carries oxo substituents at positions 3 and 20 and is unsaturated at C(4)-C(5). As a hormone, it is involved in the female menstrual cycle, pregnancy and embryogenesis of humans and other species."
+  ],
+  "synonyms": [
+    "PROGESTERONE",
+    "Progesterone",
+    "pregn-4-ene-3,20-dione",
+    "progesterone",
+    "(S)-4-Pregnene-3,20-dione",
+    "(S)-Pregn-4-en-3,20-dione",
+    "(S)-Progesterone",
+    "17alpha-progesterone",
+    "4-Pregnene-3,20-dione",
+    "Agolutin",
+    "Akrolutin",
+    "Crinone",
+    "Delta(4)-pregnene-3,20-dione",
+    "Gelbkoerperhormon",
+    "Progesteron",
+    "corpus luteum hormone",
+    "luteohormone"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C21H30O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:14896",
+      "CHEBI:18798",
+      "CHEBI:26269",
+      "CHEBI:439",
+      "CHEBI:45786",
+      "CHEBI:8453"
+    ],
+    "has_dbxref": [
+      "CAS:57-83-0",
+      "DrugBank:DB00396",
+      "Drug_Central:2279",
+      "Gmelin:708590",
+      "HMDB:HMDB0001830",
+      "KEGG:C00410",
+      "KEGG:D00066",
+      "MetaCyc:PROGESTERONE",
+      "PDBeChem:STR",
+      "PMID:10438974",
+      "PMID:9506942",
+      "Reaxys:1915950",
+      "Wikipedia:Progesterone"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:17026"
+    ],
+    "inchi": [
+      "InChI=1S/C21H30O2/c1-13(22)17-6-7-18-16-5-4-14-12-15(23)8-10-20(14,2)19(16)9-11-21(17,18)3/h12,16-19H,4-11H2,1-3H3/t16-,17+,18-,19-,20-,21+/m0/s1"
+    ],
+    "inchikey": [
+      "RJKFOVLPORLFTN-LEKSSAKUSA-N"
+    ],
+    "mass": [
+      "314.46170"
+    ],
+    "monoisotopicmass": [
+      "314.22458"
+    ],
+    "smiles": [
+      "[H][C@@]12CCC3=CC(=O)CC[C@]3(C)[C@@]1([H])CC[C@]1(C)[C@H](CC[C@@]21[H])C(C)=O"
+    ]
+  },
+  "label": "progesterone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_17026",
+  "obo_id": "CHEBI:17026",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "57-83-0",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "57-83-0",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "57-83-0",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00396",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00396"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2279",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2279"
+    },
+    {
+      "database": "Gmelin",
+      "id": "708590",
+      "description": "Gmelin",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0001830",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001830"
+    },
+    {
+      "database": "KEGG",
+      "id": "C00410",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C00410"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00066",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00066"
+    },
+    {
+      "database": "MetaCyc",
+      "id": "PROGESTERONE",
+      "description": null,
+      "url": "https://biocyc.org/META/NEW-IMAGE?type=NIL&object=PROGESTERONE"
+    },
+    {
+      "database": "PDBeChem",
+      "id": "STR",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/STR"
+    },
+    {
+      "database": "PMID",
+      "id": "10438974",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10438974"
+    },
+    {
+      "database": "PMID",
+      "id": "9506942",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9506942"
+    },
+    {
+      "database": "Reaxys",
+      "id": "1915950",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Progesterone",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Progesterone"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "PROGESTERONE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Progesterone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pregn-4-ene-3,20-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "progesterone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-4-Pregnene-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-Pregn-4-en-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-Progesterone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "17alpha-progesterone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-Pregnene-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Agolutin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Akrolutin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Crinone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Delta(4)-pregnene-3,20-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Gelbkoerperhormon",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Progesteron",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "corpus luteum hormone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "luteohormone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17026?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17026/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17026/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17026/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17026/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17026/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17026/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17026/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_parent_hydride": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17026/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_parent_hydride"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

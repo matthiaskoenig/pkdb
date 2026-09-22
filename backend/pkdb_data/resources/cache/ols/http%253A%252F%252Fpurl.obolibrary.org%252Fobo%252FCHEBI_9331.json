@@ -1,0 +1,319 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9331",
+  "lang": "en",
+  "description": [
+    "A sulfonamide consisting of a 1,3,4-thiadiazole nucleus with a methyl substituent at C-5 and a 4-aminobenzenesulfonamido group at C-2."
+  ],
+  "synonyms": [
+    "4-amino-N-(5-methyl-1,3,4-thiadiazol-2-yl)benzenesulfonamide",
+    "Sulfamethizole",
+    "Rufol",
+    "sulfamethizol",
+    "sulfamethizole",
+    "sulfamethizolum",
+    "sulfamethylthiadiazole",
+    "sulfametizol",
+    "sulphamethazole",
+    "sulphamethiozole"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C9H10N4O2S2"
+    ],
+    "has_dbxref": [
+      "CAS:144-82-1",
+      "DrugBank:DB00576",
+      "Drug_Central:2512",
+      "KEGG:C08050",
+      "KEGG:D00870",
+      "LINCS:LSM-5455",
+      "PMID:11431418",
+      "PMID:17180970",
+      "PMID:20303138",
+      "PMID:21275251",
+      "Patent:US2447702",
+      "Reaxys:255002",
+      "Wikipedia:Sulfamethizole"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9331"
+    ],
+    "inchi": [
+      "InChI=1S/C9H10N4O2S2/c1-6-11-12-9(16-6)13-17(14,15)8-4-2-7(10)3-5-8/h2-5H,10H2,1H3,(H,12,13)"
+    ],
+    "inchikey": [
+      "VACCAVUAMIDAGB-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "270.33346"
+    ],
+    "monoisotopicmass": [
+      "270.02452"
+    ],
+    "smiles": [
+      "Cc1nnc(NS(=O)(=O)c2ccc(N)cc2)s1"
+    ]
+  },
+  "label": "sulfamethizole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9331",
+  "obo_id": "CHEBI:9331",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "144-82-1",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00576",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00576"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2512",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2512"
+    },
+    {
+      "database": "KEGG",
+      "id": "C08050",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C08050"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00870",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00870"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5455",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "11431418",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11431418"
+    },
+    {
+      "database": "PMID",
+      "id": "17180970",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17180970"
+    },
+    {
+      "database": "PMID",
+      "id": "20303138",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20303138"
+    },
+    {
+      "database": "PMID",
+      "id": "21275251",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21275251"
+    },
+    {
+      "database": "Patent",
+      "id": "US2447702",
+      "description": null,
+      "url": "https://www.google.com/patents/US2447702"
+    },
+    {
+      "database": "Reaxys",
+      "id": "255002",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Sulfamethizole",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Sulfamethizole"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-amino-N-(5-methyl-1,3,4-thiadiazol-2-yl)benzenesulfonamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sulfamethizole",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Rufol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sulfamethizol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sulfamethizole",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sulfamethizolum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sulfamethylthiadiazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sulfametizol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sulphamethazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sulphamethiozole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9331?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9331/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9331/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9331/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9331/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9331/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9331/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9331/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

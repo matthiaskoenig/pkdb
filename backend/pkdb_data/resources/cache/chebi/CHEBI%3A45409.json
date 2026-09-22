@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:45409",
+  "name": "ritonavir",
+  "definition": "An L-valine derivative that is L-valinamide in which alpha-amino group has been acylated by a [(2-isopropyl-1,3-thiazol-4-yl)methyl]methylcarbamoyl group and in which a hydrogen of the carboxamide amino group has been replaced by a (2R,4S,5S)-4-hydroxy-1,6-diphenyl-5-{[(1,3-thiazol-5-ylmethoxy)carbonyl]amino}hexan-2-yl group. A CYP3A inhibitor and antiretroviral drug from the protease inhibitor class used to treat HIV infection and AIDS, it is often used as a fixed-dose combination with another protease inhibitor, lopinavir. Also used in combination with dasabuvir sodium hydrate, ombitasvir and paritaprevir (under the trade name Viekira Pak) for treatment of chronic hepatitis C virus genotype 1 infection as well as cirrhosis of the liver.",
+  "formula": "C37H48N6O5S2",
+  "charge": "0",
+  "mass": "720.94400",
+  "inchikey": "NCDNCNXCDXHOMX-XGKFQTDJSA-N"
+}

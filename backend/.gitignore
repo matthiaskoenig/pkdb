@@ -1,2 +1,5 @@
 .venv*/
 *.egg-info/
+
+# Local migration artifacts from the retired backend are not application source.
+/pkdb_app/

@@ -1,0 +1,219 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3219",
+  "lang": "en",
+  "description": [
+    "An aromatic ketone that is propiophenone carrying a tert-butylamino group at position 2 and a chloro substituent at position 3 on the phenyl ring."
+  ],
+  "synonyms": [
+    "2-(tert-butylamino)-1-(3-chlorophenyl)propan-1-one",
+    "Bupropion"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C13H18ClNO"
+    ],
+    "has_dbxref": [
+      "CAS:34841-39-9",
+      "CAS:34911-55-2",
+      "DrugBank:DB01156",
+      "Drug_Central:435",
+      "HMDB:HMDB0001510",
+      "KEGG:C06860",
+      "KEGG:D07591",
+      "LINCS:LSM-1267",
+      "MetaCyc:CPD-3481",
+      "PMID:12826985",
+      "PMID:15876900",
+      "Reaxys:2101062",
+      "Wikipedia:Bupropion"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3219"
+    ],
+    "inchi": [
+      "InChI=1S/C13H18ClNO/c1-9(15-13(2,3)4)12(16)10-6-5-7-11(14)8-10/h5-9,15H,1-4H3"
+    ],
+    "inchikey": [
+      "SNPPWIUOZRMYNY-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "239.74086"
+    ],
+    "monoisotopicmass": [
+      "239.10769"
+    ],
+    "smiles": [
+      "CC(NC(C)(C)C)C(=O)c1cccc(Cl)c1"
+    ]
+  },
+  "label": "bupropion",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_3219",
+  "obo_id": "CHEBI:3219",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "34841-39-9",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "34911-55-2",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01156",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01156"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "435",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/435"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0001510",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001510"
+    },
+    {
+      "database": "KEGG",
+      "id": "C06860",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C06860"
+    },
+    {
+      "database": "KEGG",
+      "id": "D07591",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D07591"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-1267",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MetaCyc",
+      "id": "CPD-3481",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "12826985",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12826985"
+    },
+    {
+      "database": "PMID",
+      "id": "15876900",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15876900"
+    },
+    {
+      "database": "Reaxys",
+      "id": "2101062",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Bupropion",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Bupropion"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-(tert-butylamino)-1-(3-chlorophenyl)propan-1-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Bupropion",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3219?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3219/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3219/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3219/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3219/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3219/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3219/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3219/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3219/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3219/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3219/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3219/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,143 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C13056",
+  "lang": "en",
+  "description": [
+    "One of the contractile organs of the body."
+  ],
+  "synonyms": [
+    "MUSCLE",
+    "Muscle",
+    "Muscular",
+    "Skeletal and/or smooth muscle structure (body structure)"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A fibrous soft tissue with the ability to contract to produce force and motion."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "GDC",
+      "OORO",
+      "PCDC",
+      "mCode"
+    ],
+    "Display_Name": [
+      "Muscle"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C171435",
+      "http://purl.obolibrary.org/obo/NCIT_C70729"
+    ],
+    "Legacy Concept Name": [
+      "Muscle"
+    ],
+    "Maps_To": [
+      "Muscle"
+    ],
+    "Preferred_Name": [
+      "Muscle"
+    ],
+    "Semantic_Type": [
+      "Body Part, Organ, or Organ Component"
+    ],
+    "UMLS_CUI": [
+      "C0026845"
+    ],
+    "code": [
+      "C13056"
+    ]
+  },
+  "label": "Muscle",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C13056",
+  "obo_id": "NCIT:C13056",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C177537",
+    "NCIT_C179478",
+    "NCIT_C179481",
+    "NCIT_C192234",
+    "NCIT_C193006",
+    "NCIT_C193234",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C74456",
+    "NCIT_C77526"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "MUSCLE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Muscle",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Muscular",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Skeletal and/or smooth muscle structure (body structure)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13056?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13056/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13056/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13056/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13056/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13056/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13056/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13056/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13056/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13056/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13056/graph"
+    },
+    "Anatomic_Structure_Is_Physical_Part_Of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13056/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R82"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

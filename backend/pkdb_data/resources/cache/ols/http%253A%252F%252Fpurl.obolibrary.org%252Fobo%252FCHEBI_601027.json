@@ -1,0 +1,216 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_601027",
+  "lang": "en",
+  "description": [
+    "A monomethoxybenzene compound having a 3-methoxypropoxy group at the 2-position and a multi-substituted branched alkyl substituent at the 4-position."
+  ],
+  "synonyms": [
+    "(2S,4S,5S,7S)-5-amino-N-(3-amino-2,2-dimethyl-3-oxopropyl)-4-hydroxy-7-[4-methoxy-3-(3-methoxypropoxy)benzyl]-8-methyl-2-(propan-2-yl)nonanamide",
+    "SPP 100",
+    "aliskiren"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C30H53N3O6"
+    ],
+    "has_alternative_id": [
+      "CHEBI:41356",
+      "CHEBI:580746"
+    ],
+    "has_dbxref": [
+      "Beilstein:8740878",
+      "CAS:173334-57-1",
+      "DrugBank:DB01258",
+      "Drug_Central:119",
+      "KEGG:D03208",
+      "LINCS:LSM-2653",
+      "PDBeChem:C41",
+      "PMID:19358611",
+      "PMID:19457666",
+      "Wikipedia:Aliskiren"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:601027"
+    ],
+    "inchi": [
+      "InChI=1S/C30H53N3O6/c1-19(2)22(14-21-10-11-26(38-8)27(15-21)39-13-9-12-37-7)16-24(31)25(34)17-23(20(3)4)28(35)33-18-30(5,6)29(32)36/h10-11,15,19-20,22-25,34H,9,12-14,16-18,31H2,1-8H3,(H2,32,36)(H,33,35)/t22-,23-,24-,25-/m0/s1"
+    ],
+    "inchikey": [
+      "UXOWGYHJODZGMF-QORCZRPOSA-N"
+    ],
+    "mass": [
+      "551.75830"
+    ],
+    "monoisotopicmass": [
+      "551.39344"
+    ],
+    "smiles": [
+      "COCCCOc1cc(C[C@@H](C[C@H](N)[C@@H](O)C[C@@H](C(C)C)C(=O)NCC(C)(C)C(N)=O)C(C)C)ccc1OC"
+    ]
+  },
+  "label": "aliskiren",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_601027",
+  "obo_id": "CHEBI:601027",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "8740878",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "173334-57-1",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "173334-57-1",
+      "description": "DrugBank",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "173334-57-1",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01258",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01258"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "119",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/119"
+    },
+    {
+      "database": "KEGG",
+      "id": "D03208",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D03208"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-2653",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "C41",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/C41"
+    },
+    {
+      "database": "PMID",
+      "id": "19358611",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19358611"
+    },
+    {
+      "database": "PMID",
+      "id": "19457666",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19457666"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Aliskiren",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Aliskiren"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2S,4S,5S,7S)-5-amino-N-(3-amino-2,2-dimethyl-3-oxopropyl)-4-hydroxy-7-[4-methoxy-3-(3-methoxypropoxy)benzyl]-8-methyl-2-(propan-2-yl)nonanamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "SPP 100",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "aliskiren",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_601027?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_601027/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_601027/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_601027/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_601027/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_601027/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_601027/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_601027/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

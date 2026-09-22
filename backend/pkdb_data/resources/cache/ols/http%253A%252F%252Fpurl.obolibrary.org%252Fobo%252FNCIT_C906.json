@@ -1,0 +1,107 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C906",
+  "lang": "en",
+  "description": [
+    "Fats composed of three fatty acid chains linked to a glycerol molecule."
+  ],
+  "synonyms": [
+    "Triglyceride",
+    "Triglycerides"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Lipid composed of three fatty acids bonded to glycerol (Wardlaw, et al.)."
+    ],
+    "CHEBI_ID": [
+      "CHEBI:17855"
+    ],
+    "Contributing_Source": [
+      "CRCH",
+      "CTRP"
+    ],
+    "Display_Name": [
+      "Triglycerides"
+    ],
+    "INFOODS": [
+      "TGLY"
+    ],
+    "Legacy Concept Name": [
+      "Triglycerides"
+    ],
+    "Preferred_Name": [
+      "Triglycerides"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical"
+    ],
+    "UMLS_CUI": [
+      "C0041004"
+    ],
+    "USDA_ID": [
+      "657"
+    ],
+    "Unit": [
+      "g"
+    ],
+    "code": [
+      "C906"
+    ]
+  },
+  "label": "Triglycerides",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C906",
+  "obo_id": "NCIT:C906",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Triglyceride",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Triglycerides",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C906?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C906/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C906/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C906/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C906/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C906/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C906/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

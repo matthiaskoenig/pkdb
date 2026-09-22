@@ -1,0 +1,183 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C12432",
+  "lang": "en",
+  "description": [
+    "An organ that is part of the hematopoietic and immune systems. It is composed of the white pulp and the red pulp and is surrounded by a capsule. It is located in the left hypochondriac region. Its functions include lymphocyte production, blood cell storage, and blood cell destruction."
+  ],
+  "synonyms": [
+    "Reticuloendothelial System, Spleen",
+    "SPLEEN",
+    "Spleen",
+    "Splenic",
+    "Splenic structure (body structure)",
+    "spleen",
+    "splenic"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "An abdominal organ that is part of the hematopoietic and immune systems. It is composed of the white pulp and the red pulp and is surrounded by a capsule.",
+      "An organ that is part of the lymphatic system. The spleen produces lymphocytes, filters the blood, stores blood cells, and destroys old blood cells. It is located on the left side of the abdomen near the stomach.",
+      "The organ that functions to filter blood and to store red corpuscles and platelets."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "GDC",
+      "PCDC",
+      "UBERON",
+      "mCode"
+    ],
+    "Display_Name": [
+      "Spleen"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C156421",
+      "http://purl.obolibrary.org/obo/NCIT_C156422",
+      "http://purl.obolibrary.org/obo/NCIT_C171435",
+      "http://purl.obolibrary.org/obo/NCIT_C173263",
+      "http://purl.obolibrary.org/obo/NCIT_C177570",
+      "http://purl.obolibrary.org/obo/NCIT_C200442",
+      "http://purl.obolibrary.org/obo/NCIT_C70729"
+    ],
+    "Legacy Concept Name": [
+      "Spleen"
+    ],
+    "Maps_To": [
+      "Spleen"
+    ],
+    "Preferred_Name": [
+      "Spleen"
+    ],
+    "Semantic_Type": [
+      "Body Part, Organ, or Organ Component"
+    ],
+    "UMLS_CUI": [
+      "C0037993"
+    ],
+    "code": [
+      "C12432"
+    ],
+    "has_dbxref": [
+      "UBERON:0002106"
+    ]
+  },
+  "label": "Spleen",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C12432",
+  "obo_id": "NCIT:C12432",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C168655",
+    "NCIT_C168656",
+    "NCIT_C168659",
+    "NCIT_C168660",
+    "NCIT_C168663",
+    "NCIT_C168664",
+    "NCIT_C177537",
+    "NCIT_C179478",
+    "NCIT_C179481",
+    "NCIT_C179482",
+    "NCIT_C179483",
+    "NCIT_C186321",
+    "NCIT_C186341",
+    "NCIT_C193006",
+    "NCIT_C193234",
+    "NCIT_C198975",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C74456",
+    "NCIT_C77526",
+    "NCIT_C77529"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "UBERON",
+      "id": "0002106",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/UBERON_0002106"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Reticuloendothelial System, Spleen",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SPLEEN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Spleen",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Splenic",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Splenic structure (body structure)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "spleen",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "splenic",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12432?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12432/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12432/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12432/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12432/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12432/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12432/graph"
+    },
+    "Anatomic_Structure_Has_Location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12432/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R81"
+    },
+    "Anatomic_Structure_Is_Physical_Part_Of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12432/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R82"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

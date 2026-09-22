@@ -1,0 +1,451 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_68641",
+  "lang": "en",
+  "description": [
+    "An N-alkylpyrrolidine that consists of N-methylpyrrolidinone bearing a pyridin-3-yl substituent at position C-5 (the 5S-enantiomer). It is an alkaloid commonly found in Nicotiana tabacum."
+  ],
+  "synonyms": [
+    "(5S)-1-methyl-5-(pyridin-3-yl)pyrrolidin-2-one",
+    "(S)-(-)-Cotinine",
+    "(S)-1-Methyl-5-(3-pyridinyl)-2-pyrrolidinone",
+    "(S)-Cotinine",
+    "cotinina",
+    "cotinine",
+    "cotininum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C10H12N2O"
+    ],
+    "has_dbxref": [
+      "CAS:486-56-6",
+      "Drug_Central:737",
+      "HMDB:HMDB0001046",
+      "KNApSAcK:C00034470",
+      "LINCS:LSM-5986",
+      "MetaCyc:CPD-2742",
+      "PMID:14700346",
+      "PMID:21655912",
+      "PMID:21953524",
+      "PMID:22027507",
+      "PMID:22137886",
+      "PMID:22169225",
+      "PMID:22180597",
+      "PMID:22200307",
+      "PMID:22244928",
+      "PMID:22253001",
+      "PMID:22434216",
+      "PMID:22460317",
+      "PMID:22487419",
+      "PMID:22489581",
+      "PMID:22574797",
+      "PMID:22608097",
+      "PMID:22678157",
+      "PMID:22687995",
+      "PMID:22770225",
+      "PMID:22809871",
+      "PMID:22871902",
+      "PMID:22878732",
+      "PMID:22899265",
+      "PMID:22919158",
+      "PMID:23000417",
+      "PMID:23011941",
+      "PMID:23087643",
+      "Reaxys:5736575",
+      "Reaxys:83099",
+      "Wikipedia:Cotinine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:68641"
+    ],
+    "inchi": [
+      "InChI=1S/C10H12N2O/c1-12-9(4-5-10(12)13)8-3-2-6-11-7-8/h2-3,6-7,9H,4-5H2,1H3/t9-/m0/s1"
+    ],
+    "inchikey": [
+      "UIKROCXWUNQSPJ-VIFPVBQESA-N"
+    ],
+    "mass": [
+      "176.21510"
+    ],
+    "monoisotopicmass": [
+      "176.09496"
+    ],
+    "smiles": [
+      "[H][C@]1(CCC(=O)N1C)c1cccnc1"
+    ]
+  },
+  "label": "(-)-cotinine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_68641",
+  "obo_id": "CHEBI:68641",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "486-56-6",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "737",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/737"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0001046",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001046"
+    },
+    {
+      "database": "KNApSAcK",
+      "id": "C00034470",
+      "description": null,
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00034470"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5986",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MetaCyc",
+      "id": "CPD-2742",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "14700346",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14700346"
+    },
+    {
+      "database": "PMID",
+      "id": "21655912",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21655912"
+    },
+    {
+      "database": "PMID",
+      "id": "21953524",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21953524"
+    },
+    {
+      "database": "PMID",
+      "id": "22027507",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22027507"
+    },
+    {
+      "database": "PMID",
+      "id": "22137886",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22137886"
+    },
+    {
+      "database": "PMID",
+      "id": "22169225",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22169225"
+    },
+    {
+      "database": "PMID",
+      "id": "22180597",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22180597"
+    },
+    {
+      "database": "PMID",
+      "id": "22200307",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22200307"
+    },
+    {
+      "database": "PMID",
+      "id": "22244928",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22244928"
+    },
+    {
+      "database": "PMID",
+      "id": "22253001",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22253001"
+    },
+    {
+      "database": "PMID",
+      "id": "22434216",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22434216"
+    },
+    {
+      "database": "PMID",
+      "id": "22460317",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22460317"
+    },
+    {
+      "database": "PMID",
+      "id": "22487419",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22487419"
+    },
+    {
+      "database": "PMID",
+      "id": "22489581",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22489581"
+    },
+    {
+      "database": "PMID",
+      "id": "22574797",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22574797"
+    },
+    {
+      "database": "PMID",
+      "id": "22608097",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22608097"
+    },
+    {
+      "database": "PMID",
+      "id": "22678157",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22678157"
+    },
+    {
+      "database": "PMID",
+      "id": "22687995",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22687995"
+    },
+    {
+      "database": "PMID",
+      "id": "22770225",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22770225"
+    },
+    {
+      "database": "PMID",
+      "id": "22809871",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22809871"
+    },
+    {
+      "database": "PMID",
+      "id": "22871902",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22871902"
+    },
+    {
+      "database": "PMID",
+      "id": "22878732",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22878732"
+    },
+    {
+      "database": "PMID",
+      "id": "22899265",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22899265"
+    },
+    {
+      "database": "PMID",
+      "id": "22919158",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22919158"
+    },
+    {
+      "database": "PMID",
+      "id": "23000417",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23000417"
+    },
+    {
+      "database": "PMID",
+      "id": "23011941",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23011941"
+    },
+    {
+      "database": "PMID",
+      "id": "23087643",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23087643"
+    },
+    {
+      "database": "Reaxys",
+      "id": "5736575",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Reaxys",
+      "id": "83099",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Cotinine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Cotinine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(5S)-1-methyl-5-(pyridin-3-yl)pyrrolidin-2-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-(-)-Cotinine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-1-Methyl-5-(3-pyridinyl)-2-pyrrolidinone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-Cotinine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cotinina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cotinine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cotinine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cotininum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68641/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

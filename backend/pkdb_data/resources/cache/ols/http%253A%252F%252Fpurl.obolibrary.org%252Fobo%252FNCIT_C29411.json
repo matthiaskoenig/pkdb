@@ -1,0 +1,128 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29411",
+  "lang": "en",
+  "description": [
+    "A prodrug and nonsulfhydryl angiotensin converting enzyme (ACE) inhibitor with antihypertensive activity. Ramipril is converted in the liver by de-esterification into its active form ramiprilat, which inhibits ACE, thereby blocking the conversion of angiotensin I to angiotensin II. This abolishes the potent vasoconstrictive actions of angiotensin II and leads to vasodilatation. This agent also causes an increase in bradykinin levels and a decrease in angiotensin II-induced aldosterone secretion by the adrenal cortex, thereby promoting diuresis and natriuresis."
+  ],
+  "synonyms": [
+    "Altace",
+    "RAMIPRIL",
+    "Ramipril"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "87333-19-5"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:8774"
+    ],
+    "Chemical_Formula": [
+      "C23H32N2O5"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Ramipril"
+    ],
+    "FDA_UNII_Code": [
+      "L35JN3I7SJ"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C91297"
+    ],
+    "Legacy Concept Name": [
+      "Ramipril"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "686948"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "686948"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "686948"
+    ],
+    "Preferred_Name": [
+      "Ramipril"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0072973"
+    ],
+    "code": [
+      "C29411"
+    ]
+  },
+  "label": "Ramipril",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29411",
+  "obo_id": "NCIT:C29411",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Altace",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "RAMIPRIL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ramipril",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29411?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29411/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29411/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29411/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29411/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29411/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29411/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

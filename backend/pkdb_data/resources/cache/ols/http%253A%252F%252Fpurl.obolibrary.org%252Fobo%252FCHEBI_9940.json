@@ -1,0 +1,275 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9940",
+  "lang": "en",
+  "description": [
+    "The organic bromide salt of a 5alpha-androstane compound having 3alpha-acetoxy-, 17beta-acetoxy-, 2beta-piperidinino- and 16beta-N-methylpiperidinium substituents."
+  ],
+  "synonyms": [
+    "(2beta,3alpha,5alpha,16beta,17beta)-3,17-diacetoxy-16-(1-methylpiperidinium-1-yl)-2-(piperidin-1-yl)androstane bromide",
+    "1-(3alpha,17beta-Dihydroxy-2beta-piperidino-5alpha-androstan-16beta,5alpha-yl)-1-methylpiperidinium bromide, diacetate",
+    "1-[3alpha,17beta-bis(acetoxy)-2beta-(1-piperidinyl)-5alpha-androstan-16beta-yl]-1-methylpiperidinium bromide",
+    "bromure de vecuronium",
+    "bromuro de vecuronio",
+    "vecuronii bromidum",
+    "vecuronium bromide"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C34H57BrN2O4",
+      "C34H57N2O4.Br"
+    ],
+    "has_dbxref": [
+      "CAS:50700-72-6",
+      "DrugBank:DB01339",
+      "KEGG:D00767",
+      "PMID:17667569",
+      "PMID:21394728",
+      "PMID:23615407",
+      "PMID:2889244",
+      "Patent:CN101843593",
+      "Reaxys:7164568",
+      "Wikipedia:Vecuronium_bromide"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9940"
+    ],
+    "inchi": [
+      "InChI=1S/C34H57N2O4.BrH/c1-23(37)39-31-20-25-12-13-26-27(34(25,4)22-29(31)35-16-8-6-9-17-35)14-15-33(3)28(26)21-30(32(33)40-24(2)38)36(5)18-10-7-11-19-36;/h25-32H,6-22H2,1-5H3;1H/q+1;/p-1/t25-,26+,27-,28-,29-,30-,31-,32-,33-,34-;/m0./s1"
+    ],
+    "inchikey": [
+      "VEPSYABRBFXYIB-PWXDFCLTSA-M"
+    ],
+    "mass": [
+      "637.73100"
+    ],
+    "monoisotopicmass": [
+      "636.35017"
+    ],
+    "smiles": [
+      "[Br-].[H][C@@]12CC[C@]3([H])[C@]([H])(CC[C@]4(C)[C@@H](OC(C)=O)[C@H](C[C@@]34[H])[N+]3(C)CCCCC3)[C@@]1(C)C[C@@H]([C@H](C2)OC(C)=O)N1CCCCC1"
+    ]
+  },
+  "label": "vecuronium bromide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9940",
+  "obo_id": "CHEBI:9940",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "50700-72-6",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "50700-72-6",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "50700-72-6",
+      "description": "DrugBank",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01339",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01339"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00767",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00767"
+    },
+    {
+      "database": "PMID",
+      "id": "17667569",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17667569"
+    },
+    {
+      "database": "PMID",
+      "id": "21394728",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21394728"
+    },
+    {
+      "database": "PMID",
+      "id": "23615407",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23615407"
+    },
+    {
+      "database": "PMID",
+      "id": "2889244",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2889244"
+    },
+    {
+      "database": "Patent",
+      "id": "CN101843593",
+      "description": null,
+      "url": "https://www.google.com/patents/CN101843593"
+    },
+    {
+      "database": "Reaxys",
+      "id": "7164568",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Vecuronium_bromide",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Vecuronium_bromide"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2beta,3alpha,5alpha,16beta,17beta)-3,17-diacetoxy-16-(1-methylpiperidinium-1-yl)-2-(piperidin-1-yl)androstane bromide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-(3alpha,17beta-Dihydroxy-2beta-piperidino-5alpha-androstan-16beta,5alpha-yl)-1-methylpiperidinium bromide, diacetate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-[3alpha,17beta-bis(acetoxy)-2beta-(1-piperidinyl)-5alpha-androstan-16beta-yl]-1-methylpiperidinium bromide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "bromure de vecuronium",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "bromuro de vecuronio",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vecuronii bromidum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vecuronium bromide",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9940?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9940/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9940/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9940/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9940/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9940/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9940/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9940/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9940/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9940/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

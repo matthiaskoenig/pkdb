@@ -1,0 +1,548 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3380",
+  "lang": "en",
+  "description": [
+    "A L-proline derivative in which L-proline is substituted on nitrogen with a (2S)-2-methyl-3-sulfanylpropanoyl group. It is used as an anti-hypertensive ACE inhibitor drug."
+  ],
+  "synonyms": [
+    "1-[(2S)-2-methyl-3-sulfanylpropanoyl]-L-proline",
+    "(2S)-1-[(2S)-2-methyl-3-sulfanylpropanoyl]pyrrolidine-2-carboxylic acid",
+    "Acepress",
+    "Apopril",
+    "CP",
+    "Capoten",
+    "Captolane",
+    "Captopryl",
+    "Captoril",
+    "Cesplon",
+    "D-2-methyl-3-mercaptopropanoyl-L-proline",
+    "D-3-mercapto-2-methylpropanoyl-L-proline",
+    "Dilabar",
+    "Garranil",
+    "Hypertil",
+    "L-Captopril",
+    "Lopirin",
+    "Tenosbon",
+    "Tensobon",
+    "Tensoprel",
+    "captopril",
+    "captoprilum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C9H15NO3S"
+    ],
+    "has_dbxref": [
+      "Beilstein:477887",
+      "CAS:62571-86-2",
+      "DrugBank:DB01197",
+      "Drug_Central:484",
+      "KEGG:D00251",
+      "LINCS:LSM-5648",
+      "PMID:23137627",
+      "PMID:23161035",
+      "PMID:23278692",
+      "PMID:23299024",
+      "PMID:23328620",
+      "PMID:23397376",
+      "PMID:23410042",
+      "PMID:23422724",
+      "PMID:23429803",
+      "PMID:23435971",
+      "PMID:2420897",
+      "Patent:US4046889",
+      "Patent:US4105776",
+      "Wikipedia:Captopril"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3380"
+    ],
+    "inchi": [
+      "InChI=1S/C9H15NO3S/c1-6(5-14)8(11)10-4-2-3-7(10)9(12)13/h6-7,14H,2-5H2,1H3,(H,12,13)/t6-,7+/m1/s1"
+    ],
+    "inchikey": [
+      "FAKRSMQSSFJEIM-RQJHMYQMSA-N"
+    ],
+    "mass": [
+      "217.28500"
+    ],
+    "monoisotopicmass": [
+      "217.07726"
+    ],
+    "smiles": [
+      "C[C@H](CS)C(=O)N1CCC[C@H]1C(O)=O"
+    ]
+  },
+  "label": "captopril",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3380",
+  "obo_id": "CHEBI:3380",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "477887",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "62571-86-2",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "62571-86-2",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "62571-86-2",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01197",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01197"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "484",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/484"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00251",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00251"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5648",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "23137627",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23137627"
+    },
+    {
+      "database": "PMID",
+      "id": "23161035",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23161035"
+    },
+    {
+      "database": "PMID",
+      "id": "23278692",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23278692"
+    },
+    {
+      "database": "PMID",
+      "id": "23299024",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23299024"
+    },
+    {
+      "database": "PMID",
+      "id": "23328620",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23328620"
+    },
+    {
+      "database": "PMID",
+      "id": "23397376",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23397376"
+    },
+    {
+      "database": "PMID",
+      "id": "23410042",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23410042"
+    },
+    {
+      "database": "PMID",
+      "id": "23422724",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23422724"
+    },
+    {
+      "database": "PMID",
+      "id": "23429803",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23429803"
+    },
+    {
+      "database": "PMID",
+      "id": "23435971",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23435971"
+    },
+    {
+      "database": "PMID",
+      "id": "2420897",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2420897"
+    },
+    {
+      "database": "Patent",
+      "id": "US4046889",
+      "description": null,
+      "url": "https://www.google.com/patents/US4046889"
+    },
+    {
+      "database": "Patent",
+      "id": "US4105776",
+      "description": null,
+      "url": "https://www.google.com/patents/US4105776"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Captopril",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Captopril"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1-[(2S)-2-methyl-3-sulfanylpropanoyl]-L-proline",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S)-1-[(2S)-2-methyl-3-sulfanylpropanoyl]pyrrolidine-2-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Acepress",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Apopril",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CP",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Capoten",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Captolane",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Captopryl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Captoril",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cesplon",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "D-2-methyl-3-mercaptopropanoyl-L-proline",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "D-3-mercapto-2-methylpropanoyl-L-proline",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dilabar",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Garranil",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Hypertil",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-Captopril",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lopirin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tenosbon",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tensobon",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tensoprel",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "captopril",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "captoprilum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3380?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3380/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3380/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3380/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3380/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3380/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3380/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3380/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

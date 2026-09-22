@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:68647",
+  "name": "regorafenib",
+  "definition": "A pyridinecarboxamide obtained by condensation of 4-[4-({[4-chloro-3-(trifluoromethyl)phenyl]carbamoyl}amino)-3-fluorophenoxy]pyridine-2-carboxylic acid with methylamine. Used for for the treatment of metastatic colorectal cancer in patients who have previously received chemotherapy, anti-EGFR or anti-VEGF therapy.",
+  "formula": "C21H15ClF4N4O3",
+  "charge": 0,
+  "mass": "482.821",
+  "inchikey": "FNHKPVJBJVTLMP-UHFFFAOYSA-N"
+}

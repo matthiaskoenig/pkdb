@@ -1,0 +1,245 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7915",
+  "lang": "en",
+  "description": [
+    "A member of the class of  benzimidazoles that is 1H-benzimidazole substituted by a difluoromethoxy group at position 5 and a [(3,4-dimethoxypyridin-2-yl)methyl]sulfinyl group at position 2."
+  ],
+  "synonyms": [
+    "5-(difluoromethoxy)-2-{[(3,4-dimethoxypyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+    "pantoprazol",
+    "pantoprazole",
+    "pantoprazolum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C16H15F2N3O4S"
+    ],
+    "has_dbxref": [
+      "CAS:102625-70-7",
+      "DrugBank:DB00213",
+      "Drug_Central:2054",
+      "HMDB:HMDB0005017",
+      "KEGG:C11806",
+      "KEGG:D05353",
+      "LINCS:LSM-1390",
+      "PMID:11110229",
+      "PMID:11240974",
+      "Patent:EP166287",
+      "Patent:US4758579",
+      "Reaxys:5361474",
+      "VSDB:2958",
+      "Wikipedia:Pantoprazole"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7915"
+    ],
+    "inchi": [
+      "InChI=1S/C16H15F2N3O4S/c1-23-13-5-6-19-12(14(13)24-2)8-26(22)16-20-10-4-3-9(25-15(17)18)7-11(10)21-16/h3-7,15H,8H2,1-2H3,(H,20,21)"
+    ],
+    "inchikey": [
+      "IQPSEEYGBUAQFF-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "383.37093"
+    ],
+    "monoisotopicmass": [
+      "383.07513"
+    ],
+    "smiles": [
+      "COc1ccnc(CS(=O)c2nc3cc(OC(F)F)ccc3[nH]2)c1OC"
+    ]
+  },
+  "label": "pantoprazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7915",
+  "obo_id": "CHEBI:7915",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "102625-70-7",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00213",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00213"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2054",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2054"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0005017",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0005017"
+    },
+    {
+      "database": "KEGG",
+      "id": "C11806",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C11806"
+    },
+    {
+      "database": "KEGG",
+      "id": "D05353",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D05353"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-1390",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "11110229",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11110229"
+    },
+    {
+      "database": "PMID",
+      "id": "11240974",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11240974"
+    },
+    {
+      "database": "Patent",
+      "id": "EP166287",
+      "description": null,
+      "url": "https://www.google.com/patents/EP166287"
+    },
+    {
+      "database": "Patent",
+      "id": "US4758579",
+      "description": null,
+      "url": "https://www.google.com/patents/US4758579"
+    },
+    {
+      "database": "Reaxys",
+      "id": "5361474",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "VSDB",
+      "id": "2958",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/2958.htm"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Pantoprazole",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Pantoprazole"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-(difluoromethoxy)-2-{[(3,4-dimethoxypyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pantoprazol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pantoprazole",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pantoprazolum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7915?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7915/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7915/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7915/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7915/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7915/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7915/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7915/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_conjugate_acid_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7915/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_acid_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

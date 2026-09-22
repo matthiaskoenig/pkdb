@@ -1,0 +1,121 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C16553",
+  "lang": "en",
+  "description": [
+    "A highly sensitive technique for detecting and measuring antigens or antibodies in a solution; the solution is run over a surface to which immobilized antibodies specific to the substance have been attached, and if the substance is present, it will bind to the antibody layer, and its presence is verified and visualized with an application of antibodies that have been tagged in some way. (BioTech Life Science Dictionary)"
+  ],
+  "synonyms": [
+    "ELISA",
+    "Enzyme-linked Immunosorbent Assay",
+    "enzyme-linked immunosorbent assay"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A laboratory technique that uses antibodies linked to enzymes to detect and measure the amount of a substance in a solution, such as serum. The test is done using a solid surface to which the antibodies and other molecules stick. In the final step, an enzyme reaction takes place that causes a color change that can be read using a special machine. There are many different ways that an ELISA can be done. ELISAs may be used to help diagnose certain diseases.",
+      "A type of enzyme immunoassay in which an antigen or antibody is bound to a solid substrate (e.g., microplate or beads) and interacts with an enzyme-linked antibody or antigen in solution."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CTRP",
+      "SeroNet"
+    ],
+    "Display_Name": [
+      "ELISA"
+    ],
+    "Legacy Concept Name": [
+      "ELISA"
+    ],
+    "Preferred_Name": [
+      "ELISA"
+    ],
+    "Semantic_Type": [
+      "Laboratory Procedure"
+    ],
+    "UMLS_CUI": [
+      "C0014441"
+    ],
+    "code": [
+      "C16553"
+    ]
+  },
+  "label": "ELISA",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C16553",
+  "obo_id": "NCIT:C16553",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118169",
+    "NCIT_C179027",
+    "NCIT_C189083",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C85492"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "ELISA",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Enzyme-linked Immunosorbent Assay",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "enzyme-linked immunosorbent assay",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16553?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16553/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16553/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16553/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16553/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16553/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16553/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16553/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16553/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16553/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C16553/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

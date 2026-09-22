@@ -49,6 +49,8 @@ jobs:
       - run: uv run --python ${{ matrix.python }} --locked alembic check
       - run: uv run --python ${{ matrix.python }} --locked alembic downgrade base
       - run: uv run --python ${{ matrix.python }} --locked alembic upgrade head
+      - name: Verify generated vocabulary matches authoring sources
+        run: uv run --python ${{ matrix.python }} --locked python ../scripts/update_vocabulary.py --check
       - run: uv run --python ${{ matrix.python }} --locked pytest -q
       - run: uv run --python ${{ matrix.python }} --locked ruff check .
       - run: uv run --python ${{ matrix.python }} --locked ruff format --check .

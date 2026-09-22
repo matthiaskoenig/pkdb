@@ -1,0 +1,332 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000408",
+  "lang": "en",
+  "description": [
+    "A disease is a disposition that describes states of disease associated with a particular sample and/or organism.",
+    "A disease is a disposition to undergo pathological processes that exists in an organism because of one or more disorders in that organism."
+  ],
+  "synonyms": [
+    "Homo sapiens disease",
+    "condition",
+    "disease",
+    "disease or disorder",
+    "disease or disorder, non-neoplastic",
+    "diseases",
+    "diseases and disorders",
+    "disorder",
+    "disorders",
+    "human disease",
+    "medical condition",
+    "other disease"
+  ],
+  "annotation": {
+    "gwas_trait": [
+      true
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/4347",
+      "http://identifiers.org/mesh/D004194",
+      "http://identifiers.org/snomedct/64572001",
+      "http://linkedlifedata.com/resource/umls/id/C0012634",
+      "http://purl.obolibrary.org/obo/DOID_4",
+      "http://purl.obolibrary.org/obo/NCIT_C2991",
+      "http://www.orpha.net/ORDO/Orphanet_377788"
+    ],
+    "has_dbxref": [
+      "DOID:4",
+      "ICD10:R69",
+      "ICD9:799.9",
+      "MEDGEN:4347",
+      "MESH:D004194",
+      "MONDO:0000001",
+      "NCIT:C2991",
+      "OGMS:0000031",
+      "Orphanet:377788",
+      "SCTID:64572001",
+      "SNOMEDCT:64572001",
+      "UMLS:C0012634"
+    ],
+    "id": [
+      "EFO:0000408"
+    ],
+    "term editor": [
+      "James Malone"
+    ]
+  },
+  "label": "disease",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "EFO_0000408",
+  "obo_id": "EFO:0000408",
+  "in_subset": [
+    "ordo_disorder"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A disease is a disposition to undergo pathological processes that exists in an organism because of one or more disorders in that organism.",
+      "oboXrefs": [
+        {
+          "database": "OGMS",
+          "id": "0000031",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/OGMS_0000031"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "4",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/DOID_4"
+    },
+    {
+      "database": "ICD10",
+      "id": "R69",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/R69"
+    },
+    {
+      "database": "ICD9",
+      "id": "799.9",
+      "description": "MONDO:relatedTo",
+      "url": null
+    },
+    {
+      "database": "MEDGEN",
+      "id": "4347",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/4347"
+    },
+    {
+      "database": "MESH",
+      "id": "D004194",
+      "description": "MONDO:equivalentTo",
+      "url": "http://id.nlm.nih.gov/mesh/D004194"
+    },
+    {
+      "database": "MONDO",
+      "id": "0000001",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MONDO_0000001"
+    },
+    {
+      "database": "NCIT",
+      "id": "C2991",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/NCIT_C2991"
+    },
+    {
+      "database": "OGMS",
+      "id": "0000031",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/OGMS_0000031"
+    },
+    {
+      "database": "Orphanet",
+      "id": "377788",
+      "description": "MONDO:equivalentTo",
+      "url": "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?Lng=EN&Expert=377788"
+    },
+    {
+      "database": "SCTID",
+      "id": "64572001",
+      "description": "MONDO:equivalentTo",
+      "url": "http://snomed.info/id/64572001"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "64572001",
+      "description": null,
+      "url": "http://snomed.info/id/64572001"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0012634",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0012634"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "condition",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C2991",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C2991"
+        }
+      ]
+    },
+    {
+      "name": "disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "4",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_4"
+        },
+        {
+          "database": "NCIT",
+          "id": "C2991",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C2991"
+        },
+        {
+          "database": "Orphanet",
+          "id": "377788",
+          "description": null,
+          "url": "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?Lng=EN&Expert=377788"
+        }
+      ]
+    },
+    {
+      "name": "disease or disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C2991",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C2991"
+        }
+      ]
+    },
+    {
+      "name": "disease or disorder, non-neoplastic",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C2991",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C2991"
+        }
+      ]
+    },
+    {
+      "name": "diseases",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C2991",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C2991"
+        }
+      ]
+    },
+    {
+      "name": "diseases and disorders",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C2991",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C2991"
+        }
+      ]
+    },
+    {
+      "name": "disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C2991",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C2991"
+        }
+      ]
+    },
+    {
+      "name": "disorders",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C2991",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C2991"
+        }
+      ]
+    },
+    {
+      "name": "other disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C2991",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C2991"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000408/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

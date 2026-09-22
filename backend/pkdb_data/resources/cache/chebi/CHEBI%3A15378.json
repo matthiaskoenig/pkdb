@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:15378",
+  "name": "hydron",
+  "definition": "The general name for the hydrogen nucleus, to be used without regard to the hydrogen nuclear mass (either for hydrogen in its natural abundance or where it is not desired to distinguish between the isotopes).",
+  "formula": "H",
+  "charge": "+1",
+  "mass": "1.00794",
+  "inchikey": "GPRLSGONYQIRFK-UHFFFAOYSA-N"
+}

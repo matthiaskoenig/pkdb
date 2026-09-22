@@ -1,0 +1,355 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000400",
+  "lang": "en",
+  "description": [
+    "A metabolic disorder characterized by abnormally high blood sugar levels due to diminished production of insulin or insulin resistance/desensitization."
+  ],
+  "synonyms": [
+    "DM",
+    "DM - Diabetes mellitus",
+    "Diabetes",
+    "Diabetes NOS",
+    "Diabetes mellitus (disorder)",
+    "Diabetes mellitus, NOS",
+    "diabetes",
+    "diabetes mellitus",
+    "diabetes mellitus (disease)"
+  ],
+  "annotation": {
+    "OBO foundry unique label": [
+      "diabetes mellitus (disease)"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/8350",
+      "http://identifiers.org/mesh/D003920",
+      "http://identifiers.org/snomedct/73211009",
+      "http://linkedlifedata.com/resource/umls/id/C0011849",
+      "http://purl.bioontology.org/ontology/ICD10CM/E08-E13",
+      "http://purl.obolibrary.org/obo/DOID_9351",
+      "http://purl.obolibrary.org/obo/NCIT_C2985",
+      "http://purl.obolibrary.org/obo/mondo/sources/icd11foundation/465177735",
+      "http://www.ebi.ac.uk/efo/EFO_0000400"
+    ],
+    "has_dbxref": [
+      "DOID:9351",
+      "HP:0000819",
+      "ICD10:E13",
+      "ICD10:E14",
+      "ICD10CM:E08-E13",
+      "ICD9:250",
+      "MEDGEN:8350",
+      "MESH:D003920",
+      "MONDO:0005015",
+      "MedDRA:10012601",
+      "MedDRA:10012624",
+      "MedDRA:10012625",
+      "NANDO:2100157",
+      "NANDO:2100158",
+      "NCIT:C2985",
+      "NCIt:C2985",
+      "OMIM:612227",
+      "SCTID:73211009",
+      "SNOMEDCT:73211009",
+      "UMLS:C0011849",
+      "icd11.foundation:465177735"
+    ],
+    "id": [
+      "EFO:0000400"
+    ],
+    "term editor": [
+      "James Malone"
+    ],
+    "term tracker item": [
+      "https://github.com/monarch-initiative/mondo/issues/5723"
+    ]
+  },
+  "label": "diabetes mellitus",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "EFO_0000400",
+  "obo_id": "EFO:0000400",
+  "in_subset": [
+    "otar"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A metabolic disorder characterized by abnormally high blood sugar levels due to diminished production of insulin or insulin resistance/desensitization.",
+      "oboXrefs": [
+        {
+          "database": "NCIT",
+          "id": "P378",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_P378"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "9351",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/DOID_9351"
+    },
+    {
+      "database": "HP",
+      "id": "0000819",
+      "description": "MONDO:otherHierarchy",
+      "url": "http://purl.obolibrary.org/obo/HP_0000819"
+    },
+    {
+      "database": "ICD10",
+      "id": "E13",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/E13"
+    },
+    {
+      "database": "ICD10",
+      "id": "E14",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/E14"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "E08-E13",
+      "description": "https://orcid.org/0000-0002-4142-7153",
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "250",
+      "description": "EFO:0000400",
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=250"
+    },
+    {
+      "database": "MEDGEN",
+      "id": "8350",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/8350"
+    },
+    {
+      "database": "MESH",
+      "id": "D003920",
+      "description": "MONDO:equivalentTo",
+      "url": "http://id.nlm.nih.gov/mesh/D003920"
+    },
+    {
+      "database": "MONDO",
+      "id": "0005015",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MONDO_0005015"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10012601",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10012601"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10012624",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10012624"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10012625",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10012625"
+    },
+    {
+      "database": "NANDO",
+      "id": "2100157",
+      "description": "https://orcid.org/0000-0003-0011-764X",
+      "url": "https://nanbyodata.jp/disease/NANDO:2100157"
+    },
+    {
+      "database": "NANDO",
+      "id": "2100158",
+      "description": "https://orcid.org/0000-0003-0011-764X",
+      "url": "https://nanbyodata.jp/disease/NANDO:2100158"
+    },
+    {
+      "database": "NCIT",
+      "id": "C2985",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/NCIT_C2985"
+    },
+    {
+      "database": "NCIt",
+      "id": "C2985",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C2985"
+    },
+    {
+      "database": "OMIM",
+      "id": "612227",
+      "description": null,
+      "url": "https://omim.org/entry/612227"
+    },
+    {
+      "database": "SCTID",
+      "id": "73211009",
+      "description": "MONDO:equivalentTo",
+      "url": "http://snomed.info/id/73211009"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "73211009",
+      "description": null,
+      "url": "http://snomed.info/id/73211009"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0011849",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0011849"
+    },
+    {
+      "database": "icd11.foundation",
+      "id": "465177735",
+      "description": "MONDO:equivalentTo",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "DM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C2985",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C2985"
+        }
+      ]
+    },
+    {
+      "name": "diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "9351",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_9351"
+        },
+        {
+          "database": "NCIT",
+          "id": "C2985",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C2985"
+        }
+      ]
+    },
+    {
+      "name": "diabetes mellitus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "diabetes mellitus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "9351",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_9351"
+        },
+        {
+          "database": "ICD10CM",
+          "id": "E08-E13",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "MONDO",
+          "id": "ambiguous",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "NCIT",
+          "id": "C2985",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C2985"
+        },
+        {
+          "database": "icd11.foundation",
+          "id": "465177735",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diabetes mellitus (disease)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "https://orcid.org/0000-0002-6601-2165",
+          "description": null,
+          "url": "https://orcid.org/0000-0002-6601-2165"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400/graph"
+    },
+    "realized_in": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000400/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000054"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

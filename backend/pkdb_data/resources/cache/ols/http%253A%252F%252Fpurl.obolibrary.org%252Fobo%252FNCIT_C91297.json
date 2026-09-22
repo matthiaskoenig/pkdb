@@ -1,0 +1,183 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C91297",
+  "lang": "en",
+  "description": [
+    "Angiotensin-converting enzyme (1306 aa, ~150 kDa) is encoded by the human ACE gene. This protein plays a role in the hydrolysis of angiotensin I to form angiotensin II and the solubilization of glycophophoinositol-anchored proteins from the plasma membrane."
+  ],
+  "synonyms": [
+    "ACE",
+    "Angiotensin Converting Enzyme, Somatic Isoform",
+    "Angiotensin-Converting Enzyme",
+    "CD143",
+    "CD143 Antigen",
+    "Carboxycathepsin",
+    "Dipeptidyl Carboxypeptidase 1",
+    "Dipeptidyl Carboxypeptidase I",
+    "EC 3.2.1.-",
+    "EC 3.4.15.1",
+    "Kininase II",
+    "Peptidase P",
+    "Peptidyl-Dipeptidase A",
+    "Testicular ECA"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CTRP"
+    ],
+    "DesignNote": [
+      "Angiotensin-converting enzyme exhibits both peptidase and glycosidase activity."
+    ],
+    "Display_Name": [
+      "Angiotensin-Converting Enzyme"
+    ],
+    "OMIM_Number": [
+      "106180"
+    ],
+    "Preferred_Name": [
+      "Angiotensin-Converting Enzyme"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein",
+      "Enzyme"
+    ],
+    "Swiss_Prot": [
+      "P12821"
+    ],
+    "UMLS_CUI": [
+      "C1452534"
+    ],
+    "code": [
+      "C91297"
+    ]
+  },
+  "label": "Angiotensin-Converting Enzyme",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C91297",
+  "obo_id": "NCIT:C91297",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C142800"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "ACE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Angiotensin Converting Enzyme, Somatic Isoform",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Angiotensin-Converting Enzyme",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CD143",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CD143 Antigen",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Carboxycathepsin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Dipeptidyl Carboxypeptidase 1",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Dipeptidyl Carboxypeptidase I",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "EC 3.2.1.-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "EC 3.4.15.1",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Kininase II",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Peptidase P",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Peptidyl-Dipeptidase A",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Testicular ECA",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C91297?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C91297/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C91297/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C91297/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C91297/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C91297/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C91297/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

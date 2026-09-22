@@ -1,0 +1,75 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C69317",
+  "lang": "en",
+  "description": [
+    "An instrument used for non-invasive determination of arterial blood pressure, generally consisting of an inflatable cuff and a pressure readout device, classically, a column of mercury."
+  ],
+  "synonyms": [
+    "Sphygmomanometer"
+  ],
+  "annotation": {
+    "Legacy Concept Name": [
+      "Sphygmomanometer"
+    ],
+    "Preferred_Name": [
+      "Sphygmomanometer"
+    ],
+    "Semantic_Type": [
+      "Medical Device"
+    ],
+    "UMLS_CUI": [
+      "C0183427"
+    ],
+    "code": [
+      "C69317"
+    ]
+  },
+  "label": "Sphygmomanometer",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C69317",
+  "obo_id": "NCIT:C69317",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Sphygmomanometer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C69317?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C69317/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C69317/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C69317/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C69317/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C69317/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C69317/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

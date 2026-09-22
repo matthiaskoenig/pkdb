@@ -1,0 +1,268 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0003106",
+  "lang": "en",
+  "description": [
+    "A lung disease that involves lung parenchyma or alveolar inflammation and abnormal alveolar filling with fluid (consolidation and exudation). It results from infection with bacteria, viruses, fungi or parasites. It is accompanied by fever, chills, cough, and difficulty in breathing.",
+    "An acute, acute and chronic, or chronic inflammation focally or diffusely affecting the lung parenchyma, caused by an infection in one or both of the lungs (by bacteria, viruses, fungi, or mycoplasma.). Symptoms include cough, shortness of breath, fevers, chills, chest pain, headache, sweating, and weakness."
+  ],
+  "synonyms": [
+    "Pneumonia (disorder)",
+    "Pneumonia (disorder) [Ambiguous]",
+    "Pneumonia NOS",
+    "Pneumonia NOS (disorder)",
+    "Pneumonia due to other specified organism",
+    "Pneumonia due to other specified organisms",
+    "Pneumonia due to other specified organisms (disorder)",
+    "Pneumonitis",
+    "Pneumonitis (disorder)",
+    "acute pneumonia",
+    "chest infection due to pneumonia",
+    "pneumonia",
+    "pneumonia with infectious disease",
+    "acute pneumonia"
+  ],
+  "annotation": {
+    "excluded_subClassOf": [
+      "http://purl.obolibrary.org/obo/MONDO_0005275"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/10813",
+      "http://identifiers.org/mesh/D011014",
+      "http://identifiers.org/snomedct/233604007",
+      "http://linkedlifedata.com/resource/umls/id/C0032285",
+      "http://purl.bioontology.org/ontology/ICD10CM/J18.9",
+      "http://purl.obolibrary.org/obo/DOID_552",
+      "http://purl.obolibrary.org/obo/NCIT_C3333",
+      "http://purl.obolibrary.org/obo/mondo/sources/icd11foundation/142052508",
+      "http://www.ebi.ac.uk/efo/EFO_0003106"
+    ],
+    "has related match": [
+      "http://purl.bioontology.org/ontology/ICD10CM/J15"
+    ],
+    "has_dbxref": [
+      "DOID:552",
+      "ICD10:J18",
+      "ICD10CM:J15",
+      "ICD10CM:J18.9",
+      "ICD9:483",
+      "ICD9:483.8",
+      "ICD9:484.8",
+      "ICD9:486",
+      "MEDGEN:10813",
+      "MESH:D011014",
+      "MONDO:0005249",
+      "MedDRA:10035664",
+      "MedDRA:10035739",
+      "NCIT:C3333",
+      "NCIt:C3333",
+      "SCTID:233604007",
+      "SNOMEDCT:233604007",
+      "UMLS:C0032285",
+      "icd11.foundation:142052508"
+    ],
+    "id": [
+      "EFO:0003106"
+    ],
+    "term editor": [
+      "Tomasz Adamusiak"
+    ],
+    "term tracker item": [
+      "https://github.com/monarch-initiative/mondo/issues/3790"
+    ]
+  },
+  "label": "pneumonia",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "EFO_0003106",
+  "obo_id": "EFO:0003106",
+  "in_subset": [
+    "otar"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "An acute, acute and chronic, or chronic inflammation focally or diffusely affecting the lung parenchyma, caused by an infection in one or both of the lungs (by bacteria, viruses, fungi, or mycoplasma.). Symptoms include cough, shortness of breath, fevers, chills, chest pain, headache, sweating, and weakness.",
+      "oboXrefs": [
+        {
+          "database": "NCIT",
+          "id": "P378",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_P378"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "552",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/DOID_552"
+    },
+    {
+      "database": "ICD10",
+      "id": "J18",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/J18"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "J15",
+      "description": "MONDO:relatedTo",
+      "url": "https://icd.codes/icd10cm/J15"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "J18.9",
+      "description": "MONDO:equivalentTo",
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "483",
+      "description": "EFO:0003106",
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=483"
+    },
+    {
+      "database": "ICD9",
+      "id": "483.8",
+      "description": "EFO:0003106",
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "484.8",
+      "description": "MONDO:relatedTo",
+      "url": null
+    },
+    {
+      "database": "ICD9",
+      "id": "486",
+      "description": "MONDO:i2s",
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=486"
+    },
+    {
+      "database": "MEDGEN",
+      "id": "10813",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/10813"
+    },
+    {
+      "database": "MESH",
+      "id": "D011014",
+      "description": "MONDO:equivalentTo",
+      "url": "http://id.nlm.nih.gov/mesh/D011014"
+    },
+    {
+      "database": "MONDO",
+      "id": "0005249",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MONDO_0005249"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10035664",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10035664"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10035739",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10035739"
+    },
+    {
+      "database": "NCIT",
+      "id": "C3333",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3333"
+    },
+    {
+      "database": "NCIt",
+      "id": "C3333",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3333"
+    },
+    {
+      "database": "SCTID",
+      "id": "233604007",
+      "description": "MONDO:equivalentTo",
+      "url": "http://snomed.info/id/233604007"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "233604007",
+      "description": null,
+      "url": "http://snomed.info/id/233604007"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0032285",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0032285"
+    },
+    {
+      "database": "icd11.foundation",
+      "id": "142052508",
+      "description": "MONDO:equivalentTo",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "pneumonia",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106/graph"
+    },
+    "has_disease_location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003106/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000784"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

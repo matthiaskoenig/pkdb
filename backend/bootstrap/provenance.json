@@ -1,5 +1,35 @@
 {
-  "legacy_nodes": 2147,
+  "generator": "scripts/update_vocabulary.py",
+  "nodes": 2147,
+  "version": "95f3bab28999938c398ffb86fb0052877184f58e049f334a01de32858630668c",
+  "inputs_sha256": "dec552090c24e023c879fdc679278b9b3d58a4e547b48d69880dde6980ab9f36",
+  "definition_sha256": {
+    "backend/pkdb_data/__init__.py": "06299f8bbc08e2083edac7dd8c85a4800dad62f4b99437a14b62510dc54e950e",
+    "backend/pkdb_data/convert.py": "600ab081eecb7c9f31d898bb95cc59a01c570e6b8ed9192c4e5d575dead71314",
+    "backend/pkdb_data/info_nodes/__init__.py": "79b16b6f24e831cdeb665b7936fbc21d06e9c5047c8d12c592b4eaa01be116ae",
+    "backend/pkdb_data/info_nodes/annotation.py": "818da971c31f7a70b4d230cf7e1fe50629f8d634f74f380566b04ace416008d8",
+    "backend/pkdb_data/info_nodes/definitions/__init__.py": "f7cef468730c147ac8aec73b10f16ce5bcdff2e8ffed658e11d74ce345cca92c",
+    "backend/pkdb_data/info_nodes/definitions/anthropometry.py": "c56052024eb286d8a9fa9af4908c40a145a976e98f4bc737f7182b2565e06623",
+    "backend/pkdb_data/info_nodes/definitions/calculation_type.py": "e76a4775ee5fdcde30c375cc65f5124300ea93665ca37c219a5be995c7a43571",
+    "backend/pkdb_data/info_nodes/definitions/demographics.py": "a1795cb2e19700cbb082aab1fad367445dee9a4afc90a47627179a78f1cf8606",
+    "backend/pkdb_data/info_nodes/definitions/disease.py": "4b3f397f158004aa9e7d1506fe1699bc4095511d5b3bf86f2626c6da552dacd4",
+    "backend/pkdb_data/info_nodes/definitions/dosing.py": "742737a9194e6e3079e57f5def9c0a94561967ccf2c372ce1a745a0c02cc0729",
+    "backend/pkdb_data/info_nodes/definitions/ethnicity.py": "85b43863b75daa0e4be07e0dcaf2453db753885ac3990dfe02399c08789b25b0",
+    "backend/pkdb_data/info_nodes/definitions/genetics.py": "0e4df6e4cd11ff7aa6759fb0f47f9b763f9bd1b6357bf8b327a252b766e5fdc2",
+    "backend/pkdb_data/info_nodes/definitions/imaging.py": "df77c748803a3d0d838a631b77e9cefb55d999ea0419a654b2d7cdff7b369916",
+    "backend/pkdb_data/info_nodes/definitions/lifestyle.py": "0d378d46c8f3bc6262a91237a3e3aa4d100c09baa61de9e2d5460e858c932072",
+    "backend/pkdb_data/info_nodes/definitions/measurement.py": "ce3ba407092ff9ac29210c784c2e0c18bf1e7103bf6a423f96fbf47f23284be1",
+    "backend/pkdb_data/info_nodes/definitions/medical_procedure.py": "170f317917f1a858fcc6bc5ffc7fe5dea2251cf7b7f070741acc250e726f7242",
+    "backend/pkdb_data/info_nodes/definitions/method.py": "5c8e5b5b192df78ad0e273c6fd3eef53548b6876f3d4630a01e8584babcca1a4",
+    "backend/pkdb_data/info_nodes/definitions/specie.py": "3539650646a7b98704201eb197e190f6bba9b0a3a6cb2fcded58306d21635251",
+    "backend/pkdb_data/info_nodes/definitions/substance.py": "022ebff527600ba9a3116e3675f0e5ced706cb59686f1a6598c9205570de2f4c",
+    "backend/pkdb_data/info_nodes/definitions/tissue.py": "7ec403ed6023a3a8509d704fc0a4ad8004e479cbd5f89cb0489050fe4052be76",
+    "backend/pkdb_data/info_nodes/node.py": "6e79c61bf144f3d356ad10531cf7d9ffd0f6e2d4c94699677696a1d570c22639",
+    "backend/pkdb_data/info_nodes/nodes.py": "a1a2b6bb22450ce27d9f03eed6435fbd0e49c61f6d3f268b0574e9cabe5ea9c6",
+    "backend/pkdb_data/info_nodes/policies.py": "cbfd8036a068db10de603280704c1f8c34b42b159031208e4d605ad443f026cb",
+    "backend/pkdb_data/info_nodes/units.py": "1d4087425ea9b997f782451507ad566ddfeed8654379b214a74376832e62b88b",
+    "scripts/update_vocabulary.py": "c3786b0812b4de56cf406ff841b0a9366242dfa221102ed6310fc1f84984d763"
+  },
   "uncached_optional_metadata": [
     "https://www.ebi.ac.uk/ols4/api/ontologies/obi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOBI_OBI_0000070",
     "https://www.ebi.ac.uk/ols4/api/ontologies/pr/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FPR_000003809",
@@ -12,7 +42,5 @@
     "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_001024",
     "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_010048",
     "https://www.ebi.ac.uk/ols4/api/ontologies/sio/terms/http%253A%252F%252Fsemanticscience.org%252Fresource%252FSIO_SIO_010052"
-  ],
-  "legacy_serialization_sha256": "d6ba91a18f703271563bea45dd07baa61e816af99b6d9bb3fc90ad7edcc1eef9",
-  "policy_sha256": "41438d3302d09aecb89da5a3bdd276dfd7c3f1b7d5e44141f9767db8a88097f5"
+  ]
 }

@@ -1,0 +1,120 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C107562",
+  "lang": "en",
+  "description": [
+    "Angiotensin-2 (8 aa, ~1 kDa) is encoded by the human AGT gene. This protein is involved in vasoconstriction, heart rate and renal absorption of water and sodium."
+  ],
+  "synonyms": [
+    "AGT",
+    "Ang2",
+    "Angiotensin 1-8",
+    "Angiotensin II",
+    "Angiotensin-2"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CTRP"
+    ],
+    "DesignNote": [
+      "Angiotensin-2 is the product of the cleavage of angiotensin-1 by angiotensin-converting enzyme."
+    ],
+    "Display_Name": [
+      "Angiotensin-2"
+    ],
+    "OMIM_Number": [
+      "106150"
+    ],
+    "Preferred_Name": [
+      "Angiotensin-2"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein",
+      "Hormone"
+    ],
+    "Swiss_Prot": [
+      "P01019"
+    ],
+    "UMLS_CUI": [
+      "C0003009"
+    ],
+    "code": [
+      "C107562"
+    ]
+  },
+  "label": "Angiotensin-2",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C107562",
+  "obo_id": "NCIT:C107562",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C142800"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "AGT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ang2",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Angiotensin 1-8",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Angiotensin II",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Angiotensin-2",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C107562?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C107562/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C107562/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C107562/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C107562/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C107562/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C107562/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

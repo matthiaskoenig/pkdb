@@ -1,0 +1,60 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/OMIT_0003637",
+  "lang": "en",
+  "description": [],
+  "synonyms": [],
+  "annotation": {},
+  "label": "Cardiac Output",
+  "ontology_name": "omit",
+  "ontology_prefix": "OMIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/omit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "OMIT_0003637",
+  "obo_id": "OMIT:0003637",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0003637?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0003637/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0003637/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0003637/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0003637/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0003637/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0003637/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0003637/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0003637/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0003637/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0003637/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

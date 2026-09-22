@@ -1,0 +1,789 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8069",
+  "lang": "en",
+  "description": [
+    "A member of the class of barbiturates, the structure of which is that of barbituric acid substituted at C-5 by ethyl and phenyl groups."
+  ],
+  "synonyms": [
+    "5-ethyl-5-phenylpyrimidine-2,4,6(1H,3H,5H)-trione",
+    "Phenobarbital",
+    "5-Ethyl-5-phenyl-pyrimidine-2,4,6-trione",
+    "5-Ethyl-5-phenylbarbituric acid",
+    "5-Phenyl-5-ethylbarbituric acid",
+    "5-ethyl-5-phenyl-2,4,6(1H,3H,5H)-pyrimidinetrione",
+    "5-ethyl-5-phenylpyrimidine-2,4,6(1H,3H,5H)-trione",
+    "Luminal",
+    "PHENYLETHYLMALONYLUREA",
+    "Phenobarbitol",
+    "Phenobarbitone",
+    "Phenobarbituric Acid",
+    "Phenylaethylbarbitursaeure",
+    "Phenylethylbarbiturate",
+    "Phenylethylbarbituric Acid",
+    "Phenylethylbarbitursaeure",
+    "Phenylethylmalonylurea",
+    "phenobarbital"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C12H12N2O3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:102217"
+    ],
+    "has_dbxref": [
+      "CAS:50-06-6",
+      "DrugBank:DB01174",
+      "Drug_Central:2134",
+      "Gmelin:336231",
+      "HMDB:HMDB0015305",
+      "KEGG:C07434",
+      "KEGG:D00506",
+      "PMID:10866370",
+      "PMID:10891117",
+      "PMID:11311072",
+      "PMID:12361404",
+      "PMID:12873507",
+      "PMID:1495012",
+      "PMID:15324906",
+      "PMID:15857133",
+      "PMID:16139502",
+      "PMID:16190747",
+      "PMID:16789751",
+      "PMID:16793262",
+      "PMID:1681105",
+      "PMID:17300161",
+      "PMID:17481896",
+      "PMID:17827020",
+      "PMID:17870541",
+      "PMID:1875341",
+      "PMID:1992141",
+      "PMID:2061925",
+      "PMID:2170646",
+      "PMID:2296016",
+      "PMID:2308141",
+      "PMID:2308142",
+      "PMID:2579237",
+      "PMID:2724304",
+      "PMID:3016269",
+      "PMID:3336019",
+      "PMID:3572984",
+      "PMID:3599019",
+      "PMID:3654008",
+      "PMID:3735320",
+      "PMID:3783589",
+      "PMID:3783590",
+      "PMID:3820228",
+      "PMID:3950916",
+      "PMID:3950919",
+      "PMID:4032429",
+      "PMID:6716399",
+      "PMID:6737420",
+      "PMID:6864729",
+      "PMID:7205879",
+      "PMID:7381857",
+      "PMID:7562939",
+      "PMID:7799408",
+      "PMID:8035421",
+      "PMID:8230125",
+      "PMID:8246220",
+      "PMID:8627613",
+      "PMID:8691481",
+      "PMID:9016327",
+      "PMID:9544213",
+      "Patent:US1025872",
+      "Reaxys:233363",
+      "Wikipedia:Phenobarbital"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8069"
+    ],
+    "inchi": [
+      "InChI=1S/C12H12N2O3/c1-2-12(8-6-4-3-5-7-8)9(15)13-11(17)14-10(12)16/h3-7H,2H2,1H3,(H2,13,14,15,16,17)"
+    ],
+    "inchikey": [
+      "DDBREPKUVSBGFI-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "232.23530"
+    ],
+    "monoisotopicmass": [
+      "232.08479"
+    ],
+    "smiles": [
+      "CCC1(C(=O)NC(=O)NC1=O)c1ccccc1"
+    ]
+  },
+  "label": "phenobarbital",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8069",
+  "obo_id": "CHEBI:8069",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "50-06-6",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "50-06-6",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "50-06-6",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01174",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01174"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2134",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2134"
+    },
+    {
+      "database": "Gmelin",
+      "id": "336231",
+      "description": "Gmelin",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0015305",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015305"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07434",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07434"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00506",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00506"
+    },
+    {
+      "database": "PMID",
+      "id": "10866370",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10866370"
+    },
+    {
+      "database": "PMID",
+      "id": "10891117",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10891117"
+    },
+    {
+      "database": "PMID",
+      "id": "11311072",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11311072"
+    },
+    {
+      "database": "PMID",
+      "id": "12361404",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12361404"
+    },
+    {
+      "database": "PMID",
+      "id": "12873507",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12873507"
+    },
+    {
+      "database": "PMID",
+      "id": "1495012",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/1495012"
+    },
+    {
+      "database": "PMID",
+      "id": "15324906",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15324906"
+    },
+    {
+      "database": "PMID",
+      "id": "15857133",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15857133"
+    },
+    {
+      "database": "PMID",
+      "id": "16139502",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16139502"
+    },
+    {
+      "database": "PMID",
+      "id": "16190747",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16190747"
+    },
+    {
+      "database": "PMID",
+      "id": "16789751",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16789751"
+    },
+    {
+      "database": "PMID",
+      "id": "16793262",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16793262"
+    },
+    {
+      "database": "PMID",
+      "id": "1681105",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/1681105"
+    },
+    {
+      "database": "PMID",
+      "id": "17300161",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17300161"
+    },
+    {
+      "database": "PMID",
+      "id": "17481896",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17481896"
+    },
+    {
+      "database": "PMID",
+      "id": "17827020",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17827020"
+    },
+    {
+      "database": "PMID",
+      "id": "17870541",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17870541"
+    },
+    {
+      "database": "PMID",
+      "id": "1875341",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/1875341"
+    },
+    {
+      "database": "PMID",
+      "id": "1992141",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/1992141"
+    },
+    {
+      "database": "PMID",
+      "id": "2061925",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2061925"
+    },
+    {
+      "database": "PMID",
+      "id": "2170646",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2170646"
+    },
+    {
+      "database": "PMID",
+      "id": "2296016",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2296016"
+    },
+    {
+      "database": "PMID",
+      "id": "2308141",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2308141"
+    },
+    {
+      "database": "PMID",
+      "id": "2308142",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2308142"
+    },
+    {
+      "database": "PMID",
+      "id": "2579237",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2579237"
+    },
+    {
+      "database": "PMID",
+      "id": "2724304",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2724304"
+    },
+    {
+      "database": "PMID",
+      "id": "3016269",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3016269"
+    },
+    {
+      "database": "PMID",
+      "id": "3336019",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3336019"
+    },
+    {
+      "database": "PMID",
+      "id": "3572984",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3572984"
+    },
+    {
+      "database": "PMID",
+      "id": "3599019",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3599019"
+    },
+    {
+      "database": "PMID",
+      "id": "3654008",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3654008"
+    },
+    {
+      "database": "PMID",
+      "id": "3735320",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3735320"
+    },
+    {
+      "database": "PMID",
+      "id": "3783589",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3783589"
+    },
+    {
+      "database": "PMID",
+      "id": "3783590",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3783590"
+    },
+    {
+      "database": "PMID",
+      "id": "3820228",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3820228"
+    },
+    {
+      "database": "PMID",
+      "id": "3950916",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3950916"
+    },
+    {
+      "database": "PMID",
+      "id": "3950919",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3950919"
+    },
+    {
+      "database": "PMID",
+      "id": "4032429",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/4032429"
+    },
+    {
+      "database": "PMID",
+      "id": "6716399",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/6716399"
+    },
+    {
+      "database": "PMID",
+      "id": "6737420",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/6737420"
+    },
+    {
+      "database": "PMID",
+      "id": "6864729",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/6864729"
+    },
+    {
+      "database": "PMID",
+      "id": "7205879",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7205879"
+    },
+    {
+      "database": "PMID",
+      "id": "7381857",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7381857"
+    },
+    {
+      "database": "PMID",
+      "id": "7562939",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7562939"
+    },
+    {
+      "database": "PMID",
+      "id": "7799408",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7799408"
+    },
+    {
+      "database": "PMID",
+      "id": "8035421",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8035421"
+    },
+    {
+      "database": "PMID",
+      "id": "8230125",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8230125"
+    },
+    {
+      "database": "PMID",
+      "id": "8246220",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8246220"
+    },
+    {
+      "database": "PMID",
+      "id": "8627613",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8627613"
+    },
+    {
+      "database": "PMID",
+      "id": "8691481",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8691481"
+    },
+    {
+      "database": "PMID",
+      "id": "9016327",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9016327"
+    },
+    {
+      "database": "PMID",
+      "id": "9544213",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9544213"
+    },
+    {
+      "database": "Patent",
+      "id": "US1025872",
+      "description": null,
+      "url": "https://www.google.com/patents/US1025872"
+    },
+    {
+      "database": "Reaxys",
+      "id": "233363",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Phenobarbital",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Phenobarbital"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-ethyl-5-phenylpyrimidine-2,4,6(1H,3H,5H)-trione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenobarbital",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Ethyl-5-phenyl-pyrimidine-2,4,6-trione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Ethyl-5-phenylbarbituric acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-Phenyl-5-ethylbarbituric acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-ethyl-5-phenyl-2,4,6(1H,3H,5H)-pyrimidinetrione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-ethyl-5-phenylpyrimidine-2,4,6(1H,3H,5H)-trione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Luminal",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "PHENYLETHYLMALONYLUREA",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenobarbitol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenobarbitone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenobarbituric Acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenylaethylbarbitursaeure",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenylethylbarbiturate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenylethylbarbituric Acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenylethylbarbitursaeure",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phenylethylmalonylurea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "HMDB",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenobarbital",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8069?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8069/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8069/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8069/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8069/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8069/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8069/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8069/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

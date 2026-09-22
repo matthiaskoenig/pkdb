@@ -1,0 +1,140 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C28862",
+  "lang": "en",
+  "description": [
+    "The hydrochloride salt of benazepril, a carboxyl-containing angiotensin-converting enzyme (ACE) inhibitor with antihypertensive activity. As a prodrug, benazepril is metabolized to its active form benazeprilat. Benazeprilat competitively binds to and inhibits ACE, thereby blocking the conversion of angiotensin I to angiotensin II. This prevents the potent vasoconstrictive actions of angiotensin II, resulting in vasodilation. Benazeprilat also decreases angiotensin II-induced aldosterone secretion by the adrenal cortex, which leads to an increase in sodium excretion and subsequently increases water outflow."
+  ],
+  "synonyms": [
+    "BENAZEPRIL HYDROCHLORIDE",
+    "Benazepril HCl",
+    "Benazepril Hydrochloride",
+    "CGS14824A",
+    "Lotensin"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "86541-74-4"
+    ],
+    "Chemical_Formula": [
+      "C24H28N2O5.ClH"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Benazepril Hydrochloride"
+    ],
+    "FDA_UNII_Code": [
+      "N1SN99T69T"
+    ],
+    "Has_Free_Acid_Or_Base_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C61645"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C91297"
+    ],
+    "Legacy Concept Name": [
+      "Benazepril_Hydrochloride"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "686949"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "686949"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "686949"
+    ],
+    "Preferred_Name": [
+      "Benazepril Hydrochloride"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0770917"
+    ],
+    "code": [
+      "C28862"
+    ]
+  },
+  "label": "Benazepril Hydrochloride",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C28862",
+  "obo_id": "NCIT:C28862",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "BENAZEPRIL HYDROCHLORIDE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Benazepril HCl",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Benazepril Hydrochloride",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CGS14824A",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lotensin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28862?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28862/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28862/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28862/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28862/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28862/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28862/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

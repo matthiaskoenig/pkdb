@@ -1,0 +1,217 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C1212",
+  "lang": "en",
+  "description": [
+    "A natural macrocyclic lactone produced by the bacterium Streptomyces hygroscopicus, with immunosuppressant properties. In cells, sirolimus binds to the immunophilin FK Binding Protein-12 (FKBP-12) to generate an immunosuppressive complex that binds to and inhibits the activation of the mammalian Target Of Rapamycin (mTOR), a key regulatory kinase. This results in inhibition of T lymphocyte activation and proliferation that occurs in response to antigenic and cytokine (IL-2, IL-4, and IL-15) stimulation and inhibition of antibody production. (NCI04)"
+  ],
+  "synonyms": [
+    "9,10,12,13,14,21,22,23,24,25,26,27,32,33,34,34a-Hexadecahydro-9,27-dihydroxy-3-((1R)-2-((1S,3R,4R)-4-hydroxy-3-methoxycyclohexyl)-1-methylethyl)-10,21-dimethoxy-6,8,12,14,20,26-hexamethyl-23,27-epoxy-3H-pyrido(2,1-c)(1,4)oxaazacyclohentriacontine-1,5,11,2",
+    "AY 22989",
+    "RAPA",
+    "RAPAMYCIN",
+    "Rapamune",
+    "Rapamycin",
+    "SILA 9268A",
+    "SIROLIMUS",
+    "Sirolimus",
+    "WY-090217",
+    "rapamycin",
+    "sirolimus"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to keep the body from rejecting organ and bone marrow transplants. Rapamune blocks certain white blood cells that can reject foreign tissues and organs. It also blocks a protein that is involved in cell division. It is a type of antibiotic, a type of immunosuppressant, and a type of serine/threonine kinase inhibitor. Rapamune was previously called rapamycin."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Kidney transplant rejection, prevention"
+    ],
+    "CAS_Registry": [
+      "53123-88-9"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:9168"
+    ],
+    "Chemical_Formula": [
+      "C51H79NO13"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "GDC",
+      "HemOnc"
+    ],
+    "Display_Name": [
+      "Sirolimus"
+    ],
+    "FDA_UNII_Code": [
+      "W36ZG6FT64"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C102485",
+      "http://purl.obolibrary.org/obo/NCIT_C38929"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Sirolimus"
+    ],
+    "Maps_To": [
+      "Sirolimus"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "42555"
+    ],
+    "NSC Number": [
+      "226080"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "42555"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "42555"
+    ],
+    "Preferred_Name": [
+      "Sirolimus"
+    ],
+    "Semantic_Type": [
+      "Antibiotic",
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0072980"
+    ],
+    "code": [
+      "C1212"
+    ]
+  },
+  "label": "Sirolimus",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C1212",
+  "obo_id": "NCIT:C1212",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C176424",
+    "NCIT_C177537",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "9,10,12,13,14,21,22,23,24,25,26,27,32,33,34,34a-Hexadecahydro-9,27-dihydroxy-3-((1R)-2-((1S,3R,4R)-4-hydroxy-3-methoxycyclohexyl)-1-methylethyl)-10,21-dimethoxy-6,8,12,14,20,26-hexamethyl-23,27-epoxy-3H-pyrido(2,1-c)(1,4)oxaazacyclohentriacontine-1,5,11,2",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "AY 22989",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "RAPA",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "RAPAMYCIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Rapamune",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Rapamycin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SILA 9268A",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SIROLIMUS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sirolimus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "WY-090217",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "rapamycin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "sirolimus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1212?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1212/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1212/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1212/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1212/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1212/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1212/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1212/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

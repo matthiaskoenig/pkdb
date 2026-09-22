@@ -1,0 +1,292 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_63618",
+  "lang": "en",
+  "description": [
+    "A carboxylic ester resulting from the formal condensation of (S)-2-methylbutyric acid with the hydroxy group adjacent to the ring junction of (3R,5R)-7-[(1S,2S,6S,8S,8aR)-6,8-dihydroxy-2-methyl-1,2,6,7,8,8a-hexahydronaphthalen-1-yl]-3,5-dihydroxyheptanoic acid. Derived from microbial transformation of mevastatin, pravastatin is a reversible inhibitor of 3-hydroxy-3-methylglutaryl-coenzyme A (HMG-CoA). The sodium salt is used for lowering cholesterol and preventing cardiovascular disease. It is one of the lower potency statins, but has the advantage of fewer side effects compared with lovastatin and simvastatin."
+  ],
+  "synonyms": [
+    "(3R,5R)-3,5-dihydroxy-7-[(1S,2S,6S,8S,8aR)-6-hydroxy-2-methyl-8-{[(2S)-2-methylbutanoyl]oxy}-1,2,6,7,8,8a-hexahydronaphthalen-1-yl]heptanoic acid",
+    "(+)-(3R,5R)-3,5-dihydroxy-7-[(1S,2S,6S,8S,8aR)-6-hydroxy-2-methyl-8-{[(S)-2-methylbutyryl]oxy}-1,2,6,7,8,8a-hexahydro-1-naphthyl]heptanoic acid",
+    "pravastatin",
+    "pravastatin acid",
+    "pravastatina",
+    "pravastatine",
+    "pravastatinum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C23H36O7"
+    ],
+    "has_alternative_id": [
+      "CHEBI:8360"
+    ],
+    "has_dbxref": [
+      "CAS:81093-37-0",
+      "DrugBank:DB00175",
+      "Drug_Central:2239",
+      "HMDB:HMDB0005022",
+      "KEGG:C01844",
+      "KEGG:D08410",
+      "KNApSAcK:C00000565",
+      "LINCS:LSM-3347",
+      "PMID:21749370",
+      "PMID:21851379",
+      "PMID:25264019",
+      "Reaxys:4825538",
+      "Wikipedia:Pravastatin"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:63618"
+    ],
+    "inchi": [
+      "InChI=1S/C23H36O7/c1-4-13(2)23(29)30-20-11-17(25)9-15-6-5-14(3)19(22(15)20)8-7-16(24)10-18(26)12-21(27)28/h5-6,9,13-14,16-20,22,24-26H,4,7-8,10-12H2,1-3H3,(H,27,28)/t13-,14-,16+,17+,18+,19-,20-,22-/m0/s1"
+    ],
+    "inchikey": [
+      "TUZYXOIXSAXUGO-PZAWKZKUSA-N"
+    ],
+    "mass": [
+      "424.52770"
+    ],
+    "monoisotopicmass": [
+      "424.24610"
+    ],
+    "smiles": [
+      "[H][C@]12[C@H](C[C@H](O)C=C1C=C[C@H](C)[C@@H]2CC[C@@H](O)C[C@@H](O)CC(O)=O)OC(=O)[C@@H](C)CC"
+    ]
+  },
+  "label": "pravastatin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_63618",
+  "obo_id": "CHEBI:63618",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "81093-37-0",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "81093-37-0",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00175",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00175"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2239",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2239"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0005022",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0005022"
+    },
+    {
+      "database": "KEGG",
+      "id": "C01844",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C01844"
+    },
+    {
+      "database": "KEGG",
+      "id": "D08410",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D08410"
+    },
+    {
+      "database": "KNApSAcK",
+      "id": "C00000565",
+      "description": null,
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00000565"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-3347",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "21749370",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21749370"
+    },
+    {
+      "database": "PMID",
+      "id": "21851379",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21851379"
+    },
+    {
+      "database": "PMID",
+      "id": "25264019",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25264019"
+    },
+    {
+      "database": "Reaxys",
+      "id": "4825538",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Pravastatin",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Pravastatin"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3R,5R)-3,5-dihydroxy-7-[(1S,2S,6S,8S,8aR)-6-hydroxy-2-methyl-8-{[(2S)-2-methylbutanoyl]oxy}-1,2,6,7,8,8a-hexahydronaphthalen-1-yl]heptanoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-(3R,5R)-3,5-dihydroxy-7-[(1S,2S,6S,8S,8aR)-6-hydroxy-2-methyl-8-{[(S)-2-methylbutyryl]oxy}-1,2,6,7,8,8a-hexahydro-1-naphthyl]heptanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pravastatin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pravastatin acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pravastatina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pravastatine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pravastatinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63618?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63618/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63618/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63618/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63618/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63618/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63618/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63618/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63618/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    },
+    "is_conjugate_acid_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63618/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_acid_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

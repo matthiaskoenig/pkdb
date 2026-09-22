@@ -1,0 +1,124 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C28985",
+  "lang": "en",
+  "description": [
+    "A nonsteroidal benzeneacetic acid derivative with anti-inflammatory activity.  As a nonsteroidal anti-inflammatory drug (NSAID), diclofenac binds and chelates both isoforms of cyclooxygenase (COX-1 and-2), thereby blocking the conversion of arachidonic acid to pro-inflammatory-proprostaglandins.  This agent also may inhibit COX-2-mediated tumor angiogenesis.  When inhibiting COX-2, diclofenac may be effective in relieving pain and inflammation; when inhibiting COX-1, it may produce unacceptable gastrointestinal side effects.  This agent may be more active against COX-2 than several other carboxylic acid-containing NSAIDs. (NCI04)"
+  ],
+  "synonyms": [
+    "2-[(2,6-Dichlorophenyl)amino]benzeneacetic Acid",
+    "DICLOFENAC",
+    "Diclofenac",
+    "diclofenac"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "The active ingredient in a drug that is used to treat the symptoms of rheumatoid arthritis and is being studied in the prevention and treatment of some types of skin cancer. It blocks substances that cause inflammation and pain. It may also prevent the growth of new blood vessels that tumors need to grow. It is a type of cyclooxygenase inhibitor, a type of nonsteroidal anti-inflammatory drug (NSAID), and a type of antiangiogenesis agent."
+    ],
+    "CAS_Registry": [
+      "15307-86-5"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:47381"
+    ],
+    "Chemical_Formula": [
+      "C14H11Cl2NO2"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "144O8QL0L1"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C47983",
+      "http://purl.obolibrary.org/obo/NCIT_C47984"
+    ],
+    "Legacy Concept Name": [
+      "Diclofenac"
+    ],
+    "Preferred_Name": [
+      "Diclofenac"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0012091"
+    ],
+    "code": [
+      "C28985"
+    ]
+  },
+  "label": "Diclofenac",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C28985",
+  "obo_id": "NCIT:C28985",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "2-[(2,6-Dichlorophenyl)amino]benzeneacetic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "DICLOFENAC",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Diclofenac",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "diclofenac",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28985?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28985/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28985/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28985/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28985/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28985/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28985/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28985/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

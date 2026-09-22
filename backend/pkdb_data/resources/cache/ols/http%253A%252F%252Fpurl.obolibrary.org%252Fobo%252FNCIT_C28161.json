@@ -1,0 +1,166 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C28161",
+  "lang": "en",
+  "description": [
+    "Intramuscular injection is a route of drug administration via injection into muscle tissue. Aqueous or oleaginous solutions and emulsions or suspensions may be administered. Absorption rates, delay in availability of the drug to the systemic circulation, and duration of effect are perfusion-limited, depend on molecular size of the agent, volume, and osmolarity of the drug solution, fat content of the injection site, and patient physical activity."
+  ],
+  "synonyms": [
+    "IM",
+    "INTRAMUSCULAR",
+    "Intramuscular",
+    "Intramuscular Injection",
+    "Intramuscular Route of Administration",
+    "Intramuscular use",
+    "intramuscular injection"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Administration within a muscle. (FDA)",
+      "Injection of a medicinal product into muscular tissue."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "EDQM-HC",
+      "FDA",
+      "GDC",
+      "NICHD",
+      "OORO"
+    ],
+    "FDA_Table": [
+      "Route of Administration (C-DRG-00301)"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C38114"
+    ],
+    "Legacy Concept Name": [
+      "Intramuscular_Injection"
+    ],
+    "Maps_To": [
+      "Intramuscular"
+    ],
+    "Preferred_Name": [
+      "Intramuscular Route of Administration"
+    ],
+    "Semantic_Type": [
+      "Therapeutic or Preventive Procedure"
+    ],
+    "UMLS_CUI": [
+      "C1556154"
+    ],
+    "code": [
+      "C28161"
+    ]
+  },
+  "label": "Intramuscular Route of Administration",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C28161",
+  "obo_id": "NCIT:C28161",
+  "in_subset": [
+    "NCIT_C148636",
+    "NCIT_C150107",
+    "NCIT_C157711",
+    "NCIT_C177537",
+    "NCIT_C192234",
+    "NCIT_C54452",
+    "NCIT_C54455",
+    "NCIT_C61410",
+    "NCIT_C66729",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C77527",
+    "NCIT_C78420",
+    "NCIT_C78425",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "IM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "INTRAMUSCULAR",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intramuscular",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intramuscular Injection",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intramuscular Route of Administration",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Intramuscular use",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "intramuscular injection",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28161?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28161/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28161/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28161/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28161/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28161/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28161/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28161/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28161/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28161/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28161/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

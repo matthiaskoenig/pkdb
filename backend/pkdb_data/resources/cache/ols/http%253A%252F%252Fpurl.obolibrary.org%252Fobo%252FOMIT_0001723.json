@@ -1,0 +1,48 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/OMIT_0001723",
+  "lang": "en",
+  "description": [],
+  "synonyms": [],
+  "annotation": {},
+  "label": "Adolescent",
+  "ontology_name": "omit",
+  "ontology_prefix": "OMIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/omit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "OMIT_0001723",
+  "obo_id": "OMIT:0001723",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0001723?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0001723/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0001723/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0001723/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0001723/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0001723/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/omit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOMIT_0001723/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

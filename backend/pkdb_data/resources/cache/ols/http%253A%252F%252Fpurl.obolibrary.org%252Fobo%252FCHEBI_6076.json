@@ -1,0 +1,276 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6076",
+  "lang": "en",
+  "description": [
+    "An N-arylpiperazine that is cis-ketoconazole in which the imidazol-1-yl group is replaced by a 1,2,4-triazol-1-yl group and in which the actyl group attached to the piperazine moiety is replaced by a p-[(+-)1-sec-butyl-5-oxo-1,5-dihydro-4H-1,2,4-triazol-4-yl]phenyl group. A potent P-glycoprotein and CYP3A4 inhibitor, it is used as an antifungal drug for the treatment of various fungal infections, including aspergillosis, blastomycosis, candidiasis, chromoblastomycosis, coccidioidomycosis, cryptococcosis, histoplasmosis, and sporotrichosis."
+  ],
+  "synonyms": [
+    "2-(butan-2-yl)-4-{4-[4-(4-{[(2R,4S)-2-(2,4-dichlorophenyl)-2-(1H-1,2,4-triazol-1-ylmethyl)-1,3-dioxolan-4-yl]methoxy}phenyl)piperazin-1-yl]phenyl}-2,4-dihydro-3H-1,2,4-triazol-3-one",
+    "Itraconazole",
+    "itraconazole",
+    "Itrizole (TN)",
+    "Oriconazole",
+    "Sporanox (TN)"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C35H38Cl2N8O4"
+    ],
+    "has_dbxref": [
+      "CAS:84625-61-6",
+      "DrugBank:DB01167",
+      "KEGG:D00350",
+      "PMID:11219548",
+      "PMID:11403818",
+      "PMID:11422002",
+      "PMID:15521894",
+      "PMID:19025521",
+      "PMID:20400651",
+      "PMID:25326091",
+      "Patent:EP6711",
+      "Patent:US4267179",
+      "VSDB:1853",
+      "Wikipedia:Itraconazole"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6076"
+    ],
+    "inchi": [
+      "InChI=1S/C35H38Cl2N8O4/c1-3-25(2)45-34(46)44(24-40-45)29-7-5-27(6-8-29)41-14-16-42(17-15-41)28-9-11-30(12-10-28)47-19-31-20-48-35(49-31,21-43-23-38-22-39-43)32-13-4-26(36)18-33(32)37/h4-13,18,22-25,31H,3,14-17,19-21H2,1-2H3/t25?,31-,35-/m0/s1"
+    ],
+    "inchikey": [
+      "VHVPQPYKVGDNFY-ZPGVKDDISA-N"
+    ],
+    "mass": [
+      "705.63300"
+    ],
+    "monoisotopicmass": [
+      "704.23931"
+    ],
+    "smiles": [
+      "CCC(C)n1ncn(-c2ccc(cc2)N2CCN(CC2)c2ccc(OC[C@H]3CO[C@@](Cn4cncn4)(O3)c3ccc(Cl)cc3Cl)cc2)c1=O"
+    ]
+  },
+  "label": "itraconazole",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6076",
+  "obo_id": "CHEBI:6076",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "84625-61-6",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "84625-61-6",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01167",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01167"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00350",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00350"
+    },
+    {
+      "database": "PMID",
+      "id": "11219548",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11219548"
+    },
+    {
+      "database": "PMID",
+      "id": "11403818",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11403818"
+    },
+    {
+      "database": "PMID",
+      "id": "11422002",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11422002"
+    },
+    {
+      "database": "PMID",
+      "id": "15521894",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15521894"
+    },
+    {
+      "database": "PMID",
+      "id": "19025521",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19025521"
+    },
+    {
+      "database": "PMID",
+      "id": "20400651",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20400651"
+    },
+    {
+      "database": "PMID",
+      "id": "25326091",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25326091"
+    },
+    {
+      "database": "Patent",
+      "id": "EP6711",
+      "description": null,
+      "url": "https://www.google.com/patents/EP6711"
+    },
+    {
+      "database": "Patent",
+      "id": "US4267179",
+      "description": null,
+      "url": "https://www.google.com/patents/US4267179"
+    },
+    {
+      "database": "VSDB",
+      "id": "1853",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1853.htm"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Itraconazole",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Itraconazole"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-(butan-2-yl)-4-{4-[4-(4-{[(2R,4S)-2-(2,4-dichlorophenyl)-2-(1H-1,2,4-triazol-1-ylmethyl)-1,3-dioxolan-4-yl]methoxy}phenyl)piperazin-1-yl]phenyl}-2,4-dihydro-3H-1,2,4-triazol-3-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Itraconazole",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "itraconazole",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Itrizole (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Oriconazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sporanox (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6076/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

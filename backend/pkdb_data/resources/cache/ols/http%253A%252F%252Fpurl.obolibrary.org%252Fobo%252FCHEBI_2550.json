@@ -1,0 +1,142 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_2550",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Albuterol sulfate",
+    "Salbutamol sulfate",
+    "Ventolin"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:51022-70-9",
+      "kegg.drug:D00683"
+    ],
+    "generalized_empirical_formula": [
+      "2C13H21NO3.H2O4S"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:2550"
+    ],
+    "inchi_key_string": [
+      "BNPSSFBOAGDEEL-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/2C13H21NO3.H2O4S/c2*1-13(2,3)14-7-12(17)9-4-5-11(16)10(6-9)8-15;1-5(2,3)4/h2*4-6,12,14-17H,7-8H2,1-3H3;(H2,1,2,3,4)"
+    ],
+    "mass": [
+      "576.709"
+    ],
+    "monoisotopic_mass": [
+      "576.27167"
+    ],
+    "smiles_string": [
+      "CC(C)(C)NCC(O)c1ccc(O)c(CO)c1.CC(C)(C)NCC(O)c1ccc(O)c(CO)c1.O=S(=O)(O)O"
+    ]
+  },
+  "label": "albuterol sulfate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_2550",
+  "obo_id": "CHEBI:2550",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "51022-70-9",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=51022-70-9"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00683",
+      "description": "kegg.drug",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Albuterol sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salbutamol sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ventolin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2550?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2550/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2550/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2550/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2550/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2550/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2550/graph"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_2550/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018038"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

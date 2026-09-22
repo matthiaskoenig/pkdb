@@ -1,0 +1,122 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_4194",
+  "lang": "en",
+  "description": [
+    "A carbohydrate metabolic disorder that is characterized by blood glucose levels which cannot be maintained within the normal range."
+  ],
+  "synonyms": [
+    "disorder of glucose metabolism"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "MESH:D044882",
+      "NCI:C53655",
+      "SNOMEDCT_US_2023_03_01:126877002",
+      "UMLS_CUI:C1257958"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:4194"
+    ]
+  },
+  "label": "glucose metabolism disease",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_4194",
+  "obo_id": "DOID:4194",
+  "in_subset": [
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A carbohydrate metabolic disorder that is characterized by blood glucose levels which cannot be maintained within the normal range.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "MESH",
+      "id": "D044882",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D044882"
+    },
+    {
+      "database": "NCI",
+      "id": "C53655",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C53655"
+    },
+    {
+      "database": "SNOMEDCT_US_2023_03_01",
+      "id": "126877002",
+      "description": null,
+      "url": "http://snomed.info/id/126877002"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C1257958",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C1257958"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4194?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4194/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4194/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4194/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4194/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4194/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4194/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4194/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4194/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4194/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4194/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

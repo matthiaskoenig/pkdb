@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:196955",
+  "name": "atogepant",
+  "definition": "A secondary carboxamide resulting from the formal condensation of the carboxy group of (3'S)-2'-oxo-1',2',5,7-tetrahydrospiro[cyclopenta[b]pyridine-6,3'-pyrrolo[2,3-b]pyridine]-3-carboxylic acid with the amino group of (3S,5S,6R)-3-amino-6-methyl-1-(2,2,2-trifluoroethyl)-5-(2,3,6-trifluorophenyl)piperidin-2-one. It is a selective oral, small-molecule antagonist of calcitonin gene-related peptide (CGRP) receptor that has been approved for the treatment of migraine.",
+  "formula": "C29H23F6N5O3",
+  "charge": "0",
+  "mass": "603.525",
+  "inchikey": "QIVUCLWGARAQIO-OLIXTKCUSA-N"
+}

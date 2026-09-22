@@ -1,0 +1,241 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_33130",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "aluminium(3+) hydroxide",
+    "aluminium(III) hydroxide",
+    "trihydroxidoaluminium",
+    "Al(OH)3",
+    "Aluminiumhydroxid",
+    "Aluminum hydroxide"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "AlH3O3",
+      "H3AlO3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:30193",
+      "CHEBI:31195"
+    ],
+    "has_dbxref": [
+      "CAS:21645-51-2",
+      "Drug_Central:4250",
+      "Gmelin:22216",
+      "KEGG:C13391",
+      "KEGG:D02859",
+      "Wikipedia:Aluminum_Hydroxide"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:33130"
+    ],
+    "inchi": [
+      "InChI=1S/Al.3H2O/h;3*1H2/q+3;;;/p-3"
+    ],
+    "inchikey": [
+      "WNROFYMDJYEPJX-UHFFFAOYSA-K"
+    ],
+    "mass": [
+      "78.00356"
+    ],
+    "monoisotopicmass": [
+      "77.98976"
+    ],
+    "smiles": [
+      "[H]O[Al](O[H])O[H]"
+    ]
+  },
+  "label": "aluminium hydroxide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_33130",
+  "obo_id": "CHEBI:33130",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "21645-51-2",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "21645-51-2",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "21645-51-2",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "4250",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/4250"
+    },
+    {
+      "database": "Gmelin",
+      "id": "22216",
+      "description": "Gmelin",
+      "url": null
+    },
+    {
+      "database": "KEGG",
+      "id": "C13391",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C13391"
+    },
+    {
+      "database": "KEGG",
+      "id": "D02859",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D02859"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Aluminum_Hydroxide",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Aluminum_Hydroxide"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "aluminium(3+) hydroxide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "aluminium(III) hydroxide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "trihydroxidoaluminium",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Al(OH)3",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Aluminiumhydroxid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Aluminum hydroxide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_33130?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_33130/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_33130/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_33130/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_33130/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_33130/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_33130/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_33130/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_33130/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_33130/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_33130/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_33130/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

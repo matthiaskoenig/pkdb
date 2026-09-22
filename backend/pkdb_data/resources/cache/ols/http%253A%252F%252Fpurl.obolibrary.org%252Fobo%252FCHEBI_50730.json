@@ -1,0 +1,254 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_50730",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(R-(E))-1-(((1-(3-(2-(7-Chloro-2-quinolinyl)ethenyl)phenyl)-3-(2-(1-hydroxy-1-methylethyl)phenyl)propyl)thio)methyl)cyclopropaneacetic acid",
+    "1-[[[(1 R)-1-[3-[(1E)-2-(7-chloro-2-quinolinyl)ethenyl] phenyl]-3-[2-(1-hydroxy-1-methylethyl)phenyl]propyl]sulfanyl]methyl]cyclopropaneacetic acid",
+    "MONTELUKAST",
+    "Montelukast",
+    "montelukast",
+    "{1-[({(1R)-1-{3-[(E)-2-(7-chloroquinolin-2-yl)ethenyl]phenyl}-3-[2-(2-hydroxypropan-2-yl)phenyl]propyl}sulfanyl)methyl]cyclopropyl}acetic acid",
+    "{1-[({(1R)-1-{3-[(E)-2-(7-chloroquinolin-2-yl)ethenyl]phenyl}-3-[2-(2-hydroxypropan-2-yl)phenyl]propyl}sulfanyl)methyl]cyclopropyl}acetic acid"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:7896575",
+      "cas:158966-92-8",
+      "drugbank:DB00471",
+      "drugcentral:1836",
+      "kegg.compound:C07482",
+      "kegg.drug:D08229",
+      "patent:EP1886997",
+      "pdb-ccd:MTK",
+      "wikipedia.en:Montelukast"
+    ],
+    "generalized_empirical_formula": [
+      "C35H36ClNO3S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:49756",
+      "CHEBI:6992"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:50730"
+    ],
+    "inchi_key_string": [
+      "UCHDWCPVSPXUMX-TZIWLTJVSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C35H36ClNO3S/c1-34(2,40)30-9-4-3-7-25(30)13-17-32(41-23-35(18-19-35)22-33(38)39)27-8-5-6-24(20-27)10-15-29-16-12-26-11-14-28(36)21-31(26)37-29/h3-12,14-16,20-21,32,40H,13,17-19,22-23H2,1-2H3,(H,38,39)/b15-10+/t32-/m1/s1"
+    ],
+    "mass": [
+      "586.197"
+    ],
+    "monoisotopic_mass": [
+      "585.21044"
+    ],
+    "smiles_string": [
+      "CC(C)(O)c1ccccc1CC[C@@H](SCC1(CC(=O)O)CC1)c1cccc(/C=C/c2ccc3ccc(Cl)cc3n2)c1"
+    ]
+  },
+  "label": "montelukast",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_50730",
+  "obo_id": "CHEBI:50730",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "7896575",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "158966-92-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=158966-92-8"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00471",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00471"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1836",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1836"
+    },
+    {
+      "database": "kegg.compound",
+      "id": "C07482",
+      "description": "kegg.compound",
+      "url": null
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D08229",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "EP1886997",
+      "description": "patent",
+      "url": "https://www.google.com/patents/EP1886997"
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "MTK",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Montelukast",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "{1-[({(1R)-1-{3-[(E)-2-(7-chloroquinolin-2-yl)ethenyl]phenyl}-3-[2-(2-hydroxypropan-2-yl)phenyl]propyl}sulfanyl)methyl]cyclopropyl}acetic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R-(E))-1-(((1-(3-(2-(7-Chloro-2-quinolinyl)ethenyl)phenyl)-3-(2-(1-hydroxy-1-methylethyl)phenyl)propyl)thio)methyl)cyclopropaneacetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-[[[(1 R)-1-[3-[(1E)-2-(7-chloro-2-quinolinyl)ethenyl] phenyl]-3-[2-(1-hydroxy-1-methylethyl)phenyl]propyl]sulfanyl]methyl]cyclopropaneacetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "patent",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "MONTELUKAST",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "pdb-ccd",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Montelukast",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "montelukast",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chebi",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "{1-[({(1R)-1-{3-[(E)-2-(7-chloroquinolin-2-yl)ethenyl]phenyl}-3-[2-(2-hydroxypropan-2-yl)phenyl]propyl}sulfanyl)methyl]cyclopropyl}acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50730?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50730/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50730/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50730/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50730/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50730/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50730/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50730/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_50730/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

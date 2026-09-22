@@ -1,0 +1,176 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_32015",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Piretanide",
+    "arelix",
+    "diumax",
+    "eurelix"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C17H18N2O5S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:93532"
+    ],
+    "has_dbxref": [
+      "CAS:55837-27-9",
+      "Drug_Central:2201",
+      "KEGG:D01634",
+      "LINCS:LSM-3959"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:32015"
+    ],
+    "inchi": [
+      "InChI=1S/C17H18N2O5S/c18-25(22,23)15-11-12(17(20)21)10-14(19-8-4-5-9-19)16(15)24-13-6-2-1-3-7-13/h1-3,6-7,10-11H,4-5,8-9H2,(H,20,21)(H2,18,22,23)"
+    ],
+    "inchikey": [
+      "UJEWTUDSLQGTOA-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "362.402"
+    ],
+    "monoisotopicmass": [
+      "362.09364"
+    ],
+    "smiles": [
+      "C1CCN(C1)C2=C(C(=CC(=C2)C(=O)O)S(=O)(=O)N)OC3=CC=CC=C3"
+    ]
+  },
+  "label": "Piretanide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_32015",
+  "obo_id": "CHEBI:32015",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "55837-27-9",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "55837-27-9",
+      "description": "DrugCentral",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2201",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2201"
+    },
+    {
+      "database": "KEGG",
+      "id": "D01634",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D01634"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-3959",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Piretanide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "arelix",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diumax",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "eurelix",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32015/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

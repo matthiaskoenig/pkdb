@@ -1,0 +1,239 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_1001249",
+  "lang": "en",
+  "description": [
+    "A common, often \u201csilent\u201d liver disease. It resembles alcoholic liver disease, but occurs in people who drink little or no alcohol. The major feature in NASH is fat in the liver, along with inflammation and damage.",
+    "Metabolic dysfunction-associated steatohepatitis (MASH, formerly known as nonalcoholic steatohepatitis or NASH) is a type of fatty liver disease. It often develops due to a metabolic disorder, such as obesity or diabetes, resulting in a toxic buildup of fat in the liver. It is the most severe form of metabolic dysfunction-associated steatotic liver disease (MASLD, formerly known as nonalcoholic fatty liver disease or NAFLD)."
+  ],
+  "synonyms": [
+    "MASH",
+    "NASH",
+    "NASH - nonalcoholic steatohepatitis",
+    "metabolic dysfunction-associated steatohepatitis",
+    "non alcoholic steatohepatitis",
+    "non-alcoholic steatohepatitis",
+    "nonalcoholic steatohepatitis"
+  ],
+  "annotation": {
+    "definition_citation": [
+      "http://www.niddk.nih.gov/health-information/health-topics/liver-disease/nonalcoholic-steatohepatitis/Pages/facts.aspx"
+    ],
+    "gwas_trait": [
+      true
+    ],
+    "has close match": [
+      "http://identifiers.org/meddra/10053219"
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/469032",
+      "http://linkedlifedata.com/resource/umls/id/C3241937",
+      "http://purl.obolibrary.org/obo/DOID_0080547",
+      "http://purl.obolibrary.org/obo/NCIT_C84445",
+      "http://www.ebi.ac.uk/efo/EFO_1001249"
+    ],
+    "has_dbxref": [
+      "DOID:0080547",
+      "ICD10:K75.81",
+      "MEDGEN:469032",
+      "MONDO:0007027",
+      "MedDRA:10053219",
+      "NCIT:C84445",
+      "NCIt:C84445",
+      "SNOMEDCT:442191002",
+      "UMLS:C3241937"
+    ],
+    "id": [
+      "EFO:1001249"
+    ],
+    "term editor": [
+      "Sirarat Sarntivijai"
+    ],
+    "term tracker item": [
+      "https://github.com/monarch-initiative/mondo/issues/6716"
+    ]
+  },
+  "label": "non-alcoholic steatohepatitis",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "EFO_1001249",
+  "obo_id": "EFO:1001249",
+  "in_subset": [
+    "otar"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "Metabolic dysfunction-associated steatohepatitis (MASH, formerly known as nonalcoholic steatohepatitis or NASH) is a type of fatty liver disease. It often develops due to a metabolic disorder, such as obesity or diabetes, resulting in a toxic buildup of fat in the liver. It is the most severe form of metabolic dysfunction-associated steatotic liver disease (MASLD, formerly known as nonalcoholic fatty liver disease or NAFLD).",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "https://www.verywellhealth.com/non-alcoholic-steatohepatitis-nash-5196357#toc-symptoms",
+          "description": null,
+          "url": "https://www.verywellhealth.com/non-alcoholic-steatohepatitis-nash-5196357#toc-symptoms"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "0080547",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/DOID_0080547"
+    },
+    {
+      "database": "ICD10",
+      "id": "K75.81",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MEDGEN",
+      "id": "469032",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/469032"
+    },
+    {
+      "database": "MONDO",
+      "id": "0007027",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MONDO_0007027"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10053219",
+      "description": "EFO:1001249",
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10053219"
+    },
+    {
+      "database": "NCIT",
+      "id": "C84445",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/NCIT_C84445"
+    },
+    {
+      "database": "NCIt",
+      "id": "C84445",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C84445"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "442191002",
+      "description": null,
+      "url": "http://snomed.info/id/442191002"
+    },
+    {
+      "database": "UMLS",
+      "id": "C3241937",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C3241937"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "MASH",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "0080547",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_0080547"
+        },
+        {
+          "database": null,
+          "id": "https://www.verywellhealth.com/non-alcoholic-steatohepatitis-nash-5196357#toc-symptoms",
+          "description": null,
+          "url": "https://www.verywellhealth.com/non-alcoholic-steatohepatitis-nash-5196357#toc-symptoms"
+        }
+      ]
+    },
+    {
+      "name": "NASH - nonalcoholic steatohepatitis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C84445",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C84445"
+        }
+      ]
+    },
+    {
+      "name": "metabolic dysfunction-associated steatohepatitis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "non-alcoholic steatohepatitis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "0080547",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_0080547"
+        }
+      ]
+    },
+    {
+      "name": "nonalcoholic steatohepatitis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "0080547",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_0080547"
+        },
+        {
+          "database": "NCIT",
+          "id": "C84445",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C84445"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001249?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001249/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001249/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001249/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001249/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001249/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001249/graph"
+    },
+    "disease_has_inflammation_site": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_1001249/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0004027"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,462 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_80308",
+  "lang": "en",
+  "description": [
+    "A neuropeptide consisting of 11-amino acids. It preferentially activates neurokinin-1 receptors, exterting excitatory effects on central and peripheral neurons and involved in pain transmission."
+  ],
+  "synonyms": [
+    "L-arginyl-L-prolyl-L-lysyl-L-prolyl-L-glutaminyl-L-glutaminyl-L-phenylalanyl-L-phenylalanylglycyl-L-leucyl-L-methioninamide",
+    "Arg-Pro-Lys-Pro-Gln-Gln-Phe-Phe-Gly-Leu-Met-NH2",
+    "H-Arg-Pro-Lys-Pro-Gln-Gln-Phe-Phe-Gly-Leu-Met-NH2",
+    "L-Arg-L-Pro-L-Lys-L-Pro-L-Gln-L-Gln-L-Phe-L-Phe-Gly-L-Leu-L-Met-NH2",
+    "RPKPQQFFGLM-NH2",
+    "RPKPQQFFGLM-amide",
+    "SP"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C63H98N18O13S"
+    ],
+    "has_dbxref": [
+      "CAS:33507-63-0",
+      "FooDB:FDB002259",
+      "HMDB:HMDB0001897",
+      "KEGG:C16094",
+      "PMID:16729222",
+      "PMID:28474564",
+      "PMID:30935032",
+      "PMID:32634530",
+      "PMID:33688239",
+      "PMID:34017371",
+      "PMID:34915568",
+      "PMID:35054936",
+      "PMID:35269726",
+      "PMID:35402619",
+      "PMID:35485451",
+      "PMID:35507035",
+      "PMID:35525773",
+      "PMID:35779793",
+      "PMID:35806893",
+      "PMID:35820276",
+      "PMID:35856812",
+      "PMID:35884599",
+      "PMID:35904495",
+      "PMID:35948329",
+      "PMID:35955767",
+      "PMID:36001730",
+      "PMID:36040535",
+      "PMID:36067981",
+      "PMID:36146768",
+      "PMID:36165925",
+      "PMID:36197354",
+      "PMID:36351068",
+      "PMID:36361972",
+      "PMID:36385363",
+      "PMID:36414415",
+      "PMID:6196797",
+      "PMID:7541689",
+      "Patent:US2010190722",
+      "Wikipedia:Substance_P"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:80308"
+    ],
+    "inchi": [
+      "InChI=1S/C63H98N18O13S/c1-37(2)33-45(57(89)74-41(53(68)85)27-32-95-3)73-52(84)36-72-54(86)46(34-38-15-6-4-7-16-38)78-58(90)47(35-39-17-8-5-9-18-39)79-56(88)42(23-25-50(66)82)75-55(87)43(24-26-51(67)83)76-59(91)49-22-14-31-81(49)62(94)44(20-10-11-28-64)77-60(92)48-21-13-30-80(48)61(93)40(65)19-12-29-71-63(69)70/h4-9,15-18,37,40-49H,10-14,19-36,64-65H2,1-3H3,(H2,66,82)(H2,67,83)(H2,68,85)(H,72,86)(H,73,84)(H,74,89)(H,75,87)(H,76,91)(H,77,92)(H,78,90)(H,79,88)(H4,69,70,71)/t40-,41-,42-,43-,44-,45-,46-,47-,48-,49-/m0/s1"
+    ],
+    "inchikey": [
+      "ADNPLDHMAVUMIW-CUZNLEPHSA-N"
+    ],
+    "mass": [
+      "1347.650"
+    ],
+    "monoisotopicmass": [
+      "1346.72815"
+    ],
+    "smiles": [
+      "CSCC[C@H](NC(=O)[C@H](CC(C)C)NC(=O)CNC(=O)[C@H](CC1=CC=CC=C1)NC(=O)[C@H](CC1=CC=CC=C1)NC(=O)[C@H](CCC(N)=O)NC(=O)[C@H](CCC(N)=O)NC(=O)[C@@H]1CCCN1C(=O)[C@H](CCCCN)NC(=O)[C@@H]1CCCN1C(=O)[C@@H](N)CCCNC(N)=N)C(N)=O"
+    ]
+  },
+  "label": "substance P",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_80308",
+  "obo_id": "CHEBI:80308",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "33507-63-0",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "FooDB",
+      "id": "FDB002259",
+      "description": null,
+      "url": "http://foodb.ca/compounds/FDB002259"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0001897",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001897"
+    },
+    {
+      "database": "KEGG",
+      "id": "C16094",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C16094"
+    },
+    {
+      "database": "PMID",
+      "id": "16729222",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16729222"
+    },
+    {
+      "database": "PMID",
+      "id": "28474564",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28474564"
+    },
+    {
+      "database": "PMID",
+      "id": "30935032",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/30935032"
+    },
+    {
+      "database": "PMID",
+      "id": "32634530",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32634530"
+    },
+    {
+      "database": "PMID",
+      "id": "33688239",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33688239"
+    },
+    {
+      "database": "PMID",
+      "id": "34017371",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/34017371"
+    },
+    {
+      "database": "PMID",
+      "id": "34915568",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/34915568"
+    },
+    {
+      "database": "PMID",
+      "id": "35054936",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35054936"
+    },
+    {
+      "database": "PMID",
+      "id": "35269726",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35269726"
+    },
+    {
+      "database": "PMID",
+      "id": "35402619",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35402619"
+    },
+    {
+      "database": "PMID",
+      "id": "35485451",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35485451"
+    },
+    {
+      "database": "PMID",
+      "id": "35507035",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35507035"
+    },
+    {
+      "database": "PMID",
+      "id": "35525773",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35525773"
+    },
+    {
+      "database": "PMID",
+      "id": "35779793",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35779793"
+    },
+    {
+      "database": "PMID",
+      "id": "35806893",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35806893"
+    },
+    {
+      "database": "PMID",
+      "id": "35820276",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35820276"
+    },
+    {
+      "database": "PMID",
+      "id": "35856812",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35856812"
+    },
+    {
+      "database": "PMID",
+      "id": "35884599",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35884599"
+    },
+    {
+      "database": "PMID",
+      "id": "35904495",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35904495"
+    },
+    {
+      "database": "PMID",
+      "id": "35948329",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35948329"
+    },
+    {
+      "database": "PMID",
+      "id": "35955767",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35955767"
+    },
+    {
+      "database": "PMID",
+      "id": "36001730",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36001730"
+    },
+    {
+      "database": "PMID",
+      "id": "36040535",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36040535"
+    },
+    {
+      "database": "PMID",
+      "id": "36067981",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36067981"
+    },
+    {
+      "database": "PMID",
+      "id": "36146768",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36146768"
+    },
+    {
+      "database": "PMID",
+      "id": "36165925",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36165925"
+    },
+    {
+      "database": "PMID",
+      "id": "36197354",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36197354"
+    },
+    {
+      "database": "PMID",
+      "id": "36351068",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36351068"
+    },
+    {
+      "database": "PMID",
+      "id": "36361972",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36361972"
+    },
+    {
+      "database": "PMID",
+      "id": "36385363",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36385363"
+    },
+    {
+      "database": "PMID",
+      "id": "36414415",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36414415"
+    },
+    {
+      "database": "PMID",
+      "id": "6196797",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/6196797"
+    },
+    {
+      "database": "PMID",
+      "id": "7541689",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7541689"
+    },
+    {
+      "database": "Patent",
+      "id": "US2010190722",
+      "description": null,
+      "url": "https://www.google.com/patents/US2010190722"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Substance_P",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Substance_P"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "L-arginyl-L-prolyl-L-lysyl-L-prolyl-L-glutaminyl-L-glutaminyl-L-phenylalanyl-L-phenylalanylglycyl-L-leucyl-L-methioninamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Arg-Pro-Lys-Pro-Gln-Gln-Phe-Phe-Gly-Leu-Met-NH2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H-Arg-Pro-Lys-Pro-Gln-Gln-Phe-Phe-Gly-Leu-Met-NH2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "L-Arg-L-Pro-L-Lys-L-Pro-L-Gln-L-Gln-L-Phe-L-Phe-Gly-L-Leu-L-Met-NH2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "RPKPQQFFGLM-NH2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "RPKPQQFFGLM-amide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "SP",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80308?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80308/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80308/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80308/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80308/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80308/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80308/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80308/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_conjugate_base_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_80308/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_base_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

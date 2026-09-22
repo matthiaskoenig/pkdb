@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:16796",
+  "name": "melatonin",
+  "definition": "A member of the class of  acetamides that is acetamide in which one of the hydrogens attached to the nitrogen atom is replaced by a 2-(5-methoxy-1H-indol-3-yl)ethyl group. It is a hormone secreted by the pineal gland in humans.",
+  "formula": "C13H16N2O2",
+  "charge": "0",
+  "mass": "232.283",
+  "inchikey": "DRLFMBDRBRZALE-UHFFFAOYSA-N"
+}

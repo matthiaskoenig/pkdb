@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:3223",
+  "name": "buspirone",
+  "definition": "An azaspiro compound that is 8-azaspiro[4.5]decane-7,9-dione substituted at the nitrogen atom by a 4-(piperazin-1-yl)butyl group which in turn is substituted by a pyrimidin-2-yl group at the N(4) position.",
+  "formula": "C21H31N5O2",
+  "charge": "0",
+  "mass": "385.504",
+  "inchikey": "QWCRAEMEVRGPNT-UHFFFAOYSA-N"
+}

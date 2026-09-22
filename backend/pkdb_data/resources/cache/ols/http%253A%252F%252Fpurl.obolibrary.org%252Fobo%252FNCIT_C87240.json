@@ -1,0 +1,105 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C87240",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "13-Ethyl-17-Hydroxy-18,19-Dinor-17Alpha-Pregna-4,15-Dien-20-Yn-3-One",
+    "GESTODENE",
+    "Gestodene",
+    "Pregna-4,15-Dien-20-Yn-3-One, 13-Ethyl-17-Hydroxy-18,19-Dinor-, (17Alpha)-"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "60282-87-3"
+    ],
+    "Chemical_Formula": [
+      "C21H26O2"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "1664P6E6MI"
+    ],
+    "Preferred_Name": [
+      "Gestodene"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0061246"
+    ],
+    "code": [
+      "C87240"
+    ]
+  },
+  "label": "Gestodene",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C87240",
+  "obo_id": "NCIT:C87240",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "13-Ethyl-17-Hydroxy-18,19-Dinor-17Alpha-Pregna-4,15-Dien-20-Yn-3-One",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "GESTODENE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gestodene",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pregna-4,15-Dien-20-Yn-3-One, 13-Ethyl-17-Hydroxy-18,19-Dinor-, (17Alpha)-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87240?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87240/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87240/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87240/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87240/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87240/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C87240/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

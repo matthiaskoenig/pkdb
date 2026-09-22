@@ -1,0 +1,385 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9925",
+  "lang": "en",
+  "description": [
+    "The sodium salt of valproic acid."
+  ],
+  "synonyms": [
+    "sodium 2-propylpentanoate",
+    "2-Propylvaleric acid sodium salt",
+    "Depakene",
+    "Epilim",
+    "Valproate sodium",
+    "valproic acid sodium salt"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C8H15O2Na"
+    ],
+    "has_dbxref": [
+      "CAS:1069-66-5",
+      "DrugBank:DBSALT001257",
+      "KEGG:D00710",
+      "PMID:18248662",
+      "PMID:18549628",
+      "PMID:19066961",
+      "PMID:19892633",
+      "PMID:36618289",
+      "PMID:36931694",
+      "PMID:37088055",
+      "PMID:37418453",
+      "PMID:37541425",
+      "PMID:37637787",
+      "PMID:37762894",
+      "PMID:37933420",
+      "PMID:37961985",
+      "PMID:37966492",
+      "PMID:38026105",
+      "PMID:38035682",
+      "PMID:38074934",
+      "PMID:38140056",
+      "PMID:38170256",
+      "PMID:38199660",
+      "PMID:38329604",
+      "PMID:38438061",
+      "PMID:38444061",
+      "PMID:38447300",
+      "PMID:38497924",
+      "PMID:38648661",
+      "PMID:38741923"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9925"
+    ],
+    "inchi": [
+      "InChI=1S/C8H16O2.Na/c1-3-5-7(6-4-2)8(9)10;/h7H,3-6H2,1-2H3,(H,9,10);/q;+1/p-1"
+    ],
+    "inchikey": [
+      "AEQFSUDEHCCHBT-UHFFFAOYSA-M"
+    ],
+    "mass": [
+      "166.19327"
+    ],
+    "monoisotopicmass": [
+      "166.09697"
+    ],
+    "smiles": [
+      "[Na+].CCCC(CCC)C([O-])=O"
+    ]
+  },
+  "label": "sodium valproate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9925",
+  "obo_id": "CHEBI:9925",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "1069-66-5",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DBSALT001257",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "KEGG",
+      "id": "D00710",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00710"
+    },
+    {
+      "database": "PMID",
+      "id": "18248662",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18248662"
+    },
+    {
+      "database": "PMID",
+      "id": "18549628",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18549628"
+    },
+    {
+      "database": "PMID",
+      "id": "19066961",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19066961"
+    },
+    {
+      "database": "PMID",
+      "id": "19892633",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19892633"
+    },
+    {
+      "database": "PMID",
+      "id": "36618289",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36618289"
+    },
+    {
+      "database": "PMID",
+      "id": "36931694",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36931694"
+    },
+    {
+      "database": "PMID",
+      "id": "37088055",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37088055"
+    },
+    {
+      "database": "PMID",
+      "id": "37418453",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37418453"
+    },
+    {
+      "database": "PMID",
+      "id": "37541425",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37541425"
+    },
+    {
+      "database": "PMID",
+      "id": "37637787",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37637787"
+    },
+    {
+      "database": "PMID",
+      "id": "37762894",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37762894"
+    },
+    {
+      "database": "PMID",
+      "id": "37933420",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37933420"
+    },
+    {
+      "database": "PMID",
+      "id": "37961985",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37961985"
+    },
+    {
+      "database": "PMID",
+      "id": "37966492",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37966492"
+    },
+    {
+      "database": "PMID",
+      "id": "38026105",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38026105"
+    },
+    {
+      "database": "PMID",
+      "id": "38035682",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38035682"
+    },
+    {
+      "database": "PMID",
+      "id": "38074934",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38074934"
+    },
+    {
+      "database": "PMID",
+      "id": "38140056",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38140056"
+    },
+    {
+      "database": "PMID",
+      "id": "38170256",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38170256"
+    },
+    {
+      "database": "PMID",
+      "id": "38199660",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38199660"
+    },
+    {
+      "database": "PMID",
+      "id": "38329604",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38329604"
+    },
+    {
+      "database": "PMID",
+      "id": "38438061",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38438061"
+    },
+    {
+      "database": "PMID",
+      "id": "38444061",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38444061"
+    },
+    {
+      "database": "PMID",
+      "id": "38447300",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38447300"
+    },
+    {
+      "database": "PMID",
+      "id": "38497924",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38497924"
+    },
+    {
+      "database": "PMID",
+      "id": "38648661",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38648661"
+    },
+    {
+      "database": "PMID",
+      "id": "38741923",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/38741923"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "sodium 2-propylpentanoate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Propylvaleric acid sodium salt",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Depakene",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Epilim",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Valproate sodium",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "valproic acid sodium salt",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/graph"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9925/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

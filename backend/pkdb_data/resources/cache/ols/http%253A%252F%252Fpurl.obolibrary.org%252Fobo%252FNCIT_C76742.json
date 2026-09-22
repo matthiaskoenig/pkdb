@@ -1,0 +1,123 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C76742",
+  "lang": "en",
+  "description": [
+    "An odorless, tasteless, poisonous gas, CO, that results from the incomplete combustion of carbon. Inhalation causes central nervous system damage and asphyxiation."
+  ],
+  "synonyms": [
+    "CARBON MONOXIDE",
+    "CO",
+    "Carbon Monoxide",
+    "carbon monoxide"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A poisonous gas that has no color or odor. It is given off by burning fuel (as in exhaust from cars or household heaters) and tobacco products. Carbon monoxide prevents red blood cells from carrying enough oxygen for cells and tissues to live."
+    ],
+    "CAS_Registry": [
+      "630-08-0"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:17245"
+    ],
+    "Chemical_Formula": [
+      "CO"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Carbon Monoxide"
+    ],
+    "FDA_UNII_Code": [
+      "7U1EE4V452"
+    ],
+    "Legacy Concept Name": [
+      "Carbon_Monoxide"
+    ],
+    "Preferred_Name": [
+      "Carbon Monoxide"
+    ],
+    "Semantic_Type": [
+      "Hazardous or Poisonous Substance",
+      "Inorganic Chemical"
+    ],
+    "UMLS_CUI": [
+      "C0007018"
+    ],
+    "code": [
+      "C76742"
+    ]
+  },
+  "label": "Carbon Monoxide",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C76742",
+  "obo_id": "NCIT:C76742",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CARBON MONOXIDE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CO",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Carbon Monoxide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "carbon monoxide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76742?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76742/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76742/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76742/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76742/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76742/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76742/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

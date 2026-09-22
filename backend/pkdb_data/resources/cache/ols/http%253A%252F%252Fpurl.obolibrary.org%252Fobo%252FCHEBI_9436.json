@@ -1,0 +1,132 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9436",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Temocaprilat",
+    "RS 5139"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C21H24N2O5S2"
+    ],
+    "has_dbxref": [
+      "CAS:110221-53-9",
+      "HMDB:HMDB0061721",
+      "KEGG:C11373"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9436"
+    ],
+    "inchi": [
+      "InChI=1S/C21H24N2O5S2/c24-19(25)12-23-11-18(17-7-4-10-29-17)30-13-16(20(23)26)22-15(21(27)28)9-8-14-5-2-1-3-6-14/h1-7,10,15-16,18,22H,8-9,11-13H2,(H,24,25)(H,27,28)/t15-,16-,18-/m0/s1"
+    ],
+    "inchikey": [
+      "KZVWEOXAPZXAFB-BQFCYCMXSA-N"
+    ],
+    "mass": [
+      "448.559"
+    ],
+    "monoisotopicmass": [
+      "448.11266"
+    ],
+    "smiles": [
+      "OC(=O)CN1C[C@H](SC[C@H](N[C@@H](CCc2ccccc2)C(O)=O)C1=O)c1cccs1"
+    ]
+  },
+  "label": "Temocaprilat",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9436",
+  "obo_id": "CHEBI:9436",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "110221-53-9",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0061721",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0061721"
+    },
+    {
+      "database": "KEGG",
+      "id": "C11373",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C11373"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Temocaprilat",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "RS 5139",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9436/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

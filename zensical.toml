@@ -18,6 +18,7 @@ nav = [
   { "Deployment" = "deployment.md" },
   { "Development" = "development.md" },
   { "Local upload testing" = "local-upload-testing.md" },
+  { "Vocabulary definitions" = "vocabulary.md" },
   { "Contributing" = "contributing.md" },
 ]
 

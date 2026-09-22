@@ -1,0 +1,106 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_535",
+  "lang": "en",
+  "description": [
+    "A disease of mental health that involves disruption of sleep patterns."
+  ],
+  "synonyms": [
+    "Non-organic sleep disorder"
+  ],
+  "annotation": {
+    "has_alternative_id": [
+      "DOID:9028"
+    ],
+    "has_dbxref": [
+      "ICD9CM:307.4",
+      "UMLS_CUI:C0154564"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:535"
+    ]
+  },
+  "label": "sleep disorder",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_535",
+  "obo_id": "DOID:535",
+  "in_subset": [
+    "DO_FlyBase_slim",
+    "DO_RAD_slim"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A disease of mental health that involves disruption of sleep patterns.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD9CM",
+      "id": "307.4",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0154564",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0154564"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_535?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_535/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_535/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_535/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_535/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_535/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_535/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_535/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_535/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_535/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_535/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

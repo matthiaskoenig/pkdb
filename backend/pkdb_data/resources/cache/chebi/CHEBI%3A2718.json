@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:2718",
+  "name": "angiotensin I",
+  "definition": "A ten amino acid peptide formed by renin cleavage of angiotensinogen. Angiotensin I has no direct biological function except that high levels can stimulate catecholamine production. It is metabolized to its biologically active byproduct angiotensin II, a potent vasoconstrictor, by angiotensin converting enzyme (ACE) through cleavage of the two terminal amino acids.",
+  "formula": "C62H89N17O14",
+  "charge": "0",
+  "mass": "1296.499",
+  "inchikey": "ORWYRWWVDCYOMK-HBZPZAIKSA-N"
+}

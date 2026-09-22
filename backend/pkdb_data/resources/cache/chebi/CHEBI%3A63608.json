@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:63608",
+  "name": "maraviroc",
+  "definition": "A monocarboxylic acid amide obtained by formal condensation of the carboxy group of 4,4-difluorocyclohexanecarboxylic acid and the primary amino group of (1S)-3-[(3-exo)-3-(3-isopropyl-5-methyl-4H-1,2,4-triazol-4-yl)-8-azabicyclo[3.2.1]oct-8-yl]-1-phenylpropylamine. An antiretroviral drug, it prevents the interaction of HIV-1 gp120 and chemokine receptor 5 (CCR5) necessary for CCR5-tropic HIV-1 to enter cells.",
+  "formula": "C29H41F2N5O",
+  "charge": "0",
+  "mass": "513.66550",
+  "inchikey": "GSNHKUDZZFZSJB-QYOOZWMWSA-N"
+}

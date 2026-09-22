@@ -1,0 +1,215 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C1411",
+  "lang": "en",
+  "description": [
+    "A compound extracted from the Pacific yew tree Taxus brevifolia with antineoplastic activity.  Paclitaxel binds to tubulin and inhibits the disassembly of microtubules, thereby resulting in the inhibition of cell division.  This agent also induces apoptosis by binding to and blocking the function of the apoptosis inhibitor protein Bcl-2 (B-cell Leukemia 2). (NCI04)"
+  ],
+  "synonyms": [
+    "5Beta,20-epoxy-1,2alpha,4,7beta,10beta,13alpha-hexahydroxytax-11-en-9-one, 4,10-Diacetate 2-Benzoate 13-Ester with (2R,3S)-N-Benzoyl-3-phenylisoserine",
+    "Anzatax",
+    "Asotax",
+    "Bristaxol",
+    "PACLITAXEL",
+    "Paclitaxel",
+    "Praxel",
+    "Taxol",
+    "Taxol Konzentrat",
+    "[2aR-[2a Alpha,4beta,4a beta,6beta,9alpha(alphaR*,betaS*),-11alpha,12alpha,12a alpha,12b alpha]]-beta-(benzoylamino)-alpha-hydroxybenzene-propanoic acid 6,12b-bis(acetyloxy)-12-(benzoyloxy)-1a,33,4,-41,5,6,9,10,11,12,12a,12b-dodecahydro-4,11-dihydroxy-41,8,-12,13-tetramethyl-5-oxo-7,11-methano-1H-cyclodeca[3,4]benz[1,2-b]oxet-9-yl Ester",
+    "paclitaxel"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to treat breast cancer, ovarian cancer, and AIDS-related Kaposi sarcoma. It is also used together with another drug to treat non-small cell lung cancer. Paclitaxel is also being studied in the treatment of other types of cancer. It blocks cell growth by stopping cell division and may kill cancer cells. It is a type of antimitotic agent."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "AIDS-related Kaposi's sarcoma; Bladder cancer; Breast cancer; Cervical cancer; Endometrial adenocarcinoma; Esophageal cancer; Head and Neck cancer; Lung cancer; non-small cell; Lymphoma; Ovarian cancer; Prostate cancer; Testicular cancer"
+    ],
+    "CAS_Registry": [
+      "33069-62-4"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:45863"
+    ],
+    "Chemical_Formula": [
+      "C47H51NO14"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "GDC",
+      "HemOnc",
+      "PCDC"
+    ],
+    "Display_Name": [
+      "Paclitaxel"
+    ],
+    "FDA_UNII_Code": [
+      "P88XT4IS4D"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C188637"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C17219",
+      "http://purl.obolibrary.org/obo/NCIT_C18115"
+    ],
+    "Is_PCDC_GCT_Authorized_Value_For_Variable": [
+      "http://purl.obolibrary.org/obo/NCIT_C274"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Paclitaxel"
+    ],
+    "Maps_To": [
+      "Paclitaxel"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "39762"
+    ],
+    "NSC Number": [
+      "125973",
+      "673089"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "39762"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "39762"
+    ],
+    "Preferred_Name": [
+      "Paclitaxel"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0144576"
+    ],
+    "code": [
+      "C1411"
+    ]
+  },
+  "label": "Paclitaxel",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C1411",
+  "obo_id": "NCIT:C1411",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C176424",
+    "NCIT_C177383",
+    "NCIT_C177406",
+    "NCIT_C177537",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "5Beta,20-epoxy-1,2alpha,4,7beta,10beta,13alpha-hexahydroxytax-11-en-9-one, 4,10-Diacetate 2-Benzoate 13-Ester with (2R,3S)-N-Benzoyl-3-phenylisoserine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Anzatax",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Asotax",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Bristaxol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "PACLITAXEL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Paclitaxel",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Praxel",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Taxol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Taxol Konzentrat",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "[2aR-[2a Alpha,4beta,4a beta,6beta,9alpha(alphaR*,betaS*),-11alpha,12alpha,12a alpha,12b alpha]]-beta-(benzoylamino)-alpha-hydroxybenzene-propanoic acid 6,12b-bis(acetyloxy)-12-(benzoyloxy)-1a,33,4,-41,5,6,9,10,11,12,12a,12b-dodecahydro-4,11-dihydroxy-41,8,-12,13-tetramethyl-5-oxo-7,11-methano-1H-cyclodeca[3,4]benz[1,2-b]oxet-9-yl Ester",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "paclitaxel",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1411?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1411/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1411/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1411/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1411/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1411/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1411/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

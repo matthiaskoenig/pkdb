@@ -1,0 +1,273 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_145334",
+  "lang": "en",
+  "description": [
+    "A beta-D-glucosiduronic acid that is beta-D-glucuronic acid in which the anomeric hydroxyl hydrogen has been replaced by a 8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepin-4-yl group. It is the glucuronidated conjugate of the midazolam metabolite, 1-hydroxymidazolam."
+  ],
+  "synonyms": [
+    "[8-chloro-6-(2-fluorophenyl)-4H-imidazo[1,5-a][1,4]benzodiazepin-1-yl]methyl beta-D-glucopyranosiduronic acid",
+    "1'-OH MDZ glucuronide",
+    "1'-hydroxymidazolam beta-D-glucuronide",
+    "1'-hydroxymidazolam-glucuronide",
+    "1-hydroxymethylmidazolam glucuronide",
+    "1-hydroxymidazolam glucuronide",
+    "MDZ-glucuronide"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C24H21ClFN3O7"
+    ],
+    "has_dbxref": [
+      "CAS:81256-81-7",
+      "PMCID:PMC2934138",
+      "PMID:10519446",
+      "PMID:14513773",
+      "PMID:1767626",
+      "PMID:17998299",
+      "PMID:18256203",
+      "PMID:18537963",
+      "PMID:20713656",
+      "PMID:22660604",
+      "PMID:2582710",
+      "PMID:6691561"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:145334"
+    ],
+    "inchi": [
+      "InChI=1S/C24H21ClFN3O7/c25-11-5-6-16-14(7-11)18(13-3-1-2-4-15(13)26)28-9-12-8-27-17(29(12)16)10-35-24-21(32)19(30)20(31)22(36-24)23(33)34/h1-8,19-22,24,30-32H,9-10H2,(H,33,34)/t19-,20-,21+,22-,24+/m0/s1"
+    ],
+    "inchikey": [
+      "ICIUMXQTLQXWGL-QMDPOKHVSA-N"
+    ],
+    "mass": [
+      "517.890"
+    ],
+    "monoisotopicmass": [
+      "517.10521"
+    ],
+    "smiles": [
+      "C1(=NCC=2N(C=3C1=CC(=CC3)Cl)C(=NC2)CO[C@H]4[C@@H]([C@H]([C@@H]([C@H](O4)C(O)=O)O)O)O)C=5C=CC=CC5F"
+    ]
+  },
+  "label": "1-hydroxymidazolam beta-D-glucuronide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_145334",
+  "obo_id": "CHEBI:145334",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "81256-81-7",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "PMCID",
+      "id": "PMC2934138",
+      "description": "Europe PMC",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2934138"
+    },
+    {
+      "database": "PMID",
+      "id": "10519446",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10519446"
+    },
+    {
+      "database": "PMID",
+      "id": "14513773",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14513773"
+    },
+    {
+      "database": "PMID",
+      "id": "1767626",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/1767626"
+    },
+    {
+      "database": "PMID",
+      "id": "17998299",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17998299"
+    },
+    {
+      "database": "PMID",
+      "id": "18256203",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18256203"
+    },
+    {
+      "database": "PMID",
+      "id": "18537963",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18537963"
+    },
+    {
+      "database": "PMID",
+      "id": "20713656",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20713656"
+    },
+    {
+      "database": "PMID",
+      "id": "22660604",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22660604"
+    },
+    {
+      "database": "PMID",
+      "id": "2582710",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2582710"
+    },
+    {
+      "database": "PMID",
+      "id": "6691561",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/6691561"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "[8-chloro-6-(2-fluorophenyl)-4H-imidazo[1,5-a][1,4]benzodiazepin-1-yl]methyl beta-D-glucopyranosiduronic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1'-OH MDZ glucuronide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1'-hydroxymidazolam beta-D-glucuronide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1'-hydroxymidazolam-glucuronide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-hydroxymethylmidazolam glucuronide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-hydroxymidazolam glucuronide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "MDZ-glucuronide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145334?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145334/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145334/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145334/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145334/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145334/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145334/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145334/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145334/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

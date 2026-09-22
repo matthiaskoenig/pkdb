@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:7936",
+  "name": "paroxetine",
+  "definition": "A benzodioxole that consists of piperidine bearing 1,3-benzodioxol-5-yloxy)methyl and 4-fluorophenyl substituents at positions 3 and 4 respectively; the (3S,4R)-diastereomer. Highly potent and selective 5-HT uptake inhibitor that binds with high affinity to the serotonin transporter (Ki = 0.05 nM). Ki values are 1.1, 350 and 1100 nM for inhibition of [3H]-5-HT, [3H]-l-NA and [3H]-DA uptake respectively. Displays minimal affinity for alpha1-, alpha2- or beta-adrenoceptors, 5-HT2A, 5-HT1A, D2 or H1 receptors at concentrations below 1000 nM, however displays weak affinity for muscarinic ACh receptors (Ki = 42 nM). Antidepressant and anxiolytic in vivo.",
+  "formula": "C19H20FNO3",
+  "charge": "0",
+  "mass": "329.36540",
+  "inchikey": "AHOUBRCZNHFOSL-YOEHRIQHSA-N"
+}

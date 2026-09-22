@@ -1,0 +1,367 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_87738",
+  "lang": "en",
+  "description": [
+    "A 4-hydroxy-3-(3-oxo-1-phenylbutyl)-2H-1-benzopyran-2-one that has (S)-configuration (the racemate is warfarin, an anticoagulant drug and rodenticide)."
+  ],
+  "synonyms": [
+    "4-hydroxy-3-[(1S)-3-oxo-1-phenylbutyl]-2H-1-benzopyran-2-one",
+    "(-)-warfarin",
+    "(S)-(-)-warfarin",
+    "(S)-4-hydroxy-3-(3-oxo-1-phenylbutyl)-2-benzopyrone",
+    "(S)-4-hydroxy-3-(3-oxo-1-phenylbutyl)-2H-chromen-2-one",
+    "4-hydroxy-3-[(1S)-3-oxo-1-phenylbutyl]-2H-chromen-2-one",
+    "S-warfarin",
+    "levrowarfarin"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C19H16O4"
+    ],
+    "has_alternative_id": [
+      "CHEBI:45816"
+    ],
+    "has_dbxref": [
+      "CAS:5543-57-7",
+      "DrugBank:DB14055",
+      "KEGG:C20129",
+      "LINCS:LSM-5404",
+      "PDBeChem:SWF",
+      "PMID:21949493",
+      "PMID:22493814",
+      "PMID:24962085",
+      "PMID:26142522",
+      "PMID:26161443",
+      "PMID:29433307",
+      "PMID:32601017",
+      "PMID:32680916",
+      "PMID:33341662",
+      "PMID:33754183",
+      "PMID:34579970",
+      "PMID:35426132",
+      "PMID:35699912",
+      "PMID:35798369",
+      "PMID:36914276",
+      "PMID:37598356",
+      "PMID:7354137",
+      "Reaxys:4298024"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:87738"
+    ],
+    "inchi": [
+      "InChI=1S/C19H16O4/c1-12(20)11-15(13-7-3-2-4-8-13)17-18(21)14-9-5-6-10-16(14)23-19(17)22/h2-10,15,21H,11H2,1H3/t15-/m0/s1"
+    ],
+    "inchikey": [
+      "PJVWKTKQMONHTI-HNNXBMFYSA-N"
+    ],
+    "mass": [
+      "308.329"
+    ],
+    "monoisotopicmass": [
+      "308.10486"
+    ],
+    "smiles": [
+      "C1=CC=CC2=C1C(=C(C(O2)=O)[C@@H](CC(C)=O)C3=CC=CC=C3)O"
+    ]
+  },
+  "label": "(S)-warfarin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_87738",
+  "obo_id": "CHEBI:87738",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "5543-57-7",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB14055",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB14055"
+    },
+    {
+      "database": "KEGG",
+      "id": "C20129",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C20129"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5404",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "SWF",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/SWF"
+    },
+    {
+      "database": "PMID",
+      "id": "21949493",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21949493"
+    },
+    {
+      "database": "PMID",
+      "id": "22493814",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22493814"
+    },
+    {
+      "database": "PMID",
+      "id": "24962085",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24962085"
+    },
+    {
+      "database": "PMID",
+      "id": "26142522",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26142522"
+    },
+    {
+      "database": "PMID",
+      "id": "26161443",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26161443"
+    },
+    {
+      "database": "PMID",
+      "id": "29433307",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/29433307"
+    },
+    {
+      "database": "PMID",
+      "id": "32601017",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32601017"
+    },
+    {
+      "database": "PMID",
+      "id": "32680916",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32680916"
+    },
+    {
+      "database": "PMID",
+      "id": "33341662",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33341662"
+    },
+    {
+      "database": "PMID",
+      "id": "33754183",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33754183"
+    },
+    {
+      "database": "PMID",
+      "id": "34579970",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/34579970"
+    },
+    {
+      "database": "PMID",
+      "id": "35426132",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35426132"
+    },
+    {
+      "database": "PMID",
+      "id": "35699912",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35699912"
+    },
+    {
+      "database": "PMID",
+      "id": "35798369",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35798369"
+    },
+    {
+      "database": "PMID",
+      "id": "36914276",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36914276"
+    },
+    {
+      "database": "PMID",
+      "id": "37598356",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37598356"
+    },
+    {
+      "database": "PMID",
+      "id": "7354137",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7354137"
+    },
+    {
+      "database": "Reaxys",
+      "id": "4298024",
+      "description": "Reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-hydroxy-3-[(1S)-3-oxo-1-phenylbutyl]-2H-1-benzopyran-2-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-warfarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-(-)-warfarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "LINCS",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-4-hydroxy-3-(3-oxo-1-phenylbutyl)-2-benzopyrone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-4-hydroxy-3-(3-oxo-1-phenylbutyl)-2H-chromen-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-hydroxy-3-[(1S)-3-oxo-1-phenylbutyl]-2H-chromen-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "S-warfarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levrowarfarin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_87738?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_87738/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_87738/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_87738/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_87738/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_87738/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_87738/graph"
+    },
+    "is_conjugate_acid_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_87738/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_acid_of"
+    },
+    "is_enantiomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_87738/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_enantiomer_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
