@@ -58,9 +58,7 @@ def summarize(values):
     return {
         "samples_seconds": values,
         "first_seconds": values[0],
-        "warm_median_seconds": statistics.median(values[1:])
-        if len(values) > 1
-        else None,
+        "warm_median_seconds": median,
         "median_seconds": median,
         "p95_seconds": p95,
         "budget_median_seconds": round(median * 1.10, 9),
@@ -167,6 +165,11 @@ def main(argv=None):
     parser.add_argument("--runs", type=int, default=5)
     parser.add_argument("--profile", choices=("legacy", "replacement"), required=True)
     parser.add_argument("--server-pid", type=int)
+    parser.add_argument(
+        "--cold-start",
+        action="store_true",
+        help="Record a separate first run after the caller restarts the application; does not flush OS/database caches",
+    )
     args = parser.parse_args(argv)
     token = os.environ.get("PKDB_API_TOKEN")
     if not token or args.runs < 5:
@@ -229,7 +232,7 @@ def main(argv=None):
         "manifest": manifest,
         "workload": cases,
         "runs": [],
-        "cache_note": "First observation and subsequent warm observations; OS/database caches are not forcibly cleared.",
+        "cache_note": "One excluded warmup precedes five or more measured warm runs. Optional cold run requires a fresh application process; OS/database caches are not flushed.",
         "memory_note": "Server process RSS and lifetime high-water mark, before and after each iteration; excludes database/search sidecars.",
     }
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -241,7 +244,12 @@ def main(argv=None):
             timeout=180,
             follow_redirects=False,
         ) as client:
-            for number in range(args.runs):
+            phases = (
+                (["cold"] if args.cold_start else [])
+                + ["warmup"]
+                + ["measured"] * args.runs
+            )
+            for phase in phases:
                 before = memory(args.server_pid)
                 start = time.perf_counter()
                 for folder in folders:
@@ -256,15 +264,18 @@ def main(argv=None):
                 wait_visible(client, cases)
                 upload_seconds = time.perf_counter() - start
                 reads = measure_reads(client, cases)
-                report["runs"].append(
-                    {
-                        "iteration": number + 1,
-                        "upload_visible_seconds": upload_seconds,
-                        "reads": reads,
-                        "memory_before": before,
-                        "memory_after": memory(args.server_pid),
-                    }
-                )
+                observation = {
+                    "phase": phase,
+                    "iteration": len(report["runs"]) + 1 if phase == "measured" else 0,
+                    "upload_visible_seconds": upload_seconds,
+                    "reads": reads,
+                    "memory_before": before,
+                    "memory_after": memory(args.server_pid),
+                }
+                if phase == "measured":
+                    report["runs"].append(observation)
+                else:
+                    report[phase] = observation
                 output.write_text(json.dumps(report, indent=2) + "\n")
         if build_manifest(root) != manifest:
             raise ValueError("Source files changed during measurement")

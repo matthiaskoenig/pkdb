@@ -66,7 +66,7 @@ def test_summary_retains_all_samples_and_concrete_budget():
     assert result == {
         "samples_seconds": [5, 1, 3, 2, 4],
         "first_seconds": 5,
-        "warm_median_seconds": 2.5,
+        "warm_median_seconds": 3,
         "median_seconds": 3,
         "p95_seconds": 5,
         "budget_median_seconds": 3.3,
@@ -125,3 +125,65 @@ def test_invalid_visibility_request_fails_without_polling():
             timeout=0.001,
             sleep=lambda _: None,
         )
+
+
+def test_cold_and_warmup_samples_are_separate_from_five_measured_runs(
+    tmp_path, monkeypatch
+):
+    """Never dilute the warm-run budgets with cold or warmup observations."""
+    import json
+
+    from tools.backend_migration import benchmark
+
+    corpus = tmp_path / "corpus"
+    corpus.mkdir()
+    (corpus / "study.json").write_text(json.dumps({"sid": "S"}))
+    workload = tmp_path / "workload.json"
+    workload.write_text(
+        json.dumps([{"name": "study", "path": "/api/v1/studies/S/", "sid": "S"}])
+    )
+    output = tmp_path / "metrics.json"
+    monkeypatch.setenv("PKDB_API_TOKEN", "test-secret-token")
+    calls = []
+
+    def upload(*args, **kwargs):
+        calls.append(args[0])
+        return {"ok": True}
+
+    monkeypatch.setattr(benchmark, "send_folder", upload)
+    original = httpx.Client
+    monkeypatch.setattr(
+        benchmark.httpx,
+        "Client",
+        lambda **kwargs: original(
+            **kwargs,
+            transport=httpx.MockTransport(
+                lambda _: httpx.Response(200, json={"sid": "S"})
+            ),
+        ),
+    )
+    assert (
+        benchmark.main(
+            [
+                "--base-url",
+                "http://example.test",
+                "--corpus",
+                str(corpus),
+                "--workload",
+                str(workload),
+                "--output",
+                str(output),
+                "--profile",
+                "replacement",
+                "--cold-start",
+            ]
+        )
+        == 0
+    )
+    report = json.loads(output.read_text())
+    assert len(calls) == 7
+    assert len(report["runs"]) == len(report["upload"]["samples_seconds"]) == 5
+    assert report["cold"]["phase"] == "cold"
+    assert report["warmup"]["phase"] == "warmup"
+    assert all(row["phase"] == "measured" for row in report["runs"])
+    assert "test-secret-token" not in output.read_text()

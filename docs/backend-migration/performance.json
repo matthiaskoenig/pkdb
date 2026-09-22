@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "scope": "Local Frost2014 complete-study replacements; fresh application cold run, one excluded warmup, five measured warm runs per runtime. OS/database/search caches were not flushed.",
+  "production_capacity_verified": false,
+  "reports": {
+    "legacy": "performance/legacy.json",
+    "py313": "performance/py313.json",
+    "py314": "performance/py314.json"
+  },
+  "budget_multiplier": 1.1,
+  "budget_results": {
+    "py313": {
+      "upload": {
+        "median": true,
+        "p95": true
+      },
+      "study": {
+        "median": true,
+        "p95": true
+      },
+      "outputs": {
+        "median": true,
+        "p95": true
+      },
+      "analysis": {
+        "median": true,
+        "p95": true
+      },
+      "timecourses": {
+        "median": true,
+        "p95": true
+      },
+      "search": {
+        "median": true,
+        "p95": true
+      }
+    },
+    "py314": {
+      "upload": {
+        "median": true,
+        "p95": true
+      },
+      "study": {
+        "median": true,
+        "p95": true
+      },
+      "outputs": {
+        "median": true,
+        "p95": true
+      },
+      "analysis": {
+        "median": true,
+        "p95": true
+      },
+      "timecourses": {
+        "median": true,
+        "p95": true
+      },
+      "search": {
+        "median": true,
+        "p95": true
+      }
+    }
+  },
+  "full_corpus_query_plans": "performance/full-corpus-query-plans.json",
+  "cold_upload_visible_seconds": {
+    "legacy": 20.62204584799474,
+    "py313": 2.808906627004035,
+    "py314": 2.3854016789991874
+  },
+  "warm_upload_median_seconds": {
+    "legacy": 19.823945003998233,
+    "py313": 1.7748013130039908,
+    "py314": 1.4851490090077277
+  }
+}

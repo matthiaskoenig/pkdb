@@ -129,282 +129,359 @@
   ],
   "runs": [
     {
+      "phase": "measured",
       "iteration": 1,
-      "upload_visible_seconds": 21.186467947001802,
+      "upload_visible_seconds": 19.67445900797611,
       "reads": {
         "study": {
-          "seconds": 0.06440852201194502,
-          "bytes": 6365
+          "seconds": 0.056252158974530175,
+          "bytes": 6833
         },
         "outputs": {
-          "seconds": 0.025935971993021667,
-          "bytes": 78333
+          "seconds": 0.026373953005531803,
+          "bytes": 79292
         },
         "analysis": {
-          "seconds": 0.023427521024132147,
-          "bytes": 71448
+          "seconds": 0.026703732990426943,
+          "bytes": 71372
         },
         "timecourses": {
-          "seconds": 0.07148143500671722,
-          "bytes": 4419
+          "seconds": 0.06971165697905235,
+          "bytes": 4501
         },
         "search": {
-          "seconds": 0.05902112799230963,
-          "bytes": 6468
+          "seconds": 0.061059487023158,
+          "bytes": 6936
         }
       },
       "memory_before": {
         "observed": true,
-        "VmHWM_kib": 296464,
-        "VmRSS_kib": 294992
+        "VmHWM_kib": 284596,
+        "VmRSS_kib": 284596
       },
       "memory_after": {
         "observed": true,
-        "VmHWM_kib": 312396,
-        "VmRSS_kib": 312396
+        "VmHWM_kib": 296868,
+        "VmRSS_kib": 294528
       }
     },
     {
+      "phase": "measured",
       "iteration": 2,
-      "upload_visible_seconds": 19.033677452011034,
+      "upload_visible_seconds": 19.90428017801605,
       "reads": {
         "study": {
-          "seconds": 0.05780020498787053,
-          "bytes": 6365
+          "seconds": 0.05903750899597071,
+          "bytes": 6833
         },
         "outputs": {
-          "seconds": 0.030402965989196673,
-          "bytes": 78437
+          "seconds": 0.025709092995384708,
+          "bytes": 78720
         },
         "analysis": {
-          "seconds": 0.032796128012705594,
-          "bytes": 70906
+          "seconds": 0.020875653019174933,
+          "bytes": 71172
         },
         "timecourses": {
-          "seconds": 0.08387609699275345,
-          "bytes": 4419
+          "seconds": 0.07869176199892536,
+          "bytes": 4501
         },
         "search": {
-          "seconds": 0.06786000900319777,
-          "bytes": 6468
+          "seconds": 0.06095124801504426,
+          "bytes": 6936
         }
       },
       "memory_before": {
         "observed": true,
-        "VmHWM_kib": 312396,
-        "VmRSS_kib": 312396
+        "VmHWM_kib": 296868,
+        "VmRSS_kib": 294528
       },
       "memory_after": {
         "observed": true,
-        "VmHWM_kib": 312776,
-        "VmRSS_kib": 311672
+        "VmHWM_kib": 296868,
+        "VmRSS_kib": 293880
       }
     },
     {
+      "phase": "measured",
       "iteration": 3,
-      "upload_visible_seconds": 18.566204511007527,
+      "upload_visible_seconds": 19.823945003998233,
       "reads": {
         "study": {
-          "seconds": 0.05693839999730699,
-          "bytes": 6365
+          "seconds": 0.06095565698342398,
+          "bytes": 6833
         },
         "outputs": {
-          "seconds": 0.024845705018378794,
-          "bytes": 77926
+          "seconds": 0.02826154400827363,
+          "bytes": 78577
         },
         "analysis": {
-          "seconds": 0.021271113015245646,
-          "bytes": 70872
+          "seconds": 0.0193080099998042,
+          "bytes": 71231
         },
         "timecourses": {
-          "seconds": 0.06709829700412229,
-          "bytes": 4419
+          "seconds": 0.071587640006328,
+          "bytes": 4501
         },
         "search": {
-          "seconds": 0.06284714202047326,
-          "bytes": 6468
+          "seconds": 0.05601655598729849,
+          "bytes": 6936
         }
       },
       "memory_before": {
         "observed": true,
-        "VmHWM_kib": 312776,
-        "VmRSS_kib": 311672
+        "VmHWM_kib": 296868,
+        "VmRSS_kib": 293880
       },
       "memory_after": {
         "observed": true,
-        "VmHWM_kib": 313644,
-        "VmRSS_kib": 313644
+        "VmHWM_kib": 296868,
+        "VmRSS_kib": 293112
       }
     },
     {
+      "phase": "measured",
       "iteration": 4,
-      "upload_visible_seconds": 19.188019533001352,
+      "upload_visible_seconds": 19.840541086014127,
       "reads": {
         "study": {
-          "seconds": 0.05662690498866141,
-          "bytes": 6365
+          "seconds": 0.05963906701072119,
+          "bytes": 6833
         },
         "outputs": {
-          "seconds": 0.028098376002162695,
-          "bytes": 78366
+          "seconds": 0.031818770978134125,
+          "bytes": 78890
         },
         "analysis": {
-          "seconds": 0.022175882011651993,
-          "bytes": 71589
+          "seconds": 0.026405501004774123,
+          "bytes": 71310
         },
         "timecourses": {
-          "seconds": 0.06919777800794691,
-          "bytes": 4419
+          "seconds": 0.06984755099983886,
+          "bytes": 4501
         },
         "search": {
-          "seconds": 0.05997167099849321,
-          "bytes": 6468
+          "seconds": 0.06001248600659892,
+          "bytes": 6936
         }
       },
       "memory_before": {
         "observed": true,
-        "VmHWM_kib": 313644,
-        "VmRSS_kib": 313644
+        "VmHWM_kib": 296868,
+        "VmRSS_kib": 293112
       },
       "memory_after": {
         "observed": true,
-        "VmHWM_kib": 313644,
-        "VmRSS_kib": 313644
+        "VmHWM_kib": 296868,
+        "VmRSS_kib": 293256
       }
     },
     {
+      "phase": "measured",
       "iteration": 5,
-      "upload_visible_seconds": 19.454193121986464,
+      "upload_visible_seconds": 19.76164070397499,
       "reads": {
         "study": {
-          "seconds": 0.060927450977033004,
-          "bytes": 6434
+          "seconds": 0.0650947350077331,
+          "bytes": 6833
         },
         "outputs": {
-          "seconds": 0.02914246599539183,
-          "bytes": 78605
+          "seconds": 0.03015332599170506,
+          "bytes": 79223
         },
         "analysis": {
-          "seconds": 0.023985537991393358,
-          "bytes": 71347
+          "seconds": 0.021412533009424806,
+          "bytes": 70838
         },
         "timecourses": {
-          "seconds": 0.06799778097774833,
-          "bytes": 4419
+          "seconds": 0.07281881000380963,
+          "bytes": 4501
         },
         "search": {
-          "seconds": 0.05496512301033363,
-          "bytes": 6537
+          "seconds": 0.060069344006478786,
+          "bytes": 6936
         }
       },
       "memory_before": {
         "observed": true,
-        "VmHWM_kib": 313644,
-        "VmRSS_kib": 313644
+        "VmHWM_kib": 296868,
+        "VmRSS_kib": 293256
       },
       "memory_after": {
         "observed": true,
-        "VmHWM_kib": 314828,
-        "VmRSS_kib": 314252
+        "VmHWM_kib": 296868,
+        "VmRSS_kib": 293256
       }
     }
   ],
-  "cache_note": "First observation and subsequent warm observations; OS/database caches are not forcibly cleared.",
+  "cache_note": "One excluded warmup precedes five or more measured warm runs. Optional cold run requires a fresh application process; OS/database caches are not flushed.",
   "memory_note": "Server process RSS and lifetime high-water mark, before and after each iteration; excludes database/search sidecars.",
+  "cold": {
+    "phase": "cold",
+    "iteration": 0,
+    "upload_visible_seconds": 20.62204584799474,
+    "reads": {
+      "study": {
+        "seconds": 0.06571480401908047,
+        "bytes": 6440
+      },
+      "outputs": {
+        "seconds": 0.03053145101875998,
+        "bytes": 79286
+      },
+      "analysis": {
+        "seconds": 0.029861368995625526,
+        "bytes": 71197
+      },
+      "timecourses": {
+        "seconds": 0.07388022399391048,
+        "bytes": 4419
+      },
+      "search": {
+        "seconds": 0.0601060269982554,
+        "bytes": 6543
+      }
+    },
+    "memory_before": {
+      "observed": true,
+      "VmHWM_kib": 217556,
+      "VmRSS_kib": 217556
+    },
+    "memory_after": {
+      "observed": true,
+      "VmHWM_kib": 273648,
+      "VmRSS_kib": 273648
+    }
+  },
+  "warmup": {
+    "phase": "warmup",
+    "iteration": 0,
+    "upload_visible_seconds": 19.90336869400926,
+    "reads": {
+      "study": {
+        "seconds": 0.06592934500076808,
+        "bytes": 6679
+      },
+      "outputs": {
+        "seconds": 0.02801144600380212,
+        "bytes": 78991
+      },
+      "analysis": {
+        "seconds": 0.02226408800925128,
+        "bytes": 71285
+      },
+      "timecourses": {
+        "seconds": 0.06790058600017801,
+        "bytes": 4421
+      },
+      "search": {
+        "seconds": 0.05601095999008976,
+        "bytes": 6782
+      }
+    },
+    "memory_before": {
+      "observed": true,
+      "VmHWM_kib": 273648,
+      "VmRSS_kib": 273648
+    },
+    "memory_after": {
+      "observed": true,
+      "VmHWM_kib": 284596,
+      "VmRSS_kib": 284596
+    }
+  },
   "upload": {
     "samples_seconds": [
-      21.186467947001802,
-      19.033677452011034,
-      18.566204511007527,
-      19.188019533001352,
-      19.454193121986464
+      19.67445900797611,
+      19.90428017801605,
+      19.823945003998233,
+      19.840541086014127,
+      19.76164070397499
     ],
-    "first_seconds": 21.186467947001802,
-    "warm_median_seconds": 19.110848492506193,
-    "median_seconds": 19.188019533001352,
-    "p95_seconds": 21.186467947001802,
-    "budget_median_seconds": 21.106821486,
-    "budget_p95_seconds": 23.305114742
+    "first_seconds": 19.67445900797611,
+    "warm_median_seconds": 19.823945003998233,
+    "median_seconds": 19.823945003998233,
+    "p95_seconds": 19.90428017801605,
+    "budget_median_seconds": 21.806339504,
+    "budget_p95_seconds": 21.894708196
   },
   "reads": {
     "study": {
       "samples_seconds": [
-        0.06440852201194502,
-        0.05780020498787053,
-        0.05693839999730699,
-        0.05662690498866141,
-        0.060927450977033004
+        0.056252158974530175,
+        0.05903750899597071,
+        0.06095565698342398,
+        0.05963906701072119,
+        0.0650947350077331
       ],
-      "first_seconds": 0.06440852201194502,
-      "warm_median_seconds": 0.05736930249258876,
-      "median_seconds": 0.05780020498787053,
-      "p95_seconds": 0.06440852201194502,
-      "budget_median_seconds": 0.063580225,
-      "budget_p95_seconds": 0.070849374
+      "first_seconds": 0.056252158974530175,
+      "warm_median_seconds": 0.05963906701072119,
+      "median_seconds": 0.05963906701072119,
+      "p95_seconds": 0.0650947350077331,
+      "budget_median_seconds": 0.065602974,
+      "budget_p95_seconds": 0.071604209
     },
     "outputs": {
       "samples_seconds": [
-        0.025935971993021667,
-        0.030402965989196673,
-        0.024845705018378794,
-        0.028098376002162695,
-        0.02914246599539183
+        0.026373953005531803,
+        0.025709092995384708,
+        0.02826154400827363,
+        0.031818770978134125,
+        0.03015332599170506
       ],
-      "first_seconds": 0.025935971993021667,
-      "warm_median_seconds": 0.028620420998777263,
-      "median_seconds": 0.028098376002162695,
-      "p95_seconds": 0.030402965989196673,
-      "budget_median_seconds": 0.030908214,
-      "budget_p95_seconds": 0.033443263
+      "first_seconds": 0.026373953005531803,
+      "warm_median_seconds": 0.02826154400827363,
+      "median_seconds": 0.02826154400827363,
+      "p95_seconds": 0.031818770978134125,
+      "budget_median_seconds": 0.031087698,
+      "budget_p95_seconds": 0.035000648
     },
     "analysis": {
       "samples_seconds": [
-        0.023427521024132147,
-        0.032796128012705594,
-        0.021271113015245646,
-        0.022175882011651993,
-        0.023985537991393358
+        0.026703732990426943,
+        0.020875653019174933,
+        0.0193080099998042,
+        0.026405501004774123,
+        0.021412533009424806
       ],
-      "first_seconds": 0.023427521024132147,
-      "warm_median_seconds": 0.023080710001522675,
-      "median_seconds": 0.023427521024132147,
-      "p95_seconds": 0.032796128012705594,
-      "budget_median_seconds": 0.025770273,
-      "budget_p95_seconds": 0.036075741
+      "first_seconds": 0.026703732990426943,
+      "warm_median_seconds": 0.021412533009424806,
+      "median_seconds": 0.021412533009424806,
+      "p95_seconds": 0.026703732990426943,
+      "budget_median_seconds": 0.023553786,
+      "budget_p95_seconds": 0.029374106
     },
     "timecourses": {
       "samples_seconds": [
-        0.07148143500671722,
-        0.08387609699275345,
-        0.06709829700412229,
-        0.06919777800794691,
-        0.06799778097774833
+        0.06971165697905235,
+        0.07869176199892536,
+        0.071587640006328,
+        0.06984755099983886,
+        0.07281881000380963
       ],
-      "first_seconds": 0.07148143500671722,
-      "warm_median_seconds": 0.06859777949284762,
-      "median_seconds": 0.06919777800794691,
-      "p95_seconds": 0.08387609699275345,
-      "budget_median_seconds": 0.076117556,
-      "budget_p95_seconds": 0.092263707
+      "first_seconds": 0.06971165697905235,
+      "warm_median_seconds": 0.071587640006328,
+      "median_seconds": 0.071587640006328,
+      "p95_seconds": 0.07869176199892536,
+      "budget_median_seconds": 0.078746404,
+      "budget_p95_seconds": 0.086560938
     },
     "search": {
       "samples_seconds": [
-        0.05902112799230963,
-        0.06786000900319777,
-        0.06284714202047326,
-        0.05997167099849321,
-        0.05496512301033363
+        0.061059487023158,
+        0.06095124801504426,
+        0.05601655598729849,
+        0.06001248600659892,
+        0.060069344006478786
       ],
-      "first_seconds": 0.05902112799230963,
-      "warm_median_seconds": 0.06140940650948323,
-      "median_seconds": 0.05997167099849321,
-      "p95_seconds": 0.06786000900319777,
-      "budget_median_seconds": 0.065968838,
-      "budget_p95_seconds": 0.07464601
+      "first_seconds": 0.061059487023158,
+      "warm_median_seconds": 0.060069344006478786,
+      "median_seconds": 0.060069344006478786,
+      "p95_seconds": 0.061059487023158,
+      "budget_median_seconds": 0.066076278,
+      "budget_p95_seconds": 0.067165436
     }
   },
   "server_python": "3.9.25",
-  "initial_state": "Frost2014 already published; all timed iterations replace the complete study.",
-  "server": "Django development server",
-  "scope": "Local matched Frost2014 source and query workload; not production or full-corpus upload timing."
+  "initial_state": "Prepublished Frost2014, fresh application process; no HTTP preparation request. OS/database/search caches were not flushed."
 }
