@@ -7,7 +7,7 @@ import pytest
 
 
 def test_supported_runtime_and_scientific_imports():
-    assert sys.version_info[:2] in {(3, 13), (3, 14)}
+    assert sys.version_info[:2] == (3, 14)
     for name in (
         "pkdb",
         "pydantic",

@@ -44,7 +44,7 @@ def perform(request, operation, data, result=None):
         )
     except LookupError:
         return JSONResponse({"detail": "Not found"}, status_code=404)
-    except (AuthenticationFailed, ValueError):
+    except AuthenticationFailed, ValueError:
         return JSONResponse(
             {"non_field_errors": ["Invalid account request or credentials."]},
             status_code=400,

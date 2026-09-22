@@ -277,7 +277,7 @@ def prepare_study(
                         "Time unit must have time dimensionality",
                         record,
                     )
-            except (pint.PintError, ValueError, TypeError):
+            except pint.PintError, ValueError, TypeError:
                 issue("invalid_time_unit", f"Invalid time unit: {time_unit}", record)
         if record.unit and not re.fullmatch(
             r"[\/^_*.() µα-ωΑ-Ωa-zA-Z0-9]*", record.unit

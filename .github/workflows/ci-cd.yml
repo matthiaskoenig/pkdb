@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ['3.13', '3.14']
+        python: ['3.14']
     services:
       postgres:
         image: postgres:18.0
@@ -120,7 +120,7 @@ jobs:
     if: always()
     runs-on: ubuntu-latest
     steps:
-      - name: Require both Python versions and local Docker setup
+      - name: Require Python 3.14 and local Docker setup
         env:
           PYTHON_RESULT: ${{ needs.python.result }}
           COMPOSE_RESULT: ${{ needs.compose.result }}

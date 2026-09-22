@@ -1,0 +1,56 @@
+cff-version: 1.2.0
+message: "If you use PK-DB data or the web interface, please cite the preferred article below. If you use PK-DB code, please also cite the software DOI."
+title: "PK-DB: the pharmacokinetics database"
+abstract: "PK-DB provides curated pharmacokinetic study data, scientific validation, unit normalization, pharmacokinetic analysis, and access through a REST API and web interface."
+type: software
+authors:
+  - family-names: "König"
+    given-names: "Matthias"
+    orcid: "https://orcid.org/0000-0003-1725-179X"
+  - family-names: "Grzegorzewski"
+    given-names: "Jan"
+version: "0.10.0"
+date-released: "2026-09-21"
+doi: "10.5281/zenodo.1406979"
+license: MIT
+repository-code: "https://github.com/matthiaskoenig/pkdb"
+url: "https://pk-db.com"
+keywords:
+  - pharmacokinetics
+  - PK-DB
+  - database
+  - data curation
+  - computational modeling
+preferred-citation:
+  type: article
+  title: "PK-DB: pharmacokinetics database for individualized and stratified computational modeling"
+  authors:
+    - family-names: "Grzegorzewski"
+      given-names: "Jan"
+    - family-names: "Brandhorst"
+      given-names: "Janosch"
+    - family-names: "Green"
+      given-names: "Kathleen"
+    - family-names: "Eleftheriadou"
+      given-names: "Dimitra"
+    - family-names: "Duport"
+      given-names: "Yannick"
+    - family-names: "Barthorscht"
+      given-names: "Florian"
+    - family-names: "Köller"
+      given-names: "Adrian"
+    - family-names: "Ke"
+      given-names: "Danny Yu Jia"
+    - family-names: "De Angelis"
+      given-names: "Sara"
+    - family-names: "König"
+      given-names: "Matthias"
+      orcid: "https://orcid.org/0000-0003-1725-179X"
+  journal: "Nucleic Acids Research"
+  year: 2021
+  volume: "49"
+  issue: "D1"
+  start: "D1358"
+  end: "D1364"
+  doi: "10.1093/nar/gkaa990"
+  url: "https://pubmed.ncbi.nlm.nih.gov/33151297/"

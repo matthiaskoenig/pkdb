@@ -1,5 +1,5 @@
 line-length = 88
-target-version = "py313"
+target-version = "py314"
 extend-exclude = ["frontend", "docs", "superpowers"]
 
 [lint]

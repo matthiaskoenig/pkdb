@@ -1,11 +1,6 @@
 <img src="./docs/pkdb_logo.png" width="200">
 
-[![CI-CD](https://github.com/matthiaskoenig/pkdb/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ci-cd.yml)
-[![ruff](https://github.com/matthiaskoenig/pkdb/actions/workflows/ruff.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ruff.yml)
-[![ty](https://github.com/matthiaskoenig/pkdb/actions/workflows/ty.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ty.yml)
-[![documentation](https://github.com/matthiaskoenig/pkdb/actions/workflows/docs.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/docs.yml)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
-[![MIT License](https://img.shields.io/pypi/l/pymetadata.svg)](https://opensource.org/licenses/MIT)
+[![CI-CD](https://github.com/matthiaskoenig/pkdb/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ci-cd.yml) [![ruff](https://github.com/matthiaskoenig/pkdb/actions/workflows/ruff.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ruff.yml) [![ty](https://github.com/matthiaskoenig/pkdb/actions/workflows/ty.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ty.yml) [![documentation](https://github.com/matthiaskoenig/pkdb/actions/workflows/docs.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/docs.yml) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979) [![MIT License](https://img.shields.io/pypi/l/pymetadata.svg)](https://opensource.org/licenses/MIT)
 
 # PK-DB – The Pharmacokinetics Database
 
@@ -43,15 +38,12 @@ PK-DB is available from [https://pk-db.com](https://pk-db.com). The terms of use
 
 ## Documentation
 
-The full documentation, including installation, deployment and development, is at
-[https://matthiaskoenig.github.io/pkdb](https://matthiaskoenig.github.io/pkdb).
+The full documentation, including installation, deployment and development, is at [https://matthiaskoenig.github.io/pkdb](https://matthiaskoenig.github.io/pkdb).
 
 ## How to cite
 If you use PK-DB data or the web interface cite
 
-> Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M. 
-> *PK-DB: pharmacokinetics database for individualized and stratified computational modeling*. 
-> Nucleic Acids Res. 2021 Jan 8;49(D1):D1358-D1364. doi: [10.1093/nar/gkaa990](https://doi.org/10.1093/nar/gkaa990). PMID: [33151297](https://pubmed.ncbi.nlm.nih.gov/33151297/).
+> Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M. *PK-DB: pharmacokinetics database for individualized and stratified computational modeling*. Nucleic Acids Res. 2021 Jan 8;49(D1):D1358-D1364. doi: [10.1093/nar/gkaa990](https://doi.org/10.1093/nar/gkaa990). PMID: [33151297](https://pubmed.ncbi.nlm.nih.gov/33151297/).
 
 If you use PK-DB code cite in addition 
 
@@ -65,4 +57,4 @@ PK-DB code and documentation is licensed as
 ## Funding
 Matthias König (MK) and Jan Grzegorzewski were supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (LiSyM, grant number 031L0054). MK is supported by the Federal Ministry of Education and Research (BMBF, Germany) within ATLAS by grant number 031L0304B and by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resection - A Systems Medicine Approach) by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
 
-&copy; 2017-2026 Jan Grzegorzewski & Matthias König; https://livermetabolism.com.
+&copy; 2017-2026 Matthias König; https://livermetabolism.com.

@@ -25,9 +25,6 @@ Verified locally on CPython 3.13.1 and 3.14.6 (standard GIL builds):
 - Built sdist and wheel; installed wheel in clean environments on both interpreters.
 - Clean-wheel imports include NumPy, SciPy, pandas, Pint, and the PK calculation module.
 
-The unchanged pkdb-analysis import prints legacy environment-configuration warnings;
-it did not make a network request. Domain integration must not use its API client
-or import default remote configuration as an application fallback.
+The unchanged pkdb-analysis import prints legacy environment-configuration warnings; it did not make a network request. Domain integration must not use its API client or import default remote configuration as an application fallback.
 
-Runtime scientific regression, PostgreSQL, REST/MCP, and container gates remain
-pending; packaging success does not establish scientific or API compatibility.
+Runtime scientific regression, PostgreSQL, REST/MCP, and container gates remain pending; packaging success does not establish scientific or API compatibility.

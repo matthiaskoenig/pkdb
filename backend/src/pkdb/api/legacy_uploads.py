@@ -35,7 +35,7 @@ async def payload(request):
         value = json.loads(
             await request.body(), object_pairs_hook=unique, parse_constant=nonfinite
         )
-    except (ValueError, RecursionError):
+    except ValueError, RecursionError:
         fail("invalid_json", "Malformed JSON payload")
     if not isinstance(value, dict):
         fail("invalid_json", "Expected a JSON object")

@@ -1,0 +1,23 @@
+{
+  "upload_type": "software",
+  "title": "PK-DB: the pharmacokinetics database",
+  "creators": [
+    {
+      "name": "König, Matthias",
+      "orcid": "0000-0003-1725-179X"
+    },
+    {
+      "name": "Grzegorzewski, Jan"
+    }
+  ],
+  "description": "<p><a href=\"https://pk-db.com\">PK-DB</a> is an open pharmacokinetics database for clinical and pre-clinical research. This repository contains the software for validating, storing, analyzing, and accessing curated study data.</p><p>Features include:</p><ul><li>Study subjects, interventions, pharmacokinetic parameters, and timecourses</li><li>Scientific validation and unit normalization</li><li>Controlled vocabulary definitions and ontology annotations</li><li>Pharmacokinetic calculations from concentration-time profiles</li><li>REST API and web interface access</li></ul><p>Source code: <a href=\"https://github.com/matthiaskoenig/pkdb\">github.com/matthiaskoenig/pkdb</a>. Documentation: <a href=\"https://matthiaskoenig.github.io/pkdb/\">PK-DB documentation</a>. Curated study data are maintained separately in <a href=\"https://github.com/matthiaskoenig/pkdb_data\">pkdb_data</a>.</p><p>If you use PK-DB data or the web interface, cite Grzegorzewski et al., <em>PK-DB: pharmacokinetics database for individualized and stratified computational modeling</em>, Nucleic Acids Research (2021), <a href=\"https://doi.org/10.1093/nar/gkaa990\">doi:10.1093/nar/gkaa990</a>. If you use the code, also cite the archived software release.</p><p>Source code is licensed under MIT; documentation is licensed under CC BY-SA 4.0. Questions and problems can be reported in the <a href=\"https://github.com/matthiaskoenig/pkdb/issues\">issue tracker</a>.</p><h2>Funding</h2><p>Matthias König and Jan Grzegorzewski were supported by the Federal Ministry of Education and Research (BMBF, Germany) within Systems Medicine of the Liver (LiSyM, grant 031L0054). Matthias König is supported by BMBF within ATLAS (grant 031L0304B) and by the German Research Foundation (DFG) within Research Unit Program FOR 5151 QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resection - A Systems Medicine Approach, grant 436883643) and grant 465194077 (Priority Programme SPP 2311, Subproject SimLivA).</p>",
+  "access_right": "open",
+  "license": "MIT",
+  "keywords": [
+    "pharmacokinetics",
+    "PK-DB",
+    "database",
+    "data curation",
+    "computational modeling"
+  ]
+}

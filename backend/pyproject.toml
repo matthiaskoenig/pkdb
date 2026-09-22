@@ -6,7 +6,7 @@ build-backend = "hatchling.build"
 name = "pkdb"
 version = "0.10.0"
 description = "Validated PK-DB backend"
-requires-python = ">=3.13,<3.15"
+requires-python = ">=3.14,<3.15"
 dependencies = [
   "pydantic>=2,<3",
   "pydantic-settings>=2,<3",
@@ -52,13 +52,13 @@ packages = ["src/pkdb"]
 allow-direct-references = true
 
 [tool.ruff]
-target-version = "py313"
+target-version = "py314"
 
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I", "UP"]
 
 [tool.ty.environment]
-python-version = "3.13"
+python-version = "3.14"
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
