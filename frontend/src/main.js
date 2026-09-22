@@ -11,7 +11,7 @@ import VueResource from 'vue-resource';
 import App from './App.vue'
 import router from './router'
 import store from './store'
-import axios from 'axios';
+import {configureHttp} from './http';
 
 
 /** --------------------------------------------------------------
@@ -73,6 +73,9 @@ Vue.use(Vuetify)
 Vue.use(VueAuthImage);
 Vue.use(VueResource);
 
+configureHttp(store);
+store.dispatch('refreshProfile').catch(() => {});
+
 new Vue({
     router,
     store,
@@ -86,14 +89,3 @@ new Vue({
     vuetify: new Vuetify(opts),
     render: h => h(App)
 }).$mount('#app');
-
-
-axios.interceptors.request.use(function (config) {
-    const token = store.state.token;
-    if (token) {
-        axios.defaults.headers.common['Authorization'] = 'Token ' + localStorage.getItem('token')
-    }
-    return config;
-}, function (err) {
-    return Promise.reject(err);
-});

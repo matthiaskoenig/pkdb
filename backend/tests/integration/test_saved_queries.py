@@ -53,8 +53,11 @@ def test_export_rechecks_visibility_and_account(
     from pkdb.services.exports import ExportService
 
     ingestion, creator = ingestion_context
-    valid_bundle.study["access"] = "public"
+    valid_bundle.study["access"] = "private"
     ingestion.replace(valid_bundle, creator)
+    # Fixture publication is an administrative state transition.
+    with session_factory.begin() as session:
+        session.execute(update(Study).values(access="public"))
     exports = ExportService(session_factory, QueryService(session_factory))
     public_id = exports.create_filter(QuerySpec(entity="studies"), Principal())
     owned_id = exports.create_filter(QuerySpec(entity="studies"), creator)
@@ -65,7 +68,9 @@ def test_export_rechecks_visibility_and_account(
         session.execute(
             update(User).where(User.id == creator.user_id).values(active=False)
         )
-    with pytest.raises(AuthorizationDenied, match="Active account"):
+    from pkdb.services.authentication import AuthenticationFailed
+
+    with pytest.raises(AuthenticationFailed, match="Inactive"):
         next(exports.stream_export(owned_id, "csv", creator))
 
 
@@ -140,7 +145,7 @@ def test_saved_filter_rechecks_removed_collaborator(
 ):
     from sqlalchemy import delete, select
 
-    from pkdb.db.models.studies import Study, StudyUser
+    from pkdb.db.models.studies import Study, StudyGrant
     from pkdb.db.models.users import User
     from pkdb.schemas.filters import FilterSpec
     from pkdb.services.exports import ExportService
@@ -154,7 +159,7 @@ def test_saved_filter_rechecks_removed_collaborator(
         session.flush()
         actor = Principal(user_id=user.id, username=user.username, role=user.role)
         session.add(
-            StudyUser(
+            StudyGrant(
                 study_id=session.scalar(select(Study.id)),
                 user_id=user.id,
                 role="collaborator",
@@ -164,7 +169,7 @@ def test_saved_filter_rechecks_removed_collaborator(
     identifier = exports.create_filter(FilterSpec(), actor)
     assert exports.overview(identifier, actor)["outputs"] == 1
     with session_factory.begin() as session:
-        session.execute(delete(StudyUser).where(StudyUser.user_id == actor.user_id))
+        session.execute(delete(StudyGrant).where(StudyGrant.user_id == actor.user_id))
     assert exports.overview(identifier, actor)["outputs"] == 0
     from io import BytesIO
     from zipfile import ZipFile

@@ -19,7 +19,11 @@ router = APIRouter()
 
 
 def require_account(request: Request):
-    request.state.account_actor = request.app.state.principal(request)
+    from pkdb.api.credentials import actor
+
+    request.state.account_actor = actor(
+        request, recent=request.method not in {"GET", "HEAD", "OPTIONS"}
+    )
 
 
 email_router = APIRouter(dependencies=[Depends(require_account)])
@@ -53,7 +57,13 @@ def perform(request, operation, data, result=None):
 
 @router.post("/api-token-auth/")
 def login(data: Login, request: Request):
-    return perform(request, "login", data.model_dump(), lambda token: {"token": token})
+    return JSONResponse(
+        {
+            "detail": "Use /api/v1/auth/login for browser sessions or create a personal API key in account settings.",
+            "code": "legacy_login_retired",
+        },
+        status_code=410,
+    )
 
 
 @router.post("/accounts/register/", status_code=201)

@@ -11,7 +11,7 @@ from pkdb.config import Settings
 from pkdb.db import replace
 from pkdb.db.bootstrap import VOCABULARY_LOCK, load_vocabulary
 from pkdb.db.models.files import StoredFile, StudyAttachment
-from pkdb.db.models.studies import Study
+from pkdb.db.models.studies import Study, StudyGrant
 from pkdb.db.models.users import User
 from pkdb.db.models.vocabulary import VocabularyVersion
 from pkdb.domain.provenance import comment_authors
@@ -49,16 +49,25 @@ class IngestionService:
         self.file_store = file_store
         self.settings = settings
 
+    @staticmethod
+    def _can_manage(principal, session):
+        if principal.role != "admin":
+            return False
+        if principal.credential_kind == "internal":
+            return True
+        if principal.credential_kind != "session":
+            return False
+        from pkdb.services.mfa import require_admin_session
+
+        require_admin_session(principal, session)
+        return True
+
     def _principal(
         self, session: Session, principal: Principal, *, lock=False
     ) -> Principal:
-        statement = select(User).where(User.id == principal.user_id)
-        if lock:
-            statement = statement.with_for_update(read=True)
-        user = session.scalar(statement)
-        if user is None or not user.active:
-            raise AuthorizationDenied("Active account required")
-        return Principal(user_id=user.id, username=user.username, role=user.role)
+        from pkdb.services.authentication import revalidate_principal
+
+        return revalidate_principal(principal, session, lock=lock)
 
     def validate(self, bundle: SourceBundle, principal: Principal) -> PreparedStudy:
         if len(bundle.files) > self.settings.upload_max_files:
@@ -69,6 +78,14 @@ class IngestionService:
             root = session.scalar(select(Study).where(Study.sid == study.sid))
             if root is None:
                 authorize_creation(current)
+                if (
+                    not self._can_manage(current, session)
+                    and study.metadata.access != "private"
+                ):
+                    fail(
+                        "private_creation_required",
+                        "New studies must be private until an administrator publishes them",
+                    )
             else:
                 authorize(current, "write", study_access(root, session))
             vocabulary = load_vocabulary(session)
@@ -132,6 +149,7 @@ class IngestionService:
                     {"key": sid_lock(study.sid)},
                 )
                 current = self._principal(session, principal, lock=True)
+                can_manage = self._can_manage(current, session)
                 version = session.get(VocabularyVersion, 1)
                 if version is None or version.version != prepared.vocabulary_version:
                     raise PublicationConflict("vocabulary_changed")
@@ -141,6 +159,11 @@ class IngestionService:
                 created = root is None
                 if root is None:
                     authorize_creation(current)
+                    if not can_manage and study.metadata.access != "private":
+                        fail(
+                            "private_creation_required",
+                            "New studies must be private until an administrator publishes them",
+                        )
                     root = Study(
                         sid=study.sid,
                         name=study.metadata.name,
@@ -150,6 +173,13 @@ class IngestionService:
                     session.add(root)
                 else:
                     authorize(current, "write", study_access(root, session))
+                    if not can_manage and (
+                        root.access != study.metadata.access
+                        or root.licence != study.metadata.licence
+                    ):
+                        raise AuthorizationDenied(
+                            "Only administrators change visibility or licence"
+                        )
                 names = {
                     study.metadata.creator,
                     *study.metadata.collaborators,
@@ -168,7 +198,7 @@ class IngestionService:
                 if names - users.keys():
                     fail("unknown_user", "Study refers to an unknown user")
                 creator_id = users[study.metadata.creator].id
-                if current.role != "admin" and creator_id != (
+                if not can_manage and creator_id != (
                     current.user_id if created else root.creator_id
                 ):
                     raise AuthorizationDenied(
@@ -203,6 +233,29 @@ class IngestionService:
                     locked_files.append(row)
                 replace.clear_children(session, root.id)
                 replace.insert_graph(session, root, study)
+                if created:
+                    # Source contributor metadata never grants access implicitly.
+                    session.add(
+                        StudyGrant(
+                            study_id=root.id, user_id=current.user_id, role="curator"
+                        )
+                    )
+                    if can_manage:
+                        grants = {(current.user_id, "curator")}
+                        grants.update(
+                            (users[c.user].id, "curator")
+                            for c in study.metadata.curators
+                        )
+                        grants.update(
+                            (users[name].id, "collaborator")
+                            for name in study.metadata.collaborators
+                        )
+                        for user_id, role in sorted(
+                            grants - {(current.user_id, "curator")}
+                        ):
+                            session.add(
+                                StudyGrant(study_id=root.id, user_id=user_id, role=role)
+                            )
                 session.add_all(
                     StudyAttachment(
                         study_id=root.id, file_id=row.id, name=row.original_name

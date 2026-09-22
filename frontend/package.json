@@ -36,12 +36,12 @@
     "@vue/test-utils": "^1.0.0-beta.30",
     "chai": "^4.2.0",
     "css-loader": "^3.6.0",
-    "node-sass": "^4.14.1",
     "sass-loader": "^8.0.2",
     "style-loader": "^1.2.1",
     "stylus": "^0.54.8",
     "stylus-loader": "^3.0.2",
     "vue-cli-plugin-vuetify": "^0.2.1",
-    "vue-template-compiler": "^2.6.12"
+    "vue-template-compiler": "^2.6.12",
+    "sass": "^1.93.0"
   }
 }

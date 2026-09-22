@@ -12,8 +12,8 @@ import httpx
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 
-from pkdb.db.models.users import User
-from pkdb.services.authentication import issue_token
+from pkdb.db.models.users import EmailAddress, User
+from pkdb.services.authentication import password_hash
 
 
 def test_container_nonroot_upload_and_graceful_shutdown(
@@ -23,7 +23,16 @@ def test_container_nonroot_upload_and_graceful_shutdown(
     expected_python = os.environ["PKDB_TEST_IMAGE_PYTHON"]
     _, actor = ingestion_context
     with session_factory.begin() as session:
-        token = issue_token(session.get(User, actor.user_id), session)
+        user = session.get(User, actor.user_id)
+        user.password_hash = password_hash.hash("Runtime-password-42!")
+        session.add(
+            EmailAddress(
+                user_id=user.id,
+                email="runtime@example.org",
+                is_primary=True,
+                is_verified=True,
+            )
+        )
     with socket.socket() as sock:
         sock.bind(("127.0.0.1", 0))
         port = sock.getsockname()[1]
@@ -49,6 +58,10 @@ def test_container_nonroot_upload_and_graceful_shutdown(
             "PKDB_DATABASE_URL",
             "--env",
             "PKDB_FILE_ROOT=/data/files",
+            "--env",
+            f"PKDB_BROWSER_ORIGIN=http://127.0.0.1:{port}",
+            "--env",
+            "PKDB_SECURE_COOKIES=false",
             "--tmpfs",
             "/data/files:rw,uid=10001,gid=10001,mode=0700",
             image,
@@ -77,9 +90,33 @@ def test_container_nonroot_upload_and_graceful_shutdown(
                     pass
                 assert time.monotonic() < deadline, "Container did not become ready"
                 time.sleep(0.1)
+            csrf = client.get("/api/v1/auth/csrf").json()["csrf_token"]
+            browser_headers = {
+                "Origin": f"http://127.0.0.1:{port}",
+                "X-CSRF-Token": csrf,
+            }
+            login = client.post(
+                "/api/v1/auth/login",
+                json={"username": actor.username, "password": "Runtime-password-42!"},
+                headers=browser_headers,
+            )
+            assert login.status_code == 200, login.text
+            key = client.post(
+                "/api/v1/me/api-keys",
+                json={"name": "container runtime", "scopes": ["read", "studies:write"]},
+                headers=browser_headers,
+            )
+            assert key.status_code == 201, key.text
+            token = key.json()["secret"]
+            assert "secret" not in client.get("/api/v1/me/api-keys").json()[0]
+            assert (
+                client.post("/api/v1/auth/logout", headers=browser_headers).status_code
+                == 204
+            )
+            client.cookies.clear()
             response = client.put(
                 f"/api/v2/studies/{valid_bundle.study['sid']}",
-                headers={"Authorization": f"Token {token}"},
+                headers={"Authorization": f"Bearer {token}"},
                 data={
                     "study": json.dumps(valid_bundle.study),
                     "reference": json.dumps(valid_bundle.reference),
@@ -89,20 +126,20 @@ def test_container_nonroot_upload_and_graceful_shutdown(
             assert response.status_code == 201, response.text
             response = client.get(
                 f"/api/v2/studies/{valid_bundle.study['sid']}",
-                headers={"Authorization": f"Token {token}"},
+                headers={"Authorization": f"Bearer {token}"},
             )
             assert response.status_code == 200
             assert len(response.json()["measurements"]) == 2
             response = client.get(
                 f"/api/v1/studies/{valid_bundle.study['sid']}/",
-                headers={"Authorization": f"Token {token}"},
+                headers={"Authorization": f"Bearer {token}"},
             )
             assert response.status_code == 200
             file_url = response.json()["files"][0]["file"]
             assert client.get(file_url).status_code == 403
             assert (
                 client.get(
-                    file_url, headers={"Authorization": f"Token {token}"}
+                    file_url, headers={"Authorization": f"Bearer {token}"}
                 ).content
                 == b"container attachment"
             )

@@ -12,13 +12,13 @@ from sqlalchemy import delete, func, select
 
 from pkdb.db.analysis import ENTITIES, statement
 from pkdb.db.models.saved_queries import SavedQuery
-from pkdb.db.models.users import User
 from pkdb.db.selection import selection
 from pkdb.schemas.analysis import ANALYSIS_MODELS
 from pkdb.schemas.filters import FilterSpec
 from pkdb.schemas.queries import QuerySpec
 from pkdb.schemas.security import Principal
 from pkdb.services.analysis import AnalysisService
+from pkdb.services.authentication import revalidate_principal
 from pkdb.services.authorization import AuthorizationDenied
 
 
@@ -58,10 +58,7 @@ class ExportService:
     def current_principal(session, principal):
         if principal.user_id is None:
             return Principal()
-        user = session.get(User, principal.user_id)
-        if user is None or not user.active:
-            raise AuthorizationDenied("Active account required")
-        return Principal(user_id=user.id, username=user.username, role=user.role)
+        return revalidate_principal(principal, session)
 
     def create_filter(self, query: QuerySpec | FilterSpec, principal: Principal):
         if isinstance(query, QuerySpec) and query.entity not in ENTITIES:

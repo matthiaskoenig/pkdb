@@ -2,7 +2,6 @@ import pytest
 from sqlalchemy import select
 
 from pkdb.db.models.users import EmailAddress, User
-from pkdb.services.authentication import password_hash
 
 
 def payload():
@@ -16,7 +15,7 @@ def payload():
     }
 
 
-def test_admin_creates_verified_user_without_exposing_password(
+def test_admin_creates_pending_user_without_issuing_credentials(
     client, admin_headers, session_factory
 ):
     response = client.post("/api/v1/_users/", headers=admin_headers, json=payload())
@@ -29,25 +28,24 @@ def test_admin_creates_verified_user_without_exposing_password(
         "last_name",
         "email",
         "groups",
-        "auth_token",
     }
     assert data["groups"] == ["basic"]
     assert data["email"] == "new@example.test"
-    assert isinstance(data["auth_token"], str)
+    assert "auth_token" not in data
     with session_factory() as session:
         user = session.get(User, data["id"])
-        assert user.role == "user" and user.active
-        assert password_hash.verify(payload()["password"], user.password_hash)
+        assert user.role == "user" and not user.active
+        assert user.password_hash is None
         email = session.scalar(
             select(EmailAddress).where(EmailAddress.user_id == user.id)
         )
-        assert email.is_primary and email.is_verified
+        assert email.is_primary and not email.is_verified
     assert (
         client.post(
             "/api-token-auth/",
             json={"username": "new-user", "password": payload()["password"]},
         ).status_code
-        == 200
+        == 410
     )
     detail = client.get(f"/api/v1/_users/{data['id']}.json", headers=admin_headers)
     assert detail.status_code == 200
@@ -73,7 +71,7 @@ def test_admin_user_routes_reject_nonadmins_and_recheck_role(
             == expected
         )
     with session_factory.begin() as session:
-        operator = session.scalar(select(User).where(User.username == "operator"))
+        operator = session.scalar(select(User).where(User.username == "mkoenig"))
         operator.role = "user"
     assert (
         client.post(
@@ -155,20 +153,19 @@ def test_admin_service_rejects_stale_authorization(session_factory):
         AdminUserService(session_factory).create(stale, AdminUserCreate(**payload()))
 
 
-def test_admin_role_changes_apply_to_existing_tokens(client, admin_headers):
+def test_admin_cannot_promote_a_second_administrator(client, admin_headers):
     created = client.post(
         "/api/v1/_users/", headers=admin_headers, json=payload()
     ).json()
-    headers = {"Authorization": f"Token {created['auth_token']}"}
     url = f"/api/v1/_users/{created['id']}/"
-    assert client.get(url, headers=headers).status_code == 403
     assert (
         client.patch(url, headers=admin_headers, json={"groups": ["admin"]}).status_code
-        == 200
+        == 400
     )
-    assert client.get(url, headers=headers).status_code == 200
     assert (
-        client.patch(url, headers=admin_headers, json={"groups": ["basic"]}).status_code
+        client.patch(
+            url, headers=admin_headers, json={"groups": ["reviewer"]}
+        ).status_code
         == 200
     )
-    assert client.get(url, headers=headers).status_code == 403
+    assert client.get(url, headers=admin_headers).json()["groups"] == ["reviewer"]

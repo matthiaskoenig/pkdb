@@ -86,7 +86,7 @@
                 }
             },
             token() {
-                return this.$store.state.token;
+                return !!this.$store.state.profile;
             },
             user() {
                 return this.$store.state.username;
@@ -106,13 +106,13 @@
                 };
 
                 axios.post(this.$store.state.endpoints.register, payload)
-                    .then((response) => {
-                        console.log(response);
+                    .then(() => {
+                        this.password = "";
                         this.success = true
 
                     })
                     .catch((error) => {
-                        this.warnings = error.response.data;
+                        this.warnings = error.response ? error.response.data : {non_field_errors: ["Unable to register. Please try again."]};
                         this.success = false
                     })
             }

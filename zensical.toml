@@ -17,6 +17,7 @@ nav = [
   { "Installation" = "installation.md" },
   { "Deployment" = "deployment.md" },
   { "Development" = "development.md" },
+  { "Accounts and API keys" = "authentication.md" },
   { "Local upload testing" = "local-upload-testing.md" },
   { "Vocabulary definitions" = "vocabulary.md" },
   { "Contributing" = "contributing.md" },

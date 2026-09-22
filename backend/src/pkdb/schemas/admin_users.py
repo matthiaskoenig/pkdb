@@ -4,7 +4,7 @@ from pydantic import Field
 
 from pkdb.schemas.accounts import AccountInput, Registration
 
-LegacyRole = Literal["basic", "curator", "reviewer", "admin"]
+LegacyRole = Literal["basic", "curator", "reviewer"]
 
 
 class AdminUserCreate(Registration):

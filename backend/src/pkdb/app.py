@@ -23,13 +23,20 @@ from pkdb.api import (
     admin_roles,
     admin_users,
     exports,
+    invitations,
     legacy_uploads,
+    management,
     media,
+    mfa,
+    profiles,
+    providers,
     reads,
     staging,
 )
+from pkdb.api.credentials import install_browser_security
 from pkdb.api.errors import account_validation_error
 from pkdb.api.limits import UploadLimits
+from pkdb.api.quotas import RequestQuotas
 from pkdb.config import Settings
 from pkdb.db.read import publication_state, read_study
 from pkdb.db.session import make_session_factory
@@ -43,14 +50,20 @@ from pkdb.services.admin_users import AdminUserService
 from pkdb.services.analysis import AnalysisService
 from pkdb.services.authentication import AuthenticationFailed, authenticate_token
 from pkdb.services.authorization import AuthorizationDenied
+from pkdb.services.credentials import CredentialService, authenticate_session
 from pkdb.services.drafts import DraftService
 from pkdb.services.exports import ExportService
 from pkdb.services.ingestion import IngestionService, PublicationConflict
+from pkdb.services.invitations import InvitationService
 from pkdb.services.mailer import SMTPMailer
+from pkdb.services.mfa import MfaService
+from pkdb.services.profiles import ProfileService
+from pkdb.services.providers import ProviderService
 from pkdb.services.queries import QueryService
+from pkdb.services.quotas import QuotaService
 
 log = logging.getLogger(__name__)
-SCHEMA_REVISION = "276e94c58ad1"
+SCHEMA_REVISION = "p775privacy01"
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -76,6 +89,46 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app = FastAPI(title="PK-DB", version="0.10.0", lifespan=lifespan)
     app.add_exception_handler(RequestValidationError, account_validation_error)
     app.state.accounts = AccountService(session_factory, SMTPMailer(settings))
+    app.state.invitations = InvitationService(
+        session_factory, app.state.accounts.mailer
+    )
+    app.include_router(invitations.router)
+    app.state.credentials = CredentialService(session_factory, app.state.accounts)
+    app.state.profiles = ProfileService(session_factory, settings.file_root)
+    app.state.quotas = QuotaService(session_factory, settings)
+    app.state.providers = ProviderService(
+        session_factory,
+        app.state.accounts,
+        origin=settings.browser_origin,
+        providers={
+            name: {
+                "client_id": getattr(settings, f"{name}_client_id"),
+                "client_secret": getattr(
+                    settings, f"{name}_client_secret"
+                ).get_secret_value()
+                if getattr(settings, f"{name}_client_secret")
+                else "",
+            }
+            for name in ("github", "orcid")
+        },
+    )
+    app.state.mfa = MfaService(
+        session_factory,
+        app.state.accounts,
+        settings.mfa_encryption_key.get_secret_value()
+        if settings.mfa_encryption_key
+        else None,
+    )
+    install_browser_security(
+        app, origin=settings.browser_origin, secure=settings.secure_cookies
+    )
+    app.include_router(profiles.router)
+    app.include_router(mfa.router)
+    app.include_router(management.router)
+    app.include_router(management.account_router)
+    app.include_router(providers.router)
+    if settings.rate_limits_enabled:
+        app.add_middleware(RequestQuotas)
     app.state.admin_users = AdminUserService(session_factory)
     app.state.file_store = file_store
     app.state.ingestion = ingestion
@@ -92,9 +145,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
-        allow_credentials=False,
+        allow_credentials=True,
         allow_methods=["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-        allow_headers=["Authorization", "Content-Type"],
+        allow_headers=["Authorization", "Content-Type", "X-CSRF-Token"],
         expose_headers=["Content-Disposition", "Retry-After"],
     )
 
@@ -136,13 +189,19 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     def principal(request: Request, required: bool = True) -> Principal:
         header = request.headers.get("Authorization", "")
         if not header:
+            cookie = request.cookies.get(app.state.session_cookie_name)
+            if cookie:
+                with session_factory.begin() as session:
+                    return authenticate_session(cookie, session)
             if not required:
                 return Principal()
             raise AuthenticationFailed()
         scheme, _, raw = header.partition(" ")
         if scheme.lower() not in {"token", "bearer"} or not raw:
             raise AuthenticationFailed()
-        with session_factory() as session:
+        if scheme.lower() == "token" and raw.startswith("pkdb_live_"):
+            raise AuthenticationFailed()
+        with session_factory.begin() as session:
             return authenticate_token(raw, session)
 
     def parse_json(value):

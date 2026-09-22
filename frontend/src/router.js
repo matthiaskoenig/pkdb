@@ -6,6 +6,7 @@ import Data from './components/Data'
 import Page404 from './components/Page404';
 import Curation from './components/Curation';
 import Account from './components/auth/Account';
+import Invitation from './components/auth/Invitation';
 import Registration from './components/auth/Registration';
 import Verification from './components/auth/Verification';
 import RequestPasswordReset from './components/auth/RequestPasswordReset';
@@ -37,6 +38,11 @@ export default new Router({
             path: '/curation',
             name: 'Curation',
             component: Curation
+        },
+        {
+            path: '/invitation',
+            name: 'Invitation',
+            component: Invitation
         },
         {
             path: '/account',

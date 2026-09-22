@@ -2,9 +2,7 @@ import json
 from copy import deepcopy
 
 
-def test_analysis_pagination_counts_expanded_pairs(
-    client, creator_headers, valid_bundle
-):
+def test_analysis_pagination_counts_expanded_pairs(client, admin_headers, valid_bundle):
     valid_bundle.study["access"] = "public"
     intervention = deepcopy(valid_bundle.study["interventionset"]["interventions"][0])
     intervention["name"] = "second"
@@ -12,7 +10,7 @@ def test_analysis_pagination_counts_expanded_pairs(
     valid_bundle.study["outputset"]["outputs"][0]["interventions"] = ["dose", "second"]
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
-        headers=creator_headers,
+        headers=admin_headers,
         data={
             "study": json.dumps(valid_bundle.study),
             "reference": json.dumps(valid_bundle.reference),
@@ -20,7 +18,7 @@ def test_analysis_pagination_counts_expanded_pairs(
     )
     assert response.status_code == 201
     response = client.get("/api/v1/pkdata/outputs/", params={"page_size": 1})
-    assert response.status_code == 200
+    assert response.status_code == 200, response.text
     page = response.json()
     assert page["data"]["count"] == 4
     assert len(page["data"]["data"]) == 1
@@ -33,11 +31,11 @@ def test_analysis_pagination_counts_expanded_pairs(
     assert row["individual_pk"] is None
     for entity in ("studies", "groups", "interventions"):
         response = client.get(f"/api/v1/pkdata/{entity}/")
-        assert response.status_code == 200
+        assert response.status_code == 200, response.text
         assert response.json()["data"]["count"] > 0
     for entity in ("individuals", "timecourses", "data"):
         response = client.get(f"/api/v1/pkdata/{entity}/")
-        assert response.status_code == 200
+        assert response.status_code == 200, response.text
         assert response.json()["data"]["count"] == 0
 
 

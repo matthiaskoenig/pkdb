@@ -124,3 +124,89 @@ def test_invalid_reset_cannot_change_password(accounts, session_factory, action)
     with session_factory() as session:
         user = session.scalar(select(User).where(User.username == "account"))
         assert password_hash.verify("Initial-password-42!", user.password_hash)
+
+
+@pytest.fixture
+def primary_change_context(accounts, session_factory):
+    from pkdb.db.models.users import EmailAddress
+    from pkdb.services.credentials import CredentialService
+
+    service, mailbox = accounts
+    with session_factory.begin() as session:
+        user = session.scalar(select(User).where(User.username == "account"))
+        primary = EmailAddress(
+            user_id=user.id, email=user.email, is_primary=True, is_verified=True
+        )
+        secondary = EmailAddress(
+            user_id=user.id,
+            email="secondary@example.org",
+            is_primary=False,
+            is_verified=True,
+        )
+        session.add_all([primary, secondary])
+        session.flush()
+        primary_id, secondary_id = primary.id, secondary.id
+    _, principal = CredentialService(session_factory, service).login(
+        "account", "Initial-password-42!"
+    )
+    return service, mailbox, principal, primary_id, secondary_id
+
+
+def test_primary_change_notifies_both_verified_addresses_once(
+    primary_change_context, session_factory
+):
+    from pkdb.db.models.users import EmailAddress
+
+    service, mailbox, principal, primary_id, secondary_id = primary_change_context
+    service.change_email(principal, secondary_id, {"is_primary": True})
+    assert [message[0] for message in mailbox.messages] == [
+        "account@example.org",
+        "secondary@example.org",
+    ]
+    for _, subject, body in mailbox.messages:
+        assert "primary email" in subject
+        assert "requested" in body
+        assert "Initial-password-42!" not in body
+    with session_factory.begin() as session:
+        assert not session.get(EmailAddress, primary_id).is_primary
+        assert session.get(EmailAddress, secondary_id).is_primary
+        assert session.get(User, principal.user_id).email == "secondary@example.org"
+    service.change_email(principal, secondary_id, {"is_primary": True})
+    assert len(mailbox.messages) == 2
+
+
+@pytest.mark.parametrize("fail_on", [1, 2])
+def test_primary_change_mail_failure_retains_working_primary(
+    primary_change_context, session_factory, fail_on
+):
+    from pkdb.db.models.users import EmailAddress
+    from pkdb.services.accounts import MailDeliveryFailed
+
+    service, mailbox, principal, primary_id, secondary_id = primary_change_context
+    delivered = []
+
+    def fail_delivery(recipient, subject, body):
+        if len(delivered) + 1 == fail_on:
+            raise OSError("SMTP unavailable")
+        delivered.append((recipient, subject, body))
+
+    service.mailer.send = fail_delivery
+    with pytest.raises(MailDeliveryFailed):
+        service.change_email(principal, secondary_id, {"is_primary": True})
+    with session_factory.begin() as session:
+        assert session.get(EmailAddress, primary_id).is_primary
+        assert not session.get(EmailAddress, secondary_id).is_primary
+        assert session.get(User, principal.user_id).email == "account@example.org"
+    assert all("requested" in body for _, _, body in delivered)
+
+
+def test_primary_change_does_not_notify_unverified_previous_address(
+    primary_change_context, session_factory
+):
+    from pkdb.db.models.users import EmailAddress
+
+    service, mailbox, principal, primary_id, secondary_id = primary_change_context
+    with session_factory.begin() as session:
+        session.get(EmailAddress, primary_id).is_verified = False
+    service.change_email(principal, secondary_id, {"is_primary": True})
+    assert [message[0] for message in mailbox.messages] == ["secondary@example.org"]

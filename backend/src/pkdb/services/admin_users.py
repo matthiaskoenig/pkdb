@@ -5,9 +5,9 @@ from sqlalchemy.exc import IntegrityError
 
 from pkdb.db.models.users import EmailAddress, User
 from pkdb.schemas.security import Principal
-from pkdb.services.authentication import issue_token, password_hash
 from pkdb.services.authorization import AuthorizationDenied
 from pkdb.services.ingestion import PublicationConflict
+from pkdb.services.mfa import require_admin_session
 
 LEGACY_ROLES = {
     "user": "basic",
@@ -18,6 +18,7 @@ LEGACY_ROLES = {
 
 
 def require_admin(principal, session, *, target_id=None):
+    require_admin_session(principal, session)
     # Lock in a consistent order even when administrators edit each other.
     ids = {principal.user_id, target_id} - {None}
     users = session.scalars(
@@ -51,11 +52,11 @@ class AdminUserService:
                 user = User(
                     username=values.username,
                     email=values.email.strip().casefold(),
-                    password_hash=password_hash.hash(values.password),
+                    password_hash=None,
                     first_name=values.first_name,
                     last_name=values.last_name,
                     role="user" if role == "basic" else role,
-                    active=True,
+                    active=False,
                 )
                 session.add(user)
                 session.flush()
@@ -64,14 +65,12 @@ class AdminUserService:
                         user_id=user.id,
                         email=user.email,
                         is_primary=True,
-                        is_verified=True,
+                        is_verified=False,
                     )
                 )
-                token = issue_token(user, session)
                 result = {
                     **user_response(user),
                     "email": user.email,
-                    "auth_token": token,
                 }
             return result
         except IntegrityError:
@@ -93,6 +92,10 @@ class AdminUserService:
                 if name in values:
                     setattr(user, name, values[name])
             if "groups" in values:
+                if user.role == "admin":
+                    raise AuthorizationDenied(
+                        "Cannot change the designated administrator role"
+                    )
                 role = values["groups"][0]
                 user.role = "user" if role == "basic" else role
             session.flush()

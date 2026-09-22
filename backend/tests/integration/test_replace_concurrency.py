@@ -8,7 +8,7 @@ from pkdb.db.models.studies import Study
 from pkdb.db.models.users import User
 from pkdb.db.models.vocabulary import VocabularyVersion
 from pkdb.db.read import assemble_study, read_study
-from pkdb.services.authorization import AuthorizationDenied
+from pkdb.services.authentication import AuthenticationFailed
 from pkdb.services.ingestion import PublicationConflict
 
 
@@ -65,7 +65,7 @@ def test_mutable_state_is_rechecked(
         else:
             session.get(User, principal.user_id).active = False
     with pytest.raises(
-        PublicationConflict if change == "vocabulary" else AuthorizationDenied
+        PublicationConflict if change == "vocabulary" else AuthenticationFailed
     ):
         ingestion._publish(prepared, principal, [])
     with session_factory() as session:

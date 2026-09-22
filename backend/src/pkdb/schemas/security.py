@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict
@@ -10,6 +11,13 @@ class Principal(BaseModel):
     user_id: int | None = None
     username: str | None = None
     role: str = "anonymous"
+    credential_kind: Literal[
+        "anonymous", "legacy", "session", "api_key", "internal"
+    ] = "internal"
+    credential_id: int | None = None
+    scopes: frozenset[str] = frozenset()
+    authenticated_at: datetime | None = None
+    mfa_at: datetime | None = None
 
 
 class StudyAccess(BaseModel):

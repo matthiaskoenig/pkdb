@@ -12,7 +12,7 @@ def test_inherited_filters_use_effective_same_characteristic(
     ingestion_context, valid_bundle, session_factory
 ):
     ingestion, creator = ingestion_context
-    valid_bundle.study["access"] = "public"
+    valid_bundle.study["access"] = "private"
     ingestion.replace(valid_bundle, creator)
     with session_factory.begin() as session:
         session.add_all(
@@ -30,6 +30,7 @@ def test_inherited_filters_use_effective_same_characteristic(
             ]
         )
         root = session.scalar(select(Study))
+        root.access = "public"  # Administrative publication in this read fixture.
         parent = session.scalar(select(Group))
         child = Group(
             study_id=root.id, key="child", name="child", count=1, parent_id=parent.id

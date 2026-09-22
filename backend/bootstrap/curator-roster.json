@@ -1,0 +1,962 @@
+{
+  "schema_version": 1,
+  "purpose": "Public identity/profile mapping only. Not an executable account bootstrap or proof of account ownership. Supply verified contacts privately for invitations.",
+  "roster_source": {
+    "repository": "pkdb",
+    "revision": "632a8bb21a894e97e2a4f6df7173f0956ded09f5",
+    "path": "backend/pkdb_data/management/users.py"
+  },
+  "avatar_source": {
+    "repository": "livermetabolism-site",
+    "revision": "6e13b9dff910434b9851296a073ff1642b277343",
+    "metadata_path": "data/people.yml",
+    "metadata_sha256": "40dd6dd8c3bca44c117c6edf3567899418d6193fe806fd91f1ecfd6c9628a594"
+  },
+  "users": [
+    {
+      "username": "janekg",
+      "display_name": "Jan Grzegorzewski",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/jan_grzegorzewski.webp",
+        "sha256": "aabef5ac8e56cac56de0e38dd5161d3f2437ef215ae1b5e0f365da94a8f8ad4d",
+        "source_person_id": "jan_grzegorzewski",
+        "source_path": "public/assets/image/people/128/jan_grzegorzewski.webp"
+      },
+      "profile_references": {
+        "orcid": "0000-0002-4588-4925",
+        "repository": "https://github.com/janekg89/"
+      },
+      "identity_match": "explicit_name_mapping"
+    },
+    {
+      "username": "mkoenig",
+      "display_name": "Matthias König",
+      "role": "admin",
+      "import_policy": "administrator_bootstrap",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/matthias_koenig.webp",
+        "sha256": "67c78bd0aca0204f818f9730050d92032d4b365614211f498eb67d102f6f219f",
+        "source_person_id": "matthias_koenig",
+        "source_path": "public/assets/image/people/128/matthias_koenig.webp"
+      },
+      "profile_references": {
+        "orcid": "0000-0003-1725-179X",
+        "repository": "https://github.com/matthiaskoenig/"
+      },
+      "identity_match": "explicit_name_mapping"
+    },
+    {
+      "username": "dimitra",
+      "display_name": "Dimitra Eleftheriadou",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/dimitra_eleftheriadou.webp",
+        "sha256": "e525775cbef1727b4d2f891ea5ef5b60f3a5c9550f370fa617c1af71bc168533",
+        "source_person_id": "dimitra_eleftheriadou",
+        "source_path": "public/assets/image/people/128/dimitra_eleftheriadou.webp"
+      },
+      "profile_references": {},
+      "identity_match": "explicit_name_mapping"
+    },
+    {
+      "username": "kgreen",
+      "display_name": "Kathleen Green",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/kgreen_128.png",
+        "sha256": "3b7a8c653f57a1623d6f38e9385680e7101a9f1fded99c26ce01eaee0f13425b",
+        "source_path": "frontend/public/assets/images/avatars/kgreen_128.png",
+        "source_repository": "pkdb"
+      },
+      "avatar_note": "No site image found; retain existing PK-DB asset."
+    },
+    {
+      "username": "jbrandhorst",
+      "display_name": "Janosch Brandhorst",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/janosch_brandhorst.webp",
+        "sha256": "2011697302934ba9a53f78572d676867e7918d0c6fa1a69d64f40c3edbec385a",
+        "source_person_id": "janosch_brandhorst",
+        "source_path": "public/assets/image/people/128/janosch_brandhorst.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/JBrandh"
+      },
+      "identity_match": "explicit_name_mapping"
+    },
+    {
+      "username": "FlorBar",
+      "display_name": "Florian Bartsch",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/florian_bartsch.webp",
+        "sha256": "3ed3d9ae3ac18a7ab2ac06d76fc53a0dbabb7e30864c1c3b02387693e03df3ca",
+        "source_person_id": "florian_bartsch",
+        "source_path": "public/assets/image/people/128/florian_bartsch.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/FloBar"
+      },
+      "identity_match": "explicit_name_mapping"
+    },
+    {
+      "username": "deepa",
+      "display_name": "Deepa Maheshvare",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/deepa_maheshvare.webp",
+        "sha256": "16f5dceb51d600fe9aa9eabb24db58d892756343719caae025939cde9ed95337",
+        "source_person_id": "deepa_maheshvare",
+        "source_path": "public/assets/image/people/128/deepa_maheshvare.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/DeepaMahm"
+      },
+      "identity_match": "explicit_name_mapping",
+      "migration_note": "Possible duplicate identity; retain distinct account IDs and review manually. Never merge automatically."
+    },
+    {
+      "username": "yduport",
+      "display_name": "Yannick Duport",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/yannick_duport.webp",
+        "sha256": "09780b5955c77de79acd5c8faf6d0a0dde317ae37c2f55af10891c02732b3060",
+        "source_person_id": "yannick_duport",
+        "source_path": "public/assets/image/people/128/yannick_duport.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/YannickDuport"
+      },
+      "identity_match": "explicit_name_mapping"
+    },
+    {
+      "username": "adriankl",
+      "display_name": "Adrian Koeller",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/adrian_koeller.webp",
+        "sha256": "68c92cdbc886899edd595c6df04d7ca168a095bdcec41d76f53cdd66b84567e3",
+        "source_person_id": "adrian_koeller",
+        "source_path": "public/assets/image/people/128/adrian_koeller.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/adriankl"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "dannythekey",
+      "display_name": "Danny Ke",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/danny_ke.webp",
+        "sha256": "3a3fcdba633e6a35c80ba526869fd5465dbf25ec0c334e3e58009888beda9406",
+        "source_person_id": "danny_ke",
+        "source_path": "public/assets/image/people/128/danny_ke.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/dannythekey"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "SaraD-hub",
+      "display_name": "Sara De Angelis",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/sara_angelis.webp",
+        "sha256": "cc8d07d921fab3a0d7c95a3aaf9aed366f2d3ba8dbeeac38b9b525e6dc10124d",
+        "source_person_id": "sara_angelis",
+        "source_path": "public/assets/image/people/128/sara_angelis.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/SaraD-hub"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "balcisue",
+      "display_name": "Sükrü Balci",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/suekrue_balci.webp",
+        "sha256": "3152cc882eb9171822397a4c6d7e65033d493484c58d59d4d740b5f2667d2105",
+        "source_person_id": "suekrue_balci",
+        "source_path": "public/assets/image/people/128/suekrue_balci.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/SukruBalci"
+      },
+      "identity_match": "explicit_name_mapping"
+    },
+    {
+      "username": "paula-ogata",
+      "display_name": "Paul Ogata",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/paula_ogata.webp",
+        "sha256": "cb37be2804c004a979b77a18209ab715183c64ac04d91f07be7313535bfcc39e",
+        "source_person_id": "paula_ogata",
+        "source_path": "public/assets/image/people/128/paula_ogata.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/paula-ogata"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "lepujolh",
+      "display_name": "Helen Leal",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/helen_pujol.webp",
+        "sha256": "760f44e9202ccad1b5542bfebc2edfc4c7fb0b7a0e3ebae5d09260c907ce8a84",
+        "source_person_id": "helen_pujol",
+        "source_path": "public/assets/image/people/128/helen_pujol.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/Lepujolh"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "stemllb",
+      "display_name": "Beatrice Stemmer Mallol",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/beatrice_mallol.webp",
+        "sha256": "7a8ad7b03051e93814bb5656eaa2fee021aa57f4d29b914b68c08ac142285646",
+        "source_person_id": "beatrice_mallol",
+        "source_path": "public/assets/image/people/128/beatrice_mallol.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/stemllb"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "jonaspk98",
+      "display_name": "Jonas Küttner",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/jonas_kuettner.webp",
+        "sha256": "0ef6e596427d8913bbd39708b4b942022cc8b01637e7078eae5137e303d3dd41",
+        "source_person_id": "jonas_kuettner",
+        "source_path": "public/assets/image/people/128/jonas_kuettner.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/jonaspk98"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "reviewer",
+      "display_name": "reviewer test",
+      "role": "user",
+      "import_policy": "exclude_test_account",
+      "avatar": null,
+      "exclusion_reason": "Historical reviewer test account is not a named reviewer.",
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "xresearch",
+      "display_name": "XResearch Group",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/xresearch_128.png",
+        "sha256": "34417556a7a24fb26a23f9d7e00288f1cdd25707adcbe479b62253afe53c237a",
+        "source_path": "frontend/public/assets/images/avatars/xresearch_128.png",
+        "source_repository": "pkdb"
+      },
+      "avatar_note": "No site image found; retain existing PK-DB asset."
+    },
+    {
+      "username": "Ahmed-fub",
+      "display_name": "Ahmed Atta",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "DaryaChb",
+      "display_name": "Darya Chobat",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "DaryaLigay",
+      "display_name": "Darya Ligay",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "drosdekv",
+      "display_name": "Vanessa Drosdek",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "long231a",
+      "display_name": "Lucia Link",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback.",
+      "migration_note": "Possible duplicate identity; retain distinct account IDs and review manually. Never merge automatically."
+    },
+    {
+      "username": "lucialink30",
+      "display_name": "Lucia Link",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback.",
+      "migration_note": "Possible duplicate identity; retain distinct account IDs and review manually. Never merge automatically."
+    },
+    {
+      "username": "Mattimatti1",
+      "display_name": "Mathis Hertel",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "Ming-Yuen",
+      "display_name": "Ng Ming",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "MuellTim",
+      "display_name": "Tim Mueller",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "sarahdv7",
+      "display_name": "Sarah Davoudzadeh",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "shihabmo",
+      "display_name": "Mohammad Shihab",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "SophieSilberhorn",
+      "display_name": "Sophie Silberhorn",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/sophie_silberhorn.webp",
+        "sha256": "3830903510cbbcfcc33823a8510184e5c94eee7c6443426ba365742322eeb054",
+        "source_person_id": "sophie_silberhorn",
+        "source_path": "public/assets/image/people/128/sophie_silberhorn.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/SophieSilberhorn"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "wumbor",
+      "display_name": "Victor Kumbol",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "DariusSchulze",
+      "display_name": "Darius Schulze",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "fuokibedi",
+      "display_name": "Frances Okibedi",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/frances_okibedi.webp",
+        "sha256": "710906f7f2ae3649e2f900f0edd02e1414716687f4b4f4301b0bf3ed8b0e7ff3",
+        "source_person_id": "frances_okibedi",
+        "source_path": "public/assets/image/people/128/frances_okibedi.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/fuokibedi"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "Soji4eva",
+      "display_name": "Narudeem Sojimade",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/nurudeen_sojimade.webp",
+        "sha256": "e80ad444e924a0ec26c4c62e5f118abb9dbffd73487d51ff543f354d9267a4cc",
+        "source_person_id": "nurudeen_sojimade",
+        "source_path": "public/assets/image/people/128/nurudeen_sojimade.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/Soji4eva"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "amdangelica",
+      "display_name": "Amanda Lim",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/amanda_schwaiger.webp",
+        "sha256": "9ba7804f5d1a0a93fef3b32506a969ef78f557deb748aa5eb35a5ae092fec1b8",
+        "source_person_id": "amanda_schwaiger",
+        "source_path": "public/assets/image/people/128/amanda_schwaiger.webp"
+      },
+      "profile_references": {
+        "orcid": "0000-0002-8993-8569",
+        "repository": "https://github.com/amdangelica"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "dzinty",
+      "display_name": "Kseniia Petukhova",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/xenia_petukhova.webp",
+        "sha256": "2c5878088afeefc4c9756c7e3b62b097135543b1705bfe85c9b9ff8330ae70a2",
+        "source_person_id": "xenia_petukhova",
+        "source_path": "public/assets/image/people/128/xenia_petukhova.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/dzinty"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "Rain-marine",
+      "display_name": "Bahri Zahra",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/zahra_bahri.webp",
+        "sha256": "8fbdf12864088a4f2e6258d227ff023dc617d9e1268afb6b1e2406e4f917d23c",
+        "source_person_id": "zahra_bahri",
+        "source_path": "public/assets/image/people/128/zahra_bahri.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/Rain-marine"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "linafrolova",
+      "display_name": "Lina Frolova",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "gozdemkarapinar",
+      "display_name": "Gozdem Karapinar",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "jonathanspeh",
+      "display_name": "Michel Jonathan Speh",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "Raj-codes",
+      "display_name": "Raj Prateek Rai",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "MadNietzsche",
+      "display_name": "Antonio Alvarez",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/antonio_aguilar.webp",
+        "sha256": "24b6b357cfe69948d8b9390b903126d738cc8623510f61683c7db8ede05afea2",
+        "source_person_id": "antonio_aguilar",
+        "source_path": "public/assets/image/people/128/antonio_aguilar.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/MadNietzsche"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "lisapolzer",
+      "display_name": "Lisa Polzer",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "FrancaLe",
+      "display_name": "Franca Lemor",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "hannah3menghis",
+      "display_name": "Hannah Menghis",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/hannah_menghis.webp",
+        "sha256": "031f8e53d2e135b1ddb63b6e7fd2dff68f3021428c1b51e4c1d6c23950a75856",
+        "source_person_id": "hannah_menghis",
+        "source_path": "public/assets/image/people/128/hannah_menghis.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/hannah3menghis"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "SamLuca",
+      "display_name": "Luca Samuel Sawady",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/luca_sawady.webp",
+        "sha256": "d468dbc0767e7ed7e262b290472a942d3b5947e55ed0e785f7a3c07aeaf6ebb4",
+        "source_person_id": "luca_sawady",
+        "source_path": "public/assets/image/people/128/luca_sawady.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/SamLuca"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "shubhankarpalwankar",
+      "display_name": "Shubhankar Palwankar",
+      "role": "reviewer",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/shubhankar_palwankar.webp",
+        "sha256": "c4757b763db842ca4903bc1df970b4e89cd3b371c3590f65a7eef53d75f8c463",
+        "source_person_id": "shubhankar_palwankar",
+        "source_path": "public/assets/image/people/128/shubhankar_palwankar.webp"
+      },
+      "profile_references": {
+        "orcid": "0009-0007-3431-463X",
+        "repository": "https://github.com/shubhankarpalwankar"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "DeepaMahm",
+      "display_name": "Deepa Maheshvare",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/deepa_maheshvare.webp",
+        "sha256": "16f5dceb51d600fe9aa9eabb24db58d892756343719caae025939cde9ed95337",
+        "source_person_id": "deepa_maheshvare",
+        "source_path": "public/assets/image/people/128/deepa_maheshvare.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/DeepaMahm"
+      },
+      "identity_match": "site_github_reference",
+      "migration_note": "Possible duplicate identity; retain distinct account IDs and review manually. Never merge automatically."
+    },
+    {
+      "username": "MariiaMysh",
+      "display_name": "Mariia Myshkina",
+      "role": "reviewer",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/mariia_myshkina.webp",
+        "sha256": "3f4a9c2db82013f2203223ff09fc901672a8327f6efb470985dbc719e9dd2abc",
+        "source_person_id": "mariia_myshkina",
+        "source_path": "public/assets/image/people/128/mariia_myshkina.webp"
+      },
+      "profile_references": {
+        "orcid": "0009-0000-7769-2154",
+        "repository": "https://github.com/MariiaMysh"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "rohinichakraborty",
+      "display_name": "Rohini Chakraborty",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/rohini_chakraborty.webp",
+        "sha256": "0460d22639fe29d47deb0b088191e45990fa6ac1b22f1aa560828160ae46fca2",
+        "source_person_id": "rohini_chakraborty",
+        "source_path": "public/assets/image/people/128/rohini_chakraborty.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/rohinichakraborty"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "nikenemitz",
+      "display_name": "Nike Nemitz",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/nike_nemitz.webp",
+        "sha256": "f67ded7bb95fa5f7fe807790c24a98b1f6948791c7143d40578ee6d33b6c2b60",
+        "source_person_id": "nike_nemitz",
+        "source_path": "public/assets/image/people/128/nike_nemitz.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/nikenemitz"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "ykulanoglu",
+      "display_name": "Yusuf Ali Kulanoglu",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/yusuf_kulanoglu.webp",
+        "sha256": "9daae2b187722b5931061c06fd4c06dbce7804d1ad5f4763117aa9d5ef8b82b0",
+        "source_person_id": "yusuf_kulanoglu",
+        "source_path": "public/assets/image/people/128/yusuf_kulanoglu.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/ykulanoglu"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "tereshchuk1",
+      "display_name": "Vera Tereshchuk",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/vera_tereshchuk.webp",
+        "sha256": "c4c1229207e8bc693bf6a65bc4668289557eecfce800004028f3df5ec22acf3a",
+        "source_person_id": "vera_tereshchuk",
+        "source_path": "public/assets/image/people/128/vera_tereshchuk.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/tereshchuk1"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "ennietensil",
+      "display_name": "Ennie Tensil",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/ennie_tensil.webp",
+        "sha256": "1a6c7fa907a081c48ca276114fe387559a122b6648a6ff741be3fb976872ff6c",
+        "source_person_id": "ennie_tensil",
+        "source_path": "public/assets/image/people/128/ennie_tensil.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/ennietensil"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "jen-ne-sse",
+      "display_name": "Jennesse Alejandro",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/jennesse_alejandro.webp",
+        "sha256": "11f1c2c6b915148998b15f2e8decb229e48ecea0109f3a7dd81c04fe6e85ab44",
+        "source_person_id": "jennesse_alejandro",
+        "source_path": "public/assets/image/people/128/jennesse_alejandro.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/jen-ne-sse"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "mii-halina",
+      "display_name": "Michelle Elias",
+      "role": "reviewer",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/michelle_elias.webp",
+        "sha256": "030af0b27ce6acf534caf4b2a168da5c69f8995a1521a0de5088fd9d6f807270",
+        "source_person_id": "michelle_elias",
+        "source_path": "public/assets/image/people/128/michelle_elias.webp"
+      },
+      "profile_references": {
+        "orcid": "0009-0005-7959-3164",
+        "repository": "https://github.com/mii-halina"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "bibymaths",
+      "display_name": "Abhinav Mishra",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/abhinav_mishra.webp",
+        "sha256": "9bfe6e70fe5d9fc3092b0ce8243e0d051222de42947c256cf6e95b5b4911ca25",
+        "source_person_id": "abhinav_mishra",
+        "source_path": "public/assets/image/people/128/abhinav_mishra.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/bibymaths"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "elisabettacasabianca11",
+      "display_name": "Elisabetta Casabianca",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/elisabetta_casabianca.webp",
+        "sha256": "2fec28477fbace81ff78c4fa3236d76ec27c04167f39dd9589fbd0427d3a0856",
+        "source_person_id": "elisabetta_casabianca",
+        "source_path": "public/assets/image/people/128/elisabetta_casabianca.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/elisabettacasabianca11"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "icalledmyselfmoon",
+      "display_name": "Mariia Babaeva",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/mariia_babaeva.webp",
+        "sha256": "6747b862509c953e0e7dd86f56a7372a6cb60d357e8ed73289efb0d775fe283d",
+        "source_person_id": "mariia_babaeva",
+        "source_path": "public/assets/image/people/128/mariia_babaeva.webp"
+      },
+      "profile_references": {
+        "orcid": "0009-0007-6659-7638",
+        "repository": "https://github.com/icalledmyselfmoon"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "unfulw",
+      "display_name": "Kim Minjun",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/minjun_kim.webp",
+        "sha256": "b80d4a8b79c21f27084c2f58d027b70bc50a5eda51deae23208807c62e51ca30",
+        "source_person_id": "minjun_kim",
+        "source_path": "public/assets/image/people/128/minjun_kim.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/unfulw"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "bellatgy",
+      "display_name": "Isabella Tan",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/isabella_tan.webp",
+        "sha256": "c046653d2f30fa027cc6e7dfd4193e208cfa394f7d1c9fe66243fb1cb5a3acc3",
+        "source_person_id": "isabella_tan",
+        "source_path": "public/assets/image/people/128/isabella_tan.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/bellatgy"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "oliviaayau",
+      "display_name": "Olivia Yau",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/olivia_yau.webp",
+        "sha256": "ebbe4984e7ee9ba57bee1811360f9ba94f3a09b4ee941fef2679630820c4e86e",
+        "source_person_id": "olivia_yau",
+        "source_path": "public/assets/image/people/128/olivia_yau.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/oliviaayau"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "Juan-hub129",
+      "display_name": "Juan Pablo Ramos Mendoza",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/juan_mendoza.webp",
+        "sha256": "8cc4680553f1bfb452e1a9ae17de4370a0e5e3f8865b582f3900da88e222beb4",
+        "source_person_id": "juan_mendoza",
+        "source_path": "public/assets/image/people/128/juan_mendoza.webp"
+      },
+      "profile_references": {
+        "repository": "https://github.com/Juan-hub129"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "monajes",
+      "display_name": "Monika Jesionek",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/monika_jesionek.webp",
+        "sha256": "628bf414ff2d17090cce9f2ead0a6b164e7eaf214c0e329b3a80378bfc63ab90",
+        "source_person_id": "monika_jesionek",
+        "source_path": "public/assets/image/people/128/monika_jesionek.webp"
+      },
+      "profile_references": {
+        "orcid": "0009-0003-3110-3440",
+        "repository": "https://github.com/monajes"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "jzhannes",
+      "display_name": "Johannes Metternich",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": null,
+      "avatar_note": "No matching livermetabolism-site person or existing PK-DB avatar found; use initials/generic fallback."
+    },
+    {
+      "username": "changlinh",
+      "display_name": "Linh Chang",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/chang_nguyen.webp",
+        "sha256": "611db46cb06b2c11a822378ec985fad153d00800161e6b5fa31e7438762895f5",
+        "source_person_id": "chang_nguyen",
+        "source_path": "public/assets/image/people/128/chang_nguyen.webp"
+      },
+      "profile_references": {
+        "orcid": "0009-0004-8004-3314",
+        "repository": "https://github.com/changlinh"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "Shelee97",
+      "display_name": "Shelee Badon",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/shelee_bedon.webp",
+        "sha256": "6519874cdd21fd15333f1f6447ae1ce1da80512f9a1d92c5456138eb24b31a71",
+        "source_person_id": "shelee_bedon",
+        "source_path": "public/assets/image/people/128/shelee_bedon.webp"
+      },
+      "profile_references": {
+        "orcid": "0009-0005-9147-0028",
+        "repository": "https://github.com/Shelee97"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "jessicalienx97-wq",
+      "display_name": "Jessica Cruz",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/jessica_cruz.webp",
+        "sha256": "42fa1453d4d84b11a0d2a83ca2fb35e94d6e61d9f03302bb676c1631149bf7f8",
+        "source_person_id": "jessica_cruz",
+        "source_path": "public/assets/image/people/128/jessica_cruz.webp"
+      },
+      "profile_references": {
+        "orcid": "0009-0006-9067-5547",
+        "repository": "https://github.com/jessicalienx97-wq"
+      },
+      "identity_match": "site_github_reference"
+    },
+    {
+      "username": "sandeep-konakagautamdas",
+      "display_name": "Sandeep Konaka Gautamdas",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/sandeep_gautamdas.webp",
+        "sha256": "028bf5f7da1c7b6dc0dfc22db573c109f6de7bb79f6e8d03c58b49d709960fd9",
+        "source_person_id": "sandeep_gautamdas",
+        "source_path": "public/assets/image/people/128/sandeep_gautamdas.webp"
+      },
+      "profile_references": {
+        "orcid": "0000-0002-7855-9715",
+        "repository": "https://github.com/sandeep-konakagautamdas"
+      },
+      "identity_match": "site_github_reference"
+    }
+  ]
+}

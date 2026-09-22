@@ -26,6 +26,11 @@ dependencies = [
   "fastmcp>=3,<4",
   "mcp==1.30.0",
   "httpx>=0.28",
+  "pillow>=11,<13",
+  "authlib>=1.6,<2",
+  "pyotp>=2.9,<3",
+  "cryptography>=46",
+  "requests>=2.32,<3",
 ]
 
 [project.scripts]

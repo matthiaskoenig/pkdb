@@ -13,10 +13,11 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
 from pkdb.db.models.files import StoredFile, StudyAttachment
-from pkdb.db.models.studies import Study, StudyUser
+from pkdb.db.models.studies import Study, StudyGrant
 from pkdb.db.models.users import User
 from pkdb.schemas.security import Principal, StudyAccess
-from pkdb.services.authorization import AuthorizationDenied, authorize
+from pkdb.services.authentication import revalidate_principal
+from pkdb.services.authorization import AuthorizationDenied, authorize, require_scope
 
 
 class FileTooLarge(ValueError):
@@ -36,7 +37,7 @@ class StagedFile(BaseModel):
 
 def study_access(study: Study, session: Session) -> StudyAccess:
     members = list(
-        session.scalars(select(StudyUser).where(StudyUser.study_id == study.id))
+        session.scalars(select(StudyGrant).where(StudyGrant.study_id == study.id))
     )
     if study.creator_id is None:
         raise AuthorizationDenied("Study ownership is not configured")
@@ -90,6 +91,10 @@ class FileStore:
         file_id = uuid4()
         key = file_id.hex
         with self.session_factory.begin() as session:
+            from pkdb.services.authorization import authorize_creation
+
+            owner = revalidate_principal(owner, session, lock=True)
+            authorize_creation(owner)
             user = session.get(User, owner.user_id)
             if user is None or not user.active:
                 raise AuthorizationDenied("Inactive file owner")
@@ -164,6 +169,9 @@ class FileStore:
 
     def open_authorized(self, principal: Principal, attachment_id: UUID) -> BinaryIO:
         with self.session_factory.begin() as session:
+            if principal.user_id is not None:
+                principal = revalidate_principal(principal, session)
+            require_scope(principal, "read")
             row = session.scalar(
                 select(StoredFile)
                 .where(StoredFile.id == attachment_id)

@@ -75,7 +75,13 @@ def send_folder(path, *, client, api_url, token, validate=False):
             response = client.request(
                 "POST" if validate else "PUT",
                 url,
-                headers={"Authorization": f"Token {token}"},
+                headers={
+                    "Authorization": (
+                        f"Bearer {token}"
+                        if token.startswith("pkdb_live_")
+                        else f"Token {token}"
+                    )
+                },
                 files=parts,
             )
         record["status"] = response.status_code

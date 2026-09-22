@@ -170,9 +170,6 @@ export default {
     getData() {
       this.loading = true
       let headers = {};
-      if (localStorage.getItem('token')) {
-        headers = {Authorization: 'Token ' + localStorage.getItem('token')}
-      }
       axios.get(this.url, {headers: headers})
           .then(res => {
             this.results = res.data

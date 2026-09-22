@@ -10,6 +10,7 @@ from pkdb.schemas.validation import StudyValidationError, fail
 from pkdb.services.authentication import AuthenticationFailed
 from pkdb.services.authorization import AuthorizationDenied
 from pkdb.services.bundles import materialize_bundle
+from pkdb.services.quotas import QuotaExceeded, QuotaService
 
 
 def create_mcp(ingestion, queries, file_store, session_factory):
@@ -17,8 +18,31 @@ def create_mcp(ingestion, queries, file_store, session_factory):
     server = FastMCP("PK-DB", auth=authentication, mask_error_details=True)
 
     def execute(operation, *args):
+        from threading import Event, Thread
+
+        quotas = QuotaService(session_factory, ingestion.settings)
+        lease = None
+        stop = Event()
+        heartbeat = None
         try:
-            return operation(authentication.current_principal(), *args)
+            principal = authentication.current_principal()
+            category = "upload" if operation in {validate, replace} else "read"
+            if ingestion.settings.rate_limits_enabled:
+                quotas.charge(principal, "mcp", category)
+                lease = quotas.acquire(principal, "mcp", category)
+
+            def renew():
+                while not stop.wait(30):
+                    quotas.renew(lease)
+
+            if lease:
+                heartbeat = Thread(target=renew, daemon=True)
+                heartbeat.start()
+            return operation(principal, *args)
+        except QuotaExceeded as error:
+            raise ToolError(
+                f"Request quota exceeded; retry after {error.retry_after} seconds"
+            ) from None
         except StudyValidationError as error:
             return {**error.report.model_dump(mode="json"), "valid": False}
         except AuthenticationFailed, AuthorizationDenied:
@@ -27,6 +51,12 @@ def create_mcp(ingestion, queries, file_store, session_factory):
             raise ToolError("Not found") from None
         except ValueError:
             raise ToolError("Invalid request") from None
+        finally:
+            stop.set()
+            if heartbeat:
+                heartbeat.join()
+            if lease:
+                quotas.release(lease)
 
     def search(principal, query):
         if query.entity != "studies":

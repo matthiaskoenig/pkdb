@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import {utils} from '@/utils'
 export default {
   props: {
@@ -53,7 +54,7 @@ export default {
       if(this.config.headers) {
           config.headers = this.config.headers;
       }
-      this.$http.get(pageUrl, config)
+      axios.get(pageUrl, config)
       .then(function (response) {
         self.$emit("request_finish",response);
         self.handleResponseData(response.data)
