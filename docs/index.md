@@ -1,4 +1,4 @@
-![PK-DB logo](pkdb_logo_transparent.png)
+![PK-DB logo](pkdb_logo.png)
 
 # PK-DB - the pharmacokinetics database
 
