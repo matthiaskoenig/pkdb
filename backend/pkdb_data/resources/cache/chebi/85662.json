@@ -1,9 +1,0 @@
-{
-  "chebi": "85662",
-  "name": "lixisenatide",
-  "definition": "A forty-four membered polypeptide consisting of L-His, Gly, L-Glu, Gly, L-Thr, L-Phe, L-Thr, L-Ser, L-Asp, L-Leu, L-Ser, L-Lys, L-Gln, L-Met, L-Glu, L-Glu, L-Glu, L-Ala, L-Val, L-Arg, L-Leu, L-Phe, L-Ile, L-Glu, L-Trp, L-Leu, L-Lys, L-Asn, Gly, Gly, LPro, L-Ser, L-Ser, Gly, L-Ala, L-Pro, L-Pro, L-Ser, L-Lys, L-Lys, L-Lys, L-Lys, L-Lys, and L-Lys-NH2 residues joined in sequence. Used as an adjunct to diet and exercise for the treatment of adults with type II diabetes.",
-  "formula": "C215H347N61O65S",
-  "charge": "0",
-  "mass": "4858.49000",
-  "inchikey": "XVVOERDUTLJJHN-IAEQDCLQSA-N"
-}

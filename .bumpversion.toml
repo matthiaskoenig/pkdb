@@ -18,4 +18,12 @@ message = "Bump version: {current_version} → {new_version}"
 commit_args = ""
 
 [[tool.bumpversion.files]]
-filename = "./backend/pkdb_app/__init__.py"
+filename = "./backend/src/pkdb/__init__.py"
+
+[[tool.bumpversion.files]]
+filename = "./backend/pyproject.toml"
+
+[[tool.bumpversion.files]]
+filename = "./backend/uv.lock"
+search = """name = "pkdb"\nversion = "{current_version}""""
+replace = """name = "pkdb"\nversion = "{new_version}""""

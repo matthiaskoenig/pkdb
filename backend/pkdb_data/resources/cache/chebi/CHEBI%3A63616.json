@@ -1,9 +1,0 @@
-{
-  "chebi": "CHEBI:63616",
-  "name": "pemetrexed",
-  "definition": "An <em>N</em>-acylglutamic acid in which the <em>N</em>-acyl group is specified as 4-[2-(2-amino-4-oxo-4,7-dihydro-1<em>H</em>-pyrrolo[2,3-<em>d</em>]pyrimidin-5-yl)ethyl]benzoyl. Inhibits thymidylate synthase (TS), 421 dihydrofolate reductase (DHFR), and glycinamide ribonucleotide formyltransferase (GARFT).",
-  "formula": "C20H21N5O6",
-  "charge": 0,
-  "mass": "427.417",
-  "inchikey": "WBXPDJSOTKVWSJ-ZDUSSCGKSA-N"
-}

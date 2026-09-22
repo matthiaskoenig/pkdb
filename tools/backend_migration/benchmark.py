@@ -1,6 +1,5 @@
 """Benchmark uploads and reads against an explicitly isolated backend instance.
 
-Legacy mode replaces studies using the unchanged uploader in a temporary copy.
 Use the same corpus, workload, machine and database population for comparisons.
 """
 
@@ -9,45 +8,18 @@ import json
 import math
 import os
 import platform
-import shutil
 import statistics
-import subprocess
 import sys
-import tempfile
 import time
 from pathlib import Path
 
 import httpx
+
 from pkdb.commands.upload import api_root, send_folder, study_folders
 
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from tools.backend_migration.manifest import build_manifest
-
-LEGACY_SCRIPT = r"""
-import json, multiprocessing, sys
-from pathlib import Path
-from urllib.parse import urlparse
-sys.dont_write_bytecode = True
-config = json.load(sys.stdin)
-sys.path.insert(0, config['client_root'])
-import requests
-from pkdb_data.management import upload_studies
-from pkdb_data.management.envs import Environment
-upload_studies.get_environment = lambda: Environment(api_base=config['url'], user='benchmark', password='unused')
-original = requests.sessions.Session.request
-def local_request(self, method, url, *args, **kwargs):
-    if urlparse(url).netloc != urlparse(config['url']).netloc:
-        raise RuntimeError('Benchmark forbids external requests')
-    kwargs.setdefault('timeout', 180)
-    return original(self, method, url, *args, **kwargs)
-requests.sessions.Session.request = local_request
-client = upload_studies.UploadClient(api_url=config['url']+'/api/v1', auth_headers={'Authorization':'Token '+config['token']}, client=None)
-assert client.upload_study(Path(config['folder']))
-for child in multiprocessing.active_children():
-    child.join(180)
-    assert not child.is_alive() and child.exitcode == 0
-"""
 
 
 def summarize(values):
@@ -126,30 +98,6 @@ def memory(pid):
     return {"observed": True, **values}
 
 
-def legacy_upload(folder, url, token, interpreter, client_root):
-    """Run the unchanged legacy uploader against an isolated source copy."""
-    with tempfile.TemporaryDirectory(prefix="pkdb-benchmark-") as temporary:
-        copied = Path(temporary) / folder.name
-        shutil.copytree(folder, copied)
-        result = subprocess.run(
-            [interpreter, "-c", LEGACY_SCRIPT],
-            input=json.dumps(
-                {
-                    "folder": str(copied),
-                    "url": url,
-                    "token": token,
-                    "client_root": client_root,
-                }
-            ),
-            capture_output=True,
-            text=True,
-            timeout=600,
-        )
-        # Legacy logs may contain request material. Never copy them into metrics.
-        if result.returncode:
-            raise ValueError("Legacy upload or indexing process failed")
-
-
 def main(argv=None):
     """Measure an isolated backend and persist shareable results without credentials."""
     parser = argparse.ArgumentParser(description=__doc__)
@@ -163,7 +111,6 @@ def main(argv=None):
         help="JSON list of named paths with expected count or SID",
     )
     parser.add_argument("--runs", type=int, default=5)
-    parser.add_argument("--profile", choices=("legacy", "replacement"), required=True)
     parser.add_argument("--server-pid", type=int)
     parser.add_argument(
         "--cold-start",
@@ -195,10 +142,6 @@ def main(argv=None):
             )
     if len({case["name"] for case in cases}) != len(cases):
         parser.error("Workload names must be unique")
-    interpreter = os.environ.get("PKDB_LEGACY_CLIENT_PYTHON")
-    client_root = os.environ.get("PKDB_LEGACY_CLIENT_ROOT")
-    if args.profile == "legacy" and not (interpreter and client_root):
-        parser.error("Legacy client interpreter and root must be configured")
     folders = study_folders(root)
     manifest = build_manifest(root)
     if manifest["issues"] or any(
@@ -214,7 +157,7 @@ def main(argv=None):
     report = {
         "schema_version": 1,
         "complete": False,
-        "profile": args.profile,
+        "profile": "current",
         "hardware": {
             "machine": platform.machine(),
             "system": platform.system(),
@@ -233,7 +176,7 @@ def main(argv=None):
         "workload": cases,
         "runs": [],
         "cache_note": "One excluded warmup precedes five or more measured warm runs. Optional cold run requires a fresh application process; OS/database caches are not flushed.",
-        "memory_note": "Server process RSS and lifetime high-water mark, before and after each iteration; excludes database/search sidecars.",
+        "memory_note": "Server process RSS and lifetime high-water mark, before and after each iteration; excludes PostgreSQL.",
     }
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2) + "\n")
@@ -253,14 +196,11 @@ def main(argv=None):
                 before = memory(args.server_pid)
                 start = time.perf_counter()
                 for folder in folders:
-                    if args.profile == "legacy":
-                        legacy_upload(folder, url, token, interpreter, client_root)
-                    else:
-                        result = send_folder(
-                            folder, client=client, api_url=url + "/api/v2", token=token
-                        )
-                        if not result["ok"]:
-                            raise ValueError("Replacement upload failed")
+                    result = send_folder(
+                        folder, client=client, api_url=url + "/api/v2", token=token
+                    )
+                    if not result["ok"]:
+                        raise ValueError("Study upload failed")
                 wait_visible(client, cases)
                 upload_seconds = time.perf_counter() - start
                 reads = measure_reads(client, cases)
@@ -294,7 +234,6 @@ def main(argv=None):
         ValueError,
         TimeoutError,
         httpx.HTTPError,
-        subprocess.SubprocessError,
     ) as error:
         report["failure_type"] = type(error).__name__
     output.write_text(json.dumps(report, indent=2) + "\n")

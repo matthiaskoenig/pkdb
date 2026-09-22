@@ -25,8 +25,8 @@ jobs:
       - uses: actions/checkout@v7
         with:
           persist-credentials: false
-      # the ruff version is read from the dev dependencies in backend/pyproject.toml,
-      # the rule set and the excludes (frontend, docs, migrations) from .ruff.toml
+      # the ruff version is read from the development group in backend/pyproject.toml,
+      # the rule set and the excludes (frontend, docs) from .ruff.toml
       - name: Lint
         # astral-sh/ruff-action publishes no floating major tag beyond v3
         uses: astral-sh/ruff-action@v4.1.0

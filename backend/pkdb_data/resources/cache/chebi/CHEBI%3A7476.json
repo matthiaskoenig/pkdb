@@ -1,9 +1,0 @@
-{
-  "chebi": "CHEBI:7476",
-  "name": "naproxen",
-  "definition": "A methoxynaphthalene that is 2-methoxynaphthalene substituted by a carboxy ethyl group at position 6. Naproxen is a non-steroidal anti-inflammatory drug commonly used for the reduction of pain, fever, inflammation  and stiffness caused by conditions such as osteoarthritis, kidney stones, rheumatoid arthritis, psoriatic arthritis, gout, ankylosing spondylitis, menstrual cramps, tendinitis, bursitis, and for the treatment of primary dysmenorrhea. It works by inhibiting both the COX-1 and COX-2 enzymes.",
-  "formula": "C14H14O3",
-  "charge": 0,
-  "mass": "230.263",
-  "inchikey": "CMWTZPSULFXXJA-VIFPVBQESA-N"
-}

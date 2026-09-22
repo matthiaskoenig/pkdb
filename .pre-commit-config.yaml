@@ -4,19 +4,22 @@
 # A commit only checks the changed files; `pre-commit run --all-files` checks
 # the whole repository, which is what a newly added hook should be tried with.
 
+default_language_version:
+  python: python3.14
+
 repos:
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v6.0.0
   hooks:
   - id: check-yaml
     description: Check yaml files for parseable syntax
-    exclude: ^(frontend/|nginx/|docs/presentation/|docs/images/)
+    exclude: ^(frontend/|docs/presentation/|docs/images/)
   - id: check-toml
     description: Check toml files for parseable syntax
-    exclude: ^(frontend/|nginx/|docs/presentation/|docs/images/)
+    exclude: ^(frontend/|docs/presentation/|docs/images/)
   - id: check-json
     description: Check json files for parseable syntax
-    exclude: ^(frontend/|nginx/|docs/presentation/|docs/images/)
+    exclude: ^(frontend/|docs/presentation/|docs/images/)
   - id: check-added-large-files
     description: Prevent large files from being committed
     args: [ --maxkb=2000 ]
@@ -26,13 +29,13 @@ repos:
     description: Check for symlinks which do not point to anything
   - id: trailing-whitespace
     description: Trim trailing whitespaces
-    # README.md, backend/README.md and backend/download_extra/README.md use two
+    # README.md and backend/README.md use two
     # trailing spaces as a markdown hard line break in their intro paragraph;
     # stripping them would silently change how the paragraph renders
-    exclude: ^(frontend/|nginx/|docs/presentation/|docs/images/|README\.md$|backend/README\.md$|backend/download_extra/README\.md$)
+    exclude: ^(frontend/|docs/presentation/|docs/images/|README\.md$|backend/README\.md$)
   - id: end-of-file-fixer
     description: Fix empty lines at ends of files
-    exclude: ^(frontend/|nginx/|docs/presentation/|docs/images/)
+    exclude: ^(frontend/|docs/presentation/|docs/images/)
   - id: detect-private-key
     description: Detects the presence of private keys
   - id: check-case-conflict
@@ -40,16 +43,16 @@ repos:
   - id: mixed-line-ending
     description: Normalize mixed line endings
     args: [ --fix=lf ]
-    exclude: ^(frontend/|nginx/|docs/presentation/|docs/images/)
+    exclude: ^(frontend/|docs/presentation/|docs/images/)
   - id: fix-byte-order-marker
     description: Remove the UTF-8 byte order mark, which breaks `ruff format`
   - id: debug-statements
     description: Check for forgotten breakpoints and debugger imports
-    exclude: ^(frontend/|nginx/|docs/presentation/|docs/images/)
+    exclude: ^(frontend/|docs/presentation/|docs/images/)
 
 - repo: https://github.com/astral-sh/ruff-pre-commit
   # Ruff version.
-  rev: v0.16.6
+  rev: v0.16.8
   hooks:
     # Run the linter, see the rule set in `.ruff.toml`.
     - id: ruff-check
@@ -62,11 +65,10 @@ repos:
 - repo: local
   hooks:
     # Run the type checker on the checked modules (see `[tool.ty]` in
-    # backend/pyproject.toml). `--extra dev` syncs the environment with the
-    # dev dependencies, so that the test imports (pytest) resolve.
+    # backend/pyproject.toml). The default development group includes pytest.
     - id: ty
       name: ty
-      entry: uv run --project backend --extra dev ty check --project backend
+      entry: uv run --project backend --locked --python 3.14 ty check --project backend
       language: system
       files: ^backend/.*\.py$
       pass_filenames: false

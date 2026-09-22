@@ -37,16 +37,17 @@ The full documentation, including installation, deployment and development, is a
 
 ## Setup
 
-PK-DB is deployed via `docker` and `docker compose`; there is no PyPI package.
+Run the backend and PostgreSQL with Docker Compose:
 
 ```bash
 git clone https://github.com/matthiaskoenig/pkdb.git
 cd pkdb
-set -a && source .env.local
-./docker-purge.sh
+docker compose up --build --wait
 ```
 
-See [Installation](https://matthiaskoenig.github.io/pkdb/installation/) for the requirements and the details, and [`INSTALLATION.md`](./INSTALLATION.md) as a pointer from the repository.
+Open <http://localhost:18083/docs>. Migrations and vocabulary loading run automatically.
+Follow [Local upload testing](docs/local-upload-testing.md) to create an account and
+upload your first study. See [Installation](docs/installation.md) for configuration.
 
 ## How to cite
 If you use PK-DB data or the web interface cite

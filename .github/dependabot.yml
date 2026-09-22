@@ -2,7 +2,7 @@
 # date. See https://docs.github.com/code-security/dependabot/dependabot-version-updates
 version: 2
 updates:
-  - package-ecosystem: "pip"
+  - package-ecosystem: "uv"
     directory: "/backend"
     schedule:
       interval: "weekly"
@@ -14,18 +14,6 @@ updates:
     open-pull-requests-limit: 5
     commit-message:
       prefix: "deps"
-    ignore:
-      # Django and the REST stack are pinned deliberately, see backend/pyproject.toml
-      - dependency-name: "Django"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
-      - dependency-name: "djangorestframework"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
-      - dependency-name: "django-*"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
-      - dependency-name: "drf-yasg"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
-      - dependency-name: "elasticsearch-dsl"
-        update-types: ["version-update:semver-major", "version-update:semver-minor"]
 
   - package-ecosystem: "pip"
     directory: "/docs"

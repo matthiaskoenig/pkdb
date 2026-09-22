@@ -1,9 +1,0 @@
-{
-  "chebi": "CHEBI:61033",
-  "name": "fondaparinux",
-  "definition": "A synthetic pentasaccharide which, apart from the <em>O</em>-methyl group at the reducing end of the molecule, consists of monomeric sugar units which are identical to a sequence of five monomeric sugar units that can be isolated after either chemical or enzymatic cleavage of the polymeric glycosaminoglycans heparin and heparan sulfate.",
-  "formula": "C31H53N3O49S8",
-  "charge": 0,
-  "mass": "1508.273",
-  "inchikey": "KANJSNBRCNMZMV-ABRZTLGGSA-N"
-}

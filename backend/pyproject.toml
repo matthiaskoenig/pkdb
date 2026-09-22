@@ -4,142 +4,58 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pkdb"
-dynamic = ["version"]
-description = "PK-DB backend."
-readme = "README.md"
-requires-python = ">=3.9"
-authors = [
-	{name="Matthias König", email="konigmatt@googlemail.com"},
-    {name="Jan Grzegorzewski"}
-]
-maintainers = [
-	{name="Matthias König", email="konigmatt@googlemail.com"}
-]
-classifiers = [
-	"Development Status :: 4 - Beta",
-	"Intended Audience :: Science/Research",
-	"Operating System :: OS Independent",
-    "Programming Language :: Python :: 3.9",
-	"Programming Language :: Python :: Implementation :: CPython",
-	"Topic :: Scientific/Engineering",
-	"Topic :: Scientific/Engineering :: Bio-Informatics",
-]
-keywords = [
-	"pharmacokinetics",
-]
+version = "0.10.0"
+description = "Validated PK-DB backend"
+requires-python = ">=3.13,<3.15"
 dependencies = [
-    "Markdown>=3.9",
-    "gunicorn>=23.0.0",
-    "json-logging>=1.5.1",
-    "psycopg2-binary>=2.9.10",
-    # drf-yasg imports pkg_resources at module load time without declaring
-    # setuptools as its own dependency; uv venvs are seedless and do not
-    # provide it, so it has to be declared here explicitly. Pinned below the
-    # setuptools version which dropped the bundled pkg_resources package.
-    "setuptools>=75.0.0,<81",
-
-    # django
-    "Django==3.1.14",
-    "django-model-utils==4.2.0",
-    "django-extra-fields==3.0.2",
-    "django-storages==1.12.3",
-    "django-filter==21.1",
-    "django-cors-headers==3.11.0",
-    "django-rest-email-auth==3.0.3",
-
-    # REST API
-    "djangorestframework==3.12.4",
-    "drf-yasg==1.21.4",
-    "elasticsearch-dsl==7.3.0",
-    "django-elasticsearch-dsl==7.2.0",
-    "django-elasticsearch-dsl-drf==0.22.5",
-
-    # analysis
-    "pandas>=2.3.3",
-    "numpy>=2.0.2",
-    "scipy>=1.13.1",
-    "matplotlib>=3.6.3",
-    "pint>=0.24.4",
-    "pkdb-analysis @ git+https://github.com/matthiaskoenig/pkdb_analysis.git@6e010ca987bc43995da99b826064581bf201e731"
+  "pydantic>=2,<3",
+  "pydantic-settings>=2,<3",
+  "pandas>=2.3,<3",
+  "numpy>=2.3,<3",
+  "scipy>=1.16,<2",
+  "pint>=0.25,<1",
+  "openpyxl>=3.1,<4",
+  "pkdb-analysis @ git+https://github.com/matthiaskoenig/pkdb_analysis.git@6e010ca987bc43995da99b826064581bf201e731",
+  "sqlalchemy>=2,<3",
+  "psycopg[binary]>=3,<4",
+  "alembic>=1,<2",
+  "pwdlib[argon2]>=0.3,<1",
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.34,<1",
+  "python-multipart>=0.0.20",
+  "fastmcp>=3,<4",
+  "mcp==1.30.0",
+  "httpx>=0.28",
 ]
 
-[project.optional-dependencies]
+[project.scripts]
+pkdb = "pkdb.cli:main"
+
+[dependency-groups]
 dev = [
-    "bump-my-version>=1.2.0",
-    "ruff>=0.16.6",
-    "pre-commit>=4.3.0",
-    "ty>=0.0.78",
-    "tox>=4.30.0",
-    "tox-uv>=1.28.0",
-    "pytest>=8.4.0",
-    "pytest-django>=4.11.0",
-    "pytest-env>=1.1.5",
-    "pytest-cov>=6.0.0",
-    "django-stubs>=5.1.0",
-    "djangorestframework-stubs>=3.15.0",
-    "types-Markdown>=3.7.0",
-    "ipython>=8.18.0",
-    "ipdb>=0.13.13",
+    "bump-my-version>=1.5.1",
+    "pre-commit>=4.6.2",
+    "pytest>=8",
+    "ruff>=0.16",
+    "ty>=0.0.82",
 ]
-
-[project.urls]
-Homepage = "https://pk-db.com"
-Documentation = "https://matthiaskoenig.github.io/pkdb"
-Repository = "https://github.com/matthiaskoenig/pkdb"
-Issues = "https://github.com/matthiaskoenig/pkdb/issues"
-Changelog = "https://github.com/matthiaskoenig/pkdb/tree/develop/release-notes"
-
-[tool.hatch.version]
-path = "./pkdb_app/__init__.py"
 
 [tool.hatch.build.targets.wheel]
-packages = ["pkdb_app"]
+packages = ["src/pkdb"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
 
+[tool.ruff]
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP"]
+
+[tool.ty.environment]
+python-version = "3.13"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-DJANGO_SETTINGS_MODULE = "pkdb_app.settings"
 addopts = "--strict-markers"
-filterwarnings = [
-    # django-rest-email-auth still uses the pre-Django-4.0 translation aliases and Signal(providing_args=...)
-    "ignore::django.utils.deprecation.RemovedInDjango40Warning:rest_email_auth",
-    # Django itself and django-elasticsearch-dsl-drf compare versions with the removed distutils.version.LooseVersion
-    "ignore:distutils Version classes are deprecated\\. Use packaging\\.version instead\\.:DeprecationWarning",
-    # matplotlib's mpl_toolkits namespace package still calls the deprecated pkg_resources.declare_namespace
-    "ignore:Deprecated call to `pkg_resources\\.declare_namespace\\('mpl_toolkits'\\)`\\.:DeprecationWarning:pkg_resources",
-    # drf-yasg and its coreapi dependency import the deprecated pkg_resources API at module load time
-    "ignore:pkg_resources is deprecated as an API\\.:UserWarning",
-    # pkdb_app/urls.py still uses the pre-Django-4.0 django.conf.urls.url() alias; left for the lint task
-    "ignore:django\\.conf\\.urls\\.url\\(\\) is deprecated in favor of django\\.urls\\.re_path\\(\\)\\.:django.utils.deprecation.RemovedInDjango40Warning:pkdb_app\\.urls",
-    # elasticsearch-dsl 7.3.0 still builds queries with the deprecated 'body' parameter of elasticsearch-py
-    "ignore:The 'body' parameter is deprecated for the '.*' API and will be removed in a future version\\.:DeprecationWarning:elasticsearch_dsl",
-    # StudyViewSet and ReferencesViewSet use django-filter's pre-2.0 `filter_fields` attribute name; left for the lint task
-    "ignore:`(StudyViewSet|ReferencesViewSet)\\.filter_fields` attribute should be renamed `filterset_fields`\\.:django_filters.utils.MigrationNotice:django_filters",
-    # the elastic Study queryset used for the django (write) endpoints is not ordered, which is fine for the
-    # single-object create/update/delete actions of StudyViewSet; only pagination of a list would need an order
-    "ignore:Pagination may yield inconsistent results with an unordered object_list.*:django.core.paginator.UnorderedObjectListWarning:rest_framework",
-]
-
-[tool.pytest_env]
-# defaults for the services of docker-compose-test.yml; an environment variable
-# which is set (CI) wins
-PKDB_DJANGO_CONFIGURATION = {value = "local", skip_if_set = true}
-PKDB_API_BASE = {value = "http://localhost:8000", skip_if_set = true}
-PKDB_SECRET_KEY = {value = "test-secret-key-not-used-anywhere-else", skip_if_set = true}
-PKDB_DB_NAME = {value = "postgres", skip_if_set = true}
-PKDB_DB_USER = {value = "postgres", skip_if_set = true}
-PKDB_DB_PASSWORD = {value = "postgres", skip_if_set = true}
-PKDB_DB_SERVICE = {value = "localhost", skip_if_set = true}
-PKDB_DB_PORT = {value = "5434", skip_if_set = true}
-PKDB_ELASTICSEARCH_HOST = {value = "localhost:9124", skip_if_set = true}
-PKDB_EMAIL_HOST_USER = {value = "", skip_if_set = true}
-PKDB_EMAIL_HOST_PASSWORD = {value = "", skip_if_set = true}
-
-[tool.ty.src]
-include = ["pkdb_app", "tests", "manage.py"]
-exclude = ["**/migrations/**"]
-
-[tool.ty.terminal]
-error-on-warning = true
+markers = ["corpus: requires explicitly configured source corpus", "integration: PostgreSQL integration"]
