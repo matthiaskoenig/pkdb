@@ -63,6 +63,13 @@ def query_spec(request: Request, entity: str, *, analysis=False) -> QuerySpec:
             if analysis:
                 name_fields = set()
             if (
+                analysis
+                and entity in {"groups", "individuals"}
+                and field in {"measurement_type_sid", "substance_sid"}
+            ):
+                # Flat subject rows expose separate vocabulary names and SIDs.
+                pass
+            elif (
                 not analysis
                 and entity in {"groups", "individuals"}
                 and field

@@ -298,3 +298,27 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
             },
         )
     )
+
+
+def publication_state(sid: str, principal: Principal, session_factory):
+    from pkdb.db.models.vocabulary import VocabularyVersion
+    from pkdb.domain.validation import PROCESSING_VERSION
+    from pkdb.schemas.replacement import PublicationState
+
+    with session_factory() as session:
+        session.connection(execution_options={"isolation_level": "REPEATABLE READ"})
+        root = session.scalar(select(s.Study).where(s.Study.sid == sid))
+        if root is None:
+            raise LookupError("Study not found")
+        authorize(principal, "read", study_access(root, session))
+        vocabulary = session.get(VocabularyVersion, 1)
+        if vocabulary is None:
+            raise RuntimeError("Vocabulary unavailable")
+        return PublicationState(
+            sid=root.sid,
+            digest=root.source_digest,
+            processing_version=root.processing_version,
+            vocabulary_version=root.vocabulary_version,
+            current_processing_version=PROCESSING_VERSION,
+            current_vocabulary_version=vocabulary.version,
+        )

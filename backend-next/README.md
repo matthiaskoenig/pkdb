@@ -96,6 +96,10 @@ seals the generation; a subsequent patch reopens it unless it includes dataset.
 synchronously. It performs no indexing job. Unsupported actions are rejected.
 
 Drafts and references belong to their staging account and expire after 24 hours.
+Their owner can inspect them with `GET /api/v1/_studies/{sid}/` and
+`GET /api/v1/_references/{sid}/`. Reference PATCH changes the staged reference;
+a study snapshots that reference when its draft begins. Later reference edits
+apply to subsequent study drafts and never mutate an existing generation.
 A second begin or overlapping operation for the same account/study returns 409.
 A retry after successful finalization returns the legacy success response for an
 authorized existing study. A newer incomplete draft cannot be finalized by that
@@ -105,5 +109,6 @@ strictly serial; delayed requests from separate sessions cannot be distinguished
 An explicit `DELETE /api/v1/_studies/{sid}/` really deletes an authorized study.
 Delete-before-upload clients therefore cannot preserve old data after a failed
 replacement and should use the complete-bundle CLI. Failed staged finalization
-itself leaves the previous publication unchanged. Legacy editable GET/PUT and
-remaining reference adapter contracts are still under implementation.
+itself leaves the previous publication unchanged. Editable reads of already
+published source templates, PUT and remaining reference adapter contracts are
+still under implementation.

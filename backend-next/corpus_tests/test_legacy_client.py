@@ -6,6 +6,7 @@ import os
 import shutil
 import socket
 import subprocess
+import sys
 import threading
 import time
 from pathlib import Path
@@ -137,6 +138,34 @@ def test_unchanged_frost_uploader_publishes_complete_study(session_factory, tmp_
                 == 4
             )
             assert published["metadata"]["name"] == study.metadata.name
+        report_path = tmp_path / "rebuild.json"
+        rebuild_script = (
+            Path(__file__).parents[2] / "tools/backend_migration/rebuild.py"
+        )
+        for resumed in (False, True):
+            rebuild = subprocess.run(
+                [
+                    sys.executable,
+                    str(rebuild_script),
+                    "--corpus",
+                    str(source),
+                    "--api-url",
+                    url,
+                    "--report",
+                    str(report_path),
+                ],
+                env={**os.environ, "PKDB_API_TOKEN": token},
+                capture_output=True,
+                text=True,
+                timeout=180,
+            )
+            assert rebuild.returncode == 0, (rebuild.stdout + rebuild.stderr).replace(
+                token, "[redacted]"
+            )
+            report = json.loads(report_path.read_text())
+            assert report["complete"]
+            assert report["results"][0]["status"] == "published"
+            assert report["results"][0]["resumed"] is resumed
         assert digest_tree(source) == before
     finally:
         server.should_exit = True

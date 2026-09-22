@@ -181,3 +181,118 @@ def test_legacy_reference_response_supports_unchanged_uploader(
     assert "doi" not in data
     # The existing uploader checks the first element of each response value.
     assert not any("already exists" in value[0] for value in data.values())
+
+
+def test_owned_draft_reads_and_reference_edits_stay_unpublished(
+    client, creator_headers, valid_bundle
+):
+    from datetime import UTC, datetime, timedelta
+
+    from sqlalchemy import update
+
+    from pkdb.db.models.drafts import ReferenceDraft, StudyDraft
+    from pkdb.db.models.users import User
+    from pkdb.services.authentication import issue_token
+
+    core = deepcopy(valid_bundle.study)
+    for key in ("groupset", "individualset", "interventionset", "outputset", "dataset"):
+        core.pop(key, None)
+    sid, reference_sid = core["sid"], str(valid_bundle.reference["sid"])
+    assert (
+        client.post(
+            "/api/v1/_references/", headers=creator_headers, json=valid_bundle.reference
+        ).status_code
+        == 201
+    )
+    response = client.patch(
+        f"/api/v1/_references/{reference_sid}/",
+        headers=creator_headers,
+        json={"title": "Draft title"},
+    )
+    assert response.status_code == 200
+    assert response.json()["title"] == "Draft title"
+    assert (
+        client.get(
+            f"/api/v1/_references/{reference_sid}/", headers=creator_headers
+        ).json()
+        == response.json()
+    )
+    assert (
+        client.post("/api/v1/_studies/", headers=creator_headers, json=core).status_code
+        == 201
+    )
+    response = client.get(f"/api/v1/_studies/{sid}/", headers=creator_headers)
+    assert response.status_code == 200
+    assert response.json()["sid"] == sid
+    assert (
+        client.get(f"/api/v1/studies/{sid}/", headers=creator_headers).status_code
+        == 404
+    )
+    with client.app.state.session_factory.begin() as session:
+        other = User(username="other-reader", role="curator", active=True)
+        session.add(other)
+        session.flush()
+        other_token = issue_token(other, session)
+    for path in (f"/_studies/{sid}/", f"/_references/{reference_sid}/"):
+        assert client.get("/api/v1" + path).status_code == 401
+        assert (
+            client.get(
+                "/api/v1" + path, headers={"Authorization": f"Token {other_token}"}
+            ).status_code
+            == 404
+        )
+    assert (
+        client.patch(
+            f"/api/v1/_references/{reference_sid}/",
+            headers=creator_headers,
+            json={"sid": "OTHER"},
+        ).status_code
+        == 422
+    )
+    with client.app.state.session_factory.begin() as session:
+        for model in (ReferenceDraft, StudyDraft):
+            session.execute(
+                update(model).values(
+                    expires_at=datetime.now(UTC) - timedelta(seconds=1)
+                )
+            )
+    for path in (f"/_studies/{sid}/", f"/_references/{reference_sid}/"):
+        assert client.get("/api/v1" + path, headers=creator_headers).status_code == 404
+
+
+def test_publication_metadata_supports_resume_without_exposing_private_studies(
+    client, creator_headers, valid_bundle
+):
+    import json
+
+    from pkdb.domain.validation import PROCESSING_VERSION
+
+    sid = valid_bundle.study["sid"]
+    response = client.put(
+        f"/api/v2/studies/{sid}",
+        headers=creator_headers,
+        data={
+            "study": json.dumps(valid_bundle.study),
+            "reference": json.dumps(valid_bundle.reference),
+        },
+    )
+    assert response.status_code == 201
+    digest = response.json()["digest"]
+    response = client.get(f"/api/v2/studies/{sid}/publication", headers=creator_headers)
+    assert response.status_code == 200
+    body = response.json()
+    assert body["sid"] == sid and body["digest"] == digest
+    assert (
+        body["processing_version"]
+        == body["current_processing_version"]
+        == PROCESSING_VERSION
+    )
+    assert body["vocabulary_version"] == body["current_vocabulary_version"]
+    assert len(body["vocabulary_version"]) == 64
+    assert client.get(f"/api/v2/studies/{sid}/publication").status_code == 403
+    assert (
+        client.get(
+            "/api/v2/studies/missing/publication", headers=creator_headers
+        ).status_code
+        == 404
+    )

@@ -127,3 +127,25 @@ def test_failed_or_ambiguous_responses_are_not_retried(
     output = capsys.readouterr().out
     assert "private-token" not in output
     assert json.loads(output)["ok"] is False
+
+
+def test_integer_study_sid_is_uploaded_as_canonical_text(tmp_path):
+    from pkdb.commands.upload import send_folder
+
+    root = folder(tmp_path, sid=123)
+    calls = []
+
+    def handler(request):
+        calls.append(request.url.path)
+        return httpx.Response(201, json={"sid": "123"})
+
+    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+        result = send_folder(
+            root,
+            client=client,
+            api_url="http://example.test/api/v2",
+            token="test-token",
+        )
+    assert result["ok"]
+    assert result["sid"] == "123"
+    assert calls == ["/api/v2/studies/123"]

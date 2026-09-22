@@ -46,7 +46,10 @@ def send_folder(path, *, client, api_url, token, validate=False):
     try:
         bundle = load_folder(path)
         sid = bundle.study.get("sid")
-        if not isinstance(sid, str) or not sid or sid in {".", ".."}:
+        if type(sid) not in (str, int):
+            raise ValueError("Study SID must be text or an integer")
+        sid = str(sid)
+        if not sid or sid in {".", ".."}:
             raise ValueError("Study SID must be a nonempty identifier")
         record["sid"] = sid
         url = api_url + (
@@ -88,6 +91,8 @@ def send_folder(path, *, client, api_url, token, validate=False):
                 record.update(ok=False, error="Validation was not confirmed")
             elif not validate and body.get("sid") != sid:
                 record.update(ok=False, error="Publication SID was not confirmed")
+            if not validate and isinstance(body.get("digest"), str):
+                record["digest"] = body["digest"]
         else:
             # Do not echo arbitrary response bodies (e.g. proxy/debug output).
             record["error"] = "Server rejected the study bundle"

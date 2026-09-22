@@ -73,6 +73,23 @@ def reference_response(reference):
     }
 
 
+@router.get("/_references/{sid}/")
+async def read_reference(sid: str, request: Request):
+    return reference_response(await invoke(request, "read_reference", sid))
+
+
+@router.patch("/_references/{sid}/")
+async def patch_reference(sid: str, request: Request):
+    return reference_response(
+        await invoke(request, "patch_reference", sid, await payload(request))
+    )
+
+
+@router.get("/_studies/{sid}/")
+async def read_draft(sid: str, request: Request):
+    return await invoke(request, "read", sid)
+
+
 @router.post("/_studies/", status_code=201)
 async def begin_study(request: Request):
     core = await payload(request)

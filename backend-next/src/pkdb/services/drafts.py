@@ -73,6 +73,37 @@ class DraftService:
             row.expires_at = datetime.now(UTC) + timedelta(hours=24)
         return payload
 
+    def read_reference(self, sid, principal):
+        with self.session_factory.begin() as session:
+            actor, _ = self.actor(session, principal)
+            row = self.reference(session, actor, sid)
+            return deepcopy(row.payload)
+
+    def reference(self, session, actor, sid):
+        self.lock(session, actor, "reference:" + sid)
+        row = session.get(ReferenceDraft, (actor.user_id, sid))
+        if row is None or row.expires_at <= datetime.now(UTC):
+            raise LookupError("Active reference draft unavailable")
+        return row
+
+    def patch_reference(self, sid, values, principal):
+        validate_json_tree(values, "reference.json")
+        if not isinstance(values, dict) or not values:
+            fail("invalid_reference", "Expected a nonempty reference patch")
+        if "sid" in values and self.identifier(values["sid"]) != sid:
+            fail("invalid_sid", "Reference SID cannot be changed")
+        with self.session_factory.begin() as session:
+            actor, _ = self.actor(session, principal)
+            row = self.reference(session, actor, sid)
+            row.payload = {**row.payload, **deepcopy(values)}
+            return deepcopy(row.payload)
+
+    def read(self, sid, principal):
+        with self.session_factory.begin() as session:
+            actor, _ = self.actor(session, principal, sid)
+            draft = self.active(session, actor, sid)
+            return {**deepcopy(draft.payload), "generation": str(draft.id)}
+
     def begin(self, sid, principal, core):
         validate_json_tree(core, "study.json")
         sid = self.identifier(sid)

@@ -19,7 +19,7 @@ from starlette.responses import JSONResponse
 from pkdb.api import accounts, exports, legacy_uploads, media, reads, staging
 from pkdb.api.limits import UploadLimits
 from pkdb.config import Settings
-from pkdb.db.read import read_study
+from pkdb.db.read import publication_state, read_study
 from pkdb.db.session import make_session_factory
 from pkdb.files.store import FileStore, FileTooLarge
 from pkdb.mcp.server import create_mcp
@@ -219,6 +219,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         actor = principal(request, required=False)
         try:
             return read_study(sid, actor, session_factory)
+        except LookupError:
+            raise HTTPException(404, "Study not found") from None
+
+    @app.get("/api/v2/studies/{sid}/publication")
+    def get_publication(sid: str, request: Request):
+        actor = principal(request, required=False)
+        try:
+            return publication_state(sid, actor, session_factory)
         except LookupError:
             raise HTTPException(404, "Study not found") from None
 

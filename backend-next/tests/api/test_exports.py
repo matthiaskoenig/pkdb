@@ -189,3 +189,36 @@ def test_export_limit_and_capacity_errors_precede_headers(client, creator_header
         "/api/v1/filter/", headers=creator_headers, params={"download": "true"}
     )
     assert response.status_code == 200
+
+
+def test_subject_analysis_distinguishes_measurement_sid_from_name(
+    client, creator_headers, valid_bundle
+):
+    from sqlalchemy import update
+
+    from pkdb.db.models.vocabulary import VocabularyNode
+
+    response = client.put(
+        f"/api/v2/studies/{valid_bundle.study['sid']}",
+        headers=creator_headers,
+        data={
+            "study": json.dumps(valid_bundle.study),
+            "reference": json.dumps(valid_bundle.reference),
+        },
+    )
+    assert response.status_code == 201
+    with client.app.state.session_factory.begin() as session:
+        session.execute(
+            update(VocabularyNode)
+            .where(VocabularyNode.sid == "species")
+            .values(name="Species display")
+        )
+    for field, value in [
+        ("measurement_type_sid", "species"),
+        ("measurement_type", "Species display"),
+    ]:
+        response = client.get(
+            "/api/v1/pkdata/groups/", headers=creator_headers, params={field: value}
+        )
+        assert response.status_code == 200
+        assert response.json()["data"]["count"] == 1
