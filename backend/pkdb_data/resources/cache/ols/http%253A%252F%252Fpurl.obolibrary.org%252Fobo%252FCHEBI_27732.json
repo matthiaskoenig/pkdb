@@ -1,0 +1,973 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_27732",
+  "lang": "en",
+  "description": [
+    "A trimethylxanthine in which the three methyl groups are located at positions 1, 3, and 7. A purine alkaloid that occurs naturally in tea and coffee."
+  ],
+  "synonyms": [
+    "1,3,7-trimethyl-3,7-dihydro-1H-purine-2,6-dione",
+    "CAFFEINE",
+    "Caffeine",
+    "caffeine",
+    "1,3,7-Trimethylxanthine",
+    "1,3,7-trimethyl-2,6-dioxopurine",
+    "1,3,7-trimethylpurine-2,6-dione",
+    "1,3,7-trimethylxanthine",
+    "1-methyltheobromine",
+    "3,7-Dihydro-1,3,7-trimethyl-1H-purin-2,6-dion",
+    "7-methyltheophylline",
+    "Coffein",
+    "Koffein",
+    "Thein",
+    "anhydrous caffeine",
+    "cafeina",
+    "cafeine",
+    "guaranine",
+    "mateina",
+    "methyltheobromine",
+    "teina",
+    "theine"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C8H10N4O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:22982",
+      "CHEBI:3295",
+      "CHEBI:41472"
+    ],
+    "has_dbxref": [
+      "CAS:58-08-2",
+      "DrugBank:DB00201",
+      "Drug_Central:463",
+      "Gmelin:103040",
+      "HMDB:HMDB0001847",
+      "KEGG:C07481",
+      "KEGG:D00528",
+      "KNApSAcK:C00001492",
+      "LINCS:LSM-2026",
+      "MetaCyc:1-3-7-TRIMETHYLXANTHINE",
+      "PDBeChem:CFF",
+      "PMID:10510174",
+      "PMID:10796597",
+      "PMID:10803761",
+      "PMID:10822912",
+      "PMID:10884512",
+      "PMID:10924888",
+      "PMID:10983026",
+      "PMID:11014293",
+      "PMID:11022879",
+      "PMID:11209966",
+      "PMID:11312039",
+      "PMID:11410911",
+      "PMID:11431501",
+      "PMID:11815511",
+      "PMID:11949272",
+      "PMID:12397877",
+      "PMID:12457274",
+      "PMID:12574990",
+      "PMID:12915014",
+      "PMID:12943586",
+      "PMID:14521986",
+      "PMID:14607010",
+      "PMID:15257305",
+      "PMID:15280431",
+      "PMID:15681408",
+      "PMID:15718055",
+      "PMID:15840517",
+      "PMID:16143823",
+      "PMID:16391865",
+      "PMID:16528931",
+      "PMID:16644114",
+      "PMID:16709440",
+      "PMID:16805851",
+      "PMID:16856769",
+      "PMID:17132260",
+      "PMID:17387608",
+      "PMID:17508167",
+      "PMID:17724925",
+      "PMID:17932622",
+      "PMID:17957400",
+      "PMID:18068204",
+      "PMID:18258404",
+      "PMID:18421070",
+      "PMID:18513215",
+      "PMID:18625110",
+      "PMID:18647558",
+      "PMID:19007524",
+      "PMID:19047957",
+      "PMID:19084078",
+      "PMID:19088793",
+      "PMID:19418355",
+      "PMID:19879252",
+      "PMID:20164568",
+      "PMID:20470411",
+      "PMID:22114686",
+      "PMID:22770225",
+      "PMID:23551936",
+      "PMID:24039592",
+      "PMID:7441110",
+      "PMID:7689104",
+      "PMID:8332255",
+      "PMID:8347173",
+      "PMID:8679661",
+      "PMID:9063686",
+      "PMID:9067318",
+      "PMID:9132918",
+      "PMID:9218278",
+      "Reaxys:17705",
+      "Wikipedia:Caffeine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:27732"
+    ],
+    "inchi": [
+      "InChI=1S/C8H10N4O2/c1-10-4-9-6-5(10)7(13)12(3)8(14)11(6)2/h4H,1-3H3"
+    ],
+    "inchikey": [
+      "RYYVLZVUVIJVGH-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "194.19076"
+    ],
+    "monoisotopicmass": [
+      "194.08038"
+    ],
+    "smiles": [
+      "Cn1cnc2n(C)c(=O)n(C)c(=O)c12"
+    ]
+  },
+  "label": "caffeine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_27732",
+  "obo_id": "CHEBI:27732",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "58-08-2",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "58-08-2",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "58-08-2",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00201",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00201"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "463",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/463"
+    },
+    {
+      "database": "Gmelin",
+      "id": "103040",
+      "description": "Gmelin",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0001847",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001847"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07481",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07481"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00528",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00528"
+    },
+    {
+      "database": "KNApSAcK",
+      "id": "C00001492",
+      "description": null,
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00001492"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-2026",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MetaCyc",
+      "id": "1-3-7-TRIMETHYLXANTHINE",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "CFF",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/CFF"
+    },
+    {
+      "database": "PMID",
+      "id": "10510174",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10510174"
+    },
+    {
+      "database": "PMID",
+      "id": "10796597",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10796597"
+    },
+    {
+      "database": "PMID",
+      "id": "10803761",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10803761"
+    },
+    {
+      "database": "PMID",
+      "id": "10822912",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10822912"
+    },
+    {
+      "database": "PMID",
+      "id": "10884512",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10884512"
+    },
+    {
+      "database": "PMID",
+      "id": "10924888",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10924888"
+    },
+    {
+      "database": "PMID",
+      "id": "10983026",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10983026"
+    },
+    {
+      "database": "PMID",
+      "id": "11014293",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11014293"
+    },
+    {
+      "database": "PMID",
+      "id": "11022879",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11022879"
+    },
+    {
+      "database": "PMID",
+      "id": "11209966",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11209966"
+    },
+    {
+      "database": "PMID",
+      "id": "11312039",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11312039"
+    },
+    {
+      "database": "PMID",
+      "id": "11410911",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11410911"
+    },
+    {
+      "database": "PMID",
+      "id": "11431501",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11431501"
+    },
+    {
+      "database": "PMID",
+      "id": "11815511",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11815511"
+    },
+    {
+      "database": "PMID",
+      "id": "11949272",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11949272"
+    },
+    {
+      "database": "PMID",
+      "id": "12397877",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12397877"
+    },
+    {
+      "database": "PMID",
+      "id": "12457274",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12457274"
+    },
+    {
+      "database": "PMID",
+      "id": "12574990",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12574990"
+    },
+    {
+      "database": "PMID",
+      "id": "12915014",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12915014"
+    },
+    {
+      "database": "PMID",
+      "id": "12943586",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12943586"
+    },
+    {
+      "database": "PMID",
+      "id": "14521986",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14521986"
+    },
+    {
+      "database": "PMID",
+      "id": "14607010",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14607010"
+    },
+    {
+      "database": "PMID",
+      "id": "15257305",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15257305"
+    },
+    {
+      "database": "PMID",
+      "id": "15280431",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15280431"
+    },
+    {
+      "database": "PMID",
+      "id": "15681408",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15681408"
+    },
+    {
+      "database": "PMID",
+      "id": "15718055",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15718055"
+    },
+    {
+      "database": "PMID",
+      "id": "15840517",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15840517"
+    },
+    {
+      "database": "PMID",
+      "id": "16143823",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16143823"
+    },
+    {
+      "database": "PMID",
+      "id": "16391865",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16391865"
+    },
+    {
+      "database": "PMID",
+      "id": "16528931",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16528931"
+    },
+    {
+      "database": "PMID",
+      "id": "16644114",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16644114"
+    },
+    {
+      "database": "PMID",
+      "id": "16709440",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16709440"
+    },
+    {
+      "database": "PMID",
+      "id": "16805851",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16805851"
+    },
+    {
+      "database": "PMID",
+      "id": "16856769",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16856769"
+    },
+    {
+      "database": "PMID",
+      "id": "17132260",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17132260"
+    },
+    {
+      "database": "PMID",
+      "id": "17387608",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17387608"
+    },
+    {
+      "database": "PMID",
+      "id": "17508167",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17508167"
+    },
+    {
+      "database": "PMID",
+      "id": "17724925",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17724925"
+    },
+    {
+      "database": "PMID",
+      "id": "17932622",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17932622"
+    },
+    {
+      "database": "PMID",
+      "id": "17957400",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17957400"
+    },
+    {
+      "database": "PMID",
+      "id": "18068204",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18068204"
+    },
+    {
+      "database": "PMID",
+      "id": "18258404",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18258404"
+    },
+    {
+      "database": "PMID",
+      "id": "18421070",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18421070"
+    },
+    {
+      "database": "PMID",
+      "id": "18513215",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18513215"
+    },
+    {
+      "database": "PMID",
+      "id": "18625110",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18625110"
+    },
+    {
+      "database": "PMID",
+      "id": "18647558",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18647558"
+    },
+    {
+      "database": "PMID",
+      "id": "19007524",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19007524"
+    },
+    {
+      "database": "PMID",
+      "id": "19047957",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19047957"
+    },
+    {
+      "database": "PMID",
+      "id": "19084078",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19084078"
+    },
+    {
+      "database": "PMID",
+      "id": "19088793",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19088793"
+    },
+    {
+      "database": "PMID",
+      "id": "19418355",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19418355"
+    },
+    {
+      "database": "PMID",
+      "id": "19879252",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19879252"
+    },
+    {
+      "database": "PMID",
+      "id": "20164568",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20164568"
+    },
+    {
+      "database": "PMID",
+      "id": "20470411",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20470411"
+    },
+    {
+      "database": "PMID",
+      "id": "22114686",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22114686"
+    },
+    {
+      "database": "PMID",
+      "id": "22770225",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22770225"
+    },
+    {
+      "database": "PMID",
+      "id": "23551936",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23551936"
+    },
+    {
+      "database": "PMID",
+      "id": "24039592",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24039592"
+    },
+    {
+      "database": "PMID",
+      "id": "7441110",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7441110"
+    },
+    {
+      "database": "PMID",
+      "id": "7689104",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7689104"
+    },
+    {
+      "database": "PMID",
+      "id": "8332255",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8332255"
+    },
+    {
+      "database": "PMID",
+      "id": "8347173",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8347173"
+    },
+    {
+      "database": "PMID",
+      "id": "8679661",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8679661"
+    },
+    {
+      "database": "PMID",
+      "id": "9063686",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9063686"
+    },
+    {
+      "database": "PMID",
+      "id": "9067318",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9067318"
+    },
+    {
+      "database": "PMID",
+      "id": "9132918",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9132918"
+    },
+    {
+      "database": "PMID",
+      "id": "9218278",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9218278"
+    },
+    {
+      "database": "Reaxys",
+      "id": "17705",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Caffeine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Caffeine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1,3,7-trimethyl-3,7-dihydro-1H-purine-2,6-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CAFFEINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Caffeine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "caffeine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,3,7-Trimethylxanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,3,7-trimethyl-2,6-dioxopurine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,3,7-trimethylpurine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPHAR",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,3,7-trimethylxanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-methyltheobromine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,7-Dihydro-1,3,7-trimethyl-1H-purin-2,6-dion",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7-methyltheophylline",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Coffein",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Koffein",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Thein",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "anhydrous caffeine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cafeina",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cafeine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "guaranine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPHAR",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "mateina",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methyltheobromine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPHAR",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "teina",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "theine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27732?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27732/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27732/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27732/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27732/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27732/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27732/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27732/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

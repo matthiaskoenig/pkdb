@@ -1,0 +1,485 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_16737",
+  "lang": "en",
+  "description": [
+    "A lactam obtained by formal cyclocondensation of creatine. It is a metabolite of creatine."
+  ],
+  "synonyms": [
+    "2-imino-1-methylimidazolidin-4-one",
+    "Creatinine",
+    "creatinine",
+    "1-Methylglycocyamidine",
+    "1-Methylhydantoin-2-imide",
+    "1-methylglycocyamidine",
+    "2-Amino-1-methylimidazolin-4-one",
+    "2-amino-1,5-dihydro-1-methyl-4H-Imidazol-4-one",
+    "Creatine anhydride",
+    "Kreatinin",
+    "creatinina"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C4H7N3O"
+    ],
+    "has_alternative_id": [
+      "CHEBI:14029",
+      "CHEBI:23406",
+      "CHEBI:3910"
+    ],
+    "has_dbxref": [
+      "CAS:60-27-5",
+      "HMDB:HMDB0000562",
+      "KEGG:C00791",
+      "KEGG:D03600",
+      "MetaCyc:CREATININE",
+      "PMID:11256540",
+      "PMID:11981083",
+      "PMID:17190852",
+      "PMID:17422601",
+      "PMID:18182718",
+      "PMID:19236048",
+      "PMID:19715855",
+      "PMID:19968328",
+      "PMID:21775764",
+      "PMID:22047975",
+      "PMID:22121923",
+      "PMID:22166252",
+      "PMID:22207347",
+      "PMID:22212624",
+      "PMID:22223530",
+      "PMID:22331238",
+      "PMID:22338083",
+      "PMID:22349552",
+      "PMID:22390548",
+      "PMID:22432114",
+      "PMID:22441184",
+      "PMID:22459582",
+      "PMID:22498455",
+      "Reaxys:112064",
+      "Wikipedia:Creatinine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:16737"
+    ],
+    "inchi": [
+      "InChI=1S/C4H7N3O/c1-7-2-3(8)6-4(7)5/h2H2,1H3,(H2,5,6,8)"
+    ],
+    "inchikey": [
+      "DDRJAANPRJIHGJ-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "113.11800"
+    ],
+    "monoisotopicmass": [
+      "113.05891"
+    ],
+    "smiles": [
+      "CN1CC(=O)NC1=N"
+    ]
+  },
+  "label": "creatinine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_16737",
+  "obo_id": "CHEBI:16737",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "60-27-5",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "60-27-5",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "60-27-5",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0000562",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0000562"
+    },
+    {
+      "database": "KEGG",
+      "id": "C00791",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C00791"
+    },
+    {
+      "database": "KEGG",
+      "id": "D03600",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D03600"
+    },
+    {
+      "database": "MetaCyc",
+      "id": "CREATININE",
+      "description": null,
+      "url": "https://biocyc.org/META/NEW-IMAGE?type=NIL&object=CREATININE"
+    },
+    {
+      "database": "PMID",
+      "id": "11256540",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11256540"
+    },
+    {
+      "database": "PMID",
+      "id": "11981083",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11981083"
+    },
+    {
+      "database": "PMID",
+      "id": "17190852",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17190852"
+    },
+    {
+      "database": "PMID",
+      "id": "17422601",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17422601"
+    },
+    {
+      "database": "PMID",
+      "id": "18182718",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18182718"
+    },
+    {
+      "database": "PMID",
+      "id": "19236048",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19236048"
+    },
+    {
+      "database": "PMID",
+      "id": "19715855",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19715855"
+    },
+    {
+      "database": "PMID",
+      "id": "19968328",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19968328"
+    },
+    {
+      "database": "PMID",
+      "id": "21775764",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21775764"
+    },
+    {
+      "database": "PMID",
+      "id": "22047975",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22047975"
+    },
+    {
+      "database": "PMID",
+      "id": "22121923",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22121923"
+    },
+    {
+      "database": "PMID",
+      "id": "22166252",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22166252"
+    },
+    {
+      "database": "PMID",
+      "id": "22207347",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22207347"
+    },
+    {
+      "database": "PMID",
+      "id": "22212624",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22212624"
+    },
+    {
+      "database": "PMID",
+      "id": "22223530",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22223530"
+    },
+    {
+      "database": "PMID",
+      "id": "22331238",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22331238"
+    },
+    {
+      "database": "PMID",
+      "id": "22338083",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22338083"
+    },
+    {
+      "database": "PMID",
+      "id": "22349552",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22349552"
+    },
+    {
+      "database": "PMID",
+      "id": "22390548",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22390548"
+    },
+    {
+      "database": "PMID",
+      "id": "22432114",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22432114"
+    },
+    {
+      "database": "PMID",
+      "id": "22441184",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22441184"
+    },
+    {
+      "database": "PMID",
+      "id": "22459582",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22459582"
+    },
+    {
+      "database": "PMID",
+      "id": "22498455",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22498455"
+    },
+    {
+      "database": "Reaxys",
+      "id": "112064",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Creatinine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Creatinine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-imino-1-methylimidazolidin-4-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Creatinine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "creatinine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "creatinine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Methylglycocyamidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Methylhydantoin-2-imide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "HMDB",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-methylglycocyamidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Amino-1-methylimidazolin-4-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "HMDB",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-amino-1,5-dihydro-1-methyl-4H-Imidazol-4-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "HMDB",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Creatine anhydride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "HMDB",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Kreatinin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "creatinina",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16737?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16737/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16737/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16737/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16737/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16737/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16737/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16737/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16737/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

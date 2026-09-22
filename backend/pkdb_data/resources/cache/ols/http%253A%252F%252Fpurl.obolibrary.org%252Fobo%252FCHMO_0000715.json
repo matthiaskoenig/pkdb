@@ -1,0 +1,76 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHMO_0000715",
+  "lang": "en",
+  "description": [
+    "A method where a sample mixture is first separated by ultra-performance liquid chromatography before being converted into ions which are characterised by their mass-to-charge ratio and relative abundance."
+  ],
+  "synonyms": [
+    "UPLC-MS",
+    "UPLC/MS",
+    "ultra performance LC-MS",
+    "ultra performance liquid chromatography mass spectrometry",
+    "ultra performance liquid chromatography-mass spectrometry",
+    "ultra-performance LC-MS"
+  ],
+  "annotation": {
+    "id": [
+      "CHMO:0000715"
+    ]
+  },
+  "label": "ultra-performance liquid chromatography-mass spectrometry",
+  "ontology_name": "chmo",
+  "ontology_prefix": "CHMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHMO_0000715",
+  "obo_id": "CHMO:0000715",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A method where a sample mixture is first separated by ultra-performance liquid chromatography before being converted into ions which are characterised by their mass-to-charge ratio and relative abundance.",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "https://doi.org/10.1039/b814426e",
+          "description": null,
+          "url": "https://doi.org/10.1039/b814426e"
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000715?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000715/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000715/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000715/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000715/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000715/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000715/graph"
+    },
+    "has_proper_occurrent_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000715/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000118"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

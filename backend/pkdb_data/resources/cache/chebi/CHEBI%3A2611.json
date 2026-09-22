@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:2611",
+  "name": "alprazolam",
+  "definition": "A member of the class of triazolobenzodiazepines that is 4H-[1,2,4]triazolo[4,3-a][1,4]benzodiazepine carrying methyl, phenyl and chloro substituents at positions 1, 6 and 8 respectively. Alprazolam is only found in individuals that have taken this drug.",
+  "formula": "C17H13ClN4",
+  "charge": "0",
+  "mass": "308.76478",
+  "inchikey": "VREFGVBLTWBCJP-UHFFFAOYSA-N"
+}

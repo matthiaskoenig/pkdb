@@ -1,0 +1,87 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0009373",
+  "lang": "en",
+  "description": [
+    "An abnormal accumulation of fluid beneath the skin, or in one or more cavities of the body."
+  ],
+  "synonyms": [
+    "Dropsy",
+    "Fluid retention",
+    "Hydrops",
+    "Oedema",
+    "Water retention"
+  ],
+  "annotation": {
+    "gwas_trait": [
+      true
+    ],
+    "has_dbxref": [
+      "HP:0000969",
+      "ICD10:R60",
+      "MedDRA:10014210"
+    ],
+    "term editor": [
+      "Annalisa Buniello"
+    ]
+  },
+  "label": "edema",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "EFO_0009373",
+  "obo_id": "EFO:0009373",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "HP",
+      "id": "0000969",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/HP_0000969"
+    },
+    {
+      "database": "ICD10",
+      "id": "R60",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/R60"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10014210",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10014210"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009373?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009373/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009373/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009373/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009373/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009373/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0009373/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

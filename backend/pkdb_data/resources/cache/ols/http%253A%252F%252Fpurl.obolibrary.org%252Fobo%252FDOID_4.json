@@ -1,0 +1,100 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_4",
+  "lang": "en",
+  "description": [
+    "A disease is a disposition (i) to undergo pathological processes that (ii) exists in an organism because of one or more disorders in that organism."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "has_dbxref": [
+      "MESH:D004194",
+      "NCI:C2991",
+      "SNOMEDCT_US_2023_03_01:64572001",
+      "UMLS_CUI:C0012634"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:4"
+    ]
+  },
+  "label": "disease",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": true,
+  "short_form": "DOID_4",
+  "obo_id": "DOID:4",
+  "in_subset": [
+    "DO_RAD_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A disease is a disposition (i) to undergo pathological processes that (ii) exists in an organism because of one or more disorders in that organism.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "MESH",
+      "id": "D004194",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D004194"
+    },
+    {
+      "database": "NCI",
+      "id": "C2991",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C2991"
+    },
+    {
+      "database": "SNOMEDCT_US_2023_03_01",
+      "id": "64572001",
+      "description": null,
+      "url": "http://snomed.info/id/64572001"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0012634",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0012634"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4?lang=en"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_4/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

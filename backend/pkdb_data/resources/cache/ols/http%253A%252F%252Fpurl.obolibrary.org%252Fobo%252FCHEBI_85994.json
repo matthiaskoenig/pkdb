@@ -1,0 +1,329 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_85994",
+  "lang": "en",
+  "description": [
+    "A member of the class of quinolines that is the carboxamide of 4-{3-chloro-4-[(cyclopropylcarbamoyl)amino]phenoxy}-7-methoxyquinoline-6-carboxylic acid. A multi-kinase inhibitor and orphan drug used (as its mesylate salt) for the treatment of various types of thyroid cancer that do not respond to radioiodine."
+  ],
+  "synonyms": [
+    "4-(3-Chloro-4-(N'-cyclopropylureido)phenoxy)-7-methoxyquinoline-6-carboxamide",
+    "4-{3-chloro-4-[(cyclopropylcarbamoyl)amino]phenoxy}-7-methoxyquinoline-6-carboxamide",
+    "4-{3-chloro-4-[(cyclopropylcarbamoyl)amino]phenoxy}-7-methoxyquinoline-6-carboxamide",
+    "E 7080",
+    "E7080",
+    "UNII-EE083865G2",
+    "lenvatinib"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "cas:417716-92-8",
+      "drugcentral:4942",
+      "kegg.drug:D09919",
+      "pdb-ccd:LEV",
+      "pubmed:25240824",
+      "pubmed:25458359",
+      "pubmed:25589937",
+      "pubmed:25600977",
+      "pubmed:25616432",
+      "pubmed:25625428",
+      "pubmed:25671254",
+      "pubmed:25720434",
+      "pubmed:25795101",
+      "pubmed:25859118",
+      "pubmed:25913680",
+      "pubmed:25974026",
+      "pubmed:26008987",
+      "pubmed:26026266",
+      "reaxys:12096874",
+      "wikipedia.en:Lenvatinib"
+    ],
+    "generalized_empirical_formula": [
+      "C21H19ClN4O4"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:85994"
+    ],
+    "inchi_key_string": [
+      "WOSKHXYHFSIKNG-UHFFFAOYSA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C21H19ClN4O4/c1-29-19-10-17-13(9-14(19)20(23)27)18(6-7-24-17)30-12-4-5-16(15(22)8-12)26-21(28)25-11-2-3-11/h4-11H,2-3H2,1H3,(H2,23,27)(H2,25,26,28)"
+    ],
+    "mass": [
+      "426.86"
+    ],
+    "monoisotopic_mass": [
+      "426.10948"
+    ],
+    "smiles_string": [
+      "COc1cc2nccc(Oc3ccc(NC(=O)NC4CC4)c(Cl)c3)c2cc1C(N)=O"
+    ]
+  },
+  "label": "lenvatinib",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_85994",
+  "obo_id": "CHEBI:85994",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "cas",
+      "id": "417716-92-8",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=417716-92-8"
+    },
+    {
+      "database": "drugcentral",
+      "id": "4942",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/4942"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D09919",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "pdb-ccd",
+      "id": "LEV",
+      "description": "pdb-ccd",
+      "url": null
+    },
+    {
+      "database": "pubmed",
+      "id": "25240824",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25240824/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25458359",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25458359/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25589937",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25589937/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25600977",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25600977/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25616432",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25616432/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25625428",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25625428/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25671254",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25671254/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25720434",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25720434/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25795101",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25795101/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25859118",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25859118/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25913680",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25913680/"
+    },
+    {
+      "database": "pubmed",
+      "id": "25974026",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/25974026/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26008987",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26008987/"
+    },
+    {
+      "database": "pubmed",
+      "id": "26026266",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/26026266/"
+    },
+    {
+      "database": "reaxys",
+      "id": "12096874",
+      "description": "reaxys",
+      "url": null
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Lenvatinib",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-{3-chloro-4-[(cyclopropylcarbamoyl)amino]phenoxy}-7-methoxyquinoline-6-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(3-Chloro-4-(N'-cyclopropylureido)phenoxy)-7-methoxyquinoline-6-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-{3-chloro-4-[(cyclopropylcarbamoyl)amino]phenoxy}-7-methoxyquinoline-6-carboxamide",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E 7080",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E7080",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "UNII-EE083865G2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lenvatinib",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.drug",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85994?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85994/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85994/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85994/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85994/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85994/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85994/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85994/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_deprotonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85994/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018033"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,117 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C1033",
+  "lang": "en",
+  "description": [
+    "Commercial citrate of caffeine, though not a definite salt.  It is the alkaloid caffeine, with a portion of adherent citric acid, as indicated by its pharmacopoeial name (citrated caffeine). Its general action and uses are the same as those given under caffeine. Caffeine citrate is used chiefly as a remedy for the idiopathic headache (migraine). This salt is very soluble in water, and is assimilated much more readily than pure caffeine when taken into the stomach. (NCI04)"
+  ],
+  "synonyms": [
+    "CAFFEINE CITRATE",
+    "Caffeina Citrata",
+    "Caffeine Citrate",
+    "Citrated Caffeine"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "69-22-7"
+    ],
+    "Chemical_Formula": [
+      "C8H10N4O2.C6H8O7"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "U26EO4675Q"
+    ],
+    "Has_Free_Acid_Or_Base_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C328"
+    ],
+    "Legacy Concept Name": [
+      "Citrated_Caffeine"
+    ],
+    "NSC Number": [
+      "63248"
+    ],
+    "Preferred_Name": [
+      "Caffeine Citrate"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0054436"
+    ],
+    "code": [
+      "C1033"
+    ]
+  },
+  "label": "Caffeine Citrate",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C1033",
+  "obo_id": "NCIT:C1033",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CAFFEINE CITRATE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Caffeina Citrata",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Caffeine Citrate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Citrated Caffeine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1033?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1033/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1033/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1033/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1033/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1033/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1033/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

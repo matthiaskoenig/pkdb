@@ -1,0 +1,103 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29462",
+  "lang": "en",
+  "description": [
+    "A sugar alcohol found in fruits and plants with diuretic, laxative and cathartic property. Unabsorbed sorbitol retains water in the large intestine through osmotic pressure thereby stimulating peristalsis of the intestine and exerting its diuretic, laxative and cathartic effect. In addition, sorbitol has one-third fewer calories and 60 % the sweetening activity of sucrose and is used as a sugar replacement in diabetes."
+  ],
+  "synonyms": [
+    "SORBITOL",
+    "Sorbitol"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "50-70-4"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:17924"
+    ],
+    "Chemical_Formula": [
+      "C6H14O6"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "506T60A25R"
+    ],
+    "Legacy Concept Name": [
+      "Sorbitol"
+    ],
+    "NSC Number": [
+      "25944"
+    ],
+    "Preferred_Name": [
+      "Sorbitol"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0037688"
+    ],
+    "code": [
+      "C29462"
+    ]
+  },
+  "label": "Sorbitol",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29462",
+  "obo_id": "NCIT:C29462",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "SORBITOL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Sorbitol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29462?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29462/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29462/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29462/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29462/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29462/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29462/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

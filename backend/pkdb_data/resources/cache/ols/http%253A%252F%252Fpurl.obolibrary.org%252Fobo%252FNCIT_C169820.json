@@ -1,0 +1,110 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C169820",
+  "lang": "en",
+  "description": [
+    "A human immunodeficiency virus type 1 (HIV-1) integrase strand transfer inhibitor (INSTI), that is used for pre-exposure prophylaxis (PrEP) to reduce the risk of sexually acquired HIV-1 infection. Upon gluteal intramuscular administration, cabotegravir binds to the active site of HIV integrase and inhibits the activity of HIV integrase, an HIV-1 coded enzyme that is necessary for viral replication. Inhibition of integrase prevents the integration of HIV-1 DNA into host genomic DNA."
+  ],
+  "synonyms": [
+    "Apretude",
+    "CABOTEGRAVIR",
+    "Cabotegravir"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "1051375-10-0"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Cabotegravir"
+    ],
+    "FDA_UNII_Code": [
+      "HMH0132Z1Q"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C166681"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "811240"
+    ],
+    "NCI_META_CUI": [
+      "CL601825"
+    ],
+    "Preferred_Name": [
+      "Cabotegravir"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "code": [
+      "C169820"
+    ]
+  },
+  "label": "Cabotegravir",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C169820",
+  "obo_id": "NCIT:C169820",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Apretude",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CABOTEGRAVIR",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cabotegravir",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C169820?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C169820/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C169820/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C169820/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C169820/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C169820/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C169820/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

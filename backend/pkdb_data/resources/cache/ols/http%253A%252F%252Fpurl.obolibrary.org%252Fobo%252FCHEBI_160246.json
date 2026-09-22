@@ -1,0 +1,581 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_160246",
+  "lang": "en",
+  "description": [
+    "A  pyrazolone  that is 1,2-dihydro-3H-pyrazol-3-one substituted by a dimethylamino group at position 4, methyl groups at positions 1 and 5 and a phenyl group at position 2. It exhibits analgesic, anti-inflammatory, and antipyretic properties."
+  ],
+  "synonyms": [
+    "4-(dimethylamino)-1,5-dimethyl-2-phenyl-1,2-dihydro-3H-pyrazol-3-one",
+    "(Dimethylamino)phenazone",
+    "1,5-Dimethyl-4-dimethylamino-2-phenyl-3-pyrazolone",
+    "1-Phenyl-2,3-dimethyl-4-(dimethylamino)-5-pyrazolone",
+    "1-Phenyl-2,3-dimethyl-4-dimethylaminopyrazol-5-one",
+    "2,3-Dimethyl-4-dimethylamino-1-phenyl-5-pyrazolone",
+    "3-Keto-1,5-dimethyl-4-dimethylamino-2-phenyl-2,3-dihydropyrazole",
+    "4-(Dimethylamino)-1,2-dihydro-1,5-dimethyl-2-phenyl-3H-pyrazol-3-one",
+    "4-(Dimethylamino)-1,5-dimethyl-2-phenyl-1,2-dihydro-3H-pyrazol-3-one",
+    "4-(Dimethylamino)antipyrine",
+    "4-Dimethylamino-1-phenyl-2,3-dimethylpyrazolone",
+    "4-Dimethylamino-2,3-dimethyl-1-phenyl-3-pyrazolin-5-one",
+    "4-Dimethylamino-2,3-dimethyl-1-phenyl-5-pyrazolone",
+    "4-Dimethylaminoantipyrine",
+    "4-Dimethylaminophenazone",
+    "Aminofenazone",
+    "Aminophenazon",
+    "Aminopyrine",
+    "Dimethylaminoantipyrine",
+    "Dimethylaminoazophene",
+    "Dimethylaminophenazon",
+    "Dimethylaminophenazone",
+    "Dimethylaminophenyldimethylpyrazolone",
+    "Dipyrine",
+    "aminofenazona",
+    "aminophenazone",
+    "aminophenazonum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C13H17N3O"
+    ],
+    "has_dbxref": [
+      "CAS:58-15-1",
+      "DrugBank:DB01424",
+      "Drug_Central:171",
+      "Gmelin:103164",
+      "HMDB:HMDB0015493",
+      "KEGG:C07539",
+      "KEGG:D00556",
+      "LINCS:LSM-20000",
+      "PMID:23603897",
+      "PMID:23727364",
+      "PMID:24428683",
+      "Reaxys:222626",
+      "Wikipedia:Aminophenazone"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:160246"
+    ],
+    "inchi": [
+      "InChI=1S/C13H17N3O/c1-10-12(14(2)3)13(17)16(15(10)4)11-8-6-5-7-9-11/h5-9H,1-4H3"
+    ],
+    "inchikey": [
+      "RMMXTBMQSGEXHJ-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "231.29360"
+    ],
+    "monoisotopicmass": [
+      "231.13716"
+    ],
+    "smiles": [
+      "CN(C)c1c(C)n(C)n(-c2ccccc2)c1=O"
+    ]
+  },
+  "label": "aminophenazone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_160246",
+  "obo_id": "CHEBI:160246",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "58-15-1",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "58-15-1",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "58-15-1",
+      "description": "DrugBank",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "58-15-1",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "58-15-1",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01424",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01424"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "171",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/171"
+    },
+    {
+      "database": "Gmelin",
+      "id": "103164",
+      "description": "Gmelin",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0015493",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015493"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07539",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07539"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00556",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00556"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-20000",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "23603897",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23603897"
+    },
+    {
+      "database": "PMID",
+      "id": "23727364",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23727364"
+    },
+    {
+      "database": "PMID",
+      "id": "24428683",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24428683"
+    },
+    {
+      "database": "Reaxys",
+      "id": "222626",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Aminophenazone",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Aminophenazone"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-(dimethylamino)-1,5-dimethyl-2-phenyl-1,2-dihydro-3H-pyrazol-3-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(Dimethylamino)phenazone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,5-Dimethyl-4-dimethylamino-2-phenyl-3-pyrazolone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Phenyl-2,3-dimethyl-4-(dimethylamino)-5-pyrazolone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Phenyl-2,3-dimethyl-4-dimethylaminopyrazol-5-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2,3-Dimethyl-4-dimethylamino-1-phenyl-5-pyrazolone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-Keto-1,5-dimethyl-4-dimethylamino-2-phenyl-2,3-dihydropyrazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(Dimethylamino)-1,2-dihydro-1,5-dimethyl-2-phenyl-3H-pyrazol-3-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(Dimethylamino)-1,5-dimethyl-2-phenyl-1,2-dihydro-3H-pyrazol-3-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(Dimethylamino)antipyrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-Dimethylamino-1-phenyl-2,3-dimethylpyrazolone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-Dimethylamino-2,3-dimethyl-1-phenyl-3-pyrazolin-5-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-Dimethylamino-2,3-dimethyl-1-phenyl-5-pyrazolone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-Dimethylaminoantipyrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-Dimethylaminophenazone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Aminofenazone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Aminophenazon",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Aminopyrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dimethylaminoantipyrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dimethylaminoazophene",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dimethylaminophenazon",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dimethylaminophenazone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dimethylaminophenyldimethylpyrazolone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dipyrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "aminofenazona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "aminophenazone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "aminophenazonum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_160246?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_160246/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_160246/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_160246/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_160246/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_160246/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_160246/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_160246/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

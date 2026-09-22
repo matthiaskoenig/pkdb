@@ -1,0 +1,183 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C447",
+  "lang": "en",
+  "description": [
+    "An orally bioavailable carbamoyl derivative and a proteasome inhibitor that is used in the treatment of alcoholism, with potential antineoplastic and chemosensitizing activities. Disulfiram (DSF) may help to treat alcoholism by irreversibly binding to and inhibiting acetaldehyde dehydrogenase, an enzyme that oxidizes the ethanol metabolite acetaldehyde into acetic acid. Inhibition of acetaldehyde dehydrogenase leads to an accumulation of acetaldehyde and produces a variety of very unpleasant symptoms, which together are referred to as the disulfiram-ethanol reaction (DER). In addition, DSF has a strong ability to chelate metals and its antineoplastic activity is highly dependent upon binding to copper (Cu), a metal that selectively accumulates in cancer cells. DSF/Cu generates reactive oxygen species (ROS) and inhibits proteasome activity, leading to an accumulation of ubiquitinated proteins; both of these processes result in induction of apoptosis. Also, DSF/Cu inhibits various cancer-specific pathways, which leads to inhibition of tumor cell growth."
+  ],
+  "synonyms": [
+    "Antabuse",
+    "Bis(diethylthiocarbamoyl) Disulfide",
+    "DISULFIRAM",
+    "DS",
+    "Disulfiram",
+    "TTD",
+    "Tetraethylthioperoxydicarbonic Diamide",
+    "Tetraethylthiuram Disulfide",
+    "Teturamin",
+    "disulfiram"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug that slows the metabolism of retinoids, allowing them to act over a longer period of time."
+    ],
+    "CAS_Registry": [
+      "97-77-8"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:4659"
+    ],
+    "Chemical_Formula": [
+      "C10H20N2S4"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Disulfiram"
+    ],
+    "FDA_UNII_Code": [
+      "TR3MLJ1UAI"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C13314"
+    ],
+    "Legacy Concept Name": [
+      "Disulfiram"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "42291"
+    ],
+    "NSC Number": [
+      "25953"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "42291"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "42291"
+    ],
+    "Preferred_Name": [
+      "Disulfiram"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0012772"
+    ],
+    "code": [
+      "C447"
+    ]
+  },
+  "label": "Disulfiram",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C447",
+  "obo_id": "NCIT:C447",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Antabuse",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Bis(diethylthiocarbamoyl) Disulfide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "DISULFIRAM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "DS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Disulfiram",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "TTD",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Tetraethylthioperoxydicarbonic Diamide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Tetraethylthiuram Disulfide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Teturamin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "disulfiram",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C447?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C447/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C447/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C447/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C447/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C447/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C447/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

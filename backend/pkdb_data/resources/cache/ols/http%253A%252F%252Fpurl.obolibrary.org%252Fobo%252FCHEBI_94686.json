@@ -1,0 +1,346 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_94686",
+  "lang": "en",
+  "description": [
+    "A carboxylic ester resulting from the formal condensation of the carboxy group of N-formyl-L-leucine with the hydroxy group of (3S,4S)-3-hexyl-4-[(2S)-2-hydroxytridecyl]oxetan-2-one. A pancreatic lipase inhibitor, it is used as an anti-obesity drug."
+  ],
+  "synonyms": [
+    "(2S)-1-[(2S,3S)-3-hexyl-4-oxooxetan-2-yl]tridecan-2-yl N-formyl-L-leucinate",
+    "(-)-tetrahydrolipostatin",
+    "(2S)-2-formamido-4-methylpentanoic acid [(2S)-1-[(2S,3S)-3-hexyl-4-oxo-2-oxetanyl]tridecan-2-yl] ester",
+    "Alli",
+    "N-formyl-L-leucine (1S)-1-{[(2S,3S)-3-hexyl-4-oxo-2-oxetanyl]methyl}dodecyl ester",
+    "Ro-18-0647",
+    "Xenical",
+    "orlipastat",
+    "orlistat",
+    "orlistatum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C29H53NO5"
+    ],
+    "has_dbxref": [
+      "CAS:96829-58-2",
+      "Drug_Central:1996",
+      "KEGG:D04028",
+      "LINCS:LSM-5724",
+      "PMID:27793869",
+      "PMID:28097013",
+      "PMID:28191026",
+      "PMID:28260907",
+      "PMID:28387458",
+      "PMID:28559211",
+      "PMID:28588183",
+      "PMID:28624425",
+      "Patent:EP129748",
+      "Patent:US4598089",
+      "Reaxys:3658031",
+      "Wikipedia:Orlistat"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:94686"
+    ],
+    "inchi": [
+      "InChI=1S/C29H53NO5/c1-5-7-9-11-12-13-14-15-16-18-24(34-29(33)26(30-22-31)20-23(3)4)21-27-25(28(32)35-27)19-17-10-8-6-2/h22-27H,5-21H2,1-4H3,(H,30,31)/t24-,25-,26-,27-/m0/s1"
+    ],
+    "inchikey": [
+      "AHLBNYSZXLDEJQ-FWEHEUNISA-N"
+    ],
+    "mass": [
+      "495.736"
+    ],
+    "monoisotopicmass": [
+      "495.39237"
+    ],
+    "smiles": [
+      "[C@@]1(OC([C@]1(CCCCCC)[H])=O)(C[C@H](CCCCCCCCCCC)OC([C@@H](NC(=O)[H])CC(C)C)=O)[H]"
+    ]
+  },
+  "label": "orlistat",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_94686",
+  "obo_id": "CHEBI:94686",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "96829-58-2",
+      "description": "DrugCentral",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "96829-58-2",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1996",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1996"
+    },
+    {
+      "database": "KEGG",
+      "id": "D04028",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D04028"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5724",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "27793869",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27793869"
+    },
+    {
+      "database": "PMID",
+      "id": "28097013",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28097013"
+    },
+    {
+      "database": "PMID",
+      "id": "28191026",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28191026"
+    },
+    {
+      "database": "PMID",
+      "id": "28260907",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28260907"
+    },
+    {
+      "database": "PMID",
+      "id": "28387458",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28387458"
+    },
+    {
+      "database": "PMID",
+      "id": "28559211",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28559211"
+    },
+    {
+      "database": "PMID",
+      "id": "28588183",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28588183"
+    },
+    {
+      "database": "PMID",
+      "id": "28624425",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28624425"
+    },
+    {
+      "database": "Patent",
+      "id": "EP129748",
+      "description": null,
+      "url": "https://www.google.com/patents/EP129748"
+    },
+    {
+      "database": "Patent",
+      "id": "US4598089",
+      "description": null,
+      "url": "https://www.google.com/patents/US4598089"
+    },
+    {
+      "database": "Reaxys",
+      "id": "3658031",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Orlistat",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Orlistat"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2S)-1-[(2S,3S)-3-hexyl-4-oxooxetan-2-yl]tridecan-2-yl N-formyl-L-leucinate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-tetrahydrolipostatin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S)-2-formamido-4-methylpentanoic acid [(2S)-1-[(2S,3S)-3-hexyl-4-oxo-2-oxetanyl]tridecan-2-yl] ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Alli",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-formyl-L-leucine (1S)-1-{[(2S,3S)-3-hexyl-4-oxo-2-oxetanyl]methyl}dodecyl ester",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ro-18-0647",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Xenical",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "orlipastat",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "orlistat",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "orlistatum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94686?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94686/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94686/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94686/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94686/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94686/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94686/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_94686/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

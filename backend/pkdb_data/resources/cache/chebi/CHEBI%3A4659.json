@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:4659",
+  "name": "disulfiram",
+  "definition": "An organic disulfide that results from the formal oxidative dimerisation of N,N-diethyldithiocarbamic acid.  A multi-enzyme inhibitor that is used in alcohol aversion therapy and also exhibits anticancer properties.",
+  "formula": "C10H20N2S4",
+  "charge": "0",
+  "mass": "296.544",
+  "inchikey": "AUZONCFQVSMFAP-UHFFFAOYSA-N"
+}

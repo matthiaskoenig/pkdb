@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:63618",
+  "name": "pravastatin",
+  "definition": "A carboxylic ester resulting from the formal condensation of (S)-2-methylbutyric acid with the hydroxy group adjacent to the ring junction of (3R,5R)-7-[(1S,2S,6S,8S,8aR)-6,8-dihydroxy-2-methyl-1,2,6,7,8,8a-hexahydronaphthalen-1-yl]-3,5-dihydroxyheptanoic acid. Derived from microbial transformation of mevastatin, pravastatin is a reversible inhibitor of 3-hydroxy-3-methylglutaryl-coenzyme A (HMG-CoA). The sodium salt is used for lowering cholesterol and preventing cardiovascular disease. It is one of the lower potency statins, but has the advantage of fewer side effects compared with lovastatin and simvastatin.",
+  "formula": "C23H36O7",
+  "charge": "0",
+  "mass": "424.52770",
+  "inchikey": "TUZYXOIXSAXUGO-PZAWKZKUSA-N"
+}

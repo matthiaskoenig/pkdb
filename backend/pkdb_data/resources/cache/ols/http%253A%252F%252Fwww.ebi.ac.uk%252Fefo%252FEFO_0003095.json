@@ -1,0 +1,359 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0003095",
+  "lang": "en",
+  "description": [
+    "A term referring to fatty replacement of the hepatic parenchyma which is not related to alcohol use.",
+    "Metabolic dysfunction-associated steatotic liver disease (MASLD, formerly known as nonalcoholic fatty liver disease or NAFLD) is a type of liver disease that is not caused by alcohol. It typically does not cause symptoms in the early stages, but it can cause health problems due to fat accumulation, inflammation, and scarring in the liver."
+  ],
+  "synonyms": [
+    "MASLD",
+    "NAFLD",
+    "NAFLD - Nonalcoholic Fatty Liver Disease",
+    "NAFLD - nonalcoholic fatty liver disease",
+    "Nonalcoholic Fatty Liver Disease",
+    "fatty liver disease, nonalcoholic",
+    "metabolic dysfunction-associated steatotic liver disease",
+    "non-alcoholic fatty liver",
+    "non-alcoholic fatty liver disease",
+    "nonalcoholic fatty liver disease",
+    "NAFLD1",
+    "fatty liver disease, nonalcoholic, susceptibility to, 1",
+    "liver disease, alcoholic, susceptibility to, 1"
+  ],
+  "annotation": {
+    "gwas_trait": [
+      true
+    ],
+    "has close match": [
+      "http://identifiers.org/meddra/10029530"
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/96033",
+      "http://identifiers.org/mesh/D065626",
+      "http://identifiers.org/snomedct/197315008",
+      "http://linkedlifedata.com/resource/umls/id/C0400966",
+      "http://purl.obolibrary.org/obo/DOID_0080208",
+      "http://purl.obolibrary.org/obo/NCIT_C84444",
+      "http://www.ebi.ac.uk/efo/EFO_0003095"
+    ],
+    "has_dbxref": [
+      "DOID:0080208",
+      "DOID:0080546",
+      "ICD9:571.8",
+      "MEDGEN:96033",
+      "MESH:D065626",
+      "MONDO:0013209",
+      "MedDRA:10029530",
+      "NCIT:C84444",
+      "NCIt:C84444",
+      "OMIM:613282",
+      "Orphanet:33271",
+      "SCTID:197315008",
+      "UMLS:C0400966"
+    ],
+    "id": [
+      "EFO:0003095"
+    ],
+    "term editor": [
+      "Tomasz Adamusiak"
+    ],
+    "term tracker item": [
+      "https://github.com/monarch-initiative/mondo/issues/6718"
+    ]
+  },
+  "label": "non-alcoholic fatty liver disease",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "EFO_0003095",
+  "obo_id": "EFO:0003095",
+  "in_subset": [
+    "otar",
+    "predisposition"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "Metabolic dysfunction-associated steatotic liver disease (MASLD, formerly known as nonalcoholic fatty liver disease or NAFLD) is a type of liver disease that is not caused by alcohol. It typically does not cause symptoms in the early stages, but it can cause health problems due to fat accumulation, inflammation, and scarring in the liver.",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "https://www.verywellhealth.com/how-dangerous-is-non-alcoholic-fatty-liver-disease-2223390",
+          "description": null,
+          "url": "https://www.verywellhealth.com/how-dangerous-is-non-alcoholic-fatty-liver-disease-2223390"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "0080208",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/DOID_0080208"
+    },
+    {
+      "database": "DOID",
+      "id": "0080546",
+      "description": "MONDO:equivalentObsolete",
+      "url": "http://purl.obolibrary.org/obo/DOID_0080546"
+    },
+    {
+      "database": "ICD9",
+      "id": "571.8",
+      "description": "MONDO:relatedTo",
+      "url": null
+    },
+    {
+      "database": "MEDGEN",
+      "id": "96033",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/96033"
+    },
+    {
+      "database": "MESH",
+      "id": "D065626",
+      "description": "MONDO:equivalentTo",
+      "url": "http://id.nlm.nih.gov/mesh/D065626"
+    },
+    {
+      "database": "MONDO",
+      "id": "0013209",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MONDO_0013209"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10029530",
+      "description": "EFO:1001248",
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10029530"
+    },
+    {
+      "database": "NCIT",
+      "id": "C84444",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/NCIT_C84444"
+    },
+    {
+      "database": "NCIt",
+      "id": "C84444",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C84444"
+    },
+    {
+      "database": "OMIM",
+      "id": "613282",
+      "description": null,
+      "url": "https://omim.org/entry/613282"
+    },
+    {
+      "database": "Orphanet",
+      "id": "33271",
+      "description": "OMIM:613282",
+      "url": "http://www.orpha.net/consor/cgi-bin/OC_Exp.php?Lng=EN&Expert=33271"
+    },
+    {
+      "database": "SCTID",
+      "id": "197315008",
+      "description": "MONDO:equivalentTo",
+      "url": "http://snomed.info/id/197315008"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0400966",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0400966"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "MASLD",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "0080208",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_0080208"
+        },
+        {
+          "database": null,
+          "id": "https://www.verywellhealth.com/how-dangerous-is-non-alcoholic-fatty-liver-disease-2223390",
+          "description": null,
+          "url": "https://www.verywellhealth.com/how-dangerous-is-non-alcoholic-fatty-liver-disease-2223390"
+        }
+      ]
+    },
+    {
+      "name": "NAFLD",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "0080208",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_0080208"
+        }
+      ]
+    },
+    {
+      "name": "NAFLD - nonalcoholic fatty liver disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C84444",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C84444"
+        }
+      ]
+    },
+    {
+      "name": "fatty liver disease, nonalcoholic",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MONDO",
+          "id": "0000031",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/MONDO_0000031"
+        }
+      ]
+    },
+    {
+      "name": "metabolic dysfunction-associated steatotic liver disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "non-alcoholic fatty liver",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "0080546",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_0080546"
+        },
+        {
+          "database": "MONDO",
+          "id": "0007026",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/MONDO_0007026"
+        }
+      ]
+    },
+    {
+      "name": "non-alcoholic fatty liver disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "0080208",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_0080208"
+        },
+        {
+          "database": "NCIT",
+          "id": "C84444",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C84444"
+        }
+      ]
+    },
+    {
+      "name": "nonalcoholic fatty liver disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "DOID",
+          "id": "0080208",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/DOID_0080208"
+        },
+        {
+          "database": "NCIT",
+          "id": "C84444",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C84444"
+        }
+      ]
+    },
+    {
+      "name": "NAFLD1",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MONDO",
+          "id": "Lexical",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fatty liver disease, nonalcoholic, susceptibility to, 1",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MONDO",
+          "id": "Lexical",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0003095/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

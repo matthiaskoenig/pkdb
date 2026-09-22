@@ -1,0 +1,122 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29071",
+  "lang": "en",
+  "description": [
+    "A fibric acid derivative with hypolipidemic effects. Gemfibrozil interacts with peroxisome proliferator-activated receptors (PPARalpha) resulting in PPARalpha-mediated stimulation of fatty acid oxidation and an increase in lipoprotein lipase (LPL) synthesis. This enhances triglyceride-rich lipoprotein clearance and reduces the expression of apolipoprotein C-III (apoC-III). The reduction in hepatic production of apoC-III results in subsequent reduction of serum levels of very-low-density-lipoprotein cholesterol (VLDL-C). In addition, gemfibrozil-mediated PPARalpha stimulation of apoA-I and apoA-II expression results in an increase in high-density lipoprotein cholesterol (HDL-C)."
+  ],
+  "synonyms": [
+    "GEMFIBROZIL",
+    "Gemfibrozil",
+    "Lopid"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "25812-30-0"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:5296"
+    ],
+    "Chemical_Formula": [
+      "C15H22O3"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Gemfibrozil"
+    ],
+    "FDA_UNII_Code": [
+      "Q8X02027X3"
+    ],
+    "Legacy Concept Name": [
+      "Gemfibrozil"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "715911"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "715911"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "715911"
+    ],
+    "Preferred_Name": [
+      "Gemfibrozil"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0017245"
+    ],
+    "code": [
+      "C29071"
+    ]
+  },
+  "label": "Gemfibrozil",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29071",
+  "obo_id": "NCIT:C29071",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "GEMFIBROZIL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gemfibrozil",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lopid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29071?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29071/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29071/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29071/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29071/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29071/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29071/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

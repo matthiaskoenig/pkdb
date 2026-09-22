@@ -1,0 +1,549 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_16526",
+  "lang": "en",
+  "description": [
+    "A one-carbon compound with formula CO2 in which the carbon is attached to each oxygen atom by a double bond. A colourless, odourless gas under normal conditions, it is produced during respiration by all animals, fungi and microorganisms that depend directly or indirectly on living or decaying plants for food."
+  ],
+  "synonyms": [
+    "CARBON DIOXIDE",
+    "Carbon dioxide",
+    "carbon dioxide",
+    "dioxidocarbon",
+    "methanedione",
+    "CO2",
+    "E 290",
+    "E-290",
+    "E290",
+    "R-744",
+    "[CO2]",
+    "carbonic anhydride"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "CO2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:13282",
+      "CHEBI:13283",
+      "CHEBI:13284",
+      "CHEBI:13285",
+      "CHEBI:23011",
+      "CHEBI:3283",
+      "CHEBI:48829"
+    ],
+    "has_dbxref": [
+      "CAS:124-38-9",
+      "Drug_Central:4256",
+      "Gmelin:989",
+      "HMDB:HMDB0001967",
+      "KEGG:C00011",
+      "KEGG:D00004",
+      "MetaCyc:CARBON-DIOXIDE",
+      "MolBase:752",
+      "PDBeChem:CO2",
+      "PMID:10826146",
+      "PMID:11094503",
+      "PMID:11584085",
+      "PMID:11802652",
+      "PMID:14639145",
+      "PMID:15050588",
+      "PMID:16591971",
+      "PMID:16656478",
+      "PMID:16659660",
+      "PMID:17190796",
+      "PMID:17448243",
+      "PMID:17878298",
+      "PMID:17884085",
+      "PMID:19043767",
+      "PMID:19259576",
+      "PMID:19854893",
+      "PMID:23384758",
+      "PMID:23828359",
+      "PMID:24258718",
+      "PMID:8482095",
+      "PMID:8818713",
+      "PMID:8869828",
+      "PMID:9611769",
+      "PMID:9730350",
+      "PPDB:119",
+      "Reaxys:1900390",
+      "UM-BBD_compID:c0131",
+      "Wikipedia:Carbon_dioxide"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:16526"
+    ],
+    "inchi": [
+      "InChI=1S/CO2/c2-1-3"
+    ],
+    "inchikey": [
+      "CURLTUGMZLYLDI-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "44.010"
+    ],
+    "monoisotopicmass": [
+      "43.98983"
+    ],
+    "smiles": [
+      "O=C=O"
+    ]
+  },
+  "label": "carbon dioxide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_16526",
+  "obo_id": "CHEBI:16526",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "124-38-9",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "124-38-9",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "124-38-9",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "4256",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/4256"
+    },
+    {
+      "database": "Gmelin",
+      "id": "989",
+      "description": "Gmelin",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0001967",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001967"
+    },
+    {
+      "database": "KEGG",
+      "id": "C00011",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C00011"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00004",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00004"
+    },
+    {
+      "database": "MetaCyc",
+      "id": "CARBON-DIOXIDE",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MolBase",
+      "id": "752",
+      "description": null,
+      "url": "http://www.molbase.com/en/index.php?app=search&search_keyword=752"
+    },
+    {
+      "database": "PDBeChem",
+      "id": "CO2",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/CO2"
+    },
+    {
+      "database": "PMID",
+      "id": "10826146",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10826146"
+    },
+    {
+      "database": "PMID",
+      "id": "11094503",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11094503"
+    },
+    {
+      "database": "PMID",
+      "id": "11584085",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11584085"
+    },
+    {
+      "database": "PMID",
+      "id": "11802652",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11802652"
+    },
+    {
+      "database": "PMID",
+      "id": "14639145",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14639145"
+    },
+    {
+      "database": "PMID",
+      "id": "15050588",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15050588"
+    },
+    {
+      "database": "PMID",
+      "id": "16591971",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16591971"
+    },
+    {
+      "database": "PMID",
+      "id": "16656478",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16656478"
+    },
+    {
+      "database": "PMID",
+      "id": "16659660",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16659660"
+    },
+    {
+      "database": "PMID",
+      "id": "17190796",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17190796"
+    },
+    {
+      "database": "PMID",
+      "id": "17448243",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17448243"
+    },
+    {
+      "database": "PMID",
+      "id": "17878298",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17878298"
+    },
+    {
+      "database": "PMID",
+      "id": "17884085",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17884085"
+    },
+    {
+      "database": "PMID",
+      "id": "19043767",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19043767"
+    },
+    {
+      "database": "PMID",
+      "id": "19259576",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19259576"
+    },
+    {
+      "database": "PMID",
+      "id": "19854893",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19854893"
+    },
+    {
+      "database": "PMID",
+      "id": "23384758",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23384758"
+    },
+    {
+      "database": "PMID",
+      "id": "23828359",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23828359"
+    },
+    {
+      "database": "PMID",
+      "id": "24258718",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24258718"
+    },
+    {
+      "database": "PMID",
+      "id": "8482095",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8482095"
+    },
+    {
+      "database": "PMID",
+      "id": "8818713",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8818713"
+    },
+    {
+      "database": "PMID",
+      "id": "8869828",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8869828"
+    },
+    {
+      "database": "PMID",
+      "id": "9611769",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9611769"
+    },
+    {
+      "database": "PMID",
+      "id": "9730350",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9730350"
+    },
+    {
+      "database": "PPDB",
+      "id": "119",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/ppdb/en/Reports/119.htm"
+    },
+    {
+      "database": "Reaxys",
+      "id": "1900390",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "UM-BBD_compID",
+      "id": "c0131",
+      "description": "UM-BBD",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Carbon_dioxide",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Carbon_dioxide"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "CARBON DIOXIDE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Carbon dioxide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbon dioxide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dioxidocarbon",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "methanedione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CO2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CO2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E 290",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E-290",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E290",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "R-744",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[CO2]",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "MolBase",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "carbonic anhydride",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UM-BBD",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16526?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16526/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16526/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16526/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16526/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16526/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16526/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_16526/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

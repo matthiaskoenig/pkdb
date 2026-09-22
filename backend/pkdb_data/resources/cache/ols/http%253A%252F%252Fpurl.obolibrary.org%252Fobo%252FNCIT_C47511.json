@@ -1,0 +1,130 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C47511",
+  "lang": "en",
+  "description": [
+    "A fluorinated ether and very potent and stable general anaesthetic agent. The mechanism through which enflurane exerts its effect is not clear, it probably acts on nerve cell membranes to disrupt neuronal transmission in the brain, probably via an action at the lipid matrix of the neuronal membrane. Enflurane may also enhance the activity of the inhibitory neurotransmitter gamma-aminobutyric acid on synaptic transmission. Enflurane may also inhibit glutamatergic excitatory transmission."
+  ],
+  "synonyms": [
+    "2-Chloro-1,1,2-trifluoroethyl difluoromethyl Ether",
+    "2-Chloro-1-(difluoromethoxy)-1,1,2-trifluoroethane",
+    "ENFLURANE",
+    "Enflurane",
+    "Ethrane",
+    "Methylflurether"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "13838-16-9"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:4792"
+    ],
+    "Chemical_Formula": [
+      "C3H2ClF5O"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "91I69L5AY5"
+    ],
+    "Legacy Concept Name": [
+      "Enflurane"
+    ],
+    "NSC Number": [
+      "115944"
+    ],
+    "Preferred_Name": [
+      "Enflurane"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0014277"
+    ],
+    "code": [
+      "C47511"
+    ]
+  },
+  "label": "Enflurane",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C47511",
+  "obo_id": "NCIT:C47511",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "2-Chloro-1,1,2-trifluoroethyl difluoromethyl Ether",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "2-Chloro-1-(difluoromethoxy)-1,1,2-trifluoroethane",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ENFLURANE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Enflurane",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ethrane",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Methylflurether",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47511?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47511/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47511/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47511/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47511/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47511/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47511/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

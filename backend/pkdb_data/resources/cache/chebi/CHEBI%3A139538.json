@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:139538",
+  "name": "((13)C)carbon dioxide",
+  "definition": "A (13)C-modified compound that is carbon dioxide in which the carbon is present as its (13)C isotope.",
+  "formula": "[13C]O2",
+  "charge": "0",
+  "mass": "45.001",
+  "inchikey": "CURLTUGMZLYLDI-OUBTZVSYSA-N"
+}

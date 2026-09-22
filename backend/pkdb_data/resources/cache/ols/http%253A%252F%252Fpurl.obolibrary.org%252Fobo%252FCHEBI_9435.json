@@ -1,0 +1,188 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9435",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Temazepam",
+    "(RS)-Temazepam",
+    "Restoril (TN)",
+    "levanxene",
+    "levanxol"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C16H13ClN2O2"
+    ],
+    "has_dbxref": [
+      "CAS:846-50-4",
+      "Drug_Central:2585",
+      "HMDB:HMDB0014376",
+      "KEGG:C07125",
+      "KEGG:D00370"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9435"
+    ],
+    "inchi": [
+      "InChI=1S/C16H13ClN2O2/c1-19-13-8-7-11(17)9-12(13)14(18-15(20)16(19)21)10-5-3-2-4-6-10/h2-9,15,20H,1H3"
+    ],
+    "inchikey": [
+      "SEQDDYPDSLOBDC-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "300.740"
+    ],
+    "monoisotopicmass": [
+      "300.06656"
+    ],
+    "smiles": [
+      "CN1c2ccc(Cl)cc2C(=NC(O)C1=O)c1ccccc1"
+    ]
+  },
+  "label": "Temazepam",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9435",
+  "obo_id": "CHEBI:9435",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "846-50-4",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2585",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2585"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014376",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014376"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07125",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07125"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00370",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00370"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Temazepam",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(RS)-Temazepam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Restoril (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levanxene",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "levanxol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9435/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

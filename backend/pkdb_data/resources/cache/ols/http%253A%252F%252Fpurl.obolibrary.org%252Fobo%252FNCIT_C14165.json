@@ -1,0 +1,122 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C14165",
+  "lang": "en",
+  "description": [
+    "Being approximately average or within certain limits; conforming with or constituting a norm or standard or level or type or social norm."
+  ],
+  "synonyms": [
+    "NORMAL",
+    "Normal"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Being approximately average or within certain limits; conforming with or constituting a norm or standard or level or type or social norm. (NCI)"
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "GDC"
+    ],
+    "Display_Name": [
+      "Normal"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C19697",
+      "http://purl.obolibrary.org/obo/NCIT_C199145",
+      "http://purl.obolibrary.org/obo/NCIT_C36292"
+    ],
+    "Legacy Concept Name": [
+      "Normal"
+    ],
+    "Maps_To": [
+      "Normal"
+    ],
+    "Preferred_Name": [
+      "Normal"
+    ],
+    "Semantic_Type": [
+      "Conceptual Entity"
+    ],
+    "UMLS_CUI": [
+      "C1550457"
+    ],
+    "code": [
+      "C14165"
+    ]
+  },
+  "label": "Normal",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C14165",
+  "obo_id": "NCIT:C14165",
+  "in_subset": [
+    "NCIT_C101834",
+    "NCIT_C102580",
+    "NCIT_C124309",
+    "NCIT_C132321",
+    "NCIT_C157711",
+    "NCIT_C177537",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C77526"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "NORMAL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Normal",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14165?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14165/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14165/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14165/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14165/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14165/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14165/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14165/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14165/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14165/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C14165/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

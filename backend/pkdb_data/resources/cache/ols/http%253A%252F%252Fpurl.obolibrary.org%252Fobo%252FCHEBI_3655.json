@@ -1,0 +1,480 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3655",
+  "lang": "en",
+  "description": [
+    "A member of the class of  1,3-benzoxazoles that is 1,3-benzoxazol-2-ol in which the hydrogen atom at position 5 is substituted by chlorine. A centrally acting muscle relaxant with sedative properties, it is used for the symptomatic treatment of painful muscle spasm."
+  ],
+  "synonyms": [
+    "5-chloro-1,3-benzoxazol-2-ol",
+    "CHLORZOXAZONE",
+    "Chlorzoxazone",
+    "2-hydroxy-5-chlorobenzoxazole",
+    "5-chloro-2(3H)-benzoxazolone",
+    "5-chloro-2-benzoxazolinone",
+    "5-chloro-2-benzoxazolol",
+    "5-chloro-2-benzoxazolone",
+    "5-chloro-2-hydroxybenzoxazole",
+    "5-chlorobenzoxazolidone",
+    "5-chlorobenzoxazolin-2-one",
+    "chlorzoxane",
+    "chlorzoxazona",
+    "chlorzoxazone",
+    "chlorzoxazonum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C7H4ClNO2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:47330"
+    ],
+    "has_dbxref": [
+      "CAS:95-25-0",
+      "DrugBank:DB00356",
+      "Drug_Central:626",
+      "HMDB:HMDB0014500",
+      "KEGG:C07931",
+      "KEGG:D00771",
+      "LINCS:LSM-6011",
+      "PDBeChem:CLW",
+      "PMID:10640318",
+      "PMID:11727787",
+      "PMID:12437348",
+      "PMID:16763012",
+      "PMID:16859676",
+      "PMID:17621748",
+      "PMID:21195386",
+      "PMID:23975871",
+      "PMID:24210069",
+      "PMID:25815637",
+      "PMID:6631711",
+      "Patent:US2895877",
+      "Reaxys:638882",
+      "Wikipedia:Chlorzoxazone"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3655"
+    ],
+    "inchi": [
+      "InChI=1S/C7H4ClNO2/c8-4-1-2-6-5(3-4)9-7(10)11-6/h1-3H,(H,9,10)"
+    ],
+    "inchikey": [
+      "TZFWDZFKRBELIQ-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "169.56500"
+    ],
+    "monoisotopicmass": [
+      "168.99306"
+    ],
+    "smiles": [
+      "Oc1nc2cc(Cl)ccc2o1"
+    ]
+  },
+  "label": "chlorzoxazone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3655",
+  "obo_id": "CHEBI:3655",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "95-25-0",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "95-25-0",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "95-25-0",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00356",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00356"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "626",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/626"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014500",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014500"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07931",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07931"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00771",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00771"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-6011",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "CLW",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/CLW"
+    },
+    {
+      "database": "PMID",
+      "id": "10640318",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10640318"
+    },
+    {
+      "database": "PMID",
+      "id": "11727787",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11727787"
+    },
+    {
+      "database": "PMID",
+      "id": "12437348",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12437348"
+    },
+    {
+      "database": "PMID",
+      "id": "16763012",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16763012"
+    },
+    {
+      "database": "PMID",
+      "id": "16859676",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16859676"
+    },
+    {
+      "database": "PMID",
+      "id": "17621748",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17621748"
+    },
+    {
+      "database": "PMID",
+      "id": "21195386",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21195386"
+    },
+    {
+      "database": "PMID",
+      "id": "23975871",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23975871"
+    },
+    {
+      "database": "PMID",
+      "id": "24210069",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24210069"
+    },
+    {
+      "database": "PMID",
+      "id": "25815637",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25815637"
+    },
+    {
+      "database": "PMID",
+      "id": "6631711",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/6631711"
+    },
+    {
+      "database": "Patent",
+      "id": "US2895877",
+      "description": null,
+      "url": "https://www.google.com/patents/US2895877"
+    },
+    {
+      "database": "Reaxys",
+      "id": "638882",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Chlorzoxazone",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Chlorzoxazone"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-chloro-1,3-benzoxazol-2-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CHLORZOXAZONE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Chlorzoxazone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-hydroxy-5-chlorobenzoxazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-chloro-2(3H)-benzoxazolone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-chloro-2-benzoxazolinone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-chloro-2-benzoxazolol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-chloro-2-benzoxazolone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-chloro-2-hydroxybenzoxazole",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-chlorobenzoxazolidone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-chlorobenzoxazolin-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlorzoxane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlorzoxazona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlorzoxazone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlorzoxazone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "chlorzoxazonum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3655?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3655/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3655/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3655/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3655/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3655/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3655/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3655/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

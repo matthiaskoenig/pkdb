@@ -1,0 +1,328 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_6456",
+  "lang": "en",
+  "description": [
+    "The monocarboxylic acid amide resulting from the formal condensation of N,N-diethylglycine with 2,6-dimethylaniline."
+  ],
+  "synonyms": [
+    "Lidocaine",
+    "N-(2,6-dimethylphenyl)-N(2),N(2)-diethylglycinamide",
+    "2-(Diethylamino)-2',6'-acetoxylidide",
+    "2-(Diethylamino)-N-(2,6-dimethylphenyl)acetamide",
+    "Lidoderm",
+    "alpha-diethylamino-2,6-dimethylacetanilide"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C14H22N2O"
+    ],
+    "has_dbxref": [
+      "CAS:137-58-6",
+      "DrugBank:DB00281",
+      "Drug_Central:1579",
+      "HMDB:HMDB0014426",
+      "KEGG:C07073",
+      "KEGG:D00358",
+      "LINCS:LSM-3165",
+      "PMID:11106996",
+      "PMID:11120381",
+      "PMID:11431418",
+      "PMID:11692349",
+      "PMID:15056998",
+      "PMID:16668583",
+      "PMID:17214917",
+      "PMID:18940244",
+      "Patent:GB706409",
+      "Patent:GB758224",
+      "Patent:US2441498",
+      "Reaxys:2215784",
+      "VSDB:1903",
+      "Wikipedia:Lidocaine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:6456"
+    ],
+    "inchi": [
+      "InChI=1S/C14H22N2O/c1-5-16(6-2)10-13(17)15-14-11(3)8-7-9-12(14)4/h7-9H,5-6,10H2,1-4H3,(H,15,17)"
+    ],
+    "inchikey": [
+      "NNJVILVZKWQKPM-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "234.33736"
+    ],
+    "monoisotopicmass": [
+      "234.17321"
+    ],
+    "smiles": [
+      "CCN(CC)CC(=O)Nc1c(C)cccc1C"
+    ]
+  },
+  "label": "lidocaine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_6456",
+  "obo_id": "CHEBI:6456",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "137-58-6",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "137-58-6",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00281",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00281"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1579",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1579"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014426",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014426"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07073",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07073"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00358",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00358"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-3165",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "11106996",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11106996"
+    },
+    {
+      "database": "PMID",
+      "id": "11120381",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11120381"
+    },
+    {
+      "database": "PMID",
+      "id": "11431418",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11431418"
+    },
+    {
+      "database": "PMID",
+      "id": "11692349",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11692349"
+    },
+    {
+      "database": "PMID",
+      "id": "15056998",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15056998"
+    },
+    {
+      "database": "PMID",
+      "id": "16668583",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16668583"
+    },
+    {
+      "database": "PMID",
+      "id": "17214917",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17214917"
+    },
+    {
+      "database": "PMID",
+      "id": "18940244",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18940244"
+    },
+    {
+      "database": "Patent",
+      "id": "GB706409",
+      "description": null,
+      "url": "https://www.google.com/patents/GB706409"
+    },
+    {
+      "database": "Patent",
+      "id": "GB758224",
+      "description": null,
+      "url": "https://www.google.com/patents/GB758224"
+    },
+    {
+      "database": "Patent",
+      "id": "US2441498",
+      "description": null,
+      "url": "https://www.google.com/patents/US2441498"
+    },
+    {
+      "database": "Reaxys",
+      "id": "2215784",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "VSDB",
+      "id": "1903",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1903.htm"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Lidocaine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Lidocaine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Lidocaine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(2,6-dimethylphenyl)-N(2),N(2)-diethylglycinamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(Diethylamino)-2',6'-acetoxylidide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(Diethylamino)-N-(2,6-dimethylphenyl)acetamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lidoderm",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-diethylamino-2,6-dimethylacetanilide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6456?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6456/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6456/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6456/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6456/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6456/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6456/graph"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6456/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_6456/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

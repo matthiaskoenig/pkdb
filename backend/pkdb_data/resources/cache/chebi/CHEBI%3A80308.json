@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:80308",
+  "name": "substance P",
+  "definition": "A neuropeptide consisting of 11-amino acids. It preferentially activates neurokinin-1 receptors, exterting excitatory effects on central and peripheral neurons and involved in pain transmission.",
+  "formula": "C63H98N18O13S",
+  "charge": "0",
+  "mass": "1347.650",
+  "inchikey": "ADNPLDHMAVUMIW-CUZNLEPHSA-N"
+}

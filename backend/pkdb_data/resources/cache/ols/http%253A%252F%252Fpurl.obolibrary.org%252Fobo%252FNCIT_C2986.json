@@ -1,0 +1,194 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C2986",
+  "lang": "en",
+  "description": [
+    "A chronic condition characterized by minimal or absent production of insulin by the pancreas."
+  ],
+  "synonyms": [
+    "Diabetes Mellitus (Type I)",
+    "Diabetes, Type I",
+    "IDDM",
+    "Immune Mediated Diabetes",
+    "Insulin Dependent Diabetes",
+    "Insulin Dependent Diabetes Mellitus",
+    "Juvenile Diabetes",
+    "Type 1 Diabetes",
+    "Type 1 Diabetes Mellitus",
+    "Type I Diabetes",
+    "Type I Diabetes Mellitus",
+    "Type I Diabetes mellitus",
+    "Type I diabetes"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Diabetes mellitus caused by cell-mediated autoimmune destruction of pancreatic beta cells."
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "Cellosaurus",
+      "GDC",
+      "MedDRA",
+      "NICHD",
+      "PCDC",
+      "SeroNet"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C17103"
+    ],
+    "Legacy Concept Name": [
+      "Insulin_Dependent_Diabetes_Mellitus"
+    ],
+    "Maps_To": [
+      "Diabetes, Type I",
+      "Type I diabetes mellitus"
+    ],
+    "Preferred_Name": [
+      "Type 1 Diabetes Mellitus"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C0011854"
+    ],
+    "code": [
+      "C2986"
+    ]
+  },
+  "label": "Type 1 Diabetes Mellitus",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C2986",
+  "obo_id": "NCIT:C2986",
+  "in_subset": [
+    "NCIT_C118464",
+    "NCIT_C118467",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C157711",
+    "NCIT_C159416",
+    "NCIT_C165258",
+    "NCIT_C177537",
+    "NCIT_C179027",
+    "NCIT_C186315",
+    "NCIT_C186341",
+    "NCIT_C189083",
+    "NCIT_C189762",
+    "NCIT_C192842",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Diabetes Mellitus (Type I)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Diabetes, Type I",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "IDDM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Immune Mediated Diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Insulin Dependent Diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Insulin Dependent Diabetes Mellitus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Juvenile Diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type 1 Diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type 1 Diabetes Mellitus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type I Diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type I Diabetes Mellitus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type I Diabetes mellitus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type I diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2986?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2986/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2986/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2986/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2986/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2986/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2986/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

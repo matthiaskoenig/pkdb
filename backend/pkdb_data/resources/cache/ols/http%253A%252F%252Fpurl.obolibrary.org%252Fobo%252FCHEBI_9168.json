@@ -1,0 +1,343 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9168",
+  "lang": "en",
+  "description": [
+    "A macrolide lactam isolated from Streptomyces hygroscopicus consisting of a 29-membered ring containing 4 trans double bonds, three of which are conjugated. It is an antibiotic, immunosupressive and antineoplastic agent."
+  ],
+  "synonyms": [
+    "(3S,6R,7E,9R,10R,12R,14S,15E,17E,19E,21S,23S,26R,27R,34aS)-9,27-dihydroxy-3-{(2R)-1-[(1S,3R,4R)-4-hydroxy-3-methoxycyclohexyl]propan-2-yl}-10,21-dimethoxy-6,8,12,14,20,26-hexamethyl-9,10,12,13,14,21,22,23,24,25,26,27,32,33,34,34a-hexadecahydro-3H-23,27-epoxypyrido[2,1-c][1,4]oxazacyclohentriacontine-1,5,11,28,29(4H,6H,31H)-pentone",
+    "Sirolimus",
+    "(-)-Rapamycin",
+    "(1R,9S,12S,15R,16E,18R,19R,21R,23S,24E,26E,28E,30S,32S,35R)-1,18-dihydroxy-12-{(2S)-1-[(1S,3R,4R)-4-hydroxy-3-methoxycyclohexyl]propan-2-yl}-19,30-dimethoxy-15,17,21,23,29,35-hexamethyl-11,36-dioxa-4-azatricyclo[30.3.1.0(4,9)]hexatriaconta-16,24,26,28-tetraene-2,3,10,14,20-pentone",
+    "Antibiotic AY 22989",
+    "Rapamune",
+    "rapamycin",
+    "sirolimus",
+    "sirolimusum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "database_cross_reference": [
+      "CAS:53123-88-9",
+      "DrugBank:DB00877",
+      "Drug_Central:2446",
+      "HMDB:HMDB0015015",
+      "KEGG:C07909",
+      "KEGG:D00753",
+      "KNApSAcK:C00018055",
+      "LIPID_MAPS_instance:LMPK06000003",
+      "PDBeChem:RAP",
+      "PMID:19587680",
+      "PMID:22960739",
+      "PMID:22981852",
+      "PMID:22984623",
+      "PMID:24341993",
+      "PMID:24409289",
+      "Reaxys:5848501",
+      "Wikipedia:Rapamycin"
+    ],
+    "formula": [
+      "C51H79NO13"
+    ],
+    "has_alternative_id": [
+      "CHEBI:45276",
+      "CHEBI:67812"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9168"
+    ],
+    "inchi": [
+      "InChI=1S/C51H79NO13/c1-30-16-12-11-13-17-31(2)42(61-8)28-38-21-19-36(7)51(60,65-38)48(57)49(58)52-23-15-14-18-39(52)50(59)64-43(33(4)26-37-20-22-40(53)44(27-37)62-9)29-41(54)32(3)25-35(6)46(56)47(63-10)45(55)34(5)24-30/h11-13,16-17,25,30,32-34,36-40,42-44,46-47,53,56,60H,14-15,18-24,26-29H2,1-10H3/b13-11+,16-12+,31-17+,35-25+/t30-,32-,33-,34-,36-,37+,38+,39+,40-,42+,43+,44-,46-,47+,51-/m1/s1"
+    ],
+    "inchikey": [
+      "QFJCIRLUMZQUOT-HPLJOQBZSA-N"
+    ],
+    "mass": [
+      "914.17190"
+    ],
+    "monoisotopicmass": [
+      "913.55514"
+    ],
+    "smiles": [
+      "[H][C@]1(CC[C@@H](O)[C@@H](C1)OC)C[C@@H](C)[C@]1([H])CC(=O)[C@H](C)\\C=C(C)\\[C@@H](O)[C@@H](OC)C(=O)[C@H](C)C[C@H](C)\\C=C\\C=C\\C=C(C)\\[C@H](C[C@]2([H])CC[C@@H](C)[C@@](O)(O2)C(=O)C(=O)N2CCCC[C@@]2([H])C(=O)O1)OC"
+    ]
+  },
+  "label": "sirolimus",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9168",
+  "obo_id": "CHEBI:9168",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "53123-88-9",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "53123-88-9",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00877",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00877"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2446",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2446"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0015015",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015015"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07909",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07909"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00753",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00753"
+    },
+    {
+      "database": "KNApSAcK",
+      "id": "C00018055",
+      "description": null,
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00018055"
+    },
+    {
+      "database": "LIPID_MAPS_instance",
+      "id": "LMPK06000003",
+      "description": "LIPID MAPS",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMPK06000003"
+    },
+    {
+      "database": "PDBeChem",
+      "id": "RAP",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/RAP"
+    },
+    {
+      "database": "PMID",
+      "id": "19587680",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19587680"
+    },
+    {
+      "database": "PMID",
+      "id": "22960739",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22960739"
+    },
+    {
+      "database": "PMID",
+      "id": "22981852",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22981852"
+    },
+    {
+      "database": "PMID",
+      "id": "22984623",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22984623"
+    },
+    {
+      "database": "PMID",
+      "id": "24341993",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24341993"
+    },
+    {
+      "database": "PMID",
+      "id": "24409289",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24409289"
+    },
+    {
+      "database": "Reaxys",
+      "id": "5848501",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Rapamycin",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Rapamycin"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3S,6R,7E,9R,10R,12R,14S,15E,17E,19E,21S,23S,26R,27R,34aS)-9,27-dihydroxy-3-{(2R)-1-[(1S,3R,4R)-4-hydroxy-3-methoxycyclohexyl]propan-2-yl}-10,21-dimethoxy-6,8,12,14,20,26-hexamethyl-9,10,12,13,14,21,22,23,24,25,26,27,32,33,34,34a-hexadecahydro-3H-23,27-epoxypyrido[2,1-c][1,4]oxazacyclohentriacontine-1,5,11,28,29(4H,6H,31H)-pentone",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sirolimus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-Rapamycin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1R,9S,12S,15R,16E,18R,19R,21R,23S,24E,26E,28E,30S,32S,35R)-1,18-dihydroxy-12-{(2S)-1-[(1S,3R,4R)-4-hydroxy-3-methoxycyclohexyl]propan-2-yl}-19,30-dimethoxy-15,17,21,23,29,35-hexamethyl-11,36-dioxa-4-azatricyclo[30.3.1.0(4,9)]hexatriaconta-16,24,26,28-tetraene-2,3,10,14,20-pentone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Antibiotic AY 22989",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Rapamune",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rapamycin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sirolimus",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sirolimusum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9168?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9168/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9168/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9168/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9168/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9168/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9168/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9168/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

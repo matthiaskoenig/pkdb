@@ -1,0 +1,148 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_5844",
+  "lang": "en",
+  "description": [
+    "A coronary artery disease characterized by myocardial cell death (myocardial necrosis) due to prolonged ischaemia.",
+    "Xref MGI."
+  ],
+  "synonyms": [
+    "Myocardial infarct",
+    "heart attack"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "EFO:0000612",
+      "ICD10CM:I21",
+      "MESH:D009203",
+      "MIM:608557",
+      "NCI:C27996",
+      "SNOMEDCT_US_2023_03_01:66514008",
+      "UMLS_CUI:C0027051"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:5844"
+    ]
+  },
+  "label": "myocardial infarction",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_5844",
+  "obo_id": "DOID:5844",
+  "in_subset": [
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A coronary artery disease characterized by myocardial cell death (myocardial necrosis) due to prolonged ischaemia.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0000612",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0000612"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "I21",
+      "description": null,
+      "url": "https://icd.codes/icd10cm/I21"
+    },
+    {
+      "database": "MESH",
+      "id": "D009203",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D009203"
+    },
+    {
+      "database": "MIM",
+      "id": "608557",
+      "description": null,
+      "url": "https://omim.org/MIM:608557"
+    },
+    {
+      "database": "NCI",
+      "id": "C27996",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C27996"
+    },
+    {
+      "database": "SNOMEDCT_US_2023_03_01",
+      "id": "66514008",
+      "description": null,
+      "url": "http://snomed.info/id/66514008"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0027051",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0027051"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5844?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5844/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5844/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5844/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5844/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5844/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5844/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5844/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5844/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5844/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5844/graph"
+    },
+    "has_symptom": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5844/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002452"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

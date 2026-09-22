@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:3720",
+  "name": "cisapride",
+  "definition": "The amide resulting from formal condensation of 4-amino-5-chloro-2-methoxybenzoic acid with cis-1-[3-(4-fluorophenoxy)propyl]-3-methoxypiperidin-4-amine. It has been used (as its monohydrate or as its tartrate) for the treatment of gastro-oesophageal reflux disease and for non-ulcer dyspepsia, but its propensity to cause cardiac arrhythmias resulted in its complete withdrawal from many countries, including the U.K., and restrictions on its use elsewhere.",
+  "formula": "C23H29ClFN3O4",
+  "charge": "0",
+  "mass": "465.94500",
+  "inchikey": "DCSUBABJRXZOMT-IRLDBZIGSA-N"
+}

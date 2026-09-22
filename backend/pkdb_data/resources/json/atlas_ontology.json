@@ -1,0 +1,213 @@
+[
+  {
+    "sid": "creatinine",
+    "name": "creatinine",
+    "label": "creatinine",
+    "ntype": "substance",
+    "dtype": "undefined",
+    "description": "Creatinine. The breakdown product of creatine, a constituent of muscle tissue, that is excreted by the kidney and whose serum level is used to evaluate kidney function.",
+    "annotations": [
+      {
+        "term": "CHEBI:16737",
+        "relation": "BQB_IS",
+        "collection": "chebi",
+        "description": null,
+        "label": null,
+        "url": "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:16737"
+      },
+      {
+        "term": "C399",
+        "relation": "BQB_IS",
+        "collection": "ncit",
+        "description": null,
+        "label": null,
+        "url": "http://ncit.nci.nih.gov/ncitbrowser/ConceptReport.jsp?dictionary=NCI%20Thesaurus&code=C399"
+      },
+      {
+        "term": "DDRJAANPRJIHGJ-UHFFFAOYSA-N",
+        "relation": "BQB_IS",
+        "collection": "inchikey",
+        "description": null,
+        "label": null,
+        "url": "http://www.chemspider.com/inchikey=DDRJAANPRJIHGJ-UHFFFAOYSA-N"
+      }
+    ],
+    "synonyms": [],
+    "xrefs": [
+      {
+        "name": "chembl",
+        "accession": "CHEMBL65567",
+        "url": "https://www.ebi.ac.uk/chembldb/compound/inspect/CHEMBL65567"
+      },
+      {
+        "name": "chebi",
+        "accession": "16737",
+        "url": "http://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI%3A16737"
+      },
+      {
+        "name": "kegg_ligand",
+        "accession": "C00791",
+        "url": "http://www.genome.jp/dbget-bin/www_bget?C00791"
+      },
+      {
+        "name": "emolecules",
+        "accession": "494216",
+        "url": "https://www.emolecules.com/cgi-bin/more?vid=494216"
+      },
+      {
+        "name": "emolecules",
+        "accession": "1937952",
+        "url": "https://www.emolecules.com/cgi-bin/more?vid=1937952"
+      },
+      {
+        "name": "hmdb",
+        "accession": "HMDB0000562",
+        "url": "http://www.hmdb.ca/metabolites/HMDB0000562"
+      },
+      {
+        "name": "drugbank",
+        "accession": "DB11846",
+        "url": "http://www.drugbank.ca/drugs/DB11846"
+      },
+      {
+        "name": "brenda",
+        "accession": "2015",
+        "url": "https://www.brenda-enzymes.org/ligand.php?brenda_ligand_id=2015"
+      },
+      {
+        "name": "metabolights",
+        "accession": "MTBLC16737",
+        "url": "http://www.ebi.ac.uk/metabolights/MTBLC16737"
+      },
+      {
+        "name": "pubchem",
+        "accession": "137319715",
+        "url": "http://pubchem.ncbi.nlm.nih.gov/compound/137319715"
+      },
+      {
+        "name": "chemicalbook",
+        "accession": "CB8672212",
+        "url": "https://www.chemicalbook.com/ChemicalProductProperty_EN_CB8672212"
+      },
+      {
+        "name": "rhea",
+        "accession": "16737",
+        "url": "http://www.rhea-db.org/searchresults?q=CHEBI:16737"
+      },
+      {
+        "name": "mcule",
+        "accession": "MCULE-8832153777",
+        "url": "https://mcule.com/MCULE-8832153777"
+      },
+      {
+        "name": "nmrshiftdb2",
+        "accession": "10016981",
+        "url": "http://nmrshiftdb.org/molecule/10016981"
+      },
+      {
+        "name": "molport",
+        "accession": "MolPort-003-803-357",
+        "url": "https://www.molport.com/shop/molecule-link/MolPort-003-803-357"
+      },
+      {
+        "name": "nikkaji",
+        "accession": "J1.397H",
+        "url": "http://jglobal.jst.go.jp/en/redirect?Nikkaji_No=J1.397H"
+      },
+      {
+        "name": "molport",
+        "accession": "MolPort-001-779-735",
+        "url": "https://www.molport.com/shop/molecule-link/MolPort-001-779-735"
+      },
+      {
+        "name": "surechembl",
+        "accession": "SCHEMBL16295",
+        "url": "https://www.surechembl.org/chemical/SCHEMBL16295"
+      },
+      {
+        "name": "pubchem",
+        "accession": "588",
+        "url": "http://pubchem.ncbi.nlm.nih.gov/compound/588"
+      },
+      {
+        "name": "fdasrs",
+        "accession": "AYI8EX34EU",
+        "url": "https://fdasis.nlm.nih.gov/srs/ProxyServlet?mergeData=true&objectHandle=DBMaint&APPLICATION_NAME=fdasrs&actionHandle=default&nextPage=jsp/srs/ResultScreen.jsp&TXTSUPERLISTID=AYI8EX34EU"
+      },
+      {
+        "name": "recon",
+        "accession": "crtn",
+        "url": "https://vmh.uni.lu/#metabolite/crtn"
+      },
+      {
+        "name": "pubchem_tpharma",
+        "accession": "15146458",
+        "url": "http://pubchem.ncbi.nlm.nih.gov/substance/15146458"
+      },
+      {
+        "name": "actor",
+        "accession": "60-27-5",
+        "url": "http://actor.epa.gov/actor/chemical.xhtml?casrn=60-27-5"
+      },
+      {
+        "name": "selleck",
+        "accession": "creatinine",
+        "url": "http://www.selleckchem.com/products/creatinine"
+      },
+      {
+        "name": "pubchem_tpharma",
+        "accession": "16190123",
+        "url": "http://pubchem.ncbi.nlm.nih.gov/substance/16190123"
+      },
+      {
+        "name": "actor",
+        "accession": "15231-31-9",
+        "url": "http://actor.epa.gov/actor/chemical.xhtml?casrn=15231-31-9"
+      },
+      {
+        "name": "dailymed",
+        "accession": "CREATININE",
+        "url": "https://dailymed.nlm.nih.gov/dailymed/search.cfm?adv=1&labeltype=human&query=ACTIVEMOIETY:(CREATININE"
+      },
+      {
+        "name": "rxnorm",
+        "accession": "CREATININE",
+        "url": "https://mor.nlm.nih.gov/RxNav/search?searchBy=RXCUI&searchTerm=CREATININE"
+      },
+      {
+        "name": "clinicaltrials",
+        "accession": "CREATININE",
+        "url": "https://www.clinicaltrials.gov/ct2/results?&type=Intr&intr=%22CREATININE%22"
+      },
+      {
+        "name": "MedChemExpress",
+        "accession": "HY-B0504",
+        "url": "https://www.medchemexpress.com/HY-B0504"
+      },
+      {
+        "name": "surechembl",
+        "accession": "SCHEMBL23777915",
+        "url": "https://www.surechembl.org/chemical/SCHEMBL23777915"
+      },
+      {
+        "name": "comptox",
+        "accession": "DTXSID8045987",
+        "url": "https://comptox.epa.gov/dashboard/DTXSID8045987"
+      },
+      {
+        "name": "zinc",
+        "accession": "ZINC000000967189",
+        "url": "http://zinc15.docking.org/substances/ZINC000000967189"
+      }
+    ],
+    "deprecated": false,
+    "parents": [],
+    "children": [],
+    "substance": {
+      "mass": "113.11800",
+      "charge": "0",
+      "formula": "C4H7N3O",
+      "stype": "basic"
+    }
+  }
+]

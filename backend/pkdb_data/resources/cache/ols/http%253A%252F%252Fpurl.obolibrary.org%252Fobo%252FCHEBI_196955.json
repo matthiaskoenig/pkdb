@@ -1,0 +1,424 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_196955",
+  "lang": "en",
+  "description": [
+    "A secondary carboxamide resulting from the formal condensation of the carboxy group of (3'S)-2'-oxo-1',2',5,7-tetrahydrospiro[cyclopenta[b]pyridine-6,3'-pyrrolo[2,3-b]pyridine]-3-carboxylic acid with the amino group of (3S,5S,6R)-3-amino-6-methyl-1-(2,2,2-trifluoroethyl)-5-(2,3,6-trifluorophenyl)piperidin-2-one. It is a selective oral, small-molecule antagonist of calcitonin gene-related peptide (CGRP) receptor that has been approved for the treatment of migraine."
+  ],
+  "synonyms": [
+    "(3'S)-N-[(3S,5S,6R)-6-methyl-2-oxo-1-(2,2,2-trifluoroethyl)-5-(2,3,6-trifluorophenyl)piperidin-3-yl]-2'-oxo-1',2',5,7-tetrahydrospiro[cyclopenta[b]pyridine-6,3'-pyrrolo[2,3-b]pyridine]-3-carboxamide",
+    "AGN-241689",
+    "MK-8031",
+    "Qulipta",
+    "atogepant",
+    "atogepantum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C29H23F6N5O3"
+    ],
+    "has_dbxref": [
+      "CAS:1374248-81-3",
+      "DrugBank:DB16098",
+      "KEGG:D11313",
+      "PMID:34407343",
+      "PMID:34813050",
+      "PMID:34964810",
+      "PMID:35085204",
+      "PMID:35093013",
+      "PMID:35230651",
+      "PMID:35319319",
+      "PMID:35332801",
+      "PMID:35358493",
+      "PMID:35469689",
+      "PMID:35493707",
+      "PMID:35675076",
+      "PMID:35705886",
+      "PMID:35983926",
+      "PMID:36153941",
+      "PMID:36226229",
+      "PMID:36396451",
+      "PMID:36552072",
+      "PMID:36602199",
+      "PMID:36620892",
+      "PMID:36651532",
+      "PMID:37038933",
+      "PMID:37210713",
+      "PMID:37278480",
+      "PMID:37424270",
+      "PMID:37516124",
+      "PMID:37516125",
+      "PMID:37564925",
+      "PMID:37630989",
+      "PMID:37638400",
+      "PMID:37650778",
+      "PMID:37656319",
+      "Wikipedia:Atogepant"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:196955"
+    ],
+    "inchi": [
+      "InChI=1S/C29H23F6N5O3/c1-13-16(22-18(30)4-5-19(31)23(22)32)8-20(26(42)40(13)12-29(33,34)35)38-25(41)15-7-14-9-28(10-21(14)37-11-15)17-3-2-6-36-24(17)39-27(28)43/h2-7,11,13,16,20H,8-10,12H2,1H3,(H,38,41)(H,36,39,43)/t13-,16-,20+,28+/m1/s1"
+    ],
+    "inchikey": [
+      "QIVUCLWGARAQIO-OLIXTKCUSA-N"
+    ],
+    "mass": [
+      "603.525"
+    ],
+    "monoisotopicmass": [
+      "603.17051"
+    ],
+    "smiles": [
+      "[H][C@]1(C[C@H](NC(=O)C2=CC3=C(C[C@]4(C3)C(=O)NC3=C4C=CC=N3)N=C2)C(=O)N(CC(F)(F)F)[C@@H]1C)C1=C(F)C=CC(F)=C1F"
+    ]
+  },
+  "label": "atogepant",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_196955",
+  "obo_id": "CHEBI:196955",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "1374248-81-3",
+      "description": "DrugBank",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB16098",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB16098"
+    },
+    {
+      "database": "KEGG",
+      "id": "D11313",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D11313"
+    },
+    {
+      "database": "PMID",
+      "id": "34407343",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/34407343"
+    },
+    {
+      "database": "PMID",
+      "id": "34813050",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/34813050"
+    },
+    {
+      "database": "PMID",
+      "id": "34964810",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/34964810"
+    },
+    {
+      "database": "PMID",
+      "id": "35085204",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35085204"
+    },
+    {
+      "database": "PMID",
+      "id": "35093013",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35093013"
+    },
+    {
+      "database": "PMID",
+      "id": "35230651",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35230651"
+    },
+    {
+      "database": "PMID",
+      "id": "35319319",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35319319"
+    },
+    {
+      "database": "PMID",
+      "id": "35332801",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35332801"
+    },
+    {
+      "database": "PMID",
+      "id": "35358493",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35358493"
+    },
+    {
+      "database": "PMID",
+      "id": "35469689",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35469689"
+    },
+    {
+      "database": "PMID",
+      "id": "35493707",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35493707"
+    },
+    {
+      "database": "PMID",
+      "id": "35675076",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35675076"
+    },
+    {
+      "database": "PMID",
+      "id": "35705886",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35705886"
+    },
+    {
+      "database": "PMID",
+      "id": "35983926",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/35983926"
+    },
+    {
+      "database": "PMID",
+      "id": "36153941",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36153941"
+    },
+    {
+      "database": "PMID",
+      "id": "36226229",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36226229"
+    },
+    {
+      "database": "PMID",
+      "id": "36396451",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36396451"
+    },
+    {
+      "database": "PMID",
+      "id": "36552072",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36552072"
+    },
+    {
+      "database": "PMID",
+      "id": "36602199",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36602199"
+    },
+    {
+      "database": "PMID",
+      "id": "36620892",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36620892"
+    },
+    {
+      "database": "PMID",
+      "id": "36651532",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/36651532"
+    },
+    {
+      "database": "PMID",
+      "id": "37038933",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37038933"
+    },
+    {
+      "database": "PMID",
+      "id": "37210713",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37210713"
+    },
+    {
+      "database": "PMID",
+      "id": "37278480",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37278480"
+    },
+    {
+      "database": "PMID",
+      "id": "37424270",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37424270"
+    },
+    {
+      "database": "PMID",
+      "id": "37516124",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37516124"
+    },
+    {
+      "database": "PMID",
+      "id": "37516125",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37516125"
+    },
+    {
+      "database": "PMID",
+      "id": "37564925",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37564925"
+    },
+    {
+      "database": "PMID",
+      "id": "37630989",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37630989"
+    },
+    {
+      "database": "PMID",
+      "id": "37638400",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37638400"
+    },
+    {
+      "database": "PMID",
+      "id": "37650778",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37650778"
+    },
+    {
+      "database": "PMID",
+      "id": "37656319",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/37656319"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Atogepant",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Atogepant"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3'S)-N-[(3S,5S,6R)-6-methyl-2-oxo-1-(2,2,2-trifluoroethyl)-5-(2,3,6-trifluorophenyl)piperidin-3-yl]-2'-oxo-1',2',5,7-tetrahydrospiro[cyclopenta[b]pyridine-6,3'-pyrrolo[2,3-b]pyridine]-3-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AGN-241689",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "MK-8031",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Qulipta",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "atogepant",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "atogepantum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_196955/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

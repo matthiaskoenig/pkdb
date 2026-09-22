@@ -1,0 +1,121 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C28836",
+  "lang": "en",
+  "description": [
+    "A synthetic isopropylamino-propanol derivative used as an antihypertensive, hypotensive and antiarrhythmic Atenolol acts as a peripheral, cardioselective beta blocker specific for beta-1 adrenergic receptors, without intrinsic sympathomimetic effects. It reduces exercise heart rates and delays atrioventricular conduction, with overall oxygen requirements decreasing. (NCI04)"
+  ],
+  "synonyms": [
+    "ATENOLOL",
+    "Atenolol"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "29122-68-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:2904"
+    ],
+    "Chemical_Formula": [
+      "C14H22N2O3"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "HemOnc"
+    ],
+    "Display_Name": [
+      "Atenolol"
+    ],
+    "FDA_UNII_Code": [
+      "50VV3VW0TI"
+    ],
+    "Has_Target": [
+      "http://purl.obolibrary.org/obo/NCIT_C40096"
+    ],
+    "Legacy Concept Name": [
+      "Atenolol"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "590657"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "590657"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "590657"
+    ],
+    "Preferred_Name": [
+      "Atenolol"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0004147"
+    ],
+    "code": [
+      "C28836"
+    ]
+  },
+  "label": "Atenolol",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C28836",
+  "obo_id": "NCIT:C28836",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "ATENOLOL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Atenolol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28836?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28836/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28836/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28836/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28836/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28836/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28836/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

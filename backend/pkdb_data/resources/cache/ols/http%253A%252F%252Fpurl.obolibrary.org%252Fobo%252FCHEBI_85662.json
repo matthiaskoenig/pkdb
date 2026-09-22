@@ -1,0 +1,690 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_85662",
+  "lang": "en",
+  "description": [
+    "A forty-four membered polypeptide consisting of L-His, Gly, L-Glu, Gly, L-Thr, L-Phe, L-Thr, L-Ser, L-Asp, L-Leu, L-Ser, L-Lys, L-Gln, L-Met, L-Glu, L-Glu, L-Glu, L-Ala, L-Val, L-Arg, L-Leu, L-Phe, L-Ile, L-Glu, L-Trp, L-Leu, L-Lys, L-Asn, Gly, Gly, LPro, L-Ser, L-Ser, Gly, L-Ala, L-Pro, L-Pro, L-Ser, L-Lys, L-Lys, L-Lys, L-Lys, L-Lys, and L-Lys-NH2 residues joined in sequence. Used as an adjunct to diet and exercise for the treatment of adults with type II diabetes."
+  ],
+  "synonyms": [
+    "L-histidylglycyl-L-alpha-glutamylglycyl-L-threonyl-L-phenylalanyl-L-threonyl-L-seryl-L-alpha-aspartyl-L-leucyl-L-seryl-L-lysyl-L-glutaminyl-L-methionyl-L-alpha-glutamyl-L-alpha-glutamyl-L-alpha-glutamyl-L-alanyl-L-valyl-L-arginyl-L-leucyl-L-phenylalanyl-L-isoleucyl-L-alpha-glutamyl-L-tryptophyl-L-leucyl-L-lysyl-L-asparaginylglycylglycyl-L-prolyl-L-seryl-L-serylglycyl-L-alanyl-L-prolyl-L-prolyl-L-seryl-L-lysyl-L-lysyl-L-lysyl-L-lysyl-L-lysyl-L-lysinamide",
+    "AQVE-10010",
+    "AVE 0010",
+    "AVE0010",
+    "Adlyxin",
+    "DesPro38Exendin-4(1-39)-Lys6-NH2",
+    "H-HGEGTFTSDLSKQMEEEAVRLFIEWLKNGGPSSGAPPSKKKKKK-NH2",
+    "H-His-Gly-Glu-Gly-Thr-Phe-Thr-Ser-Asp-Leu-Ser-Lys-Gln-Met-Glu-Glu-Glu-Ala-Val-Arg-Leu-Phe-Ile-Glu-Trp-Leu-Lys-Asn-Gly-Gly-Pro-Ser-Ser-Gly-Ala-Pro-Pro-Ser-Lys-Lys-Lys-Lys-Lys-Lys-NH2",
+    "H-L-His-Gly-L-Glu-Gly-L-Thr-L-Phe-L-Thr-L-Ser-L-Asp-L-Leu-L-Ser-L-Lys-L-Gln-L-Met-L-Glu-L-Glu-L-Glu-L-Ala-L-Val-L-Arg-L-Leu-L-Phe-L-Ile-L-Glu-L-Trp-L-Leu-L-Lys-L-Asn-Gly-Gly-L-Pro-L-Ser-L-Ser-Gly-L-Ala-L-Pro-L-Pro-L-Ser-L-Lys-L-Lys-L-Lys-L-Lys-L-Lys-L-Lys-NH2",
+    "Lyxumia",
+    "ZP 10",
+    "ZP10A peptide",
+    "des-38-proline-exendine-4 (Heloderma suspectum)-(1-39)-peptidylpenta-L-lysyl-L-lysinamide",
+    "lixisenatida",
+    "lixisenatide",
+    "lixisenatidum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C215H347N61O65S"
+    ],
+    "has_dbxref": [
+      "CAS:320367-13-3",
+      "Drug_Central:4815",
+      "KEGG:D09729",
+      "PMID:19629885",
+      "PMID:21391833",
+      "PMID:23537041",
+      "PMID:23558600",
+      "PMID:23825925",
+      "PMID:23992745",
+      "PMID:24086950",
+      "PMID:24122776",
+      "PMID:24363554",
+      "PMID:24373190",
+      "PMID:24476092",
+      "PMID:24583037",
+      "PMID:24641271",
+      "PMID:24683832",
+      "PMID:24876548",
+      "PMID:25012990",
+      "PMID:25027491",
+      "PMID:25055456",
+      "PMID:25066229",
+      "PMID:25107586",
+      "PMID:25115916",
+      "PMID:25119443",
+      "PMID:25130920",
+      "PMID:25195184",
+      "PMID:25773712",
+      "PMID:25802728",
+      "PMID:25853868",
+      "PMID:25887358",
+      "PMID:25965710",
+      "PMID:26342556",
+      "PMID:26423184",
+      "PMID:26537183",
+      "PMID:26594250",
+      "PMID:26630143",
+      "PMID:26701217",
+      "PMID:26770666",
+      "PMID:26787264",
+      "PMID:26981945",
+      "PMID:26981946",
+      "PMID:26981947",
+      "PMID:27092017",
+      "PMID:27222510",
+      "PMID:27252787",
+      "PMID:27267268",
+      "PMID:27284114",
+      "PMID:27310712",
+      "PMID:27311491",
+      "PMID:27319011",
+      "PMID:27341040",
+      "Reaxys:23952540",
+      "Wikipedia:Lixisenatide"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:85662"
+    ],
+    "inchi": [
+      "InChI=1S/C215H347N61O65S/c1-16-115(10)173(210(337)256-141(68-74-170(299)300)194(321)261-148(94-122-98-232-126-50-24-23-49-124(122)126)199(326)258-143(89-111(2)3)196(323)247-134(58-32-40-83-223)189(316)262-149(96-160(226)285)180(307)235-100-161(286)233-104-165(290)274-85-42-60-156(274)207(334)267-154(108-280)206(333)265-151(105-277)181(308)237-101-162(287)239-117(12)213(340)276-87-44-62-158(276)214(341)275-86-43-61-157(275)208(335)268-153(107-279)204(331)249-132(56-30-38-81-221)187(314)246-131(55-29-37-80-220)186(313)245-130(54-28-36-79-219)185(312)244-129(53-27-35-78-218)184(311)243-128(52-26-34-77-217)183(310)242-127(176(227)303)51-25-33-76-216)272-201(328)146(92-120-45-19-17-20-46-120)260-197(324)144(90-112(4)5)257-190(317)135(59-41-84-231-215(228)229)255-209(336)172(114(8)9)271-177(304)116(11)240-182(309)138(65-71-167(293)294)251-192(319)139(66-72-168(295)296)252-193(320)140(67-73-169(297)298)253-195(322)142(75-88-342-15)254-191(318)137(63-69-159(225)284)250-188(315)133(57-31-39-82-222)248-203(330)152(106-278)266-198(325)145(91-113(6)7)259-200(327)150(97-171(301)302)263-205(332)155(109-281)269-212(339)175(119(14)283)273-202(329)147(93-121-47-21-18-22-48-121)264-211(338)174(118(13)282)270-164(289)103-236-179(306)136(64-70-166(291)292)241-163(288)102-234-178(305)125(224)95-123-99-230-110-238-123/h17-24,45-50,98-99,110-119,125,127-158,172-175,232,277-283H,16,25-44,51-97,100-109,216-224H2,1-15H3,(H2,225,284)(H2,226,285)(H2,227,303)(H,230,238)(H,233,286)(H,234,305)(H,235,307)(H,236,306)(H,237,308)(H,239,287)(H,240,309)(H,241,288)(H,242,310)(H,243,311)(H,244,312)(H,245,313)(H,246,314)(H,247,323)(H,248,330)(H,249,331)(H,250,315)(H,251,319)(H,252,320)(H,253,322)(H,254,318)(H,255,336)(H,256,337)(H,257,317)(H,258,326)(H,259,327)(H,260,324)(H,261,321)(H,262,316)(H,263,332)(H,264,338)(H,265,333)(H,266,325)(H,267,334)(H,268,335)(H,269,339)(H,270,289)(H,271,304)(H,272,328)(H,273,329)(H,291,292)(H,293,294)(H,295,296)(H,297,298)(H,299,300)(H,301,302)(H4,228,229,231)/t115-,116-,117-,118+,119+,125-,127-,128-,129-,130-,131-,132-,133-,134-,135-,136-,137-,138-,139-,140-,141-,142-,143-,144-,145-,146-,147-,148-,149-,150-,151-,152-,153-,154-,155-,156-,157-,158-,172-,173-,174-,175-/m0/s1"
+    ],
+    "inchikey": [
+      "XVVOERDUTLJJHN-IAEQDCLQSA-N"
+    ],
+    "mass": [
+      "4858.49000"
+    ],
+    "monoisotopicmass": [
+      "4855.54432"
+    ],
+    "smiles": [
+      "CC[C@H](C)[C@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CCCNC(N)=N)NC(=O)[C@@H](NC(=O)[C@H](C)NC(=O)[C@H](CCC(O)=O)NC(=O)[C@H](CCC(O)=O)NC(=O)[C@H](CCC(O)=O)NC(=O)[C@H](CCSC)NC(=O)[C@H](CCC(N)=O)NC(=O)[C@H](CCCCN)NC(=O)[C@H](CO)NC(=O)[C@H](CC(C)C)NC(=O)[C@H](CC(O)=O)NC(=O)[C@H](CO)NC(=O)[C@@H](NC(=O)[C@H](Cc1ccccc1)NC(=O)[C@@H](NC(=O)CNC(=O)[C@H](CCC(O)=O)NC(=O)CNC(=O)[C@@H](N)Cc1c[nH]cn1)[C@@H](C)O)[C@@H](C)O)C(C)C)C(=O)N[C@@H](CCC(O)=O)C(=O)N[C@@H](Cc1c[nH]c2ccccc12)C(=O)N[C@@H](CC(C)C)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CC(N)=O)C(=O)NCC(=O)NCC(=O)N1CCC[C@H]1C(=O)N[C@@H](CO)C(=O)N[C@@H](CO)C(=O)NCC(=O)N[C@@H](C)C(=O)N1CCC[C@H]1C(=O)N1CCC[C@H]1C(=O)N[C@@H](CO)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(=O)N[C@@H](CCCCN)C(N)=O"
+    ]
+  },
+  "label": "lixisenatide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_85662",
+  "obo_id": "CHEBI:85662",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "320367-13-3",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "4815",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/4815"
+    },
+    {
+      "database": "KEGG",
+      "id": "D09729",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D09729"
+    },
+    {
+      "database": "PMID",
+      "id": "19629885",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19629885"
+    },
+    {
+      "database": "PMID",
+      "id": "21391833",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21391833"
+    },
+    {
+      "database": "PMID",
+      "id": "23537041",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23537041"
+    },
+    {
+      "database": "PMID",
+      "id": "23558600",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23558600"
+    },
+    {
+      "database": "PMID",
+      "id": "23825925",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23825925"
+    },
+    {
+      "database": "PMID",
+      "id": "23992745",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23992745"
+    },
+    {
+      "database": "PMID",
+      "id": "24086950",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24086950"
+    },
+    {
+      "database": "PMID",
+      "id": "24122776",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24122776"
+    },
+    {
+      "database": "PMID",
+      "id": "24363554",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24363554"
+    },
+    {
+      "database": "PMID",
+      "id": "24373190",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24373190"
+    },
+    {
+      "database": "PMID",
+      "id": "24476092",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24476092"
+    },
+    {
+      "database": "PMID",
+      "id": "24583037",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24583037"
+    },
+    {
+      "database": "PMID",
+      "id": "24641271",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24641271"
+    },
+    {
+      "database": "PMID",
+      "id": "24683832",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24683832"
+    },
+    {
+      "database": "PMID",
+      "id": "24876548",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24876548"
+    },
+    {
+      "database": "PMID",
+      "id": "25012990",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25012990"
+    },
+    {
+      "database": "PMID",
+      "id": "25027491",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25027491"
+    },
+    {
+      "database": "PMID",
+      "id": "25055456",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25055456"
+    },
+    {
+      "database": "PMID",
+      "id": "25066229",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25066229"
+    },
+    {
+      "database": "PMID",
+      "id": "25107586",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25107586"
+    },
+    {
+      "database": "PMID",
+      "id": "25115916",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25115916"
+    },
+    {
+      "database": "PMID",
+      "id": "25119443",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25119443"
+    },
+    {
+      "database": "PMID",
+      "id": "25130920",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25130920"
+    },
+    {
+      "database": "PMID",
+      "id": "25195184",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25195184"
+    },
+    {
+      "database": "PMID",
+      "id": "25773712",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25773712"
+    },
+    {
+      "database": "PMID",
+      "id": "25802728",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25802728"
+    },
+    {
+      "database": "PMID",
+      "id": "25853868",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25853868"
+    },
+    {
+      "database": "PMID",
+      "id": "25887358",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25887358"
+    },
+    {
+      "database": "PMID",
+      "id": "25965710",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25965710"
+    },
+    {
+      "database": "PMID",
+      "id": "26342556",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26342556"
+    },
+    {
+      "database": "PMID",
+      "id": "26423184",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26423184"
+    },
+    {
+      "database": "PMID",
+      "id": "26537183",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26537183"
+    },
+    {
+      "database": "PMID",
+      "id": "26594250",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26594250"
+    },
+    {
+      "database": "PMID",
+      "id": "26630143",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26630143"
+    },
+    {
+      "database": "PMID",
+      "id": "26701217",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26701217"
+    },
+    {
+      "database": "PMID",
+      "id": "26770666",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26770666"
+    },
+    {
+      "database": "PMID",
+      "id": "26787264",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26787264"
+    },
+    {
+      "database": "PMID",
+      "id": "26981945",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26981945"
+    },
+    {
+      "database": "PMID",
+      "id": "26981946",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26981946"
+    },
+    {
+      "database": "PMID",
+      "id": "26981947",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26981947"
+    },
+    {
+      "database": "PMID",
+      "id": "27092017",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27092017"
+    },
+    {
+      "database": "PMID",
+      "id": "27222510",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27222510"
+    },
+    {
+      "database": "PMID",
+      "id": "27252787",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27252787"
+    },
+    {
+      "database": "PMID",
+      "id": "27267268",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27267268"
+    },
+    {
+      "database": "PMID",
+      "id": "27284114",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27284114"
+    },
+    {
+      "database": "PMID",
+      "id": "27310712",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27310712"
+    },
+    {
+      "database": "PMID",
+      "id": "27311491",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27311491"
+    },
+    {
+      "database": "PMID",
+      "id": "27319011",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27319011"
+    },
+    {
+      "database": "PMID",
+      "id": "27341040",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27341040"
+    },
+    {
+      "database": "Reaxys",
+      "id": "23952540",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Lixisenatide",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Lixisenatide"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "L-histidylglycyl-L-alpha-glutamylglycyl-L-threonyl-L-phenylalanyl-L-threonyl-L-seryl-L-alpha-aspartyl-L-leucyl-L-seryl-L-lysyl-L-glutaminyl-L-methionyl-L-alpha-glutamyl-L-alpha-glutamyl-L-alpha-glutamyl-L-alanyl-L-valyl-L-arginyl-L-leucyl-L-phenylalanyl-L-isoleucyl-L-alpha-glutamyl-L-tryptophyl-L-leucyl-L-lysyl-L-asparaginylglycylglycyl-L-prolyl-L-seryl-L-serylglycyl-L-alanyl-L-prolyl-L-prolyl-L-seryl-L-lysyl-L-lysyl-L-lysyl-L-lysyl-L-lysyl-L-lysinamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AQVE-10010",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AVE 0010",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "AVE0010",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Adlyxin",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DesPro38Exendin-4(1-39)-Lys6-NH2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H-HGEGTFTSDLSKQMEEEAVRLFIEWLKNGGPSSGAPPSKKKKKK-NH2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H-His-Gly-Glu-Gly-Thr-Phe-Thr-Ser-Asp-Leu-Ser-Lys-Gln-Met-Glu-Glu-Glu-Ala-Val-Arg-Leu-Phe-Ile-Glu-Trp-Leu-Lys-Asn-Gly-Gly-Pro-Ser-Ser-Gly-Ala-Pro-Pro-Ser-Lys-Lys-Lys-Lys-Lys-Lys-NH2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H-L-His-Gly-L-Glu-Gly-L-Thr-L-Phe-L-Thr-L-Ser-L-Asp-L-Leu-L-Ser-L-Lys-L-Gln-L-Met-L-Glu-L-Glu-L-Glu-L-Ala-L-Val-L-Arg-L-Leu-L-Phe-L-Ile-L-Glu-L-Trp-L-Leu-L-Lys-L-Asn-Gly-Gly-L-Pro-L-Ser-L-Ser-Gly-L-Ala-L-Pro-L-Pro-L-Ser-L-Lys-L-Lys-L-Lys-L-Lys-L-Lys-L-Lys-NH2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Lyxumia",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ZP 10",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ZP10A peptide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "des-38-proline-exendine-4 (Heloderma suspectum)-(1-39)-peptidylpenta-L-lysyl-L-lysinamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lixisenatida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lixisenatide",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lixisenatidum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85662?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85662/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85662/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85662/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85662/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85662/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85662/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_85662/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

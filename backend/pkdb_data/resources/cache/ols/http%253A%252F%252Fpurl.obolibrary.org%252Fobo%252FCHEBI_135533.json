@@ -1,0 +1,146 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_135533",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(+/-)-Talinolol",
+    "cordanum",
+    "racemic talinolol"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C20H33N3O3"
+    ],
+    "has_dbxref": [
+      "CAS:57460-41-0",
+      "Drug_Central:2557",
+      "HMDB:HMDB0042020"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:135533"
+    ],
+    "inchi": [
+      "InChI=1S/C20H33N3O3/c1-20(2,3)21-13-17(24)14-26-18-11-9-16(10-12-18)23-19(25)22-15-7-5-4-6-8-15/h9-12,15,17,21,24H,4-8,13-14H2,1-3H3,(H2,22,23,25)"
+    ],
+    "inchikey": [
+      "MXFWWQICDIZSOA-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "363.495"
+    ],
+    "monoisotopicmass": [
+      "363.25219"
+    ],
+    "smiles": [
+      "O(CC(CNC(C)(C)C)O)C1=CC=C(C=C1)NC(NC2CCCCC2)=O"
+    ]
+  },
+  "label": "talinolol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_135533",
+  "obo_id": "CHEBI:135533",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "57460-41-0",
+      "description": "DrugCentral",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2557",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2557"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0042020",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0042020"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(+/-)-Talinolol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cordanum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "racemic talinolol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135533/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

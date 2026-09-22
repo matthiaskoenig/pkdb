@@ -1,0 +1,292 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_4792",
+  "lang": "en",
+  "description": [
+    "An ether in which the oxygen atom is connected to 2-chloro-1,1,2-trifluoroethyl and difluoromethyl groups."
+  ],
+  "synonyms": [
+    "2-chloro-1-(difluoromethoxy)-1,1,2-trifluoroethane",
+    "Enflurane",
+    "2-chloro-1,1,2-trifluoroethyl difluoromethyl ether",
+    "Alyrane",
+    "Efrane",
+    "Ethrane",
+    "Methylflurether"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C3H2ClF5O"
+    ],
+    "has_dbxref": [
+      "CAS:13838-16-9",
+      "DrugBank:DB00228",
+      "Drug_Central:1009",
+      "HMDB:HMDB0014373",
+      "KEGG:C07516",
+      "KEGG:D00543",
+      "PMID:23934553",
+      "PMID:25386744",
+      "PMID:7457058",
+      "Patent:AU2014277860",
+      "Patent:US5783199",
+      "Reaxys:1903921",
+      "Wikipedia:Enflurane"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:4792"
+    ],
+    "inchi": [
+      "InChI=1S/C3H2ClF5O/c4-1(5)3(8,9)10-2(6)7/h1-2H"
+    ],
+    "inchikey": [
+      "JPGQOUSTVILISH-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "184.49210"
+    ],
+    "monoisotopicmass": [
+      "183.97143"
+    ],
+    "smiles": [
+      "FC(F)OC(F)(F)C(F)Cl"
+    ]
+  },
+  "label": "enflurane",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_4792",
+  "obo_id": "CHEBI:4792",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "13838-16-9",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "13838-16-9",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "13838-16-9",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00228",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00228"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1009",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1009"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014373",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014373"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07516",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07516"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00543",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00543"
+    },
+    {
+      "database": "PMID",
+      "id": "23934553",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23934553"
+    },
+    {
+      "database": "PMID",
+      "id": "25386744",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25386744"
+    },
+    {
+      "database": "PMID",
+      "id": "7457058",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7457058"
+    },
+    {
+      "database": "Patent",
+      "id": "AU2014277860",
+      "description": null,
+      "url": "https://www.google.com/patents/AU2014277860"
+    },
+    {
+      "database": "Patent",
+      "id": "US5783199",
+      "description": null,
+      "url": "https://www.google.com/patents/US5783199"
+    },
+    {
+      "database": "Reaxys",
+      "id": "1903921",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Enflurane",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Enflurane"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-chloro-1-(difluoromethoxy)-1,1,2-trifluoroethane",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Enflurane",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-chloro-1,1,2-trifluoroethyl difluoromethyl ether",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Alyrane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Efrane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ethrane",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Methylflurether",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4792?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4792/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4792/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4792/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4792/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4792/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4792/graph"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4792/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4792/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

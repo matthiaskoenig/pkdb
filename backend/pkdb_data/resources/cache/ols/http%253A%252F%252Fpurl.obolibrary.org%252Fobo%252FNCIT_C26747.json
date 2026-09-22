@@ -1,0 +1,213 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C26747",
+  "lang": "en",
+  "description": [
+    "A type of diabetes mellitus that is characterized by insulin resistance or desensitization and increased blood glucose levels. This is a chronic disease that can develop gradually over the life of a patient and can be linked to both environmental factors and heredity."
+  ],
+  "synonyms": [
+    "Adult Onset Diabetes",
+    "Adult-Onset Diabetes",
+    "Diabetes, Type 2",
+    "Diabetes, Type II",
+    "NIDDM",
+    "Non-Insulin Dependent Diabetes",
+    "Non-Insulin Dependent Diabetes Mellitus",
+    "Noninsulin Dependent Diabetes",
+    "T2DM - Type 2 Diabetes mellitus",
+    "Type 2 Diabetes",
+    "Type 2 Diabetes Mellitus",
+    "Type 2 Diabetes Mellitus Non-Insulin Dependent",
+    "Type II Diabetes",
+    "Type II Diabetes Mellitus",
+    "Type II Diabetes mellitus",
+    "Type II diabetes"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Diabetes mellitus caused by decreased insulin action in target tissues and insufficient production of insulin by pancreatic beta cells."
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "Cellosaurus",
+      "GDC",
+      "MedDRA",
+      "NICHD",
+      "SeroNet"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C16457",
+      "http://purl.obolibrary.org/obo/NCIT_C17103"
+    ],
+    "Legacy Concept Name": [
+      "Non-Insulin_Dependent_Diabetes_Mellitus"
+    ],
+    "Maps_To": [
+      "Diabetes, Type II",
+      "Type II diabetes mellitus"
+    ],
+    "Preferred_Name": [
+      "Type 2 Diabetes Mellitus"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C0011860"
+    ],
+    "code": [
+      "C26747"
+    ]
+  },
+  "label": "Type 2 Diabetes Mellitus",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C26747",
+  "obo_id": "NCIT:C26747",
+  "in_subset": [
+    "NCIT_C118464",
+    "NCIT_C118467",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C157711",
+    "NCIT_C159416",
+    "NCIT_C165258",
+    "NCIT_C177537",
+    "NCIT_C179027",
+    "NCIT_C189083",
+    "NCIT_C189762",
+    "NCIT_C192842",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Adult Onset Diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Adult-Onset Diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Diabetes, Type 2",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Diabetes, Type II",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "NIDDM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Non-Insulin Dependent Diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Non-Insulin Dependent Diabetes Mellitus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Noninsulin Dependent Diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "T2DM - Type 2 Diabetes mellitus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type 2 Diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type 2 Diabetes Mellitus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type 2 Diabetes Mellitus Non-Insulin Dependent",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type II Diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type II Diabetes Mellitus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type II Diabetes mellitus",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Type II diabetes",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26747?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26747/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26747/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26747/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26747/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26747/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26747/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

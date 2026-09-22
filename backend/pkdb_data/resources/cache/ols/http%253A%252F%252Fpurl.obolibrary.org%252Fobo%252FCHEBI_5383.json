@@ -1,0 +1,295 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_5383",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "3-ethyl-4-methyl-N-[2-(4-{[(trans-4-methylcyclohexyl)carbamoyl]sulfamoyl}phenyl)ethyl]-2-oxo-2,5-dihydro-1H-pyrrole-1-carboxamide",
+    "1-((p-(2-(3-Ethyl-4-methyl-2-oxo-3-pyrroline-1-carboxamido)ethyl)phenyl)sulfonyl)-3-(trans-4-methylcyclohexyl)urea",
+    "1-{[4-(2-{[(3-ethyl-4-methyl-2-oxo-2,5-dihydro-1H-pyrrol-1-yl)carbonyl]amino}ethyl)phenyl]sulfonyl}-3-(trans-4-methylcyclohexyl)urea",
+    "Amaryl",
+    "gimepiride",
+    "glimepirida",
+    "glimepiride",
+    "glimepiridum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C24H34N4O5S"
+    ],
+    "has_dbxref": [
+      "CAS:93479-97-1",
+      "DrugBank:DB00222",
+      "Drug_Central:1300",
+      "HMDB:HMDB0014367",
+      "KEGG:C07669",
+      "KEGG:D00593",
+      "PMID:11199230",
+      "PMID:12369756",
+      "PMID:12852703",
+      "PMID:22469262",
+      "PMID:23305037",
+      "PMID:8141820",
+      "Reaxys:7731873"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:5383"
+    ],
+    "inchi": [
+      "InChI=1S/C24H34N4O5S/c1-4-21-17(3)15-28(22(21)29)24(31)25-14-13-18-7-11-20(12-8-18)34(32,33)27-23(30)26-19-9-5-16(2)6-10-19/h7-8,11-12,16,19H,4-6,9-10,13-15H2,1-3H3,(H,25,31)(H2,26,27,30)/t16-,19-"
+    ],
+    "inchikey": [
+      "WIGIZIANZCJQQY-RUCARUNLSA-N"
+    ],
+    "mass": [
+      "490.61600"
+    ],
+    "monoisotopicmass": [
+      "490.22499"
+    ],
+    "smiles": [
+      "CCC1=C(C)CN(C(=O)NCCc2ccc(cc2)S(=O)(=O)NC(=O)N[C@H]2CC[C@H](C)CC2)C1=O"
+    ]
+  },
+  "label": "glimepiride",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_5383",
+  "obo_id": "CHEBI:5383",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "93479-97-1",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "93479-97-1",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00222",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00222"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1300",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1300"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014367",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014367"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07669",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07669"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00593",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00593"
+    },
+    {
+      "database": "PMID",
+      "id": "11199230",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11199230"
+    },
+    {
+      "database": "PMID",
+      "id": "12369756",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12369756"
+    },
+    {
+      "database": "PMID",
+      "id": "12852703",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12852703"
+    },
+    {
+      "database": "PMID",
+      "id": "22469262",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22469262"
+    },
+    {
+      "database": "PMID",
+      "id": "23305037",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23305037"
+    },
+    {
+      "database": "PMID",
+      "id": "8141820",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8141820"
+    },
+    {
+      "database": "Reaxys",
+      "id": "7731873",
+      "description": "Reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3-ethyl-4-methyl-N-[2-(4-{[(trans-4-methylcyclohexyl)carbamoyl]sulfamoyl}phenyl)ethyl]-2-oxo-2,5-dihydro-1H-pyrrole-1-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-((p-(2-(3-Ethyl-4-methyl-2-oxo-3-pyrroline-1-carboxamido)ethyl)phenyl)sulfonyl)-3-(trans-4-methylcyclohexyl)urea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-{[4-(2-{[(3-ethyl-4-methyl-2-oxo-2,5-dihydro-1H-pyrrol-1-yl)carbonyl]amino}ethyl)phenyl]sulfonyl}-3-(trans-4-methylcyclohexyl)urea",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Amaryl",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "gimepiride",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glimepirida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glimepiride",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "glimepiridum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5383/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:77734",
+  "name": "dexverapamil",
+  "definition": "A 2-(3,4-dimethoxyphenyl)-5-{[2-(3,4-dimethoxyphenyl)ethyl](methyl)amino}-2-(propan-2-yl)pentanenitrile that has R configuration. It competitively inhibits the multidrug resistance efflux pump P-glycoprotein (MDR-1, EC 3.6.3.44), thereby potentially increasing the effectiveness of a wide range of antineoplastic drugs which are inactivated by MDR-1 mechanisms. Dexverapamil exhibits lower calcium antagonistic activity and toxicity than racemic verapamil.",
+  "formula": "C27H38N2O4",
+  "charge": "0",
+  "mass": "454.60160",
+  "inchikey": "SGTNSNPWRIOYBX-HHHXNRCGSA-N"
+}

@@ -1,0 +1,106 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C119246",
+  "lang": "en",
+  "description": [
+    "The total volume of blood pumped by the heart over a set period of time, conventionally one minute; it is calculated as heart rate times stroke volume (CO= HR x SV), and is additionally dependent on preload and afterload for functional output."
+  ],
+  "synonyms": [
+    "CARDOUT",
+    "Cardiac Output",
+    "Cardiac output"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "The total volume of blood pumped by the heart over a set period of time, conventionally 1 min; it is calculated as heart rate times stroke volume and is additionally dependent on preload and afterload for functional output.",
+      "The total volume of blood pumped by the heart over a set period of time, conventionally one minute; it is calculated as heart rate times stroke volume (CO= HR x SV)."
+    ],
+    "Contributing_Source": [
+      "ACC/AHA",
+      "CDISC"
+    ],
+    "Has_ACC-AHA_SARS2_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C67388"
+    ],
+    "Preferred_Name": [
+      "Cardiac Output"
+    ],
+    "Semantic_Type": [
+      "Finding"
+    ],
+    "UMLS_CUI": [
+      "C0007165"
+    ],
+    "code": [
+      "C119246"
+    ]
+  },
+  "label": "Cardiac Output",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C119246",
+  "obo_id": "NCIT:C119246",
+  "in_subset": [
+    "NCIT_C101846",
+    "NCIT_C101847",
+    "NCIT_C191200",
+    "NCIT_C191386",
+    "NCIT_C191670",
+    "NCIT_C61410",
+    "NCIT_C66830"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CARDOUT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cardiac Output",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cardiac output",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C119246?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C119246/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C119246/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C119246/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C119246/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C119246/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C119246/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

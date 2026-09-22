@@ -1,0 +1,74 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/OPMI_0000281",
+  "lang": "en",
+  "description": [
+    "The state of being free from illness or injury"
+  ],
+  "synonyms": [],
+  "annotation": {
+    "alternative label": [
+      "health state"
+    ],
+    "definition source": [
+      "https://en.oxforddictionaries.com/definition/health",
+      "https://en.wikipedia.org/wiki/Health",
+      "https://www.healthknowledge.org.uk/public-health-textbook/research-methods/1c-health-care-evaluation-health-care-assessment/measures-health-status"
+    ],
+    "term editor": [
+      "Oliver He, Edison Ong"
+    ]
+  },
+  "label": "health status",
+  "ontology_name": "opmi",
+  "ontology_prefix": "OPMI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/opmi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "OPMI_0000281",
+  "obo_id": "OPMI:0000281",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/opmi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOPMI_0000281?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/opmi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOPMI_0000281/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/opmi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOPMI_0000281/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/opmi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOPMI_0000281/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/opmi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOPMI_0000281/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/opmi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOPMI_0000281/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/opmi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOPMI_0000281/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/opmi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOPMI_0000281/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/opmi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOPMI_0000281/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/opmi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOPMI_0000281/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/opmi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FOPMI_0000281/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

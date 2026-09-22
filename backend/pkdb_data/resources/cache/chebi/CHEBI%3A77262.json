@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:77262",
+  "name": "(R)-omeprazole",
+  "definition": "A 5-methoxy-2-{[(4-methoxy-3,5-dimethylpyridin-2-yl)methyl]sulfinyl}-1H-benzimidazole that has R configuration at the sulfur atom.",
+  "formula": "C17H19N3O3S",
+  "charge": "0",
+  "mass": "345.41600",
+  "inchikey": "SUBDBMMJDZJVOS-XMMPIXPASA-N"
+}

@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:85994",
+  "name": "lenvatinib",
+  "definition": "A member of the class of quinolines that is the carboxamide of 4-{3-chloro-4-[(cyclopropylcarbamoyl)amino]phenoxy}-7-methoxyquinoline-6-carboxylic acid. A multi-kinase inhibitor and orphan drug used (as its mesylate salt) for the treatment of various types of thyroid cancer that do not respond to radioiodine.",
+  "formula": "C21H19ClN4O4",
+  "charge": 0,
+  "mass": "426.860",
+  "inchikey": "WOSKHXYHFSIKNG-UHFFFAOYSA-N"
+}

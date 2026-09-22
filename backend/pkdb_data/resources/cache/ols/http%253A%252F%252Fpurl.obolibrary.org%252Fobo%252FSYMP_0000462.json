@@ -1,0 +1,78 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/SYMP_0000462",
+  "lang": "en",
+  "description": [
+    "A symptom is a perceived change in function, sensation, loss, disturbance or appearance reported by a patient indicative of a disease."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "has_obo_namespace": [
+      "symptoms"
+    ],
+    "id": [
+      "SYMP:0000462"
+    ]
+  },
+  "label": "symptom",
+  "ontology_name": "symp",
+  "ontology_prefix": "SYMP",
+  "ontology_iri": "http://purl.obolibrary.org/obo/symp.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": true,
+  "short_form": "SYMP_0000462",
+  "obo_id": "SYMP:0000462",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A symptom is a perceived change in function, sensation, loss, disturbance or appearance reported by a patient indicative of a disease.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000462?lang=en"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000462/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000462/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000462/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000462/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/symp/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FSYMP_0000462/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

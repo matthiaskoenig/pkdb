@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:3699",
+  "name": "cimetidine",
+  "definition": "A member of the class of  guanidines that consists of guanidine carrying a methyl substituent at position 1, a cyano group at position 2 and a 2-{[(5-methyl-1H-imidazol-4-yl)methyl]sulfanyl}ethyl group at position 3. It is a  H2-receptor antagonist that inhibits the production of acid in stomach.",
+  "formula": "C10H16N6S",
+  "charge": "0",
+  "mass": "252.34048",
+  "inchikey": "AQIXAKUUQRKLND-UHFFFAOYSA-N"
+}

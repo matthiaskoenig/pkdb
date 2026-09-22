@@ -1,0 +1,279 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_31401",
+  "lang": "en",
+  "description": [
+    "A lactam that is 3,4-dihydroquinolin-2(1H)-one in which the hydrogen at position 6 is substituted by a 4-(1-cyclohexyl-1H-tetrazol-5-yl)butoxy group."
+  ],
+  "synonyms": [
+    "6-[4-(1-cyclohexyl-1H-tetrazol-5-yl)butoxy]-3,4-dihydroquinolin-2(1H)-one",
+    "3,4-dihydro-6-(4-(1-cyclohexyl-1H-tetrazol-5-yl)butoxy)-2(1H)-quinolinone",
+    "6-(4-(1-cyclohexyl-1H-tetrazol-5-yl)butoxy)-3,4-dihydro-2(1H)-quinolinone",
+    "6-(4-(1-cyclohexyl-1H-tetrazol-5-yl)butoxy)-3,4-dihydrocarbostyril",
+    "6-[4-(1-Cyclohexyl-1H-tetrazol-5-yl)-butoxy]-3,4-dihydro-1H-quinolin-2-one",
+    "cilostazol",
+    "cilostazolum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C20H27N5O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:150440"
+    ],
+    "has_dbxref": [
+      "Beilstein:3632017",
+      "CAS:73963-72-1",
+      "DrugBank:DB01166",
+      "Drug_Central:644",
+      "KEGG:D01896",
+      "LINCS:LSM-3491",
+      "PMID:17500510",
+      "PMID:9873372",
+      "Patent:BE878548",
+      "Patent:US4277479",
+      "VSDB:1939",
+      "Wikipedia:Cilostazol"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:31401"
+    ],
+    "inchi": [
+      "InChI=1S/C20H27N5O2/c26-20-12-9-15-14-17(10-11-18(15)21-20)27-13-5-4-8-19-22-23-24-25(19)16-6-2-1-3-7-16/h10-11,14,16H,1-9,12-13H2,(H,21,26)"
+    ],
+    "inchikey": [
+      "RRGUKTPIGVIEKM-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "369.46070"
+    ],
+    "monoisotopicmass": [
+      "369.21648"
+    ],
+    "smiles": [
+      "O=C1CCc2cc(OCCCCc3nnnn3C3CCCCC3)ccc2N1"
+    ]
+  },
+  "label": "cilostazol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_31401",
+  "obo_id": "CHEBI:31401",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "3632017",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "73963-72-1",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "73963-72-1",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01166",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01166"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "644",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/644"
+    },
+    {
+      "database": "KEGG",
+      "id": "D01896",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D01896"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-3491",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "17500510",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17500510"
+    },
+    {
+      "database": "PMID",
+      "id": "9873372",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9873372"
+    },
+    {
+      "database": "Patent",
+      "id": "BE878548",
+      "description": null,
+      "url": "https://www.google.com/patents/BE878548"
+    },
+    {
+      "database": "Patent",
+      "id": "US4277479",
+      "description": null,
+      "url": "https://www.google.com/patents/US4277479"
+    },
+    {
+      "database": "VSDB",
+      "id": "1939",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1939.htm"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Cilostazol",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Cilostazol"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "6-[4-(1-cyclohexyl-1H-tetrazol-5-yl)butoxy]-3,4-dihydroquinolin-2(1H)-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,4-dihydro-6-(4-(1-cyclohexyl-1H-tetrazol-5-yl)butoxy)-2(1H)-quinolinone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-(4-(1-cyclohexyl-1H-tetrazol-5-yl)butoxy)-3,4-dihydro-2(1H)-quinolinone",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-(4-(1-cyclohexyl-1H-tetrazol-5-yl)butoxy)-3,4-dihydrocarbostyril",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "6-[4-(1-Cyclohexyl-1H-tetrazol-5-yl)-butoxy]-3,4-dihydro-1H-quinolin-2-one",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cilostazol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cilostazolum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31401?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31401/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31401/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31401/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31401/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31401/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31401/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_31401/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

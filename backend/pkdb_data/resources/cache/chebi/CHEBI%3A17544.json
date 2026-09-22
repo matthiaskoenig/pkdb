@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:17544",
+  "name": "hydrogencarbonate",
+  "definition": "The carbon oxoanion resulting from the removal of a proton from carbonic acid.",
+  "formula": "CHO3",
+  "charge": "-1",
+  "mass": "61.01684",
+  "inchikey": "BVKZGUZCCUSVTD-UHFFFAOYSA-M"
+}

@@ -1,0 +1,89 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/BTO_0001487",
+  "lang": "en",
+  "description": [
+    "Connective tissue in which fat is stored and which has the cells distended by droplets of fat."
+  ],
+  "synonyms": [
+    "adipose",
+    "bodyfat",
+    "fat",
+    "fat tissue"
+  ],
+  "annotation": {
+    "has_alternative_id": [
+      "BTO:0000441"
+    ],
+    "has_obo_namespace": [
+      "BrendaTissueOBO"
+    ],
+    "id": [
+      "BTO:0001487"
+    ]
+  },
+  "label": "adipose tissue",
+  "ontology_name": "bto",
+  "ontology_prefix": "BTO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/bto.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "BTO_0001487",
+  "obo_id": "BTO:0001487",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "Connective tissue in which fat is stored and which has the cells distended by droplets of fat.",
+      "oboXrefs": [
+        {
+          "database": "From_Merriam-Webster's_Online_Dictionary_at_www.Merriam-Webster.com",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0001487?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0001487/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0001487/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0001487/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0001487/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0001487/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0001487/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0001487/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0001487/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0001487/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0001487/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

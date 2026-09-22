@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:49662",
+  "name": "indometacin",
+  "definition": "A member of the class of indole-3-acetic acids that is indole-3-acetic acid in which the indole ring is substituted at positions 1, 2 and 5 by p-chlorobenzoyl, methyl, and methoxy groups, respectively. A non-steroidal anti-inflammatory drug, it is used in the treatment of musculoskeletal and joint disorders including osteoarthritis, rheumatoid arthritis, gout, bursitis and tendinitis.",
+  "formula": "C19H16ClNO4",
+  "charge": "0",
+  "mass": "357.78800",
+  "inchikey": "CGIGDMFJXJATDK-UHFFFAOYSA-N"
+}

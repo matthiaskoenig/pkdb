@@ -1,0 +1,96 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C76134",
+  "lang": "en",
+  "description": [
+    "The anhydrous form of the pyridazine angiotensin-converting enzyme (ACE) inhibitor cilazapril with antihypertensive activity. As a prodrug cilazapril is rapidly metabolized in the liver to cilazaprilat; cilazaprilat competitively binds to and inhibits ACE, thereby blocking the conversion of angiotensin I to angiotensin II. This prevents the potent vasoconstrictive actions of angiotensin II, resulting in vasodilation. Cilazaprilat also decreases angiotensin II-induced aldosterone secretion by the adrenal cortex, which leads to an increase in sodium excretion and subsequently increases water outflow."
+  ],
+  "synonyms": [
+    "CILAZAPRIL ANHYDROUS",
+    "Cilazapril Anhydrous"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "88768-40-5"
+    ],
+    "Chemical_Formula": [
+      "C22H31N3O5"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "8Q9454114Q"
+    ],
+    "Legacy Concept Name": [
+      "Cilazapril_Anhydrous"
+    ],
+    "Preferred_Name": [
+      "Cilazapril Anhydrous"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0886706"
+    ],
+    "code": [
+      "C76134"
+    ]
+  },
+  "label": "Cilazapril Anhydrous",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C76134",
+  "obo_id": "NCIT:C76134",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CILAZAPRIL ANHYDROUS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cilazapril Anhydrous",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76134?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76134/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76134/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76134/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76134/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76134/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C76134/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

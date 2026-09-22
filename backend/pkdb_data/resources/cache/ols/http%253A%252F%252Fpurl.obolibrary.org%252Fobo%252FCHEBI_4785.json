@@ -1,0 +1,202 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_4785",
+  "lang": "en",
+  "description": [
+    "The maleic acid salt of enalapril. It contains one molecule of maleic acid for each molecule of enalapril. Following oral administration, the ethyl ester group of enalapril is hydrolysed to afford the corresponding carboxylic acid, enalaprilat, an angiotensin-converting enzyme (ACE) inhibitor. Enalapril is thus a prodrug for enalaprilat (which, unlike enalapril, is not absorbed by mouth), and its maleate is used in the treatment of hypertension and heart failure, for reduction of proteinuria and renal disease in patients with nephropathies, and for the prevention of stroke, myocardial infarction, and cardiac death in high-risk patients."
+  ],
+  "synonyms": [
+    "N-[(2S)-1-ethoxy-1-oxo-4-phenylbutan-2-yl]-L-alanyl-L-proline (2Z)-but-2-enedioate",
+    "(S)-1-(N-(1-(ethoxycarbonyl)-3-phenylpropyl)-L-alanyl)-L-proline maleate (1:1)",
+    "N-((S)-1-ethoxycarbonyl-3-phenylpropyl)-L-alanyl-L-proline maleate (1:1)",
+    "N-{N-[(S)-1-ethoxycarbonyl-3-phenylpropyl]-L-alanyl}-L-proline hydrogen maleate",
+    "enalapril hydrogen maleate"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C24H32N2O9"
+    ],
+    "has_dbxref": [
+      "Beilstein:3645274",
+      "CAS:76095-16-4",
+      "DrugBank:DB00584",
+      "KEGG:D00621",
+      "VSDB:2974"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:4785"
+    ],
+    "inchi": [
+      "InChI=1S/C20H28N2O5.C4H4O4/c1-3-27-20(26)16(12-11-15-8-5-4-6-9-15)21-14(2)18(23)22-13-7-10-17(22)19(24)25;5-3(6)1-2-4(7)8/h4-6,8-9,14,16-17,21H,3,7,10-13H2,1-2H3,(H,24,25);1-2H,(H,5,6)(H,7,8)/b;2-1-/t14-,16-,17-;/m0./s1"
+    ],
+    "inchikey": [
+      "OYFJQPXVCSSHAI-QFPUQLAESA-N"
+    ],
+    "mass": [
+      "492.51890"
+    ],
+    "monoisotopicmass": [
+      "492.21078"
+    ],
+    "smiles": [
+      "OC(=O)\\C=C/C(O)=O.CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1CCC[C@H]1C(O)=O"
+    ]
+  },
+  "label": "enalapril maleate",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_4785",
+  "obo_id": "CHEBI:4785",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "3645274",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "76095-16-4",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "76095-16-4",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00584",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00584"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00621",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00621"
+    },
+    {
+      "database": "VSDB",
+      "id": "2974",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/2974.htm"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-[(2S)-1-ethoxy-1-oxo-4-phenylbutan-2-yl]-L-alanyl-L-proline (2Z)-but-2-enedioate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-1-(N-(1-(ethoxycarbonyl)-3-phenylpropyl)-L-alanyl)-L-proline maleate (1:1)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-((S)-1-ethoxycarbonyl-3-phenylpropyl)-L-alanyl-L-proline maleate (1:1)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-{N-[(S)-1-ethoxycarbonyl-3-phenylpropyl]-L-alanyl}-L-proline hydrogen maleate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "enalapril hydrogen maleate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4785?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4785/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4785/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4785/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4785/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4785/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4785/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4785/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_4785/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

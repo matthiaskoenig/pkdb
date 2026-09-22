@@ -1,0 +1,103 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_0081445",
+  "lang": "en",
+  "description": [
+    "A blood protein disease that is characterized by chronic hemolytic anemia and intermittent vaso-occlusive events that result in tissue ischemia leading to acute and chronic pain as well as organ damage that can affect any organ system, resulting from the replacement of one of the beta-globin subunits in hemoglobin with atypical hemoglobin molecules called hemoglobin S which can distort red blood cells into a sickle or crescent shape. Sickle cell disease subtypes should include a detailed genotypic description for the hemoglobin molecules (e.g., Hb S/S, Hb S/C, Hb S/\u03b20-thalassemia)."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "has_dbxref": [
+      "MIM:603903"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:0081445"
+    ]
+  },
+  "label": "sickle cell disease",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_0081445",
+  "obo_id": "DOID:0081445",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A blood protein disease that is characterized by chronic hemolytic anemia and intermittent vaso-occlusive events that result in tissue ischemia leading to acute and chronic pain as well as organ damage that can affect any organ system, resulting from the replacement of one of the beta-globin subunits in hemoglobin with atypical hemoglobin molecules called hemoglobin S which can distort red blood cells into a sickle or crescent shape. Sickle cell disease subtypes should include a detailed genotypic description for the hemoglobin molecules (e.g., Hb S/S, Hb S/C, Hb S/\u03b20-thalassemia).",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "https",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "MIM",
+      "id": "603903",
+      "description": null,
+      "url": "https://omim.org/MIM:603903"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081445?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081445/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081445/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081445/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081445/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081445/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081445/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081445/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081445/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081445/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_0081445/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

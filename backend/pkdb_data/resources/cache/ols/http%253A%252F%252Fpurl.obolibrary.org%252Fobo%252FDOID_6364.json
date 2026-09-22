@@ -1,0 +1,166 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_6364",
+  "lang": "en",
+  "description": [
+    "A brain disease that is characterized by moderate to severe headaches, nausea, extreme sensitivity to light and sound and intense unilaterial throbbing or pulsing.",
+    "Xref MGI. OMIM mapping confirmed by DO. [SN]."
+  ],
+  "synonyms": [
+    "migraine disorder",
+    "migraine variant",
+    "migraine with or without aura"
+  ],
+  "annotation": {
+    "has_alternative_id": [
+      "DOID:12437"
+    ],
+    "has_dbxref": [
+      "ICD10CM:G43",
+      "ICD9CM:346",
+      "MESH:D008881",
+      "MIM:157300",
+      "NCI:C89715",
+      "SNOMEDCT_US_2023_03_01:155046006",
+      "SNOMEDCT_US_2023_03_01:193036004",
+      "UMLS_CUI:C0042331",
+      "UMLS_CUI:C0149931"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:6364"
+    ]
+  },
+  "label": "migraine",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_6364",
+  "obo_id": "DOID:6364",
+  "in_subset": [
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A brain disease that is characterized by moderate to severe headaches, nausea, extreme sensitivity to light and sound and intense unilaterial throbbing or pulsing.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "G43",
+      "description": null,
+      "url": "https://icd.codes/icd10cm/G43"
+    },
+    {
+      "database": "ICD9CM",
+      "id": "346",
+      "description": null,
+      "url": "http://icd9cm.chrisendres.com/index.php?action=search&srchtext=346"
+    },
+    {
+      "database": "MESH",
+      "id": "D008881",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D008881"
+    },
+    {
+      "database": "MIM",
+      "id": "157300",
+      "description": null,
+      "url": "https://omim.org/MIM:157300"
+    },
+    {
+      "database": "NCI",
+      "id": "C89715",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C89715"
+    },
+    {
+      "database": "SNOMEDCT_US_2023_03_01",
+      "id": "155046006",
+      "description": null,
+      "url": "http://snomed.info/id/155046006"
+    },
+    {
+      "database": "SNOMEDCT_US_2023_03_01",
+      "id": "193036004",
+      "description": null,
+      "url": "http://snomed.info/id/193036004"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0042331",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0042331"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0149931",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0149931"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6364?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6364/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6364/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6364/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6364/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6364/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6364/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6364/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6364/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6364/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6364/graph"
+    },
+    "has_symptom": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6364/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002452"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

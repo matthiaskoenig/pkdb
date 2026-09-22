@@ -1,0 +1,237 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_145331",
+  "lang": "en",
+  "description": [
+    "An imidazobenzodiazepine that is midazolam which is substituted by a hydroxy group at position 4. It is the minor hydroxylated metabolite of the anesthetic, midazolam."
+  ],
+  "synonyms": [
+    "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepin-4-ol",
+    "4-OH midazolam",
+    "4-OH-MDZ",
+    "Ro 21-5975"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C18H13ClFN3O"
+    ],
+    "has_dbxref": [
+      "CAS:59468-85-8",
+      "HMDB:HMDB0061090",
+      "PMID:15018796",
+      "PMID:20434409",
+      "PMID:20713656",
+      "PMID:21204116",
+      "PMID:21992114",
+      "PMID:22841553",
+      "PMID:23870610",
+      "PMID:28978489",
+      "PMID:31474719",
+      "PMID:9187388"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:145331"
+    ],
+    "inchi": [
+      "InChI=1S/C18H13ClFN3O/c1-10-21-9-16-18(24)22-17(12-4-2-3-5-14(12)20)13-8-11(19)6-7-15(13)23(10)16/h2-9,18,24H,1H3"
+    ],
+    "inchikey": [
+      "ZYISITHKPKHPKG-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "341.770"
+    ],
+    "monoisotopicmass": [
+      "341.07312"
+    ],
+    "smiles": [
+      "C1(=NC(C=2N(C=3C1=CC(=CC3)Cl)C(=NC2)C)O)C=4C=CC=CC4F"
+    ]
+  },
+  "label": "4-hydroxymidazolam",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_145331",
+  "obo_id": "CHEBI:145331",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "59468-85-8",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "59468-85-8",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0061090",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0061090"
+    },
+    {
+      "database": "PMID",
+      "id": "15018796",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15018796"
+    },
+    {
+      "database": "PMID",
+      "id": "20434409",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20434409"
+    },
+    {
+      "database": "PMID",
+      "id": "20713656",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20713656"
+    },
+    {
+      "database": "PMID",
+      "id": "21204116",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21204116"
+    },
+    {
+      "database": "PMID",
+      "id": "21992114",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21992114"
+    },
+    {
+      "database": "PMID",
+      "id": "22841553",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22841553"
+    },
+    {
+      "database": "PMID",
+      "id": "23870610",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23870610"
+    },
+    {
+      "database": "PMID",
+      "id": "28978489",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28978489"
+    },
+    {
+      "database": "PMID",
+      "id": "31474719",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/31474719"
+    },
+    {
+      "database": "PMID",
+      "id": "9187388",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9187388"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "8-chloro-6-(2-fluorophenyl)-1-methyl-4H-imidazo[1,5-a][1,4]benzodiazepin-4-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-OH midazolam",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-OH-MDZ",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ro 21-5975",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145331?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145331/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145331/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145331/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145331/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145331/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145331/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145331/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_145331/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

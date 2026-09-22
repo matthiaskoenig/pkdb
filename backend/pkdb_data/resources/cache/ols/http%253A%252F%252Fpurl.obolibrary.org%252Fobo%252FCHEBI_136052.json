@@ -1,0 +1,139 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_136052",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "CKD-501",
+    "duvie",
+    "lobeglitazone sulfate"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C24H24N4O5S"
+    ],
+    "has_dbxref": [
+      "CAS:607723-33-1",
+      "Drug_Central:5078"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:136052"
+    ],
+    "inchi": [
+      "InChI=1S/C24H24N4O5S/c1-28(21-14-22(26-15-25-21)33-19-9-7-17(31-2)8-10-19)11-12-32-18-5-3-16(4-6-18)13-20-23(29)27-24(30)34-20/h3-10,14-15,20H,11-13H2,1-2H3,(H,27,29,30)"
+    ],
+    "inchikey": [
+      "CHHXEZSCHQVSRE-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "480.538"
+    ],
+    "monoisotopicmass": [
+      "480.14674"
+    ],
+    "smiles": [
+      "C1=C(C=CC(=C1)OC2=CC(=NC=N2)N(CCOC3=CC=C(C=C3)CC4(C(NC(S4)=O)=O)[H])C)OC"
+    ]
+  },
+  "label": "lobeglitazone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_136052",
+  "obo_id": "CHEBI:136052",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "607723-33-1",
+      "description": "DrugCentral",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "5078",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/5078"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "CKD-501",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "duvie",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lobeglitazone sulfate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_136052/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

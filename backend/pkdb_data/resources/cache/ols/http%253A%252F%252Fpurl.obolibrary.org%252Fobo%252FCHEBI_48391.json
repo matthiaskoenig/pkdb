@@ -1,0 +1,238 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_48391",
+  "lang": "en",
+  "description": [
+    "A hydrochloride derived from equimolar amounts of cinacalcet and hydrogen chloride."
+  ],
+  "synonyms": [
+    "N-[(1R)-1-(1-naphthyl)ethyl]-3-[3-(trifluoromethyl)phenyl]propan-1-amine hydrochloride",
+    "CNC-HCl",
+    "Mimpara",
+    "SENSIPAR(TM)",
+    "Sensipar"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C22H22F3N.HCl",
+      "C22H23ClF3N"
+    ],
+    "has_dbxref": [
+      "CAS:364782-34-3",
+      "KEGG:D03505",
+      "PMID:16200170",
+      "PMID:16680561",
+      "PMID:17652181",
+      "PMID:20555319",
+      "Patent:US2007060645",
+      "Patent:US2010298606",
+      "Patent:WO2010094674",
+      "Reaxys:10219584"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:48391"
+    ],
+    "inchi": [
+      "InChI=1S/C22H22F3N.ClH/c1-16(20-13-5-10-18-9-2-3-12-21(18)20)26-14-6-8-17-7-4-11-19(15-17)22(23,24)25;/h2-5,7,9-13,15-16,26H,6,8,14H2,1H3;1H/t16-;/m1./s1"
+    ],
+    "inchikey": [
+      "QANQWUQOEJZMLL-PKLMIRHRSA-N"
+    ],
+    "mass": [
+      "393.87267"
+    ],
+    "monoisotopicmass": [
+      "393.14711"
+    ],
+    "smiles": [
+      "Cl.C[C@@H](NCCCc1cccc(c1)C(F)(F)F)c1cccc2ccccc12"
+    ]
+  },
+  "label": "cinacalcet hydrochloride",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_48391",
+  "obo_id": "CHEBI:48391",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "364782-34-3",
+      "description": "Patent",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "364782-34-3",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "KEGG",
+      "id": "D03505",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D03505"
+    },
+    {
+      "database": "PMID",
+      "id": "16200170",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16200170"
+    },
+    {
+      "database": "PMID",
+      "id": "16680561",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16680561"
+    },
+    {
+      "database": "PMID",
+      "id": "17652181",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17652181"
+    },
+    {
+      "database": "PMID",
+      "id": "20555319",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20555319"
+    },
+    {
+      "database": "Patent",
+      "id": "US2007060645",
+      "description": null,
+      "url": "https://www.google.com/patents/US2007060645"
+    },
+    {
+      "database": "Patent",
+      "id": "US2010298606",
+      "description": null,
+      "url": "https://www.google.com/patents/US2010298606"
+    },
+    {
+      "database": "Patent",
+      "id": "WO2010094674",
+      "description": null,
+      "url": "https://www.google.com/patents/WO2010094674"
+    },
+    {
+      "database": "Reaxys",
+      "id": "10219584",
+      "description": "Reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-[(1R)-1-(1-naphthyl)ethyl]-3-[3-(trifluoromethyl)phenyl]propan-1-amine hydrochloride",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CNC-HCl",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "Patent",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Mimpara",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "SENSIPAR(TM)",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "Patent",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sensipar",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48391?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48391/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48391/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48391/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48391/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48391/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48391/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48391/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_48391/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

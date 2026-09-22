@@ -1,0 +1,377 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_100246",
+  "lang": "en",
+  "description": [
+    "A quinolinemonocarboxylic acid with broad-spectrum antibacterial activity against most gram-negative and gram-positive bacteria. Norfloxacin is bactericidal and its mode of action depends on blocking of bacterial DNA replication by binding itself to an enzyme called DNA gyrase."
+  ],
+  "synonyms": [
+    "1-ethyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydroquinoline-3-carboxylic acid",
+    "1,4-Dihydro-1-ethyl-6-fluoro-4-oxo-7-(1-piperazinyl)-3-quinolinecarboxylic acid",
+    "1-Ethyl-6-fluor-1,4-dihydro-4-oxo-7-(1-piperazinyl)-3-chinolincarbonsaeure",
+    "1-Ethyl-6-fluoro-1,4-dihydro-4-oxo-7-(1-piperazinyl)-3-quinolinecarboxylic acid",
+    "NFLX",
+    "norfloxacin",
+    "norfloxacine",
+    "norfloxacino",
+    "norfloxacinum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C16H18FN3O3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:7629"
+    ],
+    "has_dbxref": [
+      "CAS:70458-96-7",
+      "DrugBank:DB01059",
+      "Drug_Central:1967",
+      "Gmelin:1576626",
+      "HMDB:HMDB0015192",
+      "KEGG:C06687",
+      "KEGG:D00210",
+      "LINCS:LSM-5286",
+      "PMID:3317294",
+      "PMID:3908074",
+      "PMID:6211142",
+      "PMID:6224685",
+      "PMID:6234465",
+      "PMID:6454381",
+      "PMID:6461606",
+      "Patent:BE863429",
+      "Patent:DE2840910",
+      "Patent:US4146719",
+      "Patent:US4292317",
+      "Reaxys:567897",
+      "VSDB:1831",
+      "Wikipedia:Norfloxacin"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:100246"
+    ],
+    "inchi": [
+      "InChI=1S/C16H18FN3O3/c1-2-19-9-11(16(22)23)15(21)10-7-12(17)14(8-13(10)19)20-5-3-18-4-6-20/h7-9,18H,2-6H2,1H3,(H,22,23)"
+    ],
+    "inchikey": [
+      "OGJPXUAPXNRGGI-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "319.33080"
+    ],
+    "monoisotopicmass": [
+      "319.13322"
+    ],
+    "smiles": [
+      "CCn1cc(C(O)=O)c(=O)c2cc(F)c(cc12)N1CCNCC1"
+    ]
+  },
+  "label": "norfloxacin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_100246",
+  "obo_id": "CHEBI:100246",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "70458-96-7",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "70458-96-7",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01059",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01059"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1967",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1967"
+    },
+    {
+      "database": "Gmelin",
+      "id": "1576626",
+      "description": "Gmelin",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0015192",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015192"
+    },
+    {
+      "database": "KEGG",
+      "id": "C06687",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C06687"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00210",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00210"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5286",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "3317294",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3317294"
+    },
+    {
+      "database": "PMID",
+      "id": "3908074",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3908074"
+    },
+    {
+      "database": "PMID",
+      "id": "6211142",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/6211142"
+    },
+    {
+      "database": "PMID",
+      "id": "6224685",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/6224685"
+    },
+    {
+      "database": "PMID",
+      "id": "6234465",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/6234465"
+    },
+    {
+      "database": "PMID",
+      "id": "6454381",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/6454381"
+    },
+    {
+      "database": "PMID",
+      "id": "6461606",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/6461606"
+    },
+    {
+      "database": "Patent",
+      "id": "BE863429",
+      "description": null,
+      "url": "https://www.google.com/patents/BE863429"
+    },
+    {
+      "database": "Patent",
+      "id": "DE2840910",
+      "description": null,
+      "url": "https://www.google.com/patents/DE2840910"
+    },
+    {
+      "database": "Patent",
+      "id": "US4146719",
+      "description": null,
+      "url": "https://www.google.com/patents/US4146719"
+    },
+    {
+      "database": "Patent",
+      "id": "US4292317",
+      "description": null,
+      "url": "https://www.google.com/patents/US4292317"
+    },
+    {
+      "database": "Reaxys",
+      "id": "567897",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "VSDB",
+      "id": "1831",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1831.htm"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Norfloxacin",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Norfloxacin"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1-ethyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydroquinoline-3-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,4-Dihydro-1-ethyl-6-fluoro-4-oxo-7-(1-piperazinyl)-3-quinolinecarboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Ethyl-6-fluor-1,4-dihydro-4-oxo-7-(1-piperazinyl)-3-chinolincarbonsaeure",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Ethyl-6-fluoro-1,4-dihydro-4-oxo-7-(1-piperazinyl)-3-quinolinecarboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "NFLX",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "norfloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "norfloxacine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "norfloxacino",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "norfloxacinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100246?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100246/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100246/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100246/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100246/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100246/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100246/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100246/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

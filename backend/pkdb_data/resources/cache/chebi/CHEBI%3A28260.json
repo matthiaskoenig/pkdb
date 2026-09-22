@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:28260",
+  "name": "galactose",
+  "definition": "An aldohexose that is the C-4 epimer of glucose.",
+  "formula": "C6H12O6",
+  "charge": "0",
+  "mass": "180.156",
+  "inchikey": null
+}

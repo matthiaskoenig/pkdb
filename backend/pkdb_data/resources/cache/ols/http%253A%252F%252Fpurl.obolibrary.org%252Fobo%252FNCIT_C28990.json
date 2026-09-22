@@ -1,0 +1,175 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C28990",
+  "lang": "en",
+  "description": [
+    "A cardiac glycoside. Digoxin inhibits the sodium potassium adenosine triphosphatase (ATPase) pump, thereby increasing intracellular calcium and enhancing cardiac contractility.  This agent also acts directly on the atrioventricular node to suppress conduction, thereby slowing conduction velocity.  Apparently due to its effects on intracellular calcium concentrations, digoxin induces apoptosis of tumor cells via a pathway involving mitochondrial cytochrome c and caspases 8 and 3. (NCI04)"
+  ],
+  "synonyms": [
+    "12beta-Hydroxydigitoxin",
+    "3beta,12beta,14-Trihydroxy-5beta,14beta-card-20(22)-enolid-3-tridigitoxosid",
+    "Cardiogoxin",
+    "DIGOXIN",
+    "Digoxigenin-tridigitoxosid",
+    "Digoxin",
+    "Lanoxin",
+    "digoxin"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to treat irregular heartbeat and some types of heart failure. It is also being studied in the treatment of some types of cancer. Digoxin helps the heart work normally by controlling the amount of calcium that goes into the heart muscle. It also may kill cancer cells and make them more sensitive to anticancer drugs. It is a type of cardiac glycoside."
+    ],
+    "CAS_Registry": [
+      "20830-75-5"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:4551"
+    ],
+    "Chemical_Formula": [
+      "C41H64O14"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "GDC"
+    ],
+    "Display_Name": [
+      "Digoxin"
+    ],
+    "FDA_UNII_Code": [
+      "73K4184T59"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Digoxin"
+    ],
+    "Maps_To": [
+      "Digoxin"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "485249"
+    ],
+    "NSC Number": [
+      "95100"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "485249"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "485249"
+    ],
+    "Preferred_Name": [
+      "Digoxin"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0012265"
+    ],
+    "code": [
+      "C28990"
+    ]
+  },
+  "label": "Digoxin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C28990",
+  "obo_id": "NCIT:C28990",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C176424",
+    "NCIT_C177537",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "12beta-Hydroxydigitoxin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "3beta,12beta,14-Trihydroxy-5beta,14beta-card-20(22)-enolid-3-tridigitoxosid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cardiogoxin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "DIGOXIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Digoxigenin-tridigitoxosid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Digoxin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Lanoxin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "digoxin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28990?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28990/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28990/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28990/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28990/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28990/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C28990/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,423 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_71272",
+  "lang": "en",
+  "description": [
+    "A monocarboxylic acid amide obtained by formal condensation of the carboxy group of (2S)-amino(3-hydroxyadamantan-1-yl)acetic acid with the amino group of (1S,3S,5S)-2-azabicyclo[3.1.0]hexane-3-carbonitrile. Used in its monohydrate form for the treatment of Type II diabetes."
+  ],
+  "synonyms": [
+    "(1S,3S,5S)-2-[(2S)-2-amino-2-(3-hydroxyadamantan-1-yl)acetyl]-2-azabicyclo[3.1.0]hexane-3-carbonitrile",
+    "(1S,3S,5S)-2-((2S)-Amino(3-hydroxytricyclo(3.3.1.13,7)dec-1-yl)acetyl)-2-azabicyclo(3.1.0)hexane-3-carbonitrile",
+    "BMS 477118",
+    "BMS-477118",
+    "saxagliptin"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C18H25N3O2"
+    ],
+    "has_dbxref": [
+      "CAS:361442-04-8",
+      "DrugBank:DB06335",
+      "Drug_Central:4114",
+      "HMDB:HMDB0015634",
+      "KEGG:D08996",
+      "PMID:22001114",
+      "PMID:22066527",
+      "PMID:22081481",
+      "PMID:22098472",
+      "PMID:22132773",
+      "PMID:22149373",
+      "PMID:22192246",
+      "PMID:22221000",
+      "PMID:22232748",
+      "PMID:22248301",
+      "PMID:22292415",
+      "PMID:22313154",
+      "PMID:22313172",
+      "PMID:22334441",
+      "PMID:22349123",
+      "PMID:22475049",
+      "PMID:22496391",
+      "PMID:22564773",
+      "PMID:22668067",
+      "PMID:22776778",
+      "PMID:22823746",
+      "PMID:22828124",
+      "PMID:22932707",
+      "PMID:22943617",
+      "PMID:23137182",
+      "Patent:US2005222242",
+      "Patent:US2007172525",
+      "Patent:WO2007078726",
+      "Patent:WO2009022009",
+      "Patent:WO2011125011",
+      "Reaxys:10201614",
+      "Wikipedia:Saxagliptin"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:71272"
+    ],
+    "inchi": [
+      "InChI=1S/C18H25N3O2/c19-8-13-2-12-3-14(12)21(13)16(22)15(20)17-4-10-1-11(5-17)7-18(23,6-10)9-17/h10-15,23H,1-7,9,20H2/t10?,11?,12-,13+,14+,15-,17?,18?/m1/s1"
+    ],
+    "inchikey": [
+      "QGJUIPDUBHWZPV-SGTAVMJGSA-N"
+    ],
+    "mass": [
+      "315.41000"
+    ],
+    "monoisotopicmass": [
+      "315.19468"
+    ],
+    "smiles": [
+      "[H][C@]12C[C@@H](C#N)N(C(=O)[C@@H](N)C34CC5CC(CC(O)(C5)C3)C4)[C@@]1([H])C2"
+    ]
+  },
+  "label": "saxagliptin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_71272",
+  "obo_id": "CHEBI:71272",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "361442-04-8",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "361442-04-8",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB06335",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB06335"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "4114",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/4114"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0015634",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015634"
+    },
+    {
+      "database": "KEGG",
+      "id": "D08996",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D08996"
+    },
+    {
+      "database": "PMID",
+      "id": "22001114",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22001114"
+    },
+    {
+      "database": "PMID",
+      "id": "22066527",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22066527"
+    },
+    {
+      "database": "PMID",
+      "id": "22081481",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22081481"
+    },
+    {
+      "database": "PMID",
+      "id": "22098472",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22098472"
+    },
+    {
+      "database": "PMID",
+      "id": "22132773",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22132773"
+    },
+    {
+      "database": "PMID",
+      "id": "22149373",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22149373"
+    },
+    {
+      "database": "PMID",
+      "id": "22192246",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22192246"
+    },
+    {
+      "database": "PMID",
+      "id": "22221000",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22221000"
+    },
+    {
+      "database": "PMID",
+      "id": "22232748",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22232748"
+    },
+    {
+      "database": "PMID",
+      "id": "22248301",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22248301"
+    },
+    {
+      "database": "PMID",
+      "id": "22292415",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22292415"
+    },
+    {
+      "database": "PMID",
+      "id": "22313154",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22313154"
+    },
+    {
+      "database": "PMID",
+      "id": "22313172",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22313172"
+    },
+    {
+      "database": "PMID",
+      "id": "22334441",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22334441"
+    },
+    {
+      "database": "PMID",
+      "id": "22349123",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22349123"
+    },
+    {
+      "database": "PMID",
+      "id": "22475049",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22475049"
+    },
+    {
+      "database": "PMID",
+      "id": "22496391",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22496391"
+    },
+    {
+      "database": "PMID",
+      "id": "22564773",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22564773"
+    },
+    {
+      "database": "PMID",
+      "id": "22668067",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22668067"
+    },
+    {
+      "database": "PMID",
+      "id": "22776778",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22776778"
+    },
+    {
+      "database": "PMID",
+      "id": "22823746",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22823746"
+    },
+    {
+      "database": "PMID",
+      "id": "22828124",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22828124"
+    },
+    {
+      "database": "PMID",
+      "id": "22932707",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22932707"
+    },
+    {
+      "database": "PMID",
+      "id": "22943617",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22943617"
+    },
+    {
+      "database": "PMID",
+      "id": "23137182",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23137182"
+    },
+    {
+      "database": "Patent",
+      "id": "US2005222242",
+      "description": null,
+      "url": "https://www.google.com/patents/US2005222242"
+    },
+    {
+      "database": "Patent",
+      "id": "US2007172525",
+      "description": null,
+      "url": "https://www.google.com/patents/US2007172525"
+    },
+    {
+      "database": "Patent",
+      "id": "WO2007078726",
+      "description": null,
+      "url": "https://www.google.com/patents/WO2007078726"
+    },
+    {
+      "database": "Patent",
+      "id": "WO2009022009",
+      "description": null,
+      "url": "https://www.google.com/patents/WO2009022009"
+    },
+    {
+      "database": "Patent",
+      "id": "WO2011125011",
+      "description": null,
+      "url": "https://www.google.com/patents/WO2011125011"
+    },
+    {
+      "database": "Reaxys",
+      "id": "10201614",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Saxagliptin",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Saxagliptin"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(1S,3S,5S)-2-[(2S)-2-amino-2-(3-hydroxyadamantan-1-yl)acetyl]-2-azabicyclo[3.1.0]hexane-3-carbonitrile",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(1S,3S,5S)-2-((2S)-Amino(3-hydroxytricyclo(3.3.1.13,7)dec-1-yl)acetyl)-2-azabicyclo(3.1.0)hexane-3-carbonitrile",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BMS 477118",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BMS-477118",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "saxagliptin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_71272/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,450 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9334",
+  "lang": "en",
+  "description": [
+    "An azobenzene consisting of diphenyldiazene having a carboxy substituent at the 4-position, a hydroxy substituent at the 3-position and a 2-pyridylaminosulphonyl substituent at the 4'-position."
+  ],
+  "synonyms": [
+    "2-hydroxy-5-{[4-(pyridin-2-ylsulfamoyl)phenyl]diazenyl}benzoic acid",
+    "Sulfasalazine",
+    "2-Hydroxy-5-((4-((2-pyridinylamino)sulfonyl)phenyl)azo)benzoic acid",
+    "2-Hydroxy-5-[4-(pyridin-2-ylsulfamoyl)-phenylazo]-benzoic acid",
+    "4-(Pyridyl-2-amidosulfonyl)-3'-carboxy-4'-hydroxyazobenzene",
+    "5-((p-(2-Pyridylsulfamoyl)phenyl)azo)salicylic acid",
+    "5-(4-(2-Pyridylsulfamoyl)phenylazo)-2-hydroxybenzoic acid",
+    "5-(p-(2-Pyridylsulfamyl)phenylazo)salicylic acid",
+    "Azulfidine",
+    "Salazosulfapiridina",
+    "Salazosulfapyridine",
+    "Salazosulfapyridinum",
+    "Salicylazosulfapyridine",
+    "Sulfasalazina",
+    "Sulfasalazinum",
+    "sulfasalazine"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C18H14N4O5S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:101223"
+    ],
+    "has_dbxref": [
+      "Beilstein:356241",
+      "CAS:599-79-1",
+      "DrugBank:DB00795",
+      "Gmelin:2666050",
+      "KEGG:C07316",
+      "KEGG:D00448",
+      "PDBeChem:SAS",
+      "PMID:11362329",
+      "PMID:11485124",
+      "PMID:11587223",
+      "PMID:14981898",
+      "PMID:15248210",
+      "PMID:16322111",
+      "PMID:17386570",
+      "PMID:2434548",
+      "PMID:7720170",
+      "Patent:US2396145",
+      "Reaxys:8132868"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9334"
+    ],
+    "inchi": [
+      "InChI=1S/C18H14N4O5S/c23-16-9-6-13(11-15(16)18(24)25)21-20-12-4-7-14(8-5-12)28(26,27)22-17-3-1-2-10-19-17/h1-11,23H,(H,19,22)(H,24,25)/b21-20+"
+    ],
+    "inchikey": [
+      "NCEXYHBECQHGNR-QZQOTICOSA-N"
+    ],
+    "mass": [
+      "398.39300"
+    ],
+    "monoisotopicmass": [
+      "398.06849"
+    ],
+    "smiles": [
+      "OC(=O)c1cc(ccc1O)\\N=N\\c1ccc(cc1)S(=O)(=O)Nc1ccccn1"
+    ]
+  },
+  "label": "sulfasalazine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9334",
+  "obo_id": "CHEBI:9334",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "356241",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "599-79-1",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "599-79-1",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00795",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00795"
+    },
+    {
+      "database": "Gmelin",
+      "id": "2666050",
+      "description": "Gmelin",
+      "url": null
+    },
+    {
+      "database": "KEGG",
+      "id": "C07316",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07316"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00448",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00448"
+    },
+    {
+      "database": "PDBeChem",
+      "id": "SAS",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/SAS"
+    },
+    {
+      "database": "PMID",
+      "id": "11362329",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11362329"
+    },
+    {
+      "database": "PMID",
+      "id": "11485124",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11485124"
+    },
+    {
+      "database": "PMID",
+      "id": "11587223",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11587223"
+    },
+    {
+      "database": "PMID",
+      "id": "14981898",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14981898"
+    },
+    {
+      "database": "PMID",
+      "id": "15248210",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15248210"
+    },
+    {
+      "database": "PMID",
+      "id": "16322111",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16322111"
+    },
+    {
+      "database": "PMID",
+      "id": "17386570",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17386570"
+    },
+    {
+      "database": "PMID",
+      "id": "2434548",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2434548"
+    },
+    {
+      "database": "PMID",
+      "id": "7720170",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7720170"
+    },
+    {
+      "database": "Patent",
+      "id": "US2396145",
+      "description": null,
+      "url": "https://www.google.com/patents/US2396145"
+    },
+    {
+      "database": "Reaxys",
+      "id": "8132868",
+      "description": "Reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-hydroxy-5-{[4-(pyridin-2-ylsulfamoyl)phenyl]diazenyl}benzoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sulfasalazine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Hydroxy-5-((4-((2-pyridinylamino)sulfonyl)phenyl)azo)benzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-Hydroxy-5-[4-(pyridin-2-ylsulfamoyl)-phenylazo]-benzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(Pyridyl-2-amidosulfonyl)-3'-carboxy-4'-hydroxyazobenzene",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-((p-(2-Pyridylsulfamoyl)phenyl)azo)salicylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-(4-(2-Pyridylsulfamoyl)phenylazo)-2-hydroxybenzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-(p-(2-Pyridylsulfamyl)phenylazo)salicylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Azulfidine",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salazosulfapiridina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salazosulfapyridine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salazosulfapyridinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salicylazosulfapyridine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sulfasalazina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Sulfasalazinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sulfasalazine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9334?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9334/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9334/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9334/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9334/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9334/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9334/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9334/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9334/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

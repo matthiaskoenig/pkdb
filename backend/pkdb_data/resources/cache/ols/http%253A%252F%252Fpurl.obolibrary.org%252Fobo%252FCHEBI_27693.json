@@ -1,0 +1,430 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_27693",
+  "lang": "en",
+  "description": [
+    "A member of the class of phytosterols that is stigmast-5-ene substituted by a beta-hydroxy group at position 3."
+  ],
+  "synonyms": [
+    "Sitosterol",
+    "sitosterol",
+    "stigmast-5-en-3beta-ol",
+    "(-)-beta-Sitosterol",
+    "(24R)-Ethylcholest-5-en-3beta-ol",
+    "(24R)-Stigmast-5-en-3beta-ol",
+    "(3beta)-Stigmast-5-en-3-ol",
+    "22,23-Dihydrostigmasterol",
+    "24alpha-Ethylcholesterol",
+    "Azuprostat",
+    "Cupreol",
+    "Nimbosterol",
+    "Triastonal",
+    "alpha-Dihydrofucosterol",
+    "beta-Sitosterin",
+    "beta-Sitosterol"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C29H50O"
+    ],
+    "has_alternative_id": [
+      "CHEBI:26692",
+      "CHEBI:9170"
+    ],
+    "has_dbxref": [
+      "Beilstein:1916156",
+      "CAS:83-46-5",
+      "Drug_Central:2451",
+      "KEGG:C01753",
+      "KEGG:D08518",
+      "KNApSAcK:C00003672",
+      "KNApSAcK:C00023770",
+      "LIPID_MAPS_instance:LMST01040129",
+      "PMID:20525330",
+      "PMID:23199991",
+      "PMID:23215694",
+      "PMID:23250922",
+      "PMID:23266618",
+      "PMID:23516045",
+      "PMID:23624268"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:27693"
+    ],
+    "inchi": [
+      "InChI=1S/C29H50O/c1-7-21(19(2)3)9-8-20(4)25-12-13-26-24-11-10-22-18-23(30)14-16-28(22,5)27(24)15-17-29(25,26)6/h10,19-21,23-27,30H,7-9,11-18H2,1-6H3/t20-,21-,23+,24+,25-,26+,27+,28+,29-/m1/s1"
+    ],
+    "inchikey": [
+      "KZJWDPNRJALLNS-VJSFXXLFSA-N"
+    ],
+    "mass": [
+      "414.70670"
+    ],
+    "monoisotopicmass": [
+      "414.38617"
+    ],
+    "smiles": [
+      "[H][C@@]1(CC[C@@]2([H])[C@]3([H])CC=C4C[C@@H](O)CC[C@]4(C)[C@@]3([H])CC[C@]12C)[C@H](C)CC[C@@H](CC)C(C)C"
+    ]
+  },
+  "label": "sitosterol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_27693",
+  "obo_id": "CHEBI:27693",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "1916156",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "83-46-5",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "83-46-5",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2451",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2451"
+    },
+    {
+      "database": "KEGG",
+      "id": "C01753",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C01753"
+    },
+    {
+      "database": "KEGG",
+      "id": "D08518",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D08518"
+    },
+    {
+      "database": "KNApSAcK",
+      "id": "C00003672",
+      "description": null,
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00003672"
+    },
+    {
+      "database": "KNApSAcK",
+      "id": "C00023770",
+      "description": null,
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00023770"
+    },
+    {
+      "database": "LIPID_MAPS_instance",
+      "id": "LMST01040129",
+      "description": "LIPID MAPS",
+      "url": "http://www.lipidmaps.org/data/LMSDRecord.php?LMID=LMST01040129"
+    },
+    {
+      "database": "PMID",
+      "id": "20525330",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20525330"
+    },
+    {
+      "database": "PMID",
+      "id": "23199991",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23199991"
+    },
+    {
+      "database": "PMID",
+      "id": "23215694",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23215694"
+    },
+    {
+      "database": "PMID",
+      "id": "23250922",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23250922"
+    },
+    {
+      "database": "PMID",
+      "id": "23266618",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23266618"
+    },
+    {
+      "database": "PMID",
+      "id": "23516045",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23516045"
+    },
+    {
+      "database": "PMID",
+      "id": "23624268",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23624268"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Sitosterol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "sitosterol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "stigmast-5-en-3beta-ol",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-beta-Sitosterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(24R)-Ethylcholest-5-en-3beta-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(24R)-Stigmast-5-en-3beta-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3beta)-Stigmast-5-en-3-ol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "22,23-Dihydrostigmasterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "24alpha-Ethylcholesterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Azuprostat",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Cupreol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Nimbosterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Triastonal",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-Dihydrofucosterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "beta-Sitosterin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "beta-Sitosterol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27693?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27693/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27693/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27693/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27693/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27693/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27693/graph"
+    },
+    "has_parent_hydride": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27693/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_parent_hydride"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27693/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

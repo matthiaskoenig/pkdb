@@ -1,0 +1,96 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C111196",
+  "lang": "en",
+  "description": [
+    "A type of homogenous immunoassay in which sample is applied to a reagent mixture of enzyme-labeled ligand, antibody, and substrate. Substrate binding to enzyme leads to inactivation and unlabeled-ligand in the sample can be quantified by colorimetric analysis."
+  ],
+  "synonyms": [
+    "EMIT",
+    "ENZYME MULTIPLIED IMMUNOASSAY TECHNIQUE",
+    "Enzyme Multiplied Immunoassay Technique"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A type of homogenous immunoassay in which sample is applied to a reagent mixture of enzyme-labeled ligand, antibody, and substrate. Substrate binding to enzyme leads to inactivation and unlabeled-ligand in the sample can be quantified by colorimetric analysis."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "Preferred_Name": [
+      "Enzyme Multiplied Immunoassay Technique"
+    ],
+    "Semantic_Type": [
+      "Laboratory Procedure"
+    ],
+    "UMLS_CUI": [
+      "C0162676"
+    ],
+    "code": [
+      "C111196"
+    ]
+  },
+  "label": "Enzyme Multiplied Immunoassay Technique",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C111196",
+  "obo_id": "NCIT:C111196",
+  "in_subset": [
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C85492"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "EMIT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ENZYME MULTIPLIED IMMUNOASSAY TECHNIQUE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Enzyme Multiplied Immunoassay Technique",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111196?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111196/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111196/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111196/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111196/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111196/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C111196/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

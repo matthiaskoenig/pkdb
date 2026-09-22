@@ -1,0 +1,98 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C73929",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "POMEGRANATE",
+    "Pomegranate",
+    "pomegranate"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A subtropical shrub or tree. Juice from the fruit may contain substances that decrease or slow the rise of prostate-specific antigen (PSA) levels. It is being studied for its ability to delay or prevent recurrent prostate cancer. The scientific name is Punica granatum."
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "56687D1Z4D"
+    ],
+    "Legacy Concept Name": [
+      "Pomegranate"
+    ],
+    "Preferred_Name": [
+      "Pomegranate"
+    ],
+    "Semantic_Type": [
+      "Food"
+    ],
+    "UMLS_CUI": [
+      "C0453289"
+    ],
+    "code": [
+      "C73929"
+    ]
+  },
+  "label": "Pomegranate",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C73929",
+  "obo_id": "NCIT:C73929",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "POMEGRANATE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pomegranate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "pomegranate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C73929?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C73929/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C73929/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C73929/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C73929/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C73929/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C73929/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

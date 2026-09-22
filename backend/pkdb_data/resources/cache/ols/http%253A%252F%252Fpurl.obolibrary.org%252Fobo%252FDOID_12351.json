@@ -1,0 +1,97 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_12351",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "acute alcoholic hepatitis",
+    "acute alcoholic liver disease"
+  ],
+  "annotation": {
+    "has_alternative_id": [
+      "DOID:12350"
+    ],
+    "has_dbxref": [
+      "ICD9CM:571.1",
+      "NCI:C34352",
+      "SNOMEDCT_US_2023_03_01:9953008",
+      "UMLS_CUI:C0001306"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:12351"
+    ]
+  },
+  "label": "alcoholic hepatitis",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "DOID_12351",
+  "obo_id": "DOID:12351",
+  "in_subset": [
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "ICD9CM",
+      "id": "571.1",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "NCI",
+      "id": "C34352",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C34352"
+    },
+    {
+      "database": "SNOMEDCT_US_2023_03_01",
+      "id": "9953008",
+      "description": null,
+      "url": "http://snomed.info/id/9953008"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0001306",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0001306"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_12351?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_12351/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_12351/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_12351/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_12351/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_12351/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_12351/graph"
+    },
+    "has_disease_driver": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_12351/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0007001"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

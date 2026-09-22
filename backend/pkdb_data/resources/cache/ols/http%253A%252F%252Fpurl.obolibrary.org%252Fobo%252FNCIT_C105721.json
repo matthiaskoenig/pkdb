@@ -1,0 +1,139 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C105721",
+  "lang": "en",
+  "description": [
+    "A performance status scale designed to assess disease progression and its affect on the daily living abilities of the patient."
+  ],
+  "synonyms": [
+    "ECOG Performance Status",
+    "ECOG Score",
+    "ECOG",
+    "Eastern Cooperative Oncology Group Performance Status",
+    "ecog performance status",
+    "ecog_performance_status"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CTDC",
+      "GDC",
+      "OORO"
+    ],
+    "Has_GDC_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C105722",
+      "http://purl.obolibrary.org/obo/NCIT_C105723",
+      "http://purl.obolibrary.org/obo/NCIT_C105725",
+      "http://purl.obolibrary.org/obo/NCIT_C105726",
+      "http://purl.obolibrary.org/obo/NCIT_C105727",
+      "http://purl.obolibrary.org/obo/NCIT_C105728",
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C43234"
+    ],
+    "NCI_META_CUI": [
+      "CL447088"
+    ],
+    "Preferred_Name": [
+      "ECOG Performance Status"
+    ],
+    "Semantic_Type": [
+      "Clinical Attribute"
+    ],
+    "code": [
+      "C105721"
+    ]
+  },
+  "label": "ECOG Performance Status",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C105721",
+  "obo_id": "NCIT:C105721",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C173072",
+    "NCIT_C177536",
+    "NCIT_C192234"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "ECOG Performance Status",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ECOG Score",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ECOG",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Eastern Cooperative Oncology Group Performance Status",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ecog performance status",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ecog_performance_status",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C105721?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C105721/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C105721/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C105721/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C105721/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C105721/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C105721/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C105721/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C105721/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C105721/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C105721/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

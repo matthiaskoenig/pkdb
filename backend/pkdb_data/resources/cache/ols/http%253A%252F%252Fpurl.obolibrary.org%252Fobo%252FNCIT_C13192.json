@@ -1,0 +1,119 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C13192",
+  "lang": "en",
+  "description": [
+    "Fluid composed of waste products, bile acids, salts, cholesterol, and electrolytes. It is secreted by the liver parenchyma and stored in the gallbladder."
+  ],
+  "synonyms": [
+    "BILE",
+    "Bile",
+    "Bile Fluid",
+    "Bile Juice",
+    "bile"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A fluid made by the liver and stored in the gallbladder. Bile is excreted into the small intestine, where it helps digest fat.",
+      "Fluid composed of waste products, bile acids, salts, cholesterol, and electrolytes. It is produced by the liver and may be stored in the gallbladder (if present)."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "mCode"
+    ],
+    "Legacy Concept Name": [
+      "Bile"
+    ],
+    "Preferred_Name": [
+      "Bile"
+    ],
+    "Semantic_Type": [
+      "Body Substance"
+    ],
+    "UMLS_CUI": [
+      "C0005388"
+    ],
+    "code": [
+      "C13192"
+    ]
+  },
+  "label": "Bile",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C13192",
+  "obo_id": "NCIT:C13192",
+  "in_subset": [
+    "NCIT_C193006",
+    "NCIT_C193221",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C77529",
+    "NCIT_C78734"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "BILE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Bile",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Bile Fluid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Bile Juice",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "bile",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13192?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13192/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13192/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13192/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13192/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13192/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C13192/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

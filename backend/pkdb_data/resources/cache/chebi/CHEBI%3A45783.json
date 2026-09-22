@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:45783",
+  "name": "imatinib",
+  "definition": "A benzamide obtained by formal condensation of the carboxy group of 4-[(4-methylpiperazin-1-yl)methyl]benzoic acid with the primary aromatic amino group of 4-methyl-N(3)-[4-(pyridin-3-yl)pyrimidin-2-yl]benzene-1,3-diamine. Used (as its mesylate salt) for treatment of chronic myelogenous leukemia and gastrointestinal stromal tumours.",
+  "formula": "C29H31N7O",
+  "charge": "0",
+  "mass": "493.60270",
+  "inchikey": "KTUFNOKKBVMGRW-UHFFFAOYSA-N"
+}
