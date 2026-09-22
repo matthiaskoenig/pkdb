@@ -1,5 +1,6 @@
 import json
 
+import pytest
 from sqlalchemy import func, select
 
 from pkdb.db.models.studies import Study
@@ -109,3 +110,62 @@ def test_workbook_attachment_keeps_its_format(client, creator_headers, valid_bun
         ],
     )
     assert response.status_code == 200, response.text
+
+
+@pytest.mark.parametrize(
+    "path,value",
+    [
+        (
+            ("dataset",),
+            {"data": [{"name": "bad", "data_type": "scatter", "subsets": None}]},
+        ),
+        (
+            ("dataset",),
+            {"data": [{"name": "bad", "data_type": "scatter", "subsets": [None]}]},
+        ),
+        (("groupset", "groups", 0, "characteristica"), [None]),
+        (("groupset", "groups", 0, "name"), []),
+        (("outputset", "outputs", 0, "image"), {"name": "bad"}),
+        (("outputset", "outputs", 0, "subset"), 3),
+        (("curators",), 1),
+        (("comments",), 1),
+        (("descriptions",), "not a list"),
+        (("name",), []),
+        (("groupset",), []),
+        (("outputset", "outputs"), False),
+        (("outputset", "outputs", 0, "mean"), float("inf")),
+    ],
+)
+def test_malformed_nested_upload_is_structured_and_keeps_publication(
+    client, creator_headers, valid_bundle, path, value
+):
+    url = "/api/v2/studies/" + valid_bundle.study["sid"]
+    assert (
+        client.put(url, headers=creator_headers, **multipart(valid_bundle)).status_code
+        == 201
+    )
+    before = client.get(url, headers=creator_headers).json()
+    target = valid_bundle.study
+    for part in path[:-1]:
+        target = target[part]
+    target[path[-1]] = value
+    response = client.put(url, headers=creator_headers, **multipart(valid_bundle))
+    assert response.status_code == 422
+    report = response.json()
+    assert report["valid"] is False
+    assert report["error_count"] >= 1
+    assert report["issues"]
+    assert client.get(url, headers=creator_headers).json() == before
+
+
+def test_json_recursion_is_a_validation_error(client, creator_headers):
+    response = client.post(
+        "/api/v2/studies/validate",
+        headers=creator_headers,
+        files={
+            "study": (None, '{"nested":' + "[" * 2000 + "0" + "]" * 2000 + "}"),
+            "reference": (None, "{}"),
+        },
+    )
+    assert response.status_code == 422
+    assert response.json()["error_count"] == 1

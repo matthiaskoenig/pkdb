@@ -164,3 +164,27 @@ def test_duplicate_source_headers_are_rejected(study_folder, kind):
     with pytest.raises(StudyValidationError) as error:
         read_table(path, "Results" if kind == "xlsx" else None, 100)
     assert error.value.report.issues[0].code == "duplicate_column"
+
+
+def test_canonical_shape_errors_report_full_count(valid_bundle):
+    from copy import deepcopy
+
+    output = valid_bundle.study["outputset"]["outputs"][0]
+    valid_bundle.study["outputset"]["outputs"] = [
+        dict(deepcopy(output), unknown_field=True) for _ in range(150)
+    ]
+    with pytest.raises(StudyValidationError) as error:
+        parse_bundle(valid_bundle)
+    assert error.value.report.error_count == 150
+    assert len(error.value.report.issues) == 100
+    assert error.value.report.truncated
+
+
+def test_nonfinite_in_memory_bundle_reports_source(valid_bundle):
+    valid_bundle.study["outputset"]["outputs"][0]["mean"] = float("inf")
+    with pytest.raises(StudyValidationError) as error:
+        parse_bundle(valid_bundle)
+    issue = error.value.report.issues[0]
+    assert issue.code == "invalid_number"
+    assert issue.source.path == ("outputset", "outputs", 0, "mean")
+    assert error.value.report.error_count == 1

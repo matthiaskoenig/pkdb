@@ -37,12 +37,13 @@ class StudyValidationError(ValueError):
 def fail(code: str, message: str, source: SourceLocation | None = None) -> NoReturn:
     raise StudyValidationError(
         ValidationReport(
+            error_count=1,
             issues=[
                 ValidationIssue(
                     code=code,
                     message=message,
                     source=source,
                 )
-            ]
+            ],
         )
     )

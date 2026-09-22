@@ -9,6 +9,7 @@ from pathlib import Path
 from pydantic import ValidationError
 
 from pkdb.importers.expressions import bind_columns, clean, split_entry
+from pkdb.importers.structure import entry_structure, list_value, validate_json_tree
 from pkdb.importers.workbook import read_table
 from pkdb.schemas.source import SourceBundle, SourceLocation
 from pkdb.schemas.study import CanonicalStudy, Statistics
@@ -55,7 +56,7 @@ def _read_json(path: Path) -> dict:
             object_pairs_hook=_unique_object,
             parse_constant=lambda value: fail("invalid_number", value),
         )
-    except (ValueError, OSError) as error:
+    except (ValueError, OSError, RecursionError) as error:
         fail("invalid_json", str(error), SourceLocation(file=path.name))
     if not isinstance(value, dict):
         fail("invalid_json", "Expected a JSON object", SourceLocation(file=path.name))
@@ -81,6 +82,8 @@ def load_folder(path: Path) -> SourceBundle:
 
 
 def _notes(data: dict) -> dict:
+    if not isinstance(data, dict):
+        fail("invalid_entry", "Notes must belong to an object")
     result = deepcopy(data)
     for key in ("comments", "descriptions"):
         if key in result:
@@ -92,7 +95,7 @@ def _notes(data: dict) -> dict:
                     if key == "comments" and isinstance(item, list) and len(item) == 2
                     else item
                 )
-                for item in (result[key] or [])
+                for item in list_value(result[key], key)
             ]
     return result
 
@@ -146,6 +149,8 @@ def _scientific(data: dict, key: str, source: SourceLocation) -> dict:
 def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> CanonicalStudy:
     if max_rows <= 0:
         fail("row_limit", "Row limit must be positive")
+    validate_json_tree(bundle.study, "study.json")
+    validate_json_tree(bundle.reference, "reference.json")
     data = deepcopy(bundle.study)
     unexpected = (
         data.keys() - META_KEYS - SECTIONS.keys() - {"sid", "reference", "files"}
@@ -157,12 +162,23 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
         fail("invalid_identity", "Study SID must be a string or integer")
     for name in ("sid", "pmid"):
         if reference.get(name) is not None:
+            if type(reference[name]) not in (str, int):
+                fail(
+                    "invalid_identity",
+                    f"Reference {name} must be text or integer",
+                    SourceLocation(file="reference.json", path=(name,)),
+                )
             reference[name] = str(reference[name])
     if str(data.get("reference")) != reference.get("sid"):
         fail("reference_mismatch", "Study reference must match reference.json SID")
     metadata = _notes({key: value for key, value in data.items() if key in META_KEYS})
+    entry_structure(metadata, SourceLocation(file="study.json"))
     curators = []
-    for value in metadata.get("curators", []) or []:
+    for value in list_value(
+        metadata.get("curators"),
+        "curators",
+        SourceLocation(file="study.json", path=("curators",)),
+    ):
         if isinstance(value, str):
             curators.append({"user": value, "rating": 0})
         elif isinstance(value, list) and len(value) == 2:
@@ -172,7 +188,11 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
         else:
             fail("invalid_curator", "Expected a username or [username, rating]")
     metadata["curators"] = curators
-    metadata["collaborators"] = metadata.get("collaborators") or []
+    metadata["collaborators"] = list_value(
+        metadata.get("collaborators"),
+        "collaborators",
+        SourceLocation(file="study.json", path=("collaborators",)),
+    )
     result = {
         "sid": str(data["sid"]),
         "metadata": metadata,
@@ -250,7 +270,9 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
         return name
 
     for section, entity in SECTIONS.items():
-        content = data.get(section) or {}
+        content = data.get(section)
+        if content is None:
+            content = {}
         if not isinstance(content, dict):
             fail("invalid_section", f"{section} must be an object")
         unknown = content.keys() - {entity, "comments", "descriptions"}
@@ -262,12 +284,18 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
         destination = {"outputs": "measurements", "data": "scatters"}.get(
             entity, entity
         )
-        templates = content.get(entity, []) or []
-        if not isinstance(templates, list):
-            fail("invalid_section", f"{entity} must be a list")
+        templates = list_value(
+            content.get(entity),
+            entity,
+            SourceLocation(file="study.json", path=(section, entity)),
+        )
         for template_index, raw in enumerate(templates):
-            if not isinstance(raw, dict):
-                fail("invalid_entry", f"{entity} entries must be objects")
+            entry_structure(
+                raw,
+                SourceLocation(
+                    file="study.json", path=(section, entity, template_index)
+                ),
+            )
             for split_index, template in enumerate(split_entry(raw)):
                 source = template.pop("source", None)
                 subset = template.pop("subset", None)
@@ -308,6 +336,7 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
                         if not keep:
                             continue
                     bound = bind_columns(template, row, location)
+                    entry_structure(bound, location)
                     for entry in split_entry(bound):
                         expanded += 1
                         if expanded > max_rows:
@@ -451,5 +480,9 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
                 )
             )
         raise StudyValidationError(
-            ValidationReport(issues=issues, truncated=len(error.errors()) > 100)
+            ValidationReport(
+                issues=issues,
+                truncated=error.error_count() > 100,
+                error_count=error.error_count(),
+            )
         ) from error

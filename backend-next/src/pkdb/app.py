@@ -127,7 +127,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             return json.loads(
                 value, object_pairs_hook=unique_pairs, parse_constant=invalid_constant
             )
-        except json.JSONDecodeError:
+        except (json.JSONDecodeError, RecursionError):
             fail("invalid_json", "Malformed JSON form field")
 
     async def upload(request: Request, sid: str | None = None):
