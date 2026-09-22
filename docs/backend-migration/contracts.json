@@ -2708,11 +2708,12 @@
         "status": "implemented_list_checkpoint",
         "tests": [
           "tests/api/test_exports.py",
-          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
         ],
         "remaining": [
           "full filter/operator compatibility matrix",
-          "detail and format aliases"
+          "analysis detail aliases"
         ]
       }
     },
@@ -2826,11 +2827,12 @@
         "status": "implemented_list_checkpoint",
         "tests": [
           "tests/api/test_exports.py",
-          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
         ],
         "remaining": [
           "full filter/operator compatibility matrix",
-          "detail and format aliases"
+          "analysis detail aliases"
         ]
       }
     },
@@ -2976,11 +2978,12 @@
         "status": "implemented_list_checkpoint",
         "tests": [
           "tests/api/test_exports.py",
-          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
         ],
         "remaining": [
           "full filter/operator compatibility matrix",
-          "detail and format aliases"
+          "analysis detail aliases"
         ]
       }
     },
@@ -3128,11 +3131,12 @@
         "status": "implemented_list_checkpoint",
         "tests": [
           "tests/api/test_exports.py",
-          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
         ],
         "remaining": [
           "full filter/operator compatibility matrix",
-          "detail and format aliases"
+          "analysis detail aliases"
         ]
       }
     },
@@ -3297,11 +3301,12 @@
         "status": "implemented_list_checkpoint",
         "tests": [
           "tests/api/test_exports.py",
-          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
         ],
         "remaining": [
           "full filter/operator compatibility matrix",
-          "detail and format aliases"
+          "analysis detail aliases"
         ]
       }
     },
@@ -3456,11 +3461,12 @@
         "status": "implemented_list_checkpoint",
         "tests": [
           "tests/api/test_exports.py",
-          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
         ],
         "remaining": [
           "full filter/operator compatibility matrix",
-          "detail and format aliases"
+          "analysis detail aliases"
         ]
       }
     },
@@ -3583,11 +3589,12 @@
         "status": "implemented_list_checkpoint",
         "tests": [
           "tests/api/test_exports.py",
-          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy",
+          "tests/api/test_read_contracts.py::test_legacy_json_suffix_preserves_visibility_details_and_pagination"
         ],
         "remaining": [
           "full filter/operator compatibility matrix",
-          "detail and format aliases"
+          "analysis detail aliases"
         ]
       }
     },

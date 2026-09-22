@@ -263,12 +263,14 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             return JSONResponse({"status": "unavailable"}, status_code=503)
         return {"status": "ok"}
 
+    from pkdb.api.compatibility import include_legacy_router
+
     app.state.principal = principal
-    app.include_router(accounts.router)
+    include_legacy_router(app, accounts.router)
     app.include_router(media.router)
-    app.include_router(reads.router)
-    app.include_router(staging.router)
-    app.include_router(exports.router)
-    app.include_router(legacy_uploads.router)
+    include_legacy_router(app, reads.router)
+    include_legacy_router(app, staging.router)
+    include_legacy_router(app, exports.router)
+    include_legacy_router(app, legacy_uploads.router)
     app.mount("/mcp", mcp_app)
     return app

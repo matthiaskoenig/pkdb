@@ -293,3 +293,43 @@ def test_subject_measurement_filter_alias(client, valid_bundle, creator_headers)
     )
     assert response.status_code == 200
     assert response.json()["data"]["count"] == 0
+
+
+def test_legacy_json_suffix_preserves_visibility_details_and_pagination(
+    client, valid_bundle, creator_headers
+):
+    import json
+
+    valid_bundle.study["access"] = "private"
+    sid = valid_bundle.study["sid"]
+    assert (
+        client.put(
+            f"/api/v2/studies/{sid}",
+            headers=creator_headers,
+            data={
+                "study": json.dumps(valid_bundle.study),
+                "reference": json.dumps(valid_bundle.reference),
+            },
+        ).status_code
+        == 201
+    )
+    for suffix in (".json", ".json/"):
+        for path in ("outputs", "pkdata/outputs"):
+            url = f"/api/v1/{path}{suffix}"
+            response = client.get(url)
+            assert response.status_code == 200
+            assert response.json()["data"]["count"] == 0
+            page = client.get(
+                url, headers=creator_headers, params={"page_size": 1}
+            ).json()
+            assert page["data"]["count"] == 2
+            assert suffix in page["next_page_url"]
+            assert (
+                client.get(page["next_page_url"], headers=creator_headers).status_code
+                == 200
+            )
+        response = client.get(f"/api/v1/studies/{sid}{suffix}", headers=creator_headers)
+        assert response.status_code == 200
+        assert response.json()["sid"] == sid
+        assert client.get(f"/api/v1/studies/{sid}{suffix}").status_code == 404
+    assert client.get("/api/v1/outputs.xml").status_code == 404
