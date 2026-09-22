@@ -73,7 +73,7 @@ legacy deployment until restore and cutover acceptance are signed off.
 
 Both Python container variants pass local non-root REST/MCP, analytical PK,
 protected attachment and graceful shutdown gates. The full database and file
-restore rehearsal remains pending.
+restore rehearsal is recorded in `restore-checkpoint.json`; repeat against the final accepted release corpus.
 Production deployment, data deletion and retiring the legacy runtime are separate
 operations and are not performed by this runbook's rebuild command.
 

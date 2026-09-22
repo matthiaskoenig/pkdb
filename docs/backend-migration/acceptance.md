@@ -133,3 +133,27 @@ are not complete. The legacy backend remains unchanged and is not retired.
   disposition. Other compatibility, performance and final-review gates remain.
 - CLI redaction regressions for JSON literals and escaped strings fail before
   the fix and pass afterward on both interpreters; all 12 CLI upload tests pass.
+
+## Processing version 5 compatibility checkpoint
+
+- 314 regular tests pass on each Python 3.13 and 3.14; Ruff, formatting and ty
+  pass. Latest images build on both versions. The combined explicit runtime,
+  restore and Frost/scatter corpus run has 24 passing and five failing tests on
+  each interpreter; the failures are the existing corpus blockers below.
+- Numeric labels and categorical choices now follow legacy CharField conversion
+  at the source boundary, retaining zero and rejecting boolean coercion. Five
+  regression cases fail before the fix and pass afterward. Unchanged Levy1983
+  and McCrea1999 now both publish through actual HTTP (201); see
+  numeric-source-checkpoint.json. Matthaei2016 advances past numeric choices but
+  still fails its unknown CYP1A2 genotype measurement definition.
+- Frost corpus blockers remain: Frost2013a references missing Tab3 imagery
+  (both parse and scientific tests fail); Frost2014a uses unknown measurement
+  names; Frost2015 has a negative concentration mean; Frost2018 has missing
+  method/measurement definitions, negative values forbidden by its vocabulary,
+  and percent data against an ETP-relative definition specifying hours. These
+  are not approved exclusions or evidence of complete apixaban acceptance.
+- Browser checks additionally render all four Frost2014 timecourse plots and
+  successfully fetch a protected TSV through the existing frontend control.
+- Earlier full rebuild/restore artifacts remain evidence for processing version
+  4. Two new publications use version 5; a fresh complete rebuild/resume is still
+  required after compatibility and vocabulary dispositions are settled.

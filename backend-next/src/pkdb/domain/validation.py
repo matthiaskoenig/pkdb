@@ -28,7 +28,7 @@ from pkdb.schemas.validation import (
     ValidationReport,
 )
 
-PROCESSING_VERSION = "4"
+PROCESSING_VERSION = "5"
 NUMERIC_FIELDS = ("value", "mean", "median", "min", "max", "sd", "se", "cv")
 
 

@@ -231,3 +231,35 @@ def test_boolean_subject_name_is_not_coerced_to_text(study_folder):
     path.write_text(json.dumps(data))
     with pytest.raises(StudyValidationError):
         parse_bundle(load_folder(study_folder))
+
+
+@pytest.mark.parametrize("label", [1, 1.5])
+def test_numeric_output_labels_use_legacy_text_conversion(study_folder, label):
+    path = study_folder / "study.json"
+    data = json.loads(path.read_text())
+    data["outputset"]["outputs"][0]["label"] = label
+    path.write_text(json.dumps(data))
+    study = parse_bundle(load_folder(study_folder))
+    assert all(record.label == str(label) for record in study.measurements)
+
+
+@pytest.mark.parametrize("choice", [0, 1, 1.5])
+def test_numeric_characteristic_choices_use_legacy_text_conversion(
+    study_folder, choice
+):
+    path = study_folder / "study.json"
+    data = json.loads(path.read_text())
+    data["individualset"] = {
+        "individuals": [
+            {
+                "name": "subject",
+                "group": "all",
+                "characteristica": [
+                    {"measurement_type": "nat2 activity", "choice": choice}
+                ],
+            }
+        ]
+    }
+    path.write_text(json.dumps(data))
+    study = parse_bundle(load_folder(study_folder))
+    assert study.individuals[0].characteristica[0].choice == str(choice)
