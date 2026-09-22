@@ -4,8 +4,8 @@ from datetime import timedelta
 
 from authlib.common.errors import AuthlibBaseError
 from fastapi import APIRouter, HTTPException, Request
+from httpx2 import HTTPError
 from pydantic import BaseModel, ConfigDict, Field
-from requests import RequestException
 from sqlalchemy.exc import IntegrityError
 from starlette.responses import JSONResponse, RedirectResponse, Response
 
@@ -149,7 +149,7 @@ def callback(provider: str, request: Request):
         LookupError,
         IntegrityError,
         AuthlibBaseError,
-        RequestException,
+        HTTPError,
     ):
         return RedirectResponse("/account?oauth=error", status_code=303)
     response = RedirectResponse(f"/account?oauth={result['status']}", status_code=303)

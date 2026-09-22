@@ -13,7 +13,7 @@ import sys
 import time
 from pathlib import Path
 
-import httpx
+import httpx2
 
 from pkdb.commands.upload import api_root, send_folder, study_folders
 
@@ -181,7 +181,7 @@ def main(argv=None):
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(report, indent=2) + "\n")
     try:
-        with httpx.Client(
+        with httpx2.Client(
             base_url=url,
             headers={"Authorization": "Token " + token},
             timeout=180,
@@ -233,7 +233,7 @@ def main(argv=None):
         OSError,
         ValueError,
         TimeoutError,
-        httpx.HTTPError,
+        httpx2.HTTPError,
     ) as error:
         report["failure_type"] = type(error).__name__
     output.write_text(json.dumps(report, indent=2) + "\n")

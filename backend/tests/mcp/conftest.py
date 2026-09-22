@@ -3,7 +3,7 @@ import threading
 import time
 from contextlib import asynccontextmanager
 
-import httpx
+import httpx2
 import pytest
 import uvicorn
 from mcp import ClientSession
@@ -39,7 +39,7 @@ def mcp_http(ingestion_context, session_factory):
     url = f"http://127.0.0.1:{sock.getsockname()[1]}"
     server = uvicorn.Server(
         uvicorn.Config(
-            app, log_level="critical", lifespan="on", timeout_graceful_shutdown=5
+            app, log_level="error", lifespan="on", timeout_graceful_shutdown=5
         )
     )
     thread = threading.Thread(
@@ -61,13 +61,12 @@ def mcp_http(ingestion_context, session_factory):
 
 @asynccontextmanager
 async def connect(url, token):
-    async with httpx.AsyncClient(
+    async with httpx2.AsyncClient(
         headers={"Authorization": f"Bearer {token}"}, timeout=15
     ) as http:
         async with streamable_http_client(url + "/mcp/", http_client=http) as (
             read,
             write,
-            _,
         ):
             async with ClientSession(read, write) as session:
                 await session.initialize()

@@ -192,3 +192,143 @@ def test_all_zero_curve_is_a_source_located_validation_error(exponential_course)
     source = error.value.report.issues[0].source
     assert source is not None and source.file == "curve.tsv"
     assert all(point.statistics.mean == 0 for point in exponential_course.points)
+
+
+def scalar_dose(**updates):
+    from pkdb.schemas.study import Intervention
+
+    return Intervention(
+        key="dose",
+        name="dose",
+        measurement_type="dosing",
+        substance="drug",
+        application="single dose",
+        statistics=Statistics(value=40),
+        unit="mg",
+        time=0,
+        time_unit="h",
+        route="oral",
+    ).model_copy(update=updates)
+
+
+def test_linear_auc_and_observed_terminal_extrapolation(exponential_course):
+    import numpy as np
+
+    outputs = {p.measurement_type: p for p in derive_pk(exponential_course)}
+    points = exponential_course.points
+    expected = np.trapezoid(
+        [p.statistics.mean for p in points], [p.time for p in points]
+    )
+    assert outputs["auc_end"].statistics.mean == pytest.approx(expected)
+    assert outputs["auc_inf"].statistics.mean == pytest.approx(
+        expected + points[-1].statistics.mean / 0.5
+    )
+    assert outputs["auc_end"].time == 8
+
+
+@pytest.mark.parametrize("route", ["oral", "subcutaneous", "iv"])
+def test_route_specific_clearance_and_volume(exponential_course, route):
+    outputs = {
+        p.measurement_type: p
+        for p in derive_pk(exponential_course, scalar_dose(route=route))
+    }
+    auc = outputs["auc_inf"].statistics.mean
+    assert auc is not None
+    clearance = 40 / auc
+    assert outputs["clearance"].statistics.mean == pytest.approx(clearance)
+    assert outputs["vd"].statistics.mean == pytest.approx(clearance / 0.5)
+    assert ("vd_ss" in outputs) == (route == "iv")
+    if route == "iv":
+        import numpy as np
+
+        times = np.array([p.time for p in exponential_course.points])
+        values = np.array([p.statistics.mean for p in exponential_course.points])
+        aumc = np.trapezoid(times * values, times) + values[-1] * (
+            times[-1] / 0.5 + 1 / 0.5**2
+        )
+        assert outputs["vd_ss"].statistics.mean == pytest.approx(clearance * aumc / auc)
+
+
+@pytest.mark.parametrize(
+    "updates",
+    [
+        {"route": None},
+        {"route": "nr-route"},
+        {"route": "intraarterial"},
+        {"application": "multiple doses"},
+        {"substance": "other"},
+        {"statistics": Statistics(value=0)},
+    ],
+)
+def test_unestablished_dosing_keeps_dose_independent_outputs(
+    exponential_course, updates
+):
+    assert derive_pk(exponential_course, scalar_dose(**updates)) == derive_pk(
+        exponential_course
+    )
+
+
+def test_dose_time_units_and_infusion_duration(exponential_course):
+    for point in exponential_course.points:
+        point.time += 2
+    outputs = {
+        p.measurement_type: p
+        for p in derive_pk(
+            exponential_course,
+            scalar_dose(route="iv", time=120, time_end=150, time_unit="min"),
+        )
+    }
+    assert outputs["tmax"].statistics.mean == 0
+    assert outputs["auc_end"].time == 10
+    bolus = {
+        p.measurement_type: p
+        for p in derive_pk(exponential_course, scalar_dose(route="iv", time=2))
+    }
+    bolus_volume = bolus["vd_ss"].statistics.mean
+    clearance = outputs["clearance"].statistics.mean
+    assert bolus_volume is not None and clearance is not None
+    assert outputs["vd_ss"].statistics.mean == pytest.approx(
+        bolus_volume - clearance * 0.25
+    )
+
+
+def test_missing_statistic_and_short_terminal_curve_never_emit_nonfinite_values(
+    exponential_course,
+):
+    exponential_course.points[2].statistics.mean = None
+    outputs = derive_pk(exponential_course)
+    assert outputs
+    assert all(
+        p.statistics.mean is not None and math.isfinite(p.statistics.mean)
+        for p in outputs
+    )
+    exponential_course.points = exponential_course.points[:2]
+    outputs = {p.measurement_type: p for p in derive_pk(exponential_course)}
+    assert set(outputs) == {"auc_end", "cmax", "tmax"}
+
+
+def test_bodyweight_normalized_dose_preserves_clearance_dimensions(exponential_course):
+    from pkdb.domain.units import ureg
+
+    outputs = {
+        p.measurement_type: p
+        for p in derive_pk(exponential_course, scalar_dose(unit="mg/kg"))
+    }
+    clearance = outputs["clearance"]
+    volume = outputs["vd"]
+    assert clearance.unit is not None and volume.unit is not None
+    assert (
+        ureg.Unit(clearance.unit).dimensionality == ureg.Unit("l/h/kg").dimensionality
+    )
+    assert ureg.Unit(volume.unit).dimensionality == ureg.Unit("l/kg").dimensionality
+
+
+def test_terminal_regression_uses_all_post_peak_points(exponential_course):
+    import numpy as np
+
+    concentrations = [8, 5, 4, 2, 1.5, 0.4, 0.1]
+    for point, value in zip(exponential_course.points, concentrations, strict=True):
+        point.statistics.mean = value
+    outputs = {p.measurement_type: p for p in derive_pk(exponential_course)}
+    slope, _ = np.polyfit([1, 2, 3, 4, 6, 8], np.log(concentrations[1:]), 1)
+    assert outputs["kel"].statistics.mean == pytest.approx(-slope)

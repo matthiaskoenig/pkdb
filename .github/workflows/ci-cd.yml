@@ -21,7 +21,7 @@ jobs:
         python: ['3.14']
     services:
       postgres:
-        image: postgres:18.0
+        image: postgres:18.6
         env:
           POSTGRES_DB: pkdb_test
           POSTGRES_USER: pkdb_test
@@ -61,7 +61,7 @@ jobs:
           uv venv --python ${{ matrix.python }} /tmp/pkdb-wheel
           uv pip install --python /tmp/pkdb-wheel/bin/python dist/*.whl
           cd /tmp
-          /tmp/pkdb-wheel/bin/python -c 'import pkdb, numpy, scipy, pandas, pint; from pkdb_analysis.pk import pharmacokinetics'
+          /tmp/pkdb-wheel/bin/python -c 'import pkdb, numpy, scipy, pandas, pint; from pkpdutils import Timecourse, nca_single'
       - name: Build pinned runtime image
         run: docker build --build-arg PYTHON_VERSION=${{ matrix.python }} -t pkdb:py${{ matrix.python }} .
       - name: Verify installed container runtime

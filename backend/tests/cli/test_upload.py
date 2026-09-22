@@ -1,6 +1,6 @@
 import json
 
-import httpx
+import httpx2
 import pytest
 
 
@@ -37,14 +37,14 @@ def test_complete_bundle_one_request_no_source_edits(
         body = request.read()
         assert b'name="study"' in body and b'name="reference"' in body
         assert b'filename="table.tsv"' in body
-        return httpx.Response(
+        return httpx2.Response(
             200,
             json={"valid": True}
             if command == "validate"
             else {"sid": "TEST1", "created": True},
         )
 
-    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as client:
         assert (
             main(
                 [command, str(root), "--api-url", "http://example.test"], client=client
@@ -67,12 +67,12 @@ def test_all_studies_reported_and_failures_are_nonzero(tmp_path, monkeypatch, ca
     def handler(request):
         calls.append(request.url.path)
         return (
-            httpx.Response(422, json={"detail": "invalid"})
+            httpx2.Response(422, json={"detail": "invalid"})
             if "FIRST" in request.url.path
-            else httpx.Response(201, json={"sid": "SECOND", "created": True})
+            else httpx2.Response(201, json={"sid": "SECOND", "created": True})
         )
 
-    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as client:
         assert (
             main(
                 ["upload", str(tmp_path), "--api-url", "http://example.test"],
@@ -107,14 +107,14 @@ def test_failed_or_ambiguous_responses_are_not_retried(
     def handler(request):
         calls.append(request)
         if failure == "timeout":
-            raise httpx.ReadTimeout("timeout", request=request)
+            raise httpx2.ReadTimeout("timeout", request=request)
         if failure == "html":
-            return httpx.Response(502, text="private-token debug page")
+            return httpx2.Response(502, text="private-token debug page")
         if failure == "redirect":
-            return httpx.Response(307, headers={"location": "https://other.test"})
-        return httpx.Response(201, json={"sid": "unexpected"})
+            return httpx2.Response(307, headers={"location": "https://other.test"})
+        return httpx2.Response(201, json={"sid": "unexpected"})
 
-    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as client:
         assert (
             main(
                 ["upload", str(root), "--api-url", "http://example.test/api/v1"],
@@ -137,9 +137,9 @@ def test_integer_study_sid_is_uploaded_as_canonical_text(tmp_path):
 
     def handler(request):
         calls.append(request.url.path)
-        return httpx.Response(201, json={"sid": "123"})
+        return httpx2.Response(201, json={"sid": "123"})
 
-    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as client:
         result = send_folder(
             root,
             client=client,
@@ -161,12 +161,12 @@ def test_redaction_preserves_json_types_and_hides_escaped_tokens(
     monkeypatch.setenv("PKDB_API_TOKEN", token)
 
     def handler(request):
-        return httpx.Response(
+        return httpx2.Response(
             422,
             json={"issues": [{"message": "Rejected " + token, "retry": False}]},
         )
 
-    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as client:
         assert (
             main(
                 ["upload", str(root), "--api-url", "http://example.test"], client=client

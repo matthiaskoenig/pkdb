@@ -5,7 +5,7 @@ from contextlib import ExitStack
 from pathlib import Path
 from urllib.parse import quote, urlsplit, urlunsplit
 
-import httpx
+import httpx2
 
 from pkdb.importers.folder import load_folder
 from pkdb.schemas.validation import StudyValidationError
@@ -109,7 +109,7 @@ def send_folder(path, *, client, api_url, token, validate=False):
         record["issues"] = error.report.model_dump(mode="json")["issues"]
     except OSError, ValueError:
         record["error"] = "Unable to read a valid source bundle"
-    except httpx.RequestError:
+    except httpx2.RequestError:
         record["error"] = (
             "Request failed; publication outcome may be unknown. Retry the complete bundle."
         )

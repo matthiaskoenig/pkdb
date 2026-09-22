@@ -8,7 +8,7 @@ import subprocess
 import time
 from uuid import uuid4
 
-import httpx
+import httpx2
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 
@@ -79,14 +79,14 @@ def test_container_nonroot_upload_and_graceful_shutdown(
         text=True,
     )
     try:
-        with httpx.Client(base_url=f"http://127.0.0.1:{port}", timeout=30) as client:
+        with httpx2.Client(base_url=f"http://127.0.0.1:{port}", timeout=30) as client:
             deadline = time.monotonic() + 30
             while True:
                 try:
                     ready = client.get("/health/ready")
                     if ready.status_code == 200:
                         break
-                except httpx.ConnectError:
+                except httpx2.ConnectError:
                     pass
                 assert time.monotonic() < deadline, "Container did not become ready"
                 time.sleep(0.1)
@@ -145,22 +145,23 @@ def test_container_nonroot_upload_and_graceful_shutdown(
             )
 
         async def check_mcp():
-            async with httpx.AsyncClient(
+            async with httpx2.AsyncClient(
                 headers={"Authorization": f"Bearer {token}"}, timeout=30
             ) as transport:
                 async with streamable_http_client(
                     f"http://127.0.0.1:{port}/mcp/", http_client=transport
-                ) as (read, write, _):
+                ) as (read, write):
                     async with ClientSession(read, write) as session:
                         await session.initialize()
                         assert len((await session.list_tools()).tools) == 4
                         result = await session.call_tool(
                             "get_study", {"sid": valid_bundle.study["sid"]}
                         )
-                        assert not result.isError
-                        assert result.structuredContent is not None
+                        assert not result.is_error
+                        assert result.structured_content is not None
                         assert (
-                            result.structuredContent["sid"] == valid_bundle.study["sid"]
+                            result.structured_content["sid"]
+                            == valid_bundle.study["sid"]
                         )
 
         asyncio.run(check_mcp())
@@ -172,14 +173,14 @@ def test_container_nonroot_upload_and_graceful_shutdown(
                 "python",
                 "-c",
                 "import os,sys,importlib.util; import numpy,scipy,pandas,pint; "
-                "from pkdb_analysis.pk import pharmacokinetics; "
+                "from pkpdutils import Timecourse, nca_single; "
                 "assert os.getuid() == 10001 and sys._is_gil_enabled(); "
-                "from pkdb.domain.units import ureg; import math; "
+                "import math; "
                 "t=numpy.array([0,1,2,3,4,6,8]); "
-                "course=pharmacokinetics.TimecoursePKNoDosing(substance='test', "
-                "time=ureg.Quantity(t,'h'), "
-                "concentration=ureg.Quantity(8*numpy.exp(-0.5*t),'mg/l'), ureg=ureg); "
-                "assert math.isclose(course.pk.thalf.to('h').magnitude,math.log(2)/0.5,rel_tol=1e-9); "
+                "course=Timecourse(time=t,value=8*numpy.exp(-0.5*t),time_unit='h',unit='mg/l'); "
+                "result=nca_single(course); "
+                "assert math.isclose(result['thalf'].item(),math.log(2)/0.5,rel_tol=1e-9); "
+                'assert importlib.util.find_spec("pkdb_analysis") is None; '
                 'assert importlib.util.find_spec("django") is None; '
                 'assert importlib.util.find_spec("elasticsearch") is None; '
                 'print(str(sys.version_info.major)+"."+str(sys.version_info.minor))',

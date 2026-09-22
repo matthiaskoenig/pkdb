@@ -2,7 +2,7 @@
 
 import json
 
-import httpx
+import httpx2
 
 from tools.backend_migration.rebuild import rebuild
 
@@ -42,12 +42,12 @@ def test_every_folder_accounted_duplicates_never_overwrite(tmp_path):
     def handler(request):
         calls.append((request.method, request.url.path))
         return (
-            httpx.Response(201, json={"sid": "A", "digest": "source-digest"})
+            httpx2.Response(201, json={"sid": "A", "digest": "source-digest"})
             if request.method == "PUT"
-            else httpx.Response(200, json=state())
+            else httpx2.Response(200, json=state())
         )
 
-    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as client:
         result = rebuild(
             corpus,
             "http://local.test",
@@ -77,12 +77,12 @@ def test_resume_requires_current_remote_versions_and_unchanged_source(tmp_path):
     def handler(request):
         calls.append(request.method)
         return (
-            httpx.Response(201, json={"sid": "A", "digest": "source-digest"})
+            httpx2.Response(201, json={"sid": "A", "digest": "source-digest"})
             if request.method == "PUT"
-            else httpx.Response(200, json=remote)
+            else httpx2.Response(200, json=remote)
         )
 
-    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as client:
         first = rebuild(corpus, "http://local.test", report, "secret-token", client)
         assert first["complete"]
         calls.clear()
@@ -115,7 +115,7 @@ def test_interruption_leaves_accounting_for_unattempted_studies(tmp_path):
         raise KeyboardInterrupt()
 
     with (
-        httpx.Client(transport=httpx.MockTransport(handler)) as client,
+        httpx2.Client(transport=httpx2.MockTransport(handler)) as client,
         pytest.raises(KeyboardInterrupt),
     ):
         rebuild(corpus, "http://local.test", report, "secret-token", client)
@@ -133,10 +133,10 @@ def test_concurrent_replacement_cannot_be_counted_as_our_publication(tmp_path):
 
     def handler(request):
         if request.method == "PUT":
-            return httpx.Response(201, json={"sid": "A", "digest": "our-digest"})
-        return httpx.Response(200, json=state())
+            return httpx2.Response(201, json={"sid": "A", "digest": "our-digest"})
+        return httpx2.Response(200, json=state())
 
-    with httpx.Client(transport=httpx.MockTransport(handler)) as client:
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as client:
         report = rebuild(
             corpus,
             "http://local.test",

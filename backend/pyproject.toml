@@ -1,36 +1,35 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling>=1.32.4"]
 build-backend = "hatchling.build"
 
 [project]
 name = "pkdb"
-version = "0.10.0"
-description = "Validated PK-DB backend"
+version = "0.10.1"
+description = "PK-DB backend"
 requires-python = ">=3.14,<3.15"
 dependencies = [
-  "pydantic>=2,<3",
-  "pydantic-settings>=2,<3",
-  "pandas>=2.3,<4",
-  "numpy>=2.3,<3",
-  "scipy>=1.16,<2",
-  "pint>=0.25,<1",
-  "openpyxl>=3.1,<4",
-  "pkdb-analysis @ git+https://github.com/matthiaskoenig/pkdb_analysis.git@6e010ca987bc43995da99b826064581bf201e731",
-  "sqlalchemy>=2,<3",
-  "psycopg[binary]>=3,<4",
-  "alembic>=1,<2",
-  "pwdlib[argon2]>=0.3,<1",
-  "fastapi>=0.115,<1",
-  "uvicorn>=0.34,<1",
-  "python-multipart>=0.0.20",
-  "fastmcp>=3,<4",
-  "mcp==1.30.0",
-  "httpx>=0.28",
-  "pillow>=11,<13",
-  "authlib>=1.6,<2",
-  "pyotp>=2.9,<3",
-  "cryptography>=46",
-  "requests>=2.32,<3",
+  "pydantic>=2.13.5,<3",
+  "pydantic-settings>=2.15.0,<3",
+  "pandas>=3.0.6,<4",
+  "numpy>=2.5.3,<3",
+  "scipy>=1.18.1,<2",
+  "pint>=0.26.1,<1",
+  "openpyxl>=3.1.5,<4",
+  "pkpdutils>=1.2.0,<2",
+  "sqlalchemy>=2.0.54,<3",
+  "psycopg[binary]>=3.3.6,<4",
+  "alembic>=1.20.0,<2",
+  "pwdlib[argon2]>=0.3.1,<1",
+  "fastapi>=0.141.1,<1",
+  "uvicorn>=0.53.0,<1",
+  "python-multipart>=0.0.32",
+  "fastmcp>=4.0.5,<5",
+  "mcp==2.2.0",
+  "httpx2>=2.13.0,<3",
+  "pillow>=12.3.0,<13",
+  "authlib>=1.8.0,<2",
+  "pyotp>=2.10.0,<3",
+  "cryptography>=50.0.1",
 ]
 
 [project.scripts]
@@ -45,9 +44,9 @@ dev = [
     {include-group = "vocabulary"},
     "bump-my-version>=1.5.1",
     "pre-commit>=4.6.2",
-    "pytest>=8",
-    "ruff>=0.16",
-    "ty>=0.0.82",
+    "pytest>=9.1.1",
+    "ruff>=0.16.8",
+    "ty>=0.0.83",
 ]
 
 [tool.hatch.build.targets.wheel]

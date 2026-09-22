@@ -1,4 +1,8 @@
+from urllib.parse import parse_qs, urlsplit
+
+import httpx2
 import pytest
+from authlib.integrations.httpx_client import OAuth2Client
 
 from pkdb.db.models.users import EmailAddress, User
 from pkdb.services.authentication import password_hash
@@ -82,8 +86,6 @@ def test_key_secret_shown_once_and_invalid_header_never_falls_back(browser):
 def test_provider_link_callback_cleans_url_and_exposes_only_verified_identity(
     browser, monkeypatch
 ):
-    from urllib.parse import parse_qs, urlsplit
-
     client, headers = browser
     assert login(client, headers).status_code == 200
     service = client.app.state.providers
@@ -108,6 +110,48 @@ def test_provider_link_callback_cleans_url_and_exposes_only_verified_identity(
         client.get(callback, follow_redirects=False).headers["location"]
         == "/account?oauth=error"
     )
+
+
+@pytest.mark.parametrize("stage", ["token", "profile"])
+@pytest.mark.parametrize("failure", ["timeout", "status", "redirect"])
+def test_provider_http_failures_return_clean_error_without_following_redirects(
+    client, monkeypatch, stage, failure
+):
+    service = client.app.state.providers
+    service.providers["github"] = {"client_id": "test", "client_secret": "test"}
+    calls = []
+
+    def http(request):
+        calls.append(request)
+        assert request.url.host in {"github.com", "api.github.com"}
+        assert all(value == 15 for value in request.extensions["timeout"].values())
+        if stage == "profile" and request.url.host == "github.com":
+            return httpx2.Response(
+                200, json={"access_token": "provider-secret", "token_type": "bearer"}
+            )
+        if failure == "timeout":
+            raise httpx2.ReadTimeout("provider-secret", request=request)
+        if failure == "redirect":
+            return httpx2.Response(
+                307, headers={"location": "https://untrusted.example/collect"}
+            )
+        return httpx2.Response(502, text="provider-secret")
+
+    monkeypatch.setattr(
+        service,
+        "client_factory",
+        lambda **kwargs: OAuth2Client(transport=httpx2.MockTransport(http), **kwargs),
+    )
+    start = client.get("/api/v1/auth/github/start", follow_redirects=False)
+    state = parse_qs(urlsplit(start.headers["location"]).query)["state"][0]
+    response = client.get(
+        f"/api/v1/auth/github/callback?state={state}&code=one-use-code",
+        follow_redirects=False,
+    )
+    assert response.status_code == 303
+    assert response.headers["location"] == "/account?oauth=error"
+    assert "provider-secret" not in response.text
+    assert len(calls) == (2 if stage == "profile" else 1)
 
 
 @pytest.mark.parametrize(

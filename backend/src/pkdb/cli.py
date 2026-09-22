@@ -8,7 +8,7 @@ from contextlib import nullcontext
 from getpass import getpass
 from pathlib import Path
 
-import httpx
+import httpx2
 
 from pkdb.commands.upload import api_root, send_folder, study_folders
 
@@ -67,8 +67,8 @@ def main(argv=None, *, client=None):
     with (
         nullcontext(client)
         if client is not None
-        else httpx.Client(
-            timeout=httpx.Timeout(600, connect=10), follow_redirects=False
+        else httpx2.Client(
+            timeout=httpx2.Timeout(600, connect=10), follow_redirects=False
         ) as transport
     ):
         for folder in folders:

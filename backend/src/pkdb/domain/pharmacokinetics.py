@@ -5,6 +5,16 @@ import math
 from collections import defaultdict
 
 import numpy as np
+from pkpdutils import (
+    AUCMethod,
+    Dose,
+    NCAOptions,
+    Route,
+    TerminalMethod,
+    TerminalPhase,
+    nca_single,
+)
+from pkpdutils import Timecourse as PKTimecourse
 
 from pkdb.domain.units import ureg
 from pkdb.schemas.study import Intervention, Measurement, Statistics, Timecourse
@@ -24,16 +34,88 @@ CONSISTENT_FIELDS = (
 DEFAULT_PK_DOSE_UNITS = ("g", "g/kg", "mol", "mol/kg")
 
 PK_FIELDS = {
-    "auc": "auc_end",
-    "aucinf": "auc_inf",
+    "auc_last": "auc_end",
+    "auc_inf_obs": "auc_inf",
     "cl": "clearance",
+    "cl_f": "clearance",
     "cmax": "cmax",
-    "kel": "kel",
+    "lambda_z": "kel",
     "thalf": "thalf",
     "tmax": "tmax",
-    "vd": "vd",
-    "vdss": "vd_ss",
+    "vz": "vd",
+    "vz_f": "vd",
+    "vss": "vd_ss",
 }
+
+EXTRAVASCULAR_ROUTES = frozenset(
+    {
+        "intraperitoneal-route",
+        "intramuscular",
+        "oral",
+        "rectal",
+        "inhalation",
+        "buccal",
+        "intradermal",
+        "cutaneous",
+        "transdermal",
+        "vaginal",
+        "topical",
+        "intraduodenal",
+        "subcutaneous",
+        "sublingual",
+    }
+)
+
+
+def _pk_dose(
+    dose: Intervention | None, substance: str | None, time_unit: str, dose_units
+) -> Dose | None:
+    """Only use a scalar single dose with a known administration route.
+
+    PK-DB's clearance and vd include apparent CL/F and Vz/F for extravascular
+    routes. An unknown route cannot establish either IV or extravascular dosing.
+    """
+    if (
+        dose is None
+        or dose.application != "single dose"
+        or dose.substance != substance
+        or not dose.unit
+        or dose.statistics.value is None
+        or dose.statistics.value <= 0
+        or not any(
+            ureg.Unit(dose.unit).dimensionality == ureg.Unit(unit).dimensionality
+            for unit in dose_units
+        )
+    ):
+        return None
+    time = 0.0
+    if isinstance(dose.time, (int, float)) and dose.time_unit:
+        time = float(ureg.Quantity(dose.time, dose.time_unit).to(time_unit).magnitude)
+    duration = None
+    if dose.route == "iv":
+        route = Route.IV_BOLUS
+        if dose.time_end is not None:
+            if not isinstance(dose.time, (int, float)) or not dose.time_unit:
+                return None
+            duration = float(
+                ureg.Quantity(dose.time_end - dose.time, dose.time_unit)
+                .to(time_unit)
+                .magnitude
+            )
+            if duration <= 0:
+                return None
+            route = Route.IV_INFUSION
+    elif dose.route in EXTRAVASCULAR_ROUTES:
+        route = Route.ORAL
+    else:
+        return None
+    return Dose(
+        amount=dose.statistics.value,
+        unit=str(ureg.Unit(dose.unit)),
+        route=route,
+        time=time,
+        duration=duration,
+    )
 
 
 def build_timecourses(points: list[Measurement]) -> list[Timecourse]:
@@ -82,12 +164,12 @@ def derive_pk(
     *,
     dose_units=DEFAULT_PK_DOSE_UNITS,
 ) -> list[Measurement]:
-    from pkdb_analysis.pk import pharmacokinetics
-
     points = course.points
     if not points or points[0].measurement_type != "concentration":
         return []
     first = points[0]
+    if not first.time_unit or not first.unit:
+        fail("pk_units", "PK requires concentration and time units", first.source)
     times: list[float] = []
     for point in points:
         if point.time is None:
@@ -113,47 +195,28 @@ def derive_pk(
             "PK parameters cannot be calculated from an all-zero concentration curve",
             first.source,
         )
-    time = ureg.Quantity(np.array(times, dtype=float), first.time_unit)
-    concentration = ureg.Quantity(numeric, first.unit)
-    substance = first.substance or "substance"
-    if dose and dose.application == "single dose" and dose.substance == first.substance:
-        # Legacy PK accepts only restricted dosing dimensions. Other dosing
-        # units and absent scalar values still permit dose-independent outputs.
-        eligible = bool(dose.unit) and any(
-            ureg.Unit(dose.unit).dimensionality == ureg.Unit(unit).dimensionality
-            for unit in dose_units
-        )
-        dose_quantity = ureg.Quantity(np.nan, "mg")
-        if eligible and dose.statistics.value is not None:
-            dose_quantity = ureg.Quantity(dose.statistics.value, dose.unit)
-        if eligible and isinstance(dose.time, (int, float)) and dose.time_unit:
-            calculated = pharmacokinetics.TimecoursePK(
-                time=time,
-                concentration=concentration,
-                substance=substance,
-                ureg=ureg,
-                dose=dose_quantity,
-                intervention_time=ureg.Quantity(dose.time, dose.time_unit),
-            ).pk
-        else:
-            calculated = pharmacokinetics.TimecoursePK(
-                time=time,
-                concentration=concentration,
-                substance=substance,
-                ureg=ureg,
-                dose=dose_quantity,
-            ).pk
-    else:
-        calculated = pharmacokinetics.TimecoursePKNoDosing(
-            time=time,
-            concentration=concentration,
-            substance=substance,
-            ureg=ureg,
-        ).pk
+    calculated = nca_single(
+        PKTimecourse(
+            time=np.array(times, dtype=float),
+            value=numeric,
+            time_unit=str(ureg.Unit(first.time_unit)),
+            unit=str(ureg.Unit(first.unit)),
+            substance=first.substance or "substance",
+            dose=_pk_dose(dose, first.substance, first.time_unit, dose_units),
+        ),
+        options=NCAOptions(
+            # Keep PK-DB's integration and terminal-window policy explicit.
+            auc_method=AUCMethod.LINEAR,
+            terminal=TerminalPhase(method=TerminalMethod.ALL_AFTER_TMAX),
+        ),
+    )
     results = []
     for name, measurement_type in PK_FIELDS.items():
-        quantity = getattr(calculated, name, None)
-        if quantity is None or not math.isfinite(float(quantity.magnitude)):
+        if name not in calculated:
+            continue
+        parameter = calculated[name]
+        value = float(parameter.item())
+        if not math.isfinite(value):
             continue
         record = first.model_copy(deep=True)
         record.key = f"{course.key}:{measurement_type}"
@@ -165,12 +228,10 @@ def derive_pk(
         record.derived_from = course.key
         record.output_type = "output"
         record.measurement_type = measurement_type
-        record.unit = str(quantity.units)
-        record.statistics = Statistics.model_validate(
-            {statistic: float(quantity.magnitude)}
-        )
-        record.time = max(times) if name == "auc" else None
-        record.time_unit = first.time_unit if name == "auc" else None
+        record.unit = parameter.attrs["units"]
+        record.statistics = Statistics.model_validate({statistic: value})
+        record.time = max(times) if name == "auc_last" else None
+        record.time_unit = first.time_unit if name == "auc_last" else None
         record.time_not_reported = False
         record.time_unit_not_reported = False
         results.append(record)

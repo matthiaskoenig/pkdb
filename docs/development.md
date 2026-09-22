@@ -4,6 +4,8 @@ The backend lives in `backend/`: FastAPI, Pydantic, SQLAlchemy, Alembic, Postgre
 
 See [Accounts, authentication, and API keys](authentication.md) for same-origin browser configuration, provider setup, administrator recovery, and curator migration.
 
+See [Pharmacokinetic calculations](pharmacokinetics.md) for the `pkpdutils` adapter, method choices, and parameter mapping.
+
 ## Environment and tests
 
 Install uv and Python 3.14 for the application, tests, and development hooks. Run from the repository root:
@@ -22,7 +24,7 @@ uv run --project backend ty check --project backend
 
 The test database uses temporary container storage. Tests create isolated schemas. Keep it separate from your upload-testing database. Stop it with `docker compose -f compose.test.yaml down`.
 
-Image lifecycle and backup/restore tests live in `backend/system_tests`. They require Docker, a built image selected by `PKDB_TEST_IMAGE`, and the test database URL. CI runs these tests for both Python versions. Corpus tests require explicitly configured source data and are not part of the default suite.
+Image lifecycle and backup/restore tests live in `backend/system_tests`. They require Docker, a built image selected by `PKDB_TEST_IMAGE`, and the test database URL. CI runs these tests on Python 3.14. Corpus tests require explicitly configured source data and are not part of the default suite.
 
 ## Migrations
 
@@ -39,4 +41,4 @@ uv run --no-project --python 3.14 python scripts/llms_txt.py
 
 ## Branches and releases
 
-Use a topic branch and a pull request against `develop`. Required checks are `tests`, `ruff`, `ty`, and `docs`. The `tests` check includes both Python versions and a fresh Compose startup/restart smoke test. Release automation uses `.bumpversion.toml` to update package metadata, the lockfile, and the runtime version together. Do not edit generated changelogs manually.
+Use a topic branch and a pull request against `develop`. Required checks are `tests`, `ruff`, `ty`, and `docs`. The `tests` check includes Python 3.14 and a fresh Compose startup/restart smoke test. Release automation uses `.bumpversion.toml` to update package metadata, the lockfile, and the runtime version together. Do not edit generated changelogs manually.

@@ -1,11 +1,9 @@
-import json
 from datetime import UTC, datetime
 from urllib.parse import parse_qs, urlsplit
 
+import httpx2
 import pytest
-from authlib.integrations.requests_client import OAuth2Session
-from requests import Response
-from requests.adapters import BaseAdapter
+from authlib.integrations.httpx_client import OAuth2Client
 from sqlalchemy import select
 
 from pkdb.db.models.providers import ExternalIdentity, OAuthTransaction
@@ -32,15 +30,11 @@ def provider_context(session_factory):
     calls = []
 
     def response(data):
-        result = Response()
-        result.status_code = 200
-        result._content = json.dumps(data).encode()
-        result.headers["Content-Type"] = "application/json"
-        return result
+        return httpx2.Response(200, json=data)
 
     def http(request):
         calls.append(request)
-        if urlsplit(request.url).hostname == "api.github.com":
+        if request.url.host == "api.github.com":
             return response(
                 {
                     "id": 12345,
@@ -48,7 +42,7 @@ def provider_context(session_factory):
                     "email": "existing@example.org",
                 },
             )
-        if urlsplit(request.url).hostname == "orcid.org":
+        if request.url.host == "orcid.org":
             return response(
                 {
                     "access_token": "provider-secret",
@@ -58,25 +52,8 @@ def provider_context(session_factory):
             )
         return response({"access_token": "provider-secret", "token_type": "bearer"})
 
-    class MockAdapter(BaseAdapter):
-        def send(
-            self,
-            request,
-            stream=False,
-            timeout=None,
-            verify=True,
-            cert=None,
-            proxies=None,
-        ):
-            return http(request)
-
-        def close(self):
-            pass
-
     def client_factory(**kwargs):
-        client = OAuth2Session(**kwargs)
-        client.mount("https://", MockAdapter())
-        return client
+        return OAuth2Client(transport=httpx2.MockTransport(http), **kwargs)
 
     service = ProviderService(
         session_factory,
@@ -107,7 +84,7 @@ def test_state_is_browser_bound_one_use_and_github_pkce(
         service.callback("github", state, "another browser", "code")
     result = service.callback("github", state, browser, "code")
     assert result["status"] == "onboarding"
-    assert "code_verifier" in parse_qs(calls[0].body)
+    assert "code_verifier" in parse_qs(calls[0].content.decode())
     with pytest.raises(AuthenticationFailed):
         service.callback("github", state, browser, "code")
     with session_factory.begin() as session:

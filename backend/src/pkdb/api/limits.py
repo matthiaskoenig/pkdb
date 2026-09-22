@@ -20,7 +20,12 @@ class UploadLimits:
         if not upload:
             await self.app(scope, receive, send)
             return
-        if not self.slots.acquire(blocking=False):
+        # MCP uses POST for discovery and reads as well as uploads. Its tool
+        # executor holds operation-specific quota leases; transport requests
+        # must not compete for upload slots, but still need the byte limit.
+        path = scope.get("path", "")
+        admission = not (path == "/mcp" or path.startswith("/mcp/"))
+        if admission and not self.slots.acquire(blocking=False):
             await JSONResponse(
                 {"detail": "Upload capacity reached"},
                 status_code=503,
@@ -58,4 +63,5 @@ class UploadLimits:
                 {"detail": "Upload exceeds configured byte limit"}, status_code=413
             )(scope, receive, send)
         finally:
-            self.slots.release()
+            if admission:
+                self.slots.release()
