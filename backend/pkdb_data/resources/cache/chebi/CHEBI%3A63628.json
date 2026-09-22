@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:63628",
+  "name": "tipranavir",
+  "definition": "A pyridine-2-sulfonamide substituted at C-5 by a trifluoromethyl group and at the sulfonamide nitrogen by a dihydropyrone-containing m-tolyl substituent. It is an HIV-1 protease inhibitor.",
+  "formula": "C31H33F3N2O5S",
+  "charge": "0",
+  "mass": "602.66400",
+  "inchikey": "SUJUHGSWHZTSEU-FYBSXPHGSA-N"
+}

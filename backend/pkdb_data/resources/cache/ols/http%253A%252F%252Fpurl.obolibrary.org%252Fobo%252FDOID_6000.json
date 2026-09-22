@@ -1,0 +1,181 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_6000",
+  "lang": "en",
+  "description": [
+    "A heart disease that is characterized by any structural or functional cardiac disorder that impairs the ability of the heart to fill with or pump a sufficient amount of blood throughout the body."
+  ],
+  "synonyms": [
+    "CHF",
+    "Cardiac Failure Congestive",
+    "Congestive heart disease",
+    "Weak heart"
+  ],
+  "annotation": {
+    "has_alternative_id": [
+      "DOID:395"
+    ],
+    "has_dbxref": [
+      "ICD10CM:I50",
+      "ICD10CM:I50.9",
+      "ICD9CM:428",
+      "ICD9CM:428.0",
+      "MESH:D006333",
+      "NCI:C3080",
+      "NCI:C50577",
+      "SNOMEDCT_US_2023_03_01:155374007",
+      "SNOMEDCT_US_2023_03_01:195108009",
+      "UMLS_CUI:C0018801",
+      "UMLS_CUI:C0018802"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:6000"
+    ]
+  },
+  "label": "congestive heart failure",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_6000",
+  "obo_id": "DOID:6000",
+  "in_subset": [
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A heart disease that is characterized by any structural or functional cardiac disorder that impairs the ability of the heart to fill with or pump a sufficient amount of blood throughout the body.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "I50",
+      "description": null,
+      "url": "https://icd.codes/icd10cm/I50"
+    },
+    {
+      "database": "ICD10CM",
+      "id": "I50.9",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "ICD9CM",
+      "id": "428",
+      "description": null,
+      "url": "http://icd9cm.chrisendres.com/index.php?action=search&srchtext=428"
+    },
+    {
+      "database": "ICD9CM",
+      "id": "428.0",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MESH",
+      "id": "D006333",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D006333"
+    },
+    {
+      "database": "NCI",
+      "id": "C3080",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3080"
+    },
+    {
+      "database": "NCI",
+      "id": "C50577",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C50577"
+    },
+    {
+      "database": "SNOMEDCT_US_2023_03_01",
+      "id": "155374007",
+      "description": null,
+      "url": "http://snomed.info/id/155374007"
+    },
+    {
+      "database": "SNOMEDCT_US_2023_03_01",
+      "id": "195108009",
+      "description": null,
+      "url": "http://snomed.info/id/195108009"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0018801",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0018801"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0018802",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0018802"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "CHF",
+      "scope": "hasExactSynonym",
+      "type": "acronym",
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6000?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6000/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6000/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6000/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6000/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6000/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6000/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6000/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6000/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6000/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6000/graph"
+    },
+    "has_symptom": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_6000/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0002452"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,142 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29049",
+  "lang": "en",
+  "description": [
+    "A sulfate salt of mineral iron formulated for oral administration and used as a dietary supplement, ferrous sulfate is absorbed in the stomach and small intestine and combines with apoferritin to form ferritin, which is stored in the liver, spleen, red bone marrow, and intestinal mucosa. Important in transport of oxygen by hemoglobin to the tissues, iron is also found in myoglobin, transferrin, and ferritin, and is a component of many enzymes such as catalase, peroxidase, and cytochromes."
+  ],
+  "synonyms": [
+    "FERROUS SULFATE",
+    "Ferrous Sulfate",
+    "Ferrous sulfate",
+    "Iron(II) Sulfate",
+    "ferrous sulfate"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A form of the mineral iron that is used to treat anemia caused by low amounts of iron in the blood. Anemia is a condition in which the number of red blood cells is below normal. Ferrous sulfate is a type of hematinic and a type of dietary supplement."
+    ],
+    "CAS_Registry": [
+      "7782-63-0"
+    ],
+    "Chemical_Formula": [
+      "Fe.O4S.7H2O"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "HemOnc"
+    ],
+    "Display_Name": [
+      "Ferrous Sulfate"
+    ],
+    "FDA_UNII_Code": [
+      "39R4TAN1VT"
+    ],
+    "Legacy Concept Name": [
+      "Ferrous_Sulfate"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "467929"
+    ],
+    "NSC Number": [
+      "146177",
+      "57631"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "467929"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "467929"
+    ],
+    "Preferred_Name": [
+      "Ferrous Sulfate"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0060282"
+    ],
+    "code": [
+      "C29049"
+    ]
+  },
+  "label": "Ferrous Sulfate",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29049",
+  "obo_id": "NCIT:C29049",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "FERROUS SULFATE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ferrous Sulfate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ferrous sulfate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Iron(II) Sulfate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ferrous sulfate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29049?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29049/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29049/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29049/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29049/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29049/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29049/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,324 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_9008",
+  "lang": "en",
+  "description": [
+    "An N-acylglycine in which the acyl group is specified as 2-hydroxybenzoyl."
+  ],
+  "synonyms": [
+    "(2-hydroxybenzamido)acetic acid",
+    "N-(2-hydroxybenzoyl)glycine",
+    "Salicyluric acid",
+    "N-(2-Hydroxybenzoyl)-glycine",
+    "N-Salicyloylglycine",
+    "Salicyloylglycine",
+    "Salicylurate",
+    "o-Hydroxyhippuric acid"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C9H9NO4"
+    ],
+    "has_dbxref": [
+      "CAS:487-54-7",
+      "HMDB:HMDB0000840",
+      "KEGG:C07588",
+      "PMID:1686904",
+      "PMID:2079643",
+      "PMID:22770225",
+      "PMID:2605706",
+      "PMID:2630630",
+      "PMID:3216284",
+      "PMID:3385604",
+      "PMID:3805574",
+      "PMID:6101164",
+      "PMID:7074905",
+      "PMID:947617",
+      "Reaxys:2213833",
+      "Wikipedia:Salicyluric_acid"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:9008"
+    ],
+    "inchi": [
+      "InChI=1S/C9H9NO4/c11-7-4-2-1-3-6(7)9(14)10-5-8(12)13/h1-4,11H,5H2,(H,10,14)(H,12,13)"
+    ],
+    "inchikey": [
+      "ONJSZLXSECQROL-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "195.17210"
+    ],
+    "monoisotopicmass": [
+      "195.05316"
+    ],
+    "smiles": [
+      "OC(=O)CNC(=O)c1ccccc1O"
+    ]
+  },
+  "label": "salicyluric acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_9008",
+  "obo_id": "CHEBI:9008",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "487-54-7",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "487-54-7",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0000840",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0000840"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07588",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07588"
+    },
+    {
+      "database": "PMID",
+      "id": "1686904",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/1686904"
+    },
+    {
+      "database": "PMID",
+      "id": "2079643",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2079643"
+    },
+    {
+      "database": "PMID",
+      "id": "22770225",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22770225"
+    },
+    {
+      "database": "PMID",
+      "id": "2605706",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2605706"
+    },
+    {
+      "database": "PMID",
+      "id": "2630630",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2630630"
+    },
+    {
+      "database": "PMID",
+      "id": "3216284",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3216284"
+    },
+    {
+      "database": "PMID",
+      "id": "3385604",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3385604"
+    },
+    {
+      "database": "PMID",
+      "id": "3805574",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3805574"
+    },
+    {
+      "database": "PMID",
+      "id": "6101164",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/6101164"
+    },
+    {
+      "database": "PMID",
+      "id": "7074905",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7074905"
+    },
+    {
+      "database": "PMID",
+      "id": "947617",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/947617"
+    },
+    {
+      "database": "Reaxys",
+      "id": "2213833",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Salicyluric_acid",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Salicyluric_acid"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2-hydroxybenzamido)acetic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(2-hydroxybenzoyl)glycine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salicyluric acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-(2-Hydroxybenzoyl)-glycine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-Salicyloylglycine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salicyloylglycine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Salicylurate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "o-Hydroxyhippuric acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9008?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9008/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9008/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9008/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9008/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9008/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9008/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9008/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_conjugate_acid_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9008/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_acid_of"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_9008/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

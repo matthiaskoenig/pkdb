@@ -1,0 +1,116 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C214",
+  "lang": "en",
+  "description": [
+    "A family of globular proteins found in many plant and animal tissues that tend to bind a wide variety of ligands.  Albumin is the main protein in blood plasma.  Low serum levels occur in conditions associated with malnutrition, inflammation and liver and kidney diseases."
+  ],
+  "synonyms": [
+    "Albumin",
+    "Albumin:",
+    "albumin"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A type of protein found in blood, egg white, milk, and other substances."
+    ],
+    "Contributing_Source": [
+      "CPTAC",
+      "CTRP"
+    ],
+    "Display_Name": [
+      "Albumin"
+    ],
+    "Legacy Concept Name": [
+      "Albumin"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "38468"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "38468"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "38468"
+    ],
+    "Preferred_Name": [
+      "Albumin"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein"
+    ],
+    "UMLS_CUI": [
+      "C0001924"
+    ],
+    "code": [
+      "C214"
+    ]
+  },
+  "label": "Albumin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C214",
+  "obo_id": "NCIT:C214",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C142799",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C159412",
+    "NCIT_C176424"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Albumin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Albumin:",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "albumin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C214?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C214/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C214/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C214/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C214/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C214/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C214/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

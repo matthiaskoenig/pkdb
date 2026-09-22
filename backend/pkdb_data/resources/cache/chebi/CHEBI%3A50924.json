@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:50924",
+  "name": "sorafenib",
+  "definition": "A member of the class of phenylureas that is urea in which one of the nitrogens is substituted by a 4-chloro-3-trifluorophenyl group while the other is substituted by a phenyl group which, in turn, is substituted at the para position by a [2-(methylcarbamoyl)pyridin-4-yl]oxy group.",
+  "formula": "C21H16ClF3N4O3",
+  "charge": "0",
+  "mass": "464.826",
+  "inchikey": "MLDQJTXFUGDVEO-UHFFFAOYSA-N"
+}

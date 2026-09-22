@@ -1,0 +1,113 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C47772",
+  "lang": "en",
+  "description": [
+    "A dione-type anticonvulsant with antiepileptic activity. Trimethadione reduces T-type calcium currents in thalamic neurons, thereby stabilizing neuronal membranes, raising the threshold for repetitive activities in the thalamus and inhibiting corticothalamic transmission. This decreases the abnormal thalamocortical rhythmicity, which is thought to underlie the paroxysmal three-cycle-per-second spike-and-wave pattern seen with absence (petit mal) seizures."
+  ],
+  "synonyms": [
+    "2,4-Oxazolidinedione, 3,5,5-trimethyl-",
+    "TRIMETHADIONE",
+    "Tridione",
+    "Trimethadione"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "127-48-0"
+    ],
+    "Chemical_Formula": [
+      "C6H9NO3"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "R7GV3H6FQ4"
+    ],
+    "Legacy Concept Name": [
+      "Trimethadione"
+    ],
+    "NSC Number": [
+      "15799"
+    ],
+    "Preferred_Name": [
+      "Trimethadione"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0041038"
+    ],
+    "code": [
+      "C47772"
+    ]
+  },
+  "label": "Trimethadione",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C47772",
+  "obo_id": "NCIT:C47772",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "2,4-Oxazolidinedione, 3,5,5-trimethyl-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "TRIMETHADIONE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Tridione",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Trimethadione",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47772?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47772/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47772/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47772/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47772/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47772/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C47772/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

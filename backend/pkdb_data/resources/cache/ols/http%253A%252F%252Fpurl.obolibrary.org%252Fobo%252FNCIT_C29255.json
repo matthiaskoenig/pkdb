@@ -1,0 +1,120 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29255",
+  "lang": "en",
+  "description": [
+    "The tartrate salt form of metoprolol, a cardioselective competitive beta-1 adrenergic receptor antagonist with antihypertensive properties and devoid of intrinsic sympathomimetic activity. Metoprolol tartrate antagonizes beta 1-adrenergic receptors in the myocardium, thereby reducing the rate and force of myocardial contraction, and consequently a diminished cardiac output. This agent may also reduce the secretion of renin with subsequent reduction in levels of angiotensin II thus decreasing sympathetic activation, including vasoconstriction, aldosterone secretion."
+  ],
+  "synonyms": [
+    "Lopressor",
+    "METOPROLOL TARTRATE",
+    "Metoprolol Tartrate"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "56392-17-7"
+    ],
+    "Chemical_Formula": [
+      "2C15H25NO3.C4H6O6"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Metoprolol Tartrate"
+    ],
+    "FDA_UNII_Code": [
+      "W5S57Y3A5L"
+    ],
+    "Has_Free_Acid_Or_Base_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C61845"
+    ],
+    "Legacy Concept Name": [
+      "Metoprolol_Tartrate"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "809246"
+    ],
+    "Preferred_Name": [
+      "Metoprolol Tartrate"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0700548"
+    ],
+    "code": [
+      "C29255"
+    ]
+  },
+  "label": "Metoprolol Tartrate",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29255",
+  "obo_id": "NCIT:C29255",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Lopressor",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "METOPROLOL TARTRATE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Metoprolol Tartrate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29255?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29255/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29255/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29255/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29255/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29255/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29255/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29255/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

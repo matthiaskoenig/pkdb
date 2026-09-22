@@ -1,0 +1,140 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C316",
+  "lang": "en",
+  "description": [
+    "Bradykinin (9 aa, ~1 kDa) is encoded by the human KNG1 gene. This protein is involved in blood pressure regulation and pain receptor stimulation."
+  ],
+  "synonyms": [
+    "Arg-pro-pro-gly-phe-ser-pro-phe-arg",
+    "BRADYKININ",
+    "BRS-640",
+    "Bradykinin",
+    "Callidin I",
+    "Kallidin I",
+    "Kallidin-9"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "58-82-2"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:3165"
+    ],
+    "Chemical_Formula": [
+      "C50H73N15O11"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "S8TIM42R2W"
+    ],
+    "Legacy Concept Name": [
+      "Bradykinin"
+    ],
+    "OMIM_Number": [
+      "612358"
+    ],
+    "Preferred_Name": [
+      "Bradykinin"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein"
+    ],
+    "Swiss_Prot": [
+      "P01042"
+    ],
+    "UMLS_CUI": [
+      "C0006100"
+    ],
+    "code": [
+      "C316"
+    ]
+  },
+  "label": "Bradykinin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C316",
+  "obo_id": "NCIT:C316",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Arg-pro-pro-gly-phe-ser-pro-phe-arg",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "BRADYKININ",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "BRS-640",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Bradykinin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Callidin I",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Kallidin I",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Kallidin-9",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C316?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C316/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C316/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C316/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C316/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C316/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C316/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

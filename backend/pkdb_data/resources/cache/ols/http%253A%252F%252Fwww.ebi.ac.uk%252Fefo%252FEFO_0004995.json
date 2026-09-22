@@ -1,0 +1,74 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0004995",
+  "lang": "en",
+  "description": [
+    "The weight of all organs and tissue in an individual less the weight of the individual's body fat."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "gwas_trait": [
+      true
+    ],
+    "has_dbxref": [
+      "NCIt:C71258",
+      "SNOMEDCT:248362003"
+    ],
+    "term editor": [
+      "James Malone"
+    ]
+  },
+  "label": "lean body mass",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "EFO_0004995",
+  "obo_id": "EFO:0004995",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "NCIt",
+      "id": "C71258",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C71258"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "248362003",
+      "description": null,
+      "url": "http://snomed.info/id/248362003"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004995?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004995/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004995/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004995/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004995/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004995/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004995/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

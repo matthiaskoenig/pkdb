@@ -1,0 +1,142 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_5419",
+  "lang": "en",
+  "description": [
+    "A psychotic disorder that is characterized by a disintegration of thought processes and of emotional responsiveness.",
+    "Xref MGI. OMIM mapping confirmed by DO. [SN]."
+  ],
+  "synonyms": [
+    "schizophrenia-1"
+  ],
+  "annotation": {
+    "has_alternative_id": [
+      "DOID:14734"
+    ],
+    "has_dbxref": [
+      "ICD10CM:F20",
+      "ICD9CM:295",
+      "MESH:D012559",
+      "MIM:181500",
+      "NCI:C3362",
+      "SNOMEDCT_US_2023_03_01:58214004",
+      "UMLS_CUI:C0036341"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:5419"
+    ]
+  },
+  "label": "schizophrenia",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "DOID_5419",
+  "obo_id": "DOID:5419",
+  "in_subset": [
+    "DO_FlyBase_slim",
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A psychotic disorder that is characterized by a disintegration of thought processes and of emotional responsiveness.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "ICD10CM",
+      "id": "F20",
+      "description": null,
+      "url": "https://icd.codes/icd10cm/F20"
+    },
+    {
+      "database": "ICD9CM",
+      "id": "295",
+      "description": null,
+      "url": "http://icd9cm.chrisendres.com/index.php?action=search&srchtext=295"
+    },
+    {
+      "database": "MESH",
+      "id": "D012559",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D012559"
+    },
+    {
+      "database": "MIM",
+      "id": "181500",
+      "description": null,
+      "url": "https://omim.org/MIM:181500"
+    },
+    {
+      "database": "NCI",
+      "id": "C3362",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3362"
+    },
+    {
+      "database": "SNOMEDCT_US_2023_03_01",
+      "id": "58214004",
+      "description": null,
+      "url": "http://snomed.info/id/58214004"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0036341",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0036341"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5419?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5419/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5419/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5419/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5419/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5419/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5419/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5419/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5419/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5419/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_5419/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

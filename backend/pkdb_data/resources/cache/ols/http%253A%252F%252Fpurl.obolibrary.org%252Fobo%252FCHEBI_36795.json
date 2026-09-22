@@ -1,0 +1,184 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_36795",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(3S)-N-methyl-3-(naphthalen-1-yloxy)-3-(2-thienyl)propan-1-amine",
+    "(S)-duloxetine",
+    "(3S)-N-methyl-3-(1-naphthyloxy)-3-(2-thienyl)propan-1-amine",
+    "LY 248686"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C18H19NOS"
+    ],
+    "has_dbxref": [
+      "Beilstein:4297128",
+      "CAS:116539-59-4",
+      "DrugBank:DB00476",
+      "Drug_Central:972",
+      "LINCS:LSM-3591",
+      "Wikipedia:Duloxetine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:36795"
+    ],
+    "inchi": [
+      "InChI=1S/C18H19NOS/c1-19-12-11-17(18-10-5-13-21-18)20-16-9-4-7-14-6-2-3-8-15(14)16/h2-10,13,17,19H,11-12H2,1H3/t17-/m0/s1"
+    ],
+    "inchikey": [
+      "ZEUITGRIYCTCEM-KRWDZBQOSA-N"
+    ],
+    "mass": [
+      "297.41560"
+    ],
+    "monoisotopicmass": [
+      "297.11874"
+    ],
+    "smiles": [
+      "CNCC[C@H](Oc1cccc2ccccc12)c1cccs1"
+    ]
+  },
+  "label": "(S)-duloxetine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_36795",
+  "obo_id": "CHEBI:36795",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "4297128",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "116539-59-4",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00476",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00476"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "972",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/972"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-3591",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Duloxetine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Duloxetine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3S)-N-methyl-3-(naphthalen-1-yloxy)-3-(2-thienyl)propan-1-amine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-duloxetine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3S)-N-methyl-3-(1-naphthyloxy)-3-(2-thienyl)propan-1-amine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "LY 248686",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_36795?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_36795/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_36795/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_36795/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_36795/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_36795/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_36795/graph"
+    },
+    "is_enantiomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_36795/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_enantiomer_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

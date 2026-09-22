@@ -1,0 +1,111 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C41262",
+  "lang": "en",
+  "description": [
+    "A person having origins in the original peoples of the Indian sub-continent."
+  ],
+  "synonyms": [
+    "ASIAN INDIAN",
+    "Asian Indian",
+    "Asian Indians",
+    "Indian"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A person having origins in any of the original peoples of the Indian subcontinent."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "FDA"
+    ],
+    "DesignNote": [
+      "The concept is close to the term South Asian but several major South Asian populations such as Pakistani and Bangladeshi may not identify with it."
+    ],
+    "Legacy Concept Name": [
+      "Asian_Indian"
+    ],
+    "Preferred_Name": [
+      "Asian Indian"
+    ],
+    "Semantic_Type": [
+      "Population Group"
+    ],
+    "UMLS_CUI": [
+      "C1524069"
+    ],
+    "code": [
+      "C41262"
+    ]
+  },
+  "label": "Asian Indian",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C41262",
+  "obo_id": "NCIT:C41262",
+  "in_subset": [
+    "NCIT_C128689",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C77527"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "ASIAN INDIAN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Asian Indian",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Asian Indians",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Indian",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41262?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41262/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41262/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41262/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41262/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41262/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C41262/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

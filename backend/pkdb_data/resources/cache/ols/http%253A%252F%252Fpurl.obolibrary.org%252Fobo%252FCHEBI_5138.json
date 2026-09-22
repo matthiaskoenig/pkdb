@@ -1,0 +1,452 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_5138",
+  "lang": "en",
+  "description": [
+    "An oxime O-ether that is benzene substituted by a (1E)-N-(2-aminoethoxy)-5-methoxypentanimidoyl group at position 1 and a trifluoromethyl group at position 4. It is a selective serotonin reuptake inhibitor that is used for the treatment of obsessive-compulsive disorder."
+  ],
+  "synonyms": [
+    "(1E)-5-methoxy-1-[4-(trifluoromethyl)phenyl]pentan-1-one O-(2-aminoethyl)oxime",
+    "Fluvoxamine",
+    "2-{[(E)-{5-methoxy-1-[4-(trifluoromethyl)phenyl]pentylidene}amino]oxy}ethan-1-amine",
+    "O-(2-aminoethyl)-N-{(1E)-5-methoxy-1-[4-(trifluoromethyl)phenyl]pentylidene}hydroxylamine",
+    "fluvoxamina",
+    "fluvoxamine",
+    "fluvoxaminum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C15H21F3N2O2"
+    ],
+    "has_dbxref": [
+      "Beilstein:5583954",
+      "CAS:54739-18-3",
+      "Chemspider:4481878",
+      "DrugBank:DB00176",
+      "Drug_Central:1230",
+      "HMDB:HMDB0014322",
+      "KEGG:C07571",
+      "KEGG:D07984",
+      "MetaCyc:CPD-20520",
+      "PDBeChem:FVX",
+      "PMID:10456487",
+      "PMID:11825104",
+      "PMID:12107854",
+      "PMID:15686112",
+      "PMID:16316311",
+      "PMID:18976545",
+      "PMID:20025739",
+      "PMID:20573265",
+      "PMID:22859721",
+      "PMID:24121440",
+      "PMID:29379174",
+      "PMID:30690950",
+      "PMID:30734885",
+      "PMID:31807102",
+      "PMID:31807753",
+      "PMID:32618683",
+      "PMID:32672818",
+      "PMID:33180097",
+      "PMID:33392622",
+      "PMID:7988100",
+      "PMID:9164424",
+      "Patent:NL7503310",
+      "Patent:US4085225",
+      "Wikipedia:Fluvoxamine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:5138"
+    ],
+    "inchi": [
+      "InChI=1S/C15H21F3N2O2/c1-21-10-3-2-4-14(20-22-11-9-19)12-5-7-13(8-6-12)15(16,17)18/h5-8H,2-4,9-11,19H2,1H3/b20-14+"
+    ],
+    "inchikey": [
+      "CJOFXWAVKWHTFT-XSFVSMFZSA-N"
+    ],
+    "mass": [
+      "318.340"
+    ],
+    "monoisotopicmass": [
+      "318.15551"
+    ],
+    "smiles": [
+      "COCCCC\\C(=N/OCCN)C1=CC=C(C=C1)C(F)(F)F"
+    ]
+  },
+  "label": "fluvoxamine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_5138",
+  "obo_id": "CHEBI:5138",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "5583954",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "54739-18-3",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "54739-18-3",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "54739-18-3",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Chemspider",
+      "id": "4481878",
+      "description": null,
+      "url": "http://www.chemspider.com/Chemical-Structure.4481878.html"
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00176",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00176"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1230",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1230"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014322",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014322"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07571",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07571"
+    },
+    {
+      "database": "KEGG",
+      "id": "D07984",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D07984"
+    },
+    {
+      "database": "MetaCyc",
+      "id": "CPD-20520",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "FVX",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/FVX"
+    },
+    {
+      "database": "PMID",
+      "id": "10456487",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10456487"
+    },
+    {
+      "database": "PMID",
+      "id": "11825104",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11825104"
+    },
+    {
+      "database": "PMID",
+      "id": "12107854",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12107854"
+    },
+    {
+      "database": "PMID",
+      "id": "15686112",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15686112"
+    },
+    {
+      "database": "PMID",
+      "id": "16316311",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16316311"
+    },
+    {
+      "database": "PMID",
+      "id": "18976545",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18976545"
+    },
+    {
+      "database": "PMID",
+      "id": "20025739",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20025739"
+    },
+    {
+      "database": "PMID",
+      "id": "20573265",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20573265"
+    },
+    {
+      "database": "PMID",
+      "id": "22859721",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22859721"
+    },
+    {
+      "database": "PMID",
+      "id": "24121440",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24121440"
+    },
+    {
+      "database": "PMID",
+      "id": "29379174",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/29379174"
+    },
+    {
+      "database": "PMID",
+      "id": "30690950",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/30690950"
+    },
+    {
+      "database": "PMID",
+      "id": "30734885",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/30734885"
+    },
+    {
+      "database": "PMID",
+      "id": "31807102",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/31807102"
+    },
+    {
+      "database": "PMID",
+      "id": "31807753",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/31807753"
+    },
+    {
+      "database": "PMID",
+      "id": "32618683",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32618683"
+    },
+    {
+      "database": "PMID",
+      "id": "32672818",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32672818"
+    },
+    {
+      "database": "PMID",
+      "id": "33180097",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33180097"
+    },
+    {
+      "database": "PMID",
+      "id": "33392622",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33392622"
+    },
+    {
+      "database": "PMID",
+      "id": "7988100",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7988100"
+    },
+    {
+      "database": "PMID",
+      "id": "9164424",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9164424"
+    },
+    {
+      "database": "Patent",
+      "id": "NL7503310",
+      "description": null,
+      "url": "https://www.google.com/patents/NL7503310"
+    },
+    {
+      "database": "Patent",
+      "id": "US4085225",
+      "description": null,
+      "url": "https://www.google.com/patents/US4085225"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Fluvoxamine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Fluvoxamine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(1E)-5-methoxy-1-[4-(trifluoromethyl)phenyl]pentan-1-one O-(2-aminoethyl)oxime",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Fluvoxamine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-{[(E)-{5-methoxy-1-[4-(trifluoromethyl)phenyl]pentylidene}amino]oxy}ethan-1-amine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "O-(2-aminoethyl)-N-{(1E)-5-methoxy-1-[4-(trifluoromethyl)phenyl]pentylidene}hydroxylamine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fluvoxamina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fluvoxamine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fluvoxamine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fluvoxaminum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5138?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5138/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5138/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5138/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5138/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5138/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5138/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5138/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5138/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

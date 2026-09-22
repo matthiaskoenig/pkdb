@@ -1,0 +1,384 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_25858",
+  "lang": "en",
+  "description": [
+    "A dimethylxanthine having the two methyl groups located at positions 1 and 7. It is a metabolite of caffeine and theobromine in animals."
+  ],
+  "synonyms": [
+    "1,7-Dimethylxanthine",
+    "1,7-dimethyl-3,7-dihydro-1H-purine-2,6-dione",
+    "1,7-dimethylxanthine",
+    "3,7-Dihydro-1,7-dimethyl-1H-purine-2,6-dione",
+    "Paraxanthine",
+    "p-Xanthine"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C7H8N4O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:34067"
+    ],
+    "has_dbxref": [
+      "CAS:611-59-6",
+      "HMDB:HMDB0001860",
+      "KEGG:C13747",
+      "LINCS:LSM-20962",
+      "MetaCyc:1-7-DIMETHYLXANTHINE",
+      "PMID:10416066",
+      "PMID:10572151",
+      "PMID:10593655",
+      "PMID:10877011",
+      "PMID:11090584",
+      "PMID:1128545",
+      "PMID:12110375",
+      "PMID:16870158",
+      "PMID:17655324",
+      "PMID:18621927",
+      "PMID:20004571",
+      "PMID:20614853",
+      "PMID:20853468",
+      "PMID:21380987",
+      "PMID:22770225",
+      "PMID:2882985",
+      "PMID:3371146",
+      "PMID:3798364",
+      "PMID:7920690",
+      "PMID:7977734",
+      "PMID:8529334",
+      "PMID:9920286",
+      "Reaxys:197907",
+      "Wikipedia:Paraxanthine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:25858"
+    ],
+    "inchi": [
+      "InChI=1S/C7H8N4O2/c1-10-3-8-5-4(10)6(12)11(2)7(13)9-5/h3H,1-2H3,(H,9,13)"
+    ],
+    "inchikey": [
+      "QUNWUDVFRNGTCO-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "180.16400"
+    ],
+    "monoisotopicmass": [
+      "180.06473"
+    ],
+    "smiles": [
+      "Cn1cnc2[nH]c(=O)n(C)c(=O)c12"
+    ]
+  },
+  "label": "1,7-dimethylxanthine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_25858",
+  "obo_id": "CHEBI:25858",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "611-59-6",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "611-59-6",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0001860",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001860"
+    },
+    {
+      "database": "KEGG",
+      "id": "C13747",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C13747"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-20962",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MetaCyc",
+      "id": "1-7-DIMETHYLXANTHINE",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "10416066",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10416066"
+    },
+    {
+      "database": "PMID",
+      "id": "10572151",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10572151"
+    },
+    {
+      "database": "PMID",
+      "id": "10593655",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10593655"
+    },
+    {
+      "database": "PMID",
+      "id": "10877011",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10877011"
+    },
+    {
+      "database": "PMID",
+      "id": "11090584",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11090584"
+    },
+    {
+      "database": "PMID",
+      "id": "1128545",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/1128545"
+    },
+    {
+      "database": "PMID",
+      "id": "12110375",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12110375"
+    },
+    {
+      "database": "PMID",
+      "id": "16870158",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16870158"
+    },
+    {
+      "database": "PMID",
+      "id": "17655324",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17655324"
+    },
+    {
+      "database": "PMID",
+      "id": "18621927",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18621927"
+    },
+    {
+      "database": "PMID",
+      "id": "20004571",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20004571"
+    },
+    {
+      "database": "PMID",
+      "id": "20614853",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20614853"
+    },
+    {
+      "database": "PMID",
+      "id": "20853468",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20853468"
+    },
+    {
+      "database": "PMID",
+      "id": "21380987",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21380987"
+    },
+    {
+      "database": "PMID",
+      "id": "22770225",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22770225"
+    },
+    {
+      "database": "PMID",
+      "id": "2882985",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2882985"
+    },
+    {
+      "database": "PMID",
+      "id": "3371146",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3371146"
+    },
+    {
+      "database": "PMID",
+      "id": "3798364",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3798364"
+    },
+    {
+      "database": "PMID",
+      "id": "7920690",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7920690"
+    },
+    {
+      "database": "PMID",
+      "id": "7977734",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7977734"
+    },
+    {
+      "database": "PMID",
+      "id": "8529334",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8529334"
+    },
+    {
+      "database": "PMID",
+      "id": "9920286",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9920286"
+    },
+    {
+      "database": "Reaxys",
+      "id": "197907",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Paraxanthine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Paraxanthine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1,7-Dimethylxanthine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,7-dimethyl-3,7-dihydro-1H-purine-2,6-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,7-dimethylxanthine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,7-Dihydro-1,7-dimethyl-1H-purine-2,6-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Paraxanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "p-Xanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_25858/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

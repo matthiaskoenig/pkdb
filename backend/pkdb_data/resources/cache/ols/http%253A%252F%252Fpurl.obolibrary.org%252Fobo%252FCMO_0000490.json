@@ -1,0 +1,102 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CMO_0000490",
+  "lang": "en",
+  "description": [
+    "Glomerular filtration rate describes the flow rate of filtered fluid through the kidney. It is calculated by comparative measurements of substances (ex. creatinine or inulin) in the blood and urine over a designated period of time."
+  ],
+  "synonyms": [
+    "Calculated GFR",
+    "cGFR",
+    "eGFR",
+    "estimated glomerular filtration rate"
+  ],
+  "annotation": {
+    "created_by": [
+      "mshimoyama"
+    ],
+    "creation_date": [
+      "2011-01-04T02:41:58Z"
+    ],
+    "has_dbxref": [
+      "EFO:0005208"
+    ],
+    "has_obo_namespace": [
+      "clinical_measurement_ontology"
+    ],
+    "id": [
+      "CMO:0000490"
+    ]
+  },
+  "label": "glomerular filtration rate",
+  "ontology_name": "cmo",
+  "ontology_prefix": "CMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/cmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CMO_0000490",
+  "obo_id": "CMO:0000490",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "Glomerular filtration rate describes the flow rate of filtered fluid through the kidney. It is calculated by comparative measurements of substances (ex. creatinine or inulin) in the blood and urine over a designated period of time.",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "https://en.wikipedia.org/wiki/Renal_function#Glomerular_filtration_rate",
+          "description": null,
+          "url": "https://en.wikipedia.org/wiki/Renal_function#Glomerular_filtration_rate"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0005208",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0005208"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000490?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000490/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000490/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000490/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000490/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000490/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000490/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000490/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000490/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000490/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000490/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

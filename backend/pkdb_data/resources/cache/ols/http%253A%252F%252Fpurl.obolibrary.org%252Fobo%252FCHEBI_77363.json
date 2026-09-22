@@ -1,0 +1,287 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_77363",
+  "lang": "en",
+  "description": [
+    "A dipeptide that is the active metabolite of ramipril. An angiotensin-converting enzyme (ACE) inhibitor, used to treat high blood pressure and congestive heart failure."
+  ],
+  "synonyms": [
+    "(2S,3aS,6aS)-1-[(2S)-2-{[(1S)-1-carboxy-3-phenylpropyl]amino}propanoyl]octahydrocyclopenta[b]pyrrole-2-carboxylic acid",
+    "ramiprilat",
+    "ramiprilate",
+    "ramiprilatum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C21H28N2O5"
+    ],
+    "has_dbxref": [
+      "CAS:87269-97-4",
+      "HMDB:HMDB0060579",
+      "PDBeChem:X92",
+      "PMID:1650863",
+      "PMID:19795361",
+      "PMID:21147310",
+      "PMID:21535409",
+      "PMID:21545343",
+      "PMID:22022329",
+      "PMID:22076778",
+      "PMID:23372044",
+      "PMID:23591995",
+      "PMID:2483427",
+      "PMID:2485060",
+      "PMID:7768254",
+      "PMID:8118952",
+      "Patent:EP2277519",
+      "Patent:NZ571901",
+      "Patent:US2011263619",
+      "Reaxys:4212094"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:77363"
+    ],
+    "inchi": [
+      "InChI=1S/C21H28N2O5/c1-13(22-16(20(25)26)11-10-14-6-3-2-4-7-14)19(24)23-17-9-5-8-15(17)12-18(23)21(27)28/h2-4,6-7,13,15-18,22H,5,8-12H2,1H3,(H,25,26)(H,27,28)/t13-,15-,16-,17-,18-/m0/s1"
+    ],
+    "inchikey": [
+      "KEDYTOTWMPBSLG-HILJTLORSA-N"
+    ],
+    "mass": [
+      "388.45740"
+    ],
+    "monoisotopicmass": [
+      "388.19982"
+    ],
+    "smiles": [
+      "C[C@H](N[C@@H](CCc1ccccc1)C(O)=O)C(=O)N1[C@H]2CCC[C@H]2C[C@H]1C(O)=O"
+    ]
+  },
+  "label": "ramiprilat",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_77363",
+  "obo_id": "CHEBI:77363",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "87269-97-4",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0060579",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0060579"
+    },
+    {
+      "database": "PDBeChem",
+      "id": "X92",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/X92"
+    },
+    {
+      "database": "PMID",
+      "id": "1650863",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/1650863"
+    },
+    {
+      "database": "PMID",
+      "id": "19795361",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19795361"
+    },
+    {
+      "database": "PMID",
+      "id": "21147310",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21147310"
+    },
+    {
+      "database": "PMID",
+      "id": "21535409",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21535409"
+    },
+    {
+      "database": "PMID",
+      "id": "21545343",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21545343"
+    },
+    {
+      "database": "PMID",
+      "id": "22022329",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22022329"
+    },
+    {
+      "database": "PMID",
+      "id": "22076778",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22076778"
+    },
+    {
+      "database": "PMID",
+      "id": "23372044",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23372044"
+    },
+    {
+      "database": "PMID",
+      "id": "23591995",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23591995"
+    },
+    {
+      "database": "PMID",
+      "id": "2483427",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2483427"
+    },
+    {
+      "database": "PMID",
+      "id": "2485060",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2485060"
+    },
+    {
+      "database": "PMID",
+      "id": "7768254",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7768254"
+    },
+    {
+      "database": "PMID",
+      "id": "8118952",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8118952"
+    },
+    {
+      "database": "Patent",
+      "id": "EP2277519",
+      "description": null,
+      "url": "https://www.google.com/patents/EP2277519"
+    },
+    {
+      "database": "Patent",
+      "id": "NZ571901",
+      "description": null,
+      "url": "https://www.google.com/patents/NZ571901"
+    },
+    {
+      "database": "Patent",
+      "id": "US2011263619",
+      "description": null,
+      "url": "https://www.google.com/patents/US2011263619"
+    },
+    {
+      "database": "Reaxys",
+      "id": "4212094",
+      "description": "Reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2S,3aS,6aS)-1-[(2S)-2-{[(1S)-1-carboxy-3-phenylpropyl]amino}propanoyl]octahydrocyclopenta[b]pyrrole-2-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ramiprilat",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ramiprilate",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ramiprilatum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77363?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77363/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77363/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77363/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77363/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77363/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77363/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77363/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_conjugate_acid_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77363/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_acid_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

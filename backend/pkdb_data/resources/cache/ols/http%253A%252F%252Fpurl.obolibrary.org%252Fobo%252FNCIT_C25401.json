@@ -1,0 +1,121 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C25401",
+  "lang": "en",
+  "description": [
+    "Deviating in any way from the state, position, structure, condition, behavior, or rule which is considered a norm."
+  ],
+  "synonyms": [
+    "ABNORMAL",
+    "Abnormal",
+    "abnormal",
+    "deviant"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Deviating in any way from the state, position, structure, condition, behavior, or rule which is considered a norm. (NCI)",
+      "Not normal. An abnormal lesion or growth may be cancer, premalignant (likely to become cancer), or benign (not cancer)."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CPTAC",
+      "GDC"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C19697"
+    ],
+    "Legacy Concept Name": [
+      "Abnormal"
+    ],
+    "Maps_To": [
+      "Abnormal"
+    ],
+    "Preferred_Name": [
+      "Abnormal"
+    ],
+    "Semantic_Type": [
+      "Qualitative Concept"
+    ],
+    "UMLS_CUI": [
+      "C0205161"
+    ],
+    "code": [
+      "C25401"
+    ]
+  },
+  "label": "Abnormal",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C25401",
+  "obo_id": "NCIT:C25401",
+  "in_subset": [
+    "NCIT_C101834",
+    "NCIT_C102580",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C157711",
+    "NCIT_C159339",
+    "NCIT_C177537",
+    "NCIT_C61410",
+    "NCIT_C66830"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "ABNORMAL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Abnormal",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "abnormal",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "deviant",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25401?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25401/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25401/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25401/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25401/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25401/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C25401/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

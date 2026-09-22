@@ -1,0 +1,251 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_5050",
+  "lang": "en",
+  "description": [
+    "A piperidine-based anti-histamine compound."
+  ],
+  "synonyms": [
+    "Fexofenadine",
+    "4-(1-Hydroxy-4-(4-(hydroxydiphenylmethyl)-1-piperidinyl)butyl)-alpha,alpha-dimethylbenzeneacetic acid",
+    "Carboxyterfenadine",
+    "Terfenadine acid metabolite",
+    "Terfenadine carboxylate",
+    "Terfenadine-COOH"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C32H39NO4"
+    ],
+    "has_dbxref": [
+      "Beilstein:6832242",
+      "CAS:83799-24-0",
+      "DrugBank:DB00950",
+      "Drug_Central:1170",
+      "KEGG:C06999",
+      "KEGG:D07958",
+      "LINCS:LSM-1770",
+      "Patent:DE3007498",
+      "Patent:US4254129",
+      "Wikipedia:Fexofenadine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:5050"
+    ],
+    "inchi": [
+      "InChI=1S/C32H39NO4/c1-31(2,30(35)36)25-17-15-24(16-18-25)29(34)14-9-21-33-22-19-28(20-23-33)32(37,26-10-5-3-6-11-26)27-12-7-4-8-13-27/h3-8,10-13,15-18,28-29,34,37H,9,14,19-23H2,1-2H3,(H,35,36)"
+    ],
+    "inchikey": [
+      "RWTNPBWLLIMQHL-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "501.65640"
+    ],
+    "monoisotopicmass": [
+      "501.28791"
+    ],
+    "smiles": [
+      "CC(C)(C(O)=O)c1ccc(cc1)C(O)CCCN1CCC(CC1)C(O)(c1ccccc1)c1ccccc1"
+    ]
+  },
+  "label": "fexofenadine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_5050",
+  "obo_id": "CHEBI:5050",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "6832242",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "83799-24-0",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "83799-24-0",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00950",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00950"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1170",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1170"
+    },
+    {
+      "database": "KEGG",
+      "id": "C06999",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C06999"
+    },
+    {
+      "database": "KEGG",
+      "id": "D07958",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D07958"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-1770",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "Patent",
+      "id": "DE3007498",
+      "description": null,
+      "url": "https://www.google.com/patents/DE3007498"
+    },
+    {
+      "database": "Patent",
+      "id": "US4254129",
+      "description": null,
+      "url": "https://www.google.com/patents/US4254129"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Fexofenadine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Fexofenadine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Fexofenadine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(1-Hydroxy-4-(4-(hydroxydiphenylmethyl)-1-piperidinyl)butyl)-alpha,alpha-dimethylbenzeneacetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Carboxyterfenadine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Terfenadine acid metabolite",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Terfenadine carboxylate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Terfenadine-COOH",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5050?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5050/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5050/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5050/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5050/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5050/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5050/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5050/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_5050/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

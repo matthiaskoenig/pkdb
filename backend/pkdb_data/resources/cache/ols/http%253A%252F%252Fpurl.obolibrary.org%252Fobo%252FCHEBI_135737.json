@@ -1,0 +1,153 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_135737",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "GR-43659X",
+    "lacipil",
+    "lacirex",
+    "motens"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C26H33NO6"
+    ],
+    "has_dbxref": [
+      "CAS:103890-78-4",
+      "Drug_Central:1532"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:135737"
+    ],
+    "inchi": [
+      "InChI=1S/C26H33NO6/c1-8-31-24(29)21-16(3)27-17(4)22(25(30)32-9-2)23(21)19-13-11-10-12-18(19)14-15-20(28)33-26(5,6)7/h10-15,23,27H,8-9H2,1-7H3/b15-14+"
+    ],
+    "inchikey": [
+      "GKQPCPXONLDCMU-CCEZHUSRSA-N"
+    ],
+    "mass": [
+      "455.544"
+    ],
+    "monoisotopicmass": [
+      "455.23079"
+    ],
+    "smiles": [
+      "N1C(=C(C(C(=C1C)C(OCC)=O)C=2C=CC=CC2/C=C/C(OC(C)(C)C)=O)C(=O)OCC)C"
+    ]
+  },
+  "label": "lacidipine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_135737",
+  "obo_id": "CHEBI:135737",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "103890-78-4",
+      "description": "DrugCentral",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1532",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1532"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "GR-43659X",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lacipil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "lacirex",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "motens",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135737?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135737/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135737/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135737/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135737/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135737/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_135737/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

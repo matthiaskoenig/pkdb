@@ -1,0 +1,136 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C2295",
+  "lang": "en",
+  "description": [
+    "The most potent form of the naturally occurring steroid sex hormone in humans, produced by ovary, placenta, testis, and in small amount by adrenal cortex. Estradiol binds to a specific intracellular estrogen receptor located in female organs, breasts, hypothalamus and pituitary. The receptor-ligand complex promotes gene expression necessary for the maintenance of fertility and secondary sexual characteristics in females. In addition, estradiol exhibits mild anabolic and metabolic properties, and increases blood coagulability. Estradiol, the principal intracellular human estrogen, is substantially more active at the cellular level than its metabolites, estrone and estriol."
+  ],
+  "synonyms": [
+    "(17beta)-Estra-1,3,5(10)-triene-3,17-diol",
+    "17 Beta-Estradiol",
+    "17-beta-Estradiol",
+    "Estradiol",
+    "estradiol"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A form of the hormone estrogen."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Advanced androgen-dependent prostate cancer, palliative; Breast cancer, palliative; Estrogen replacement; Menopausal symptoms; Postmenopausal osteoporosis"
+    ],
+    "CAS_Registry": [
+      "50-28-2"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:16469"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "HemOnc"
+    ],
+    "Display_Name": [
+      "Estradiol"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C1090",
+      "http://purl.obolibrary.org/obo/NCIT_C169964",
+      "http://purl.obolibrary.org/obo/NCIT_C29769",
+      "http://purl.obolibrary.org/obo/NCIT_C29770",
+      "http://purl.obolibrary.org/obo/NCIT_C47990",
+      "http://purl.obolibrary.org/obo/NCIT_C47991",
+      "http://purl.obolibrary.org/obo/NCIT_C76996"
+    ],
+    "Legacy Concept Name": [
+      "Estradiol"
+    ],
+    "Preferred_Name": [
+      "Estradiol"
+    ],
+    "Semantic_Type": [
+      "Hormone",
+      "Organic Chemical"
+    ],
+    "UMLS_CUI": [
+      "C0014912"
+    ],
+    "code": [
+      "C2295"
+    ]
+  },
+  "label": "Estradiol",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C2295",
+  "obo_id": "NCIT:C2295",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C201600"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(17beta)-Estra-1,3,5(10)-triene-3,17-diol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "17 Beta-Estradiol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "17-beta-Estradiol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Estradiol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "estradiol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2295?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2295/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2295/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2295/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2295/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2295/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2295/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

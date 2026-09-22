@@ -1,0 +1,128 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_134731",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "LC15-0444",
+    "zemiglo"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C18H19F8N5O2"
+    ],
+    "has_dbxref": [
+      "CAS:911637-19-9",
+      "Drug_Central:4833"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:134731"
+    ],
+    "inchi": [
+      "InChI=1S/C18H19F8N5O2/c19-16(20)3-1-12(32)31(8-16)6-9(27)5-13(33)30-4-2-10-11(7-30)28-15(18(24,25)26)29-14(10)17(21,22)23/h9H,1-8,27H2/t9-/m0/s1"
+    ],
+    "inchikey": [
+      "ZWPRRQZNBDYKLH-VIFPVBQESA-N"
+    ],
+    "mass": [
+      "489.364"
+    ],
+    "monoisotopicmass": [
+      "489.14110"
+    ],
+    "smiles": [
+      "C(F)(F)(F)C1=C2C(CN(C(C[C@@H](CN3CC(F)(F)CCC3=O)N)=O)CC2)=NC(C(F)(F)F)=N1"
+    ]
+  },
+  "label": "gemigliptin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_134731",
+  "obo_id": "CHEBI:134731",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "911637-19-9",
+      "description": "DrugCentral",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "4833",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/4833"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "LC15-0444",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "zemiglo",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134731?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134731/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134731/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134731/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134731/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134731/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134731/graph"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_134731/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

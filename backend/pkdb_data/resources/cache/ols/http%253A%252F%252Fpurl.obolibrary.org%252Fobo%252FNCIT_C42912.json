@@ -1,0 +1,133 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C42912",
+  "lang": "en",
+  "description": [
+    "A solution composed of a clear, sweetened hydroalcoholic liquid in which active and/or inert ingredient(s) are dissolved."
+  ],
+  "synonyms": [
+    "ELIXIR",
+    "Elix",
+    "Elixir Dosage Form",
+    "Elixir Dose Form",
+    "Elixir",
+    "Oral elixir"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A clear, pleasantly flavored, sweetened hydroalcoholic liquid containing dissolved medicinal agents; it is intended for oral use. (NCI)"
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "FDA",
+      "NCPDP"
+    ],
+    "FDA_Table": [
+      "Dosage Form (C-DRG-00201)"
+    ],
+    "Has_Pharmaceutical_State_Of_Matter": [
+      "http://purl.obolibrary.org/obo/NCIT_C45298"
+    ],
+    "Legacy Concept Name": [
+      "Elixir_Dosage_Form"
+    ],
+    "Preferred_Name": [
+      "Elixir Dosage Form"
+    ],
+    "Semantic_Type": [
+      "Biomedical or Dental Material"
+    ],
+    "UMLS_CUI": [
+      "C0678430"
+    ],
+    "code": [
+      "C42912"
+    ]
+  },
+  "label": "Elixir Dosage Form",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C42912",
+  "obo_id": "NCIT:C42912",
+  "in_subset": [
+    "NCIT_C223540",
+    "NCIT_C54452",
+    "NCIT_C54456",
+    "NCIT_C61410",
+    "NCIT_C66726",
+    "NCIT_C66830",
+    "NCIT_C77526",
+    "NCIT_C89508"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "ELIXIR",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Elix",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Elixir Dosage Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Elixir Dose Form",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Elixir",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Oral elixir",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42912?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42912/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42912/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42912/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42912/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42912/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C42912/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

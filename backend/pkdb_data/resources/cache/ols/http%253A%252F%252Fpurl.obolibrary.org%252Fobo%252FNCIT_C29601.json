@@ -1,0 +1,148 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29601",
+  "lang": "en",
+  "description": [
+    "An essential aromatic amino acid in humans (provided by food), Phenylalanine plays a key role in the biosynthesis of other amino acids and is important in the structure and function of many proteins and enzymes. Phenylalanine is converted to tyrosine, used in the biosynthesis of dopamine and norepinephrine neurotransmitters. The L-form of Phenylalanine is incorporated into proteins, while the D-form acts as a painkiller. Absorption of ultraviolet radiation by Phenylalanine is used to quantify protein amounts. (NCI04)"
+  ],
+  "synonyms": [
+    "2-Amino-3-phenyl-pronanoic acid",
+    "L-Phenylalanine",
+    "PHENYLALANINE",
+    "Phe",
+    "Phenylalanine"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Amino acid with side chain -CH2C6H5."
+    ],
+    "CAS_Registry": [
+      "63-91-2"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:17295"
+    ],
+    "Chemical_Formula": [
+      "C9H11NO2"
+    ],
+    "Contributing_Source": [
+      "CRCH",
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Phenylalanine"
+    ],
+    "Essential_Amino_Acid": [
+      "Y"
+    ],
+    "FDA_UNII_Code": [
+      "47E5O17Y3R"
+    ],
+    "INFOODS": [
+      "PHE_G"
+    ],
+    "Legacy Concept Name": [
+      "Phenylalanine"
+    ],
+    "Macronutrient": [
+      "Y"
+    ],
+    "Nutrient": [
+      "Y"
+    ],
+    "Preferred_Name": [
+      "Phenylalanine"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein"
+    ],
+    "UMLS_CUI": [
+      "C0031453"
+    ],
+    "USDA_ID": [
+      "508"
+    ],
+    "Unit": [
+      "g"
+    ],
+    "code": [
+      "C29601"
+    ]
+  },
+  "label": "Phenylalanine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29601",
+  "obo_id": "NCIT:C29601",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "2-Amino-3-phenyl-pronanoic acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "L-Phenylalanine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "PHENYLALANINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Phe",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Phenylalanine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29601?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29601/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29601/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29601/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29601/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29601/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29601/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

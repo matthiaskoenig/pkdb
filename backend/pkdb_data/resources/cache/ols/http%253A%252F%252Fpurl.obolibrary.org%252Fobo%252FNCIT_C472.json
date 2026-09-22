@@ -1,0 +1,121 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C472",
+  "lang": "en",
+  "description": [
+    "An alkaloid that is an hydroxylated form of phenethylamineand sympathomimetic amine, with potential bronchodilatory and anti-hypotensive activities. Following administration, ephedrine activates post-synaptic noradrenergic receptors. Activation of alpha-adrenergic receptors in the vasculature induces vasoconstriction, and activation of beta-adrenergic receptors in the lungs leads to bronchodilation."
+  ],
+  "synonyms": [
+    "(-)-Ephedrine",
+    "EPHEDRINE",
+    "Ephedrine",
+    "[R-(R*,S*)]-alpha-[1-(Methylamino)ethyl]benzenemethanol"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "299-42-3"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:15407"
+    ],
+    "Chemical_Formula": [
+      "C10H15NO"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "GN83C131XS"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C72765",
+      "http://purl.obolibrary.org/obo/NCIT_C75031"
+    ],
+    "Legacy Concept Name": [
+      "Ephedrine"
+    ],
+    "NSC Number": [
+      "8971"
+    ],
+    "Preferred_Name": [
+      "Ephedrine"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0014479"
+    ],
+    "code": [
+      "C472"
+    ]
+  },
+  "label": "Ephedrine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C472",
+  "obo_id": "NCIT:C472",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(-)-Ephedrine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "EPHEDRINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ephedrine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "[R-(R*,S*)]-alpha-[1-(Methylamino)ethyl]benzenemethanol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C472?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C472/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C472/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C472/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C472/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C472/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C472/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

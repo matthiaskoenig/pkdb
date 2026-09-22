@@ -1,0 +1,85 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C113746",
+  "lang": "en",
+  "description": [
+    "Capillary blood collected on blotting paper, typically from heel or finger stick."
+  ],
+  "synonyms": [
+    "Blood Spot Card",
+    "Dried Blood Spot"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "SeroNet"
+    ],
+    "Preferred_Name": [
+      "Dried Blood Spot"
+    ],
+    "Semantic_Type": [
+      "Body Substance"
+    ],
+    "UMLS_CUI": [
+      "C3830395"
+    ],
+    "code": [
+      "C113746"
+    ]
+  },
+  "label": "Dried Blood Spot",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C113746",
+  "obo_id": "NCIT:C113746",
+  "in_subset": [
+    "NCIT_C179027",
+    "NCIT_C189083"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Blood Spot Card",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Dried Blood Spot",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C113746?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C113746/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C113746/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C113746/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C113746/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C113746/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C113746/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

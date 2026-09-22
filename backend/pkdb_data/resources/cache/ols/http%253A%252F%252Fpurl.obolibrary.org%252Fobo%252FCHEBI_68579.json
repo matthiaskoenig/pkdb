@@ -1,0 +1,606 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_68579",
+  "lang": "en",
+  "description": [
+    "A monocarboxylic acid amide obtained by formal condensation of the carboxy group of 5-chlorothiophene-2-carboxylic acid with the amino group of 4-{4-[(5S)-5-(aminomethyl)-2-oxo-1,3-oxazolidin-3-yl]phenyl}morpholin-3-one. An anticoagulant used for prophylaxis of venous thromboembolism in patients with knee or hip replacement surgery."
+  ],
+  "synonyms": [
+    "5-chloro-N-({(5S)-2-oxo-3-[4-(3-oxomorpholin-4-yl)phenyl]-1,3-oxazolidin-5-yl}methyl)thiophene-2-carboxamide",
+    "BAY 59-7939",
+    "BAY59-7939",
+    "Xarelto",
+    "rivaroxaban"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C19H18ClN3O5S"
+    ],
+    "has_dbxref": [
+      "CAS:366789-02-8",
+      "DrugBank:DB06228",
+      "Drug_Central:4182",
+      "KEGG:D07086",
+      "LINCS:LSM-5499",
+      "PDBeChem:RIV",
+      "PMCID:PMC7292653",
+      "PMID:22042412",
+      "PMID:22173426",
+      "PMID:22187012",
+      "PMID:22242932",
+      "PMID:22272729",
+      "PMID:22372178",
+      "PMID:22387577",
+      "PMID:22422332",
+      "PMID:22533680",
+      "PMID:22534269",
+      "PMID:22534775",
+      "PMID:22542983",
+      "PMID:22651881",
+      "PMID:22664783",
+      "PMID:22701330",
+      "PMID:22740145",
+      "PMID:22777255",
+      "PMID:22800431",
+      "PMID:22811404",
+      "PMID:22871192",
+      "PMID:22884545",
+      "PMID:22932305",
+      "PMID:22958812",
+      "PMID:23006523",
+      "PMID:23014816",
+      "PMID:30653475",
+      "PMID:31784708",
+      "PMID:32002769",
+      "PMID:32023227",
+      "PMID:32223113",
+      "PMID:32223511",
+      "PMID:32252075",
+      "PMID:32265542",
+      "PMID:32279215",
+      "PMID:32296145",
+      "PMID:32382756",
+      "PMID:32519800",
+      "PMID:32548552",
+      "PMID:32548556",
+      "Patent:EP1685841",
+      "Patent:US2005182055",
+      "Patent:US2007026065",
+      "Patent:US2009036504",
+      "Patent:US2010151011",
+      "Patent:US2011034453",
+      "Patent:US2011112083",
+      "Patent:US2011152266",
+      "Patent:US2011288294",
+      "Patent:US7816355",
+      "Patent:WO2004060887",
+      "Patent:WO2005068456",
+      "Patent:WO2008140220",
+      "Patent:WO2011080341",
+      "Patent:WO2012035057",
+      "Patent:WO2012051692",
+      "Reaxys:10206739",
+      "Wikipedia:Rivaroxaban"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:68579"
+    ],
+    "inchi": [
+      "InChI=1S/C19H18ClN3O5S/c20-16-6-5-15(29-16)18(25)21-9-14-10-23(19(26)28-14)13-3-1-12(2-4-13)22-7-8-27-11-17(22)24/h1-6,14H,7-11H2,(H,21,25)/t14-/m0/s1"
+    ],
+    "inchikey": [
+      "KGFYHTZWPPHNLQ-AWEZNQCLSA-N"
+    ],
+    "mass": [
+      "435.880"
+    ],
+    "monoisotopicmass": [
+      "435.06557"
+    ],
+    "smiles": [
+      "O1CC(N(CC1)C2=CC=C(C=C2)N3C[C@@H](OC3=O)CNC(C=4SC(=CC4)Cl)=O)=O"
+    ]
+  },
+  "label": "rivaroxaban",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_68579",
+  "obo_id": "CHEBI:68579",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "366789-02-8",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB06228",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB06228"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "4182",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/4182"
+    },
+    {
+      "database": "KEGG",
+      "id": "D07086",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D07086"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5499",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "RIV",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/RIV"
+    },
+    {
+      "database": "PMCID",
+      "id": "PMC7292653",
+      "description": "Europe PMC",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7292653"
+    },
+    {
+      "database": "PMID",
+      "id": "22042412",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22042412"
+    },
+    {
+      "database": "PMID",
+      "id": "22173426",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22173426"
+    },
+    {
+      "database": "PMID",
+      "id": "22187012",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22187012"
+    },
+    {
+      "database": "PMID",
+      "id": "22242932",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22242932"
+    },
+    {
+      "database": "PMID",
+      "id": "22272729",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22272729"
+    },
+    {
+      "database": "PMID",
+      "id": "22372178",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22372178"
+    },
+    {
+      "database": "PMID",
+      "id": "22387577",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22387577"
+    },
+    {
+      "database": "PMID",
+      "id": "22422332",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22422332"
+    },
+    {
+      "database": "PMID",
+      "id": "22533680",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22533680"
+    },
+    {
+      "database": "PMID",
+      "id": "22534269",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22534269"
+    },
+    {
+      "database": "PMID",
+      "id": "22534775",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22534775"
+    },
+    {
+      "database": "PMID",
+      "id": "22542983",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22542983"
+    },
+    {
+      "database": "PMID",
+      "id": "22651881",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22651881"
+    },
+    {
+      "database": "PMID",
+      "id": "22664783",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22664783"
+    },
+    {
+      "database": "PMID",
+      "id": "22701330",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22701330"
+    },
+    {
+      "database": "PMID",
+      "id": "22740145",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22740145"
+    },
+    {
+      "database": "PMID",
+      "id": "22777255",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22777255"
+    },
+    {
+      "database": "PMID",
+      "id": "22800431",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22800431"
+    },
+    {
+      "database": "PMID",
+      "id": "22811404",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22811404"
+    },
+    {
+      "database": "PMID",
+      "id": "22871192",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22871192"
+    },
+    {
+      "database": "PMID",
+      "id": "22884545",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22884545"
+    },
+    {
+      "database": "PMID",
+      "id": "22932305",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22932305"
+    },
+    {
+      "database": "PMID",
+      "id": "22958812",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22958812"
+    },
+    {
+      "database": "PMID",
+      "id": "23006523",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23006523"
+    },
+    {
+      "database": "PMID",
+      "id": "23014816",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23014816"
+    },
+    {
+      "database": "PMID",
+      "id": "30653475",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/30653475"
+    },
+    {
+      "database": "PMID",
+      "id": "31784708",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/31784708"
+    },
+    {
+      "database": "PMID",
+      "id": "32002769",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32002769"
+    },
+    {
+      "database": "PMID",
+      "id": "32023227",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32023227"
+    },
+    {
+      "database": "PMID",
+      "id": "32223113",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32223113"
+    },
+    {
+      "database": "PMID",
+      "id": "32223511",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32223511"
+    },
+    {
+      "database": "PMID",
+      "id": "32252075",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32252075"
+    },
+    {
+      "database": "PMID",
+      "id": "32265542",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32265542"
+    },
+    {
+      "database": "PMID",
+      "id": "32279215",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32279215"
+    },
+    {
+      "database": "PMID",
+      "id": "32296145",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32296145"
+    },
+    {
+      "database": "PMID",
+      "id": "32382756",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32382756"
+    },
+    {
+      "database": "PMID",
+      "id": "32519800",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32519800"
+    },
+    {
+      "database": "PMID",
+      "id": "32548552",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32548552"
+    },
+    {
+      "database": "PMID",
+      "id": "32548556",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32548556"
+    },
+    {
+      "database": "Patent",
+      "id": "EP1685841",
+      "description": null,
+      "url": "https://www.google.com/patents/EP1685841"
+    },
+    {
+      "database": "Patent",
+      "id": "US2005182055",
+      "description": null,
+      "url": "https://www.google.com/patents/US2005182055"
+    },
+    {
+      "database": "Patent",
+      "id": "US2007026065",
+      "description": null,
+      "url": "https://www.google.com/patents/US2007026065"
+    },
+    {
+      "database": "Patent",
+      "id": "US2009036504",
+      "description": null,
+      "url": "https://www.google.com/patents/US2009036504"
+    },
+    {
+      "database": "Patent",
+      "id": "US2010151011",
+      "description": null,
+      "url": "https://www.google.com/patents/US2010151011"
+    },
+    {
+      "database": "Patent",
+      "id": "US2011034453",
+      "description": null,
+      "url": "https://www.google.com/patents/US2011034453"
+    },
+    {
+      "database": "Patent",
+      "id": "US2011112083",
+      "description": null,
+      "url": "https://www.google.com/patents/US2011112083"
+    },
+    {
+      "database": "Patent",
+      "id": "US2011152266",
+      "description": null,
+      "url": "https://www.google.com/patents/US2011152266"
+    },
+    {
+      "database": "Patent",
+      "id": "US2011288294",
+      "description": null,
+      "url": "https://www.google.com/patents/US2011288294"
+    },
+    {
+      "database": "Patent",
+      "id": "US7816355",
+      "description": null,
+      "url": "https://www.google.com/patents/US7816355"
+    },
+    {
+      "database": "Patent",
+      "id": "WO2004060887",
+      "description": null,
+      "url": "https://www.google.com/patents/WO2004060887"
+    },
+    {
+      "database": "Patent",
+      "id": "WO2005068456",
+      "description": null,
+      "url": "https://www.google.com/patents/WO2005068456"
+    },
+    {
+      "database": "Patent",
+      "id": "WO2008140220",
+      "description": null,
+      "url": "https://www.google.com/patents/WO2008140220"
+    },
+    {
+      "database": "Patent",
+      "id": "WO2011080341",
+      "description": null,
+      "url": "https://www.google.com/patents/WO2011080341"
+    },
+    {
+      "database": "Patent",
+      "id": "WO2012035057",
+      "description": null,
+      "url": "https://www.google.com/patents/WO2012035057"
+    },
+    {
+      "database": "Patent",
+      "id": "WO2012051692",
+      "description": null,
+      "url": "https://www.google.com/patents/WO2012051692"
+    },
+    {
+      "database": "Reaxys",
+      "id": "10206739",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Rivaroxaban",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Rivaroxaban"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5-chloro-N-({(5S)-2-oxo-3-[4-(3-oxomorpholin-4-yl)phenyl]-1,3-oxazolidin-5-yl}methyl)thiophene-2-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BAY 59-7939",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "BAY59-7939",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Xarelto",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rivaroxaban",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68579?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68579/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68579/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68579/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68579/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68579/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68579/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_68579/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

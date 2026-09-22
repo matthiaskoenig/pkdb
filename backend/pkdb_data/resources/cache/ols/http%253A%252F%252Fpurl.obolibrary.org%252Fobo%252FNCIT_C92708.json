@@ -1,0 +1,93 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C92708",
+  "lang": "en",
+  "description": [
+    "A drug packaging type usually in a cylindrical shape with rounded ends. Capsule shells may be made from gelatin, starch, or cellulose, or other suitable materials, may be soft or hard, and are filled with solid or liquid drug products."
+  ],
+  "synonyms": [
+    "CAPSULE",
+    "Capsule"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug packaging type usually in a cylindrical shape with rounded ends. Capsule shells may be made from gelatin, starch, or cellulose, or other suitable materials, may be soft or hard, and are filled with solid or liquid drug products."
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_Table": [
+      "Package Type (C-DRG-00907)"
+    ],
+    "NCI_META_CUI": [
+      "CL423897"
+    ],
+    "Preferred_Name": [
+      "Capsule"
+    ],
+    "Semantic_Type": [
+      "Manufactured Object"
+    ],
+    "code": [
+      "C92708"
+    ]
+  },
+  "label": "Capsule",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C92708",
+  "obo_id": "NCIT:C92708",
+  "in_subset": [
+    "NCIT_C133805",
+    "NCIT_C133853",
+    "NCIT_C54452",
+    "NCIT_C54457"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CAPSULE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Capsule",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C92708?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C92708/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C92708/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C92708/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C92708/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C92708/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C92708/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

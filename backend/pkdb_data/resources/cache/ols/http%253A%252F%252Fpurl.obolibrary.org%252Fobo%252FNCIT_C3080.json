@@ -1,0 +1,170 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C3080",
+  "lang": "en",
+  "description": [
+    "Failure of the heart to pump a sufficient amount of blood to meet the needs of the body tissues, resulting in tissue congestion and edema. Signs and symptoms include shortness of breath, pitting edema, enlarged tender liver, engorged neck veins, and pulmonary rales."
+  ],
+  "synonyms": [
+    "CHF",
+    "Cardiac Failure Congestive",
+    "Congestive Heart Failure",
+    "Congestive Heart Failure (CHF)",
+    "Congestive heart failure",
+    "Heart Failure/Congestive Heart Failure",
+    "congestive heart failure"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Inability of the heart to pump blood adequately to fill tissue metabolic requirements or the ability to do so only at an elevated filling pressure.",
+      "Weakness of the heart muscle that leads to a buildup of fluid in body tissues."
+    ],
+    "Contributing_Source": [
+      "Cellosaurus",
+      "FDA",
+      "GDC",
+      "NICHD",
+      "SeroNet"
+    ],
+    "FDA_Table": [
+      "Patient Code (Appendix B)"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C16457"
+    ],
+    "Legacy Concept Name": [
+      "Congestive_Heart_Failure"
+    ],
+    "Maps_To": [
+      "Congestive Heart Failure (CHF)"
+    ],
+    "Preferred_Name": [
+      "Congestive Heart Failure"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C3551869"
+    ],
+    "code": [
+      "C3080"
+    ],
+    "has_dbxref": [
+      "IMDRF:E0611"
+    ]
+  },
+  "label": "Congestive Heart Failure",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C3080",
+  "obo_id": "NCIT:C3080",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C165258",
+    "NCIT_C177537",
+    "NCIT_C179027",
+    "NCIT_C189083",
+    "NCIT_C192842",
+    "NCIT_C54450",
+    "NCIT_C62596",
+    "NCIT_C90259",
+    "NCIT_C99147"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "IMDRF",
+      "id": "E0611",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "CHF",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cardiac Failure Congestive",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Congestive Heart Failure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Congestive Heart Failure (CHF)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Congestive heart failure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Heart Failure/Congestive Heart Failure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "congestive heart failure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3080?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3080/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3080/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3080/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3080/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3080/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3080/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3080/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3080/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3080/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3080/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

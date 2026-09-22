@@ -1,0 +1,366 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8107",
+  "lang": "en",
+  "description": [
+    "A imidazolidine-2,4-dione that consists of hydantoin bearing two phenyl substituents at position 5."
+  ],
+  "synonyms": [
+    "5,5-diphenylimidazolidine-2,4-dione",
+    "5,5-Diphenyl-imidazolidine-2,4-dione",
+    "5,5-diphenylimidazolidine-2,4-dione",
+    "5,5-diphenyltetrahydro-1H-2,4-imidazoledione",
+    "DILANTIN",
+    "PHENTYTOIN",
+    "fenitoina",
+    "phenytoin",
+    "phenytoine",
+    "phenytoinum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C15H12N2O2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:100921"
+    ],
+    "has_dbxref": [
+      "CAS:57-41-0",
+      "DrugBank:DB00252",
+      "Drug_Central:2152",
+      "HMDB:HMDB0014397",
+      "KEGG:C07443",
+      "KEGG:D00512",
+      "LINCS:LSM-5663",
+      "PMID:10698828",
+      "PMID:12952753",
+      "PMID:15246836",
+      "PMID:15744730",
+      "PMID:16303054",
+      "PMID:7105825",
+      "PMID:7602118",
+      "PMID:9186244",
+      "Patent:WO2012174723",
+      "Reaxys:384532",
+      "Wikipedia:Phenytoin"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8107"
+    ],
+    "inchi": [
+      "InChI=1S/C15H12N2O2/c18-13-15(17-14(19)16-13,11-7-3-1-4-8-11)12-9-5-2-6-10-12/h1-10H,(H2,16,17,18,19)"
+    ],
+    "inchikey": [
+      "CXOFVDLJLONNDW-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "252.26800"
+    ],
+    "monoisotopicmass": [
+      "252.08988"
+    ],
+    "smiles": [
+      "O=C1NC(=O)C(N1)(c1ccccc1)c1ccccc1"
+    ]
+  },
+  "label": "phenytoin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8107",
+  "obo_id": "CHEBI:8107",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "57-41-0",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "57-41-0",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00252",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00252"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2152",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2152"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014397",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014397"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07443",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07443"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00512",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00512"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5663",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "10698828",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10698828"
+    },
+    {
+      "database": "PMID",
+      "id": "12952753",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12952753"
+    },
+    {
+      "database": "PMID",
+      "id": "15246836",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15246836"
+    },
+    {
+      "database": "PMID",
+      "id": "15744730",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15744730"
+    },
+    {
+      "database": "PMID",
+      "id": "16303054",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16303054"
+    },
+    {
+      "database": "PMID",
+      "id": "7105825",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7105825"
+    },
+    {
+      "database": "PMID",
+      "id": "7602118",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7602118"
+    },
+    {
+      "database": "PMID",
+      "id": "9186244",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9186244"
+    },
+    {
+      "database": "Patent",
+      "id": "WO2012174723",
+      "description": null,
+      "url": "https://www.google.com/patents/WO2012174723"
+    },
+    {
+      "database": "Reaxys",
+      "id": "384532",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Phenytoin",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Phenytoin"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "5,5-diphenylimidazolidine-2,4-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5,5-Diphenyl-imidazolidine-2,4-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5,5-diphenylimidazolidine-2,4-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5,5-diphenyltetrahydro-1H-2,4-imidazoledione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "DILANTIN",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "PHENTYTOIN",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "fenitoina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenytoin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenytoine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "phenytoinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8107?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8107/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8107/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8107/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8107/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8107/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8107/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8107/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8107/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

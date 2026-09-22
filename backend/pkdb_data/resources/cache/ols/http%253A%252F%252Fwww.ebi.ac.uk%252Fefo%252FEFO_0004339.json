@@ -1,0 +1,74 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0004339",
+  "lang": "en",
+  "description": [
+    "The distance from the sole to the crown of the head with body standing on a flat surface and fully extended."
+  ],
+  "synonyms": [
+    "height"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "MESH:D001827",
+      "MedDRA:10005891",
+      "NCIt:C25347"
+    ],
+    "obsoleted_in_version": [
+      "3.74.0"
+    ],
+    "reason_for_obsolescence": [
+      "Project to replace EFO measurement branch with enriched OBA branch. Please use: OBA:VT0001253"
+    ],
+    "term editor": [
+      "Dani Welter"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/OBA_VT0001253"
+    ]
+  },
+  "label": "obsolete_body height",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/OBA_VT0001253",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0004339",
+  "obo_id": "EFO:0004339",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "MESH",
+      "id": "D001827",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D001827"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10005891",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10005891"
+    },
+    {
+      "database": "NCIt",
+      "id": "C25347",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C25347"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004339?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0004339/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,112 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C106032",
+  "lang": "en",
+  "description": [
+    "Apolipoprotein B-100 (4563 aa, ~516 kDa) is encoded by the human APOB gene. This protein plays a role in both transport and cellular uptake of LDL particles."
+  ],
+  "synonyms": [
+    "APOB",
+    "Apo B-100",
+    "ApoB-100",
+    "Apolipoprotein B-100"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CTRP"
+    ],
+    "DesignNote": [
+      "RNA editing of the full-length APOB transcript at residue 2180 (CAA->UAA), results in the creation of a stop codon. This truncated mRNA encodes apolipoprotein B-48 (apo B-48), which is found in chylomicron particles. (EntrezGene and UniProt)"
+    ],
+    "Display_Name": [
+      "Apolipoprotein B-100"
+    ],
+    "OMIM_Number": [
+      "107730"
+    ],
+    "Preferred_Name": [
+      "Apolipoprotein B-100"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein"
+    ],
+    "Swiss_Prot": [
+      "P04114"
+    ],
+    "UMLS_CUI": [
+      "C0103839"
+    ],
+    "code": [
+      "C106032"
+    ]
+  },
+  "label": "Apolipoprotein B-100",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C106032",
+  "obo_id": "NCIT:C106032",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C142800"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "APOB",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Apo B-100",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ApoB-100",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Apolipoprotein B-100",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C106032?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C106032/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C106032/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C106032/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C106032/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C106032/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C106032/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

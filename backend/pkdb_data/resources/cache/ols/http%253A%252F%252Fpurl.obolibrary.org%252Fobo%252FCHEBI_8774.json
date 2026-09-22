@@ -1,0 +1,440 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8774",
+  "lang": "en",
+  "description": [
+    "A dipeptide that is the prodrug for ramiprilat, the active metabolite obtained by hydrolysis of the ethyl ester group. An angiotensin-converting enzyme (ACE) inhibitor, used to treat high blood pressure and congestive heart failure."
+  ],
+  "synonyms": [
+    "(2S,3aS,6aS)-1-[(2S)-2-{[(1S)-1-ethoxycarbonyl-3-phenylpropyl]amino}propanoyl]octahydrocyclopenta[b]pyrrole-2-carboxylic acid",
+    "Ramipril",
+    "(2S-(1(R*(R*)),2alpha,3abeta,6abeta))-1-(2-((1-(Ethoxycarbonyl)-3-phenylpropyl)amino)-1-oxopropyl)octahydrocyclopenta(b)pyrrole-2-carboxylic acid",
+    "Altace (TN)",
+    "Ramiprilum",
+    "Tritace",
+    "ramipril"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C23H32N2O5"
+    ],
+    "has_dbxref": [
+      "CAS:87333-19-5",
+      "DrugBank:DB00178",
+      "Drug_Central:2356",
+      "HMDB:HMDB0014324",
+      "KEGG:D00421",
+      "LINCS:LSM-5950",
+      "PMID:11095026",
+      "PMID:11575208",
+      "PMID:12076194",
+      "PMID:12768220",
+      "PMID:15110900",
+      "PMID:16144510",
+      "PMID:16734081",
+      "PMID:17004100",
+      "PMID:17192135",
+      "PMID:17496463",
+      "PMID:17903031",
+      "PMID:20122169",
+      "PMID:22799880",
+      "PMID:23557551",
+      "PMID:23713675",
+      "PMID:23747952",
+      "PMID:23842688",
+      "PMID:23842829",
+      "PMID:23951921",
+      "PMID:24048485",
+      "PMID:24090393",
+      "PMID:24191305",
+      "PMID:24397981",
+      "PMID:24435506",
+      "PMID:24452090",
+      "PMID:24509355",
+      "Reaxys:4214464",
+      "VSDB:1888",
+      "Wikipedia:Ramipril"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8774"
+    ],
+    "inchi": [
+      "InChI=1S/C23H32N2O5/c1-3-30-23(29)18(13-12-16-8-5-4-6-9-16)24-15(2)21(26)25-19-11-7-10-17(19)14-20(25)22(27)28/h4-6,8-9,15,17-20,24H,3,7,10-14H2,1-2H3,(H,27,28)/t15-,17-,18-,19-,20-/m0/s1"
+    ],
+    "inchikey": [
+      "HDACQVRGBOVJII-JBDAPHQKSA-N"
+    ],
+    "mass": [
+      "416.51060"
+    ],
+    "monoisotopicmass": [
+      "416.23112"
+    ],
+    "smiles": [
+      "CCOC(=O)[C@H](CCc1ccccc1)N[C@@H](C)C(=O)N1[C@H]2CCC[C@H]2C[C@H]1C(O)=O"
+    ]
+  },
+  "label": "ramipril",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8774",
+  "obo_id": "CHEBI:8774",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "87333-19-5",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "87333-19-5",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00178",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00178"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2356",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2356"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014324",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014324"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00421",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00421"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5950",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "11095026",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11095026"
+    },
+    {
+      "database": "PMID",
+      "id": "11575208",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11575208"
+    },
+    {
+      "database": "PMID",
+      "id": "12076194",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12076194"
+    },
+    {
+      "database": "PMID",
+      "id": "12768220",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12768220"
+    },
+    {
+      "database": "PMID",
+      "id": "15110900",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15110900"
+    },
+    {
+      "database": "PMID",
+      "id": "16144510",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16144510"
+    },
+    {
+      "database": "PMID",
+      "id": "16734081",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16734081"
+    },
+    {
+      "database": "PMID",
+      "id": "17004100",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17004100"
+    },
+    {
+      "database": "PMID",
+      "id": "17192135",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17192135"
+    },
+    {
+      "database": "PMID",
+      "id": "17496463",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17496463"
+    },
+    {
+      "database": "PMID",
+      "id": "17903031",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17903031"
+    },
+    {
+      "database": "PMID",
+      "id": "20122169",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20122169"
+    },
+    {
+      "database": "PMID",
+      "id": "22799880",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22799880"
+    },
+    {
+      "database": "PMID",
+      "id": "23557551",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23557551"
+    },
+    {
+      "database": "PMID",
+      "id": "23713675",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23713675"
+    },
+    {
+      "database": "PMID",
+      "id": "23747952",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23747952"
+    },
+    {
+      "database": "PMID",
+      "id": "23842688",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23842688"
+    },
+    {
+      "database": "PMID",
+      "id": "23842829",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23842829"
+    },
+    {
+      "database": "PMID",
+      "id": "23951921",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23951921"
+    },
+    {
+      "database": "PMID",
+      "id": "24048485",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24048485"
+    },
+    {
+      "database": "PMID",
+      "id": "24090393",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24090393"
+    },
+    {
+      "database": "PMID",
+      "id": "24191305",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24191305"
+    },
+    {
+      "database": "PMID",
+      "id": "24397981",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24397981"
+    },
+    {
+      "database": "PMID",
+      "id": "24435506",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24435506"
+    },
+    {
+      "database": "PMID",
+      "id": "24452090",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24452090"
+    },
+    {
+      "database": "PMID",
+      "id": "24509355",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24509355"
+    },
+    {
+      "database": "Reaxys",
+      "id": "4214464",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "VSDB",
+      "id": "1888",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1888.htm"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Ramipril",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Ramipril"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2S,3aS,6aS)-1-[(2S)-2-{[(1S)-1-ethoxycarbonyl-3-phenylpropyl]amino}propanoyl]octahydrocyclopenta[b]pyrrole-2-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ramipril",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S-(1(R*(R*)),2alpha,3abeta,6abeta))-1-(2-((1-(Ethoxycarbonyl)-3-phenylpropyl)amino)-1-oxopropyl)octahydrocyclopenta(b)pyrrole-2-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Altace (TN)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ramiprilum",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tritace",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ramipril",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_conjugate_acid_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8774/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_acid_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

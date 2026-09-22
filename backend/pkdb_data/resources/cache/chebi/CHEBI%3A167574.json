@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:167574",
+  "name": "semaglutide",
+  "definition": "A polypeptide that contains a linear sequence of 31 amino acids joined together by peptide linkages. It is an agonist of glucagon-like peptide-1 receptors (GLP-1 AR) and used for the treatment of type 2 diabetes.",
+  "formula": "C187H291N45O59",
+  "charge": "0",
+  "mass": "4113.641",
+  "inchikey": "DLSWIYLPEUIQAV-CCUURXOWSA-N"
+}

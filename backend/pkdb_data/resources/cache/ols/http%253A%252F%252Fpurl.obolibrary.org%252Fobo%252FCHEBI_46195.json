@@ -1,0 +1,609 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_46195",
+  "lang": "en",
+  "description": [
+    "A member of the class of phenols that is 4-aminophenol in which one of the hydrogens attached to the amino group has been replaced by an acetyl group."
+  ],
+  "synonyms": [
+    "N-(4-hydroxyphenyl)acetamide",
+    "Paracetamol",
+    "4'-hydroxyacetanilide",
+    "4-(Acetylamino)phenol",
+    "4-acetamidophenol",
+    "APAP",
+    "Acenol",
+    "Acetaminofen",
+    "Acetaminophen",
+    "N-acetyl-p-aminophenol",
+    "Panadol",
+    "Tylenol",
+    "acetaminofen",
+    "acetaminophene",
+    "p-Acetylaminophenol",
+    "p-acetamidophenol",
+    "p-acetaminophenol",
+    "p-hydroxyacetanilide",
+    "p-hydroxyphenolacetamide",
+    "paracetamol",
+    "paracetamolum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C8H9NO2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:2386",
+      "CHEBI:46191"
+    ],
+    "has_dbxref": [
+      "Beilstein:2208089",
+      "CAS:103-90-2",
+      "Chemspider:1906",
+      "DrugBank:DB00316",
+      "Drug_Central:52",
+      "HMDB:HMDB0001859",
+      "KEGG:C06804",
+      "KEGG:D00217",
+      "LINCS:LSM-5533",
+      "MetaCyc:CPD-7669",
+      "PDBeChem:TYL",
+      "PMID:11084378",
+      "PMID:11304127",
+      "PMID:16716555",
+      "PMID:18953082",
+      "PMID:21108564",
+      "PMID:22114686",
+      "PMID:22770225",
+      "PMID:25128677",
+      "PMID:25962350",
+      "PMID:27320817",
+      "PMID:28734939",
+      "PMID:29398597",
+      "PMID:7602118",
+      "Reaxys:2208089",
+      "Wikipedia:Acetaminophen"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:46195"
+    ],
+    "inchi": [
+      "InChI=1S/C8H9NO2/c1-6(10)9-7-2-4-8(11)5-3-7/h2-5,11H,1H3,(H,9,10)"
+    ],
+    "inchikey": [
+      "RZVAJINKPMORJF-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "151.165"
+    ],
+    "monoisotopicmass": [
+      "151.06333"
+    ],
+    "smiles": [
+      "CC(=O)NC1=CC=C(O)C=C1"
+    ]
+  },
+  "label": "paracetamol",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_46195",
+  "obo_id": "CHEBI:46195",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "2208089",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "103-90-2",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "103-90-2",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "103-90-2",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Chemspider",
+      "id": "1906",
+      "description": null,
+      "url": "http://www.chemspider.com/Chemical-Structure.1906.html"
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00316",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00316"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "52",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/52"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0001859",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001859"
+    },
+    {
+      "database": "KEGG",
+      "id": "C06804",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C06804"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00217",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00217"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5533",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MetaCyc",
+      "id": "CPD-7669",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "TYL",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/TYL"
+    },
+    {
+      "database": "PMID",
+      "id": "11084378",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11084378"
+    },
+    {
+      "database": "PMID",
+      "id": "11304127",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11304127"
+    },
+    {
+      "database": "PMID",
+      "id": "16716555",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16716555"
+    },
+    {
+      "database": "PMID",
+      "id": "18953082",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18953082"
+    },
+    {
+      "database": "PMID",
+      "id": "21108564",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21108564"
+    },
+    {
+      "database": "PMID",
+      "id": "22114686",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22114686"
+    },
+    {
+      "database": "PMID",
+      "id": "22770225",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22770225"
+    },
+    {
+      "database": "PMID",
+      "id": "25128677",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25128677"
+    },
+    {
+      "database": "PMID",
+      "id": "25962350",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25962350"
+    },
+    {
+      "database": "PMID",
+      "id": "27320817",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27320817"
+    },
+    {
+      "database": "PMID",
+      "id": "28734939",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28734939"
+    },
+    {
+      "database": "PMID",
+      "id": "29398597",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/29398597"
+    },
+    {
+      "database": "PMID",
+      "id": "7602118",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7602118"
+    },
+    {
+      "database": "Reaxys",
+      "id": "2208089",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Acetaminophen",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Acetaminophen"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-(4-hydroxyphenyl)acetamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Paracetamol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4'-hydroxyacetanilide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-(Acetylamino)phenol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-acetamidophenol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "4-acetamidophenol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "APAP",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Acenol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Acetaminofen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Acetaminophen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-acetyl-p-aminophenol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Panadol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Tylenol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acetaminofen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acetaminophene",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "p-Acetylaminophenol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "p-acetamidophenol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "p-acetaminophenol",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "p-hydroxyacetanilide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "p-hydroxyphenolacetamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "paracetamol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "paracetamol",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "paracetamolum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46195?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46195/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46195/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46195/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46195/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46195/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46195/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46195/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_46195/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,168 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C1505",
+  "lang": "en",
+  "description": [
+    "Oral preparations containing dietary ingredient(s) intended to supplement the diet.  Dietary ingredients include vitamins, minerals, herbs, amino acids, extracts and metabolites."
+  ],
+  "synonyms": [
+    "DIETARY SUPPLEMENT",
+    "Dietary Supplement",
+    "Dietary Supplements",
+    "Nutritional Supplement",
+    "Supplement",
+    "Supplements",
+    "dietary supplement",
+    "nutritional supplement",
+    "supplemental nutrition"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A product that is added to the diet. A dietary supplement is taken by mouth, and usually contains one or more dietary ingredient (such as vitamin, mineral, herb, amino acid, and enzyme).",
+      "Preparations containing ingredient(s) intended to supplement the diet."
+    ],
+    "CHEBI_ID": [
+      "CHEBI:50733"
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CPTAC",
+      "CTRP"
+    ],
+    "Display_Name": [
+      "Dietary Supplement"
+    ],
+    "Legacy Concept Name": [
+      "Nutritional_Supplement"
+    ],
+    "Preferred_Name": [
+      "Dietary Supplement"
+    ],
+    "Semantic_Type": [
+      "Food"
+    ],
+    "UMLS_CUI": [
+      "C0242295"
+    ],
+    "code": [
+      "C1505"
+    ]
+  },
+  "label": "Dietary Supplement",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C1505",
+  "obo_id": "NCIT:C1505",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C132298",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C156954",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C99078"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "DIETARY SUPPLEMENT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Dietary Supplement",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Dietary Supplements",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Nutritional Supplement",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Supplement",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Supplements",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "dietary supplement",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "nutritional supplement",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "supplemental nutrition",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1505?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1505/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1505/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1505/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1505/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1505/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1505/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1505/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1505/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1505/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C1505/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

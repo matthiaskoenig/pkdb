@@ -1,0 +1,137 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_63800",
+  "lang": "en",
+  "description": [
+    "An isoquinoline that is 3,4-dihydroisoquinoline bearing amidino and hydroxy substituent at positions 2 and 4 respectively."
+  ],
+  "synonyms": [
+    "4-hydroxy-3,4-dihydroisoquinoline-2(1H)-carboximidamide",
+    "3,4-dihydro-4-hydroxy-2(1H)-Isoquinolinecarboximidamide"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C10H13N3O"
+    ],
+    "has_dbxref": [
+      "CAS:59333-79-8",
+      "HMDB:HMDB0006468",
+      "Reaxys:1533392"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:63800"
+    ],
+    "inchi": [
+      "InChI=1S/C10H13N3O/c11-10(12)13-5-7-3-1-2-4-8(7)9(14)6-13/h1-4,9,14H,5-6H2,(H3,11,12)"
+    ],
+    "inchikey": [
+      "AKFURXZANOMQBD-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "191.22970"
+    ],
+    "monoisotopicmass": [
+      "191.10586"
+    ],
+    "smiles": [
+      "NC(=N)N1CC(O)c2ccccc2C1"
+    ]
+  },
+  "label": "4-hydroxydebrisoquin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_63800",
+  "obo_id": "CHEBI:63800",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "59333-79-8",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0006468",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0006468"
+    },
+    {
+      "database": "Reaxys",
+      "id": "1533392",
+      "description": "Reaxys",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4-hydroxy-3,4-dihydroisoquinoline-2(1H)-carboximidamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3,4-dihydro-4-hydroxy-2(1H)-Isoquinolinecarboximidamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "HMDB",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63800?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63800/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63800/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63800/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63800/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63800/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63800/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_63800/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

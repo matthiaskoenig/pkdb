@@ -1,0 +1,464 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7476",
+  "lang": "en",
+  "description": [
+    "A methoxynaphthalene that is 2-methoxynaphthalene substituted by a carboxy ethyl group at position 6. Naproxen is a non-steroidal anti-inflammatory drug commonly used for the reduction of pain, fever, inflammation  and stiffness caused by conditions such as osteoarthritis, kidney stones, rheumatoid arthritis, psoriatic arthritis, gout, ankylosing spondylitis, menstrual cramps, tendinitis, bursitis, and for the treatment of primary dysmenorrhea. It works by inhibiting both the COX-1 and COX-2 enzymes."
+  ],
+  "synonyms": [
+    "(+)-(S)-6-Methoxy-alpha-methyl-2-naphthaleneacetic acid",
+    "(+)-(S)-Naproxen",
+    "(+)-2-(6-Methoxy-2-naphthyl)propionic acid",
+    "(+)-2-(Methoxy-2-naphthyl)-propionic acid",
+    "(+)-2-(Methoxy-2-naphthyl)-propionsaeure",
+    "(+)-Naproxen",
+    "(2S)-2-(6-methoxynaphthalen-2-yl)propanoic acid",
+    "(2S)-2-(6-methoxynaphthalen-2-yl)propanoic acid",
+    "(S)-(+)-2-(6-Methoxy-2-naphthyl)propionic acid",
+    "(S)-(+)-Naproxen",
+    "(S)-2-(6-Methoxy-2-naphthyl)propanoic acid",
+    "(S)-2-(6-Methoxy-2-naphthyl)propionic acid",
+    "(S)-6-Methoxy-alpha-methyl-2-naphthaleneacetic acid",
+    "(S)-Naproxen",
+    "Naproxen",
+    "naproxen",
+    "naproxene",
+    "naproxeno",
+    "naproxenum"
+  ],
+  "annotation": {
+    "charge": [
+      0.0
+    ],
+    "database_cross_reference": [
+      "beilstein:3591067",
+      "cas:22204-53-1",
+      "drugbank:DB00788",
+      "drugcentral:1883",
+      "hmdb:HMDB0001923",
+      "kegg.drug:D00118",
+      "lincs.smallmolecule:LSM-5689",
+      "patent:US3904682",
+      "patent:US4009197",
+      "pubmed:18044350",
+      "pubmed:24478225",
+      "pubmed:9784154",
+      "wikipedia.en:Naproxen"
+    ],
+    "generalized_empirical_formula": [
+      "C14H14O3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:603695"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7476"
+    ],
+    "inchi_key_string": [
+      "CMWTZPSULFXXJA-VIFPVBQESA-N"
+    ],
+    "inchi_string": [
+      "InChI=1S/C14H14O3/c1-9(14(15)16)10-3-4-12-8-13(17-2)6-5-11(12)7-10/h3-9H,1-2H3,(H,15,16)/t9-/m0/s1"
+    ],
+    "mass": [
+      "230.263"
+    ],
+    "monoisotopic_mass": [
+      "230.09429"
+    ],
+    "smiles_string": [
+      "COc1ccc2cc([C@H](C)C(=O)O)ccc2c1"
+    ]
+  },
+  "label": "naproxen",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7476",
+  "obo_id": "CHEBI:7476",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "beilstein",
+      "id": "3591067",
+      "description": "beilstein",
+      "url": null
+    },
+    {
+      "database": "cas",
+      "id": "22204-53-1",
+      "description": "cas",
+      "url": "https://commonchemistry.cas.org/detail?cas_rn=22204-53-1"
+    },
+    {
+      "database": "drugbank",
+      "id": "DB00788",
+      "description": "drugbank",
+      "url": "https://go.drugbank.com/drugs/DB00788"
+    },
+    {
+      "database": "drugcentral",
+      "id": "1883",
+      "description": "drugcentral",
+      "url": "http://drugcentral.org/drugcard/1883"
+    },
+    {
+      "database": "hmdb",
+      "id": "HMDB0001923",
+      "description": "hmdb",
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001923"
+    },
+    {
+      "database": "kegg.drug",
+      "id": "D00118",
+      "description": "kegg.drug",
+      "url": null
+    },
+    {
+      "database": "lincs.smallmolecule",
+      "id": "LSM-5689",
+      "description": "lincs.smallmolecule",
+      "url": null
+    },
+    {
+      "database": "patent",
+      "id": "US3904682",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US3904682"
+    },
+    {
+      "database": "patent",
+      "id": "US4009197",
+      "description": "patent",
+      "url": "https://www.google.com/patents/US4009197"
+    },
+    {
+      "database": "pubmed",
+      "id": "18044350",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/18044350/"
+    },
+    {
+      "database": "pubmed",
+      "id": "24478225",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/24478225/"
+    },
+    {
+      "database": "pubmed",
+      "id": "9784154",
+      "description": "pubmed",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/9784154/"
+    },
+    {
+      "database": "wikipedia.en",
+      "id": "Naproxen",
+      "description": "wikipedia.en",
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(2S)-2-(6-methoxynaphthalen-2-yl)propanoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-(S)-6-Methoxy-alpha-methyl-2-naphthaleneacetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-(S)-Naproxen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-2-(6-Methoxy-2-naphthyl)propionic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-2-(Methoxy-2-naphthyl)-propionic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-2-(Methoxy-2-naphthyl)-propionsaeure",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+)-Naproxen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S)-2-(6-methoxynaphthalen-2-yl)propanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "iupac",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-(+)-2-(6-Methoxy-2-naphthyl)propionic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-(+)-Naproxen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-2-(6-Methoxy-2-naphthyl)propanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-2-(6-Methoxy-2-naphthyl)propionic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-6-Methoxy-alpha-methyl-2-naphthaleneacetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(S)-Naproxen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Naproxen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "kegg.compound",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "naproxen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chembl",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "naproxen",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "drugbank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "naproxene",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "naproxeno",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "naproxenum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "chemidplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7476?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7476/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7476/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7476/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7476/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7476/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7476/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7476/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_protonated_form_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7476/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0018034"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

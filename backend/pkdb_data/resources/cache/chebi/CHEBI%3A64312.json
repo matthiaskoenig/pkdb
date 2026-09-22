@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:64312",
+  "name": "memantine",
+  "definition": "A primary aliphatic amine that is the 3,5-dimethyl derivative of 1-aminoadamantane. A low to moderate affinity uncompetitive (open-channel); NMDA receptor antagonist which binds preferentially to the NMDA receptor-operated cation channels.",
+  "formula": "C12H21N",
+  "charge": "0",
+  "mass": "179.30180",
+  "inchikey": "BUGYDGFZZOZRHP-UHFFFAOYSA-N"
+}

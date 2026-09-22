@@ -1,0 +1,171 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C121007",
+  "lang": "en",
+  "description": [
+    "A standardized rating scale used to assess the severity of liver cirrhosis and determine the prognosis, the required strength of treatment, and the necessity of liver transplantation. This instrument uses the following clinical and lab criteria: encephalopathy grade, ascites, bilirubin, albumin, and prothrombin index."
+  ],
+  "synonyms": [
+    "CHILD-PUGH CLASSIFICATION",
+    "CPS01",
+    "Child-Pugh",
+    "Child-Pugh Classification",
+    "Child-Pugh Clinical Classification",
+    "Child-Pugh Score",
+    "child pugh classification",
+    "child_pugh_classification"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Child-Pugh Classification (Guidance for Industry Pharmacokinetics in Patients with Impaired Hepatic Function: Study Design, Data Analysis, and Impact on Dosing and Labeling. U.S. Department of Health and Human Services; Food and Drug Administration; Center for Drug Evaluation and Research (CDER); Center for Biologics Evaluation and Research (CBER). May 2003, Clinical Pharmacology. http://www.fda.gov/downloads/Drugs/GuidanceComplianceRegulatoryInformation/Guidances/UCM072123.pdf; http://www.halaven.com/sites/default/files/ChildPugh_FlashCard.pdf). CDISC believes this instrument to be in the public domain, but you should perform your own assessment."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CPTAC",
+      "GDC"
+    ],
+    "Has_GDC_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C113691",
+      "http://purl.obolibrary.org/obo/NCIT_C113692",
+      "http://purl.obolibrary.org/obo/NCIT_C113694",
+      "http://purl.obolibrary.org/obo/NCIT_C146790",
+      "http://purl.obolibrary.org/obo/NCIT_C146791",
+      "http://purl.obolibrary.org/obo/NCIT_C146792",
+      "http://purl.obolibrary.org/obo/NCIT_C146793",
+      "http://purl.obolibrary.org/obo/NCIT_C146794",
+      "http://purl.obolibrary.org/obo/NCIT_C146795",
+      "http://purl.obolibrary.org/obo/NCIT_C146796",
+      "http://purl.obolibrary.org/obo/NCIT_C146797",
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C43234"
+    ],
+    "Legacy Concept Name": [
+      "Child-Pugh_Classification"
+    ],
+    "Preferred_Name": [
+      "Child-Pugh Clinical Classification"
+    ],
+    "Semantic_Type": [
+      "Intellectual Product"
+    ],
+    "UMLS_CUI": [
+      "C2347612"
+    ],
+    "code": [
+      "C121007"
+    ]
+  },
+  "label": "Child-Pugh Clinical Classification",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C121007",
+  "obo_id": "NCIT:C121007",
+  "in_subset": [
+    "NCIT_C118970",
+    "NCIT_C118971",
+    "NCIT_C120166",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C157528",
+    "NCIT_C157529",
+    "NCIT_C157711",
+    "NCIT_C177536",
+    "NCIT_C61410",
+    "NCIT_C66830"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "CHILD-PUGH CLASSIFICATION",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CPS01",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Child-Pugh",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Child-Pugh Classification",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Child-Pugh Clinical Classification",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Child-Pugh Score",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "child pugh classification",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "child_pugh_classification",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C121007?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C121007/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C121007/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C121007/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C121007/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C121007/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C121007/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C121007/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C121007/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C121007/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C121007/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

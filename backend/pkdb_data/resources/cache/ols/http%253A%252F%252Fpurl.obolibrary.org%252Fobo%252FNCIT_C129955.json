@@ -1,0 +1,147 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C129955",
+  "lang": "en",
+  "description": [
+    "The pressure measured by wedging a pulmonary catheter with an inflated balloon into a small pulmonary arterial branch."
+  ],
+  "synonyms": [
+    "Mean pulmonary capillary wedge pressure",
+    "PAOP",
+    "PAWP",
+    "PCWP",
+    "Pulmonary Arterial Wedge Pressure",
+    "Pulmonary Artery Occlusion Pressure",
+    "Pulmonary Artery Wedge Pressure",
+    "Pulmonary Capillary Wedge Pressure"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "The pressure measured by wedging a pulmonary catheter with an inflated balloon into a small pulmonary arterial branch"
+    ],
+    "Contributing_Source": [
+      "ACC/AHA"
+    ],
+    "Has_ACC-AHA_SARS2_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C49670"
+    ],
+    "Preferred_Name": [
+      "Pulmonary Artery Wedge Pressure"
+    ],
+    "Semantic_Type": [
+      "Finding"
+    ],
+    "UMLS_CUI": [
+      "C0034094"
+    ],
+    "code": [
+      "C129955"
+    ]
+  },
+  "label": "Pulmonary Artery Wedge Pressure",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C129955",
+  "obo_id": "NCIT:C129955",
+  "in_subset": [
+    "NCIT_C191200",
+    "NCIT_C191386",
+    "NCIT_C191670"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Mean pulmonary capillary wedge pressure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "PAOP",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "PAWP",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "PCWP",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pulmonary Arterial Wedge Pressure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pulmonary Artery Occlusion Pressure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pulmonary Artery Wedge Pressure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pulmonary Capillary Wedge Pressure",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129955?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129955/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129955/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129955/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129955/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129955/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129955/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129955/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129955/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129955/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C129955/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

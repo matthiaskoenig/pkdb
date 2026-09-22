@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:6076",
+  "name": "itraconazole",
+  "definition": "An N-arylpiperazine that is cis-ketoconazole in which the imidazol-1-yl group is replaced by a 1,2,4-triazol-1-yl group and in which the actyl group attached to the piperazine moiety is replaced by a p-[(+-)1-sec-butyl-5-oxo-1,5-dihydro-4H-1,2,4-triazol-4-yl]phenyl group. A potent P-glycoprotein and CYP3A4 inhibitor, it is used as an antifungal drug for the treatment of various fungal infections, including aspergillosis, blastomycosis, candidiasis, chromoblastomycosis, coccidioidomycosis, cryptococcosis, histoplasmosis, and sporotrichosis.",
+  "formula": "C35H38Cl2N8O4",
+  "charge": "0",
+  "mass": "705.63300",
+  "inchikey": "VHVPQPYKVGDNFY-ZPGVKDDISA-N"
+}

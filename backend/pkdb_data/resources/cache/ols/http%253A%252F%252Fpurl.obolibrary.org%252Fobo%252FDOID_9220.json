@@ -1,0 +1,125 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/DOID_9220",
+  "lang": "en",
+  "description": [
+    "A sleep apnea that is characterized by a malfunction of the basic neurological controls for breathing rate and the failure to give the signal to inhale, causing the individual to miss one or more cycles of breathing.",
+    "Xref MGI."
+  ],
+  "synonyms": [
+    "primary central sleep apnea",
+    "central sleep apnea syndrome"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "MESH:D020182",
+      "MIM:107640",
+      "MIM:207720",
+      "NCI:C116046",
+      "UMLS_CUI:C0520680"
+    ],
+    "has_obo_namespace": [
+      "disease_ontology"
+    ],
+    "id": [
+      "DOID:9220"
+    ]
+  },
+  "label": "central sleep apnea",
+  "ontology_name": "doid",
+  "ontology_prefix": "DOID",
+  "ontology_iri": "http://purl.obolibrary.org/obo/doid.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "DOID_9220",
+  "obo_id": "DOID:9220",
+  "in_subset": [
+    "NCIthesaurus"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A sleep apnea that is characterized by a malfunction of the basic neurological controls for breathing rate and the failure to give the signal to inhale, causing the individual to miss one or more cycles of breathing.",
+      "oboXrefs": [
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "url",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "MESH",
+      "id": "D020182",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D020182"
+    },
+    {
+      "database": "MIM",
+      "id": "107640",
+      "description": null,
+      "url": "https://omim.org/MIM:107640"
+    },
+    {
+      "database": "MIM",
+      "id": "207720",
+      "description": null,
+      "url": "https://omim.org/MIM:207720"
+    },
+    {
+      "database": "NCI",
+      "id": "C116046",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C116046"
+    },
+    {
+      "database": "UMLS_CUI",
+      "id": "C0520680",
+      "description": null,
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0520680"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9220?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9220/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9220/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9220/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9220/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9220/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/doid/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FDOID_9220/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

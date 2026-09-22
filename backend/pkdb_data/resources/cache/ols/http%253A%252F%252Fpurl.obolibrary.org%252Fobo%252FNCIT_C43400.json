@@ -1,0 +1,93 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C43400",
+  "lang": "en",
+  "description": [
+    "Denotes the inhabitants of Thailand, a person from there, or their descendants elsewhere."
+  ],
+  "synonyms": [
+    "THAI",
+    "Thai"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A person having origins in any of the original peoples of Thailand."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "Legacy Concept Name": [
+      "Thai"
+    ],
+    "Preferred_Name": [
+      "Thai"
+    ],
+    "Semantic_Type": [
+      "Population Group"
+    ],
+    "UMLS_CUI": [
+      "C0337910"
+    ],
+    "code": [
+      "C43400"
+    ]
+  },
+  "label": "Thai",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C43400",
+  "obo_id": "NCIT:C43400",
+  "in_subset": [
+    "NCIT_C128689",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C77527"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "THAI",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Thai",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43400?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43400/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43400/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43400/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43400/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43400/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C43400/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

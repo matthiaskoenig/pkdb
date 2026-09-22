@@ -1,0 +1,359 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_18276",
+  "lang": "en",
+  "description": [
+    "An elemental molecule consisting of two hydrogens joined by a single bond."
+  ],
+  "synonyms": [
+    "dihydrogen",
+    "E 949",
+    "E-949",
+    "E949",
+    "H2",
+    "Hydrogen",
+    "molecular hydrogen"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "H2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:13350",
+      "CHEBI:25363",
+      "CHEBI:5785"
+    ],
+    "has_dbxref": [
+      "CAS:1333-74-0",
+      "Gmelin:3",
+      "HMDB:HMDB0001362",
+      "KEGG:C00282",
+      "MetaCyc:HYDROGEN-MOLECULE",
+      "MolBase:748",
+      "PMID:15303745",
+      "PMID:16517646",
+      "PMID:18706888",
+      "PMID:19905000",
+      "PMID:19908827",
+      "PMID:20568549",
+      "PMID:24171421",
+      "Reaxys:3587189",
+      "Wikipedia:Hydrogen"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:18276"
+    ],
+    "inchi": [
+      "InChI=1S/H2/h1H"
+    ],
+    "inchikey": [
+      "UFHFLCQGNIYNRP-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "2.01588"
+    ],
+    "monoisotopicmass": [
+      "2.01565"
+    ],
+    "smiles": [
+      "[H][H]"
+    ]
+  },
+  "label": "dihydrogen",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_18276",
+  "obo_id": "CHEBI:18276",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "1333-74-0",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "1333-74-0",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "1333-74-0",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Gmelin",
+      "id": "3",
+      "description": "Gmelin",
+      "url": null
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0001362",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0001362"
+    },
+    {
+      "database": "KEGG",
+      "id": "C00282",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C00282"
+    },
+    {
+      "database": "MetaCyc",
+      "id": "HYDROGEN-MOLECULE",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MolBase",
+      "id": "748",
+      "description": null,
+      "url": "http://www.molbase.com/en/index.php?app=search&search_keyword=748"
+    },
+    {
+      "database": "PMID",
+      "id": "15303745",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15303745"
+    },
+    {
+      "database": "PMID",
+      "id": "16517646",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16517646"
+    },
+    {
+      "database": "PMID",
+      "id": "18706888",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18706888"
+    },
+    {
+      "database": "PMID",
+      "id": "19905000",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19905000"
+    },
+    {
+      "database": "PMID",
+      "id": "19908827",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19908827"
+    },
+    {
+      "database": "PMID",
+      "id": "20568549",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20568549"
+    },
+    {
+      "database": "PMID",
+      "id": "24171421",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24171421"
+    },
+    {
+      "database": "Reaxys",
+      "id": "3587189",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Hydrogen",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Hydrogen"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "dihydrogen",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dihydrogen",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E 949",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E-949",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "E949",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H2",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Hydrogen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "molecular hydrogen",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18276?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18276/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18276/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18276/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18276/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18276/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18276/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18276/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18276/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18276/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18276/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18276/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

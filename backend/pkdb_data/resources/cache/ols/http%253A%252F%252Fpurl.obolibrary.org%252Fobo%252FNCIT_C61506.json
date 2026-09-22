@@ -1,0 +1,128 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C61506",
+  "lang": "en",
+  "description": [
+    "A naturally occurring, indigestible and non-absorbable oligosaccharide produced by certain plants with prebiotic and potential anticancer activity. Inulin stimulates the growth of beneficial bacteria in the colon, including Bifidobacteria and Lactobacilli, thereby modulating the composition of microflora. This creates an environment that protects against pathogens, toxins and carcinogens, which can cause inflammation and cancer. In addition, fermentation of inulin leads to an increase in short-chain fatty acids and lactic acid production, thereby reducing colonic pH, which may further control pathogenic bacteria growth and may contribute to inulin's cancer protective properties."
+  ],
+  "synonyms": [
+    "INULIN",
+    "Inulin"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Class of oligosaccharides produced by plants that are polymers mainly comprised of fructose (generally 2 to 140) units usually with a glucose end. These units are joined by beta-(2-1) glycosidic links."
+    ],
+    "CAS_Registry": [
+      "9005-80-5"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:15443"
+    ],
+    "Chemical_Formula": [
+      "C18H32O16(C6H10O5)n"
+    ],
+    "Contributing_Source": [
+      "CRCH",
+      "FDA",
+      "GDC"
+    ],
+    "FDA_UNII_Code": [
+      "JOS53KRJ01"
+    ],
+    "INFOODS": [
+      "INULN"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Inulin"
+    ],
+    "Maps_To": [
+      "Inulin"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "486745"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "486745"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "486745"
+    ],
+    "Preferred_Name": [
+      "Inulin"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0021936"
+    ],
+    "code": [
+      "C61506"
+    ]
+  },
+  "label": "Inulin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C61506",
+  "obo_id": "NCIT:C61506",
+  "in_subset": [
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C176424",
+    "NCIT_C177537",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "INULIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Inulin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61506?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61506/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61506/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61506/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61506/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61506/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61506/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,406 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_100241",
+  "lang": "en",
+  "description": [
+    "A  quinolone that is quinolin-4(1H)-one bearing cyclopropyl, carboxylic acid, fluoro and piperazin-1-yl substituents at positions 1, 3, 6 and 7, respectively."
+  ],
+  "synonyms": [
+    "1-cyclopropyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydroquinoline-3-carboxylic acid",
+    "Ciprofloxacin",
+    "ciprofloxacin",
+    "1-CYCLOPROPYL-6-FLUORO-4-OXO-7-PIPERAZIN-1-YL-1,4-DIHYDROQUINOLINE-3-CARBOXYLIC ACID",
+    "1-Cyclopropyl-6-fluoro-4-oxo-7-piperazin-1-yl-1,4-dihydro-quinoline-3-carboxylic acid",
+    "1-Cyclopropyl-6-fluoro-7-(4-methyl-piperazin-1-yl)-4-oxo-1,4-dihydro-quinoline-3-carboxylic acid",
+    "1-cyclopropyl-6-fluoro-1,4-dihydro-4-oxo-7-(1-piperazinyl)-3-quinolinecarboxylic acid",
+    "1-cyclopropyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydroquinoline-3-carboxylic acid",
+    "1-cyclopropyl-6-fluoro-4-oxo-7-piperazin-1-ylquinoline-3-carboxylic acid",
+    "1-cyclopropyl-6-fluoro-7-hexahydro-1-pyrazinyl-4-oxo-1,4-dihydro-3-quinolinecarboxylic acid",
+    "ciprofloxacin",
+    "ciprofloxacine",
+    "ciprofloxacino",
+    "ciprofloxacinum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C17H18FN3O3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:102718",
+      "CHEBI:3717",
+      "CHEBI:41638"
+    ],
+    "has_dbxref": [
+      "CAS:85721-33-1",
+      "DrugBank:DB00537",
+      "Drug_Central:659",
+      "HMDB:HMDB0014677",
+      "KEGG:C05349",
+      "KEGG:D00186",
+      "LINCS:LSM-5226",
+      "PDBeChem:CPF",
+      "PMID:10397494",
+      "PMID:10737746",
+      "Patent:DE3142854",
+      "Patent:US4670444",
+      "Reaxys:3568352",
+      "VSDB:1763",
+      "Wikipedia:Ciprofloxacin"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:100241"
+    ],
+    "inchi": [
+      "InChI=1S/C17H18FN3O3/c18-13-7-11-14(8-15(13)20-5-3-19-4-6-20)21(10-1-2-10)9-12(16(11)22)17(23)24/h7-10,19H,1-6H2,(H,23,24)"
+    ],
+    "inchikey": [
+      "MYSWGUAQZAJSOK-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "331.34150"
+    ],
+    "monoisotopicmass": [
+      "331.13322"
+    ],
+    "smiles": [
+      "OC(=O)c1cn(C2CC2)c2cc(N3CCNCC3)c(F)cc2c1=O"
+    ]
+  },
+  "label": "ciprofloxacin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_100241",
+  "obo_id": "CHEBI:100241",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "85721-33-1",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "85721-33-1",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00537",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00537"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "659",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/659"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014677",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014677"
+    },
+    {
+      "database": "KEGG",
+      "id": "C05349",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C05349"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00186",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00186"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5226",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "CPF",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/CPF"
+    },
+    {
+      "database": "PMID",
+      "id": "10397494",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10397494"
+    },
+    {
+      "database": "PMID",
+      "id": "10737746",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10737746"
+    },
+    {
+      "database": "Patent",
+      "id": "DE3142854",
+      "description": null,
+      "url": "https://www.google.com/patents/DE3142854"
+    },
+    {
+      "database": "Patent",
+      "id": "US4670444",
+      "description": null,
+      "url": "https://www.google.com/patents/US4670444"
+    },
+    {
+      "database": "Reaxys",
+      "id": "3568352",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "VSDB",
+      "id": "1763",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1763.htm"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Ciprofloxacin",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Ciprofloxacin"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1-cyclopropyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydroquinoline-3-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ciprofloxacin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ciprofloxacin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-CYCLOPROPYL-6-FLUORO-4-OXO-7-PIPERAZIN-1-YL-1,4-DIHYDROQUINOLINE-3-CARBOXYLIC ACID",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Cyclopropyl-6-fluoro-4-oxo-7-piperazin-1-yl-1,4-dihydro-quinoline-3-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-Cyclopropyl-6-fluoro-7-(4-methyl-piperazin-1-yl)-4-oxo-1,4-dihydro-quinoline-3-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-cyclopropyl-6-fluoro-1,4-dihydro-4-oxo-7-(1-piperazinyl)-3-quinolinecarboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-cyclopropyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydroquinoline-3-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-cyclopropyl-6-fluoro-4-oxo-7-piperazin-1-ylquinoline-3-carboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1-cyclopropyl-6-fluoro-7-hexahydro-1-pyrazinyl-4-oxo-1,4-dihydro-3-quinolinecarboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ciprofloxacin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ciprofloxacine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ciprofloxacino",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ciprofloxacinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100241?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100241/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100241/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100241/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100241/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100241/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100241/graph"
+    },
+    "is_conjugate_base_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100241/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_base_of"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100241/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_tautomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_100241/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_tautomer_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

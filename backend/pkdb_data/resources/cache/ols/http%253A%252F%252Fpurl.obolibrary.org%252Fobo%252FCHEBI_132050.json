@@ -1,0 +1,487 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_132050",
+  "lang": "en",
+  "description": [
+    "A racemate comprising equimolar amounts of (R)- and (S)-norverapamil. The major active metabolite of verapamil."
+  ],
+  "synonyms": [
+    "rac-2-(3,4-dimethoxyphenyl)-5-{[2-(3,4-dimethoxyphenyl)ethyl]amino}-2-(propan-2-yl)pentanenitrile",
+    "(+-)-norverapamil",
+    "(RS)-2-(3,4-dimethoxyphenyl)-5-{[2-(3,4-dimethoxyphenyl)ethyl]amino}-2-(propan-2-yl)pentanenitrile",
+    "(RS)-norverapamil",
+    "5-((3,4-Dimethoxyphenethyl)amino)-2-(3,4-dimethoxyphenyl)-2-isopropylvaleronitrile",
+    "alpha-(3-((2-(3,4-Dimethoxyphenyl)ethyl)amino)propyl)-3,4-dimethoxy-alpha-(1-methylethyl)benzeneacetonitrile",
+    "desmethylverapamil",
+    "rac-norverapamil"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C26H36N2O4"
+    ],
+    "has_dbxref": [
+      "CAS:67018-85-3",
+      "Chemspider:94724",
+      "HMDB:HMDB0060540",
+      "PMID:10336579",
+      "PMID:10613599",
+      "PMID:10701911",
+      "PMID:11377051",
+      "PMID:11456122",
+      "PMID:11777750",
+      "PMID:11996822",
+      "PMID:12016885",
+      "PMID:15563760",
+      "PMID:15918524",
+      "PMID:16013069",
+      "PMID:16892180",
+      "PMID:17981422",
+      "PMID:18193210",
+      "PMID:18806964",
+      "PMID:19746412",
+      "PMID:19898809",
+      "PMID:20166433",
+      "PMID:20604832",
+      "PMID:21135265",
+      "PMID:22300394",
+      "PMID:22677487",
+      "PMID:23757929",
+      "PMID:23916407",
+      "PMID:24044638",
+      "PMID:24532601",
+      "PMID:25237334",
+      "PMID:25571292",
+      "PMID:25650380",
+      "PMID:26265240",
+      "PMID:26643325",
+      "PMID:27457673",
+      "PMID:27750166",
+      "PMID:8554934",
+      "PMID:9572542",
+      "PMID:9613945",
+      "Reaxys:5458977",
+      "Wikipedia:Norverapamil"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:132050"
+    ],
+    "mass": [
+      "440.576"
+    ],
+    "monoisotopicmass": [
+      "440.26751"
+    ]
+  },
+  "label": "norverapamil",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_132050",
+  "obo_id": "CHEBI:132050",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "67018-85-3",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "67018-85-3",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "Chemspider",
+      "id": "94724",
+      "description": null,
+      "url": "http://www.chemspider.com/Chemical-Structure.94724.html"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0060540",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0060540"
+    },
+    {
+      "database": "PMID",
+      "id": "10336579",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10336579"
+    },
+    {
+      "database": "PMID",
+      "id": "10613599",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10613599"
+    },
+    {
+      "database": "PMID",
+      "id": "10701911",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10701911"
+    },
+    {
+      "database": "PMID",
+      "id": "11377051",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11377051"
+    },
+    {
+      "database": "PMID",
+      "id": "11456122",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11456122"
+    },
+    {
+      "database": "PMID",
+      "id": "11777750",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11777750"
+    },
+    {
+      "database": "PMID",
+      "id": "11996822",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11996822"
+    },
+    {
+      "database": "PMID",
+      "id": "12016885",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12016885"
+    },
+    {
+      "database": "PMID",
+      "id": "15563760",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15563760"
+    },
+    {
+      "database": "PMID",
+      "id": "15918524",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15918524"
+    },
+    {
+      "database": "PMID",
+      "id": "16013069",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16013069"
+    },
+    {
+      "database": "PMID",
+      "id": "16892180",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16892180"
+    },
+    {
+      "database": "PMID",
+      "id": "17981422",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17981422"
+    },
+    {
+      "database": "PMID",
+      "id": "18193210",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18193210"
+    },
+    {
+      "database": "PMID",
+      "id": "18806964",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18806964"
+    },
+    {
+      "database": "PMID",
+      "id": "19746412",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19746412"
+    },
+    {
+      "database": "PMID",
+      "id": "19898809",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19898809"
+    },
+    {
+      "database": "PMID",
+      "id": "20166433",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20166433"
+    },
+    {
+      "database": "PMID",
+      "id": "20604832",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20604832"
+    },
+    {
+      "database": "PMID",
+      "id": "21135265",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21135265"
+    },
+    {
+      "database": "PMID",
+      "id": "22300394",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22300394"
+    },
+    {
+      "database": "PMID",
+      "id": "22677487",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22677487"
+    },
+    {
+      "database": "PMID",
+      "id": "23757929",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23757929"
+    },
+    {
+      "database": "PMID",
+      "id": "23916407",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23916407"
+    },
+    {
+      "database": "PMID",
+      "id": "24044638",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24044638"
+    },
+    {
+      "database": "PMID",
+      "id": "24532601",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24532601"
+    },
+    {
+      "database": "PMID",
+      "id": "25237334",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25237334"
+    },
+    {
+      "database": "PMID",
+      "id": "25571292",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25571292"
+    },
+    {
+      "database": "PMID",
+      "id": "25650380",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25650380"
+    },
+    {
+      "database": "PMID",
+      "id": "26265240",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26265240"
+    },
+    {
+      "database": "PMID",
+      "id": "26643325",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26643325"
+    },
+    {
+      "database": "PMID",
+      "id": "27457673",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27457673"
+    },
+    {
+      "database": "PMID",
+      "id": "27750166",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27750166"
+    },
+    {
+      "database": "PMID",
+      "id": "8554934",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8554934"
+    },
+    {
+      "database": "PMID",
+      "id": "9572542",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9572542"
+    },
+    {
+      "database": "PMID",
+      "id": "9613945",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9613945"
+    },
+    {
+      "database": "Reaxys",
+      "id": "5458977",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Norverapamil",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Norverapamil"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "rac-2-(3,4-dimethoxyphenyl)-5-{[2-(3,4-dimethoxyphenyl)ethyl]amino}-2-(propan-2-yl)pentanenitrile",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(+-)-norverapamil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(RS)-2-(3,4-dimethoxyphenyl)-5-{[2-(3,4-dimethoxyphenyl)ethyl]amino}-2-(propan-2-yl)pentanenitrile",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(RS)-norverapamil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-((3,4-Dimethoxyphenethyl)amino)-2-(3,4-dimethoxyphenyl)-2-isopropylvaleronitrile",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "alpha-(3-((2-(3,4-Dimethoxyphenyl)ethyl)amino)propyl)-3,4-dimethoxy-alpha-(1-methylethyl)benzeneacetonitrile",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "desmethylverapamil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "rac-norverapamil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132050?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132050/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132050/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132050/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132050/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132050/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132050/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132050/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_part": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_132050/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000051"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

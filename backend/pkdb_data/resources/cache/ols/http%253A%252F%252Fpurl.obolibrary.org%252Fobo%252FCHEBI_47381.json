@@ -1,0 +1,376 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_47381",
+  "lang": "en",
+  "description": [
+    "A monocarboxylic acid consisting of phenylacetic acid having a (2,6-dichlorophenyl)amino group at the 2-position."
+  ],
+  "synonyms": [
+    "2-[(2,6-dichlorophenyl)amino]benzeneacetic acid",
+    "Diclofenac",
+    "{2-[(2,6-dichlorophenyl)amino]phenyl}acetic acid",
+    "2-((2,6-dichlorophenyl)amino)benzeneacetic acid",
+    "[2-(2,6-dichloroanilino)phenyl]acetic acid",
+    "diclofenac",
+    "diclofenac acid",
+    "diclofenaco",
+    "diclofenacum",
+    "diclofenamic acid"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C14H11Cl2NO2"
+    ],
+    "has_alternative_id": [
+      "CHEBI:4507",
+      "CHEBI:47380"
+    ],
+    "has_dbxref": [
+      "CAS:15307-86-5",
+      "DrugBank:DB00586",
+      "Drug_Central:865",
+      "HMDB:HMDB0014724",
+      "KEGG:C01690",
+      "KEGG:D07816",
+      "LINCS:LSM-2160",
+      "PDBeChem:DIF",
+      "PMID:11322639",
+      "PMID:1502708",
+      "PMID:23777257",
+      "PMID:27967303",
+      "PMID:7838674",
+      "Patent:NL6604752",
+      "Patent:US3558690",
+      "Reaxys:2146636",
+      "VSDB:1933",
+      "Wikipedia:Diclofenac"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:47381"
+    ],
+    "inchi": [
+      "InChI=1S/C14H11Cl2NO2/c15-10-5-3-6-11(16)14(10)17-12-7-2-1-4-9(12)8-13(18)19/h1-7,17H,8H2,(H,18,19)"
+    ],
+    "inchikey": [
+      "DCOPUUMXTXDBNB-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "296.150"
+    ],
+    "monoisotopicmass": [
+      "295.01668"
+    ],
+    "smiles": [
+      "C1(Cl)=CC=CC(=C1NC2=CC=CC=C2CC(=O)O)Cl"
+    ]
+  },
+  "label": "diclofenac",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_47381",
+  "obo_id": "CHEBI:47381",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "15307-86-5",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "15307-86-5",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "15307-86-5",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00586",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00586"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "865",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/865"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014724",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014724"
+    },
+    {
+      "database": "KEGG",
+      "id": "C01690",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C01690"
+    },
+    {
+      "database": "KEGG",
+      "id": "D07816",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D07816"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-2160",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "DIF",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/DIF"
+    },
+    {
+      "database": "PMID",
+      "id": "11322639",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11322639"
+    },
+    {
+      "database": "PMID",
+      "id": "1502708",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/1502708"
+    },
+    {
+      "database": "PMID",
+      "id": "23777257",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23777257"
+    },
+    {
+      "database": "PMID",
+      "id": "27967303",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27967303"
+    },
+    {
+      "database": "PMID",
+      "id": "7838674",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7838674"
+    },
+    {
+      "database": "Patent",
+      "id": "NL6604752",
+      "description": null,
+      "url": "https://www.google.com/patents/NL6604752"
+    },
+    {
+      "database": "Patent",
+      "id": "US3558690",
+      "description": null,
+      "url": "https://www.google.com/patents/US3558690"
+    },
+    {
+      "database": "Reaxys",
+      "id": "2146636",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "VSDB",
+      "id": "1933",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/vsdb/Reports/1933.htm"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Diclofenac",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Diclofenac"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-[(2,6-dichlorophenyl)amino]benzeneacetic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Diclofenac",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "{2-[(2,6-dichlorophenyl)amino]phenyl}acetic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-((2,6-dichlorophenyl)amino)benzeneacetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[2-(2,6-dichloroanilino)phenyl]acetic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diclofenac",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diclofenac acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diclofenaco",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diclofenacum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "diclofenamic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47381?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47381/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47381/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47381/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47381/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47381/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47381/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47381/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47381/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    },
+    "is_conjugate_acid_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_47381/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_acid_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

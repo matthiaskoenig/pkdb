@@ -1,0 +1,174 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_8481",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Propantheline",
+    "probanthine",
+    "propantheline bromide",
+    "propanthelinium"
+  ],
+  "annotation": {
+    "charge": [
+      "+1"
+    ],
+    "formula": [
+      "C23H30NO3"
+    ],
+    "has_dbxref": [
+      "CAS:298-50-0",
+      "Drug_Central:2293",
+      "HMDB:HMDB0014920",
+      "KEGG:C07506",
+      "LINCS:LSM-5959"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:8481"
+    ],
+    "inchi": [
+      "InChI=1S/C23H30NO3/c1-16(2)24(5,17(3)4)14-15-26-23(25)22-18-10-6-8-12-20(18)27-21-13-9-7-11-19(21)22/h6-13,16-17,22H,14-15H2,1-5H3/q+1"
+    ],
+    "inchikey": [
+      "VVWYOYDLCMFIEM-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "368.490"
+    ],
+    "monoisotopicmass": [
+      "368.22202"
+    ],
+    "smiles": [
+      "CC(C)[N+](C)(CCOC(=O)C1c2ccccc2Oc2ccccc12)C(C)C"
+    ]
+  },
+  "label": "Propantheline",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_8481",
+  "obo_id": "CHEBI:8481",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "298-50-0",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2293",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2293"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014920",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014920"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07506",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07506"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5959",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Propantheline",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "probanthine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "propantheline bromide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "propanthelinium",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugCentral",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8481?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8481/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8481/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8481/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8481/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8481/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_8481/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

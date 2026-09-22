@@ -1,0 +1,112 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C3096",
+  "lang": "en",
+  "description": [
+    "Acute inflammation of the liver caused by the hepatitis A virus. It is highly contagious and usually contracted through close contact with an infected individual or their feces, contaminated food or water."
+  ],
+  "synonyms": [
+    "Acute Hepatitis A",
+    "Hepatitis A",
+    "Hepatitis A Infection"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CPTAC",
+      "Cellosaurus",
+      "GDC",
+      "NICHD"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C16457",
+      "http://purl.obolibrary.org/obo/NCIT_C17103"
+    ],
+    "Legacy Concept Name": [
+      "Hepatitis_A"
+    ],
+    "Maps_To": [
+      "Hepatitis A Infection"
+    ],
+    "Preferred_Name": [
+      "Hepatitis A Infection"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C0019159"
+    ],
+    "code": [
+      "C3096"
+    ]
+  },
+  "label": "Hepatitis A Infection",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C3096",
+  "obo_id": "NCIT:C3096",
+  "in_subset": [
+    "NCIT_C156952",
+    "NCIT_C157711",
+    "NCIT_C158035",
+    "NCIT_C158520",
+    "NCIT_C165258",
+    "NCIT_C177537",
+    "NCIT_C192842",
+    "NCIT_C90259",
+    "NCIT_C96388"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Acute Hepatitis A",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hepatitis A",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Hepatitis A Infection",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3096?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3096/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3096/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3096/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3096/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3096/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3096/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

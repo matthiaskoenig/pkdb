@@ -1,0 +1,146 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C227",
+  "lang": "en",
+  "description": [
+    "A triazolobenzodiazepine agent with anxiolytic, sedative-hypnotic and anticonvulsant activities. Alprazolam binds to a specific site distinct from the inhibitory neurotransmitter gamma-aminobutyric acid (GABA) binding site on the benzodiazepine-GABA-A-chloride ionophore receptor complex located in the limbic, thalamic and hypothalamic regions of the central nervous system (CNS). This binding causes an allosteric modification of the receptor and enhances the affinity of GABA to the receptor leading to an increase in the frequency of chloride-channel opening events. This leads to an increase in chloride ion conductance, neuronal hyperpolarization, inhibition of the action potential and leads to a decrease in neuronal excitability."
+  ],
+  "synonyms": [
+    "ALPRAZOLAM",
+    "Alprazolam",
+    "Apo-Alpzar",
+    "Nu-Alpraz",
+    "Xanax",
+    "alprazolam"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to treat anxiety disorders and panic attacks. It is being studied in the treatment of nausea and vomiting caused by some cancer treatments. It is a type of benzodiazepine."
+    ],
+    "CAS_Registry": [
+      "28981-97-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:2611"
+    ],
+    "Chemical_Formula": [
+      "C17H13ClN4"
+    ],
+    "Contributing_Source": [
+      "FDA",
+      "HemOnc"
+    ],
+    "FDA_UNII_Code": [
+      "YU55MQ3IZY"
+    ],
+    "Legacy Concept Name": [
+      "Alprazolam"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "39659"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "39659"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "39659"
+    ],
+    "Preferred_Name": [
+      "Alprazolam"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0002333"
+    ],
+    "code": [
+      "C227"
+    ]
+  },
+  "label": "Alprazolam",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C227",
+  "obo_id": "NCIT:C227",
+  "in_subset": [
+    "NCIT_C176424",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "ALPRAZOLAM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Alprazolam",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Apo-Alpzar",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Nu-Alpraz",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Xanax",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "alprazolam",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C227?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C227/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C227/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C227/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C227/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C227/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C227/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C227/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

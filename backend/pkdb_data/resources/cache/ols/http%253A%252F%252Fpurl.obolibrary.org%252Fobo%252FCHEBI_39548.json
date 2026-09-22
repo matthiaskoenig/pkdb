@@ -1,0 +1,343 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_39548",
+  "lang": "en",
+  "description": [
+    "A dihydroxy monocarboxylic acid that is a member of the drug class known as statins, used primarily for lowering blood cholesterol and for preventing cardiovascular diseases."
+  ],
+  "synonyms": [
+    "(3R,5R)-7-[3-(anilinocarbonyl)-5-(4-fluorophenyl)-4-phenyl-2-(propan-2-yl)-1H-pyrrol-1-yl]-3,5-dihydroxyheptanoic acid",
+    "Atorvastatin",
+    "(R-(R*,R*))-2-(4-Fluorophenyl)-beta,delta-dihydroxy-5-(1-methylethyl)-3-phenyl-4-((phenylamino)carbonyl)-1H-pyrrole-1-heptanoic acid",
+    "7-[2-(4-FLUORO-PHENYL)-5-ISOPROPYL-3-PHENYL-4-PHENYLCARBAMOYL-PYRROL-1-YL]-3,5-DIHYDROXY-HEPTANOIC ACID",
+    "Atorlip",
+    "atorvastatin",
+    "atorvastatina",
+    "atorvastatine",
+    "atorvastatinum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C33H35FN2O5"
+    ],
+    "has_alternative_id": [
+      "CHEBI:2910",
+      "CHEBI:39538",
+      "CHEBI:94450"
+    ],
+    "has_dbxref": [
+      "Beilstein:8373630",
+      "CAS:134523-00-5",
+      "DrugBank:DB01076",
+      "Drug_Central:257",
+      "HMDB:HMDB0005006",
+      "KEGG:C06834",
+      "KEGG:D07474",
+      "LINCS:LSM-5771",
+      "PDBeChem:117",
+      "PMID:11693468",
+      "PMID:15012735",
+      "PMID:18720283",
+      "Patent:EP409281",
+      "Patent:US5273995",
+      "Reaxys:8373630",
+      "Wikipedia:Atorvastatin"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:39548"
+    ],
+    "inchi": [
+      "InChI=1S/C33H35FN2O5/c1-21(2)31-30(33(41)35-25-11-7-4-8-12-25)29(22-9-5-3-6-10-22)32(23-13-15-24(34)16-14-23)36(31)18-17-26(37)19-27(38)20-28(39)40/h3-16,21,26-27,37-38H,17-20H2,1-2H3,(H,35,41)(H,39,40)/t26-,27-/m1/s1"
+    ],
+    "inchikey": [
+      "XUKUURHRXDUEBC-KAYWLYCHSA-N"
+    ],
+    "mass": [
+      "558.650"
+    ],
+    "monoisotopicmass": [
+      "558.25300"
+    ],
+    "smiles": [
+      "CC(C)C1=C(C(=O)NC2=CC=CC=C2)C(=C(N1CC[C@@H](O)C[C@@H](O)CC(O)=O)C1=CC=C(F)C=C1)C1=CC=CC=C1"
+    ]
+  },
+  "label": "atorvastatin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_39548",
+  "obo_id": "CHEBI:39548",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Beilstein",
+      "id": "8373630",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "134523-00-5",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "134523-00-5",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB01076",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB01076"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "257",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/257"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0005006",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0005006"
+    },
+    {
+      "database": "KEGG",
+      "id": "C06834",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C06834"
+    },
+    {
+      "database": "KEGG",
+      "id": "D07474",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D07474"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5771",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "117",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/117"
+    },
+    {
+      "database": "PMID",
+      "id": "11693468",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11693468"
+    },
+    {
+      "database": "PMID",
+      "id": "15012735",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15012735"
+    },
+    {
+      "database": "PMID",
+      "id": "18720283",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18720283"
+    },
+    {
+      "database": "Patent",
+      "id": "EP409281",
+      "description": null,
+      "url": "https://www.google.com/patents/EP409281"
+    },
+    {
+      "database": "Patent",
+      "id": "US5273995",
+      "description": null,
+      "url": "https://www.google.com/patents/US5273995"
+    },
+    {
+      "database": "Reaxys",
+      "id": "8373630",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Atorvastatin",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Atorvastatin"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3R,5R)-7-[3-(anilinocarbonyl)-5-(4-fluorophenyl)-4-phenyl-2-(propan-2-yl)-1H-pyrrol-1-yl]-3,5-dihydroxyheptanoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Atorvastatin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R-(R*,R*))-2-(4-Fluorophenyl)-beta,delta-dihydroxy-5-(1-methylethyl)-3-phenyl-4-((phenylamino)carbonyl)-1H-pyrrole-1-heptanoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "7-[2-(4-FLUORO-PHENYL)-5-ISOPROPYL-3-PHENYL-4-PHENYLCARBAMOYL-PYRROL-1-YL]-3,5-DIHYDROXY-HEPTANOIC ACID",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Atorlip",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "atorvastatin",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "atorvastatina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "atorvastatine",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "atorvastatinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39548?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39548/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39548/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39548/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39548/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39548/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39548/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39548/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39548/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    },
+    "is_conjugate_acid_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39548/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_acid_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

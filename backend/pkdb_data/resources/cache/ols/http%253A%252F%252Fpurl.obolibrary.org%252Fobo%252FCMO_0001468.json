@@ -1,0 +1,112 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CMO_0001468",
+  "lang": "en",
+  "description": [
+    "Measurement of the size of the three dimensional space occupied by the liver, the large, dark-red organ located in the cranial portion of the abdomen of vertebrates, just behind or below the diaphragm, the functions of which include storage and filtration of blood; secretion of bile; detoxification of noxious substances; conversion of sugars into glycogen; synthesis and breakdown of fats and temporary storage of fatty acids; and synthesis of serum proteins."
+  ],
+  "synonyms": [
+    "liver lobe volume"
+  ],
+  "annotation": {
+    "created_by": [
+      "JSmith"
+    ],
+    "creation_date": [
+      "2013-01-21T12:26:44Z"
+    ],
+    "has_dbxref": [
+      "EFO:0600048",
+      "PMID:32156510"
+    ],
+    "has_obo_namespace": [
+      "clinical_measurement_ontology"
+    ],
+    "id": [
+      "CMO:0001468"
+    ]
+  },
+  "label": "liver volume",
+  "ontology_name": "cmo",
+  "ontology_prefix": "CMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/cmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CMO_0001468",
+  "obo_id": "CMO:0001468",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "Measurement of the size of the three dimensional space occupied by the liver, the large, dark-red organ located in the cranial portion of the abdomen of vertebrates, just behind or below the diaphragm, the functions of which include storage and filtration of blood; secretion of bile; detoxification of noxious substances; conversion of sugars into glycogen; synthesis and breakdown of fats and temporary storage of fatty acids; and synthesis of serum proteins.",
+      "oboXrefs": [
+        {
+          "database": "American_Heritage",
+          "id": "The_American_Heritage_Science_Dictionary_2005",
+          "description": null,
+          "url": null
+        },
+        {
+          "database": "Saunders",
+          "id": "Saunders_Comprehensive_Veterinary_Dictionary--3rd_Ed",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0600048",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0600048"
+    },
+    {
+      "database": "PMID",
+      "id": "32156510",
+      "description": null,
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32156510"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0001468?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0001468/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0001468/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0001468/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0001468/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0001468/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0001468/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0001468/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0001468/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0001468/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0001468/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,323 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000712",
+  "lang": "en",
+  "description": [
+    "A group of pathological conditions characterized by sudden, non-convulsive loss of neurological function due to BRAIN ISCHEMIA or INTRACRANIAL HEMORRHAGES. Stroke is classified by the type of tissue NECROSIS, such as the anatomic location, vasculature involved, etiology, age of the affected individual, and hemorrhagic vs. non-hemorrhagic nature. (From Adams et al., Principles of Neurology, 6th ed, pp777-810)",
+    "A sudden loss of neurological function secondary to hemorrhage or ischemia in the brain parenchyma due to a vascular event.",
+    "A sudden, nonconvulsive loss of neurologic function due to an ischemic or hemorrhagic intracranial vascular event. In general, cerebrovascular accidents are classified by anatomic location in the brain, vascular distribution, etiology, age of the affected individual, and hemorrhagic vs. nonhemorrhagic nature (MeSH).",
+    "A sudden, nonconvulsive loss of neurologic function due to an ischemic or hemorrhagic intracranial vascular event. In general, cerebrovascular accidents are classified by anatomic location in the brain, vascular distribution, etiology, age of the affected individual, and hemorrhagic vs. nonhemorrhagic nature. (From Adams et al., Principles of Neurology, 6th ed, pp777-810)",
+    "Tissue NECROSIS in any area of the brain, including the CEREBRAL HEMISPHERES, the CEREBELLUM, and the BRAIN STEM. Brain infarction is the result of a cascade of events initiated by inadequate blood flow through the brain that is followed by HYPOXIA and HYPOGLYCEMIA in brain tissue. Damage may be temporary, permanent, selective or pan-necrosis."
+  ],
+  "synonyms": [
+    "Acute Cerebrovascular Accident",
+    "Acute Cerebrovascular Accidents",
+    "Acute Stroke",
+    "Acute Strokes",
+    "Apoplexy",
+    "Apoplexy, Cerebrovascular",
+    "Brain Vascular Accident",
+    "Brain Vascular Accidents",
+    "CEREBROVASCULAR ACCIDENT, (CVA)",
+    "CVA",
+    "CVA (Cerebrovascular Accident)",
+    "CVA (cerebral vascular accident)",
+    "CVA - Cerebrovascular accident",
+    "CVA - Cerebrovascular accident unspecified",
+    "CVA, CEREBROVASCULAR ACCIDENT",
+    "CVA, cerebrovascular accident",
+    "CVAs (Cerebrovascular Accident)",
+    "Cerebral Stroke",
+    "Cerebral Strokes",
+    "Cerebrovascular Accident",
+    "Cerebrovascular Accident, Acute",
+    "Cerebrovascular Accidents",
+    "Cerebrovascular Accidents, Acute",
+    "Cerebrovascular Apoplexy",
+    "Cerebrovascular Apoplexya",
+    "Cerebrovascular Stroke",
+    "Cerebrovascular Strokes",
+    "Cerebrovascular accident (disorder)",
+    "Cerebrovascular accident (disorder) [Ambiguous]",
+    "STROKE SYNDROME",
+    "SYNDROME, STROKE",
+    "Stroke NOS",
+    "Stroke NOS (disorder)",
+    "Stroke and cerebrovascular accident unspecified",
+    "Stroke and cerebrovascular accident unspecified (disorder)",
+    "Stroke, Acute",
+    "Stroke, Cerebral",
+    "Stroke, Cerebrovascular",
+    "Stroke/CVA - undefined",
+    "Strokes",
+    "Strokes, Acute",
+    "Strokes, Cerebral",
+    "Strokes, Cerebrovascular",
+    "Vascular Accident, Brain",
+    "Vascular Accidents, Brain",
+    "cerebrovascular accident",
+    "cerebrovascular accident, (CVA)",
+    "ischemic stroke",
+    "stroke",
+    "stroke disorder",
+    "stroke syndrome",
+    "syndrome, stroke",
+    "undetermined stroke",
+    "cerebral infarction"
+  ],
+  "annotation": {
+    "gwas_trait": [
+      true
+    ],
+    "has exact match": [
+      "http://identifiers.org/medgen/52522",
+      "http://identifiers.org/mesh/D020521",
+      "http://identifiers.org/snomedct/230690007",
+      "http://linkedlifedata.com/resource/umls/id/C0038454",
+      "http://purl.obolibrary.org/obo/NCIT_C3390",
+      "http://www.ebi.ac.uk/efo/EFO_0000712"
+    ],
+    "has_dbxref": [
+      "HP:0001297",
+      "ICD10:I64",
+      "MEDGEN:52522",
+      "MESH:D020521",
+      "MONDO:0005098",
+      "MedDRA:10042244",
+      "NCIT:C3390",
+      "NCIt:C3390",
+      "NIFSTD:birnlex_12783",
+      "OMIM:601367",
+      "SCTID:230690007",
+      "SNOMEDCT:230690007",
+      "SNOMEDCT:422504002",
+      "UMLS:C0038454"
+    ],
+    "id": [
+      "EFO:0000712"
+    ],
+    "term editor": [
+      "James Malone",
+      "Tomasz Adamusiak"
+    ]
+  },
+  "label": "stroke",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "EFO_0000712",
+  "obo_id": "EFO:0000712",
+  "in_subset": [
+    "otar"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "A sudden loss of neurological function secondary to hemorrhage or ischemia in the brain parenchyma due to a vascular event.",
+      "oboXrefs": [
+        {
+          "database": "NCIT",
+          "id": "C3390",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C3390"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "HP",
+      "id": "0001297",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/HP_0001297"
+    },
+    {
+      "database": "ICD10",
+      "id": "I64",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/I64"
+    },
+    {
+      "database": "MEDGEN",
+      "id": "52522",
+      "description": "MONDO:equivalentTo",
+      "url": "https://www.ncbi.nlm.nih.gov/medgen/52522"
+    },
+    {
+      "database": "MESH",
+      "id": "D020521",
+      "description": "MONDO:equivalentTo",
+      "url": "http://id.nlm.nih.gov/mesh/D020521"
+    },
+    {
+      "database": "MONDO",
+      "id": "0005098",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MONDO_0005098"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10042244",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10042244"
+    },
+    {
+      "database": "NCIT",
+      "id": "C3390",
+      "description": "MONDO:equivalentTo",
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3390"
+    },
+    {
+      "database": "NCIt",
+      "id": "C3390",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C3390"
+    },
+    {
+      "database": "NIFSTD",
+      "id": "birnlex_12783",
+      "description": "EFO:0000712",
+      "url": null
+    },
+    {
+      "database": "OMIM",
+      "id": "601367",
+      "description": null,
+      "url": "https://omim.org/entry/601367"
+    },
+    {
+      "database": "SCTID",
+      "id": "230690007",
+      "description": "MONDO:equivalentTo",
+      "url": "http://snomed.info/id/230690007"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "230690007",
+      "description": null,
+      "url": "http://snomed.info/id/230690007"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "422504002",
+      "description": null,
+      "url": "http://snomed.info/id/422504002"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0038454",
+      "description": "MONDO:equivalentTo",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0038454"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "CVA",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C3390",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C3390"
+        }
+      ]
+    },
+    {
+      "name": "cerebrovascular accident",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C3390",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C3390"
+        }
+      ]
+    },
+    {
+      "name": "stroke",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C3390",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C3390"
+        }
+      ]
+    },
+    {
+      "name": "stroke disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "stroke syndrome",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCIT",
+          "id": "C3390",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/NCIT_C3390"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/graph"
+    },
+    "disease_has_location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0004026"
+    },
+    "disease_has_major_feature": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fmondo%2523disease_has_major_feature"
+    },
+    "has_disease_location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000712/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000784"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

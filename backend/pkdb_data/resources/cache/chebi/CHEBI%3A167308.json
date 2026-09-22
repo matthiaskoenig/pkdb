@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:167308",
+  "name": "dextromethadone",
+  "definition": "A 6-(dimethylamino)-4,4-diphenylheptan-3-one that has (S)-configuration. It is the less active enantiomer of methadone and has very little activity on opioid receptors and mainly responsible for the inhibition of hERG K+ channels and thus for cardiac toxicity. The drug is currently under clinical development for the treatment of major depressive disorder.",
+  "formula": "C21H27NO",
+  "charge": "0",
+  "mass": "309.453",
+  "inchikey": "USSIQXCVUWKGNF-KRWDZBQOSA-N"
+}

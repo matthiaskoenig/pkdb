@@ -1,0 +1,128 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29399",
+  "lang": "en",
+  "description": [
+    "The sulfate salt form of the quinidine alkaloid isolate quinine. Quinine has many mechanisms of action, including reduction of oxygen intake and carbohydrate metabolism; disruption of DNA replication and transcription via DNA intercalation; and reduction of the excitability of muscle fibers via alteration of calcium distribution.  This agent also inhibits the drug efflux pump P-glycoprotein which is overexpressed in multi-drug resistant tumors and may improve the efficacy of some antineoplastic agents. (NCI04)"
+  ],
+  "synonyms": [
+    "Chininum Sulphuricum",
+    "Cinchonan-9-ol, 6'-methoxy-, (8 alpha,9R)-, Sulfate, Hydrate (2:1:2)",
+    "QUININE SULFATE",
+    "Qualaquin",
+    "Quinine Sulfate"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "207671-44-1"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:52250"
+    ],
+    "Chemical_Formula": [
+      "2C20H24N2O2.2H2O.H2SO4"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "KF7Z0E0Q2B"
+    ],
+    "Has_Free_Acid_Or_Base_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C794"
+    ],
+    "Legacy Concept Name": [
+      "Quinine_Sulfate"
+    ],
+    "NSC Number": [
+      "5362",
+      "667852"
+    ],
+    "Preferred_Name": [
+      "Quinine Sulfate"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0034422"
+    ],
+    "code": [
+      "C29399"
+    ]
+  },
+  "label": "Quinine Sulfate",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29399",
+  "obo_id": "NCIT:C29399",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Chininum Sulphuricum",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cinchonan-9-ol, 6'-methoxy-, (8 alpha,9R)-, Sulfate, Hydrate (2:1:2)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "QUININE SULFATE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Qualaquin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Quinine Sulfate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29399?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29399/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29399/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29399/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29399/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29399/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29399/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

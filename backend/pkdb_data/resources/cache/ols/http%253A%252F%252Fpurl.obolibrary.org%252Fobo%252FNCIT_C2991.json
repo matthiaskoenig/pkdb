@@ -1,0 +1,282 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C2991",
+  "lang": "en",
+  "description": [
+    "Any abnormal condition of the body or mind that causes discomfort, dysfunction, or distress to the person affected or those in contact with the person. The term is often used broadly to include injuries, disabilities, syndromes, symptoms, deviant behaviors, and atypical variations of structure and function."
+  ],
+  "synonyms": [
+    "Condition",
+    "Diagnosis",
+    "Disease",
+    "Disease or Disorder",
+    "Disease or Disorder, Non-Neoplastic",
+    "Diseases",
+    "Diseases and Disorders",
+    "Disorder",
+    "Disorders",
+    "Other Disease",
+    "condition",
+    "disease",
+    "disease term",
+    "disease type",
+    "disease_term",
+    "disease_type",
+    "disorder"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Any abnormal condition of the body or mind that causes discomfort, dysfunction, or distress to the affected person. NOTE: The term is often used broadly to include injuries, disabilities, syndromes, symptoms, deviant behaviors, and atypical variations of structure and function. [After NCI Thesaurus] See also diagnosis.",
+      "In medicine, a health problem with certain characteristics or symptoms."
+    ],
+    "Contributing_Source": [
+      "CDISC-GLOSS",
+      "CTDC",
+      "CTRP",
+      "GDC",
+      "ICDC",
+      "NICHD"
+    ],
+    "Display_Name": [
+      "Disease or Disorder"
+    ],
+    "Has_GDC_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C184783",
+      "http://purl.obolibrary.org/obo/NCIT_C184784",
+      "http://purl.obolibrary.org/obo/NCIT_C3055",
+      "http://purl.obolibrary.org/obo/NCIT_C3059",
+      "http://purl.obolibrary.org/obo/NCIT_C3161",
+      "http://purl.obolibrary.org/obo/NCIT_C3172",
+      "http://purl.obolibrary.org/obo/NCIT_C3208",
+      "http://purl.obolibrary.org/obo/NCIT_C3230",
+      "http://purl.obolibrary.org/obo/NCIT_C3247",
+      "http://purl.obolibrary.org/obo/NCIT_C3262",
+      "http://purl.obolibrary.org/obo/NCIT_C3286",
+      "http://purl.obolibrary.org/obo/NCIT_C3411",
+      "http://purl.obolibrary.org/obo/NCIT_C3422",
+      "http://purl.obolibrary.org/obo/NCIT_C3468",
+      "http://purl.obolibrary.org/obo/NCIT_C3708",
+      "http://purl.obolibrary.org/obo/NCIT_C3709",
+      "http://purl.obolibrary.org/obo/NCIT_C3723",
+      "http://purl.obolibrary.org/obo/NCIT_C3743",
+      "http://purl.obolibrary.org/obo/NCIT_C3784",
+      "http://purl.obolibrary.org/obo/NCIT_C3786",
+      "http://purl.obolibrary.org/obo/NCIT_C3787",
+      "http://purl.obolibrary.org/obo/NCIT_C3792",
+      "http://purl.obolibrary.org/obo/NCIT_C40141",
+      "http://purl.obolibrary.org/obo/NCIT_C4063",
+      "http://purl.obolibrary.org/obo/NCIT_C4197",
+      "http://purl.obolibrary.org/obo/NCIT_C4198",
+      "http://purl.obolibrary.org/obo/NCIT_C4248",
+      "http://purl.obolibrary.org/obo/NCIT_C43234",
+      "http://purl.obolibrary.org/obo/NCIT_C4345",
+      "http://purl.obolibrary.org/obo/NCIT_C4463",
+      "http://purl.obolibrary.org/obo/NCIT_C4665",
+      "http://purl.obolibrary.org/obo/NCIT_C48660",
+      "http://purl.obolibrary.org/obo/NCIT_C4972",
+      "http://purl.obolibrary.org/obo/NCIT_C7056",
+      "http://purl.obolibrary.org/obo/NCIT_C7387",
+      "http://purl.obolibrary.org/obo/NCIT_C7539",
+      "http://purl.obolibrary.org/obo/NCIT_C9295",
+      "http://purl.obolibrary.org/obo/NCIT_C9343",
+      "http://purl.obolibrary.org/obo/NCIT_C9357",
+      "http://purl.obolibrary.org/obo/NCIT_C9360"
+    ],
+    "Legacy Concept Name": [
+      "Diseases_and_Disorders"
+    ],
+    "Preferred_Name": [
+      "Disease or Disorder"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C0012634"
+    ],
+    "code": [
+      "C2991"
+    ],
+    "has_dbxref": [
+      "IMDRF:E23"
+    ]
+  },
+  "label": "Disease or Disorder",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C2991",
+  "obo_id": "NCIT:C2991",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118168",
+    "NCIT_C138188",
+    "NCIT_C138189",
+    "NCIT_C157711",
+    "NCIT_C165451",
+    "NCIT_C166373",
+    "NCIT_C173072",
+    "NCIT_C175324",
+    "NCIT_C177536",
+    "NCIT_C61410",
+    "NCIT_C67497",
+    "NCIT_C90259",
+    "NCIT_C99147"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "IMDRF",
+      "id": "E23",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Condition",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Diagnosis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Disease or Disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Disease or Disorder, Non-Neoplastic",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Diseases",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Diseases and Disorders",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Disorders",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Other Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "condition",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "disease term",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "disease type",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "disease_term",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "disease_type",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2991?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2991/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2991/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2991/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2991/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2991/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2991/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2991/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2991/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2991/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2991/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:145330",
+  "name": "1-hydroxymidazolam",
+  "definition": "An imidazobenzodiazepine that is midazolam in which one of the hydrogens of the methyl group is substituted by a hydroxy group. It is the major metabolite of the anesthetic, midazolam.",
+  "formula": "C18H13ClFN3O",
+  "charge": "0",
+  "mass": "341.770",
+  "inchikey": "QHSMEGADRFZVNE-UHFFFAOYSA-N"
+}

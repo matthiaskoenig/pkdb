@@ -1,0 +1,805 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_27470",
+  "lang": "en",
+  "description": [
+    "An N-acyl-amino acid that is a form of the water-soluble vitamin B9. Its biologically active forms (tetrahydrofolate and others) are essential for nucleotide biosynthesis and homocysteine remethylation."
+  ],
+  "synonyms": [
+    "N-(4-{[(2-amino-4-oxo-3,4-dihydropteridin-6-yl)methyl]amino}benzoyl)-L-glutamic acid",
+    "(2S)-2-(4-{[(2-amino-4-oxo-3,4-dihydropteridin-6-yl)methyl]amino}benzamido)pentanedioic acid",
+    "Acfol",
+    "Folate",
+    "Folicet",
+    "Folsaeure",
+    "N-[(4-{[(2-amino-4-oxo-1,4-dihydropteridin-6-yl)methyl]amino}phenyl)carbonyl]-L-glutamic acid",
+    "N-pteroyl-L-glutamic acid",
+    "PGA",
+    "PteGlu",
+    "acide folique",
+    "acido folico",
+    "acidum folicum",
+    "folic acid",
+    "pteroyl-L-glutamic acid",
+    "pteroyl-L-monoglutamic acid",
+    "pteroylglutamic acid",
+    "pteroylmonoglutamic acid",
+    "vitamin B11",
+    "vitamin B9",
+    "vitamin Bc",
+    "vitamin Be",
+    "vitamin M"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C19H19N7O6"
+    ],
+    "has_alternative_id": [
+      "CHEBI:24075",
+      "CHEBI:42610",
+      "CHEBI:5140",
+      "CHEBI:569217"
+    ],
+    "has_dbxref": [
+      "AGR:IND606960789",
+      "CAS:59-30-3",
+      "Chemspider:5815",
+      "DrugBank:DB00158",
+      "Drug_Central:1231",
+      "FooDB:FDB014504",
+      "HMDB:HMDB0000121",
+      "KEGG:C00504",
+      "KEGG:D00070",
+      "KNApSAcK:C00001539",
+      "LINCS:LSM-5355",
+      "MetaCyc:CPD-12826",
+      "PDBeChem:FOL",
+      "PMID:10138938",
+      "PMID:10897644",
+      "PMID:10958818",
+      "PMID:11261364",
+      "PMID:11451208",
+      "PMID:11959400",
+      "PMID:14387833",
+      "PMID:15321809",
+      "PMID:15523939",
+      "PMID:15754725",
+      "PMID:15797531",
+      "PMID:15797685",
+      "PMID:15831910",
+      "PMID:15990733",
+      "PMID:16093404",
+      "PMID:16277678",
+      "PMID:16380297",
+      "PMID:16871332",
+      "PMID:17784727",
+      "PMID:18788725",
+      "PMID:19121630",
+      "PMID:19335717",
+      "PMID:19355913",
+      "PMID:24650098",
+      "PMID:33624660",
+      "PMID:33965562",
+      "PMID:33968971",
+      "PMID:34207319",
+      "PMID:34219855",
+      "PMID:7738698",
+      "PMID:8235383",
+      "PMID:9040515",
+      "PMID:9420019",
+      "PMID:9565830",
+      "PMID:9683174",
+      "PMID:9781393",
+      "PMID:9808640",
+      "PMID:9808641",
+      "Reaxys:100781",
+      "Wikipedia:Folic_Acid"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:27470"
+    ],
+    "inchi": [
+      "InChI=1S/C19H19N7O6/c20-19-25-15-14(17(30)26-19)23-11(8-22-15)7-21-10-3-1-9(2-4-10)16(29)24-12(18(31)32)5-6-13(27)28/h1-4,8,12,21H,5-7H2,(H,24,29)(H,27,28)(H,31,32)(H3,20,22,25,26,30)/t12-/m0/s1"
+    ],
+    "inchikey": [
+      "OVBPIULPVIDEAO-LBPRGKRZSA-N"
+    ],
+    "mass": [
+      "441.39750"
+    ],
+    "monoisotopicmass": [
+      "441.13968"
+    ],
+    "smiles": [
+      "Nc1nc2ncc(CNc3ccc(cc3)C(=O)N[C@@H](CCC(O)=O)C(O)=O)nc2c(=O)[nH]1"
+    ]
+  },
+  "label": "folic acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_27470",
+  "obo_id": "CHEBI:27470",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "AGR",
+      "id": "IND606960789",
+      "description": "Europe PMC",
+      "url": "https://europepmc.org/article/AGR/IND606960789"
+    },
+    {
+      "database": "CAS",
+      "id": "59-30-3",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "59-30-3",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "59-30-3",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Chemspider",
+      "id": "5815",
+      "description": null,
+      "url": "http://www.chemspider.com/Chemical-Structure.5815.html"
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00158",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00158"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1231",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1231"
+    },
+    {
+      "database": "FooDB",
+      "id": "FDB014504",
+      "description": null,
+      "url": "http://foodb.ca/compounds/FDB014504"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0000121",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0000121"
+    },
+    {
+      "database": "KEGG",
+      "id": "C00504",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C00504"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00070",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00070"
+    },
+    {
+      "database": "KNApSAcK",
+      "id": "C00001539",
+      "description": null,
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00001539"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5355",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MetaCyc",
+      "id": "CPD-12826",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "FOL",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/FOL"
+    },
+    {
+      "database": "PMID",
+      "id": "10138938",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10138938"
+    },
+    {
+      "database": "PMID",
+      "id": "10897644",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10897644"
+    },
+    {
+      "database": "PMID",
+      "id": "10958818",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/10958818"
+    },
+    {
+      "database": "PMID",
+      "id": "11261364",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11261364"
+    },
+    {
+      "database": "PMID",
+      "id": "11451208",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11451208"
+    },
+    {
+      "database": "PMID",
+      "id": "11959400",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11959400"
+    },
+    {
+      "database": "PMID",
+      "id": "14387833",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14387833"
+    },
+    {
+      "database": "PMID",
+      "id": "15321809",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15321809"
+    },
+    {
+      "database": "PMID",
+      "id": "15523939",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15523939"
+    },
+    {
+      "database": "PMID",
+      "id": "15754725",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15754725"
+    },
+    {
+      "database": "PMID",
+      "id": "15797531",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15797531"
+    },
+    {
+      "database": "PMID",
+      "id": "15797685",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15797685"
+    },
+    {
+      "database": "PMID",
+      "id": "15831910",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15831910"
+    },
+    {
+      "database": "PMID",
+      "id": "15990733",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15990733"
+    },
+    {
+      "database": "PMID",
+      "id": "16093404",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16093404"
+    },
+    {
+      "database": "PMID",
+      "id": "16277678",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16277678"
+    },
+    {
+      "database": "PMID",
+      "id": "16380297",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16380297"
+    },
+    {
+      "database": "PMID",
+      "id": "16871332",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16871332"
+    },
+    {
+      "database": "PMID",
+      "id": "17784727",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17784727"
+    },
+    {
+      "database": "PMID",
+      "id": "18788725",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18788725"
+    },
+    {
+      "database": "PMID",
+      "id": "19121630",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19121630"
+    },
+    {
+      "database": "PMID",
+      "id": "19335717",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19335717"
+    },
+    {
+      "database": "PMID",
+      "id": "19355913",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19355913"
+    },
+    {
+      "database": "PMID",
+      "id": "24650098",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24650098"
+    },
+    {
+      "database": "PMID",
+      "id": "33624660",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33624660"
+    },
+    {
+      "database": "PMID",
+      "id": "33965562",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33965562"
+    },
+    {
+      "database": "PMID",
+      "id": "33968971",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33968971"
+    },
+    {
+      "database": "PMID",
+      "id": "34207319",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/34207319"
+    },
+    {
+      "database": "PMID",
+      "id": "34219855",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/34219855"
+    },
+    {
+      "database": "PMID",
+      "id": "7738698",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/7738698"
+    },
+    {
+      "database": "PMID",
+      "id": "8235383",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8235383"
+    },
+    {
+      "database": "PMID",
+      "id": "9040515",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9040515"
+    },
+    {
+      "database": "PMID",
+      "id": "9420019",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9420019"
+    },
+    {
+      "database": "PMID",
+      "id": "9565830",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9565830"
+    },
+    {
+      "database": "PMID",
+      "id": "9683174",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9683174"
+    },
+    {
+      "database": "PMID",
+      "id": "9781393",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9781393"
+    },
+    {
+      "database": "PMID",
+      "id": "9808640",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9808640"
+    },
+    {
+      "database": "PMID",
+      "id": "9808641",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/9808641"
+    },
+    {
+      "database": "Reaxys",
+      "id": "100781",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Folic_Acid",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Folic_Acid"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "N-(4-{[(2-amino-4-oxo-3,4-dihydropteridin-6-yl)methyl]amino}benzoyl)-L-glutamic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(2S)-2-(4-{[(2-amino-4-oxo-3,4-dihydropteridin-6-yl)methyl]amino}benzamido)pentanedioic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Acfol",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Folate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Folicet",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Folsaeure",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-[(4-{[(2-amino-4-oxo-1,4-dihydropteridin-6-yl)methyl]amino}phenyl)carbonyl]-L-glutamic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "N-pteroyl-L-glutamic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "PGA",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "PteGlu",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acide folique",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acido folico",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "acidum folicum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "folic acid",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pteroyl-L-glutamic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pteroyl-L-monoglutamic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pteroylglutamic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "pteroylmonoglutamic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vitamin B11",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vitamin B9",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vitamin Bc",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vitamin Be",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "vitamin M",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27470?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27470/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27470/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27470/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27470/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27470/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27470/graph"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27470/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27470/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_conjugate_acid_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_27470/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_acid_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

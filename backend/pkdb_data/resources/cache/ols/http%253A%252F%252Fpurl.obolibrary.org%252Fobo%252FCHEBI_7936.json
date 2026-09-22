@@ -1,0 +1,783 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7936",
+  "lang": "en",
+  "description": [
+    "A benzodioxole that consists of piperidine bearing 1,3-benzodioxol-5-yloxy)methyl and 4-fluorophenyl substituents at positions 3 and 4 respectively; the (3S,4R)-diastereomer. Highly potent and selective 5-HT uptake inhibitor that binds with high affinity to the serotonin transporter (Ki = 0.05 nM). Ki values are 1.1, 350 and 1100 nM for inhibition of [3H]-5-HT, [3H]-l-NA and [3H]-DA uptake respectively. Displays minimal affinity for alpha1-, alpha2- or beta-adrenoceptors, 5-HT2A, 5-HT1A, D2 or H1 receptors at concentrations below 1000 nM, however displays weak affinity for muscarinic ACh receptors (Ki = 42 nM). Antidepressant and anxiolytic in vivo."
+  ],
+  "synonyms": [
+    "(3S,4R)-3-[(1,3-benzodioxol-5-yloxy)methyl]-4-(4-fluorophenyl)piperidine",
+    "Paroxetine",
+    "(-)-(3S,4R)-4-(p-fluorophenyl)-3-((3,4-(methylenedioxy)phenoxy)methyl)piperidine",
+    "(3S-trans)-3-((1,3-benzodioxol-5-yloxy)methyl)-4-(4-fluorophenyl)piperidine",
+    "paroxetina",
+    "paroxetinum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C19H20FNO3"
+    ],
+    "has_dbxref": [
+      "CAS:61869-08-7",
+      "DrugBank:DB00715",
+      "Drug_Central:2068",
+      "KEGG:C07415",
+      "KEGG:D02362",
+      "LINCS:LSM-2843",
+      "PMID:11009210",
+      "PMID:11169163",
+      "PMID:11271409",
+      "PMID:11281965",
+      "PMID:11324355",
+      "PMID:11360029",
+      "PMID:11513198",
+      "PMID:11563413",
+      "PMID:11565622",
+      "PMID:11819027",
+      "PMID:11893234",
+      "PMID:11910269",
+      "PMID:12027788",
+      "PMID:12088162",
+      "PMID:12369443",
+      "PMID:12421645",
+      "PMID:12818234",
+      "PMID:12820211",
+      "PMID:12906023",
+      "PMID:12920419",
+      "PMID:14516531",
+      "PMID:14521492",
+      "PMID:14566196",
+      "PMID:14566200",
+      "PMID:14619895",
+      "PMID:14624192",
+      "PMID:14673053",
+      "PMID:14689334",
+      "PMID:14978354",
+      "PMID:15048901",
+      "PMID:15199661",
+      "PMID:15241233",
+      "PMID:15264994",
+      "PMID:15374134",
+      "PMID:15376524",
+      "PMID:15544025",
+      "PMID:15613191",
+      "PMID:15845695",
+      "PMID:15853570",
+      "PMID:15903129",
+      "PMID:15963219",
+      "PMID:15992089",
+      "PMID:16395417",
+      "PMID:16397315",
+      "PMID:16426087",
+      "PMID:16765127",
+      "PMID:16822276",
+      "PMID:16913391",
+      "PMID:17122538",
+      "PMID:17162096",
+      "PMID:17219219",
+      "PMID:17286545",
+      "PMID:17452166",
+      "PMID:17559097",
+      "PMID:17612590",
+      "PMID:17652957",
+      "PMID:17874333",
+      "PMID:18273418",
+      "PMID:18345955",
+      "PMID:18808757",
+      "PMID:18983224",
+      "PMID:19687003",
+      "PMID:19851065",
+      "PMID:21404089",
+      "PMID:21452176",
+      "PMID:21739267",
+      "PMID:21908494",
+      "PMID:21909633",
+      "PMID:21922171",
+      "PMID:21939725",
+      "PMID:22153922",
+      "PMID:22198456",
+      "PMID:22212003",
+      "PMID:22240860",
+      "PMID:22263916",
+      "PMID:22283559",
+      "PMID:22353759",
+      "PMID:22377745",
+      "Reaxys:7467879",
+      "Wikipedia:Paroxetine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7936"
+    ],
+    "inchi": [
+      "InChI=1S/C19H20FNO3/c20-15-3-1-13(2-4-15)17-7-8-21-10-14(17)11-22-16-5-6-18-19(9-16)24-12-23-18/h1-6,9,14,17,21H,7-8,10-12H2/t14-,17-/m0/s1"
+    ],
+    "inchikey": [
+      "AHOUBRCZNHFOSL-YOEHRIQHSA-N"
+    ],
+    "mass": [
+      "329.36540"
+    ],
+    "monoisotopicmass": [
+      "329.14272"
+    ],
+    "smiles": [
+      "[H][C@]1(CCNC[C@H]1COc1ccc2OCOc2c1)c1ccc(F)cc1"
+    ]
+  },
+  "label": "paroxetine",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7936",
+  "obo_id": "CHEBI:7936",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "61869-08-7",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "61869-08-7",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00715",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00715"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "2068",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/2068"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07415",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07415"
+    },
+    {
+      "database": "KEGG",
+      "id": "D02362",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D02362"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-2843",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "11009210",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11009210"
+    },
+    {
+      "database": "PMID",
+      "id": "11169163",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11169163"
+    },
+    {
+      "database": "PMID",
+      "id": "11271409",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11271409"
+    },
+    {
+      "database": "PMID",
+      "id": "11281965",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11281965"
+    },
+    {
+      "database": "PMID",
+      "id": "11324355",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11324355"
+    },
+    {
+      "database": "PMID",
+      "id": "11360029",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11360029"
+    },
+    {
+      "database": "PMID",
+      "id": "11513198",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11513198"
+    },
+    {
+      "database": "PMID",
+      "id": "11563413",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11563413"
+    },
+    {
+      "database": "PMID",
+      "id": "11565622",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11565622"
+    },
+    {
+      "database": "PMID",
+      "id": "11819027",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11819027"
+    },
+    {
+      "database": "PMID",
+      "id": "11893234",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11893234"
+    },
+    {
+      "database": "PMID",
+      "id": "11910269",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/11910269"
+    },
+    {
+      "database": "PMID",
+      "id": "12027788",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12027788"
+    },
+    {
+      "database": "PMID",
+      "id": "12088162",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12088162"
+    },
+    {
+      "database": "PMID",
+      "id": "12369443",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12369443"
+    },
+    {
+      "database": "PMID",
+      "id": "12421645",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12421645"
+    },
+    {
+      "database": "PMID",
+      "id": "12818234",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12818234"
+    },
+    {
+      "database": "PMID",
+      "id": "12820211",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12820211"
+    },
+    {
+      "database": "PMID",
+      "id": "12906023",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12906023"
+    },
+    {
+      "database": "PMID",
+      "id": "12920419",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12920419"
+    },
+    {
+      "database": "PMID",
+      "id": "14516531",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14516531"
+    },
+    {
+      "database": "PMID",
+      "id": "14521492",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14521492"
+    },
+    {
+      "database": "PMID",
+      "id": "14566196",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14566196"
+    },
+    {
+      "database": "PMID",
+      "id": "14566200",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14566200"
+    },
+    {
+      "database": "PMID",
+      "id": "14619895",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14619895"
+    },
+    {
+      "database": "PMID",
+      "id": "14624192",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14624192"
+    },
+    {
+      "database": "PMID",
+      "id": "14673053",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14673053"
+    },
+    {
+      "database": "PMID",
+      "id": "14689334",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14689334"
+    },
+    {
+      "database": "PMID",
+      "id": "14978354",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14978354"
+    },
+    {
+      "database": "PMID",
+      "id": "15048901",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15048901"
+    },
+    {
+      "database": "PMID",
+      "id": "15199661",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15199661"
+    },
+    {
+      "database": "PMID",
+      "id": "15241233",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15241233"
+    },
+    {
+      "database": "PMID",
+      "id": "15264994",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15264994"
+    },
+    {
+      "database": "PMID",
+      "id": "15374134",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15374134"
+    },
+    {
+      "database": "PMID",
+      "id": "15376524",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15376524"
+    },
+    {
+      "database": "PMID",
+      "id": "15544025",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15544025"
+    },
+    {
+      "database": "PMID",
+      "id": "15613191",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15613191"
+    },
+    {
+      "database": "PMID",
+      "id": "15845695",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15845695"
+    },
+    {
+      "database": "PMID",
+      "id": "15853570",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15853570"
+    },
+    {
+      "database": "PMID",
+      "id": "15903129",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15903129"
+    },
+    {
+      "database": "PMID",
+      "id": "15963219",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15963219"
+    },
+    {
+      "database": "PMID",
+      "id": "15992089",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15992089"
+    },
+    {
+      "database": "PMID",
+      "id": "16395417",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16395417"
+    },
+    {
+      "database": "PMID",
+      "id": "16397315",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16397315"
+    },
+    {
+      "database": "PMID",
+      "id": "16426087",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16426087"
+    },
+    {
+      "database": "PMID",
+      "id": "16765127",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16765127"
+    },
+    {
+      "database": "PMID",
+      "id": "16822276",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16822276"
+    },
+    {
+      "database": "PMID",
+      "id": "16913391",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/16913391"
+    },
+    {
+      "database": "PMID",
+      "id": "17122538",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17122538"
+    },
+    {
+      "database": "PMID",
+      "id": "17162096",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17162096"
+    },
+    {
+      "database": "PMID",
+      "id": "17219219",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17219219"
+    },
+    {
+      "database": "PMID",
+      "id": "17286545",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17286545"
+    },
+    {
+      "database": "PMID",
+      "id": "17452166",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17452166"
+    },
+    {
+      "database": "PMID",
+      "id": "17559097",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17559097"
+    },
+    {
+      "database": "PMID",
+      "id": "17612590",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17612590"
+    },
+    {
+      "database": "PMID",
+      "id": "17652957",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17652957"
+    },
+    {
+      "database": "PMID",
+      "id": "17874333",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17874333"
+    },
+    {
+      "database": "PMID",
+      "id": "18273418",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18273418"
+    },
+    {
+      "database": "PMID",
+      "id": "18345955",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18345955"
+    },
+    {
+      "database": "PMID",
+      "id": "18808757",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18808757"
+    },
+    {
+      "database": "PMID",
+      "id": "18983224",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18983224"
+    },
+    {
+      "database": "PMID",
+      "id": "19687003",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19687003"
+    },
+    {
+      "database": "PMID",
+      "id": "19851065",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19851065"
+    },
+    {
+      "database": "PMID",
+      "id": "21404089",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21404089"
+    },
+    {
+      "database": "PMID",
+      "id": "21452176",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21452176"
+    },
+    {
+      "database": "PMID",
+      "id": "21739267",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21739267"
+    },
+    {
+      "database": "PMID",
+      "id": "21908494",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21908494"
+    },
+    {
+      "database": "PMID",
+      "id": "21909633",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21909633"
+    },
+    {
+      "database": "PMID",
+      "id": "21922171",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21922171"
+    },
+    {
+      "database": "PMID",
+      "id": "21939725",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21939725"
+    },
+    {
+      "database": "PMID",
+      "id": "22153922",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22153922"
+    },
+    {
+      "database": "PMID",
+      "id": "22198456",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22198456"
+    },
+    {
+      "database": "PMID",
+      "id": "22212003",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22212003"
+    },
+    {
+      "database": "PMID",
+      "id": "22240860",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22240860"
+    },
+    {
+      "database": "PMID",
+      "id": "22263916",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22263916"
+    },
+    {
+      "database": "PMID",
+      "id": "22283559",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22283559"
+    },
+    {
+      "database": "PMID",
+      "id": "22353759",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22353759"
+    },
+    {
+      "database": "PMID",
+      "id": "22377745",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22377745"
+    },
+    {
+      "database": "Reaxys",
+      "id": "7467879",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Paroxetine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Paroxetine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3S,4R)-3-[(1,3-benzodioxol-5-yloxy)methyl]-4-(4-fluorophenyl)piperidine",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Paroxetine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-(3S,4R)-4-(p-fluorophenyl)-3-((3,4-(methylenedioxy)phenoxy)methyl)piperidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(3S-trans)-3-((1,3-benzodioxol-5-yloxy)methyl)-4-(4-fluorophenyl)piperidine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "paroxetina",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "paroxetinum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/graph"
+    },
+    "is_conjugate_base_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_base_of"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7936/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
