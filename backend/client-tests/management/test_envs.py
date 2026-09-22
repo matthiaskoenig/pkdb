@@ -1,7 +1,6 @@
 """Test access to the environment variables."""
 
 import pytest
-
 from pkdb_data.management.envs import (
     EnvironmentNotInitializedError,
     get_environment,

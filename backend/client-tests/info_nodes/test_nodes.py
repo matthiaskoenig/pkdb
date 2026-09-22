@@ -1,8 +1,6 @@
 """Test nodes functionality."""
 
 import pytest
-from pymetadata.core.miriam import BQB
-
 from pkdb_data.info_nodes.definitions.anthropometry import ANTHROPOMETRY_NODES
 from pkdb_data.info_nodes.definitions.calculation_type import CALCULATION_NODES
 from pkdb_data.info_nodes.definitions.demographics import DEMOGRAPHICS_NODES
@@ -24,6 +22,7 @@ from pkdb_data.info_nodes.definitions.substance import SUBSTANCE_NODES
 from pkdb_data.info_nodes.definitions.tissue import TISSUE_NODES
 from pkdb_data.info_nodes.node import InfoNode, Substance
 from pkdb_data.info_nodes.nodes import collect_nodes
+from pymetadata.core.miriam import BQB
 
 
 @pytest.mark.parametrize(

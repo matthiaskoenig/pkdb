@@ -1,0 +1,28 @@
+[project]
+name = "pkdb-legacy-client-tests"
+version = "0.0.0"
+requires-python = ">=3.13,<3.15"
+dependencies = [
+    "pytest>=9,<10",
+    "ty>=0.0.82",
+    "pymetadata==0.6.2",
+    "biopython>=1.85",
+    "networkx>=3.4",
+    "py4cytoscape>=1.13",
+    "python-slugify>=8",
+    "openpyxl>=3.1",
+    "pandas>=2.3,<3",
+    "pint>=0.25,<1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["info_nodes", "management"]
+pythonpath = [".."]
+addopts = "--strict-markers"
+
+[tool.ty.environment]
+python-version = "3.13"
+extra-paths = [".."]
+
+[tool.ty.src]
+include = ["info_nodes", "management", "conftest.py", "oven.py"]

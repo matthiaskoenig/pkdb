@@ -1,8 +1,7 @@
 """Test module for substance xrefs."""
 
-from pymetadata.core.miriam import BQB
-
 from pkdb_data.info_nodes.node import Substance
+from pymetadata.core.miriam import BQB
 
 substance = Substance(
     sid="sorbitol",

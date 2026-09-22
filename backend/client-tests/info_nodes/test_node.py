@@ -1,8 +1,7 @@
 """Test info node functionality."""
 
-from pymetadata.core.miriam import BQB
-
 from pkdb_data.info_nodes.node import Substance
+from pymetadata.core.miriam import BQB
 
 
 def test_substance() -> None:

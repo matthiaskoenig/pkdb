@@ -1,9 +1,8 @@
 """Test annotations."""
 
+from pkdb_data.info_nodes.annotation import NodeAnnotation
 from pymetadata.core.annotation import RDFAnnotation
 from pymetadata.core.miriam import BQB
-
-from pkdb_data.info_nodes.annotation import NodeAnnotation
 
 
 def test_url_annotation() -> None:
