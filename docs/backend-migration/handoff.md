@@ -9,8 +9,10 @@ corpus/compatibility acceptance as complete.
 Branch: `backend/fastapi-replacement`. Original working copy:
 `/tmp/pkdb-backend-replacement`; original repository: `/home/mkoenig/git/pkdb`.
 The final saved commit includes this document and a read-only administrator role
-catalogue. The original repository's develop checkout and untracked uploader were
-not moved or incorporated into the replacement.
+catalogue. Additional original-workspace source/resources/tests are now included via
+checkpoint branch `handoff/local-workspace-20260922`, as explicitly requested by
+the user. Develop itself remains unchanged. The legacy uploader is not a
+replacement runtime dependency.
 
 Read these committed files first:
 
@@ -45,11 +47,18 @@ Alternatively fetch the bundle into an existing clone and create an isolated
 worktree for its branch. Do not overwrite an existing branch with local changes.
 
 The corpus is a separate checkout at `../pkdb_data/studies` relative to the original
-repository. Transfer or obtain it separately without editing it. The unchanged
-legacy upload client is an **untracked** directory in the original repository,
-`backend/pkdb_data`; it is deliberately not in the Git bundle. It is needed only
-for replaying legacy characterization and uploader parity. Transfer that directory
-separately if rerunning those checks. Preserve ownership and do not silently commit it.
+repository. Transfer or obtain it separately without editing it. The legacy upload client
+`backend/pkdb_data` and its resources/tests are now committed at the user's explicit
+request and included in this branch and the refreshed bundle. The separate study
+corpus remains unchanged. The non-placeholder password in `.env.template` was
+replaced with a placeholder; its original is only in a protected local /tmp backup.
+Generated transfer artifacts remain outside Git.
+
+Push status: automatic approval review rejected publication of the newly added
+legacy resources because they contain personal account data, including user names
+and email addresses in `backend/pkdb_data/resources/json/users.json`. The configured
+destination is the public repository `matthiaskoenig/pkdb`. No push has succeeded;
+explicit approval for that payload/destination is pending.
 
 ## Stack and verification
 
