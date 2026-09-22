@@ -1,0 +1,145 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_17833",
+  "lang": "en",
+  "description": [
+    "Any of a group of aminoglycoside antibiotics produced by fermentation of some Micromonospora spp."
+  ],
+  "synonyms": [
+    "4,6-diamino-3-[3-deoxy-4-C-methyl-3-(methylamino)pentopyranosyloxy]-2-hydroxycyclohexyl 2-amino-2,3,4,6,7-pentadeoxy-6-(methylamino)heptopyranoside",
+    "Gentamicin",
+    "gentamycins"
+  ],
+  "annotation": {
+    "has_alternative_id": [
+      "CHEBI:14293",
+      "CHEBI:24206",
+      "CHEBI:24212",
+      "CHEBI:5306"
+    ],
+    "has_dbxref": [
+      "CAS:1403-66-3",
+      "DrugBank:DB00798",
+      "KEGG:C00505"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:17833"
+    ]
+  },
+  "label": "gentamycin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CHEBI_17833",
+  "obo_id": "CHEBI:17833",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "1403-66-3",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00798",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00798"
+    },
+    {
+      "database": "KEGG",
+      "id": "C00505",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C00505"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "4,6-diamino-3-[3-deoxy-4-C-methyl-3-(methylamino)pentopyranosyloxy]-2-hydroxycyclohexyl 2-amino-2,3,4,6,7-pentadeoxy-6-(methylamino)heptopyranoside",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Gentamicin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "gentamycins",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17833?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17833/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17833/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17833/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17833/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17833/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17833/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17833/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17833/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17833/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_17833/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

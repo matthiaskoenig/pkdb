@@ -1,0 +1,398 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_77590",
+  "lang": "en",
+  "description": [
+    "A 2-[(diphenylmethyl)sulfinyl]acetamide that has R configuration at the sulfur atom. Like its racemate, modafinil, it is used for the treatment of sleeping disorders such as narcolepsy, obstructive sleep apnoea, and shift-work sleep disorder. Peak concentration in the blood later occurs later following administration than with modafinil, so it is thought that armodafinil may be more effective than modafinil in treating people with excessive daytime sleepiness."
+  ],
+  "synonyms": [
+    "2-[(R)-(diphenylmethyl)sulfinyl]acetamide",
+    "(-)-(R)-modafinil",
+    "(-)-modafinil",
+    "(R)-(-)-modafinil",
+    "(R)-modafinil",
+    "CEP 10953",
+    "CEP-10953",
+    "Nuvigil",
+    "armodafinil",
+    "armodafinilo",
+    "armodafinilum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C15H15NO2S"
+    ],
+    "has_dbxref": [
+      "CAS:112111-43-0",
+      "Drug_Central:4501",
+      "KEGG:D03215",
+      "PMID:19663523",
+      "PMID:19689169",
+      "PMID:20697340",
+      "PMID:20816042",
+      "PMID:21427431",
+      "PMID:22039290",
+      "PMID:22128728",
+      "PMID:22210169",
+      "PMID:22537794",
+      "PMID:22803602",
+      "PMID:22917711",
+      "PMID:22960434",
+      "PMID:22967783",
+      "PMID:23251870",
+      "PMID:23983964",
+      "PMID:24122734",
+      "Reaxys:9767970",
+      "Wikipedia:Armodafinil"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:77590"
+    ],
+    "inchi": [
+      "InChI=1S/C15H15NO2S/c16-14(17)11-19(18)15(12-7-3-1-4-8-12)13-9-5-2-6-10-13/h1-10,15H,11H2,(H2,16,17)/t19-/m1/s1"
+    ],
+    "inchikey": [
+      "YFGHCGITMMYXAQ-LJQANCHMSA-N"
+    ],
+    "mass": [
+      "273.35000"
+    ],
+    "monoisotopicmass": [
+      "273.08235"
+    ],
+    "smiles": [
+      "NC(=O)C[S@@](=O)C(c1ccccc1)c1ccccc1"
+    ]
+  },
+  "label": "armodafinil",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_77590",
+  "obo_id": "CHEBI:77590",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "112111-43-0",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "112111-43-0",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "4501",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/4501"
+    },
+    {
+      "database": "KEGG",
+      "id": "D03215",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D03215"
+    },
+    {
+      "database": "PMID",
+      "id": "19663523",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19663523"
+    },
+    {
+      "database": "PMID",
+      "id": "19689169",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19689169"
+    },
+    {
+      "database": "PMID",
+      "id": "20697340",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20697340"
+    },
+    {
+      "database": "PMID",
+      "id": "20816042",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20816042"
+    },
+    {
+      "database": "PMID",
+      "id": "21427431",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/21427431"
+    },
+    {
+      "database": "PMID",
+      "id": "22039290",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22039290"
+    },
+    {
+      "database": "PMID",
+      "id": "22128728",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22128728"
+    },
+    {
+      "database": "PMID",
+      "id": "22210169",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22210169"
+    },
+    {
+      "database": "PMID",
+      "id": "22537794",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22537794"
+    },
+    {
+      "database": "PMID",
+      "id": "22803602",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22803602"
+    },
+    {
+      "database": "PMID",
+      "id": "22917711",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22917711"
+    },
+    {
+      "database": "PMID",
+      "id": "22960434",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22960434"
+    },
+    {
+      "database": "PMID",
+      "id": "22967783",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22967783"
+    },
+    {
+      "database": "PMID",
+      "id": "23251870",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23251870"
+    },
+    {
+      "database": "PMID",
+      "id": "23983964",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23983964"
+    },
+    {
+      "database": "PMID",
+      "id": "24122734",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24122734"
+    },
+    {
+      "database": "Reaxys",
+      "id": "9767970",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Armodafinil",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Armodafinil"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2-[(R)-(diphenylmethyl)sulfinyl]acetamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-(R)-modafinil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(-)-modafinil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-(-)-modafinil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(R)-modafinil",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CEP 10953",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CEP-10953",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Nuvigil",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "armodafinil",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "armodafinilo",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "armodafinilum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77590?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77590/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77590/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77590/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77590/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77590/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77590/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77590/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_enantiomer_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77590/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_enantiomer_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

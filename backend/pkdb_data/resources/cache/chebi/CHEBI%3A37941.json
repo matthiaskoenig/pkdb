@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:37941",
+  "name": "clopidogrel",
+  "definition": "A thienopyridine that is 4,5,6,7-tetrahydrothieno[3,2-<em>c</em>]pyridine in which the hydrogen attached to the nitrogen is replaced by an <em>o</em>-chlorobenzyl group, the methylene hydrogen of which is replaced by a  methoxycarbonyl group (the <i>S</i> enantiomer). A P2Y<small><sub>12</sub></small> receptor antagonist, it is used to inhibit blood clots and prevent heart attacks.",
+  "formula": "C16H16ClNO2S",
+  "charge": 0,
+  "mass": "321.829",
+  "inchikey": "GKTWGGQPFAXNFI-HNNXBMFYSA-N"
+}

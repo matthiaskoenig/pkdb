@@ -1,0 +1,63 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/FMA_14541",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Intestinum crassum caecum"
+  ],
+  "annotation": {
+    "has_obo_namespace": [
+      "fma"
+    ],
+    "id": [
+      "FMA:14541"
+    ]
+  },
+  "label": "Cecum",
+  "ontology_name": "fma",
+  "ontology_prefix": "FMA",
+  "ontology_iri": "http://purl.obolibrary.org/obo/fma.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "FMA_14541",
+  "obo_id": "FMA:14541",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_14541?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_14541/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_14541/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_14541/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_14541/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_14541/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_14541/graph"
+    },
+    "regional_part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_14541/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Ffma%2523regional_part_of"
+    },
+    "systemic_part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/fma/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FFMA_14541/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Ffma%2523systemic_part_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

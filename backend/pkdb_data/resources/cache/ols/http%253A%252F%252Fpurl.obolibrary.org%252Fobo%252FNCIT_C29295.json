@@ -1,0 +1,103 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29295",
+  "lang": "en",
+  "description": [
+    "A competitive and reversible histamine H2-receptor antagonist with antacid activity. Nizatidine inhibits the histamine H2-receptors located on the basolateral membrane of the gastric parietal cell, thereby reducing basal and nocturnal gastric acid secretion, resulting in a reduction in gastric volume, acidity, and amount of gastric acid released in response to stimuli."
+  ],
+  "synonyms": [
+    "Axid",
+    "NIZATIDINE",
+    "Nizatidine"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "76963-41-2"
+    ],
+    "Chemical_Formula": [
+      "C12H21N5O2S2"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "P41PML4GHR"
+    ],
+    "Legacy Concept Name": [
+      "Nizatidine"
+    ],
+    "Preferred_Name": [
+      "Nizatidine"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0085154"
+    ],
+    "code": [
+      "C29295"
+    ]
+  },
+  "label": "Nizatidine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29295",
+  "obo_id": "NCIT:C29295",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Axid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "NIZATIDINE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Nizatidine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29295?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29295/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29295/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29295/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29295/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29295/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29295/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

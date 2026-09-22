@@ -1,0 +1,113 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_32645",
+  "lang": "en",
+  "description": [
+    "A glucosiduronic acid derived from dextrorphan."
+  ],
+  "synonyms": [
+    "17-methyl-9alpha,13alpha,14alpha-morphinan-3-yl D-glucopyranosiduronic acid",
+    "dextrorphan O-glucuronide"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C23H31NO7"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:32645"
+    ],
+    "inchi": [
+      "InChI=1S/C23H31NO7/c1-24-9-8-23-7-3-2-4-14(23)16(24)10-12-5-6-13(11-15(12)23)30-22-19(27)17(25)18(26)20(31-22)21(28)29/h5-6,11,14,16-20,22,25-27H,2-4,7-10H2,1H3,(H,28,29)/t14-,16+,17+,18+,19-,20+,22?,23+/m1/s1"
+    ],
+    "inchikey": [
+      "YQAUTKINOXBFCA-DCWOAAMISA-N"
+    ],
+    "mass": [
+      "433.49478"
+    ],
+    "monoisotopicmass": [
+      "433.21005"
+    ],
+    "smiles": [
+      "[H][C@]12CCCC[C@]11CCN(C)[C@H]2Cc2ccc(OC3O[C@@H]([C@@H](O)[C@H](O)[C@H]3O)C(O)=O)cc12"
+    ]
+  },
+  "label": "dextrorphan O-glucosiduronic acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_32645",
+  "obo_id": "CHEBI:32645",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "17-methyl-9alpha,13alpha,14alpha-morphinan-3-yl D-glucopyranosiduronic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "dextrorphan O-glucuronide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32645?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32645/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32645/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32645/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32645/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32645/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32645/graph"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_32645/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

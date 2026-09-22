@@ -99,10 +99,28 @@ jobs:
         cache-from: type=gha
         cache-to: type=gha,mode=max
 
+  legacy-client:
+    name: legacy-client
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          python-version: "3.13"
+          enable-cache: true
+      - name: Test preserved upload client
+        working-directory: backend/client-tests
+        run: |
+          uv run --locked --python 3.13 pytest -q -x
+          uv run --locked --python 3.13 ty check
+
   tests:
     # the one check the branch protection requires
     name: tests
-    needs: [test, docker]
+    needs: [test, docker, legacy-client]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5
@@ -111,11 +129,13 @@ jobs:
       env:
         TEST_RESULT: ${{ needs.test.result }}
         DOCKER_RESULT: ${{ needs.docker.result }}
+        CLIENT_RESULT: ${{ needs.legacy-client.result }}
       run: |
         echo "test: $TEST_RESULT"
         echo "docker: $DOCKER_RESULT"
         test "$TEST_RESULT" = "success"
         test "$DOCKER_RESULT" = "success"
+        test "$CLIENT_RESULT" = "success"
 
   release:
     # the backend is not published on PyPI, a release is the tag with its

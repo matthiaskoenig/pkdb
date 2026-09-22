@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:64628",
+  "name": "somatostatin",
+  "definition": "A fourteen-membered heterodetic cyclic peptide comprising the sequence Ala-Gly-Cys-Lys-Asn-Phe-Phe-Trp-Lys-Thr-Phe-Thr-Ser-Cys cyclised by a disulfide bridge between the two Cys residues at positions 3 and 14.",
+  "formula": "C76H104N18O19S2",
+  "charge": "0",
+  "mass": "1637.87800",
+  "inchikey": "NHXLMOGPVYXJNR-ATOGVRKGSA-N"
+}

@@ -1,0 +1,168 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C2931",
+  "lang": "en",
+  "description": [
+    "A non-neoplastic or neoplastic disorder affecting the heart or the vessels (arteries, veins and lymph vessels). Representative examples of non-neoplastic cardiovascular disorders are endocarditis and hypertension. Representative examples of neoplastic cardiovascular disorders are endocardial myxoma and angiosarcoma."
+  ],
+  "synonyms": [
+    "Cardiovascular Disease",
+    "Cardiovascular Disease (CVD)",
+    "Cardiovascular Disorder",
+    "Cardiovascular Disorder, NOS",
+    "Cardiovascular_Disease",
+    "Disorder of Cardiovascular System",
+    "Unspecified disorder of circulatory system"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CPTAC",
+      "GDC",
+      "NICHD",
+      "PCDC",
+      "SeroNet",
+      "mCode"
+    ],
+    "Has_SeroNet_Authorized_Value": [
+      "http://purl.obolibrary.org/obo/NCIT_C17998",
+      "http://purl.obolibrary.org/obo/NCIT_C48660",
+      "http://purl.obolibrary.org/obo/NCIT_C49487",
+      "http://purl.obolibrary.org/obo/NCIT_C49488"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C81239"
+    ],
+    "Legacy Concept Name": [
+      "Cardiovascular_Disorder"
+    ],
+    "Maps_To": [
+      "Cardiovascular Disorder, NOS"
+    ],
+    "Preferred_Name": [
+      "Cardiovascular Disorder"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C0007222"
+    ],
+    "code": [
+      "C2931"
+    ]
+  },
+  "label": "Cardiovascular Disorder",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C2931",
+  "obo_id": "NCIT:C2931",
+  "in_subset": [
+    "NCIT_C156952",
+    "NCIT_C157711",
+    "NCIT_C158034",
+    "NCIT_C158035",
+    "NCIT_C158520",
+    "NCIT_C177537",
+    "NCIT_C178718",
+    "NCIT_C179026",
+    "NCIT_C186336",
+    "NCIT_C186341",
+    "NCIT_C193006",
+    "NCIT_C193200",
+    "NCIT_C89506",
+    "NCIT_C90259",
+    "NCIT_C99147"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Cardiovascular Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cardiovascular Disease (CVD)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cardiovascular Disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cardiovascular Disorder, NOS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cardiovascular_Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Disorder of Cardiovascular System",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Unspecified disorder of circulatory system",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2931?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2931/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2931/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2931/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2931/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2931/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2931/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2931/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2931/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2931/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2931/graph"
+    },
+    "Disease_Has_Associated_Anatomic_Site": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C2931/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R100"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

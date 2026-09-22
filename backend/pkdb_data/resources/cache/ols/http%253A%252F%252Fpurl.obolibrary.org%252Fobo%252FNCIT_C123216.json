@@ -1,0 +1,81 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C123216",
+  "lang": "en",
+  "description": [
+    "Persistent pyelonephritis."
+  ],
+  "synonyms": [
+    "Chronic Pyelonephritis"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Persistent pyelonephritis."
+    ],
+    "Contributing_Source": [
+      "NICHD"
+    ],
+    "Preferred_Name": [
+      "Chronic Pyelonephritis"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C0085697"
+    ],
+    "code": [
+      "C123216"
+    ]
+  },
+  "label": "Chronic Pyelonephritis",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C123216",
+  "obo_id": "NCIT:C123216",
+  "in_subset": [
+    "NCIT_C123272",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Chronic Pyelonephritis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C123216?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C123216/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C123216/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C123216/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C123216/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C123216/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C123216/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

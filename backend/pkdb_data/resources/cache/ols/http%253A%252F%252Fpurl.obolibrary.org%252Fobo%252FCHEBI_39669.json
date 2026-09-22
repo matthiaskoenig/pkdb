@@ -1,0 +1,282 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_39669",
+  "lang": "en",
+  "description": [
+    "An organofluorine compound comprising salicylic acid having a 2,4-difluorophenyl group at the 5-position."
+  ],
+  "synonyms": [
+    "2',4'-difluoro-4-hydroxy-[1,1'-biphenyl]-3-carboxylic acid",
+    "Diflunisal",
+    "2',4'-difluoro-4-hydroxy-3-biphenylcarboxylic acid",
+    "2-(hydroxy)-5-(2,4-difluorophenyl)benzoic acid",
+    "5-(2,4-difluorophenyl)salicylic acid",
+    "Dolobid"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C13H8F2O3"
+    ],
+    "has_alternative_id": [
+      "CHEBI:39656",
+      "CHEBI:4538"
+    ],
+    "has_dbxref": [
+      "CAS:22494-42-4",
+      "DrugBank:DB00861",
+      "Drug_Central:880",
+      "HMDB:HMDB0014999",
+      "KEGG:C01691",
+      "KEGG:D00130",
+      "LINCS:LSM-2490",
+      "PDBeChem:1FL",
+      "PMID:23144359",
+      "PMID:23416065",
+      "PMID:28166217",
+      "Reaxys:2654431",
+      "Wikipedia:Diflunisal"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:39669"
+    ],
+    "inchi": [
+      "InChI=1S/C13H8F2O3/c14-8-2-3-9(11(15)6-8)7-1-4-12(16)10(5-7)13(17)18/h1-6,16H,(H,17,18)"
+    ],
+    "inchikey": [
+      "HUPFGZXOMWLGNK-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "250.19760"
+    ],
+    "monoisotopicmass": [
+      "250.04415"
+    ],
+    "smiles": [
+      "OC(=O)c1cc(ccc1O)-c1ccc(F)cc1F"
+    ]
+  },
+  "label": "diflunisal",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_39669",
+  "obo_id": "CHEBI:39669",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "22494-42-4",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "22494-42-4",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "22494-42-4",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00861",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00861"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "880",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/880"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014999",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014999"
+    },
+    {
+      "database": "KEGG",
+      "id": "C01691",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C01691"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00130",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00130"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-2490",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "1FL",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/1FL"
+    },
+    {
+      "database": "PMID",
+      "id": "23144359",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23144359"
+    },
+    {
+      "database": "PMID",
+      "id": "23416065",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23416065"
+    },
+    {
+      "database": "PMID",
+      "id": "28166217",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28166217"
+    },
+    {
+      "database": "Reaxys",
+      "id": "2654431",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Diflunisal",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Diflunisal"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "2',4'-difluoro-4-hydroxy-[1,1'-biphenyl]-3-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Diflunisal",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2',4'-difluoro-4-hydroxy-3-biphenylcarboxylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "2-(hydroxy)-5-(2,4-difluorophenyl)benzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "5-(2,4-difluorophenyl)salicylic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Dolobid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39669?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39669/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39669/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39669/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39669/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39669/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39669/graph"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39669/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_39669/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

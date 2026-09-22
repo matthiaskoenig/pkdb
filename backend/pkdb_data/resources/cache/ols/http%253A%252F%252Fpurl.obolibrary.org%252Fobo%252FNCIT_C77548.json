@@ -1,0 +1,186 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C77548",
+  "lang": "en",
+  "description": [
+    "A paramagnetic contrast agent consisting of the disodium salt of the gadolinium ion chelated with the lipophilic moiety ethoxybenzyl (EOB) bound to diethylenetriamine pentaacetic acid (DTPA). When placed in a magnetic field, gadolinium produces a large magnetic moment and so a large local magnetic field, which can enhance the relaxation rate of nearby protons; as a result, the signal intensity of tissue images observed with magnetic resonance imaging (MRI) may be enhanced. Because this agent is preferentially taken up by normal functioning hepatocytes, normal hepatic tissue is enhanced with MRI while tumor tissue is unenhanced. In addition, because this agent is excreted in the bile, it may be used to visualize the biliary system using MRI."
+  ],
+  "synonyms": [
+    "Disodium (N-((2S)-2-(bis(carboxymethyl)amino)-3-(p-ethoxyphenyl)propyl)-N-(2-(bis(carboxymethyl)amino)ethyl)glycinato(5-))gadolinate(2-)",
+    "Eovist",
+    "GADOXETATE DISODIUM",
+    "Gadolinium EOB DTPA",
+    "Gadolinium Ethoxybenzyl Diethylenetriamine Pentaacetic Acid",
+    "Gadolinium Ethoxybenzyl Diethylenetriaminepentaacetic Acid",
+    "Gadoxetate Disodium",
+    "Gadoxetic Acid Disodium",
+    "Gd-(S)-EOB-DTPA",
+    "Gd-EOB-DTPA",
+    "Primovist",
+    "ZK 139834"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "135326-22-6"
+    ],
+    "Chemical_Formula": [
+      "C23H28N3O11.Gd.2Na"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Gadoxetate Disodium"
+    ],
+    "FDA_UNII_Code": [
+      "HOY74VZE0M"
+    ],
+    "Has_Free_Acid_Or_Base_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C77549"
+    ],
+    "Legacy Concept Name": [
+      "Gadoxetate_Disodium"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "617182"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "617182"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "617182"
+    ],
+    "Preferred_Name": [
+      "Gadoxetate Disodium"
+    ],
+    "Semantic_Type": [
+      "Indicator, Reagent, or Diagnostic Aid",
+      "Organic Chemical"
+    ],
+    "UMLS_CUI": [
+      "C1714000"
+    ],
+    "code": [
+      "C77548"
+    ]
+  },
+  "label": "Gadoxetate Disodium",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C77548",
+  "obo_id": "NCIT:C77548",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Disodium (N-((2S)-2-(bis(carboxymethyl)amino)-3-(p-ethoxyphenyl)propyl)-N-(2-(bis(carboxymethyl)amino)ethyl)glycinato(5-))gadolinate(2-)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Eovist",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "GADOXETATE DISODIUM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gadolinium EOB DTPA",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gadolinium Ethoxybenzyl Diethylenetriamine Pentaacetic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gadolinium Ethoxybenzyl Diethylenetriaminepentaacetic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gadoxetate Disodium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gadoxetic Acid Disodium",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gd-(S)-EOB-DTPA",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gd-EOB-DTPA",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Primovist",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ZK 139834",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C77548?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C77548/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C77548/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C77548/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C77548/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C77548/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C77548/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,201 @@
+{
+  "iri": "http://www.ebi.ac.uk/efo/EFO_0000270",
+  "lang": "en",
+  "description": [
+    "A bronchial disease that is characterized by chronic inflammation and narrowing of the airways, which is caused by a combination of environmental and genetic factors resulting in recurring periods of wheezing (a whistling sound while breathing), chest tightness, shortness of breath, mucus production and coughing. The symptoms appear due to a variety of triggers such as allergens, irritants, respiratory infections, weather changes, excercise, stress, reflux disease, medications, foods and emotional anxiety.",
+    "A chronic respiratory disease manifested as difficulty breathing due to the narrowing of bronchial passageways.",
+    "A form of bronchial disorder with three distinct components: airway hyper-responsiveness (RESPIRATORY HYPERSENSITIVITY), airway INFLAMMATION, and intermittent AIRWAY OBSTRUCTION. It is characterized by spasmodic contraction of airway smooth muscle, WHEEZING, and dyspnea (DYSPNEA, PAROXYSMAL).",
+    "Tendency of the smooth muscle of the tracheobronchial tree to contract more intensely in response to a given stimulus than it does in the response seen in normal individuals. This condition is present in virtually all symptomatic patients with asthma. The most prominent manifestation of this smooth muscle contraction is a decrease in airway caliber that can be readily measured in the pulmonary function laboratory."
+  ],
+  "synonyms": [
+    "ASTHMA NOS W (AC) EXAC",
+    "Airway hyperreactivity",
+    "Asthma (disorder)",
+    "Asthma NOS",
+    "Asthma NOS (disorder)",
+    "Asthma unspecified",
+    "Asthma unspecified (disorder)",
+    "Asthma, Bronchial",
+    "Asthma, unspecified",
+    "Asthma, unspecified type, with acute exacerbation",
+    "Asthma, unspecified type, without mention of status asthmaticus",
+    "Asthmas",
+    "Asthmatic",
+    "BA",
+    "BHR - Bronchial hyperreactivity",
+    "Bronchial Hyperreactivities",
+    "Bronchial asthma",
+    "Bronchial hyperreactivity",
+    "Bronchial hyperresponsiveness",
+    "Bronchial hypersensitivity",
+    "DUST PNEUMONOPATHY NEC",
+    "Exercise induced asthma",
+    "Exercise-induced asthma",
+    "Exercise-induced asthma (disorder)",
+    "Hyperreactive airway disease",
+    "Hyperreactive airways disease",
+    "Hyperreactivities, Bronchial",
+    "Hyperreactivity, Bronchial",
+    "Other forms of asthma",
+    "Pneumonopathy due to inhalation of other dust",
+    "Pneumopathy due to inhalation of other dust",
+    "Pneumopathy due to inhalation of other dust (disorder)",
+    "Pneumopathy due to inhalation of other dust NOS",
+    "Pneumopathy due to inhalation of other dust NOS (disorder)",
+    "chronic obstructive asthma",
+    "chronic obstructive asthma with acute exacerbation",
+    "chronic obstructive asthma with status asthmaticus"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "DOID:2841",
+      "ICD10:J45",
+      "ICD9:493",
+      "MESH:D001249",
+      "MedDRA:10003553",
+      "MedDRA:10003561",
+      "MedDRA:10003562",
+      "MedDRA:10003563",
+      "NCIt:C28397",
+      "OMIM:600807",
+      "OMIM:607277",
+      "OMIM:608584",
+      "OMIM:611064",
+      "OMIM:611960",
+      "SNOMEDCT:195967001"
+    ],
+    "obsoleted_in_version": [
+      "3.38.0"
+    ],
+    "organizational_class": [
+      true
+    ],
+    "reason_for_obsolescence": [
+      "Replaced with Mondo term\nsee https://github.com/ebispot/efo/issues/1381"
+    ],
+    "term editor": [
+      "James Malone",
+      "Tomasz Adamusiak"
+    ],
+    "term replaced by": [
+      "http://purl.obolibrary.org/obo/MONDO_0004979"
+    ]
+  },
+  "label": "obsolete_asthma",
+  "ontology_name": "efo",
+  "ontology_prefix": "EFO",
+  "ontology_iri": "http://www.ebi.ac.uk/efo/efo.owl",
+  "is_obsolete": true,
+  "term_replaced_by": "http://purl.obolibrary.org/obo/MONDO_0004979",
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": true,
+  "short_form": "EFO_0000270",
+  "obo_id": "EFO:0000270",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "DOID",
+      "id": "2841",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/DOID_2841"
+    },
+    {
+      "database": "ICD10",
+      "id": "J45",
+      "description": null,
+      "url": "https://icd.who.int/browse10/2019/en#/J45"
+    },
+    {
+      "database": "ICD9",
+      "id": "493",
+      "description": null,
+      "url": "http://www.icd9data.com/getICD9Code.ashx?icd9=493"
+    },
+    {
+      "database": "MESH",
+      "id": "D001249",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D001249"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10003553",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10003553"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10003561",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10003561"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10003562",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10003562"
+    },
+    {
+      "database": "MedDRA",
+      "id": "10003563",
+      "description": null,
+      "url": "http://bioportal.bioontology.org/ontologies/MEDDRA?p=classes&conceptid=10003563"
+    },
+    {
+      "database": "NCIt",
+      "id": "C28397",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C28397"
+    },
+    {
+      "database": "OMIM",
+      "id": "600807",
+      "description": null,
+      "url": "https://omim.org/entry/600807"
+    },
+    {
+      "database": "OMIM",
+      "id": "607277",
+      "description": null,
+      "url": "https://omim.org/entry/607277"
+    },
+    {
+      "database": "OMIM",
+      "id": "608584",
+      "description": null,
+      "url": "https://omim.org/entry/608584"
+    },
+    {
+      "database": "OMIM",
+      "id": "611064",
+      "description": null,
+      "url": "https://omim.org/entry/611064"
+    },
+    {
+      "database": "OMIM",
+      "id": "611960",
+      "description": null,
+      "url": "https://omim.org/entry/611960"
+    },
+    {
+      "database": "SNOMEDCT",
+      "id": "195967001",
+      "description": null,
+      "url": "http://snomed.info/id/195967001"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000270?lang=en"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/efo/terms/http%253A%252F%252Fwww.ebi.ac.uk%252Fefo%252FEFO_0000270/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

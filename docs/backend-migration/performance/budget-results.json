@@ -1,0 +1,54 @@
+{
+  "py313": {
+    "upload": {
+      "median": true,
+      "p95": true
+    },
+    "study": {
+      "median": true,
+      "p95": true
+    },
+    "outputs": {
+      "median": true,
+      "p95": true
+    },
+    "analysis": {
+      "median": true,
+      "p95": true
+    },
+    "timecourses": {
+      "median": true,
+      "p95": true
+    },
+    "search": {
+      "median": true,
+      "p95": true
+    }
+  },
+  "py314": {
+    "upload": {
+      "median": true,
+      "p95": true
+    },
+    "study": {
+      "median": true,
+      "p95": true
+    },
+    "outputs": {
+      "median": true,
+      "p95": true
+    },
+    "analysis": {
+      "median": true,
+      "p95": true
+    },
+    "timecourses": {
+      "median": true,
+      "p95": true
+    },
+    "search": {
+      "median": true,
+      "p95": true
+    }
+  }
+}

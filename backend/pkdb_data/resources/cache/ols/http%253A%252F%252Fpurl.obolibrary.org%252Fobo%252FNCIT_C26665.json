@@ -1,0 +1,117 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C26665",
+  "lang": "en",
+  "description": [
+    "A natural juice isolated from the fruit of the plant Punica granatum with antioxidant, potential antineoplastic, and chemopreventive activities.  Pomegranate juice contains flavonoids which promote differentiation and apoptosis in tumor cells by down-regulating vascular endothelial growth factor (VEGF) and stimulating migration inhibitory factor (MIF), thereby inhibiting angiogenesis. The flavonoids in pomegranate juice also scavenge reactive oxygen species (ROS) and, in some cell types, may prevent ROS-mediated cell injury and death. (NCI04)"
+  ],
+  "synonyms": [
+    "POMEGRANATE JUICE",
+    "Pomegranate Juice"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "GDC"
+    ],
+    "Display_Name": [
+      "Pomegranate Juice"
+    ],
+    "FDA_UNII_Code": [
+      "99S671U9KB"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Pomegranate_Juice"
+    ],
+    "Maps_To": [
+      "Pomegranate Juice"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "304321"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "304321"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "304321"
+    ],
+    "Preferred_Name": [
+      "Pomegranate Juice"
+    ],
+    "Semantic_Type": [
+      "Food"
+    ],
+    "UMLS_CUI": [
+      "C1327962"
+    ],
+    "code": [
+      "C26665"
+    ]
+  },
+  "label": "Pomegranate Juice",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C26665",
+  "obo_id": "NCIT:C26665",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C176424",
+    "NCIT_C177537",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "POMEGRANATE JUICE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pomegranate Juice",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26665?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26665/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26665/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26665/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26665/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26665/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26665/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

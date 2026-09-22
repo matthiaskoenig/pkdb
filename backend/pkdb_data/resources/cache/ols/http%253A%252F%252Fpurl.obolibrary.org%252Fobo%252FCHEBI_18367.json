@@ -1,0 +1,267 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_18367",
+  "lang": "en",
+  "description": [
+    "A phosphate ion that is the conjugate base of hydrogenphosphate."
+  ],
+  "synonyms": [
+    "phosphate",
+    "tetraoxidophosphate(3-)",
+    "tetraoxophosphate(3-)",
+    "tetraoxophosphate(V)",
+    "Orthophosphate",
+    "PHOSPHATE ION",
+    "PO4(3-)",
+    "Phosphate",
+    "[PO4](3-)"
+  ],
+  "annotation": {
+    "charge": [
+      "-3"
+    ],
+    "formula": [
+      "O4P"
+    ],
+    "has_alternative_id": [
+      "CHEBI:14791",
+      "CHEBI:45024",
+      "CHEBI:7793"
+    ],
+    "has_dbxref": [
+      "CAS:14265-44-2",
+      "Gmelin:1997",
+      "KEGG:C00009",
+      "PDBeChem:PO4",
+      "Reaxys:3903772",
+      "Wikipedia:Phosphate"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:18367"
+    ],
+    "inchi": [
+      "InChI=1S/H3O4P/c1-5(2,3)4/h(H3,1,2,3,4)/p-3"
+    ],
+    "inchikey": [
+      "NBIIXXVUZAFLBC-UHFFFAOYSA-K"
+    ],
+    "mass": [
+      "94.97136"
+    ],
+    "monoisotopicmass": [
+      "94.95507"
+    ],
+    "smiles": [
+      "[O-]P([O-])([O-])=O"
+    ]
+  },
+  "label": "phosphate(3-)",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_18367",
+  "obo_id": "CHEBI:18367",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "14265-44-2",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "14265-44-2",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Gmelin",
+      "id": "1997",
+      "description": "Gmelin",
+      "url": null
+    },
+    {
+      "database": "KEGG",
+      "id": "C00009",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C00009"
+    },
+    {
+      "database": "PDBeChem",
+      "id": "PO4",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/PO4"
+    },
+    {
+      "database": "Reaxys",
+      "id": "3903772",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Phosphate",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Phosphate"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "phosphate",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tetraoxidophosphate(3-)",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tetraoxophosphate(3-)",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tetraoxophosphate(V)",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Orthophosphate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "PHOSPHATE ION",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "PDBeChem",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "PO4(3-)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Phosphate",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "[PO4](3-)",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18367?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18367/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18367/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18367/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18367/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18367/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18367/graph"
+    },
+    "is_conjugate_base_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_18367/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_base_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

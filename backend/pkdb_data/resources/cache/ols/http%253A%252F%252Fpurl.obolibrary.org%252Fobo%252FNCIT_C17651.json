@@ -1,0 +1,100 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C17651",
+  "lang": "en",
+  "description": [
+    "The ratio of the abdominal circumference at the navel to maximum hip and buttocks circumference; looks at the proportion of fat stored on the body around the waist and hip. Carrying extra weight around the waist is a greater health risk than carrying extra weight around the hips or thighs."
+  ],
+  "synonyms": [
+    "WAISTHIP",
+    "Waist to Hip Ratio",
+    "Waist-Hip Ratio"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A relative measurement (ratio) of the waist circumference to the hip circumference."
+    ],
+    "Contributing_Source": [
+      "CDISC"
+    ],
+    "Legacy Concept Name": [
+      "Waist-Hip_Ratio"
+    ],
+    "Preferred_Name": [
+      "Waist-Hip Ratio"
+    ],
+    "Semantic_Type": [
+      "Clinical Attribute"
+    ],
+    "UMLS_CUI": [
+      "C0205682"
+    ],
+    "code": [
+      "C17651"
+    ]
+  },
+  "label": "Waist-Hip Ratio",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C17651",
+  "obo_id": "NCIT:C17651",
+  "in_subset": [
+    "NCIT_C61410",
+    "NCIT_C66741",
+    "NCIT_C66830",
+    "NCIT_C67153"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "WAISTHIP",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Waist to Hip Ratio",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Waist-Hip Ratio",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17651?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17651/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17651/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17651/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17651/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17651/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C17651/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

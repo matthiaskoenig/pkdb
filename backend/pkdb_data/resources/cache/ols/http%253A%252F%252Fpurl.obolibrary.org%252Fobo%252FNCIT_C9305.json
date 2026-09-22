@@ -1,0 +1,260 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C9305",
+  "lang": "en",
+  "description": [
+    "A neoplasm composed of atypical neoplastic, often pleomorphic cells that invade other tissues. Malignant neoplasms often metastasize to distant anatomic sites and may recur after excision. The most common malignant neoplasms are carcinomas, Hodgkin and non-Hodgkin lymphomas, leukemias, melanomas, and sarcomas."
+  ],
+  "synonyms": [
+    "CA",
+    "Cancer",
+    "Malignancy",
+    "Malignant Growth",
+    "Malignant Neoplasm",
+    "Malignant Neoplastic Disease",
+    "Malignant Tumor",
+    "NEOPLASM, MALIGNANT",
+    "Neoplasm, malignant",
+    "Tumor, malignant, NOS",
+    "Unclassified tumor, malignant",
+    "cancer",
+    "malignancy"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A general term for autonomous tissue growth exhibiting morphologic features of malignancy (e.g. severe atypia, nuclear pleomorphism, tumor cell necrosis, abnormal mitoses, tissue invasiveness) and for which the transformed cell type has not been specifically identified.",
+      "A group of diseases in which abnormal cells divide without control, invade nearby tissues and may also spread to other parts of the body through the blood and lymph systems.",
+      "A term for diseases in which abnormal cells divide without control and can invade nearby tissues. Malignant cells can also spread to other parts of the body through the blood and lymph systems. There are several main types of malignancy. Carcinoma is a malignancy that begins in the skin or in tissues that line or cover internal organs. Sarcoma is a malignancy that begins in bone, cartilage, fat, muscle, blood vessels, or other connective or supportive tissue. Leukemia is a malignancy that starts in blood-forming tissue such as the bone marrow, and causes large numbers of abnormal blood cells to be produced and enter the blood. Lymphoma and multiple myeloma are malignancies that begin in the cells of the immune system. Central nervous system cancers are malignancies that begin in the tissues of the brain and spinal cord.",
+      "Uncontrolled growth of abnormal cells with potential for metastatic spread."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CPTAC",
+      "CTRP",
+      "FDA",
+      "GDC",
+      "MedDRA",
+      "NICHD",
+      "SeroNet"
+    ],
+    "Display_Name": [
+      "Malignant Neoplasm"
+    ],
+    "ICD-O-3_Code": [
+      "8000/3"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C16457",
+      "http://purl.obolibrary.org/obo/NCIT_C17103",
+      "http://purl.obolibrary.org/obo/NCIT_C176985",
+      "http://purl.obolibrary.org/obo/NCIT_C177621",
+      "http://purl.obolibrary.org/obo/NCIT_C178243"
+    ],
+    "Legacy Concept Name": [
+      "Malignant_Neoplasm"
+    ],
+    "Maps_To": [
+      "8000/3",
+      "Cancer",
+      "Malignancy",
+      "Malignant neoplasm of other and ill-defined sites",
+      "Malignant neoplasm of other and ill-defined sites: Lower limb",
+      "Malignant neoplasm of other and ill-defined sites: Overlapping lesion of other and ill-defined sites",
+      "Malignant neoplasm of other specified sites",
+      "Malignant neoplasm without specification of site",
+      "Malignant neoplasm, primary site unknown, so stated",
+      "Malignant neoplasm, unspecified",
+      "Malignant neoplasm, without specification of site",
+      "Neoplasm, malignant",
+      "Other malignant neoplasm of unspecified site",
+      "Tumor, malignant, NOS",
+      "Unclassified tumor, malignant"
+    ],
+    "Neoplastic_Status": [
+      "Malignant"
+    ],
+    "Preferred_Name": [
+      "Malignant Neoplasm"
+    ],
+    "Semantic_Type": [
+      "Neoplastic Process"
+    ],
+    "UMLS_CUI": [
+      "C1861853"
+    ],
+    "code": [
+      "C9305"
+    ],
+    "has_dbxref": [
+      "IMDRF:E1801"
+    ]
+  },
+  "label": "Malignant Neoplasm",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C9305",
+  "obo_id": "NCIT:C9305",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118168",
+    "NCIT_C118464",
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C156954",
+    "NCIT_C156966",
+    "NCIT_C157711",
+    "NCIT_C158034",
+    "NCIT_C158520",
+    "NCIT_C168655",
+    "NCIT_C168656",
+    "NCIT_C168657",
+    "NCIT_C168658",
+    "NCIT_C168661",
+    "NCIT_C168662",
+    "NCIT_C177537",
+    "NCIT_C179027",
+    "NCIT_C189083",
+    "NCIT_C189762",
+    "NCIT_C19752",
+    "NCIT_C54450",
+    "NCIT_C61410",
+    "NCIT_C62596",
+    "NCIT_C77526",
+    "NCIT_C88025",
+    "NCIT_C90259",
+    "NCIT_C99147",
+    "oncotree_slim"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "IMDRF",
+      "id": "E1801",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "CA",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Malignancy",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Malignant Growth",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Malignant Neoplasm",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Malignant Neoplastic Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Malignant Tumor",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "NEOPLASM, MALIGNANT",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Neoplasm, malignant",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Tumor, malignant, NOS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Unclassified tumor, malignant",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "cancer",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "malignancy",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9305?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9305/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9305/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9305/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9305/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9305/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9305/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9305/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9305/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9305/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C9305/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

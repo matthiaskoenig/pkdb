@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:3001",
+  "name": "beclomethasone",
+  "definition": "A 17alpha-hydroxy steroid that is prednisolone in which the hydrogens at the 9alpha and 16beta positions are substituted by a chlorine and a methyl group, respectively.",
+  "formula": "C22H29ClO5",
+  "charge": "0",
+  "mass": "408.91536",
+  "inchikey": "NBMKJKDGKREAPL-DVTGEIKXSA-N"
+}

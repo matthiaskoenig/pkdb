@@ -1,0 +1,138 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C94608",
+  "lang": "en",
+  "description": [
+    "C peptide (31 aa, ~3 kDa) is encoded by the human INS gene. This protein is involved in both signal transduction and the modulation of blood flow."
+  ],
+  "synonyms": [
+    "C Peptide",
+    "C-Peptide",
+    "C-peptide",
+    "Human Proinsulin C-Peptide",
+    "Proinsulin C-Peptide",
+    "connecting peptide"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A substance made by the pancreas. C-peptide and insulin are both part of a larger molecule that gets split apart before being released into the blood. Abnormal blood levels of C-peptide may occur in certain diseases, such as diabetes or cancer."
+    ],
+    "Contributing_Source": [
+      "CTRP"
+    ],
+    "Display_Name": [
+      "C Peptide"
+    ],
+    "OMIM_Number": [
+      "176730"
+    ],
+    "Preferred_Name": [
+      "C Peptide"
+    ],
+    "Semantic_Type": [
+      "Amino Acid, Peptide, or Protein"
+    ],
+    "Swiss_Prot": [
+      "P01308"
+    ],
+    "UMLS_CUI": [
+      "C0006558"
+    ],
+    "code": [
+      "C94608"
+    ]
+  },
+  "label": "C Peptide",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C94608",
+  "obo_id": "NCIT:C94608",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C142800"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "C Peptide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "C-Peptide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "C-peptide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Human Proinsulin C-Peptide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Proinsulin C-Peptide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "connecting peptide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94608?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94608/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94608/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94608/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94608/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94608/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94608/graph"
+    },
+    "Gene_Product_Encoded_By_Gene": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94608/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R54"
+    },
+    "Gene_Product_Has_Organism_Source": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94608/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R45"
+    },
+    "Gene_Product_Is_Biomarker_Of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94608/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R47"
+    },
+    "Gene_Product_Plays_Role_In_Biological_Process": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C94608/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R53"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

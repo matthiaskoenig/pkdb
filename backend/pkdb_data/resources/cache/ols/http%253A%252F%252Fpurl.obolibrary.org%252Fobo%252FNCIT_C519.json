@@ -1,0 +1,169 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C519",
+  "lang": "en",
+  "description": [
+    "A broad-spectrum aminoglycoside antibiotic produced by fermentation of Micromonospora purpurea or M. echinospora. Gentamicin is an antibiotic complex consisting of four major (C1, C1a, C2, and C2a) and several minor components. This agent irreversibly binds to the bacterial 30S ribosomal subunit. Specifically, this antibiotic is lodged between 16S rRNA and S12 protein within the 30S subunit. This leads to interference with translational initiation complex, misreading of mRNA, thereby hampering protein synthesis and resulting in bactericidal effect. Aminoglycosides are mostly ineffective against anaerobic bacteria, fungi and viruses."
+  ],
+  "synonyms": [
+    "GENTAMICIN",
+    "Garamicin",
+    "Garamycin",
+    "Genoptic",
+    "Genoptic S.O.P.",
+    "Gentamicin",
+    "Gentamycin",
+    "Gentamycin Complex",
+    "U-Gencin"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "1403-66-3"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:17833"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "Display_Name": [
+      "Gentamicin"
+    ],
+    "FDA_UNII_Code": [
+      "T6Z9V48IKG"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C65803"
+    ],
+    "Legacy Concept Name": [
+      "Gentamicin"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "39250"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "39250"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "39250"
+    ],
+    "Preferred_Name": [
+      "Gentamicin"
+    ],
+    "PubMedID_Primary_Reference": [
+      "15690437"
+    ],
+    "Semantic_Type": [
+      "Antibiotic",
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0017436"
+    ],
+    "code": [
+      "C519"
+    ]
+  },
+  "label": "Gentamicin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C519",
+  "obo_id": "NCIT:C519",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C176424",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "GENTAMICIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Garamicin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Garamycin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Genoptic",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Genoptic S.O.P.",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gentamicin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gentamycin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Gentamycin Complex",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "U-Gencin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C519?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C519/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C519/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C519/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C519/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C519/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C519/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,88 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_108595",
+  "lang": "en",
+  "description": [],
+  "synonyms": [],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C19H18O3"
+    ],
+    "has_dbxref": [
+      "LINCS:LSM-19978"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:108595"
+    ],
+    "inchi": [
+      "InChI=1S/C19H18O3/c1-10-9-22-18-12-6-7-13-11(5-4-8-19(13,2)3)15(12)17(21)16(20)14(10)18/h6-7,9H,4-5,8H2,1-3H3"
+    ],
+    "inchikey": [
+      "HYXITZLLTYIPOF-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "294.345"
+    ],
+    "monoisotopicmass": [
+      "294.12559"
+    ],
+    "smiles": [
+      "CC1=COC2=C1C(=O)C(=O)C3=C2C=CC4=C3CCCC4(C)C"
+    ]
+  },
+  "label": "1,6,6-trimethyl-8,9-dihydro-7H-naphtho[1,2-g]benzofuran-10,11-dione",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_108595",
+  "obo_id": "CHEBI:108595",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "LINCS",
+      "id": "LSM-19978",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_108595?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_108595/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_108595/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_108595/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_108595/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_108595/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_108595/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

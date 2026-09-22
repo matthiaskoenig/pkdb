@@ -1,0 +1,467 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_139388",
+  "lang": "en",
+  "description": [
+    "An oxopurine that is uric acid in which the hydrogens at positions 1,3,7 and 9 are replaced by methyl groups. It is a purine alkaloid that is found in Chinese tea known as kucha (Camellia assamica var. kucha) and exhibits anti-inflammatory and analgesic properties."
+  ],
+  "synonyms": [
+    "1,3,7,9-tetramethyl-7,9-dihydro-1H-purine-2,6,8(3H)-trione",
+    "1,3,7,9-tetramethyluric acid",
+    "Ba 2750",
+    "TeaCrine",
+    "temorine",
+    "temurin",
+    "tetramethyl uric acid",
+    "tetramethyl-2,3,6,7,8,9-hexahydro-1H-purine-2,6,8-trione",
+    "tetramethyluric acid",
+    "theacrine"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C9H12N4O3"
+    ],
+    "has_dbxref": [
+      "CAS:2309-49-1",
+      "Chemspider:67862",
+      "FooDB:FDB015351",
+      "HMDB:HMDB0004328",
+      "KNApSAcK:C00034312",
+      "MetaCyc:CPD-12505",
+      "PMID:12009315",
+      "PMID:1383710",
+      "PMID:14977550",
+      "PMID:20227468",
+      "PMID:22579816",
+      "PMID:23678853",
+      "PMID:23724689",
+      "PMID:26610558",
+      "PMID:26766930",
+      "PMID:27164220",
+      "PMID:27635133",
+      "PMID:28864241",
+      "PMID:28875060",
+      "PMID:29727630",
+      "PMID:31172618",
+      "PMID:31298401",
+      "PMID:32193380",
+      "PMID:32286351",
+      "PMID:32546720",
+      "PMID:32707370",
+      "PMID:32730889",
+      "PMID:32829142",
+      "PMID:331090",
+      "Patent:CN101289448",
+      "Wikipedia:Theacrine"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:139388"
+    ],
+    "inchi": [
+      "InChI=1S/C9H12N4O3/c1-10-5-6(11(2)8(10)15)12(3)9(16)13(4)7(5)14/h1-4H3"
+    ],
+    "inchikey": [
+      "QGDOQULISIQFHQ-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "224.220"
+    ],
+    "monoisotopicmass": [
+      "224.09094"
+    ],
+    "smiles": [
+      "CN1C(=O)N(C)C2=C1N(C)C(=O)N(C)C2=O"
+    ]
+  },
+  "label": "1,3,7,9-tetramethyluric acid",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_139388",
+  "obo_id": "CHEBI:139388",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "2309-49-1",
+      "description": "NIST Chemistry WebBook",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "2309-49-1",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "Chemspider",
+      "id": "67862",
+      "description": null,
+      "url": "http://www.chemspider.com/Chemical-Structure.67862.html"
+    },
+    {
+      "database": "FooDB",
+      "id": "FDB015351",
+      "description": null,
+      "url": "http://foodb.ca/compounds/FDB015351"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0004328",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0004328"
+    },
+    {
+      "database": "KNApSAcK",
+      "id": "C00034312",
+      "description": null,
+      "url": "http://www.knapsackfamily.com/knapsack_core/information.php?word=C00034312"
+    },
+    {
+      "database": "MetaCyc",
+      "id": "CPD-12505",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "12009315",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/12009315"
+    },
+    {
+      "database": "PMID",
+      "id": "1383710",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/1383710"
+    },
+    {
+      "database": "PMID",
+      "id": "14977550",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/14977550"
+    },
+    {
+      "database": "PMID",
+      "id": "20227468",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20227468"
+    },
+    {
+      "database": "PMID",
+      "id": "22579816",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22579816"
+    },
+    {
+      "database": "PMID",
+      "id": "23678853",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23678853"
+    },
+    {
+      "database": "PMID",
+      "id": "23724689",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23724689"
+    },
+    {
+      "database": "PMID",
+      "id": "26610558",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26610558"
+    },
+    {
+      "database": "PMID",
+      "id": "26766930",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26766930"
+    },
+    {
+      "database": "PMID",
+      "id": "27164220",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27164220"
+    },
+    {
+      "database": "PMID",
+      "id": "27635133",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/27635133"
+    },
+    {
+      "database": "PMID",
+      "id": "28864241",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28864241"
+    },
+    {
+      "database": "PMID",
+      "id": "28875060",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28875060"
+    },
+    {
+      "database": "PMID",
+      "id": "29727630",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/29727630"
+    },
+    {
+      "database": "PMID",
+      "id": "31172618",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/31172618"
+    },
+    {
+      "database": "PMID",
+      "id": "31298401",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/31298401"
+    },
+    {
+      "database": "PMID",
+      "id": "32193380",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32193380"
+    },
+    {
+      "database": "PMID",
+      "id": "32286351",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32286351"
+    },
+    {
+      "database": "PMID",
+      "id": "32546720",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32546720"
+    },
+    {
+      "database": "PMID",
+      "id": "32707370",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32707370"
+    },
+    {
+      "database": "PMID",
+      "id": "32730889",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32730889"
+    },
+    {
+      "database": "PMID",
+      "id": "32829142",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32829142"
+    },
+    {
+      "database": "PMID",
+      "id": "331090",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/331090"
+    },
+    {
+      "database": "Patent",
+      "id": "CN101289448",
+      "description": null,
+      "url": "https://www.google.com/patents/CN101289448"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Theacrine",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Theacrine"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1,3,7,9-tetramethyl-7,9-dihydro-1H-purine-2,6,8(3H)-trione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "1,3,7,9-tetramethyluric acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Ba 2750",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "TeaCrine",
+      "scope": "hasRelatedSynonym",
+      "type": "BRAND NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "temorine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "temurin",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tetramethyl uric acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "NIST_Chemistry_WebBook",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tetramethyl-2,3,6,7,8,9-hexahydro-1H-purine-2,6,8-trione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "tetramethyluric acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "theacrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "theacrine",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "MetaCyc",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139388?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139388/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139388/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139388/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139388/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139388/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139388/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139388/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "has_functional_parent": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_139388/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523has_functional_parent"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,12 @@
+{
+  "processing_version": "5",
+  "folders": 1579,
+  "statuses": {
+    "invalid": 486,
+    "valid": 1093
+  },
+  "audit_sha256": "a00e29bac97e90f6524ba766ce582af01054727b3adf8b0004be53106106e2f1",
+  "issue_sample_limit_per_folder": 10,
+  "http_rebuild": false,
+  "accepted_exclusions": false
+}

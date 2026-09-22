@@ -1,0 +1,131 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/VTO_0011993",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "Homo floresiensis",
+    "Homo sapiens neanderthalensis",
+    "Homo sapiens ssp. Denisova"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "NCBITaxon:9606",
+      "PaleoDB:83088"
+    ],
+    "has_obo_namespace": [
+      "vto-namespace"
+    ],
+    "has_rank": [
+      "http://purl.obolibrary.org/obo/TAXRANK_0000006"
+    ],
+    "id": [
+      "VTO:0011993"
+    ]
+  },
+  "label": "Homo sapiens",
+  "ontology_name": "vto",
+  "ontology_prefix": "VTO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/vto.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "VTO_0011993",
+  "obo_id": "VTO:0011993",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "NCBITaxon",
+      "id": "9606",
+      "description": null,
+      "url": "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=9606"
+    },
+    {
+      "database": "PaleoDB",
+      "id": "83088",
+      "description": null,
+      "url": "http://fossilworks.org/?a=taxonInfo&taxon_no=83088"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Homo floresiensis",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "PaleoDB",
+          "id": "91487",
+          "description": null,
+          "url": "http://fossilworks.org/?a=taxonInfo&taxon_no=91487"
+        }
+      ]
+    },
+    {
+      "name": "Homo sapiens neanderthalensis",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCBITaxon",
+          "id": "63221",
+          "description": null,
+          "url": "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=63221"
+        }
+      ]
+    },
+    {
+      "name": "Homo sapiens ssp. Denisova",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "NCBITaxon",
+          "id": "741158",
+          "description": null,
+          "url": "http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=741158"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011993?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011993/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011993/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011993/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011993/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011993/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011993/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011993/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011993/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011993/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/vto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FVTO_0011993/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

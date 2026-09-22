@@ -1,0 +1,239 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3374",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "(6E)-N-(4-hydroxy-3-methoxybenzyl)-8-methylnon-6-enamide",
+    "Capsaicin",
+    "capsaicin",
+    "(E)-8-Methyl-N-vanillyl-6-nonenamide",
+    "Isodecenoic acid vanillylamide",
+    "Zostrix",
+    "trans-8-Methyl-N-vanillyl-6-nonenamide"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C18H27NO3"
+    ],
+    "has_dbxref": [
+      "BPDB:1630",
+      "Beilstein:2816484",
+      "CAS:404-86-4",
+      "Drug_Central:3064",
+      "KEGG:C06866",
+      "KEGG:D00250",
+      "Wikipedia:Capsaicin"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3374"
+    ],
+    "inchi": [
+      "InChI=1S/C18H27NO3/c1-14(2)8-6-4-5-7-9-18(21)19-13-15-10-11-16(20)17(12-15)22-3/h6,8,10-12,14,20H,4-5,7,9,13H2,1-3H3,(H,19,21)/b8-6+"
+    ],
+    "inchikey": [
+      "YKPUWZUDDOIDPM-SOFGYWHQSA-N"
+    ],
+    "mass": [
+      "305.41190"
+    ],
+    "monoisotopicmass": [
+      "305.19909"
+    ],
+    "smiles": [
+      "COc1cc(CNC(=O)CCCC\\C=C\\C(C)C)ccc1O"
+    ]
+  },
+  "label": "capsaicin",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3374",
+  "obo_id": "CHEBI:3374",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "BPDB",
+      "id": "1630",
+      "description": null,
+      "url": "https://sitem.herts.ac.uk/aeru/bpdb/Reports/1630.htm"
+    },
+    {
+      "database": "Beilstein",
+      "id": "2816484",
+      "description": "Beilstein",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "404-86-4",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "404-86-4",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "Drug_Central",
+      "id": "3064",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/3064"
+    },
+    {
+      "database": "KEGG",
+      "id": "C06866",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C06866"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00250",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00250"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Capsaicin",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Capsaicin"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(6E)-N-(4-hydroxy-3-methoxybenzyl)-8-methylnon-6-enamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Capsaicin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "capsaicin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "UniProt",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(E)-8-Methyl-N-vanillyl-6-nonenamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Isodecenoic acid vanillylamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Zostrix",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "trans-8-Methyl-N-vanillyl-6-nonenamide",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3374?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3374/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3374/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3374/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3374/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3374/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3374/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3374/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

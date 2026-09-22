@@ -17,6 +17,7 @@ nav = [
   { "Installation" = "installation.md" },
   { "Deployment" = "deployment.md" },
   { "Development" = "development.md" },
+  { "Local upload testing" = "local-upload-testing.md" },
   { "Contributing" = "contributing.md" },
 ]
 

@@ -1,0 +1,159 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C83887",
+  "lang": "en",
+  "description": [
+    "A potent, orally bioavailable dihydropurinedione-based inhibitor of dipeptidyl peptidase 4 (DPP-4), with hypoglycemic activity. The inhibition of DPP-4 by linagliptin appears to be longer lasting than that by some other DPP-4 inhibitors tested."
+  ],
+  "synonyms": [
+    "(R)-8-(3-Amino-Piperidin-1-yl)-7-but-2-ynyl-3-Methyl-1-(4-methyl-quinazolin-2-ylmethyl)-3,7-dihydro-purine-2,6-dione",
+    "1H-Purine-2,6-dione, 8-((3R)-3-amino-1-piperidinyl)-7-(2-butynyl)-3,7-dihydro-3-methyl-1-((4-methyl-2-quinazolinyl)methyl)-",
+    "8-((3R)-3-Aminopiperidin-1-yl)-7-(but-2-yn-1-yl)-3-Methyl-1-((4-Methylquinazolin-2-yl)Methyl)-3,7-Dihydro-1H-Purine-2,6-Dione",
+    "BI 1356 BS",
+    "BI-1356",
+    "LINAGLIPTIN",
+    "Linagliptin",
+    "Tradjenta"
+  ],
+  "annotation": {
+    "Accepted_Therapeutic_Use_For": [
+      "Diabetes Mellitus Type II"
+    ],
+    "CAS_Registry": [
+      "668270-12-0"
+    ],
+    "Chemical_Formula": [
+      "C25H28N8O2"
+    ],
+    "Contributing_Source": [
+      "FDA",
+      "GDC"
+    ],
+    "FDA_UNII_Code": [
+      "3X29ZEJ4R2"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C99532"
+    ],
+    "Maps_To": [
+      "Linagliptin"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "793591"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "793591"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "793591"
+    ],
+    "Preferred_Name": [
+      "Linagliptin"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C2746078"
+    ],
+    "code": [
+      "C83887"
+    ]
+  },
+  "label": "Linagliptin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C83887",
+  "obo_id": "NCIT:C83887",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C173381",
+    "NCIT_C173383",
+    "NCIT_C176424",
+    "NCIT_C177537",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(R)-8-(3-Amino-Piperidin-1-yl)-7-but-2-ynyl-3-Methyl-1-(4-methyl-quinazolin-2-ylmethyl)-3,7-dihydro-purine-2,6-dione",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "1H-Purine-2,6-dione, 8-((3R)-3-amino-1-piperidinyl)-7-(2-butynyl)-3,7-dihydro-3-methyl-1-((4-methyl-2-quinazolinyl)methyl)-",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "8-((3R)-3-Aminopiperidin-1-yl)-7-(but-2-yn-1-yl)-3-Methyl-1-((4-Methylquinazolin-2-yl)Methyl)-3,7-Dihydro-1H-Purine-2,6-Dione",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "BI 1356 BS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "BI-1356",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "LINAGLIPTIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Linagliptin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Tradjenta",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C83887?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C83887/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C83887/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C83887/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C83887/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C83887/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C83887/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

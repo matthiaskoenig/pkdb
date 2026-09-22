@@ -1,0 +1,125 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C3959",
+  "lang": "en",
+  "description": [
+    "A non-neoplastic or neoplastic disorder that affects the liver, bile ducts, and gallbladder. Representative examples of non-neoplastic disorders include hepatitis, cirrhosis, cholangitis, and cholecystitis. Representative examples of neoplastic disorders include hepatocellular adenoma, hepatocellular carcinoma, and cholangiocarcinoma."
+  ],
+  "synonyms": [
+    "Hepatobiliary Disorder",
+    "Liver Disease",
+    "Liver and Biliary Disease",
+    "Liver and Biliary Disorder",
+    "Liver and Biliary System Disorder"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CPTAC"
+    ],
+    "Legacy Concept Name": [
+      "Liver_and_Biliary_Tract_Disorder"
+    ],
+    "Preferred_Name": [
+      "Hepatobiliary Disorder"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C0267792"
+    ],
+    "code": [
+      "C3959"
+    ]
+  },
+  "label": "Hepatobiliary Disorder",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C3959",
+  "obo_id": "NCIT:C3959",
+  "in_subset": [
+    "NCIT_C156952",
+    "NCIT_C158034",
+    "NCIT_C158520"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Hepatobiliary Disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver and Biliary Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver and Biliary Disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver and Biliary System Disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3959?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3959/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3959/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3959/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3959/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3959/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3959/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3959/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3959/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3959/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3959/graph"
+    },
+    "Disease_Has_Associated_Anatomic_Site": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3959/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R100"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

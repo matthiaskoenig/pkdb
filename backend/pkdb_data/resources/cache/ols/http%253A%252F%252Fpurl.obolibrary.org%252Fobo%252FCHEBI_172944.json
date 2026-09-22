@@ -1,0 +1,574 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_172944",
+  "lang": "en",
+  "description": [
+    "A monocarboxylic acid amide obtained by formal condensation of the carboxy group of (3S,11aR)-6-hydroxy-3-methyl-5,7-dioxo-2,3,5,7,11,11a-hexahydro[1,3]oxazolo[3,2-a]pyrido[1,2-d]pyrazine-8-carboxylic acid with the amino group of 2,4-difluorobenzylamine. Used (as its sodium salt) for treatment of HIV-1."
+  ],
+  "synonyms": [
+    "(3S,11aR)-N-(2,4-difluorobenzyl)-6-hydroxy-3-methyl-5,7-dioxo-2,3,5,7,11,11a-hexahydro[1,3]oxazolo[3,2-a]pyrido[1,2-d]pyrazine-8-carboxamide",
+    "CAB",
+    "GSK 1265744",
+    "GSK 744",
+    "GSK-1265744",
+    "GSK-1265744A",
+    "GSK1265744",
+    "GSK1265744A",
+    "GSK744",
+    "GSK744 LA",
+    "GSK744 LAP",
+    "S-265744",
+    "S/GSK1265744",
+    "cabotegravir",
+    "cabotegravirum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C19H17F2N3O5"
+    ],
+    "has_dbxref": [
+      "CAS:1051375-10-0",
+      "Chemspider:30829503",
+      "DrugBank:DB11751",
+      "KEGG:D10548",
+      "PMCID:PMC7776404",
+      "PMID:24144896",
+      "PMID:24594934",
+      "PMID:25469523",
+      "PMID:25589630",
+      "PMID:25589631",
+      "PMID:29410019",
+      "PMID:29746267",
+      "PMID:31644481",
+      "PMID:32164474",
+      "PMID:32341511",
+      "PMID:32361755",
+      "PMID:32447500",
+      "PMID:32495274",
+      "PMID:32497490",
+      "PMID:32592669",
+      "PMID:32882042",
+      "PMID:33005698",
+      "PMID:33112699",
+      "PMID:33136751",
+      "PMID:33148996",
+      "PMID:33289810",
+      "PMID:33308425",
+      "PMID:33347943",
+      "PMID:33593093",
+      "PMID:33730748",
+      "PMID:33770512",
+      "PMID:33770513",
+      "PMID:33794181",
+      "PMID:33821887",
+      "PMID:33822851",
+      "PMID:33830459",
+      "PMID:33872258",
+      "PMID:33957367",
+      "Wikipedia:Cabotegravir"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:172944"
+    ],
+    "inchi": [
+      "InChI=1S/C19H17F2N3O5/c1-9-8-29-14-7-23-6-12(16(25)17(26)15(23)19(28)24(9)14)18(27)22-5-10-2-3-11(20)4-13(10)21/h2-4,6,9,14,26H,5,7-8H2,1H3,(H,22,27)/t9-,14+/m0/s1"
+    ],
+    "inchikey": [
+      "WCWSTNLSLKSJPK-LKFCYVNXSA-N"
+    ],
+    "mass": [
+      "405.358"
+    ],
+    "monoisotopicmass": [
+      "405.11363"
+    ],
+    "smiles": [
+      "[H][C@@]12CN3C=C(C(=O)NCC4=C(F)C=C(F)C=C4)C(=O)C(O)=C3C(=O)N1[C@@H](C)CO2"
+    ]
+  },
+  "label": "cabotegravir",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_172944",
+  "obo_id": "CHEBI:172944",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "1051375-10-0",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "Chemspider",
+      "id": "30829503",
+      "description": null,
+      "url": "http://www.chemspider.com/Chemical-Structure.30829503.html"
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB11751",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB11751"
+    },
+    {
+      "database": "KEGG",
+      "id": "D10548",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D10548"
+    },
+    {
+      "database": "PMCID",
+      "id": "PMC7776404",
+      "description": "Europe PMC",
+      "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC7776404"
+    },
+    {
+      "database": "PMID",
+      "id": "24144896",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24144896"
+    },
+    {
+      "database": "PMID",
+      "id": "24594934",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24594934"
+    },
+    {
+      "database": "PMID",
+      "id": "25469523",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25469523"
+    },
+    {
+      "database": "PMID",
+      "id": "25589630",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25589630"
+    },
+    {
+      "database": "PMID",
+      "id": "25589631",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/25589631"
+    },
+    {
+      "database": "PMID",
+      "id": "29410019",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/29410019"
+    },
+    {
+      "database": "PMID",
+      "id": "29746267",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/29746267"
+    },
+    {
+      "database": "PMID",
+      "id": "31644481",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/31644481"
+    },
+    {
+      "database": "PMID",
+      "id": "32164474",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32164474"
+    },
+    {
+      "database": "PMID",
+      "id": "32341511",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32341511"
+    },
+    {
+      "database": "PMID",
+      "id": "32361755",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32361755"
+    },
+    {
+      "database": "PMID",
+      "id": "32447500",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32447500"
+    },
+    {
+      "database": "PMID",
+      "id": "32495274",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32495274"
+    },
+    {
+      "database": "PMID",
+      "id": "32497490",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32497490"
+    },
+    {
+      "database": "PMID",
+      "id": "32592669",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32592669"
+    },
+    {
+      "database": "PMID",
+      "id": "32882042",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/32882042"
+    },
+    {
+      "database": "PMID",
+      "id": "33005698",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33005698"
+    },
+    {
+      "database": "PMID",
+      "id": "33112699",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33112699"
+    },
+    {
+      "database": "PMID",
+      "id": "33136751",
+      "description": "SUBMITTER",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33136751"
+    },
+    {
+      "database": "PMID",
+      "id": "33148996",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33148996"
+    },
+    {
+      "database": "PMID",
+      "id": "33289810",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33289810"
+    },
+    {
+      "database": "PMID",
+      "id": "33308425",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33308425"
+    },
+    {
+      "database": "PMID",
+      "id": "33347943",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33347943"
+    },
+    {
+      "database": "PMID",
+      "id": "33593093",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33593093"
+    },
+    {
+      "database": "PMID",
+      "id": "33730748",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33730748"
+    },
+    {
+      "database": "PMID",
+      "id": "33770512",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33770512"
+    },
+    {
+      "database": "PMID",
+      "id": "33770513",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33770513"
+    },
+    {
+      "database": "PMID",
+      "id": "33794181",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33794181"
+    },
+    {
+      "database": "PMID",
+      "id": "33821887",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33821887"
+    },
+    {
+      "database": "PMID",
+      "id": "33822851",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33822851"
+    },
+    {
+      "database": "PMID",
+      "id": "33830459",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33830459"
+    },
+    {
+      "database": "PMID",
+      "id": "33872258",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33872258"
+    },
+    {
+      "database": "PMID",
+      "id": "33957367",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/33957367"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Cabotegravir",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Cabotegravir"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3S,11aR)-N-(2,4-difluorobenzyl)-6-hydroxy-3-methyl-5,7-dioxo-2,3,5,7,11,11a-hexahydro[1,3]oxazolo[3,2-a]pyrido[1,2-d]pyrazine-8-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "CAB",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "GSK 1265744",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "GSK 744",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "GSK-1265744",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "GSK-1265744A",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "GSK1265744",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "GSK1265744A",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "GSK744",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "GSK744 LA",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "GSK744 LAP",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "S-265744",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "S/GSK1265744",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cabotegravir",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "cabotegravirum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_172944?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_172944/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_172944/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_172944/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_172944/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_172944/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_172944/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_172944/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_conjugate_acid_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_172944/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_acid_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

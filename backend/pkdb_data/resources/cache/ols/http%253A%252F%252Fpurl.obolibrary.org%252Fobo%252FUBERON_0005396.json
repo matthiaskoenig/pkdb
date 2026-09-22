@@ -1,0 +1,308 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/UBERON_0005396",
+  "lang": "en",
+  "description": [
+    "One of: the common carotid artery, or its branches, the external and internal carotid arteries."
+  ],
+  "synonyms": [
+    "carotid",
+    "carotid artery",
+    "subdivision of common carotid artery",
+    "common carotid arterial subdivision"
+  ],
+  "annotation": {
+    "editor note": [
+      "This is a generic grouping class that is the superclass of the trunks/branches of the common carotid artery. Note that AOs vary widely in how they divide up and generalize arteries"
+    ],
+    "external_definition": [
+      "Artery originating at the junction of the first two aortic arches and supplying the anterior brain. Kimmel et al, 1995.[TAO]"
+    ],
+    "has_dbxref": [
+      "AAO:0010217",
+      "BTO:0000168",
+      "CALOHA:TS-0116",
+      "EFO:0000818",
+      "EHDAA:6385",
+      "EMAPA:18609",
+      "EV:0100379",
+      "FMA:70504",
+      "GAID:478",
+      "MA:0001925",
+      "MAT:0000501",
+      "MESH:D002339",
+      "NCIT:C12687",
+      "SCTID:362040006",
+      "SCTID:69105007",
+      "TAO:0000097",
+      "UMLS:C0007272",
+      "VHOG:0000266",
+      "Wikipedia:Carotid_artery",
+      "ZFA:0000097",
+      "galen:CarotidArtery"
+    ],
+    "has_obo_namespace": [
+      "uberon"
+    ],
+    "id": [
+      "UBERON:0005396"
+    ]
+  },
+  "label": "carotid artery segment",
+  "ontology_name": "uberon",
+  "ontology_prefix": "UBERON",
+  "ontology_iri": "http://purl.obolibrary.org/obo/uberon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "UBERON_0005396",
+  "obo_id": "UBERON:0005396",
+  "in_subset": [
+    "efo_slim",
+    "grouping_class",
+    "human_subset",
+    "mouse_subset",
+    "pheno_slim",
+    "vertebrate_core"
+  ],
+  "obo_definition_citation": [
+    {
+      "definition": "One of: the common carotid artery, or its branches, the external and internal carotid arteries.",
+      "oboXrefs": [
+        {
+          "database": "Wikipedia",
+          "id": "Carotid_artery",
+          "description": null,
+          "url": "http://en.wikipedia.org/wiki/Carotid_artery"
+        },
+        {
+          "database": null,
+          "id": "https://sourceforge.net/tracker/?func=detail&aid=3486870&group_id=76834&atid=994764",
+          "description": null,
+          "url": "https://sourceforge.net/tracker/?func=detail&aid=3486870&group_id=76834&atid=994764"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "AAO",
+      "id": "0010217",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/AAO_0010217"
+    },
+    {
+      "database": "BTO",
+      "id": "0000168",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/BTO_0000168"
+    },
+    {
+      "database": "CALOHA",
+      "id": "TS-0116",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "EFO",
+      "id": "0000818",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0000818"
+    },
+    {
+      "database": "EHDAA",
+      "id": "6385",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/EHDAA_6385"
+    },
+    {
+      "database": "EMAPA",
+      "id": "18609",
+      "description": null,
+      "url": "http://www.informatics.jax.org/vocab/gxd/anatomy/EMAPA:18609"
+    },
+    {
+      "database": "EV",
+      "id": "0100379",
+      "description": null,
+      "url": "http://www.evocontology.org/site/Main/BrowseEvoc?x_termid=0100379"
+    },
+    {
+      "database": "FMA",
+      "id": "70504",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/ols4/ontologies/fma/terms?obo_id=FMA:70504"
+    },
+    {
+      "database": "GAID",
+      "id": "478",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "MA",
+      "id": "0001925",
+      "description": null,
+      "url": "http://www.informatics.jax.org/searches/AMA.cgi?id=MA:0001925"
+    },
+    {
+      "database": "MAT",
+      "id": "0000501",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/MAT_0000501"
+    },
+    {
+      "database": "MESH",
+      "id": "D002339",
+      "description": null,
+      "url": "http://id.nlm.nih.gov/mesh/D002339"
+    },
+    {
+      "database": "NCIT",
+      "id": "C12687",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/NCIT_C12687"
+    },
+    {
+      "database": "SCTID",
+      "id": "362040006",
+      "description": null,
+      "url": "http://snomed.info/id/362040006"
+    },
+    {
+      "database": "SCTID",
+      "id": "69105007",
+      "description": null,
+      "url": "http://snomed.info/id/69105007"
+    },
+    {
+      "database": "TAO",
+      "id": "0000097",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/TAO_0000097"
+    },
+    {
+      "database": "UMLS",
+      "id": "C0007272",
+      "description": "ncithesaurus:Carotid_Artery",
+      "url": "https://uts.nlm.nih.gov/uts/umls/concept/C0007272"
+    },
+    {
+      "database": "VHOG",
+      "id": "0000266",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/VHOG_0000266"
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Carotid_artery",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Carotid_artery"
+    },
+    {
+      "database": "ZFA",
+      "id": "0000097",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/ZFA_0000097"
+    },
+    {
+      "database": "galen",
+      "id": "CarotidArtery",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "carotid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "AAO",
+          "id": "0010217",
+          "description": null,
+          "url": "http://purl.obolibrary.org/obo/AAO_0010217"
+        }
+      ]
+    },
+    {
+      "name": "carotid artery",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "MA",
+          "id": "0001925",
+          "description": null,
+          "url": "http://www.informatics.jax.org/searches/AMA.cgi?id=MA:0001925"
+        }
+      ]
+    },
+    {
+      "name": "subdivision of common carotid artery",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "FMA",
+          "id": "70504",
+          "description": null,
+          "url": "https://www.ebi.ac.uk/ols4/ontologies/fma/terms?obo_id=FMA:70504"
+        }
+      ]
+    },
+    {
+      "name": "common carotid arterial subdivision",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": "FMA",
+          "id": "70504",
+          "description": null,
+          "url": "https://www.ebi.ac.uk/ols4/ontologies/fma/terms?obo_id=FMA:70504"
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0005396?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0005396/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0005396/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0005396/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0005396/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0005396/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0005396/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0005396/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0005396/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0005396/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/uberon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FUBERON_0005396/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,55 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pkdb"
+version = "0.10.0"
+description = "Validated PK-DB backend"
+requires-python = ">=3.13,<3.15"
+dependencies = [
+  "pydantic>=2,<3",
+  "pydantic-settings>=2,<3",
+  "pandas>=2.3,<3",
+  "numpy>=2.3,<3",
+  "scipy>=1.16,<2",
+  "pint>=0.25,<1",
+  "openpyxl>=3.1,<4",
+  "pkdb-analysis @ git+https://github.com/matthiaskoenig/pkdb_analysis.git@6e010ca987bc43995da99b826064581bf201e731",
+  "sqlalchemy>=2,<3",
+  "psycopg[binary]>=3,<4",
+  "alembic>=1,<2",
+  "pwdlib[argon2]>=0.3,<1",
+  "fastapi>=0.115,<1",
+  "uvicorn>=0.34,<1",
+  "python-multipart>=0.0.20",
+  "fastmcp>=3,<4",
+  "mcp==1.30.0",
+  "httpx>=0.28",
+]
+
+[project.scripts]
+pkdb = "pkdb.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.16", "ty>=0.0.82"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pkdb"]
+
+[tool.hatch.metadata]
+allow-direct-references = true
+
+[tool.ruff]
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP"]
+
+[tool.ty.environment]
+python-version = "3.13"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"
+markers = ["corpus: requires explicitly configured source corpus", "integration: PostgreSQL integration"]

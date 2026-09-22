@@ -1,0 +1,93 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/MMO_0000303",
+  "lang": "en",
+  "description": [
+    "An assay in which a radioactive substrate us used to quantitate enzyme activity in a sample or in which a radioactive cofactor or substrate with an added enzyme is used to quantitate the level of another substrate in a sample."
+  ],
+  "synonyms": [],
+  "annotation": {
+    "created_by": [
+      "JSmith"
+    ],
+    "creation_date": [
+      "2012-09-06T05:04:59Z"
+    ],
+    "has_obo_namespace": [
+      "measurement_method_ontology"
+    ],
+    "id": [
+      "MMO:0000303"
+    ]
+  },
+  "label": "radioenzymatic assay",
+  "ontology_name": "mmo",
+  "ontology_prefix": "MMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/mmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "MMO_0000303",
+  "obo_id": "MMO:0000303",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "An assay in which a radioactive substrate us used to quantitate enzyme activity in a sample or in which a radioactive cofactor or substrate with an added enzyme is used to quantitate the level of another substrate in a sample.",
+      "oboXrefs": [
+        {
+          "database": "PMID",
+          "id": "904439",
+          "description": null,
+          "url": "http://www.ncbi.nlm.nih.gov/pubmed/904439"
+        },
+        {
+          "database": "RGD",
+          "id": "JRS",
+          "description": null,
+          "url": "https://rgd.mcw.edu/rgdweb/search/search.html?term=JRS"
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000303?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000303/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000303/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000303/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000303/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000303/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000303/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000303/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000303/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000303/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/mmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FMMO_0000303/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,15 @@
+{
+  "report_sha256": "16188e19fc3a76b0dac3ef7c60011fc2b033c4d46e732a0dd70f79b439e5598d",
+  "complete": false,
+  "source_folders": 1579,
+  "statuses": {
+    "failed": 446,
+    "published": 1072,
+    "blocked": 61
+  },
+  "http_statuses": {
+    "422": 400,
+    "None": 46
+  },
+  "acceptance": "Not accepted for cutover; failures and blocked identities require review."
+}

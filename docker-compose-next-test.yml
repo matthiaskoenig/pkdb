@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:18.0
+    environment:
+      POSTGRES_DB: pkdb_next_test
+      POSTGRES_USER: pkdb_test
+      POSTGRES_PASSWORD: local-test-only
+    ports:
+      - "127.0.0.1:15435:5432"
+    tmpfs:
+      - /var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pkdb_test -d pkdb_next_test"]
+      interval: 2s
+      timeout: 2s
+      retries: 30

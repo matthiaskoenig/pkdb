@@ -1,0 +1,299 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3223",
+  "lang": "en",
+  "description": [
+    "An azaspiro compound that is 8-azaspiro[4.5]decane-7,9-dione substituted at the nitrogen atom by a 4-(piperazin-1-yl)butyl group which in turn is substituted by a pyrimidin-2-yl group at the N(4) position."
+  ],
+  "synonyms": [
+    "8-[4-(4-pyrimidin-2-ylpiperazin-1-yl)butyl]-8-azaspiro[4.5]decane-7,9-dione",
+    "Buspirone",
+    "8-(4-(4-(2-Pyrimidinyl)-1-piperizinyl)butyl)-8-azaspiro(4,5)decane-7,9-dione",
+    "buspirona",
+    "buspirone",
+    "buspironum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C21H31N5O2"
+    ],
+    "has_dbxref": [
+      "CAS:36505-84-7",
+      "DrugBank:DB00490",
+      "Drug_Central:437",
+      "HMDB:HMDB0014633",
+      "KEGG:C06861",
+      "KEGG:D07593",
+      "LINCS:LSM-4105",
+      "PMID:15876901",
+      "PMID:20825390",
+      "PMID:26746121",
+      "PMID:8638511",
+      "Patent:DE2057845",
+      "Patent:US3717634",
+      "Reaxys:964904",
+      "Wikipedia:Buspirone"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3223"
+    ],
+    "inchi": [
+      "InChI=1S/C21H31N5O2/c27-18-16-21(6-1-2-7-21)17-19(28)26(18)11-4-3-10-24-12-14-25(15-13-24)20-22-8-5-9-23-20/h5,8-9H,1-4,6-7,10-17H2"
+    ],
+    "inchikey": [
+      "QWCRAEMEVRGPNT-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "385.504"
+    ],
+    "monoisotopicmass": [
+      "385.24778"
+    ],
+    "smiles": [
+      "C=1N=C(N=CC1)N2CCN(CC2)CCCCN3C(CC4(CC3=O)CCCC4)=O"
+    ]
+  },
+  "label": "buspirone",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3223",
+  "obo_id": "CHEBI:3223",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "36505-84-7",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "36505-84-7",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00490",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00490"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "437",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/437"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014633",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014633"
+    },
+    {
+      "database": "KEGG",
+      "id": "C06861",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C06861"
+    },
+    {
+      "database": "KEGG",
+      "id": "D07593",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D07593"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-4105",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "15876901",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/15876901"
+    },
+    {
+      "database": "PMID",
+      "id": "20825390",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20825390"
+    },
+    {
+      "database": "PMID",
+      "id": "26746121",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/26746121"
+    },
+    {
+      "database": "PMID",
+      "id": "8638511",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/8638511"
+    },
+    {
+      "database": "Patent",
+      "id": "DE2057845",
+      "description": null,
+      "url": "https://www.google.com/patents/DE2057845"
+    },
+    {
+      "database": "Patent",
+      "id": "US3717634",
+      "description": null,
+      "url": "https://www.google.com/patents/US3717634"
+    },
+    {
+      "database": "Reaxys",
+      "id": "964904",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Buspirone",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Buspirone"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "8-[4-(4-pyrimidin-2-ylpiperazin-1-yl)butyl]-8-azaspiro[4.5]decane-7,9-dione",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "Buspirone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_COMPOUND",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "8-(4-(4-(2-Pyrimidinyl)-1-piperizinyl)butyl)-8-azaspiro(4,5)decane-7,9-dione",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "buspirona",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "buspirone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "buspirone",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "buspironum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "WHO_MedNet",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    },
+    "is_conjugate_base_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3223/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_base_of"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,113 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_77034",
+  "lang": "en",
+  "description": [
+    "A compound that alters the structure of mucus so as to decrease its viscosity and thereby facilitate its removal by ciliary action and expectoration. Compare with antitussives, which suppress the cough reflex, and expectorants, which are considered to increase the volume of secretions in the respiratory tract, so facilitating their removal by ciliary action and coughing."
+  ],
+  "synonyms": [
+    "mucolytics"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "PMID:17419975",
+      "PMID:17594730",
+      "PMID:20031934",
+      "PMID:2117172",
+      "PMID:22895919"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:77034"
+    ]
+  },
+  "label": "mucolytic",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_77034",
+  "obo_id": "CHEBI:77034",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "PMID",
+      "id": "17419975",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17419975"
+    },
+    {
+      "database": "PMID",
+      "id": "17594730",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/17594730"
+    },
+    {
+      "database": "PMID",
+      "id": "20031934",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/20031934"
+    },
+    {
+      "database": "PMID",
+      "id": "2117172",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/2117172"
+    },
+    {
+      "database": "PMID",
+      "id": "22895919",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22895919"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "mucolytics",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77034?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77034/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77034/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77034/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77034/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77034/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_77034/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

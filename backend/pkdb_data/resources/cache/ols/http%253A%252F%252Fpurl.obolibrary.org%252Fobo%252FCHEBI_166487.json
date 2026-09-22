@@ -1,0 +1,118 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_166487",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "1-(3-chlorophenyl)-2-[(1-hydroxy-2-methylpropan-2-yl)amino]propan-1-one"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C13H18ClNO2"
+    ],
+    "has_dbxref": [
+      "CAS:92264-81-8",
+      "Chemspider:433",
+      "HMDB:HMDB0012235"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:166487"
+    ],
+    "inchi": [
+      "InChI=1S/C13H18ClNO2/c1-9(15-13(2,3)8-16)12(17)10-5-4-6-11(14)7-10/h4-7,9,15-16H,8H2,1-3H3"
+    ],
+    "inchikey": [
+      "AKOAEVOSDHIVFX-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "255.740"
+    ],
+    "monoisotopicmass": [
+      "255.10261"
+    ],
+    "smiles": [
+      "ClC=1C=C(C(=O)C(NC(CO)(C)C)C)C=CC1"
+    ]
+  },
+  "label": "Hydroxybupropion",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_166487",
+  "obo_id": "CHEBI:166487",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "92264-81-8",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "Chemspider",
+      "id": "433",
+      "description": null,
+      "url": "http://www.chemspider.com/Chemical-Structure.433.html"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0012235",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0012235"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "1-(3-chlorophenyl)-2-[(1-hydroxy-2-methylpropan-2-yl)amino]propan-1-one",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "SUBMITTER",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_166487?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_166487/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_166487/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_166487/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_166487/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_166487/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_166487/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

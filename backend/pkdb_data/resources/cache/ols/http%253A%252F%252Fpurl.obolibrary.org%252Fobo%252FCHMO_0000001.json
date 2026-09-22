@@ -1,0 +1,69 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHMO_0000001",
+  "lang": "en",
+  "description": [
+    "The determination of the spectral absorbance of a solution. This method is often used to determine the concentration of a chemical in a solution."
+  ],
+  "synonyms": [
+    "colorimetric method",
+    "colourimetry"
+  ],
+  "annotation": {
+    "id": [
+      "CHMO:0000001"
+    ]
+  },
+  "label": "colorimetry",
+  "ontology_name": "chmo",
+  "ontology_prefix": "CHMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHMO_0000001",
+  "obo_id": "CHMO:0000001",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "The determination of the spectral absorbance of a solution. This method is often used to determine the concentration of a chemical in a solution.",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "https://orcid.org/0000-0002-0640-0422",
+          "description": null,
+          "url": "https://orcid.org/0000-0002-0640-0422"
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000001?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000001/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000001/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000001/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000001/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000001/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0000001/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

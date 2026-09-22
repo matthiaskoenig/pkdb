@@ -1,0 +1,95 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CMO_0000220",
+  "lang": "en",
+  "description": [
+    "Resistance to blood flow by blood vessels throughout the body, the degree to which the blood vessels impede the flow of blood, often calculated as SVR equal to the difference between mean arterial blood pressure (MAP) and central venous pressure (CVP) divided by cardiac output (CO) (SVR=MAP &#8722; CVP/CO)."
+  ],
+  "synonyms": [
+    "SVR",
+    "TPR",
+    "total peripheral resistance"
+  ],
+  "annotation": {
+    "created_by": [
+      "mshimoyama"
+    ],
+    "creation_date": [
+      "2010-06-10T02:41:52Z"
+    ],
+    "has_dbxref": [
+      "PMID:22258067"
+    ],
+    "has_obo_namespace": [
+      "clinical_measurement_ontology"
+    ],
+    "id": [
+      "CMO:0000220"
+    ]
+  },
+  "label": "systemic vascular resistance",
+  "ontology_name": "cmo",
+  "ontology_prefix": "CMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/cmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CMO_0000220",
+  "obo_id": "CMO:0000220",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "Resistance to blood flow by blood vessels throughout the body, the degree to which the blood vessels impede the flow of blood, often calculated as SVR equal to the difference between mean arterial blood pressure (MAP) and central venous pressure (CVP) divided by cardiac output (CO) (SVR=MAP &#8722; CVP/CO).",
+      "oboXrefs": [
+        {
+          "database": "PMID",
+          "id": "22258067",
+          "description": null,
+          "url": "http://www.ncbi.nlm.nih.gov/pubmed/22258067"
+        },
+        {
+          "database": "RGD",
+          "id": "MS",
+          "description": null,
+          "url": "https://rgd.mcw.edu/rgdweb/search/search.html?term=MS"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "PMID",
+      "id": "22258067",
+      "description": null,
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/22258067"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000220?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000220/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000220/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000220/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000220/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000220/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000220/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

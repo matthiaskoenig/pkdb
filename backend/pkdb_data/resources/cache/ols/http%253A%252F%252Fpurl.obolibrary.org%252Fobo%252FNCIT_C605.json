@@ -1,0 +1,220 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C605",
+  "lang": "en",
+  "description": [
+    "A synthetic derivative of phenylpiperazine with broad antifungal properties and potential antineoplastic activity.  Ketoconazole inhibits sterol 14-a-dimethylase, a microsomal cytochrome P450-dependent enzyme, thereby disrupting synthesis of ergosterol, an important component of the fungal cell wall. (NCI04)"
+  ],
+  "synonyms": [
+    "Cis-1-Acetyl-4-[4-[[2-(2,4-dichlorophenyl)-2-(1H-imidazole-1-ylmethyl)-1,3-dioxolan-4-yl]methoxy]phenyl]piperazine",
+    "Fungarest",
+    "Fungoral",
+    "KETOCONAZOLE",
+    "Ketoconazole",
+    "Ketoderm",
+    "Ketoisdin",
+    "Nizoral",
+    "Orifungal M",
+    "Panfungol",
+    "R-41400",
+    "Xolegel",
+    "ketoconazole"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug that treats infection caused by a fungus. It is also used as a treatment for prostate cancer because it can block the production of male sex hormones."
+    ],
+    "Accepted_Therapeutic_Use_For": [
+      "Seborrheic Dermatitis; Prostate cancer"
+    ],
+    "CAS_Registry": [
+      "65277-42-1"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:47519"
+    ],
+    "Chemical_Formula": [
+      "C26H28Cl2N4O4"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA",
+      "GDC",
+      "HemOnc",
+      "OORO"
+    ],
+    "Display_Name": [
+      "Ketoconazole"
+    ],
+    "FDA_UNII_Code": [
+      "R9400W927I"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Ketoconazole"
+    ],
+    "Maps_To": [
+      "Ketoconazole"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "39488"
+    ],
+    "NSC Number": [
+      "317629"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "39488"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "39488"
+    ],
+    "Preferred_Name": [
+      "Ketoconazole"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0022625"
+    ],
+    "code": [
+      "C605"
+    ]
+  },
+  "label": "Ketoconazole",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C605",
+  "obo_id": "NCIT:C605",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C176424",
+    "NCIT_C177537",
+    "NCIT_C192234",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Cis-1-Acetyl-4-[4-[[2-(2,4-dichlorophenyl)-2-(1H-imidazole-1-ylmethyl)-1,3-dioxolan-4-yl]methoxy]phenyl]piperazine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Fungarest",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Fungoral",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "KETOCONAZOLE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ketoconazole",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ketoderm",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ketoisdin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Nizoral",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Orifungal M",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Panfungol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "R-41400",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Xolegel",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ketoconazole",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C605?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C605/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C605/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C605/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C605/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C605/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C605/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C605/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

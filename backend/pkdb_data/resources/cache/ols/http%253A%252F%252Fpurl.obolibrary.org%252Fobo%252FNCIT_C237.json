@@ -1,0 +1,178 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C237",
+  "lang": "en",
+  "description": [
+    "A broad-spectrum, semisynthetic aminopenicillin antibiotic with bactericidal activity. Amoxicillin binds to and inactivates penicillin-binding protein (PBP) 1A located on the inner membrane of the bacterial cell wall. Inactivation of PBPs interferes with the cross-linkage of peptidoglycan chains necessary for bacterial cell wall strength and rigidity. This interrupts bacterial cell wall synthesis and results in the weakening of the bacterial cell wall and causes cell lysis."
+  ],
+  "synonyms": [
+    "AMOX",
+    "AMOXICILLIN",
+    "Amoxicillin",
+    "Amoxicillin Trihydrate",
+    "Amoxil",
+    "Polymox",
+    "Trimox",
+    "Utimox",
+    "Wymox",
+    "amoxicillin"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A drug used to treat some bacterial infections. Amoxicillin is a form of penicillin that is made in the laboratory. It kills certain types of bacteria. It is a type of antibiotic."
+    ],
+    "CAS_Registry": [
+      "61336-70-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:51254"
+    ],
+    "Chemical_Formula": [
+      "C16H19N3O5S.3H2O"
+    ],
+    "Contributing_Source": [
+      "FDA",
+      "HemOnc"
+    ],
+    "FDA_UNII_Code": [
+      "804826J2HU"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C72700"
+    ],
+    "Legacy Concept Name": [
+      "Amoxicillin"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "42310"
+    ],
+    "NSC Number": [
+      "277174"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "42310"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "42310"
+    ],
+    "Preferred_Name": [
+      "Amoxicillin"
+    ],
+    "Semantic_Type": [
+      "Antibiotic",
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0002645"
+    ],
+    "code": [
+      "C237"
+    ]
+  },
+  "label": "Amoxicillin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C237",
+  "obo_id": "NCIT:C237",
+  "in_subset": [
+    "NCIT_C176424",
+    "NCIT_C201600",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "AMOX",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "AMOXICILLIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Amoxicillin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Amoxicillin Trihydrate",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Amoxil",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Polymox",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Trimox",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Utimox",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Wymox",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "amoxicillin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C237?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C237/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C237/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C237/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C237/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C237/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C237/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

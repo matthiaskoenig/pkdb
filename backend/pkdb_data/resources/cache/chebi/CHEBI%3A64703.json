@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:64703",
+  "name": "p-aminohippurate",
+  "definition": "A hippurate that is the conjugate base of p-aminohippuric acid, arising from deprotonation of the carboxy group.",
+  "formula": "C9H9N2O3",
+  "charge": "-1",
+  "mass": "193.17940",
+  "inchikey": "HSMNQINEKMPTIC-UHFFFAOYSA-M"
+}

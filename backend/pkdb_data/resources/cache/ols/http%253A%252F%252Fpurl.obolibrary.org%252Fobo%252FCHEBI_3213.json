@@ -1,0 +1,314 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_3213",
+  "lang": "en",
+  "description": [
+    "A member of the class of benzoic acids that is 4-phenoxybenzoic acid in which the hydrogens ortho to the phenoxy group are substituted by butylamino and sulfamoyl groups. Bumetanide is a diuretic, and is used for treatment of oedema associated with congestive heart failure, hepatic and renal disease."
+  ],
+  "synonyms": [
+    "3-(butylamino)-4-phenoxy-5-sulfamoylbenzoic acid",
+    "3-(aminosulfonyl)-5-(butylamino)-4-phenoxybenzoic acid",
+    "3-butylamino-4-(phenoxy)-5-sulfamoylbenzoic acid",
+    "3-butylamino-4-phenoxy-5-sulfamoyl-benzoic acid",
+    "3-butylamino-4-phenoxy-5-sulfamoylbenzoic acid",
+    "bumetanida",
+    "bumetanide",
+    "bumetanidum"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C17H20N2O5S"
+    ],
+    "has_alternative_id": [
+      "CHEBI:239281"
+    ],
+    "has_dbxref": [
+      "CAS:28395-03-1",
+      "DrugBank:DB00887",
+      "Drug_Central:427",
+      "HMDB:HMDB0015024",
+      "KEGG:D00247",
+      "LINCS:LSM-2848",
+      "PMID:18374572",
+      "PMID:19454284",
+      "PMID:28166217",
+      "PMID:3989818",
+      "Patent:DE1964503",
+      "Patent:DE1964504",
+      "Patent:US3806534",
+      "Reaxys:2185351",
+      "Wikipedia:Bumetanide"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:3213"
+    ],
+    "inchi": [
+      "InChI=1S/C17H20N2O5S/c1-2-3-9-19-14-10-12(17(20)21)11-15(25(18,22)23)16(14)24-13-7-5-4-6-8-13/h4-8,10-11,19H,2-3,9H2,1H3,(H,20,21)(H2,18,22,23)"
+    ],
+    "inchikey": [
+      "MAEIEVLCKWDQJH-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "364.41600"
+    ],
+    "monoisotopicmass": [
+      "364.10929"
+    ],
+    "smiles": [
+      "CCCCNc1cc(cc(c1Oc1ccccc1)S(N)(=O)=O)C(O)=O"
+    ]
+  },
+  "label": "bumetanide",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_3213",
+  "obo_id": "CHEBI:3213",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "28395-03-1",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "28395-03-1",
+      "description": "KEGG DRUG",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00887",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00887"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "427",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/427"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0015024",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0015024"
+    },
+    {
+      "database": "KEGG",
+      "id": "D00247",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D00247"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-2848",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PMID",
+      "id": "18374572",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/18374572"
+    },
+    {
+      "database": "PMID",
+      "id": "19454284",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/19454284"
+    },
+    {
+      "database": "PMID",
+      "id": "28166217",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/28166217"
+    },
+    {
+      "database": "PMID",
+      "id": "3989818",
+      "description": "ChEMBL",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/3989818"
+    },
+    {
+      "database": "Patent",
+      "id": "DE1964503",
+      "description": null,
+      "url": "https://www.google.com/patents/DE1964503"
+    },
+    {
+      "database": "Patent",
+      "id": "DE1964504",
+      "description": null,
+      "url": "https://www.google.com/patents/DE1964504"
+    },
+    {
+      "database": "Patent",
+      "id": "US3806534",
+      "description": null,
+      "url": "https://www.google.com/patents/US3806534"
+    },
+    {
+      "database": "Reaxys",
+      "id": "2185351",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Bumetanide",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Bumetanide"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "3-(butylamino)-4-phenoxy-5-sulfamoylbenzoic acid",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-(aminosulfonyl)-5-(butylamino)-4-phenoxybenzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-butylamino-4-(phenoxy)-5-sulfamoylbenzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "DrugBank",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-butylamino-4-phenoxy-5-sulfamoyl-benzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "3-butylamino-4-phenoxy-5-sulfamoylbenzoic acid",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEMBL",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "bumetanida",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "bumetanide",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "bumetanidum",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChemIDplus",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3213?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3213/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3213/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3213/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3213/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3213/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3213/graph"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_3213/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

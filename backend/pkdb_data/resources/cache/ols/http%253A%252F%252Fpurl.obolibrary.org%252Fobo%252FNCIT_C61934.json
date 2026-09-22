@@ -1,0 +1,106 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C61934",
+  "lang": "en",
+  "description": [
+    "A beta hydroxy acid that occurs as a natural compound in plants. It has direct activity as an anti-inflammatory agent and acts as a topical antibacterial agent due to its ability to promote exfoliation."
+  ],
+  "synonyms": [
+    "2-Hydroxybenzoic Acid",
+    "SALICYLIC ACID",
+    "Salicylic Acid"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "69-72-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:16914"
+    ],
+    "Chemical_Formula": [
+      "C7H6O3"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "O414PZ4LPZ"
+    ],
+    "Legacy Concept Name": [
+      "Salicylic_Acid"
+    ],
+    "Preferred_Name": [
+      "Salicylic Acid"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0036079"
+    ],
+    "code": [
+      "C61934"
+    ]
+  },
+  "label": "Salicylic Acid",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C61934",
+  "obo_id": "NCIT:C61934",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "2-Hydroxybenzoic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "SALICYLIC ACID",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Salicylic Acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61934?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61934/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61934/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61934/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61934/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61934/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C61934/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

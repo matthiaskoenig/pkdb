@@ -1,0 +1,74 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHMO_0001016",
+  "lang": "en",
+  "description": [
+    "Gas chromatography where the stationary phase is a liquid."
+  ],
+  "synonyms": [
+    "GLC"
+  ],
+  "annotation": {
+    "has_alternative_id": [
+      "FIX:0000631"
+    ],
+    "id": [
+      "CHMO:0001016"
+    ]
+  },
+  "label": "gas-liquid chromatography",
+  "ontology_name": "chmo",
+  "ontology_prefix": "CHMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHMO_0001016",
+  "obo_id": "CHMO:0001016",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "Gas chromatography where the stationary phase is a liquid.",
+      "oboXrefs": [
+        {
+          "database": null,
+          "id": "https://orcid.org/0000-0001-5985-7429",
+          "description": null,
+          "url": "https://orcid.org/0000-0001-5985-7429"
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001016?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001016/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001016/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001016/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001016/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001016/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001016/graph"
+    },
+    "has_participant": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHMO_0001016/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000057"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

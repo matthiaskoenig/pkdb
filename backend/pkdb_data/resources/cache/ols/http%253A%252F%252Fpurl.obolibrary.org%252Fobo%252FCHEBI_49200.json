@@ -1,0 +1,309 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_49200",
+  "lang": "en",
+  "description": [
+    "An EC 3.6.3.* (acid anhydride hydrolase catalysing transmembrane movement of substances) inhibitor that inhibits H(+)/K(+)-exchanging ATPase, EC 3.6.3.10. Such compounds are also known as proton pump inhibitors."
+  ],
+  "synonyms": [
+    "(K(+) + H(+))-ATPase inhibitor",
+    "(K(+) + H(+))-ATPase inhibitors",
+    "ATP phosphohydrolase (H(+)/K(+)-exchanging) inhibitor",
+    "ATP phosphohydrolase (H(+)/K(+)-exchanging) inhibitors",
+    "EC 3.6.3.10 (H(+)/K(+)-exchanging ATPase) inhibitors",
+    "EC 3.6.3.10 inhibitor",
+    "EC 3.6.3.10 inhibitors",
+    "H(+)-K(+)-ATPase inhibitor",
+    "H(+)-K(+)-ATPase inhibitors",
+    "H(+)/K(+)-ATPase inhibitor",
+    "H(+)/K(+)-ATPase inhibitors",
+    "H(+)/K(+)-exchanging ATPase inhibitor",
+    "H(+)/K(+)-exchanging ATPase inhibitors",
+    "H,K-ATPase inhibitor",
+    "H,K-ATPase inhibitors",
+    "proton pump inhibitor",
+    "proton pump inhibitors"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "Wikipedia:Proton_pump_inhibitor"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:49200"
+    ]
+  },
+  "label": "EC 3.6.3.10 (H(+)/K(+)-exchanging ATPase) inhibitor",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_49200",
+  "obo_id": "CHEBI:49200",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "Wikipedia",
+      "id": "Proton_pump_inhibitor",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Proton_pump_inhibitor"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(K(+) + H(+))-ATPase inhibitor",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "(K(+) + H(+))-ATPase inhibitors",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ATP phosphohydrolase (H(+)/K(+)-exchanging) inhibitor",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "ATP phosphohydrolase (H(+)/K(+)-exchanging) inhibitors",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "EC 3.6.3.10 (H(+)/K(+)-exchanging ATPase) inhibitors",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "EC 3.6.3.10 inhibitor",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "EC 3.6.3.10 inhibitors",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H(+)-K(+)-ATPase inhibitor",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H(+)-K(+)-ATPase inhibitors",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H(+)/K(+)-ATPase inhibitor",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H(+)/K(+)-ATPase inhibitors",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H(+)/K(+)-exchanging ATPase inhibitor",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H(+)/K(+)-exchanging ATPase inhibitors",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H,K-ATPase inhibitor",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "H,K-ATPase inhibitors",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "proton pump inhibitor",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "proton pump inhibitors",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49200?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49200/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49200/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49200/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49200/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49200/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_49200/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

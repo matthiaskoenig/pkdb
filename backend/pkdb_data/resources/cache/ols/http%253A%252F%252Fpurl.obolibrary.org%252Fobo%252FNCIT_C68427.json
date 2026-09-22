@@ -1,0 +1,113 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C68427",
+  "lang": "en",
+  "description": [
+    "A steroid derivative characterized by the hydroxyl group in position C-3 of the steroid skeleton, and unsaturated bonds in position 5-6 of the B ring, and position 22-23 in the alkyl substituent. Stigmasterol is found in the fats and oils of soybean, calabar bean and rape seed, as well as several other vegetables, legumes, nuts, seeds, and unpasteurized milk."
+  ],
+  "synonyms": [
+    "STIGMASTEROL",
+    "Stigmasterol"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Phytosterol with a double bond at the 22nd carbon."
+    ],
+    "CAS_Registry": [
+      "83-48-7"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:28824"
+    ],
+    "Chemical_Formula": [
+      "C29H48O"
+    ],
+    "Contributing_Source": [
+      "CRCH",
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "99WUK5D0Y8"
+    ],
+    "INFOODS": [
+      "STID7"
+    ],
+    "Legacy Concept Name": [
+      "Stigmasterol"
+    ],
+    "Preferred_Name": [
+      "Stigmasterol"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0038329"
+    ],
+    "USDA_ID": [
+      "638"
+    ],
+    "Unit": [
+      "mg"
+    ],
+    "code": [
+      "C68427"
+    ]
+  },
+  "label": "Stigmasterol",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C68427",
+  "obo_id": "NCIT:C68427",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "STIGMASTEROL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Stigmasterol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68427?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68427/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68427/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68427/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68427/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68427/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68427/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,111 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_125451",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "IN00106"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C25H22O10"
+    ],
+    "has_dbxref": [
+      "HMDB:HMDB0030583",
+      "LINCS:LSM-36943"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:125451"
+    ],
+    "inchi": [
+      "InChI=1S/C25H22O10/c1-32-17-6-11(2-4-14(17)28)24-20(10-26)33-16-5-3-12(7-18(16)34-24)25-23(31)22(30)21-15(29)8-13(27)9-19(21)35-25/h2-9,20,23-29,31H,10H2,1H3"
+    ],
+    "inchikey": [
+      "SEBFKMXJBCUCAI-UHFFFAOYSA-N"
+    ],
+    "mass": [
+      "482.437"
+    ],
+    "monoisotopicmass": [
+      "482.12130"
+    ],
+    "smiles": [
+      "COC1=C(C=CC(=C1)C2C(OC3=C(O2)C=C(C=C3)C4C(C(=O)C5=C(C=C(C=C5O4)O)O)O)CO)O"
+    ]
+  },
+  "label": "3,5,7-trihydroxy-2-[3-(4-hydroxy-3-methoxyphenyl)-2-(hydroxymethyl)-2,3-dihydro-1,4-benzodioxin-6-yl]-3,4-dihydro-2H-1-benzopyran-4-one",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_125451",
+  "obo_id": "CHEBI:125451",
+  "in_subset": [
+    "2_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "HMDB",
+      "id": "HMDB0030583",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0030583"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-36943",
+      "description": null,
+      "url": null
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "IN00106",
+      "scope": "hasRelatedSynonym",
+      "type": null,
+      "xrefs": [
+        {
+          "database": null,
+          "id": "ChEBI",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_125451?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_125451/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_125451/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_125451/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_125451/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_125451/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_125451/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

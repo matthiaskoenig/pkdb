@@ -1,0 +1,129 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C70941",
+  "lang": "en",
+  "description": [
+    "The major metabolite of nicotine."
+  ],
+  "synonyms": [
+    "(S)-1-Methyl-5-(3-pyridinyl)-2-pyrrolidinone",
+    "1-Methyl-5-(3-pyridinyl)-2-pyrrolidinone",
+    "COTININE",
+    "Cotinine",
+    "S-(-)-Cotinine"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "486-56-6"
+    ],
+    "Chemical_Formula": [
+      "C10H12N2O"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "FDA"
+    ],
+    "DesignNote": [
+      "Exposure to nicotine can be measured by analyzing the cotinine level in the blood, saliva, or urine. Cotinine assays provide an objective quantitative measure that is more reliable than smoking histories or counting the number of cigarettes smoked per day. Cotinine also permits the measurement of exposure to second-hand smoke (passive smoking)."
+    ],
+    "Display_Name": [
+      "Cotinine"
+    ],
+    "FDA_UNII_Code": [
+      "K5161X06LL"
+    ],
+    "Has_Salt_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C80524"
+    ],
+    "Legacy Concept Name": [
+      "Cotinine"
+    ],
+    "Preferred_Name": [
+      "Cotinine"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0010194"
+    ],
+    "code": [
+      "C70941"
+    ]
+  },
+  "label": "Cotinine",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C70941",
+  "obo_id": "NCIT:C70941",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C142799",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(S)-1-Methyl-5-(3-pyridinyl)-2-pyrrolidinone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "1-Methyl-5-(3-pyridinyl)-2-pyrrolidinone",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "COTININE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cotinine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "S-(-)-Cotinine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C70941?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C70941/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C70941/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C70941/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C70941/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C70941/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C70941/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

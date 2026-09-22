@@ -1,0 +1,111 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C65512",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "1-ethyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydro-1,8-naphthyridine-3-carboxylic acid",
+    "ENOXACIN",
+    "Enoxacin",
+    "Penetrex"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "74011-58-8"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:157175"
+    ],
+    "Chemical_Formula": [
+      "C15H17FN4O3"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "325OGW249P"
+    ],
+    "Legacy Concept Name": [
+      "Enoxacin"
+    ],
+    "Preferred_Name": [
+      "Enoxacin"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0014310"
+    ],
+    "code": [
+      "C65512"
+    ]
+  },
+  "label": "Enoxacin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C65512",
+  "obo_id": "NCIT:C65512",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "1-ethyl-6-fluoro-4-oxo-7-(piperazin-1-yl)-1,4-dihydro-1,8-naphthyridine-3-carboxylic acid",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "ENOXACIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Enoxacin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Penetrex",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65512?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65512/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65512/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65512/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65512/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65512/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C65512/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

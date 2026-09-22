@@ -1,0 +1,177 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C12393",
+  "lang": "en",
+  "description": [
+    "An organ behind the lower part of the stomach that is the shape of a fish and about the size of a hand. It is a compound gland composed of both exocrine and endocrine tissues. The endocrine pancreas makes insulin so that the body can use glucose (sugar) for energy. The exocrine pancreas makes enzymes that help the body digest food. Spread all over the pancreas are areas called the Islets of Langerhans. The cells in these areas each have a special purpose. The alpha cells make glucagon, which raises the level of glucose in the blood; the beta cells make insulin; the delta cells make somatostatin. There are also PP cells and D1 cells, about which little is known."
+  ],
+  "synonyms": [
+    "Gastrointestinal Tract, Pancreas",
+    "PANCREAS",
+    "Pancreas",
+    "Pancreas, NOS",
+    "Pancreatic structure (body structure)",
+    "pancreas"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A digestive organ in the abdomen that has both endocrine and exocrine functions.",
+      "A glandular organ located in the abdomen. It makes pancreatic juices, which contain enzymes that aid in digestion, and it produces several hormones, including insulin. The pancreas is surrounded by the stomach, intestines, and other organs.",
+      "An endoderm derived structure that produces precursors of digestive enzymes and blood glucose regulating hormones."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "GDC",
+      "PCDC",
+      "UBERON",
+      "mCode"
+    ],
+    "Display_Name": [
+      "Pancreas"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C156421",
+      "http://purl.obolibrary.org/obo/NCIT_C156422",
+      "http://purl.obolibrary.org/obo/NCIT_C158874",
+      "http://purl.obolibrary.org/obo/NCIT_C171435",
+      "http://purl.obolibrary.org/obo/NCIT_C173263",
+      "http://purl.obolibrary.org/obo/NCIT_C177570",
+      "http://purl.obolibrary.org/obo/NCIT_C188396",
+      "http://purl.obolibrary.org/obo/NCIT_C70729"
+    ],
+    "Legacy Concept Name": [
+      "Pancreas"
+    ],
+    "Maps_To": [
+      "Pancreas",
+      "Pancreas, NOS"
+    ],
+    "Preferred_Name": [
+      "Pancreas"
+    ],
+    "Semantic_Type": [
+      "Body Part, Organ, or Organ Component"
+    ],
+    "UMLS_CUI": [
+      "C0030274"
+    ],
+    "code": [
+      "C12393"
+    ],
+    "has_dbxref": [
+      "UBERON:0001264"
+    ]
+  },
+  "label": "Pancreas",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C12393",
+  "obo_id": "NCIT:C12393",
+  "in_subset": [
+    "NCIT_C157711",
+    "NCIT_C168655",
+    "NCIT_C168656",
+    "NCIT_C168659",
+    "NCIT_C168660",
+    "NCIT_C168663",
+    "NCIT_C168664",
+    "NCIT_C177537",
+    "NCIT_C179478",
+    "NCIT_C179481",
+    "NCIT_C179482",
+    "NCIT_C179483",
+    "NCIT_C193006",
+    "NCIT_C193234",
+    "NCIT_C198975",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C74456",
+    "NCIT_C77526",
+    "NCIT_C77529",
+    "oncotree_slim"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "UBERON",
+      "id": "0001264",
+      "description": null,
+      "url": "http://purl.obolibrary.org/obo/UBERON_0001264"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "Gastrointestinal Tract, Pancreas",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "PANCREAS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pancreas",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pancreas, NOS",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Pancreatic structure (body structure)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "pancreas",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12393?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12393/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12393/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12393/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12393/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12393/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12393/graph"
+    },
+    "Anatomic_Structure_Is_Physical_Part_Of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12393/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R82"
+    },
+    "Anatomic_Structure_Has_Location": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C12393/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R81"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

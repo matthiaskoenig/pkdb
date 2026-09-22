@@ -1,0 +1,91 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C154433",
+  "lang": "en",
+  "description": [
+    "A type of solid pharmaceutical dose form consisting of a shell inside which a single dose of the active substance(s) is enclosed. Cachet is excluded."
+  ],
+  "synonyms": [
+    "Capsule",
+    "Capsule Dose Form Category"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A type of solid pharmaceutical dose form consisting of a shell inside which a single dose of the active substance(s) is enclosed. Cachet is excluded."
+    ],
+    "Contributing_Source": [
+      "EDQM-HC"
+    ],
+    "Legacy Concept Name": [
+      "Capsule"
+    ],
+    "NCI_META_CUI": [
+      "CL556389"
+    ],
+    "Preferred_Name": [
+      "Capsule Dose Form Category"
+    ],
+    "Semantic_Type": [
+      "Classification"
+    ],
+    "code": [
+      "C154433"
+    ]
+  },
+  "label": "Capsule Dose Form Category",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C154433",
+  "obo_id": "NCIT:C154433",
+  "in_subset": [
+    "NCIT_C148636",
+    "NCIT_C150113"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Capsule",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Capsule Dose Form Category",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154433?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154433/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154433/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154433/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154433/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154433/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C154433/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

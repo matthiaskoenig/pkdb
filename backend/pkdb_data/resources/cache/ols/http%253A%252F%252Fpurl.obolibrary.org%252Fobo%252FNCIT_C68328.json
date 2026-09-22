@@ -1,0 +1,127 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C68328",
+  "lang": "en",
+  "description": [
+    "A steroid derivative that is the simplest sterol, characterized by the hydroxyl group in position C-3 of the steroid skeleton, and saturated bonds throughout the sterol structure, with the exception of the 5-6 double bond in the B ring."
+  ],
+  "synonyms": [
+    "(3Beta,24R)-Ergost-5-en-3-ol",
+    "3 beta, 24R-ergost-5-en-3-ol",
+    "CAMPESTEROL",
+    "Campesterol"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Phytosterol with a methyl group at the 24th carbon."
+    ],
+    "CAS_Registry": [
+      "474-62-4"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:28623"
+    ],
+    "Chemical_Formula": [
+      "C28H48O"
+    ],
+    "Contributing_Source": [
+      "CRCH",
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "5L5O665639"
+    ],
+    "INFOODS": [
+      "CAMD5"
+    ],
+    "Legacy Concept Name": [
+      "Campesterol"
+    ],
+    "Preferred_Name": [
+      "Campesterol"
+    ],
+    "Semantic_Type": [
+      "Organic Chemical",
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0054560"
+    ],
+    "USDA_ID": [
+      "639"
+    ],
+    "Unit": [
+      "mg"
+    ],
+    "code": [
+      "C68328"
+    ]
+  },
+  "label": "Campesterol",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C68328",
+  "obo_id": "NCIT:C68328",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "(3Beta,24R)-Ergost-5-en-3-ol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "3 beta, 24R-ergost-5-en-3-ol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "CAMPESTEROL",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Campesterol",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68328?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68328/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68328/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68328/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68328/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68328/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C68328/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

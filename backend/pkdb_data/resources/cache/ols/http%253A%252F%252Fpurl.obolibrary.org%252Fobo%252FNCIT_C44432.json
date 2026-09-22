@@ -1,0 +1,147 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C44432",
+  "lang": "en",
+  "description": [
+    "A synthetic, white crystalline solid that is slightly soluble in water and benzene, soluble in acetone and very soluble in pyrimidine. It is used in research as the preferred marker for detecting CYP1A2-based inhibition potential in vitro. Human ingestion of phenacetin can result in a bluish discoloration of the skin due to a lack of oxygen in the blood (cyanosis), dizziness and respiratory depression. It is reasonably anticipated to be a human carcinogen. (NCI05)"
+  ],
+  "synonyms": [
+    "1-Acetamido-4-ethoxybenzene",
+    "4-Ethoxy Acetanilide",
+    "Acetophenetin",
+    "N-(4-ethoxyphenol)acetamide",
+    "PHENACETIN",
+    "Phenacetin",
+    "p-Acetophenetidide",
+    "para Acetylphenetidin"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "62-44-2"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:8050"
+    ],
+    "Chemical_Formula": [
+      "C10H13NO2"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "ER0CTH01H9"
+    ],
+    "Legacy Concept Name": [
+      "Phenacetin"
+    ],
+    "NSC Number": [
+      "7651"
+    ],
+    "Preferred_Name": [
+      "Phenacetin"
+    ],
+    "Semantic_Type": [
+      "Hazardous or Poisonous Substance"
+    ],
+    "UMLS_CUI": [
+      "C0031364"
+    ],
+    "code": [
+      "C44432"
+    ]
+  },
+  "label": "Phenacetin",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C44432",
+  "obo_id": "NCIT:C44432",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "1-Acetamido-4-ethoxybenzene",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "4-Ethoxy Acetanilide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Acetophenetin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "N-(4-ethoxyphenol)acetamide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "PHENACETIN",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Phenacetin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "p-Acetophenetidide",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "para Acetylphenetidin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C44432?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C44432/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C44432/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C44432/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C44432/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C44432/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C44432/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C44432/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

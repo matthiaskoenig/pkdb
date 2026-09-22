@@ -1,0 +1,96 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCBITaxon_10090",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "house mouse",
+    "mouse"
+  ],
+  "annotation": {
+    "has_alternative_id": [
+      "NCBITaxon:85055"
+    ],
+    "has_dbxref": [
+      "GC_ID:1"
+    ],
+    "has_obo_namespace": [
+      "ncbi_taxonomy"
+    ],
+    "has_rank": [
+      "http://purl.obolibrary.org/obo/NCBITaxon_species"
+    ]
+  },
+  "label": "Mus musculus",
+  "ontology_name": "ncbitaxon",
+  "ontology_prefix": "NCBITaxon",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncbitaxon.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCBITaxon_10090",
+  "obo_id": "NCBITaxon:10090",
+  "in_subset": null,
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "GC_ID",
+      "id": "1",
+      "description": null,
+      "url": "https://www.ncbi.nlm.nih.gov/Taxonomy/taxonomyhome.html/index.cgi?chapter=cgencodes#SG1"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "house mouse",
+      "scope": "hasExactSynonym",
+      "type": "genbank common name",
+      "xrefs": []
+    },
+    {
+      "name": "mouse",
+      "scope": "hasExactSynonym",
+      "type": "layperson synonym",
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10090?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10090/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10090/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10090/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10090/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10090/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10090/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10090/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10090/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10090/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncbitaxon/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCBITaxon_10090/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

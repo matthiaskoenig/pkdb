@@ -1,0 +1,110 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C62781",
+  "lang": "en",
+  "description": [
+    "Diagnostic imaging that uses sound waves (ultrasound) applying the Doppler effect, with frequency-shifted ultrasound reflections produced by moving targets (usually red blood cells) in the bloodstream along the ultrasound axis in direct proportion to the velocity of movement of the targets, to determine both direction and velocity of blood flow."
+  ],
+  "synonyms": [
+    "DOPPLER ULTRASOUND",
+    "Doppler Ultrasound"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "Diagnostic imaging that uses sound waves (ultrasound) applying the Doppler effect, with frequency-shifted ultrasound reflections produced by moving targets (usually red blood cells) in the bloodstream along the ultrasound axis in direct proportion to the velocity of movement of the targets, to determine both direction and velocity of blood flow."
+    ],
+    "Contributing_Source": [
+      "CDISC",
+      "CTRP"
+    ],
+    "Display_Name": [
+      "Doppler Ultrasound"
+    ],
+    "Legacy Concept Name": [
+      "Doppler_Ultrasound"
+    ],
+    "Preferred_Name": [
+      "Doppler Ultrasound"
+    ],
+    "Semantic_Type": [
+      "Diagnostic Procedure"
+    ],
+    "UMLS_CUI": [
+      "C0162481"
+    ],
+    "code": [
+      "C62781"
+    ]
+  },
+  "label": "Doppler Ultrasound",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C62781",
+  "obo_id": "NCIT:C62781",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118169",
+    "NCIT_C61410",
+    "NCIT_C66830",
+    "NCIT_C85492"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "DOPPLER ULTRASOUND",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Doppler Ultrasound",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62781?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62781/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62781/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62781/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62781/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62781/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62781/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62781/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62781/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62781/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C62781/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

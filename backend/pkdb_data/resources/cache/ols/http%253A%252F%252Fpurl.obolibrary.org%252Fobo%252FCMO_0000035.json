@@ -1,0 +1,93 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CMO_0000035",
+  "lang": "en",
+  "description": [
+    "A measurement of the blood, it's contents, cells or other factors contained within the blood."
+  ],
+  "synonyms": [
+    "hematological measurement"
+  ],
+  "annotation": {
+    "has_dbxref": [
+      "EFO:0004503"
+    ],
+    "has_obo_namespace": [
+      "clinical_measurement_ontology"
+    ],
+    "id": [
+      "CMO:0000035"
+    ]
+  },
+  "label": "blood measurement",
+  "ontology_name": "cmo",
+  "ontology_prefix": "CMO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/cmo.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "CMO_0000035",
+  "obo_id": "CMO:0000035",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "A measurement of the blood, it's contents, cells or other factors contained within the blood.",
+      "oboXrefs": [
+        {
+          "database": "RGD",
+          "id": "MS",
+          "description": null,
+          "url": "https://rgd.mcw.edu/rgdweb/search/search.html?term=MS"
+        }
+      ]
+    }
+  ],
+  "obo_xref": [
+    {
+      "database": "EFO",
+      "id": "0004503",
+      "description": null,
+      "url": "http://www.ebi.ac.uk/efo/EFO_0004503"
+    }
+  ],
+  "obo_synonym": null,
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000035?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000035/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000035/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000035/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000035/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000035/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000035/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000035/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000035/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000035/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/cmo/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCMO_0000035/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

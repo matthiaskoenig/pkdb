@@ -1,0 +1,93 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/BTO_0000562",
+  "lang": "en",
+  "description": [
+    "1: A hollow muscular organ of vertebrate animals that by its rhythmic contraction acts as a force pump maintaining the circulation of the blood. 2: A structure in an invertebrate animal functionally analogous to the vertebrate heart."
+  ],
+  "synonyms": [
+    "Herz"
+  ],
+  "annotation": {
+    "has_obo_namespace": [
+      "BrendaTissueOBO"
+    ],
+    "id": [
+      "BTO:0000562"
+    ]
+  },
+  "label": "heart",
+  "ontology_name": "bto",
+  "ontology_prefix": "BTO",
+  "ontology_iri": "http://purl.obolibrary.org/obo/bto.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "BTO_0000562",
+  "obo_id": "BTO:0000562",
+  "in_subset": null,
+  "obo_definition_citation": [
+    {
+      "definition": "1: A hollow muscular organ of vertebrate animals that by its rhythmic contraction acts as a force pump maintaining the circulation of the blood. 2: A structure in an invertebrate animal functionally analogous to the vertebrate heart.",
+      "oboXrefs": [
+        {
+          "database": "From_Merriam-Webster's_Online_Dictionary_at_www.Merriam-Webster.com",
+          "id": "http",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Herz",
+      "scope": "hasRelatedSynonym",
+      "type": "LANGUAGE GERMAN",
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0000562?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0000562/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0000562/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0000562/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0000562/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0000562/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0000562/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0000562/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0000562/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0000562/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0000562/graph"
+    },
+    "part_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/bto/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBTO_0000562/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FBFO_0000050"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

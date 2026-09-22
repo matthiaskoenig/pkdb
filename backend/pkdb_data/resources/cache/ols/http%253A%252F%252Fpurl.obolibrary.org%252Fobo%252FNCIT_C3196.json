@@ -1,0 +1,145 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C3196",
+  "lang": "en",
+  "description": [
+    "A non-neoplastic or neoplastic disorder that affects the liver parenchyma and intrahepatic bile ducts. Representative examples of non-neoplastic disorders include hepatitis, cirrhosis, cholangitis, and polycystic liver disease. Representative examples of neoplastic disorders include hepatocellular adenoma, hepatocellular carcinoma, intrahepatic cholangiocarcinoma, lymphoma, and angiosarcoma."
+  ],
+  "synonyms": [
+    "Hepatic Disorder",
+    "Liver Disease",
+    "Liver Disorder",
+    "Liver and Intrahepatic Bile Duct Disorder",
+    "Liver disease",
+    "Liver disease, unspecified"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CPTAC",
+      "CTRP",
+      "mCode"
+    ],
+    "Display_Name": [
+      "Liver and Intrahepatic Bile Duct Disorder"
+    ],
+    "Legacy Concept Name": [
+      "Hepatic_Disorder"
+    ],
+    "Maps_To": [
+      "Liver disease, unspecified",
+      "Unspecified disorder of liver"
+    ],
+    "Preferred_Name": [
+      "Liver and Intrahepatic Bile Duct Disorder"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C3552261"
+    ],
+    "code": [
+      "C3196"
+    ]
+  },
+  "label": "Liver and Intrahepatic Bile Duct Disorder",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C3196",
+  "obo_id": "NCIT:C3196",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C118168",
+    "NCIT_C156952",
+    "NCIT_C158035",
+    "NCIT_C158520",
+    "NCIT_C193006",
+    "NCIT_C193192"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Hepatic Disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver Disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver Disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver and Intrahepatic Bile Duct Disorder",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver disease",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Liver disease, unspecified",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3196?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3196/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3196/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3196/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3196/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3196/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3196/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3196/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3196/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3196/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3196/graph"
+    },
+    "Disease_Has_Associated_Anatomic_Site": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C3196/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R100"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

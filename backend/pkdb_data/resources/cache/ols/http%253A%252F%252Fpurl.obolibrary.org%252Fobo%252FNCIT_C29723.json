@@ -1,0 +1,128 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29723",
+  "lang": "en",
+  "description": [
+    "Any one of the substituted benzimidazole compounds with anti-ulcer activity. A proton pump inhibitor is orally administered in the neutrally charged, inactive form and, upon entering the acidic environment of the parietal cell, gets protonated and converted into its active form. The active form will covalently and irreversibly bind to the proton pump, the H+/K+-ATPase, located on the surface of parietal cells. This leads to an inhibition of the transport of hydrogen ions, in exchange for potassium ions, into the gastric lumen and results in an inhibition of gastric acid secretion."
+  ],
+  "synonyms": [
+    "PPI",
+    "Proton Pump Inhibitor",
+    "Proton Pump Inhibitors"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "A pharmaceutical agent that inhibits the transport of hydrogen ions, in exchange for potassium ions, into the gastric lumen and results in an inhibition of gastric acid secretion. These drugs are used for their anti-ulcer activity."
+    ],
+    "CHEBI_ID": [
+      "CHEBI:49200"
+    ],
+    "Contributing_Source": [
+      "CTRP",
+      "GDC",
+      "NICHD"
+    ],
+    "Display_Name": [
+      "Proton Pump Inhibitor"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C177637"
+    ],
+    "Legacy Concept Name": [
+      "Proton_Pump_Inhibitor"
+    ],
+    "Maps_To": [
+      "Proton Pump Inhibitors"
+    ],
+    "Preferred_Name": [
+      "Proton Pump Inhibitor"
+    ],
+    "Semantic_Type": [
+      "Chemical Viewed Functionally"
+    ],
+    "UMLS_CUI": [
+      "C0358591"
+    ],
+    "code": [
+      "C29723"
+    ]
+  },
+  "label": "Proton Pump Inhibitor",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": true,
+  "is_root": false,
+  "short_form": "NCIT_C29723",
+  "obo_id": "NCIT:C29723",
+  "in_subset": [
+    "NCIT_C116977",
+    "NCIT_C116978",
+    "NCIT_C118468",
+    "NCIT_C157711",
+    "NCIT_C177537",
+    "NCIT_C90259"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "PPI",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Proton Pump Inhibitor",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Proton Pump Inhibitors",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29723?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29723/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29723/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29723/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29723/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29723/jstree"
+    },
+    "children": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29723/children"
+    },
+    "descendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29723/descendants"
+    },
+    "hierarchicalChildren": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29723/hierarchicalChildren"
+    },
+    "hierarchicalDescendants": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29723/hierarchicalDescendants"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29723/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:3766",
+  "name": "clozapine",
+  "definition": "A benzodiazepine that is 5H-dibenzo[b,e][1,4]diazepine substituted by a chloro group at position 8 and a 4-methylpiperazin-1-yl group at position 11. It is a second generation antipsychotic used in the treatment of psychiatric disorders like  schizophrenia.",
+  "formula": "C18H19ClN4",
+  "charge": "0",
+  "mass": "326.824",
+  "inchikey": "QZUDBNBUXVUHMW-UHFFFAOYSA-N"
+}

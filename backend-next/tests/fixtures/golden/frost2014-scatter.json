@@ -1,0 +1,96 @@
+{
+  "study_sid": "PKDB01110",
+  "study_name": "Frost2014",
+  "subset_pk": 5,
+  "subset_name": "paired",
+  "x_outputs_pk": [
+    79,
+    81
+  ],
+  "x_intervention_pk": [
+    3
+  ],
+  "x_group_pk": 1,
+  "x_individual_pk": null,
+  "x_normed": true,
+  "x_calculated": false,
+  "x_tissue": "plasma",
+  "x_tissue_label": "plasma",
+  "x_method": "lc-ms-ms",
+  "x_method_label": "Liquid chromatography-tandem mass spectrometry (LC MS/MS)",
+  "x_label": "apixaban_mAPI",
+  "x_output_type": "timecourse",
+  "x_time": [
+    0.0,
+    1.0
+  ],
+  "x_time_unit": "hr",
+  "x_measurement_type": "concentration",
+  "x_measurement_type__label": "concentration",
+  "x_choice": null,
+  "x_choice_label": null,
+  "x_substance": "apixaban",
+  "x_substance_label": "apixaban",
+  "x_value": null,
+  "x_mean": [
+    1.1550000000000003e-05,
+    4.636000000000001e-05
+  ],
+  "x_median": null,
+  "x_min": null,
+  "x_max": null,
+  "x_sd": null,
+  "x_se": null,
+  "x_cv": null,
+  "x_unit": "gram / liter",
+  "x_dimension": 0,
+  "x_data_point": [
+    79,
+    80
+  ],
+  "y_outputs_pk": [
+    80,
+    82
+  ],
+  "y_intervention_pk": [
+    3
+  ],
+  "y_group_pk": 1,
+  "y_individual_pk": null,
+  "y_normed": true,
+  "y_calculated": false,
+  "y_tissue": "plasma",
+  "y_tissue_label": "plasma",
+  "y_method": "lc-ms-ms",
+  "y_method_label": "Liquid chromatography-tandem mass spectrometry (LC MS/MS)",
+  "y_label": "apixaban_mAPI",
+  "y_output_type": "timecourse",
+  "y_time": [
+    0.5,
+    2.0
+  ],
+  "y_time_unit": "hr",
+  "y_measurement_type": "concentration",
+  "y_measurement_type__label": "concentration",
+  "y_choice": null,
+  "y_choice_label": null,
+  "y_substance": "apixaban",
+  "y_substance_label": "apixaban",
+  "y_value": null,
+  "y_mean": [
+    2.515e-05,
+    8.429000000000002e-05
+  ],
+  "y_median": null,
+  "y_min": null,
+  "y_max": null,
+  "y_sd": null,
+  "y_se": null,
+  "y_cv": null,
+  "y_unit": "gram / liter",
+  "y_dimension": 1,
+  "y_data_point": [
+    79,
+    80
+  ]
+}

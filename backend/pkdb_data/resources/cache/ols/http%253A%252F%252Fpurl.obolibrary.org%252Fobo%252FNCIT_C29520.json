@@ -1,0 +1,151 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C29520",
+  "lang": "en",
+  "description": [
+    "A triazolobenzodiazepinederivative with sedative-hypnotic property. Triazolam interacts directly with a specific site on the gamma-aminobutyric acid (GABA)-A-chloride-ionophore receptor complex located on the neuronal membrane. Binding causes allosteric modification of the receptor and modulation of its affinity for the inhibitory neurotransmitter GABA. This results in enhancement of synaptic actions of GABA and includes an increase in the frequency of chloride channel openings, increased chloride ion conductance, membrane hyperpolarization and ultimately synaptic inhibition and decreased neuronal excitability."
+  ],
+  "synonyms": [
+    "8-Chloro-6-(2-chlorophenyl)-1-methyl-4H-(1,2,4)triazolo(4,3-a)(1,4)benzodiazepine",
+    "Clorazolam",
+    "Halcion",
+    "Novidorm",
+    "Songar",
+    "TRIAZOLAM",
+    "Triazolam",
+    "U 33030",
+    "U-33,030"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "28911-01-5"
+    ],
+    "CHEBI_ID": [
+      "CHEBI:9674"
+    ],
+    "Chemical_Formula": [
+      "C17H12Cl2N4"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "1HM943223R"
+    ],
+    "Legacy Concept Name": [
+      "Triazolam"
+    ],
+    "Preferred_Name": [
+      "Triazolam"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C0040879"
+    ],
+    "code": [
+      "C29520"
+    ]
+  },
+  "label": "Triazolam",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C29520",
+  "obo_id": "NCIT:C29520",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "8-Chloro-6-(2-chlorophenyl)-1-methyl-4H-(1,2,4)triazolo(4,3-a)(1,4)benzodiazepine",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Clorazolam",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Halcion",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Novidorm",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Songar",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "TRIAZOLAM",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Triazolam",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "U 33030",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "U-33,030",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29520?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29520/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29520/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29520/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29520/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29520/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29520/graph"
+    },
+    "Chemical_Or_Drug_Is_Metabolized_By_Enzyme": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C29520/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_R122"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

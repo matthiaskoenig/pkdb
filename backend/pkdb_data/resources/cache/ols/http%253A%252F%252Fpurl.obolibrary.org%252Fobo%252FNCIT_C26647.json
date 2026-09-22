@@ -1,0 +1,184 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C26647",
+  "lang": "en",
+  "description": [
+    "A triterpene-containing herb isolated from the roots and rhizomes of the plant Cimicifuga racemosa (also known as Actaea racemosa). While the mechanism of action of black cohosh is not completely understood, it appears to act as a selective estrogen receptor modulator.  In vitro, this preparation has been shown to induce cell cycle arrest and caspase-dependent apoptosis of estrogen-sensitive breast cancer cells. (NCI04)"
+  ],
+  "synonyms": [
+    "Actaea racemosa Root",
+    "BLACK COHOSH",
+    "Black Cohosh",
+    "Cimicifuga racemosa Root",
+    "Cimicifugae racemosae Rhizoma",
+    "Fariy Candle Root",
+    "Remifemin",
+    "black cohosh",
+    "black snakeroot",
+    "bugbane",
+    "bugwort",
+    "rattlesnake root"
+  ],
+  "annotation": {
+    "ALT_DEFINITION": [
+      "An eastern North American perennial herb. A substance obtained from the root of the plant has been used in some cultures to treat a number of medical problems. It is being studied in the treatment of hot flashes and other symptoms of menopause. The scientific name is Cimicifuga racemosa."
+    ],
+    "Contributing_Source": [
+      "FDA",
+      "GDC"
+    ],
+    "FDA_UNII_Code": [
+      "K73E24S6X9"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C1909"
+    ],
+    "Legacy Concept Name": [
+      "Black_Cohosh"
+    ],
+    "Maps_To": [
+      "Black Cohosh"
+    ],
+    "NCI_Drug_Dictionary_ID": [
+      "302635"
+    ],
+    "PDQ_Closed_Trial_Search_ID": [
+      "302635"
+    ],
+    "PDQ_Open_Trial_Search_ID": [
+      "302635"
+    ],
+    "Preferred_Name": [
+      "Black Cohosh"
+    ],
+    "Semantic_Type": [
+      "Plant"
+    ],
+    "UMLS_CUI": [
+      "C0771967"
+    ],
+    "code": [
+      "C26647"
+    ]
+  },
+  "label": "Black Cohosh",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C26647",
+  "obo_id": "NCIT:C26647",
+  "in_subset": [
+    "NCIT_C128784",
+    "NCIT_C157711",
+    "NCIT_C157712",
+    "NCIT_C176424",
+    "NCIT_C177537",
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "Actaea racemosa Root",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "BLACK COHOSH",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Black Cohosh",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cimicifuga racemosa Root",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Cimicifugae racemosae Rhizoma",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Fariy Candle Root",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Remifemin",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "black cohosh",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "black snakeroot",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "bugbane",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "bugwort",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "rattlesnake root",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26647?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26647/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26647/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26647/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26647/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26647/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C26647/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

@@ -1,0 +1,20 @@
+{
+  "processing_version": "5",
+  "publications": [
+    {
+      "path": "caffeine/Levy1983",
+      "ok": true,
+      "sid": "PKDB00048",
+      "status": 201,
+      "digest": "aeef860ca7183c88ea0ecb892642381526ed2d680d879e610332a4d17fe5ee3e"
+    },
+    {
+      "path": "midazolam/McCrea1999",
+      "ok": true,
+      "sid": "PKDB00321",
+      "status": 201,
+      "digest": "c6dbd2e2bf12c89e419a4241c3a21cbd179eec388befad6de1cb73b688a53c46"
+    }
+  ],
+  "full_rebuild_repeated": false
+}

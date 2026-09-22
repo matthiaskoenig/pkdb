@@ -1,0 +1,113 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C84445",
+  "lang": "en",
+  "description": [
+    "Fatty replacement and damage to the hepatocytes not related to alcohol use. It may lead to cirrhosis and liver failure."
+  ],
+  "synonyms": [
+    "NASH - Nonalcoholic Steatohepatitis",
+    "Nonalcoholic Steatohepatitis",
+    "Nonalcoholic Steatohepatitis (NASH)",
+    "Nonalcoholic steatohepatitis (NASH)"
+  ],
+  "annotation": {
+    "Contributing_Source": [
+      "CPTAC",
+      "GDC",
+      "mCode"
+    ],
+    "Is_Value_For_GDC_Property": [
+      "http://purl.obolibrary.org/obo/NCIT_C16457",
+      "http://purl.obolibrary.org/obo/NCIT_C17103"
+    ],
+    "Maps_To": [
+      "Nonalcoholic Steatohepatitis"
+    ],
+    "Preferred_Name": [
+      "Nonalcoholic Steatohepatitis"
+    ],
+    "Semantic_Type": [
+      "Disease or Syndrome"
+    ],
+    "UMLS_CUI": [
+      "C3241937"
+    ],
+    "code": [
+      "C84445"
+    ]
+  },
+  "label": "Nonalcoholic Steatohepatitis",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C84445",
+  "obo_id": "NCIT:C84445",
+  "in_subset": [
+    "NCIT_C156952",
+    "NCIT_C156953",
+    "NCIT_C157529",
+    "NCIT_C157711",
+    "NCIT_C177537",
+    "NCIT_C193006",
+    "NCIT_C193192"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "NASH - Nonalcoholic Steatohepatitis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Nonalcoholic Steatohepatitis",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Nonalcoholic Steatohepatitis (NASH)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Nonalcoholic steatohepatitis (NASH)",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84445?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84445/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84445/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84445/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84445/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84445/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C84445/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

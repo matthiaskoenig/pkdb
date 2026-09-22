@@ -1,0 +1,9 @@
+{
+  "chebi": "CHEBI:139271",
+  "name": "6beta-hydroxycortisol",
+  "definition": "A C21-steroid that is cortisol bearing an additional hydroxy substituent at the 6beta-position. In humans, it is produced as a metabolite of cortisol by cytochrome p450-3A4 (CYP3A4, an important enzyme involved in the metabolism of a variety of exogenous and endogenous compounds) and can be used to detect moderate and potent CYP3A4 inhibition in vivo.",
+  "formula": "C21H30O6",
+  "charge": "0",
+  "mass": "378.460",
+  "inchikey": "GNFTWPCIRXSCQF-UJXAPRPESA-N"
+}

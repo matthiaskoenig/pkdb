@@ -1,0 +1,286 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/CHEBI_7496",
+  "lang": "en",
+  "description": [
+    "An aryl sulfide that is used (as its mesylate salt) for treatment of HIV and also exhibits some anticancer properties."
+  ],
+  "synonyms": [
+    "(3S,4aS,8aS)-N-tert-butyl-2-[(2R,3R)-2-hydroxy-3-[(3-hydroxy-2-methylbenzoyl)amino]-4-(phenylsulfanyl)butyl]decahydroisoquinoline-3-carboxamide",
+    "nelfinavir"
+  ],
+  "annotation": {
+    "charge": [
+      "0"
+    ],
+    "formula": [
+      "C32H45N3O4S"
+    ],
+    "has_dbxref": [
+      "CAS:159989-64-7",
+      "DrugBank:DB00220",
+      "Drug_Central:1893",
+      "HMDB:HMDB0014365",
+      "KEGG:C07257",
+      "KEGG:D08259",
+      "LINCS:LSM-5819",
+      "PDBeChem:1UN",
+      "PMID:23109184",
+      "PMID:23386514",
+      "PMID:23454896",
+      "PMID:23647753",
+      "PMID:23872785",
+      "PMID:23916134",
+      "PMID:24194293",
+      "PMID:24418752",
+      "PMID:24483157",
+      "PMID:24498124",
+      "PMID:24574416",
+      "PMID:24596143",
+      "PMID:24719428",
+      "Reaxys:7419619",
+      "Wikipedia:Nelfinavir"
+    ],
+    "has_obo_namespace": [
+      "chebi_ontology"
+    ],
+    "id": [
+      "CHEBI:7496"
+    ],
+    "inchi": [
+      "InChI=1S/C32H45N3O4S/c1-21-25(15-10-16-28(21)36)30(38)33-26(20-40-24-13-6-5-7-14-24)29(37)19-35-18-23-12-9-8-11-22(23)17-27(35)31(39)34-32(2,3)4/h5-7,10,13-16,22-23,26-27,29,36-37H,8-9,11-12,17-20H2,1-4H3,(H,33,38)(H,34,39)/t22-,23+,26-,27-,29+/m0/s1"
+    ],
+    "inchikey": [
+      "QAGYKUNXZHXKMR-HKWSIXNMSA-N"
+    ],
+    "mass": [
+      "567.78200"
+    ],
+    "monoisotopicmass": [
+      "567.31308"
+    ],
+    "smiles": [
+      "Cc1c(O)cccc1C(=O)N[C@@H](CSc1ccccc1)[C@H](O)CN1C[C@H]2CCCC[C@H]2C[C@H]1C(=O)NC(C)(C)C"
+    ]
+  },
+  "label": "nelfinavir",
+  "ontology_name": "chebi",
+  "ontology_prefix": "CHEBI",
+  "ontology_iri": "http://purl.obolibrary.org/obo/chebi.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "CHEBI_7496",
+  "obo_id": "CHEBI:7496",
+  "in_subset": [
+    "3_STAR"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": [
+    {
+      "database": "CAS",
+      "id": "159989-64-7",
+      "description": "KEGG COMPOUND",
+      "url": null
+    },
+    {
+      "database": "CAS",
+      "id": "159989-64-7",
+      "description": "ChemIDplus",
+      "url": null
+    },
+    {
+      "database": "DrugBank",
+      "id": "DB00220",
+      "description": null,
+      "url": "https://go.drugbank.com/drugs/DB00220"
+    },
+    {
+      "database": "Drug_Central",
+      "id": "1893",
+      "description": "DrugCentral",
+      "url": "http://drugcentral.org/drugcard/1893"
+    },
+    {
+      "database": "HMDB",
+      "id": "HMDB0014365",
+      "description": null,
+      "url": "http://www.hmdb.ca/metabolites/HMDB0014365"
+    },
+    {
+      "database": "KEGG",
+      "id": "C07257",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/C07257"
+    },
+    {
+      "database": "KEGG",
+      "id": "D08259",
+      "description": null,
+      "url": "http://www.kegg.jp/entry/D08259"
+    },
+    {
+      "database": "LINCS",
+      "id": "LSM-5819",
+      "description": null,
+      "url": null
+    },
+    {
+      "database": "PDBeChem",
+      "id": "1UN",
+      "description": null,
+      "url": "https://www.ebi.ac.uk/pdbe-srv/pdbechem/chemicalCompound/show/1UN"
+    },
+    {
+      "database": "PMID",
+      "id": "23109184",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23109184"
+    },
+    {
+      "database": "PMID",
+      "id": "23386514",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23386514"
+    },
+    {
+      "database": "PMID",
+      "id": "23454896",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23454896"
+    },
+    {
+      "database": "PMID",
+      "id": "23647753",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23647753"
+    },
+    {
+      "database": "PMID",
+      "id": "23872785",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23872785"
+    },
+    {
+      "database": "PMID",
+      "id": "23916134",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/23916134"
+    },
+    {
+      "database": "PMID",
+      "id": "24194293",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24194293"
+    },
+    {
+      "database": "PMID",
+      "id": "24418752",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24418752"
+    },
+    {
+      "database": "PMID",
+      "id": "24483157",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24483157"
+    },
+    {
+      "database": "PMID",
+      "id": "24498124",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24498124"
+    },
+    {
+      "database": "PMID",
+      "id": "24574416",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24574416"
+    },
+    {
+      "database": "PMID",
+      "id": "24596143",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24596143"
+    },
+    {
+      "database": "PMID",
+      "id": "24719428",
+      "description": "Europe PMC",
+      "url": "http://www.ncbi.nlm.nih.gov/pubmed/24719428"
+    },
+    {
+      "database": "Reaxys",
+      "id": "7419619",
+      "description": "Reaxys",
+      "url": null
+    },
+    {
+      "database": "Wikipedia",
+      "id": "Nelfinavir",
+      "description": null,
+      "url": "http://en.wikipedia.org/wiki/Nelfinavir"
+    }
+  ],
+  "obo_synonym": [
+    {
+      "name": "(3S,4aS,8aS)-N-tert-butyl-2-[(2R,3R)-2-hydroxy-3-[(3-hydroxy-2-methylbenzoyl)amino]-4-(phenylsulfanyl)butyl]decahydroisoquinoline-3-carboxamide",
+      "scope": "hasExactSynonym",
+      "type": "IUPAC NAME",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "IUPAC",
+          "description": null,
+          "url": null
+        }
+      ]
+    },
+    {
+      "name": "nelfinavir",
+      "scope": "hasRelatedSynonym",
+      "type": "INN",
+      "xrefs": [
+        {
+          "database": null,
+          "id": "KEGG_DRUG",
+          "description": null,
+          "url": null
+        }
+      ]
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/graph"
+    },
+    "is_conjugate_base_of": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252Fchebi%2523is_conjugate_base_of"
+    },
+    "has_role": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/chebi/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FCHEBI_7496/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FRO_0000087"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
