@@ -142,3 +142,10 @@ The new schema has one application role: legacy `basic` maps to `user`;
 `curator`, `reviewer`, and `admin` map directly. Multiple or unknown groups are
 rejected. Username remains read-only during updates. Arbitrary Django permission
 group CRUD is not implemented by this adapter.
+
+Administrator role catalogue reads are available at `GET /api/v1/_user_groups/`
+and `GET /api/v1/_user_groups/{id}/`, including JSON suffixes and pagination.
+Fresh database IDs 1–4 identify basic, admin, reviewer, and curator respectively;
+historical Django group IDs are not preserved. Permission arrays are empty because
+authorization uses application policy. Custom group/permission mutation remains
+unimplemented and requires a compatibility disposition before cutover.

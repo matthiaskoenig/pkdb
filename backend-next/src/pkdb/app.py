@@ -20,6 +20,7 @@ from starlette.responses import JSONResponse, RedirectResponse
 
 from pkdb.api import (
     accounts,
+    admin_roles,
     admin_users,
     exports,
     legacy_uploads,
@@ -281,6 +282,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.principal = principal
     include_legacy_router(app, accounts.router)
     include_legacy_router(app, admin_users.router)
+    include_legacy_router(app, admin_roles.router)
     app.include_router(media.router)
     include_legacy_router(app, reads.router)
     include_legacy_router(app, staging.router)

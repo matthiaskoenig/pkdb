@@ -1737,7 +1737,9 @@
         "IsAdminUser"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/admin_roles.py",
+      "verification_checkpoint": "tests/api/test_admin_roles.py",
+      "remaining_compatibility": "Fixed roles only; historical group IDs not retained; custom group and permission mutations unresolved."
     },
     {
       "path": "/api/v1/^_user_groups/$",
@@ -1785,7 +1787,9 @@
         "IsAdminUser"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/admin_roles.py",
+      "verification_checkpoint": "tests/api/test_admin_roles.py",
+      "remaining_compatibility": "Fixed roles only; historical group IDs not retained; custom group and permission mutations unresolved."
     },
     {
       "path": "/api/v1/^_user_groups/(?P<pk>[^/.]+)/$",
@@ -1849,7 +1853,9 @@
         "IsAdminUser"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/admin_roles.py",
+      "verification_checkpoint": "tests/api/test_admin_roles.py",
+      "remaining_compatibility": "Fixed roles only; historical group IDs not retained; custom group and permission mutations unresolved."
     },
     {
       "path": "/api/v1/^_user_groups/(?P<pk>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -1897,7 +1903,9 @@
         "IsAdminUser"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/admin_roles.py",
+      "verification_checkpoint": "tests/api/test_admin_roles.py",
+      "remaining_compatibility": "Fixed roles only; historical group IDs not retained; custom group and permission mutations unresolved."
     },
     {
       "path": "/api/v1/^_user_groups\\.(?P<format>[a-z0-9]+)/?$",

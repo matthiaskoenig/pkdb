@@ -176,3 +176,16 @@ are not complete. The legacy backend remains unchanged and is not retired.
   the complete count reported by validation. No source edits or exclusions.
 - This audit is not a repeated complete HTTP rebuild. The full rebuild report
   remains at its earlier checkpoint plus two separately verified publications.
+
+## Machine handoff checkpoint (2026-09-22)
+
+- 337 regular tests passed on each supported Python at commit4499eb8a. Both rebuilt
+  runtime images pass REST/MCP/protected-file/shutdown and PostgreSQL/files restore
+  tests (two system tests each). Ruff/format/ty passed at that checkpoint.
+- Performance evidence now includes separate fresh-application cold runs, excluded
+  warmups and five measured warm runs per runtime. All measured median/p95 budgets
+  pass; see performance.json and performance/README.md for scope and limitations.
+- Subsequent fixed-role catalogue addition passes six focused tests on Python3.13.
+  Full suites and images must be rerun for this final addition. Custom group writes
+  remain unresolved. No complete compatibility or cutover acceptance is claimed.
+- Work stopped at the user's request. See handoff.md and execution-ledger.md.
