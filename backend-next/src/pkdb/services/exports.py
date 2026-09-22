@@ -1,9 +1,12 @@
 """Owned saved criteria and bounded exports with current permissions rechecked."""
 
 import csv
+import json
 from datetime import UTC, datetime, timedelta
+from importlib.resources import files
 from tempfile import TemporaryFile
 from threading import BoundedSemaphore
+from zipfile import ZIP_DEFLATED, ZipFile
 
 from sqlalchemy import delete, func, select
 
@@ -134,8 +137,91 @@ class ExportService:
         if count == 0:
             writer.writerow([""])
 
+    def write_zip(self, target, session, spec, principal):
+        from pkdb.db.models.vocabulary import VocabularyNode, VocabularyTerm
+        from pkdb.db.scatter_export import rows as scatter_rows
+
+        if not isinstance(spec, FilterSpec):
+            raise ValueError("ZIP requires a multi-entity filter")
+        total_bytes = 0
+        total_rows = 0
+        with ZipFile(target, "w", ZIP_DEFLATED) as archive:
+            for entity in (
+                "studies",
+                "groups",
+                "individuals",
+                "interventions",
+                "outputs",
+                "timecourses",
+                "scatters",
+                "info_nodes",
+            ):
+                if entity == "scatters":
+                    rows = scatter_rows(session, spec, principal)
+                    columns = []
+                elif entity == "info_nodes":
+                    label = (
+                        select(VocabularyTerm.value)
+                        .where(
+                            VocabularyTerm.node_sid == VocabularyNode.sid,
+                            VocabularyTerm.kind == "label",
+                        )
+                        .order_by(VocabularyTerm.value)
+                        .limit(1)
+                        .scalar_subquery()
+                    )
+                    nodes = session.execute(
+                        select(VocabularyNode, label)
+                        .order_by(VocabularyNode.sid)
+                        .execution_options(yield_per=500)
+                    )
+                    rows = (
+                        {
+                            "sid": node.sid,
+                            "label": json.loads(label) if label else node.name,
+                            "ntype": "measurement_type"
+                            if node.kind == "measurement"
+                            else node.kind,
+                        }
+                        for node, label in nodes
+                    )
+                    columns = ["sid", "label", "ntype"]
+                else:
+                    rows = self.analysis.iter_rows(
+                        session,
+                        entity,
+                        QuerySpec.model_validate({"entity": ENTITIES[entity]}),
+                        principal,
+                        filter_spec=spec,
+                    )
+                    columns = list(ANALYSIS_MODELS[entity].model_fields)
+                with archive.open(entity + ".csv", "w") as member:
+                    output = LimitedTextWriter(member, self.max_bytes - total_bytes)
+                    writer = csv.writer(output, lineterminator="\n")
+                    count = 0
+                    for index, row in enumerate(rows):
+                        total_rows += 1
+                        if total_rows > self.max_rows:
+                            raise ExportLimit("Export exceeds configured row limit")
+                        if index == 0:
+                            columns = columns or list(row)
+                            writer.writerow(["", *columns])
+                        writer.writerow([index, *(row[column] for column in columns)])
+                        count += 1
+                    if count == 0:
+                        writer.writerow([""])
+                    total_bytes += output.size
+            for name in ("README.md", "TERMS_OF_USE.md"):
+                data = files("pkdb").joinpath("assets", "download", name).read_bytes()
+                total_bytes += len(data)
+                if total_bytes > self.max_bytes:
+                    raise ExportLimit("Export exceeds configured byte limit")
+                archive.writestr(name, data)
+        if target.tell() > self.max_bytes:
+            raise ExportLimit("Export exceeds configured byte limit")
+
     def stream_export(self, filter_id, format: str, principal: Principal):
-        if format != "csv":
+        if format not in {"csv", "zip"}:
             raise ValueError("Unsupported export format")
         if not self.slots.acquire(blocking=False):
             raise ExportBusy("Export capacity reached")
@@ -148,7 +234,12 @@ class ExportService:
                         execution_options={"isolation_level": "REPEATABLE READ"}
                     )
                     query, current = self.load_filter(filter_id, principal, session)
-                    self.write_csv(artifact, session, query.entity, query, current)
+                    if format == "zip":
+                        self.write_zip(artifact, session, query, current)
+                    elif isinstance(query, QuerySpec):
+                        self.write_csv(artifact, session, query.entity, query, current)
+                    else:
+                        raise ValueError("CSV requires a single-entity filter")
                 artifact.seek(0)
                 while chunk := artifact.read(64 * 1024):
                     yield chunk

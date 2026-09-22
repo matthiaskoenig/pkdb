@@ -68,7 +68,10 @@ def filter_studies(request: Request):
     actor = request.app.state.principal(request, required=False)
     params = request.query_params
     concise = params.get("concise", "true")
-    if concise not in {"true", "false"} or params.get("download", "false") != "false":
+    if concise not in {"true", "false"} or params.get("download", "false") not in {
+        "true",
+        "false",
+    }:
         raise HTTPException(400, "Invalid filter options")
     entities = {
         "studies",
@@ -97,6 +100,46 @@ def filter_studies(request: Request):
     spec = FilterSpec.model_validate({"queries": queries, "concise": concise == "true"})
     try:
         identifier = request.app.state.exports.create_filter(spec, actor)
+        if params.get("download") == "true":
+            return download_response(request.app.state.exports, identifier, actor)
         return request.app.state.exports.overview(identifier, actor)
     except ValueError:
         raise HTTPException(400, "Invalid filter parameters") from None
+
+
+def download_response(service, identifier, actor):
+    from anyio import CancelScope
+    from starlette.concurrency import run_in_threadpool
+    from starlette.responses import StreamingResponse
+
+    from pkdb.services.exports import ExportBusy, ExportLimit
+
+    iterator = service.stream_export(identifier, "zip", actor)
+    try:
+        first = next(iterator)
+    except ExportBusy:
+        raise HTTPException(
+            503, "Export capacity reached", headers={"Retry-After": "1"}
+        ) from None
+    except ExportLimit as error:
+        raise HTTPException(413, str(error)) from None
+
+    async def chunks():
+        yield first
+        while (chunk := await run_in_threadpool(next, iterator, None)) is not None:
+            yield chunk
+
+    class ExportResponse(StreamingResponse):
+        async def __call__(self, scope, receive, send):
+            try:
+                await super().__call__(scope, receive, send)
+            finally:
+                # Also runs if sending headers fails before chunks() starts.
+                with CancelScope(shield=True):
+                    await run_in_threadpool(iterator.close)
+
+    return ExportResponse(
+        chunks(),
+        media_type="application/x-zip-compressed",
+        headers={"Content-Disposition": "attachment; filename=pkdata.zip"},
+    )

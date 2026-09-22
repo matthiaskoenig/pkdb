@@ -469,3 +469,87 @@ def test_frost2014_postgresql_outputs_match_legacy(
             stable_analysis(actual.items, actual_identities),
             stable_analysis(expected, analysis_golden["identities"]),
         )
+
+    # Characterize a two-point scatter assembled from the same four legacy
+    # Frost measurements, inside a rollback-only transaction on both backends.
+    from sqlalchemy import select
+
+    from pkdb.db.models.measurements import (
+        Measurement,
+        Scatter,
+        Subset,
+        SubsetDimension,
+        SubsetPoint,
+    )
+    from pkdb.db.scatter_export import rows as scatter_rows
+    from pkdb.schemas.filters import FilterSpec
+
+    expected = json.loads(
+        (
+            Path(__file__).parents[1] / "tests/fixtures/golden/frost2014-scatter.json"
+        ).read_text()
+    )
+    with session_factory() as session:
+        measurements = list(
+            session.scalars(
+                select(Measurement)
+                .where(
+                    Measurement.origin == "normalized",
+                    Measurement.label == "apixaban_mAPI",
+                    Measurement.time <= 2.01,
+                )
+                .order_by(Measurement.time)
+            )
+        )
+        assert len(measurements) == 4
+        study_id = measurements[0].study_id
+        dataset = Scatter(
+            study_id=study_id,
+            key="export-characterization",
+            name="export-characterization",
+            data_type="scatter",
+        )
+        session.add(dataset)
+        session.flush()
+        subset = Subset(
+            study_id=study_id,
+            key="paired-export",
+            scatter_id=dataset.id,
+            name="paired",
+            position=0,
+            dimension_labels=["x", "y"],
+        )
+        session.add(subset)
+        session.flush()
+        for offset in (0, 2):
+            point = SubsetPoint(
+                study_id=study_id,
+                key=f"export-point-{offset}",
+                subset_id=subset.id,
+                position=offset // 2,
+            )
+            session.add(point)
+            session.flush()
+            for axis in (0, 1):
+                session.add(
+                    SubsetDimension(
+                        study_id=study_id,
+                        subset_id=subset.id,
+                        point_id=point.id,
+                        position=offset + axis,
+                        dimension=str(axis),
+                        measurement_id=measurements[offset + axis].id,
+                    )
+                )
+        session.flush()
+        actual = json.loads(
+            json.dumps(list(scatter_rows(session, FilterSpec(), Principal()))[0])
+        )
+        assert list(actual) == list(expected)
+        assert actual["x_data_point"] == actual["y_data_point"]
+        assert len(set(actual["x_data_point"])) == 2
+        for row in (actual, expected):
+            for key in list(row):
+                if key.endswith("_pk") or key.endswith("_data_point"):
+                    del row[key]
+        compare(actual, expected)

@@ -2703,7 +2703,18 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "detail and format aliases"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/data/(?P<id>[^/.]+)/$",
@@ -2727,7 +2738,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/data/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -2751,7 +2762,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/data\\.(?P<format>[a-z0-9]+)/?$",
@@ -2775,7 +2786,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/groups/$",
@@ -2810,7 +2821,18 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "detail and format aliases"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/groups/(?P<id>[^/.]+)/$",
@@ -2845,7 +2867,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/groups/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -2880,7 +2902,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/groups\\.(?P<format>[a-z0-9]+)/?$",
@@ -2915,7 +2937,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/individuals/$",
@@ -2949,7 +2971,18 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "detail and format aliases"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/individuals/(?P<id>[^/.]+)/$",
@@ -2983,7 +3016,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/individuals/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -3017,7 +3050,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/individuals\\.(?P<format>[a-z0-9]+)/?$",
@@ -3051,7 +3084,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/interventions/$",
@@ -3090,7 +3123,18 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "detail and format aliases"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/interventions/(?P<id>[^/.]+)/$",
@@ -3129,7 +3173,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/interventions/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -3168,7 +3212,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/interventions\\.(?P<format>[a-z0-9]+)/?$",
@@ -3207,7 +3251,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/outputs/$",
@@ -3248,7 +3292,18 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "detail and format aliases"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/outputs/(?P<id>[^/.]+)/$",
@@ -3289,7 +3344,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/outputs/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -3330,7 +3385,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/outputs\\.(?P<format>[a-z0-9]+)/?$",
@@ -3371,7 +3426,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/studies/$",
@@ -3396,7 +3451,18 @@
         "StudyPermission"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "detail and format aliases"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/studies/(?P<sid>[^/.]+)/$",
@@ -3421,7 +3487,7 @@
         "StudyPermission"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/studies/(?P<sid>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -3446,7 +3512,7 @@
         "StudyPermission"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/studies\\.(?P<format>[a-z0-9]+)/?$",
@@ -3471,7 +3537,7 @@
         "StudyPermission"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/timecourses/$",
@@ -3512,7 +3578,18 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_list_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "corpus_tests/test_apixaban.py::test_frost2014_postgresql_outputs_match_legacy"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "detail and format aliases"
+        ]
+      }
     },
     {
       "path": "/api/v1/^pkdata/timecourses/(?P<id>[^/.]+)/$",
@@ -3553,7 +3630,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/timecourses/(?P<id>[^/.]+)\\.(?P<format>[a-z0-9]+)/?$",
@@ -3594,7 +3671,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^pkdata/timecourses\\.(?P<format>[a-z0-9]+)/?$",
@@ -3635,7 +3712,7 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py"
     },
     {
       "path": "/api/v1/^references/$",
@@ -4048,7 +4125,19 @@
         "AllowAny"
       ],
       "characterization": "resolver_inventory",
-      "new_owner": "api/reads.py"
+      "new_owner": "api/exports.py",
+      "verification": {
+        "status": "implemented_archive_checkpoint",
+        "tests": [
+          "tests/api/test_exports.py",
+          "tests/integration/test_saved_queries.py",
+          "tests/integration/test_filter_selection.py"
+        ],
+        "remaining": [
+          "full filter/operator compatibility matrix",
+          "maintenance cleanup command"
+        ]
+      }
     },
     {
       "path": "/api/v1/filter/",
