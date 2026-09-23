@@ -1,5 +1,7 @@
 """Explicit provisioning of the sole administrator, bound to an internal account ID."""
 
+import re
+
 from sqlalchemy import select
 
 from pkdb.db.models.security import SecurityConfiguration
@@ -12,8 +14,8 @@ from pkdb.services.authentication import password_hash
 def create_admin(
     session_factory, username, email, password=None, *, adopt_user_id=None
 ):
-    if username != "mkoenig":
-        raise ValueError("Only mkoenig may be designated administrator")
+    if not re.fullmatch(r"[A-Za-z0-9_.-]{1,150}", username):
+        raise ValueError("Invalid username")
     if adopt_user_id is None:
         if password is None:
             raise ValueError("A password is required for a new administrator")

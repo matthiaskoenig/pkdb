@@ -1,6 +1,6 @@
 # Contributing
 
-This page describes step by step how a change gets into the repository. The rules behind it are in [Development](development.md).
+This page describes step by step how a change gets into the repository. The rules behind it are in [Development](installation.md).
 
 The short version: nobody pushes to `develop` directly. Every change is made on a branch, pushed, and merged through a pull request once the four checks `tests`, `ruff`, `ty` and `docs` are green.
 
@@ -62,7 +62,7 @@ Open the pull request against `develop`, either with the link git prints after t
 ## 4. Get the checks green
 
 `tests`
-:   Backend tests with PostgreSQL on Python 3.14, container tests, and Compose startup. Follow [Development](development.md) to run them locally.
+:   Backend tests with PostgreSQL on Python 3.14, container tests, and Compose startup. Follow [Development](installation.md) to run them locally.
 
 `ruff`
 :   Lint and format of `backend/`. Run it locally: `uv run --project backend ruff check .`, `uv run --project backend ruff format --check .`.

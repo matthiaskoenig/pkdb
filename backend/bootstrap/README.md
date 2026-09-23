@@ -20,7 +20,7 @@ The private invitation import must match existing account IDs/usernames explicit
 review role changes, preserve suspension and user profile edits, and use separately
 verified contacts. Site GitHub/ORCID references do not prove account ownership.
 
-- `mkoenig` is the sole administrator, provisioned by administrator bootstrap.
+- The historical administrator entry is profile-only; it is imported only if it matches the designated administrator.
 - `MariiaMysh`, `mii-halina`, and `shubhankarpalwankar` are reviewers.
 - Other historical curators remain curators, including former administrator `janekg`.
 - Historical `reviewer` is a test account and is excluded from invitation import.
@@ -51,8 +51,7 @@ can be made by users after account recovery.
 ### Operator commands
 
 Set the usual `PKDB_DATABASE_URL` and `PKDB_FILE_ROOT` deployment configuration.
-Provision/designate `mkoenig` first, so the roster can import the administrator's
-profile and avatar without changing credentials or privileges. An undesignated
+Provision the administrator first using your chosen username. If it matches the historical administrator entry, the roster can import its profile and avatar without changing credentials or privileges. An undesignated
 administrator row is skipped explicitly. Preview the public roster with optional
 private contacts before applying:
 
@@ -76,33 +75,24 @@ accounts, files, or import ledger records. Applied content digests make repeated
 imports no-ops, preserving subsequent demotions and profile edits. New identities
 remain disabled; invitations are a separate explicit administrator action.
 
-Only `mkoenig` may be provisioned as administrator. For a new identity:
+Choose `USERNAME` and `ADMIN_EMAIL` for the sole administrator. For a new identity:
 
 ```bash
-pkdb create-admin mkoenig --email ADMIN_EMAIL
+pkdb create-admin USERNAME --email ADMIN_EMAIL
 ```
 
 The command prompts for a password. For the existing active identity, explicitly
 supply its internal ID to preserve credentials:
 
 ```bash
-pkdb create-admin mkoenig --email ADMIN_EMAIL --adopt-user-id EXISTING_ID
+pkdb create-admin USERNAME --email ADMIN_EMAIL --adopt-user-id EXISTING_ID
 ```
 
 Adoption never reactivates a disabled/suspended account. The database migration
 rejects multiple legacy administrators: review and reconcile legacy roles before
 applying it. The designated identity is persisted by internal ID.
 
-Offline MFA recovery requires operator database access and explicit confirmation:
-
-```bash
-pkdb recover-admin-mfa mkoenig --user-id DESIGNATED_ID --confirm-recovery
-```
-
-This clears administrator MFA enrollment, revokes all sessions/API keys/action
-tokens, and records an audit event. It preserves identity, password, account state,
-and role. The administrator must sign in and enroll MFA again before performing
-administrator actions. It does not bypass account suspension or reset a password.
+Administrators sign in with their username and password; MFA is not used. See [local setup](../../docs/installation.md#populate-the-database-with-our-users) for container commands that import users and avatars.
 
 The final identity migration also rejects case-insensitive username duplicates
 and accounts with multiple primary email addresses. Resolve those conflicts

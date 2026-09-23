@@ -188,12 +188,10 @@ def test_public_roster_imports_named_reviewers_and_skips_admin_and_test(
         ).active
 
 
-def test_only_mkoenig_can_be_created_or_explicitly_adopted(session_factory):
-    with pytest.raises(ValueError, match="Only mkoenig"):
-        create_admin(session_factory, "someone", "other@example.org", "Password12345!")
+def test_administrator_can_be_explicitly_adopted(session_factory):
     with session_factory.begin() as session:
         user = User(
-            username="mkoenig",
+            username="USERNAME",
             role="curator",
             email="admin@example.org",
             active=True,
@@ -203,10 +201,10 @@ def test_only_mkoenig_can_be_created_or_explicitly_adopted(session_factory):
         session.flush()
         user_id = user.id
     with pytest.raises(ValueError, match="Identity exists"):
-        create_admin(session_factory, "mkoenig", "admin@example.org", "Password12345!")
+        create_admin(session_factory, "USERNAME", "admin@example.org", "Password12345!")
     assert (
         create_admin(
-            session_factory, "mkoenig", "admin@example.org", adopt_user_id=user_id
+            session_factory, "USERNAME", "admin@example.org", adopt_user_id=user_id
         )
         == user_id
     )

@@ -14,9 +14,8 @@ extra_css = ["stylesheets/extra.css"]
 
 nav = [
   { "Home" = "index.md" },
-  { "Installation" = "installation.md" },
+  { "Local setup and development" = "installation.md" },
   { "Deployment" = "deployment.md" },
-  { "Development" = "development.md" },
   { "Accounts and API keys" = "authentication.md" },
   { "Local upload testing" = "local-upload-testing.md" },
   { "Vocabulary definitions" = "vocabulary.md" },

@@ -1,27 +1,6 @@
 # Test a study upload locally
 
-Use the current `pkdb validate` and `pkdb upload` commands against your local backend. All commands below run from the repository root. Use Docker and Docker Compose, Node.js 24.21.x and npm 12.1.x for the account frontend, and a local study folder.
-
-## Start the backend
-
-Copy `.env.example` to `.env` if you do not already have a local configuration. Set `PKDB_HTTP_PORT=8000` for the frontend development proxy and keep `PKDB_BROWSER_ORIGIN=http://localhost:8080`. No provider credentials, MFA setup, or SMTP server is required for a provisioned password account.
-
-```bash
-docker compose up --build --wait
-docker compose exec backend pkdb create-admin mkoenig --email YOUR_EMAIL
-```
-
-Enter an administrator password at the hidden prompt. Create this account once; subsequent restarts preserve it. The sole administrator username is `mkoenig`. Open <http://localhost:8000/docs>.
-
-Start the account frontend in another terminal using Node.js 24.21.x and npm 12.1.x:
-
-```bash
-cd frontend
-npm ci
-npm run dev
-```
-
-Open <http://localhost:8080>, sign in as `mkoenig` using the password you chose. Browser authentication uses cookies through the frontend proxy.
+Use the current `pkdb validate` and `pkdb upload` commands against your local backend. Complete [Local setup and development](installation.md#quick-start) first, then sign in at <http://localhost:8080> with your chosen administrator username. All commands below run from the repository root and use Docker plus a local study folder.
 
 ## Select a study and prepare attribution accounts
 
@@ -61,7 +40,7 @@ docker compose run --rm --no-deps -e PKDB_API_TOKEN \
   backend pkdb upload /studies --api-url http://backend:8000
 ```
 
-Inside Compose, the backend address is `http://backend:8000`. Your browser uses `http://localhost:8000`. Do not use localhost for the container's API URL.
+Inside Compose, the backend address is `http://backend:8000`. Your browser uses `http://localhost:18083`. Do not use localhost for the container's API URL.
 
 Each command prints a JSON result and exits nonzero if any study fails. Validation does not persist the study. A first upload returns status 201; uploading the same study again returns status 200 and replaces that study atomically.
 
@@ -69,7 +48,7 @@ To inspect the stored study, use the API interface's study endpoints with the to
 
 ```bash
 curl --fail -H "Authorization: Bearer $PKDB_API_TOKEN" \
-  http://localhost:8000/api/v1/studies/PKDB01110/
+  http://localhost:18083/api/v1/studies/PKDB01110/
 ```
 
 Replace `PKDB01110` with your study SID. The Frost2014 example contains one group, 70 individuals, 782 measurements, and eight timecourses.
@@ -83,10 +62,10 @@ Set `STUDY_DIR` to a parent directory, update `STUDY_NAME`, and repeat the same 
 - Unknown attribution user: rerun `bootstrap-study` against the same folder.
 - HTTP 401: create a personal key on this local backend and export it again.
 - Validation failure: inspect the structured errors and correct your source data. Do not bypass validation to make an upload pass.
-- Port already in use: set `PKDB_HTTP_PORT` in `.env`, restart Compose, and use that port in browser and curl URLs, and update the proxy targets in `frontend/vite.config.ts`. Container commands continue using port 8000.
+- Port already in use: set `PKDB_HTTP_PORT` in `.env`, restart Compose, and use that port in browser and curl URLs, and set `PKDB_DEV_API_TARGET` if running Vite on the host. The Docker frontend needs no proxy change. Container commands continue using port 8000.
 - Startup failure: run `docker compose logs --tail=100 backend db`.
 
-Stop with `docker compose stop`; resume with `docker compose up --wait`. Database and attachments persist across restarts. Finish with `unset PKDB_API_TOKEN`.
+Stop with `docker compose --profile dev stop`; resume with `docker compose --profile dev up --wait`. Database and attachments persist across restarts. Finish with `unset PKDB_API_TOKEN`.
 
 ## Add an allowed term
 

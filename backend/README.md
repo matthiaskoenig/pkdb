@@ -2,9 +2,9 @@
 
 This is the sole backend implementation: FastAPI, SQLAlchemy, PostgreSQL, and the `pkdb` command-line interface. Python 3.14 is required.
 
-From the repository root, run `docker compose up --build --wait`. Startup applies migrations and imports the bundled vocabulary. The API documentation is available at <http://localhost:18083/docs>.
+From the repository root, run `docker compose --profile dev up --build --wait`. Startup applies migrations and imports the bundled vocabulary. The API documentation is available at <http://localhost:18083/docs>.
 
-See [installation](../docs/installation.md), [local study upload testing](../docs/local-upload-testing.md), and [development](../docs/development.md) for complete commands.
+See [local setup and development](../docs/installation.md) and [local study upload testing](../docs/local-upload-testing.md) for complete commands.
 
 ## Layout
 

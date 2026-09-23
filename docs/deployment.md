@@ -1,6 +1,6 @@
 # Deployment
 
-The root `compose.yaml` is a local backend setup. It runs the API and PostgreSQL, applies Alembic migrations, and loads the bundled vocabulary. See [Installation](installation.md) for startup and [Local upload testing](local-upload-testing.md) for the upload workflow.
+The root `compose.yaml` is a local setup with an optional `dev` profile for the frontend. It runs the API and PostgreSQL, applies Alembic migrations, and loads the bundled vocabulary. See [Installation](installation.md) for startup and [Local upload testing](local-upload-testing.md) for the upload workflow.
 
 ## Deployment requirements
 

@@ -6,7 +6,7 @@ Date: 2026-09-22. Issue: [#775 - Improved user authentification and management, 
 
 Extend the existing FastAPI/PostgreSQL application with usable account registration, GitHub and ORCID sign-in, browser sessions, independently managed personal API keys, consistent permissions, and protection against excessive crawler and agent traffic. Retain PK-DB ownership of accounts, roles, study access, and API keys. Use Authlib for external login protocols rather than implementing OAuth/OIDC primitives. An external identity service such as Keycloak is outside this implementation.
 
-The user explicitly requires four roles: users can read; curators can upload and change only assigned studies; reviewers can change all studies; administrators manage measurement types and other privileged operations. Existing curators must be populated without losing their study relationships. `mkoenig` is the only administrator. Registration must support email/password, GitHub, and ORCID.
+The user explicitly requires four roles: users can read; curators can upload and change only assigned studies; reviewers can change all studies; administrators manage measurement types and other privileged operations. Existing curators must be populated without losing their study relationships. `USERNAME` is the only administrator. Registration must support email/password, GitHub, and ORCID.
 
 The default role is `user`. For initial population, use the existing curator definitions in the user-specified `users.py`, with explicit reviewer overrides for Mariia Myshkina, Michelle Elias, and Shubhankar Palwankar. This existing-account roster is distinct from the default for newly registered accounts; its precise import mapping is specified in section 10.
 
@@ -23,7 +23,7 @@ The remaining choices in this document are implementation defaults from the desi
 | `backend/src/pkdb/services/ingestion.py` | Permissions are rechecked during publication, but uploaded graphs can replace study metadata and relationships. Protect access-control fields and preserve credential scope during rechecks. |
 | `backend/src/pkdb/services/admin_users.py` | Administrative creation issues an API token and accepts role changes. Replace automatic credential issuance with invitations and enforce the sole-administrator invariant. |
 | `backend/src/pkdb/mcp/authentication.py` | Tokens are checked against the database, with a generic `pkdb` scope. Preserve immediate rechecks and enforce actual key scopes per tool. |
-| `backend/src/pkdb/commands/admin.py` | Administrator creation rejects existing identities. Add explicit, verified adoption of the existing `mkoenig` account. |
+| `backend/src/pkdb/commands/admin.py` | Administrator creation rejects existing identities. Add explicit, verified adoption of the existing `USERNAME` account. |
 | `backend/src/pkdb/db/bootstrap.py` and `backend/bootstrap/users.json` | Bootstrap role defaults need tightening; the roster is currently empty. Add a private, reviewed account import. |
 | `frontend/src/store.js` and frontend API callers | Browser tokens are kept in local storage. Replace this with cookie sessions and centralized request handling. |
 
@@ -71,7 +71,7 @@ Recheck active state, credential revocation/expiry, role, assignment, and scopes
 
 ### 3.4 Sole administrator
 
-Persist the designated administrator's internal user ID in a singleton security configuration record. Bootstrap explicitly binds it to the reviewed existing `mkoenig` identity or creates that identity if absent. Reserve the `mkoenig` username before enabling public registration. Never derive privilege from an external username, email, request field, or provider claim.
+Persist the designated administrator's internal user ID in a singleton security configuration record. Bootstrap explicitly binds it to the reviewed existing `USERNAME` identity or creates that identity if absent. Reserve the `USERNAME` username before enabling public registration. Never derive privilege from an external username, email, request field, or provider claim.
 
 Enforce at most one `admin` with a PostgreSQL partial unique index and enforce the designated ID in the role-management service. Ordinary role endpoints accept only `user`, `curator`, and `reviewer`. Prevent deletion, demotion, or suspension of the sole administrator through ordinary account management. Reject conflicting pre-existing administrators during migration and report them for explicit resolution; do not silently demote users. A controlled offline recovery command may restore access to the designated account and must audit its actions.
 
@@ -103,7 +103,7 @@ Verification, reset, invitation, onboarding, OAuth-state, and recovery credentia
 
 Initial expiry defaults: email verification 24 hours, password reset 30 minutes, invitation 7 days, OAuth transaction/onboarding 10 minutes. Rate-limit retries and resends. Mail failure must leave a recoverable pending state, never an activated account without proof of ownership.
 
-Require TOTP MFA for `mkoenig`, using a maintained library, encrypted TOTP seed storage with an operational secret, and hashed single-use recovery codes. Enrollment requires authenticated bootstrap or recent account authentication; prove a valid code before activation. Prevent replay within a TOTP time step and rate-limit failures. A partially authenticated session cannot perform administrative operations or issue keys. Administrator recovery must use recovery codes or the audited offline recovery command, not email reset alone.
+Require TOTP MFA for `USERNAME`, using a maintained library, encrypted TOTP seed storage with an operational secret, and hashed single-use recovery codes. Enrollment requires authenticated bootstrap or recent account authentication; prove a valid code before activation. Prevent replay within a TOTP time step and rate-limit failures. A partially authenticated session cannot perform administrative operations or issue keys. Administrator recovery must use recovery codes or the audited offline recovery command, not email reset alone.
 
 Password reset revokes all browser sessions and personal API keys, with a clear notice that scripts need replacement keys. Suspension revokes all sessions and keys and blocks all login methods; reactivation does not revive revoked credentials. Users can revoke other sessions and all keys when reporting compromise.
 
@@ -139,11 +139,11 @@ GitHub and ORCID may be supplied as optional profile references without enabling
 
 ### 4.6 Avatars and initial profile population
 
-Use images from `livermetabolism-site` wherever an explicit identity match is available. The inspected source repository is `/home/mkoenig/git/livermetabolism-site`; its people metadata is `data/people.yml`, and existing 128-pixel WebP thumbnails are in `public/assets/image/people/128/`. Use these thumbnails directly for initial avatars rather than fetching photos from external providers or generating replacements.
+Use images from `livermetabolism-site` wherever an explicit identity match is available. The inspected source repository is `/home/USERNAME/git/livermetabolism-site`; its people metadata is `data/people.yml`, and existing 128-pixel WebP thumbnails are in `public/assets/image/people/128/`. Use these thumbnails directly for initial avatars rather than fetching photos from external providers or generating replacements.
 
 | PK-DB identity to resolve | Site person ID | Existing thumbnail relative to `public/assets/image/people/128/` |
 | --- | --- | --- |
-| `mkoenig` | `matthias_koenig` | `matthias_koenig.webp` |
+| `USERNAME` | `matthias_koenig` | `matthias_koenig.webp` |
 | Mariia Myshkina | `mariia_myshkina` | `mariia_myshkina.webp` |
 | Michelle Elias | `michelle_elias` | `michelle_elias.webp` |
 | Shubhankar Palwankar | `shubhankar_palwankar` | `shubhankar_palwankar.webp` |
@@ -277,16 +277,16 @@ Use the existing curator roster defined in the user-specified `users.py` as the 
 
 | Existing identity | Initial role |
 | --- | --- |
-| `mkoenig` | `admin` (sole administrator; provision through the dedicated command) |
+| `USERNAME` | `admin` (sole administrator; provision through the dedicated command) |
 | Mariia Myshkina | `reviewer` |
 | Michelle Elias | `reviewer` |
 | Shubhankar Palwankar | `reviewer` |
 | Other curators defined in the existing `users.py` roster | `curator` |
 | New registrations and accounts without an explicit privileged assignment | `user` |
 
-Resolve the three named reviewers to their exact existing usernames/internal IDs in the import manifest; the names above are requirements, not a fuzzy matching rule. Apply precedence `mkoenig` administrator designation, then the three reviewer overrides, then roster curator assignments, then the ordinary-user default. Do not derive roles from a model default, an uploaded study's contributor list, or provider claims. Initial role assignment does not bypass invitation, identity verification, or suspension rules.
+Resolve the three named reviewers to their exact existing usernames/internal IDs in the import manifest; the names above are requirements, not a fuzzy matching rule. Apply precedence `USERNAME` administrator designation, then the three reviewer overrides, then roster curator assignments, then the ordinary-user default. Do not derive roles from a model default, an uploaded study's contributor list, or provider claims. Initial role assignment does not bypass invitation, identity verification, or suspension rules.
 
-Resolved source: `backend/pkdb_data/management/users.py` at PK-DB revision `632a8bb21a894e97e2a4f6df7173f0956ded09f5`, recorded in `backend/bootstrap/curator-roster.json`. Its 69 historical accounts map Mariia Myshkina to `MariiaMysh`, Michelle Elias to `mii-halina`, and Shubhankar Palwankar to `shubhankarpalwankar`. The historical `reviewer` test account is excluded; `mkoenig` is handled by administrator bootstrap. The importer preserves separate identities for the reviewed duplicate candidates `deepa`/`DeepaMahm` and `long231a`/`lucialink30` pending explicit operator resolution. Do not substitute the empty `backend/bootstrap/users.json` for this roster. Include the resolved source path/revision and exact account mappings in the dry-run report.
+Resolved source: `backend/pkdb_data/management/users.py` at PK-DB revision `632a8bb21a894e97e2a4f6df7173f0956ded09f5`, recorded in `backend/bootstrap/curator-roster.json`. Its 69 historical accounts map Mariia Myshkina to `MariiaMysh`, Michelle Elias to `mii-halina`, and Shubhankar Palwankar to `shubhankarpalwankar`. The historical `reviewer` test account is excluded; `USERNAME` is handled by administrator bootstrap. The importer preserves separate identities for the reviewed duplicate candidates `deepa`/`DeepaMahm` and `long231a`/`lucialink30` pending explicit operator resolution. Do not substitute the empty `backend/bootstrap/users.json` for this roster. Include the resolved source path/revision and exact account mappings in the dry-run report.
 
 These are initial migration assignments, not recurring synchronization rules. Later administrator changes remain authoritative; rerunning the import must not restore a removed curator/reviewer role.
 
@@ -304,7 +304,7 @@ Users lacking usable credentials receive an invitation bound to the existing acc
 
 ## 11. Rollout and compatibility
 
-1. Back up the database, inventory existing accounts/tokens/grants, and run the import/migration dry run. Confirm the designated `mkoenig` identity and resolve conflicting administrators.
+1. Back up the database, inventory existing accounts/tokens/grants, and run the import/migration dry run. Confirm the designated `USERNAME` identity and resolve conflicting administrators.
 2. Deploy additive schema changes and centralized authorization. Backfill explicit assignments before removing implicit creator writes. All old and new endpoints immediately use the corrected role matrix.
 3. Deploy browser sessions, MFA, key management, shared quotas, and frontend changes. Remove local-storage token use and make logout server-side. Existing users sign in again to establish browser sessions.
 4. Enable GitHub and ORCID after callback and sandbox/production smoke tests; then enable public registration and issue reviewed invitations.
@@ -333,7 +333,7 @@ Commit migrations, lockfile changes, configuration examples without secrets, ope
 - A normal registrant cannot choose a role or upload studies. A curator can create a private study and becomes assigned to it.
 - Curator A can edit assigned study A but cannot validate, replace, attach files to, or delete unassigned study B. Spoofing the creator, uploader, or curator names in a payload does not change that result.
 - A reviewer can read and edit every public/private study without an assignment, but cannot change vocabulary, assignments, visibility, licence, ownership, roles, or delete studies.
-- Only the designated `mkoenig` administrator can perform administrative actions, using a fully authenticated session. An administrator-owned API key cannot do so.
+- Only the designated `USERNAME` administrator can perform administrative actions, using a fully authenticated session. An administrator-owned API key cannot do so.
 - Demotion to ordinary user removes writes even when the user remains a creator or assigned curator. Assignment removal removes a curator's writes. Transactional race tests cover writes concurrent with role/grant changes and credential revocation.
 - Replacement preserves effective grants and rejects unauthorized protected-field changes without partial publication. Scientific author/curator attribution remains intact through migration.
 - Search, pagination totals, exports, file access, and MCP do not leak private data. Existing licence restrictions remain effective.
@@ -357,8 +357,8 @@ Commit migrations, lockfile changes, configuration examples without secrets, ope
 ### Migration, operations, and overload
 
 - Import dry runs make no changes and expose conflicts. Repeated imports preserve credentials and do not revive suspended accounts or undo later role changes. No private roster or secrets enter Git.
-- The resolved `users.py` roster populates existing curators, with Mariia Myshkina, Michelle Elias, and Shubhankar Palwankar mapped to their verified existing identities as reviewers. `mkoenig` remains the sole administrator, and new registrations default to `user`. Missing or ambiguous roster/reviewer identities block import application and appear in the dry-run report.
-- `mkoenig` is reserved before registration, adopted only through explicit bootstrap, and is the sole administrator under concurrent operations.
+- The resolved `users.py` roster populates existing curators, with Mariia Myshkina, Michelle Elias, and Shubhankar Palwankar mapped to their verified existing identities as reviewers. `USERNAME` remains the sole administrator, and new registrations default to `user`. Missing or ambiguous roster/reviewer identities block import application and appear in the dry-run report.
+- `USERNAME` is reserved before registration, adopted only through explicit bootstrap, and is the sole administrator under concurrent operations.
 - Legacy credentials expire at the fixed cutoff, cannot access management endpoints, and follow current roles/scopes/quotas throughout transition.
 - Multi-worker tests prove account quotas are shared across keys, sessions, REST, and MCP. Creating more keys does not increase allowance. Proxy-header spoofing cannot bypass IP limits.
 - Limits cover expensive queries, uploads, pagination, exports, and downloads. Crashed workers release concurrency capacity through lease expiry. `429` includes a meaningful retry interval.

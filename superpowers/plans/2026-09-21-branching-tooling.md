@@ -4,7 +4,7 @@
 
 **Goal:** Bring the backend and the python code of `pkdb` to the branching model, tooling, workflows, repository policies and zensical documentation of `pkdb_data` and `pkdb_models`, without PyPI releases and without a change of the frontend.
 
-**Architecture:** All file changes happen on the branch `tooling` and reach the repository through one pull request. The templates are the files of the sibling checkout `/home/mkoenig/git/pkdb_models` (commit `d720fe2b8`), which already has the variant without PyPI; every task names the template and the exact adaptations. The tests come before the mass fixes, so formatting, lint and type fixes are made with a safety net. The remote operations (rulesets, branch deletion, tag) come last and are confirmed one by one.
+**Architecture:** All file changes happen on the branch `tooling` and reach the repository through one pull request. The templates are the files of the sibling checkout `/home/USERNAME/git/pkdb_models` (commit `d720fe2b8`), which already has the variant without PyPI; every task names the template and the exact adaptations. The tests come before the mass fixes, so formatting, lint and type fixes are made with a safety net. The remote operations (rulesets, branch deletion, tag) come last and are confirmed one by one.
 
 **Tech Stack:** uv, hatchling, ruff, ty, tox with tox-uv, pytest with pytest-django and pytest-env, pre-commit, bump-my-version, zensical, GitHub Actions with service containers, GitHub rulesets, Django 3.1.14 on python 3.9, postgres 18.0, elasticsearch 7.9.2.
 
@@ -128,7 +128,7 @@ ELASTICSEARCH_DSL = {
 ```
 
   The default keeps compose and production unchanged, no compose file needs the variable.
-- [ ] **Step 3: `.ruff.toml`** in the root. Copy of `/home/mkoenig/git/pkdb_models/.ruff.toml` with: `target-version = "py39"`, `extend-exclude = ["**/migrations/**", "frontend", "docs"]`, `RUF012` and `D106` added to `ignore` with the comment "Django idioms: class attributes of models, serializers and views, nested Meta classes", `[lint.per-file-target-version] "scripts/*.py" = "py314"`, first party `known-first-party = ["pkdb_app"]`, and the per-file ignores of the template for `tests/` moved to `backend/tests/**`.
+- [ ] **Step 3: `.ruff.toml`** in the root. Copy of `/home/USERNAME/git/pkdb_models/.ruff.toml` with: `target-version = "py39"`, `extend-exclude = ["**/migrations/**", "frontend", "docs"]`, `RUF012` and `D106` added to `ignore` with the comment "Django idioms: class attributes of models, serializers and views, nested Meta classes", `[lint.per-file-target-version] "scripts/*.py" = "py314"`, first party `known-first-party = ["pkdb_app"]`, and the per-file ignores of the template for `tests/` moved to `backend/tests/**`.
 - [ ] **Step 4: `backend/tox.ini`.**
 
 ```ini
@@ -527,7 +527,7 @@ The work is split by Django app so that the parts are independent and can run in
 - Create: `.github/workflows/{ci-cd,ruff,ty,docs}.yml`, `.github/rulesets/{develop,main,tags}.json`, `.github/rulesets/apply.sh`, `.github/CODEOWNERS`, `.github/dependabot.yml`, `.github/pull_request_template.md`, `zensical.toml`, `docs/{index,installation,deployment,development,contributing}.md`, `docs/requirements.txt`, `docs/robots.txt`, `scripts/llms_txt.py`, `CLAUDE.md`, `release-notes/0.10.0.md`
 - Modify: `README.md`, `INSTALLATION.md`
 
-- [ ] **Step 1: Verbatim copies** from `/home/mkoenig/git/pkdb_models/.github/`: `rulesets/develop.json`, `rulesets/main.json`, `CODEOWNERS`. `rulesets/tags.json` with the tag pattern checked against `v*`. `apply.sh` with `pkdb_models` replaced by `pkdb` (mode 755). `pull_request_template.md` with the test item "the tests pass against the services (`tox -e py3.9`)".
+- [ ] **Step 1: Verbatim copies** from `/home/USERNAME/git/pkdb_models/.github/`: `rulesets/develop.json`, `rulesets/main.json`, `CODEOWNERS`. `rulesets/tags.json` with the tag pattern checked against `v*`. `apply.sh` with `pkdb_models` replaced by `pkdb` (mode 755). `pull_request_template.md` with the test item "the tests pass against the services (`tox -e py3.9`)".
 - [ ] **Step 2: `dependabot.yml`.** `pip` with `directory: /backend` and `github-actions`, both weekly and grouped as in the template; `pip` in `/docs` for `requirements.txt`. For `/backend` an `ignore` list with `update-types: ["version-update:semver-major", "version-update:semver-minor"]` for `Django`, `djangorestframework`, `django-*`, `drf-yasg`, `elasticsearch-dsl`.
 - [ ] **Step 3: `ruff.yml`, `ty.yml`.** Copies without the sparse checkout block (the repository is small). `ty.yml` runs in `working-directory: backend` with python 3.9 and `uv sync --extra dev`. Project names replaced in comments and urls.
 - [ ] **Step 4: `ci-cd.yml`.** Copy with these changes: job `test` on `ubuntu-latest`, python `3.9`, `working-directory: backend`, and

@@ -10,10 +10,10 @@ from pkdb.services.authentication import authenticate_password
 
 def test_local_admin_creation_hashes_password_and_verifies_email(session_factory):
     create_admin(
-        session_factory, "mkoenig", "operator@example.test", "Initial-password-42!"
+        session_factory, "USERNAME", "operator@example.test", "Initial-password-42!"
     )
     with session_factory() as session:
-        user = authenticate_password("mkoenig", "Initial-password-42!", session)
+        user = authenticate_password("USERNAME", "Initial-password-42!", session)
         assert user.role == "admin" and user.active
         assert user.password_hash != "Initial-password-42!"
         email = session.scalar(
@@ -36,9 +36,9 @@ def test_existing_identity_is_not_silently_elevated_or_rekeyed(session_factory):
 
 def test_short_admin_password_leaves_no_account(session_factory):
     with pytest.raises(ValueError):
-        create_admin(session_factory, "mkoenig", "operator@example.test", "short")
+        create_admin(session_factory, "USERNAME", "operator@example.test", "short")
     with session_factory() as session:
-        assert session.scalar(select(User).where(User.username == "mkoenig")) is None
+        assert session.scalar(select(User).where(User.username == "USERNAME")) is None
 
 
 def test_admin_cli_accepts_protected_stdin_and_never_prints_password(
@@ -60,7 +60,7 @@ def test_admin_cli_accepts_protected_stdin_and_never_prints_password(
         main(
             [
                 "create-admin",
-                "mkoenig",
+                "USERNAME",
                 "--email",
                 "operator@example.test",
                 "--password-stdin",
@@ -70,6 +70,14 @@ def test_admin_cli_accepts_protected_stdin_and_never_prints_password(
     )
     output = capsys.readouterr().out
     assert password not in output
-    assert json.loads(output) == {"ok": True, "username": "mkoenig"}
+    assert json.loads(output) == {"ok": True, "username": "USERNAME"}
     with session_factory() as session:
-        assert authenticate_password("mkoenig", password, session).role == "admin"
+        assert authenticate_password("USERNAME", password, session).role == "admin"
+
+
+def test_second_administrator_is_rejected(session_factory):
+    create_admin(session_factory, "USERNAME", "first@example.org", "Password12345!")
+    with pytest.raises(ValueError, match="conflicting legacy administrators"):
+        create_admin(session_factory, "another", "second@example.org", "Password12345!")
+    with session_factory() as session:
+        assert session.scalar(select(User).where(User.username == "another")) is None

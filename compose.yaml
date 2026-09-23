@@ -36,6 +36,7 @@ services:
       PKDB_SMTP_STARTTLS: ${PKDB_SMTP_STARTTLS:-true}
     volumes:
       - attachments:/data/files
+      - ./frontend/public/assets/images/avatars:/app/frontend/public/assets/images/avatars:ro
     ports:
       - "127.0.0.1:${PKDB_HTTP_PORT:-18083}:8000"
     depends_on:
@@ -55,6 +56,28 @@ services:
       retries: 30
       start_period: 10s
     restart: unless-stopped
+
+  frontend:
+    profiles: [dev]
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile-develop
+    environment:
+      PKDB_DEV_API_TARGET: http://backend:8000
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - ./frontend/src:/app/src:ro
+      - ./frontend/public:/app/public:ro
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080').then(r => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))"]
+      interval: 3s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
 
 volumes:
   database:
