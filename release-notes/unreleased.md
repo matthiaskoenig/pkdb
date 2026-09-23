@@ -1,5 +1,6 @@
 # Unreleased
 
+- Add a GitHub issue reporting link to desktop and mobile navigation, and use `PKDB_ADMIN` and `PKDB_ADMIN_EMAIL` placeholders in administrator setup documentation.
 - Run regular Python CI on Linux with Python 3.14; reserve the complete Python and operating-system matrix for release tag pushes.
 
 - Show the frontend release version, linked build commit, and Matthias König copyright and group link in the shared footer on every page.
