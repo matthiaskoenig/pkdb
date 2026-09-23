@@ -98,17 +98,7 @@ describe("account activity privacy and pagination", () => {
     expect(wrapper.text()).not.toContain("PRIVATE");
     expect(wrapper.text()).toContain("Study offset 0");
   });
-  it("does not fetch protected activity before administrator MFA completion", async () => {
-    useSessionStore().profile = profileFixture({
-      role: "admin",
-      mfa_required: true,
-    });
-    const read = vi.spyOn(accountApi, "studies");
-    const wrapper = mount(ActivityHarness, { global: { plugins: [pinia] } });
-    await wrapper.findAll("button")[0]?.trigger("click");
-    expect(read).not.toHaveBeenCalled();
-  });
-  it("saves privacy switches without overwriting authenticated provider references", () => {
+  it("saves optional editable profile references and their privacy switches", () => {
     const values = profilePayload(
       {
         display_name: "",
@@ -119,13 +109,9 @@ describe("account activity privacy and pagination", () => {
         github_visible: false,
         orcid_visible: false,
       },
-      profileFixture({
-        github_provenance: "authenticated",
-        orcid_provenance: "authenticated",
-      }),
     );
-    expect(values).not.toHaveProperty("github");
-    expect(values).not.toHaveProperty("orcid");
+    expect(values.github).toBe("scientist");
+    expect(values.orcid).toBe("0000-0002-1825-0097");
     expect(values.github_visible).toBe(false);
     expect(values.orcid_visible).toBe(false);
   });

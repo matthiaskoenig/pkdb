@@ -43,7 +43,7 @@ export function useProfile() {
   );
   async function saveProfile() {
     if (!session.profile) return;
-    await accountApi.saveProfile(profilePayload(form.value, session.profile));
+    await accountApi.saveProfile(profilePayload(form.value));
     await session.refreshProfile();
   }
   async function uploadPhoto() {

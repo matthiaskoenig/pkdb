@@ -18,7 +18,7 @@ The two services are the FastAPI backend and PostgreSQL 18. The API binds only t
 docker compose exec backend pkdb create-admin mkoenig --email YOUR_EMAIL
 ```
 
-The sole administrator username is `mkoenig`. Enter a password at the hidden prompt. Persist `PKDB_MFA_ENCRYPTION_KEY` as described in [Administrator bootstrap and MFA](authentication.md#administrator-bootstrap-and-mfa), then use the account frontend to enroll an authenticator and create a personal API key. Follow [Local upload testing](local-upload-testing.md) to configure the frontend proxy port, authenticate, validate, and upload a study. The former `/api-token-auth/` endpoint is retired.
+The sole administrator username is `mkoenig`. Enter a password at the hidden prompt. Sign in to the account frontend with that password and create a personal API key. No external provider or MFA setup is needed. For an ordinary local login, use `pkdb create-user developer`; see [Local development accounts](authentication.md#local-development-accounts). Follow [Local upload testing](local-upload-testing.md) to configure the frontend proxy port, authenticate, validate, and upload a study. The former `/api-token-auth/` endpoint is retired.
 
 ## Configuration and persistence
 

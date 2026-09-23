@@ -123,8 +123,9 @@ jobs:
               assert "HttpOnly" in response.headers["Set-Cookie"]
           with browser.open(base + "/api/v1/me", timeout=30) as response:
               profile = json.load(response)
-              assert profile["mfa_required"] and not profile["mfa_enrolled"]
-          for path, expected in (("/api/v1/admin/users", 403), ("/api-token-auth/", 410)):
+              assert profile["role"] == "admin"
+              assert "mfa_required" not in profile
+          for path, expected in (("/api/v1/admin/users", 200), ("/api-token-auth/", 410)):
               request = urllib.request.Request(base + path)
               if path == "/api-token-auth/":
                   request.data = json.dumps({"username": "mkoenig", "password": "Local-CI-password-42!"}).encode()
@@ -132,11 +133,10 @@ jobs:
                   request.add_header("Origin", "http://localhost:8080")
                   request.add_header("X-CSRF-Token", csrf)
               try:
-                  browser.open(request, timeout=30)
+                  with browser.open(request, timeout=30) as response:
+                      assert response.status == expected, (path, response.status)
               except urllib.error.HTTPError as error:
                   assert error.code == expected, (path, error.code)
-              else:
-                  raise AssertionError(f"{path} did not return {expected}")
           PYTHON
       - name: Show logs on failure
         if: failure()

@@ -10,7 +10,7 @@ def require_administrator(request: Request):
     actor = request.app.state.principal(request)
     if actor.role != "admin":
         raise AuthorizationDenied("Administrator required")
-    from pkdb.services.mfa import require_admin_session
+    from pkdb.services.credentials import require_admin_session
 
     with request.app.state.session_factory() as session:
         require_admin_session(actor, session)

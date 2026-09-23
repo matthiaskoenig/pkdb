@@ -1,4 +1,4 @@
-"""Encrypted administrator MFA and append-only security events."""
+"""Append-only security events and account role requests."""
 
 from datetime import datetime
 
@@ -7,17 +7,6 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from pkdb.db.models.base import Base, Identity, Timestamped
-
-
-class MfaCredential(Base):
-    __tablename__ = "mfa_credentials"
-    user_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id", ondelete="CASCADE"), primary_key=True
-    )
-    encrypted_secret: Mapped[str]
-    confirmed: Mapped[bool] = mapped_column(default=False)
-    last_step: Mapped[int] = mapped_column(default=-1)
-    recovery_digests: Mapped[list[str]] = mapped_column(JSONB, default=list)
 
 
 class AuditEvent(Identity, Timestamped, Base):

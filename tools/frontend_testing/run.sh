@@ -5,7 +5,7 @@ cd "$(dirname "$0")/../.."
 compose=(docker compose -p pkdb-frontend-test -f "$PWD/compose.frontend-test.yaml")
 cleanup() { "${compose[@]}" down --volumes --remove-orphans; }
 trap cleanup EXIT
-# Start from a fresh disposable fixture, including account throttle/MFA state.
+# Start from a fresh disposable fixture, including account throttle state.
 cleanup
 "${compose[@]}" up --build --wait --wait-timeout 240
 cd frontend

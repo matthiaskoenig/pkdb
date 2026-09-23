@@ -24,7 +24,7 @@ const {
   roles,
   usageKinds,
   usageLabels,
-  recent,
+  canAdminister,
   load,
   search,
   closeInvitation,
@@ -51,9 +51,8 @@ onMounted(() => {
     </p>
     <v-alert v-if="error" type="error">{{ error }}</v-alert
     ><v-alert v-if="notice" type="success">{{ notice }}</v-alert>
-    <v-alert v-if="!recent" type="info">
-      Confirm your identity in account settings and verify your authenticator
-      before making administrator changes.
+    <v-alert v-if="!canAdminister" type="info">
+      Sign in with an administrator account to manage users.
     </v-alert>
     <v-form @submit.prevent="search">
       <v-text-field
@@ -117,7 +116,7 @@ onMounted(() => {
               size="small"
               variant="text"
               color="primary"
-              :disabled="busy || !recent"
+              :disabled="busy || !canAdminister"
               @click="
                 invitationError = '';
                 invitationUser = user;
@@ -188,7 +187,7 @@ onMounted(() => {
           ><v-btn
             color="primary"
             :loading="busy"
-            :disabled="!recent"
+            :disabled="!canAdminister"
             @click="sendInvitation"
           >
             Send invitation

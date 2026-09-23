@@ -28,10 +28,11 @@ def main(argv=None, *, client=None):
     admin.add_argument("--email", required=True)
     admin.add_argument("--password-stdin", action="store_true")
     admin.add_argument("--adopt-user-id", type=int)
-    recovery = commands.add_parser("recover-admin-mfa")
-    recovery.add_argument("username", choices=["mkoenig"])
-    recovery.add_argument("--user-id", type=int, required=True)
-    recovery.add_argument("--confirm-recovery", action="store_true", required=True)
+    user = commands.add_parser("create-user")
+    user.add_argument("username")
+    user.add_argument("--email")
+    user.add_argument("--role", choices=["user", "curator", "reviewer"], default="user")
+    user.add_argument("--password-stdin", action="store_true")
     roster = commands.add_parser("import-users")
     roster.add_argument("path", type=Path)
     roster.add_argument("--contacts", type=Path)
@@ -47,7 +48,7 @@ def main(argv=None, *, client=None):
         "cleanup",
         "create-admin",
         "import-users",
-        "recover-admin-mfa",
+        "create-user",
     }:
         return local_command(args)
 
@@ -101,7 +102,7 @@ def redact_values(value, token):
 def local_command(args):
     from sqlalchemy.exc import SQLAlchemyError
 
-    from pkdb.commands.admin import create_admin, recover_admin_mfa
+    from pkdb.commands.admin import create_admin
     from pkdb.commands.bootstrap import bootstrap, bootstrap_study
     from pkdb.commands.cleanup import cleanup
     from pkdb.commands.user_import import import_roster
@@ -134,10 +135,19 @@ def local_command(args):
                 adopt_user_id=args.adopt_user_id,
             )
             result = {"ok": True, "username": args.username}
-        elif args.command == "recover-admin-mfa":
-            result = recover_admin_mfa(
-                factory, args.username, args.user_id, confirm=args.confirm_recovery
+        elif args.command == "create-user":
+            from pkdb.commands.users import create_user
+
+            if args.password_stdin:
+                password = sys.stdin.readline(1026).rstrip("\r\n")
+            elif sys.stdin.isatty():
+                password = getpass("User password: ")
+            else:
+                raise ValueError("Use an interactive terminal or --password-stdin")
+            user_id = create_user(
+                factory, args.username, password, email=args.email, role=args.role
             )
+            result = {"ok": True, "username": args.username, "user_id": user_id}
         elif args.command == "import-users":
             result = import_roster(
                 args.path,

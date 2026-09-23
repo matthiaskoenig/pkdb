@@ -6,8 +6,8 @@ from sqlalchemy.exc import IntegrityError
 from pkdb.db.models.users import EmailAddress, User
 from pkdb.schemas.security import Principal
 from pkdb.services.authorization import AuthorizationDenied
+from pkdb.services.credentials import require_admin_session
 from pkdb.services.ingestion import PublicationConflict
-from pkdb.services.mfa import require_admin_session
 
 LEGACY_ROLES = {
     "user": "basic",

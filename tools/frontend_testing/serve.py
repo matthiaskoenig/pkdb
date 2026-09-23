@@ -1,6 +1,5 @@
 """Seed and serve the isolated browser fixture; never point at deployment data."""
 
-import hashlib
 import os
 import subprocess
 from pathlib import Path
@@ -95,30 +94,6 @@ def main():
                 config.designated_administrator_id = session.scalar(
                     select(User.id).where(User.username == "administrator")
                 )
-                from cryptography.fernet import Fernet
-
-                from pkdb.db.models.mfa import MfaCredential
-
-                credential = session.get(
-                    MfaCredential, config.designated_administrator_id
-                )
-                if credential is None:
-                    credential = MfaCredential(
-                        user_id=config.designated_administrator_id, encrypted_secret=""
-                    )
-                    session.add(credential)
-                credential.encrypted_secret = (
-                    Fernet(settings.mfa_encryption_key.get_secret_value().encode())
-                    .encrypt(b"JBSWY3DPEHPK3PXP")
-                    .decode()
-                )
-                credential.confirmed = True
-                credential.last_step = -1
-                credential.recovery_digests = [
-                    hashlib.sha256(f"frontend-{browser}-{attempt}".encode()).hexdigest()
-                    for browser in ("chromium", "firefox", "webkit")
-                    for attempt in range(3)
-                ]
                 creator = session.scalar(select(User).where(User.username == "curator"))
                 principal = Principal(
                     user_id=creator.id, username=creator.username, role=creator.role

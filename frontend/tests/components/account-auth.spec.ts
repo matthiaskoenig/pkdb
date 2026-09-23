@@ -5,13 +5,10 @@ import { createMemoryHistory, createRouter } from "vue-router";
 import { AxiosError, AxiosHeaders } from "axios";
 import { defineComponent, h } from "vue";
 import { useSessionStore } from "../../src/stores/session";
-import { accountApi } from "../../src/api/account";
 import { adminApi, type AdminUser } from "../../src/api/admin";
 import UserLogin from "../../src/features/account/components/UserLogin.vue";
-import ProviderOnboarding from "../../src/features/account/components/ProviderOnboarding.vue";
-import MfaChallenge from "../../src/features/account/components/MfaChallenge.vue";
 import AdminSettings from "../../src/features/admin/components/AdminSettings.vue";
-import { profileFixture, deferred } from "../unit/account-fixtures";
+import { profileFixture } from "../unit/account-fixtures";
 enableAutoUnmount(afterEach);
 let pinia = createPinia();
 beforeEach(() => {
@@ -26,7 +23,6 @@ beforeEach(() => {
   );
   pinia = createPinia();
   setActivePinia(pinia);
-  vi.spyOn(accountApi, "providers").mockResolvedValue([]);
 });
 afterEach(() => {
   disposePinia(pinia);
@@ -57,13 +53,11 @@ async function router() {
   return value;
 }
 describe("account user-visible behavior", () => {
-  it("clears the submitted password and retains the MFA challenge after login", async () => {
+  it("clears the submitted password and completes administrator login immediately", async () => {
     const store = useSessionStore();
     const login = vi.spyOn(store, "login").mockImplementation(async () => {
       store.profile = profileFixture({
         role: "admin",
-        mfa_required: true,
-        mfa_enrolled: true,
       });
       return store.profile;
     });
@@ -76,8 +70,8 @@ describe("account user-visible behavior", () => {
     await flushPromises();
     expect(login).toHaveBeenCalledWith("admin", "one-use-password");
     expect(wrapper.find('input[type="password"]').exists()).toBe(false);
-    expect(wrapper.text()).toContain("Administrator verification");
-    expect(wrapper.emitted("close")).toBeUndefined();
+    expect(wrapper.text()).toContain("Your account");
+    expect(wrapper.emitted("close")).toHaveLength(1);
   });
   it("does not close the login card after a failed logout", async () => {
     const store = useSessionStore();
@@ -95,52 +89,9 @@ describe("account user-visible behavior", () => {
     expect(wrapper.text()).toContain("could not be completed");
     expect(wrapper.emitted("close")).toBeUndefined();
   });
-  it("claims an invited provider identity with only the trimmed token and supports errors", async () => {
-    const claim = vi
-      .spyOn(accountApi, "claimInvitation")
-      .mockRejectedValueOnce(failure("Invalid or expired invitation"))
-      .mockResolvedValueOnce();
-    const wrapper = mount(ProviderOnboarding, {
-      global: { plugins: [pinia, await router()] },
-    });
-    await wrapper.get('input[type="checkbox"]').setValue(true);
-    await wrapper.get('input[autocomplete="off"]').setValue(" token ");
-    await wrapper.get("form").trigger("submit");
-    await flushPromises();
-    expect(wrapper.text()).toContain("Invalid or expired invitation");
-    expect(wrapper.text()).not.toContain("Your existing account is ready.");
-    await wrapper.get("form").trigger("submit");
-    await flushPromises();
-    expect(claim).toHaveBeenLastCalledWith("token");
-    expect(wrapper.text()).toContain("Your existing account is ready.");
-    expect(wrapper.find('input[autocomplete="off"]').exists()).toBe(false);
-  });
-  it("removes MFA secrets on identity change and ignores enrollment arriving after unmount", async () => {
-    const store = useSessionStore();
-    store.profile = profileFixture({ role: "admin" });
-    vi.spyOn(accountApi, "enroll").mockResolvedValueOnce({
-      secret: "private-seed",
-    });
-    const wrapper = mount(MfaChallenge, { global: { plugins: [pinia] } });
-    await wrapper.get("button").trigger("click");
-    await flushPromises();
-    expect(wrapper.get("input[readonly]").element.getAttribute("value")).toBe(
-      "private-seed",
-    );
-    store.invalidate();
-    await flushPromises();
-    expect(wrapper.find("input[readonly]").exists()).toBe(false);
-    const pending = deferred<{ secret: string }>();
-    vi.mocked(accountApi.enroll).mockReturnValueOnce(pending.promise);
-    await wrapper.get("button").trigger("click");
-    wrapper.unmount();
-    pending.complete({ secret: "late-seed" });
-    await flushPromises();
-    expect(wrapper.exists()).toBe(false);
-  });
   it("keeps reviewed invitation contact and dialog on delivery failure, then permits retry", async () => {
     const store = useSessionStore();
-    store.profile = profileFixture({ role: "admin", mfa_recent: true });
+    store.profile = profileFixture({ role: "admin" });
     const user: AdminUser = {
       id: 42,
       username: "invited",

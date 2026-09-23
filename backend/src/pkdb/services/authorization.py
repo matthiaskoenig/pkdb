@@ -9,12 +9,6 @@ class AuthorizationDenied(PermissionError):
 
 def require_scope(principal: Principal, scope: str) -> None:
     if (
-        principal.role == "admin"
-        and principal.credential_kind == "session"
-        and principal.mfa_at is None
-    ):
-        raise AuthorizationDenied("Administrator MFA required")
-    if (
         principal.credential_kind in {"api_key", "legacy"}
         and scope not in principal.scopes
     ):
@@ -42,13 +36,6 @@ def authorize(principal: Principal, action: Action, study: StudyAccess) -> None:
         "legacy",
     }:
         raise AuthorizationDenied("Browser session required")
-    if action in {"delete", "administer"} and principal.credential_kind == "session":
-        from datetime import UTC, datetime, timedelta
-
-        if principal.mfa_at is None or principal.mfa_at <= datetime.now(
-            UTC
-        ) - timedelta(minutes=10):
-            raise AuthorizationDenied("Recent administrator MFA required")
     authenticated = principal.user_id is not None and principal.role != "anonymous"
     if authenticated and principal.role == "admin":
         return

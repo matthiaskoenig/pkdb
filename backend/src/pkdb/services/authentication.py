@@ -156,7 +156,6 @@ def revalidate_principal(
                 "role": user.role,
                 "scopes": frozenset(),
                 "authenticated_at": row.authenticated_at,
-                "mfa_at": row.mfa_at,
             }
         )
     if isinstance(row, Token):
@@ -174,7 +173,6 @@ def revalidate_principal(
             "role": user.role,
             "scopes": scopes,
             "authenticated_at": None,
-            "mfa_at": None,
         }
     )
 

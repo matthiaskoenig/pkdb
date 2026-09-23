@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
-import { useRoute, useRouter } from "vue-router";
 import { apiBase } from "../../../api/client";
 import { useSessionStore } from "../../../stores/session";
 import { useAccountAction } from "../useAccountAction";
@@ -8,15 +7,11 @@ import { useAccountActivity } from "../useAccountActivity";
 import { useProfile } from "../useProfile";
 import { useCredentials } from "../useCredentials";
 import { useReauthentication } from "../useReauthentication";
-import type { EmailAddress, Provider } from "../../../api/session";
-import type { ApiKey, BrowserSession, Identity } from "../../../api/account";
+import type { EmailAddress } from "../../../api/session";
+import type { ApiKey, BrowserSession } from "../../../api/account";
 import UserLogin from "./UserLogin.vue";
-import MfaChallenge from "./MfaChallenge.vue";
-import ProviderOnboarding from "./ProviderOnboarding.vue";
 import AdminSettings from "../../admin/components/AdminSettings.vue";
-const session = useSessionStore(),
-  route = useRoute(),
-  router = useRouter();
+const session = useSessionStore();
 const profile = computed(() => session.profile);
 const avatarUrl = computed(() =>
   profile.value ? apiBase + profile.value.avatar_url : "",
@@ -28,8 +23,6 @@ const credentials = useCredentials();
 const {
   keys,
   sessions,
-  identities,
-  providers,
   secret,
   secretDialog,
   rotated,
@@ -37,10 +30,8 @@ const {
   keyDays,
   keyWrite,
   canWrite,
-  availableProviders,
 } = credentials;
 const {
-  recentlyConfirmed,
   reauthDialog,
   reauthPassword,
   reauthError,
@@ -62,40 +53,23 @@ const {
   loading: eventsLoading,
   error: eventsError,
 } = activity.events;
-const tab = ref(0),
-  mfaDialog = ref(false),
-  onboarding = ref(false);
+const tab = ref(0);
 watch(
   () => session.epoch,
   () => {
-    mfaDialog.value = false;
     tab.value = 0;
   },
 );
 watch(
   profile,
   (value) => {
-    if (value && !value.mfa_required) {
+    if (value) {
       void run(async () => {
         await credentials.loadCredentials();
       });
       void activity.studies.refresh();
       void activity.events.refresh();
     }
-  },
-  { immediate: true },
-);
-watch(
-  () => route.query.oauth,
-  (value) => {
-    if (!value) return;
-    onboarding.value = value === "onboarding";
-    recentlyConfirmed.value = value === "authenticated" || value === "linked";
-    if (value === "error")
-      error.value = "Provider sign-in did not complete. Please try again.";
-    const query = { ...route.query };
-    delete query.oauth;
-    void router.replace({ path: route.path, query });
   },
   { immediate: true },
 );
@@ -130,11 +104,6 @@ const revokeKey = (value: ApiKey) =>
   run(() => credentials.revokeKey(value), "API key revoked.");
 const revokeSession = (value: BrowserSession) =>
   run(() => credentials.revokeSession(value), "Session revoked.");
-const link = (value: Provider) => run(() => credentials.link(value));
-const providerReauth = (value: Provider) =>
-  run(() => credentials.providerReauth(value));
-const unlink = (value: Identity) =>
-  run(() => credentials.unlink(value), "Account disconnected.");
 </script>
 <template>
   <v-container class="account-page py-8">
@@ -142,12 +111,8 @@ const unlink = (value: Identity) =>
       v-if="!session.ready"
       indeterminate
       aria-label="Loading account"
-    /><provider-onboarding
-      v-else-if="onboarding"
-      @complete="onboarding = false"
     />
     <user-login v-else-if="!profile" class="login-card mx-auto" />
-    <mfa-challenge v-else-if="profile.mfa_required" />
     <template v-else-if="profile">
       <div class="d-flex align-center mb-7">
         <v-avatar size="72" color="surface-variant" class="mr-5">
@@ -193,18 +158,6 @@ const unlink = (value: Identity) =>
       >
         {{ notice }}
       </v-alert>
-      <v-btn
-        v-if="profile.role === 'admin'"
-        variant="outlined"
-        class="mb-4"
-        @click="
-          secure(() => {
-            mfaDialog = true;
-          })
-        "
-      >
-        Confirm administrator identity
-      </v-btn>
       <v-card
         v-if="profile.role === 'user'"
         variant="outlined"
@@ -240,8 +193,6 @@ const unlink = (value: Identity) =>
           >API keys</v-tab
         ><v-tab id="account-tab-3" aria-controls="account-panel-3" :value="3"
           >Sessions</v-tab
-        ><v-tab id="account-tab-4" aria-controls="account-panel-4" :value="4"
-          >Connected accounts</v-tab
         ><v-tab id="account-tab-5" aria-controls="account-panel-5" :value="5"
           >Assigned studies</v-tab
         ><v-tab id="account-tab-6" aria-controls="account-panel-6" :value="6"
@@ -302,32 +253,26 @@ const unlink = (value: Identity) =>
                   v-model="form.github"
                   label="GitHub handle (optional)"
                   variant="outlined"
-                  :readonly="profile.github_provenance === 'authenticated'"
-                  hint="A public reference; entering a handle does not connect a login"
+                  hint="Optional public profile reference"
                   persistent-hint
                   maxlength="39"
                 />
                 <v-checkbox
                   v-model="form.github_visible"
                   label="Show GitHub on my public profile"
-                  hint="This does not change your connected sign-in account"
-                  persistent-hint
                 />
                 <v-text-field
                   v-model="form.orcid"
                   label="ORCID iD (optional)"
                   variant="outlined"
-                  :readonly="profile.orcid_provenance === 'authenticated'"
                   placeholder="0000-0000-0000-0000"
-                  hint="A public reference; entering an iD does not verify ownership"
+                  hint="Optional public profile reference"
                   persistent-hint
                   class="mt-4"
                 />
                 <v-checkbox
                   v-model="form.orcid_visible"
                   label="Show ORCID on my public profile"
-                  hint="This does not change your connected sign-in account"
-                  persistent-hint
                 />
                 <v-btn
                   color="primary"
@@ -596,55 +541,6 @@ const unlink = (value: Identity) =>
           </v-card>
         </v-window-item>
         <v-window-item
-          id="account-panel-4"
-          role="tabpanel"
-          aria-labelledby="account-tab-4"
-          :aria-hidden="tab !== 4"
-          :inert="tab !== 4 || undefined"
-          :tabindex="tab === 4 ? 0 : -1"
-          :value="4"
-        >
-          <v-card variant="outlined" class="pa-6">
-            <h2 class="text-h6 mb-2">Connected sign-in accounts</h2>
-            <p>
-              Connect a provider only after proving ownership. Public profile
-              references do not connect a sign-in method.
-            </p>
-            <p v-if="!providers.length" class="text-medium-emphasis">
-              External sign-in providers are not configured.
-            </p>
-            <div
-              v-for="identity in identities"
-              :key="identity.id"
-              class="credential-row py-4"
-            >
-              <div>
-                <strong>{{
-                  identity.provider === "github" ? "GitHub" : "ORCID"
-                }}</strong>
-                <p class="mb-0">{{ identity.label }}</p>
-              </div>
-              <v-btn
-                variant="text"
-                size="small"
-                :disabled="busy"
-                @click="secure(() => unlink(identity))"
-              >
-                Disconnect
-              </v-btn>
-            </div>
-            <v-btn
-              v-for="provider in availableProviders"
-              :key="provider"
-              variant="outlined"
-              class="mt-4 mr-3"
-              @click="secure(() => link(provider))"
-            >
-              Connect {{ provider === "github" ? "GitHub" : "ORCID" }}
-            </v-btn>
-          </v-card>
-        </v-window-item>
-        <v-window-item
           id="account-panel-5"
           role="tabpanel"
           aria-labelledby="account-tab-5"
@@ -785,9 +681,6 @@ const unlink = (value: Identity) =>
         </v-window-item>
       </v-window>
     </template>
-    <v-dialog v-model="mfaDialog" max-width="500">
-      <mfa-challenge v-if="mfaDialog" @verified="mfaDialog = false" />
-    </v-dialog>
     <v-dialog
       v-model="reauthDialog"
       max-width="440"
@@ -823,20 +716,7 @@ const unlink = (value: Identity) =>
             >
               Cancel
             </v-btn> </v-form
-          ><v-divider v-if="identities.length" class="my-4" /><v-btn
-            v-for="identity in identities"
-            :key="identity.id"
-            variant="outlined"
-            block
-            class="mt-2"
-            @click="providerReauth(identity.provider)"
           >
-            Confirm with
-            {{ identity.provider === "github" ? "GitHub" : "ORCID" }}
-          </v-btn>
-          <p v-if="identities.length" class="text-caption mt-3">
-            After returning, repeat the action you want to perform.
-          </p>
         </v-card-text>
       </v-card>
     </v-dialog>

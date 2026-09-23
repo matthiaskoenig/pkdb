@@ -123,13 +123,13 @@ describe("session and API ownership", () => {
     await rejected;
     expect(store.profile.username).toBe("new-account");
   });
-  it("accepts nullable provider references but rejects an unknown privilege", () => {
+  it("accepts nullable optional profile references but rejects an unknown privilege", () => {
     expect(
       parseProfile({
         ...profileFixture(),
-        github_provenance: null,
-        orcid_provenance: null,
-      }).github_provenance,
+        github: null,
+        orcid: null,
+      }).github,
     ).toBe("");
     expect(() => parseProfile({ ...profileFixture(), role: "root" })).toThrow(
       "Invalid role",

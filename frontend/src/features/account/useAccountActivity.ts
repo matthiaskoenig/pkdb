@@ -28,7 +28,7 @@ export function useActivityPage<T>(
   watch(() => session.epoch, reset, { flush: "sync" });
   onScopeDispose(reset);
   async function refresh(next = 0) {
-    if (!session.profile || session.profile.mfa_required || loading.value)
+    if (!session.profile || loading.value)
       return;
     const id = generation;
     loading.value = true;
