@@ -8,6 +8,11 @@ from pathlib import Path
 
 import pytest
 
+from pkdb.domain.validation import prepare_study
+from pkdb.domain.vocabulary import Vocabulary
+from pkdb.schemas.validation import StudyValidationError
+from pkdb_server.db.bootstrap import Snapshot, vocabulary_from_snapshot
+
 ROOT = Path(__file__).resolve().parents[3]
 
 
@@ -147,3 +152,63 @@ def test_descriptions_have_consistent_whitespace(generated_vocabulary):
         description = json.loads(node["terms"]["description"][0])
         assert description == " ".join(description.split()), node["sid"]
         assert description.endswith((".", "?", "!")), node["sid"]
+
+
+@pytest.fixture(params=["server", "client"])
+def scientific_vocabulary(request, generated_vocabulary):
+    if request.param == "client":
+        return Vocabulary.bundled()
+    return vocabulary_from_snapshot(
+        Snapshot.model_validate(generated_vocabulary["vocabulary"])
+    )
+
+
+def test_all_change_measurements_allow_negative_values(scientific_vocabulary):
+    changes = [
+        rule
+        for rule in scientific_vocabulary.measurements
+        if "change" in rule.name.lower()
+    ]
+    assert changes
+    assert all(rule.can_negative for rule in changes), [
+        rule.name for rule in changes if not rule.can_negative
+    ]
+
+
+@pytest.mark.parametrize(
+    "name",
+    [
+        "inr (change)",
+        "pH change",
+        "prothrombin time (change relative)",
+        "weight (change relative)",
+    ],
+)
+def test_negative_changes_pass_scientific_validation(
+    scientific_vocabulary, valid_study, vocabulary, name
+):
+    rule = scientific_vocabulary.measurement_map()[name]
+    vocabulary = vocabulary.model_copy(
+        update={"measurements": (*vocabulary.measurements, rule)}
+    )
+    measurement = valid_study.measurements[0]
+    measurement.measurement_type = name
+    measurement.unit = rule.units[0]
+    measurement.statistics.mean = -1
+    assert prepare_study(valid_study, vocabulary).report.valid
+
+
+def test_negative_baseline_inr_remains_invalid(
+    scientific_vocabulary, valid_study, vocabulary
+):
+    rule = scientific_vocabulary.measurement_map()["inr"]
+    vocabulary = vocabulary.model_copy(
+        update={"measurements": (*vocabulary.measurements, rule)}
+    )
+    measurement = valid_study.measurements[0]
+    measurement.measurement_type = "inr"
+    measurement.unit = rule.units[0]
+    measurement.statistics.mean = -1
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(valid_study, vocabulary)
+    assert "negative_value" in {issue.code for issue in error.value.report.issues}

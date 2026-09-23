@@ -1,4 +1,4 @@
-import { beforeEach, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import CurationPage from "../../src/features/curation/components/CurationPage.vue";
@@ -42,13 +42,15 @@ it("highlights literal vocabulary terms without interpreting markup or regex", (
   expect(wrapper.find("script").exists()).toBe(false);
   wrapper.unmount();
 });
-it("applies vocabulary text only on submit and pages on the server", async () => {
+afterEach(() => { vi.useRealTimers(); vi.unstubAllGlobals(); });
+it("debounces typed vocabulary search and pages on the server", async () => {
+  vi.useFakeTimers();
   mocks.get.mockResolvedValue(envelope("Drug", 30));
   const wrapper = mount(CurationPage);
   await flushPromises();
   await wrapper.find("input").setValue("caffeine");
   expect(mocks.get).toHaveBeenCalledTimes(1);
-  await wrapper.find("form").trigger("submit");
+  await vi.advanceTimersByTimeAsync(250);
   await flushPromises();
   expect(mocks.get).toHaveBeenLastCalledWith(
     "/api/v1/info_nodes/",
@@ -79,5 +81,59 @@ it("shows an invalid response as failure rather than zero vocabulary terms", asy
       .some((alert) => alert.text().includes("invalid")),
   ).toBe(true);
   expect(wrapper.text()).not.toContain("0 vocabulary terms");
+  wrapper.unmount();
+});
+
+it("copies exact names and renders safe annotation links", async () => {
+  const response = envelope("inr change");
+  Object.assign(response.data.data.data[0]!, {
+    label: "INR change",
+    annotations: [{ term: "CMO:123", label: "Change in INR", relation: "BQB_IS", url: "https://example.org/term" }],
+    xrefs: [{ name: "External reference", accession: "123", url: "javascript:alert(1)" }],
+  });
+  mocks.get.mockResolvedValue(response);
+  const writeText = vi.fn().mockResolvedValue(undefined);
+  vi.stubGlobal("navigator", { clipboard: { writeText } });
+  const wrapper = mount(CurationPage);
+  await flushPromises();
+  await wrapper.get('button[aria-label="Copy name inr change"]').trigger("click");
+  await flushPromises();
+  expect(writeText).toHaveBeenCalledWith("inr change");
+  expect(wrapper.text()).toContain("Copied inr change");
+  expect(wrapper.text()).toContain("INR change");
+  expect(wrapper.get('a[href="https://example.org/term"]').text()).toContain("CMO:123");
+  expect(wrapper.text()).toContain("BQB_IS");
+  expect(wrapper.find('a[href^="javascript:"]').exists()).toBe(false);
+  writeText.mockRejectedValue(new Error("Denied"));
+  await wrapper.get('button[aria-label="Copy name inr change"]').trigger("click");
+  await flushPromises();
+  expect(wrapper.text()).toContain("Select and copy the name manually: inr change");
+  wrapper.unmount();
+});
+it("cancels pending search on unmount", async () => {
+  vi.useFakeTimers();
+  mocks.get.mockResolvedValue(envelope("Drug"));
+  const wrapper = mount(CurationPage);
+  await flushPromises();
+  await wrapper.find("input").setValue("caffeine");
+  wrapper.unmount();
+  await vi.advanceTimersByTimeAsync(300);
+  expect(mocks.get).toHaveBeenCalledTimes(1);
+});
+it("ignores a stale response when the next typed search is pending", async () => {
+  vi.useFakeTimers();
+  let resolveOld!: (value: ReturnType<typeof envelope>) => void;
+  mocks.get.mockReturnValueOnce(new Promise((resolve) => { resolveOld = resolve; }));
+  mocks.get.mockResolvedValue(envelope("Caffeine"));
+  const wrapper = mount(CurationPage);
+  await wrapper.find("input").setValue("caff");
+  resolveOld(envelope("Obsolete result"));
+  await flushPromises();
+  expect(wrapper.text()).not.toContain("Obsolete result");
+  await wrapper.find("input").setValue("caffeine");
+  await vi.advanceTimersByTimeAsync(250);
+  await flushPromises();
+  expect(mocks.get).toHaveBeenCalledTimes(2);
+  expect(wrapper.text()).toContain("Caffeine");
   wrapper.unmount();
 });

@@ -96,19 +96,21 @@ test("study exploration loads Plotly on demand and preserves complete subset val
 
 test("vocabulary search opens scientific terminology details and preserves text search", async ({
   page,
-}) => {
+}, testInfo) => {
   await page.goto("/curation");
+  const searched = page.waitForResponse(
+    (response) =>
+      response.url().includes("/api/v1/info_nodes/") &&
+      new URL(response.url()).searchParams.get("search") === "drug-b",
+  );
   await page.getByRole("textbox", { name: "Search vocabulary" }).fill("drug-b");
-  await page
-    .getByRole("button", { name: "Search vocabulary", exact: true })
-    .click();
+  await searched;
   await expect(
     page.getByRole("status").filter({ hasText: /vocabulary terms/ }),
   ).toBeVisible();
-  const term = page
-    .locator("button.term")
-    .filter({ hasText: /^drug-b$/ })
-    .first();
+  await expect(page.getByRole("button", { name: "Copy name drug-b", exact: true })).toBeVisible();
+  await expect(page.getByRole("columnheader", { name: "Metadata / annotations" })).toBeVisible();
+  const term = page.getByRole("button", { name: "Details for drug-b", exact: true });
   await term.click();
   await expect(
     page.getByRole("region", { name: "Record details" }),
@@ -119,4 +121,11 @@ test("vocabulary search opens scientific terminology details and preserves text 
   await expect(
     page.getByRole("textbox", { name: "Search vocabulary" }),
   ).toHaveValue("drug-b");
+  await page.getByRole("textbox", { name: "Search vocabulary" }).fill("blood measurement");
+  await expect(page.getByRole("link", { name: "CMO:0000035 · blood measurement", exact: true })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath("vocabulary-desktop.png") });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.getByRole("button", { name: "Copy name blood measurement", exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath("vocabulary-mobile.png") });
 });
