@@ -9,3 +9,5 @@ Follow `docs/development.md` for tests, lint, types, migrations, and documentati
 Historical migration reports are evidence, not current installation instructions. Do not claim unresolved corpus or compatibility gates passed merely because the previous implementation has been removed.
 
 Write Markdown paragraphs on a single source line. Use editor soft wrapping instead of inserting line breaks for visual width. Preserve structural line breaks for headings, lists, tables, and code blocks.
+
+Keep `README.md` and the documentation landing page (`docs/index.md`) aligned when updating shared descriptions, features, images, notices, citations, licensing, funding, or copyright. Adapt relative links and markup for each location, preserve documentation-specific navigation, and keep the copyright footer in `zensical.toml` consistent.
