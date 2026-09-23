@@ -20,6 +20,10 @@ const resourceLinks = [
     href: "https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
   },
   { title: "Contact", href: "mailto:koenigmx@hu-berlin.de" },
+  {
+    title: "Report an issue",
+    href: "https://github.com/matthiaskoenig/pkdb/issues/new",
+  },
   { title: "REST API", href: `${apiBase}/docs` },
 ];
 function toggleTheme() {

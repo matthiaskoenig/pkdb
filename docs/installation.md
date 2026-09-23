@@ -8,11 +8,11 @@ Run the backend, frontend, and PostgreSQL locally with Docker Engine and the Doc
 
 ## Quick start
 
-Clone the repository (`git clone https://github.com/matthiaskoenig/pkdb.git`) and change into it (`cd pkdb`). From the repository root, run these two commands, replacing `USERNAME` and `ADMIN_EMAIL` with your chosen administrator username and email address:
+Clone the repository (`git clone https://github.com/matthiaskoenig/pkdb.git`) and change into it (`cd pkdb`). From the repository root, run these two commands, replacing `PKDB_ADMIN` and `PKDB_ADMIN_EMAIL` with your chosen administrator username and email address:
 
 ```bash
 PKDB_BUILD_COMMIT="$(git rev-parse HEAD)" docker compose --profile dev up --build --wait
-docker compose exec backend pkdb-server create-admin USERNAME --email ADMIN_EMAIL
+docker compose exec backend pkdb-server create-admin PKDB_ADMIN --email PKDB_ADMIN_EMAIL
 ```
 
 Enter a password at the hidden prompt. Create the administrator once; subsequent starts preserve the account. There is one designated administrator per database, identified by its internal account ID. The username is your choice. The email is marked verified by this operator command, so local login and API-key creation work without SMTP.
@@ -149,7 +149,7 @@ mkdir -p "$PKDB_FILE_ROOT"
 cd backend
 uv run --locked alembic upgrade head
 uv run --locked pkdb-server bootstrap bootstrap
-uv run --locked pkdb-server create-admin USERNAME --email ADMIN_EMAIL
+uv run --locked pkdb-server create-admin PKDB_ADMIN --email PKDB_ADMIN_EMAIL
 uv run --locked uvicorn pkdb_server.app:create_app --factory --reload --host 127.0.0.1 --port 18083
 ```
 
