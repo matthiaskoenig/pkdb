@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pkdb"
-version = "0.10.1"
+version = "0.10.2"
 description = "PK-DB backend"
 requires-python = ">=3.14,<3.15"
 dependencies = [

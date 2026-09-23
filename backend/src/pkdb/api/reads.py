@@ -6,6 +6,7 @@ from fastapi import APIRouter, Request
 from pydantic import ValidationError
 from starlette.exceptions import HTTPException
 
+from pkdb import __version__
 from pkdb.schemas.queries import Predicate, QuerySpec
 
 router = APIRouter(prefix="/api/v1")
@@ -183,7 +184,7 @@ def output_detail(output_id: int, request: Request):
 @router.get("/statistics/")
 def statistics(request: Request):
     actor = request.app.state.principal(request, required=False)
-    return {"version": "0.10.0", **request.app.state.queries.statistics(actor)}
+    return {"version": __version__, **request.app.state.queries.statistics(actor)}
 
 
 @router.get("/groups/")

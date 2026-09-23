@@ -1,5 +1,5 @@
 [tool.bumpversion]
-current_version = "0.10.1"
+current_version = "0.10.2"
 commit = true
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
@@ -27,3 +27,19 @@ filename = "./backend/pyproject.toml"
 filename = "./backend/uv.lock"
 search = """name = "pkdb"\nversion = "{current_version}""""
 replace = """name = "pkdb"\nversion = "{new_version}""""
+
+[[tool.bumpversion.files]]
+filename = "./frontend/package.json"
+search = '"version": "{current_version}"'
+replace = '"version": "{new_version}"'
+
+[[tool.bumpversion.files]]
+filename = "./frontend/package-lock.json"
+search = '"name": "pkdb-frontend",(?P<spacing>\s*)"version": "{current_version}"'
+replace = '"name": "pkdb-frontend",\g<spacing>"version": "{new_version}"'
+regex = true
+
+[[tool.bumpversion.files]]
+filename = "./CITATION.cff"
+search = 'version: "{current_version}"'
+replace = 'version: "{new_version}"'
