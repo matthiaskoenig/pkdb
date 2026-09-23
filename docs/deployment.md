@@ -26,6 +26,15 @@ The current backend is the only backend shipped in this repository. Removing the
 
 The modern frontend uses Node 24.21.0 and npm 12.1.0 with a committed lockfile. `frontend/Dockerfile-production` runs `npm ci`, type checks, and builds `dist/`, then copies the static artifact to `/vue`. This image remains an artifact carrier; the existing deployment supplies its HTTP server. No frontend service is added to the default backend Compose stack.
 
+The shared footer identifies the frontend release from `frontend/package.json` and the source commit captured at build time. Native builds detect Git HEAD automatically. Docker builds use a frontend-only context without Git metadata, so supply the full source commit explicitly from the repository root:
+
+```bash
+docker build --build-arg PKDB_BUILD_COMMIT="$(git rev-parse HEAD)" \
+  -f frontend/Dockerfile-production -t pkdb-frontend:local frontend
+```
+
+For source archives, set `PKDB_BUILD_COMMIT` to the full commit hash before `npm run build`. If no commit is available, the footer says **Commit unavailable** instead of linking to an incorrect revision. Rebuild the frontend artifact to update its release information.
+
 Use `frontend/tests/deployment/nginx.conf` as the concrete reverse-proxy example and `compose.frontend-test.yaml` to exercise it against isolated test data. Proxy `/api`, `/accounts`, `/media`, `/static` and `/health` before history fallback. Missing JS/CSS assets must return 404, API failures must remain API responses, and `index.html` must be revalidated while fingerprinted assets may be cached immutably. Match `PKDB_BROWSER_ORIGIN` to the external origin and preserve same-origin cookies/CSRF. `VITE_API_BASE` is public API-origin build configuration, normally empty for same-origin requests, never a place for secrets.
 
 Before release, verify these rules in the real deployment proxy and retain the previous deployed artifact in durable storage. Rollback restores that static artifact atomically; this frontend migration introduces no database migration. Local recovered baseline checksums are in `frontend/docs/modernization-baseline.md`; local `/tmp` copies do not replace production rollback retention.

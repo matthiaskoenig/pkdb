@@ -11,7 +11,7 @@ Run the backend, frontend, and PostgreSQL locally with Docker Engine and the Doc
 Clone the repository (`git clone https://github.com/matthiaskoenig/pkdb.git`) and change into it (`cd pkdb`). From the repository root, run these two commands, replacing `USERNAME` and `ADMIN_EMAIL` with your chosen administrator username and email address:
 
 ```bash
-docker compose --profile dev up --build --wait
+PKDB_BUILD_COMMIT="$(git rev-parse HEAD)" docker compose --profile dev up --build --wait
 docker compose exec backend pkdb-server create-admin USERNAME --email ADMIN_EMAIL
 ```
 
@@ -79,7 +79,7 @@ The initial database contains vocabulary and any users you imported, but no stud
 Frontend edits under `frontend/src/` and `frontend/public/` are mounted into the Vite container and reload automatically. Rebuild after dependency or frontend configuration changes. Backend code is built into its image; after changing it, run:
 
 ```bash
-docker compose --profile dev up --build --wait
+PKDB_BUILD_COMMIT="$(git rev-parse HEAD)" docker compose --profile dev up --build --wait
 ```
 
 Stop and resume without losing database or attachment data:

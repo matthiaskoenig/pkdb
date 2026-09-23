@@ -5,6 +5,8 @@ COPY package*.json ./
 COPY scripts/patch-declarations.ts scripts/patch-declarations.ts
 RUN npm ci
 COPY . .
+ARG PKDB_BUILD_COMMIT
+ENV PKDB_BUILD_COMMIT=${PKDB_BUILD_COMMIT}
 RUN npm run typecheck && npm run build
 
 # Artifact-only handoff: the deployment's static server consumes /vue.

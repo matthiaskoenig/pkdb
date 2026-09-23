@@ -52,3 +52,19 @@ test("login avatar appears in both navigation layouts and clears on logout", asy
   await expect(desktop.getByRole("link", { name: "Account", exact: true })).toBeVisible();
   await expect(desktop.locator(".account-avatar")).toHaveCount(0);
 });
+
+test("release and copyright footer is shared by all page types", async ({ page }) => {
+  for (const path of ["/", "/data", "/data/PKDB00057", "/curation", "/account", "/invitation", "/registration", "/verification/example", "/request-password-reset", "/reset-password/example", "/not-a-page"]) {
+    await page.goto(path);
+    const footer = page.getByRole("contentinfo");
+    await expect(footer).toHaveCount(1);
+    await footer.scrollIntoViewIfNeeded();
+    await expect(footer).toBeVisible();
+    await expect(footer).toContainText(/Release \d+\.\d+\.\d+/);
+    await expect(footer).toContainText(`© 2017–${new Date().getFullYear()} Matthias König`);
+    await expect(footer.getByRole("link", { name: "Systems Medicine of the Liver" })).toHaveAttribute("href", "https://livermetabolism.com");
+    const commit = footer.locator('a[href*="/commit/"]');
+    await expect(commit).toHaveAttribute("href", /\/commit\/[a-f0-9]{40,64}$/i);
+    await expect(commit).toHaveText(/^[a-f0-9]{8}$/i);
+  }
+});

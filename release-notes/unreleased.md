@@ -1,5 +1,6 @@
 # Unreleased
 
+- Show the frontend release version, linked build commit, and Matthias König copyright and group link in the shared footer on every page.
 - Replace the frontend and documentation branding and favicons with the new PK-DB logo.
 - Start documentation with Introduction and Webinterface, and place Accounts and API keys before REST API and Python client.
 - Allow authorized API-key uploads to create public or private studies and change visibility on replacement. Restrict private-study access to explicitly assigned curators and administrators; creator attribution, collaborator assignments, and reviewer status alone no longer grant access.
