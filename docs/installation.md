@@ -1,5 +1,9 @@
 # Local setup and development
 
+!!! important "For developers and operators only"
+
+    This section is for working on PK-DB itself or running a separate server. General users do not need a source checkout, Docker, a database, or administrator access. To use PK-DB, start with [Browse and access data](web-interface.md) or the [Python client and API](python-client.md).
+
 Run the backend, frontend, and PostgreSQL locally with Docker Engine and the Docker Compose plugin. No host Python, Node.js, PostgreSQL, mail server, or external authentication service is needed for this setup.
 
 ## Quick start
@@ -64,7 +68,7 @@ docker compose run --rm --no-deps \
   --avatar-root /app/frontend/public --contacts /private/contacts.json --dry-run
 ```
 
-Configure SMTP in `.env` and recreate the backend with `docker compose --profile dev up -d --wait`. Sign in as the administrator and use **User administration → Invite**. Recipients accept the invitation and choose their own password. Importing does not send mail or activate users. See [accounts and API keys](authentication.md#existing-curators-and-avatars) for contact overlays, existing account IDs, and study assignments.
+Configure SMTP in `.env` and recreate the backend with `docker compose --profile dev up -d --wait`. Sign in as the administrator and use **User administration → Invite**. Recipients accept the invitation and choose their own password. Importing does not send mail or activate users. See [account administration](administration.md#existing-curators-and-avatars) for contact overlays, existing account IDs, and study assignments.
 
 ## Load studies and test uploads
 
@@ -93,7 +97,7 @@ Copy `.env.example` to `.env` if you need overrides. `PKDB_HTTP_PORT` changes th
 
 ### Native frontend and frontend checks
 
-For a host frontend, start only the database and API with `docker compose up --build --wait` and stop any Docker frontend with `docker compose --profile dev stop frontend`. Install Node **24.21.0** and npm **12.1.0**, then run:
+For a host frontend with the Docker backend, start only the database and API with `docker compose up --build --wait`. If you use the [native backend](#native-backend-server) instead, keep that process running and skip this Compose startup. Stop any Docker frontend with `docker compose --profile dev stop frontend`. Install Node **24.21.0** and npm **12.1.0**, then run:
 
 ```bash
 cd frontend
@@ -117,6 +121,39 @@ npm run test:e2e
 ```
 
 Browser tests use a separate disposable Compose project. See [isolated frontend browser checks](local-upload-testing.md#isolated-frontend-browser-checks).
+
+## Native backend server
+
+Use this workflow when you need automatic backend reloads. Stop the Compose backend first so port `18083` is free; this native workflow uses a separate development database and file directory:
+
+```bash
+docker compose --profile dev stop backend frontend
+docker run --detach --name pkdb-native-db \
+  --publish 127.0.0.1:15438:5432 \
+  --env POSTGRES_DB=pkdb_dev --env POSTGRES_USER=pkdb_dev \
+  --env POSTGRES_PASSWORD=local-development-only \
+  --mount source=pkdb-native-database,target=/var/lib/postgresql \
+  postgres:18.6
+docker exec pkdb-native-db pg_isready -U pkdb_dev -d pkdb_dev
+```
+
+Wait for `pg_isready` to report that PostgreSQL accepts connections. On subsequent starts, use `docker start pkdb-native-db` instead of creating it again. From the repository root:
+
+```bash
+uv sync --project backend --locked --python 3.14
+export PKDB_DATABASE_URL=postgresql+psycopg://pkdb_dev:local-development-only@127.0.0.1:15438/pkdb_dev
+export PKDB_FILE_ROOT="$PWD/.cache/native-files"
+export PKDB_BROWSER_ORIGIN=http://localhost:8080
+export PKDB_SECURE_COOKIES=false
+mkdir -p "$PKDB_FILE_ROOT"
+cd backend
+uv run --locked alembic upgrade head
+uv run --locked pkdb-server bootstrap bootstrap
+uv run --locked pkdb-server create-admin USERNAME --email ADMIN_EMAIL
+uv run --locked uvicorn pkdb_server.app:create_app --factory --reload --host 127.0.0.1 --port 18083
+```
+
+Create the administrator only once and choose its password at the prompt. In another terminal, start the [native frontend](#native-frontend-and-frontend-checks); its default proxy reaches this API on port `18083`. Keep the environment variables set for subsequent native API and migration commands. This local database and its accounts are independent of `alpha.pk-db.com`.
 
 ## Backend tests and checks
 

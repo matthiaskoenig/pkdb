@@ -13,20 +13,28 @@ edit_uri = "edit/develop/docs/"
 extra_css = ["stylesheets/extra.css"]
 
 nav = [
-  { "Home" = "index.md" },
-  { "Local setup and development" = "installation.md" },
-  { "Deployment" = "deployment.md" },
-  { "Accounts and API keys" = "authentication.md" },
-  { "Python client and CLI" = "python-client.md" },
-  { "Local upload testing" = "local-upload-testing.md" },
-  { "Vocabulary definitions" = "vocabulary.md" },
-  { "PK calculations" = "pharmacokinetics.md" },
-  { "Contributing" = "contributing.md" },
+  { "Browse and access data" = [
+    { "Introduction" = "index.md" },
+    { "Web interface" = "web-interface.md" },
+  ] },
+  { "Python client and API" = [
+    { "Python client" = "python-client.md" },
+    { "REST API" = "api.md" },
+    { "Accounts and API keys" = "authentication.md" },
+  ] },
+  { "Development" = [
+    { "Overview and source installation" = "development.md" },
+    { "Local setup and development server" = "installation.md" },
+    { "Local upload testing" = "local-upload-testing.md" },
+    { "Account administration" = "administration.md" },
+    { "Vocabulary definitions" = "vocabulary.md" },
+    { "Deployment" = "deployment.md" },
+  ] },
 ]
 
 [project.theme]
 language = "en"
-logo = "pkdb_logo_transparent.png"
+logo = "pkdb_logo.png"
 features = [
   "content.action.edit",
   "content.code.annotate",

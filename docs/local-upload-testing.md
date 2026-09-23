@@ -1,5 +1,9 @@
 # Test a study upload locally
 
+!!! important "For developers and operators only"
+
+    This section is for working on PK-DB itself or running a separate server. General users do not need a source checkout, Docker, a database, or administrator access. To use PK-DB, start with [Browse and access data](web-interface.md) or the [Python client and API](python-client.md).
+
 Use the current `pkdb-server validate` and `pkdb-server upload` commands against your local backend. Complete [Local setup and development](installation.md#quick-start) first, then sign in at <http://localhost:8080> with your chosen administrator username. All commands below run from the repository root and use Docker plus a local study folder.
 
 ## Select a study and prepare attribution accounts

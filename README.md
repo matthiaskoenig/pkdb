@@ -1,10 +1,10 @@
 <img src="./docs/pkdb_logo.png" width="200">
 
-[![CI-CD](https://github.com/matthiaskoenig/pkdb/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ci-cd.yml) [![ruff](https://github.com/matthiaskoenig/pkdb/actions/workflows/ruff.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ruff.yml) [![ty](https://github.com/matthiaskoenig/pkdb/actions/workflows/ty.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ty.yml) [![documentation](https://github.com/matthiaskoenig/pkdb/actions/workflows/docs.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/docs.yml) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979) [![MIT License](https://img.shields.io/pypi/l/pymetadata.svg)](https://opensource.org/licenses/MIT)
+[![PyPI](https://img.shields.io/pypi/v/pkdb.svg)](https://pypi.org/project/pkdb/) [![Python versions](https://img.shields.io/pypi/pyversions/pkdb.svg)](https://pypi.org/project/pkdb/) [![CI-CD](https://github.com/matthiaskoenig/pkdb/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ci-cd.yml) [![ruff](https://github.com/matthiaskoenig/pkdb/actions/workflows/ruff.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ruff.yml) [![ty](https://github.com/matthiaskoenig/pkdb/actions/workflows/ty.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/ty.yml) [![documentation](https://github.com/matthiaskoenig/pkdb/actions/workflows/docs.yml/badge.svg)](https://github.com/matthiaskoenig/pkdb/actions/workflows/docs.yml) [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979) [![MIT License](https://img.shields.io/pypi/l/pkdb.svg)](https://opensource.org/licenses/MIT)
 
 # PK-DB – The Pharmacokinetics Database
 
-[PK-DB](https://pk-db.com) is an open database and web platform for the **curation, integration, validation, and analysis of pharmacokinetic (PK) data** from clinical studies and preclinical research.
+[PK-DB](https://alpha.pk-db.com) is an open database and web platform for the **curation, integration, validation, and analysis of pharmacokinetic (PK) data** from clinical studies and preclinical research.
 
 > [!IMPORTANT]
 > **PK-DB update in progress**
@@ -33,35 +33,42 @@ By combining pharmacokinetic data with structured metadata, semantic annotations
 ![PK-DB overview](./docs/images/pkdb_overview.png)
 
 
-PK-DB is available from [https://pk-db.com](https://pk-db.com). The terms of use are listed in the [`TERMS_OF_USE.md`](./TERMS_OF_USE.md).
+PK-DB is available from [https://alpha.pk-db.com](https://alpha.pk-db.com). The terms of use are listed in the [`TERMS_OF_USE.md`](./TERMS_OF_USE.md).
 
 
-## Python client and command line
+## Browse and access data
 
-Install the public package from this checkout with `uv tool install ./python` (Python 3.14 or 3.15). Existing `pkdb_data` study folders work directly:
+Open [alpha.pk-db.com](https://alpha.pk-db.com) and choose **Explore data** to explore studies, subjects, interventions, and measurements. Public browsing needs no account; sign in for dataset and attachment downloads. Start with the illustrated [Web interface guide](docs/web-interface.md).
 
-```bash
-pkdb prepare /path/to/pkdb_data/studies/ExampleStudy
-pkdb validate /path/to/pkdb_data/studies/ExampleStudy --offline
-pkdb upload /path/to/pkdb_data/studies/ExampleStudy --endpoint https://pk-db.com
-```
+## Python client and API
 
-Preparation and validation run locally. Upload validates first and uses `PKDB_API_KEY` for authentication. See the [Python client guide](docs/python-client.md) for vocabulary snapshots, Python examples, and reproducible validation.
-
-## Local setup
-
-From the repository root, start the frontend, backend, and database, then create your administrator (replace `USERNAME` and `ADMIN_EMAIL`):
+Install [pkdb from PyPI](https://pypi.org/project/pkdb/) with Python 3.14 or 3.15:
 
 ```bash
-docker compose --profile dev up --build --wait
-docker compose exec backend pkdb-server create-admin USERNAME --email ADMIN_EMAIL
+python -m pip install pkdb
 ```
 
-Open <http://localhost:8080> and sign in with the password entered at the prompt. See [Local setup and development](docs/installation.md) to import our users and avatars, load studies, and run tests.
+```python
+from pkdb import Client
+
+with Client(endpoint="https://alpha.pk-db.com") as client:
+    page = client.studies.list(page=1, page_size=20)
+    for study in page.items:
+        print(study.sid)
+```
+
+See [Python client and API](docs/python-client.md) for queries, downloads, and data curation, [REST API](docs/api.md) for HTTP examples, and [Accounts and API keys](docs/authentication.md) for authenticated access. All curation examples use `https://alpha.pk-db.com`.
+
+## Development
+
+> [!IMPORTANT]
+> This section is for developers and operators. General users should use the website or install the PyPI package; no local server or source checkout is needed.
+
+See [Development](docs/development.md) for installing the package from source, working against a local development instance, running tests, and deployment.
 
 ## Documentation
 
-The full documentation, including installation, deployment and development, is at [https://matthiaskoenig.github.io/pkdb](https://matthiaskoenig.github.io/pkdb).
+Read the [documentation](https://matthiaskoenig.github.io/pkdb/) in order: **Browse and access data**, **Python client and API**, then **Development** when you work on the codebase.
 
 ## How to cite
 If you use PK-DB data or the web interface cite
