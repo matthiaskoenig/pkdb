@@ -137,7 +137,9 @@ class Client:
         try:
             body = response.json()
             if isinstance(body, dict) and isinstance(body.get("issues"), list):
-                report = ValidationReport.model_validate(body)
+                report = ValidationReport.model_validate(
+                    {key: value for key, value in body.items() if key != "valid"}
+                )
         except ValueError, ValidationError:
             pass
         compatibility_messages = {
@@ -147,6 +149,15 @@ class Client:
         }
         detail = body.get("detail") if isinstance(body, dict) else None
         message = f"PK-DB request rejected (HTTP {response.status_code})"
+        if report and report.issues:
+            issues = [issue for issue in report.issues if issue.severity == "error"]
+            summary = "; ".join(
+                f"{issue.code}: {issue.message}" for issue in issues[:3]
+            )
+            if summary:
+                message += f": {summary}"
+                if len(issues) > 3 or report.truncated:
+                    message += "; see validation report for further issues"
         error = ClientError
         if (
             response.status_code == 409

@@ -101,14 +101,6 @@ class IngestionService:
             root = session.scalar(select(Study).where(Study.sid == study.sid))
             if root is None:
                 authorize_creation(current)
-                if (
-                    not self._can_manage(current, session)
-                    and study.metadata.access != "private"
-                ):
-                    fail(
-                        "private_creation_required",
-                        "New studies must be private until an administrator publishes them",
-                    )
             else:
                 authorize(current, "write", study_access(root, session))
             vocabulary = load_vocabulary(session)
@@ -207,11 +199,6 @@ class IngestionService:
                 created = root is None
                 if root is None:
                     authorize_creation(current)
-                    if not can_manage and study.metadata.access != "private":
-                        fail(
-                            "private_creation_required",
-                            "New studies must be private until an administrator publishes them",
-                        )
                     root = Study(
                         sid=study.sid,
                         name=study.metadata.name,
@@ -221,13 +208,8 @@ class IngestionService:
                     session.add(root)
                 else:
                     authorize(current, "write", study_access(root, session))
-                    if not can_manage and (
-                        root.access != study.metadata.access
-                        or root.licence != study.metadata.licence
-                    ):
-                        raise AuthorizationDenied(
-                            "Only administrators change visibility or licence"
-                        )
+                    if not can_manage and root.licence != study.metadata.licence:
+                        raise AuthorizationDenied("Only administrators change licence")
                 names = {
                     study.metadata.creator,
                     *study.metadata.collaborators,
@@ -246,9 +228,7 @@ class IngestionService:
                 if names - users.keys():
                     fail("unknown_user", "Study refers to an unknown user")
                 creator_id = users[study.metadata.creator].id
-                if not can_manage and creator_id != (
-                    current.user_id if created else root.creator_id
-                ):
+                if not created and not can_manage and creator_id != root.creator_id:
                     raise AuthorizationDenied(
                         "Only administrators transfer study ownership"
                     )

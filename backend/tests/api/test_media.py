@@ -3,7 +3,7 @@ import io
 import pytest
 
 from pkdb_server.db.models.files import StudyAttachment
-from pkdb_server.db.models.studies import Study
+from pkdb_server.db.models.studies import Study, StudyGrant
 
 
 @pytest.mark.parametrize(
@@ -32,6 +32,9 @@ def test_public_media_respects_access_and_licence(
         )
         session.add(study)
         session.flush()
+        session.add(
+            StudyGrant(study_id=study.id, user_id=principal.user_id, role="curator")
+        )
         session.add(
             StudyAttachment(study_id=study.id, file_id=staged.id, name="paper.pdf")
         )

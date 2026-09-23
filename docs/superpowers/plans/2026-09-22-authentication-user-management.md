@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 # Implementation plan for #775
 
 Specification: [Authentication, user management, and API keys](../specs/2026-09-22-authentication-user-management-design.md). Started 2026-09-22. User authorized planning and implementation. Checkboxes track delivered and verified work, not intended functionality.

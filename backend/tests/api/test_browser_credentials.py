@@ -79,9 +79,7 @@ def test_key_secret_shown_once_and_invalid_header_never_falls_back(browser):
     assert client.get("/api/v1/me/sessions").status_code == 401
 
 
-@pytest.mark.parametrize(
-    "field,value", [("access", "public"), ("licence", "closed"), ("creator", "mkoenig")]
-)
+@pytest.mark.parametrize("field,value", [("licence", "closed"), ("creator", "mkoenig")])
 def test_administrator_api_key_cannot_change_study_access_control(
     client, admin_headers, valid_bundle, session_factory, field, value
 ):

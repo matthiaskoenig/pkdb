@@ -4,7 +4,7 @@ from pydantic import ValidationError
 from pkdb.schemas.queries import Predicate, QuerySpec
 from pkdb.schemas.security import Principal
 from pkdb_server.db.models.measurements import Measurement
-from pkdb_server.db.models.studies import Study
+from pkdb_server.db.models.studies import Study, StudyGrant
 from pkdb_server.db.models.subjects import Group
 from pkdb_server.db.models.users import User
 from pkdb_server.db.models.vocabulary import VocabularyNode
@@ -38,6 +38,7 @@ def crossed_measurements(session_factory):
             )
             session.add(study)
             session.flush()
+            session.add(StudyGrant(study_id=study.id, user_id=user.id, role="curator"))
             group = Group(study_id=study.id, key="g", name="all", count=2)
             session.add(group)
             session.flush()

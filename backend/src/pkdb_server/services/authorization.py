@@ -39,28 +39,22 @@ def authorize(principal: Principal, action: Action, study: StudyAccess) -> None:
     authenticated = principal.user_id is not None and principal.role != "anonymous"
     if authenticated and principal.role == "admin":
         return
-    member = authenticated and (
-        principal.user_id == study.creator_id or principal.user_id in study.curator_ids
-    )
-    privileged_reader = (
-        member
-        or authenticated
-        and (
-            principal.user_id in study.collaborator_ids or principal.role == "reviewer"
-        )
-    )
+    assigned_curator = authenticated and principal.user_id in study.curator_ids
     allowed = False
     if action == "read":
-        allowed = study.access == "public" or privileged_reader
+        allowed = study.access == "public" or assigned_curator
     elif action == "read_file":
         allowed = (
-            privileged_reader or study.access == "public" and study.licence == "open"
+            assigned_curator or study.access == "public" and study.licence == "open"
         )
     elif action == "write":
         allowed = authenticated and (
-            principal.role == "reviewer"
-            or principal.role == "curator"
-            and principal.user_id in study.curator_ids
+            principal.role in {"curator", "reviewer"}
+            and (
+                assigned_curator
+                or principal.role == "reviewer"
+                and study.access == "public"
+            )
         )
     if not allowed:
         raise AuthorizationDenied("Action is not permitted for this study")

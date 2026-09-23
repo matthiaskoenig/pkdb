@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 # PK-DB backend replacement specification
 
 Date: 2026-09-21 Status: Approved for implementation planning, with Python 3.13/3.14 support added at user request. Implementation awaits plan review. Scope: Replace the Django backend with a simpler, validated, reproducible backend.

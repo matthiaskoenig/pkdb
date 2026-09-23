@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 # Backend replacement execution evidence
 
 Implementation branch: `backend/fastapi-replacement`.

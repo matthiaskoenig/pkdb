@@ -200,18 +200,18 @@ def visibility(principal: Principal):
     if principal.role not in {"admin", "curator", "reviewer", "user", "anonymous"}:
         raise AuthorizationDenied("Unknown role")
     authenticated = principal.user_id is not None and principal.role != "anonymous"
-    if authenticated and principal.role in {"admin", "reviewer"}:
+    if authenticated and principal.role == "admin":
         return true()
     if not authenticated:
         return Study.access == "public"
     membership = exists(
         select(StudyGrant.study_id).where(
-            StudyGrant.study_id == Study.id, StudyGrant.user_id == principal.user_id
+            StudyGrant.study_id == Study.id,
+            StudyGrant.user_id == principal.user_id,
+            StudyGrant.role == "curator",
         )
     )
-    return or_(
-        Study.access == "public", Study.creator_id == principal.user_id, membership
-    )
+    return or_(Study.access == "public", membership)
 
 
 def comparison(column, predicate: Predicate):

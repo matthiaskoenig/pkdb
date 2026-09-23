@@ -151,7 +151,7 @@ def test_zip_snapshot_stays_consistent_during_atomic_replacement(
     assert exported_mean() == before * 2
 
 
-def test_saved_filter_rechecks_removed_collaborator(
+def test_saved_filter_rechecks_removed_curator(
     ingestion_context, valid_bundle, session_factory
 ):
     from sqlalchemy import delete, select
@@ -165,7 +165,7 @@ def test_saved_filter_rechecks_removed_collaborator(
     valid_bundle.study["access"] = "private"
     ingestion.replace(valid_bundle, creator)
     with session_factory.begin() as session:
-        user = User(username="download-collaborator", role="user", active=True)
+        user = User(username="download-curator", role="curator", active=True)
         session.add(user)
         session.flush()
         actor = Principal(user_id=user.id, username=user.username, role=user.role)
@@ -173,7 +173,7 @@ def test_saved_filter_rechecks_removed_collaborator(
             StudyGrant(
                 study_id=session.scalar(select(Study.id)),
                 user_id=user.id,
-                role="collaborator",
+                role="curator",
             )
         )
     exports = ExportService(session_factory, QueryService(session_factory))

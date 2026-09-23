@@ -47,7 +47,7 @@ For immediate login as a curator, create a separate test account with a username
 docker compose exec backend pkdb-server create-user local-curator --role curator --email local-curator@example.org
 ```
 
-Enter its password when prompted. Use `--role reviewer` to test access to all studies, or omit `--role` for an ordinary reader. Email is optional for browser login; supply it when testing personal API keys. These commands create new accounts and never overwrite imported users or reset existing passwords.
+Enter its password when prompted. Use `--role reviewer` to test reviewer access to public studies, or omit `--role` for an ordinary reader. Private-study access requires an explicit curator assignment unless the account is the administrator. Email is optional for browser login; supply it when testing personal API keys. These commands create new accounts and never overwrite imported users or reset existing passwords.
 
 ### Invite the real users
 

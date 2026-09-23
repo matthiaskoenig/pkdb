@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 # Local migration performance evidence
 
 One fresh-application run, one excluded warmup, then five sequential measured complete-study replacements per runtime, on the same machine, with identical source hashes and expected read counts. The legacy duration includes the unchanged uploader subprocess, its indexing child, and complete query visibility. The replacement uses one complete-bundle HTTP request and the same visibility probes.

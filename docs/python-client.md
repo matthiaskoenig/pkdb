@@ -67,7 +67,7 @@ export PKDB_ENDPOINT=https://alpha.pk-db.com
 pkdb upload /path/to/pkdb_data/studies/ExampleStudy
 ```
 
-Upload automatically prepares and validates the folder, checks compatibility with the processing engine used by the service and vocabulary, then sends the original source bundle. Uploading an existing SID replaces that study, subject to your study permissions. The service validates the bundle again and checks authorization. An offline validation result does not grant upload permission. Writes are not retried automatically.
+Upload automatically prepares and validates the folder, checks compatibility with the processing engine used by the service and vocabulary, then sends the original source bundle. Uploading an existing SID replaces that study, subject to your study permissions. The service validates the bundle again and checks authorization. An offline validation result does not grant upload permission. A valid key with `studies:write` can upload either a public or a private study. The study's `access` field determines visibility: public data is visible to everyone; private data is visible only to its assigned curators and the administrator. An authorized uploader can also change visibility when replacing a study. The uploader receives a curator assignment on creation; source contributor attribution alone does not grant access. Writes are not retried automatically.
 
 The public commands also accept a parent directory containing multiple study folders, emitting one JSON record per study and returning a nonzero exit code if any study fails. `--output` requires a single study folder.
 
@@ -109,3 +109,11 @@ with Client(endpoint="https://alpha.pk-db.com") as client:
 Catch `pkdb.schemas.validation.StudyValidationError` to inspect `error.report` for local validation failures. The API checks account permissions and study ownership again during upload.
 
 Use the client version compatible with the API deployment. If compatibility checks reject a request, follow the reported instructions before retrying.
+
+## Inspect a rejected upload
+
+An HTTP 422 response means the API rejected the study bundle. The CLI prints the validation code and message, plus the full `report` with source locations when available. In Python, catch `pkdb.errors.ClientError` and inspect its `report` attribute.
+
+- `unknown_user`: an attribution identity in the study is absent from the destination. Ask its administrator to provision the identity; changing attribution is not a substitute for preserving the original contributors.
+
+Offline validation cannot check destination account records or study-editing permissions. If an older client prints only the HTTP status, update the client to a release containing detailed validation reporting or use the [source checkout](development.md#install-the-python-package-from-source).

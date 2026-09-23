@@ -124,3 +124,32 @@ def test_public_cli_upload_with_environment_and_pinned_vocabulary(
     report = json.loads(capsys.readouterr().out)
     assert report["ok"] and report["created"]
     assert api.studies.get(report["sid"]).sid == report["sid"]
+
+
+def test_public_cli_preserves_rejected_upload_report(
+    client, creator_headers, study_folder, tmp_path, monkeypatch, capsys
+):
+    path = study_folder / "study.json"
+    data = json.loads(path.read_text())
+    data["curators"].append({"user": "missing-attribution-user"})
+    path.write_text(json.dumps(data))
+    token = creator_headers["Authorization"].split(" ", 1)[1]
+    api = Client(endpoint="http://testserver", api_key=token, transport=client)
+    snapshot = tmp_path / "vocabulary.lock.json"
+    api.vocabulary().save(snapshot)
+    monkeypatch.setenv("PKDB_ENDPOINT", "http://testserver")
+    monkeypatch.setenv("PKDB_API_KEY", token)
+
+    assert (
+        main(
+            ["upload", str(study_folder), "--vocabulary", str(snapshot)], client=client
+        )
+        == 1
+    )
+    output = capsys.readouterr().out
+    result = json.loads(output)
+    assert result["status_code"] == 422
+    assert "unknown_user" in result["error"]
+    assert result["report"]["issues"][0]["code"] == "unknown_user"
+    assert result["report"]["error_count"] == 1
+    assert token not in output

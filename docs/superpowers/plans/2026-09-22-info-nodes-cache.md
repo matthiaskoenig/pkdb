@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 # Info nodes cache consolidation
 
 **Goal:** Integrate all remaining `backend/pkdb_data` content into `backend/info_nodes`, refresh public metadata from scratch, and enforce explicit cache lifetimes.

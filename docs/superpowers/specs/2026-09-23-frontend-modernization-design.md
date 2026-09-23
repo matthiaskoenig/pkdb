@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 # Frontend modernization and researcher search experience
 
 Date: 2026-09-23. Status: Implementation authorized by the user and implemented on `feat/frontend-modernization`. Verification and deployment limitations are recorded in [the implementation evidence](https://github.com/matthiaskoenig/pkdb/blob/develop/frontend/docs/modernization-verification.md).

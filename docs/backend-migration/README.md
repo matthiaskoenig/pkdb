@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 # Migration records
 
 The repository now ships one backend in `backend/`. The previous Django backend, search service, uploader, and deployment scripts have been removed by explicit user request. Use [installation](../installation.md) and [local upload testing](../local-upload-testing.md) for current commands.
