@@ -219,9 +219,9 @@ async def test_concurrent_calls_keep_principals_separate(
 ):
     import asyncio
 
-    from pkdb.schemas.security import Principal
     from sqlalchemy import select
 
+    from pkdb.schemas.security import Principal
     from pkdb_server.db.models.users import User
     from pkdb_server.services.authentication import issue_token
 

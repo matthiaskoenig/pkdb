@@ -9,10 +9,10 @@ from pathlib import Path
 from typing import Literal
 from urllib.parse import urlparse
 
-from pkdb.schemas.profiles import ProfileUpdate
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import func, select
 
+from pkdb.schemas.profiles import ProfileUpdate
 from pkdb_server.db.models.security import SecurityConfiguration, UserImportRun
 from pkdb_server.db.models.studies import Study, StudyGrant
 from pkdb_server.db.models.users import EmailAddress, User

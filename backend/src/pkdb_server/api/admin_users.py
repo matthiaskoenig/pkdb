@@ -1,8 +1,8 @@
 """Legacy user administration routes; account secrets appear only at creation."""
 
 from fastapi import APIRouter, Depends, HTTPException, Request
-from pkdb.schemas.admin_users import AdminUserCreate, AdminUserPatch, AdminUserPut
 
+from pkdb.schemas.admin_users import AdminUserCreate, AdminUserPatch, AdminUserPut
 from pkdb_server.services.authorization import AuthorizationDenied
 
 

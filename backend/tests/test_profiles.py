@@ -3,11 +3,11 @@ from io import BytesIO
 
 import pytest
 from PIL import Image
+from pydantic import ValidationError
+
 from pkdb.schemas.profiles import ProfileUpdate
 from pkdb.schemas.responses import UserResponse
 from pkdb.schemas.security import Principal
-from pydantic import ValidationError
-
 from pkdb_server.db.models.credentials import BrowserSession
 from pkdb_server.db.models.users import EmailAddress, User
 from pkdb_server.services.authentication import AuthenticationFailed

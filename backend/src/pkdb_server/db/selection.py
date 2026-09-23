@@ -1,8 +1,8 @@
 """Relational legacy filter selections, evaluated with current visibility."""
 
-from pkdb.schemas.queries import QuerySpec
 from sqlalchemy import or_, select
 
+from pkdb.schemas.queries import QuerySpec
 from pkdb_server.db.models.interventions import Intervention
 from pkdb_server.db.models.measurements import (
     Measurement,

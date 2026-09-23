@@ -2,9 +2,9 @@
 
 import re
 
-from pkdb.schemas.accounts import EmailRequest
 from sqlalchemy import func, select
 
+from pkdb.schemas.accounts import EmailRequest
 from pkdb_server.db.models.users import EmailAddress, User
 from pkdb_server.services.accounts import AccountService
 from pkdb_server.services.authentication import password_hash

@@ -1,8 +1,8 @@
 """Consistent flat analysis reads over typed PostgreSQL relations."""
 
-from pkdb.schemas.queries import Page
 from sqlalchemy import func, select
 
+from pkdb.schemas.queries import Page
 from pkdb_server.db import analysis
 
 

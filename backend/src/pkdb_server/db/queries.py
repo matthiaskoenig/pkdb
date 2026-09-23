@@ -3,10 +3,10 @@
 import math
 from collections import defaultdict
 
-from pkdb.schemas.queries import Predicate, QuerySpec
-from pkdb.schemas.security import Principal
 from sqlalchemy import String, and_, case, exists, func, or_, select, true
 
+from pkdb.schemas.queries import Predicate, QuerySpec
+from pkdb.schemas.security import Principal
 from pkdb_server.db.models.interventions import Intervention
 from pkdb_server.db.models.measurements import Measurement, Scatter, Subset
 from pkdb_server.db.models.studies import Reference, Study, StudyGrant, StudyUser

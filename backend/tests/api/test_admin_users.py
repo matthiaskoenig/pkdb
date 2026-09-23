@@ -139,7 +139,6 @@ def test_duplicate_admin_creation_rolls_back(client, admin_headers, session_fact
 def test_admin_service_rejects_stale_authorization(session_factory):
     from pkdb.schemas.admin_users import AdminUserCreate
     from pkdb.schemas.security import Principal
-
     from pkdb_server.services.admin_users import AdminUserService
     from pkdb_server.services.authorization import AuthorizationDenied
 

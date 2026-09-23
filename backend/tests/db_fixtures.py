@@ -94,7 +94,6 @@ def ingestion_context(session_factory, tmp_path, vocabulary):
     import json
 
     from pkdb.schemas.security import Principal
-
     from pkdb_server.config import Settings
     from pkdb_server.db.bootstrap import bootstrap
     from pkdb_server.files.store import FileStore

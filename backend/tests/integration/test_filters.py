@@ -1,8 +1,8 @@
 import pytest
-from pkdb.schemas.queries import Predicate, QuerySpec
-from pkdb.schemas.security import Principal
 from pydantic import ValidationError
 
+from pkdb.schemas.queries import Predicate, QuerySpec
+from pkdb.schemas.security import Principal
 from pkdb_server.db.models.measurements import Measurement
 from pkdb_server.db.models.studies import Study
 from pkdb_server.db.models.subjects import Group

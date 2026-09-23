@@ -4,9 +4,9 @@ import hashlib
 import secrets
 from datetime import UTC, datetime, timedelta
 
-from pkdb.schemas.security import Principal
 from sqlalchemy import select, update
 
+from pkdb.schemas.security import Principal
 from pkdb_server.db.models.audit import AuditEvent
 from pkdb_server.db.models.credentials import ApiKey, BrowserSession
 from pkdb_server.db.models.users import EmailAddress, User

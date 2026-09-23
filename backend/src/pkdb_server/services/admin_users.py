@@ -1,9 +1,9 @@
 """Small transactional administrative adapter over the fixed application roles."""
 
-from pkdb.schemas.security import Principal
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
+from pkdb.schemas.security import Principal
 from pkdb_server.db.models.users import EmailAddress, User
 from pkdb_server.services.authorization import AuthorizationDenied
 from pkdb_server.services.credentials import require_admin_session

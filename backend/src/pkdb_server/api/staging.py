@@ -1,10 +1,11 @@
 """Authenticated immutable attachment handles for complete-bundle clients."""
 
 from fastapi import APIRouter, Request
-from pkdb.schemas.validation import fail
 from starlette.concurrency import run_in_threadpool
 from starlette.datastructures import UploadFile
 from starlette.exceptions import HTTPException
+
+from pkdb.schemas.validation import fail
 
 router = APIRouter()
 

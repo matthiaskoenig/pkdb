@@ -1,9 +1,9 @@
 from copy import deepcopy
 
 import pytest
+
 from pkdb.schemas.security import Principal
 from pkdb.schemas.validation import StudyValidationError
-
 from pkdb_server.db.read import read_study
 
 

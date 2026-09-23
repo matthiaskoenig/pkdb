@@ -2,9 +2,9 @@ import json
 from pathlib import Path
 
 import pytest
+
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import Vocabulary, vocabulary_hash
-
 from pkdb_server.db.bootstrap import (
     Snapshot,
     bootstrap,

@@ -4,16 +4,16 @@ import secrets
 from urllib.parse import urlsplit
 
 from fastapi import APIRouter, HTTPException, Request
+from pydantic import BaseModel, ConfigDict, Field
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.responses import JSONResponse, Response
+
 from pkdb.schemas.accounts import (
     EmailRequest,
     PasswordReset,
     Registration,
     Verification,
 )
-from pydantic import BaseModel, ConfigDict, Field
-from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import JSONResponse, Response
-
 from pkdb_server.services.accounts import AccountThrottled, MailDeliveryFailed
 from pkdb_server.services.authentication import AuthenticationFailed
 from pkdb_server.services.authorization import AuthorizationDenied

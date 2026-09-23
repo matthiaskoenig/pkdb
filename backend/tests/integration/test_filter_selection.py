@@ -1,6 +1,6 @@
-from pkdb.schemas.queries import Predicate, QuerySpec
 from sqlalchemy import select
 
+from pkdb.schemas.queries import Predicate, QuerySpec
 from pkdb_server.db.models.measurements import Measurement
 
 
@@ -8,7 +8,6 @@ def test_concise_selection_uses_matching_normalized_outputs(
     ingestion_context, valid_bundle, session_factory
 ):
     from pkdb.schemas.filters import FilterSpec
-
     from pkdb_server.db.selection import selection
 
     ingestion, creator = ingestion_context
@@ -44,7 +43,6 @@ def test_selection_subject_filters_compile_together(
     ingestion_context, valid_bundle, session_factory
 ):
     from pkdb.schemas.filters import FilterSpec
-
     from pkdb_server.db.selection import selection
 
     ingestion, creator = ingestion_context

@@ -3,9 +3,9 @@
 import json
 from collections import defaultdict
 
-from pkdb.schemas.responses import VocabularyResponse
 from sqlalchemy import select
 
+from pkdb.schemas.responses import VocabularyResponse
 from pkdb_server.db.models.vocabulary import (
     VocabularyEdge,
     VocabularyNode,

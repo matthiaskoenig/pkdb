@@ -2,11 +2,11 @@
 
 from collections import defaultdict
 
-from pkdb.schemas.security import Principal
-from pkdb.schemas.study import CanonicalStudy
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
+from pkdb.schemas.security import Principal
+from pkdb.schemas.study import CanonicalStudy
 from pkdb_server.db.models import interventions as i
 from pkdb_server.db.models import measurements as m
 from pkdb_server.db.models import studies as s
@@ -303,7 +303,6 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
 def publication_state(sid: str, principal: Principal, session_factory):
     from pkdb.domain.validation import PROCESSING_VERSION
     from pkdb.schemas.replacement import PublicationState
-
     from pkdb_server.db.models.vocabulary import VocabularyVersion
 
     with session_factory() as session:

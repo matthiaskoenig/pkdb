@@ -1,9 +1,9 @@
 from datetime import UTC, datetime, timedelta
 
 import pytest
-from pkdb.schemas.security import Principal
 from sqlalchemy import select
 
+from pkdb.schemas.security import Principal
 from pkdb_server.services.quotas import QuotaExceeded, QuotaService
 
 

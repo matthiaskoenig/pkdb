@@ -3,8 +3,8 @@ from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 import pytest
-from pkdb.schemas.security import Principal
 
+from pkdb.schemas.security import Principal
 from pkdb_server.db.models.files import StoredFile
 from pkdb_server.db.models.users import User
 from pkdb_server.files.cleanup import cleanup_expired_files

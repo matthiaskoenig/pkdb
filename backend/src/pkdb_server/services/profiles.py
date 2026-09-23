@@ -7,9 +7,9 @@ from pathlib import Path
 from uuid import uuid4
 
 from PIL import Image, ImageOps, UnidentifiedImageError
-from pkdb.schemas.profiles import ProfileUpdate
 from sqlalchemy import select
 
+from pkdb.schemas.profiles import ProfileUpdate
 from pkdb_server.db.models.users import AccountThrottle, AvatarAsset, EmailAddress, User
 from pkdb_server.services.accounts import AccountThrottled
 from pkdb_server.services.authentication import AuthenticationFailed

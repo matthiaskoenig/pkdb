@@ -1,9 +1,9 @@
 from datetime import UTC, datetime, timedelta
 
 import pytest
-from pkdb.schemas.security import Principal
 from sqlalchemy import select
 
+from pkdb.schemas.security import Principal
 from pkdb_server.db.models.audit import AuditEvent
 from pkdb_server.db.models.credentials import BrowserSession
 from pkdb_server.db.models.security import SecurityConfiguration

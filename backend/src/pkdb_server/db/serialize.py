@@ -3,9 +3,9 @@
 import json
 from collections import defaultdict
 
-from pkdb.schemas.responses import OutputResponse
 from sqlalchemy import select
 
+from pkdb.schemas.responses import OutputResponse
 from pkdb_server.db.models.interventions import Intervention
 from pkdb_server.db.models.measurements import MeasurementIntervention
 from pkdb_server.db.models.studies import Study
@@ -150,7 +150,6 @@ def output_responses(session, rows):
 
 def subject_responses(session, rows, individual=False):
     from pkdb.schemas.responses import GroupResponse, IndividualResponse
-
     from pkdb_server.db.models.subjects import Characteristic
 
     if not rows:
@@ -315,7 +314,6 @@ def intervention_responses(session, rows):
 
 def reference_responses(session, rows):
     from pkdb.schemas.responses import ReferenceResponse
-
     from pkdb_server.db.models.studies import Author
 
     if not rows:
@@ -355,7 +353,6 @@ def reference_responses(session, rows):
 
 def subset_responses(session, rows):
     from pkdb.schemas.responses import ArrayOutput, SubsetResponse
-
     from pkdb_server.db.models.measurements import Measurement, Scatter, SubsetDimension
 
     if not rows:

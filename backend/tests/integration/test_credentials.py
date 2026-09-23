@@ -188,7 +188,6 @@ def test_password_admin_can_export_and_read_own_staged_files(
     import io
 
     from pkdb.schemas.queries import QuerySpec
-
     from pkdb_server.files.store import FileStore
     from pkdb_server.services.exports import ExportService
 

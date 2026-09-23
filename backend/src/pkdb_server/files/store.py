@@ -8,11 +8,11 @@ from pathlib import Path
 from typing import BinaryIO
 from uuid import UUID, uuid4
 
-from pkdb.schemas.security import Principal, StudyAccess
 from pydantic import BaseModel, ConfigDict
 from sqlalchemy import select
 from sqlalchemy.orm import Session, sessionmaker
 
+from pkdb.schemas.security import Principal, StudyAccess
 from pkdb_server.db.models.files import StoredFile, StudyAttachment
 from pkdb_server.db.models.studies import Study, StudyGrant
 from pkdb_server.db.models.users import User

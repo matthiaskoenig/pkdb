@@ -1,9 +1,9 @@
 """Private self-service profiles and opaque managed-avatar URLs."""
 
 from fastapi import APIRouter, HTTPException, Request
-from pkdb.schemas.profiles import ProfileUpdate
 from starlette.responses import FileResponse, Response
 
+from pkdb.schemas.profiles import ProfileUpdate
 from pkdb_server.services.accounts import AccountThrottled
 from pkdb_server.services.profiles import MAX_AVATAR_BYTES
 

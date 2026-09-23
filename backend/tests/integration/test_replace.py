@@ -1,7 +1,7 @@
 import pytest
-from pkdb.schemas.validation import StudyValidationError
 from sqlalchemy import func, select
 
+from pkdb.schemas.validation import StudyValidationError
 from pkdb_server.db.models.studies import Study
 from pkdb_server.db.read import read_study
 

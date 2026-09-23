@@ -1,9 +1,9 @@
 """Bulk insertion of a study-owned graph inside its caller's transaction."""
 
-from pkdb.schemas.study import CanonicalStudy, ScientificRecord
 from sqlalchemy import delete, insert, select, update
 from sqlalchemy.orm import Session
 
+from pkdb.schemas.study import CanonicalStudy, ScientificRecord
 from pkdb_server.db.models import interventions as i
 from pkdb_server.db.models import measurements as m
 from pkdb_server.db.models import studies as s

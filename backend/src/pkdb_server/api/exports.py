@@ -79,7 +79,6 @@ def saved_selection(request, actor):
     from uuid import UUID
 
     from pkdb.schemas.filters import FilterSpec
-
     from pkdb_server.services.authorization import AuthorizationDenied
 
     raw = request.query_params.get("uuid")

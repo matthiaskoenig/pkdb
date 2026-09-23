@@ -1,7 +1,7 @@
 import pytest
+
 from pkdb.schemas.queries import Predicate, QuerySpec
 from pkdb.schemas.security import Principal
-
 from pkdb_server.services.authorization import AuthorizationDenied
 from pkdb_server.services.queries import QueryService
 
@@ -114,7 +114,6 @@ def test_zip_snapshot_stays_consistent_during_atomic_replacement(
     from zipfile import ZipFile
 
     from pkdb.schemas.filters import FilterSpec
-
     from pkdb_server.services.exports import ExportService
 
     ingestion, creator = ingestion_context
@@ -155,9 +154,9 @@ def test_zip_snapshot_stays_consistent_during_atomic_replacement(
 def test_saved_filter_rechecks_removed_collaborator(
     ingestion_context, valid_bundle, session_factory
 ):
-    from pkdb.schemas.filters import FilterSpec
     from sqlalchemy import delete, select
 
+    from pkdb.schemas.filters import FilterSpec
     from pkdb_server.db.models.studies import Study, StudyGrant
     from pkdb_server.db.models.users import User
     from pkdb_server.services.exports import ExportService

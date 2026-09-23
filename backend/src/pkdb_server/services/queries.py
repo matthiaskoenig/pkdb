@@ -1,9 +1,9 @@
 """Consistent PostgreSQL reads with permissions applied before count and paging."""
 
-from pkdb.schemas.queries import Page, QuerySpec
-from pkdb.schemas.security import Principal
 from sqlalchemy import func, select
 
+from pkdb.schemas.queries import Page, QuerySpec
+from pkdb.schemas.security import Principal
 from pkdb_server.db.models.interventions import Intervention
 from pkdb_server.db.models.measurements import (
     Measurement,

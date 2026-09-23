@@ -7,11 +7,11 @@ from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from typing import Protocol
 
-from pkdb.schemas.security import Principal
 from sqlalchemy import delete, func, select, text, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
+from pkdb.schemas.security import Principal
 from pkdb_server.db.models.users import AccountThrottle, EmailAddress, Token, User
 from pkdb_server.services.authentication import (
     AuthenticationFailed,

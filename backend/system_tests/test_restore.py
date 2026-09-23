@@ -7,9 +7,9 @@ from uuid import uuid4
 
 import pytest
 from fastapi.testclient import TestClient
-from pkdb.schemas.security import Principal
 from sqlalchemy import create_engine, select, text
 
+from pkdb.schemas.security import Principal
 from pkdb_server.app import create_app
 from pkdb_server.config import Settings
 from pkdb_server.db.models.files import StoredFile

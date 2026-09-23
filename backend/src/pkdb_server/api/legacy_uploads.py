@@ -3,11 +3,11 @@
 import json
 
 from fastapi import APIRouter, Depends, HTTPException, Request
-from pkdb.schemas.legacy import FinalizeRequest
-from pkdb.schemas.validation import fail
 from starlette.concurrency import run_in_threadpool
 from starlette.datastructures import UploadFile
 
+from pkdb.schemas.legacy import FinalizeRequest
+from pkdb.schemas.validation import fail
 from pkdb_server.db.models.drafts import LegacyFileHandle
 from pkdb_server.services.drafts import DraftConflict
 

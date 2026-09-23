@@ -3,6 +3,10 @@
 import hashlib
 from datetime import UTC, datetime
 
+from sqlalchemy import select, text
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import Session, sessionmaker
+
 from pkdb.domain.provenance import comment_authors
 from pkdb.domain.validation import PROCESSING_VERSION, prepare_study
 from pkdb.domain.vocabulary import vocabulary_hash
@@ -12,10 +16,6 @@ from pkdb.schemas.replacement import ReplacementResult
 from pkdb.schemas.security import Principal
 from pkdb.schemas.source import SourceBundle
 from pkdb.schemas.validation import fail
-from sqlalchemy import select, text
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session, sessionmaker
-
 from pkdb_server.config import Settings
 from pkdb_server.db import replace
 from pkdb_server.db.bootstrap import VOCABULARY_LOCK, load_vocabulary

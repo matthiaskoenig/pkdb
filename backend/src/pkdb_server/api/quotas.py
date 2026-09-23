@@ -3,12 +3,12 @@
 import asyncio
 import logging
 
-from pkdb.schemas.security import Principal
 from sqlalchemy.exc import SQLAlchemyError
 from starlette.concurrency import run_in_threadpool
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
+from pkdb.schemas.security import Principal
 from pkdb_server.services.authentication import AuthenticationFailed
 from pkdb_server.services.authorization import AuthorizationDenied
 from pkdb_server.services.quotas import QuotaExceeded

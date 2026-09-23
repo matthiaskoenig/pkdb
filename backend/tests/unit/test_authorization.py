@@ -1,6 +1,6 @@
 import pytest
-from pkdb.schemas.security import Principal, StudyAccess
 
+from pkdb.schemas.security import Principal, StudyAccess
 from pkdb_server.services.authorization import AuthorizationDenied, authorize
 
 

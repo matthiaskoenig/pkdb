@@ -8,12 +8,12 @@ from tempfile import TemporaryFile
 from threading import BoundedSemaphore
 from zipfile import ZIP_DEFLATED, ZipFile
 
+from sqlalchemy import delete, func, select
+
 from pkdb.schemas.analysis import ANALYSIS_MODELS
 from pkdb.schemas.filters import FilterSpec
 from pkdb.schemas.queries import QuerySpec
 from pkdb.schemas.security import Principal
-from sqlalchemy import delete, func, select
-
 from pkdb_server.db.analysis import ENTITIES, statement
 from pkdb_server.db.models.saved_queries import SavedQuery
 from pkdb_server.db.selection import selection

@@ -4,11 +4,11 @@ import hashlib
 import secrets
 from datetime import UTC, datetime, timedelta
 
-from pkdb.schemas.security import Principal
 from pwdlib import PasswordHash
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
+from pkdb.schemas.security import Principal
 from pkdb_server.db.models.credentials import ApiKey
 from pkdb_server.db.models.security import SecurityConfiguration
 from pkdb_server.db.models.users import Token, User

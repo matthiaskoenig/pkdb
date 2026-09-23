@@ -1,6 +1,8 @@
 """Legacy account route names with shared transactional account services."""
 
 from fastapi import APIRouter, Depends, Request
+from starlette.responses import JSONResponse, Response
+
 from pkdb.schemas.accounts import (
     EmailCreate,
     EmailRequest,
@@ -10,8 +12,6 @@ from pkdb.schemas.accounts import (
     Registration,
     Verification,
 )
-from starlette.responses import JSONResponse, Response
-
 from pkdb_server.services.accounts import AccountThrottled, MailDeliveryFailed
 from pkdb_server.services.authentication import AuthenticationFailed
 

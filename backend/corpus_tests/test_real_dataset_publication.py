@@ -6,11 +6,11 @@ import shutil
 from pathlib import Path
 
 import pytest
+from sqlalchemy import select
+
 from pkdb.domain.provenance import comment_authors
 from pkdb.importers.folder import load_folder, parse_bundle
 from pkdb.schemas.security import Principal
-from sqlalchemy import select
-
 from pkdb_server.config import Settings
 from pkdb_server.db.bootstrap import bootstrap
 from pkdb_server.db.models.users import User

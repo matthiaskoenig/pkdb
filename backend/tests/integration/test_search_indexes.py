@@ -1,7 +1,7 @@
-from pkdb.schemas.queries import QuerySpec
-from pkdb.schemas.security import Principal
 from sqlalchemy import event, select, text
 
+from pkdb.schemas.queries import QuerySpec
+from pkdb.schemas.security import Principal
 from pkdb_server.db.models.vocabulary import VocabularyNode, VocabularyTerm
 from pkdb_server.db.textsearch import text_match
 from pkdb_server.services.queries import QueryService
@@ -67,9 +67,9 @@ def test_study_page_query_count_is_independent_of_page_length(
 ):
     from copy import deepcopy
 
-    from pkdb.schemas.queries import QuerySpec
     from sqlalchemy import event
 
+    from pkdb.schemas.queries import QuerySpec
     from pkdb_server.services.queries import QueryService
 
     ingestion, principal = ingestion_context

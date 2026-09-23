@@ -13,10 +13,10 @@ def bootstrap(directory, session_factory):
 
 def bootstrap_study(path, session_factory):
     """Create disabled attribution identities without changing existing accounts."""
-    from pkdb.domain.provenance import comment_authors
-    from pkdb.importers.folder import load_folder, parse_bundle
     from sqlalchemy.dialects.postgresql import insert
 
+    from pkdb.domain.provenance import comment_authors
+    from pkdb.importers.folder import load_folder, parse_bundle
     from pkdb_server.commands.upload import study_folders
     from pkdb_server.db.bootstrap import BootstrapReport, UserInput
     from pkdb_server.db.models.users import User

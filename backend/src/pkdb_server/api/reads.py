@@ -3,10 +3,10 @@
 import math
 
 from fastapi import APIRouter, Request
-from pkdb.schemas.queries import Predicate, QuerySpec
 from pydantic import ValidationError
 from starlette.exceptions import HTTPException
 
+from pkdb.schemas.queries import Predicate, QuerySpec
 from pkdb_server import __version__
 
 router = APIRouter(prefix="/api/v1")

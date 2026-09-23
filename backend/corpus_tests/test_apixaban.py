@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 import pytest
+
 from pkdb.importers.folder import load_folder, parse_bundle
 
 ROOT = Path(os.environ["PKDB_STUDY_CORPUS"]) / "apixaban"
@@ -117,11 +118,11 @@ def test_frost2014_postgresql_outputs_match_legacy(
     import math
     import shutil
 
+    from sqlalchemy import select
+
     from pkdb.domain.validation import prepare_study
     from pkdb.schemas.queries import QuerySpec
     from pkdb.schemas.security import Principal
-    from sqlalchemy import select
-
     from pkdb_server.db.bootstrap import bootstrap
     from pkdb_server.db.models.studies import Study
     from pkdb_server.db.models.users import User
@@ -471,9 +472,9 @@ def test_frost2014_postgresql_outputs_match_legacy(
 
     # Characterize a two-point scatter assembled from the same four legacy
     # Frost measurements, inside a rollback-only transaction on both backends.
-    from pkdb.schemas.filters import FilterSpec
     from sqlalchemy import select
 
+    from pkdb.schemas.filters import FilterSpec
     from pkdb_server.db.models.measurements import (
         Measurement,
         Scatter,

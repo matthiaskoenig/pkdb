@@ -4,12 +4,12 @@ import json
 import zipfile
 
 import pytest
+from sqlalchemy import select
+
 from pkdb import Client, prepare
 from pkdb.cache import VocabularyCache
 from pkdb.cli import main
 from pkdb.schemas.validation import StudyValidationError
-from sqlalchemy import select
-
 from pkdb_server.db.models.studies import Study
 
 

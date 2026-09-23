@@ -2,9 +2,9 @@
 
 import re
 
-from pkdb.schemas.accounts import Registration
 from sqlalchemy import select
 
+from pkdb.schemas.accounts import Registration
 from pkdb_server.db.models.security import SecurityConfiguration
 from pkdb_server.db.models.users import EmailAddress, User
 from pkdb_server.services.accounts import AccountService

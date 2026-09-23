@@ -56,6 +56,7 @@ def test_unknown_comment_author_cannot_be_silently_dropped(
     ingestion_context, valid_bundle
 ):
     import pytest
+
     from pkdb.schemas.validation import StudyValidationError
 
     service, principal = ingestion_context
