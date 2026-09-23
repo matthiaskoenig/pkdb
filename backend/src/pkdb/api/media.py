@@ -15,7 +15,7 @@ router = APIRouter()
 
 @router.get("/media/{attachment_id}/{filename}")
 def download(attachment_id: UUID, filename: str, request: Request):
-    principal = request.app.state.principal(request, required=False)
+    principal = request.app.state.principal(request)
     store = request.app.state.file_store
     try:
         handle = store.open_authorized(principal, attachment_id)

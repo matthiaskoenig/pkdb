@@ -30,7 +30,7 @@ it("exposes accessible values and log controls and releases the chart", async ()
     expect.objectContaining({
       yaxis: expect.objectContaining({ type: "log" }),
     }),
-    expect.any(Object),
+    expect.objectContaining({ modeBarButtonsToRemove: ["toImage"] }),
   );
   expect(wrapper.text()).toContain("Zero and negative values");
   wrapper.unmount();

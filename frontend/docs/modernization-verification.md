@@ -2,6 +2,8 @@
 
 Implementation branch: `feat/frontend-modernization`. Baseline: `0562a566` (`develop`). Work was authorized after the specification and implementation plan were written. This report distinguishes local implementation evidence from deployment checks requiring the live environment.
 
+Follow-up issue #794 removes frontend dataset and attachment downloads and the plot image export action. Scientific exports now require the authenticated API; image attachments retain their preview. The export references below describe the original modernization verification.
+
 ## Toolchain and dependency graph
 
 Node 24.21.0 and npm 12.1.0 were used. Exact packages and compatibility evidence are in `docs/superpowers/plans/2026-09-23-frontend-modernization-versions.json`; `package-lock.json` is the reproducible installed graph. Vue 3.5.43, Vuetify 4.2.1, Router 5.3.1, Pinia 4.0.3, Vite 8.3.0 and TypeScript 6.0.3 are pinned. TypeScript 7 is excluded by the selected ESLint peer range, rather than installed with a peer override.

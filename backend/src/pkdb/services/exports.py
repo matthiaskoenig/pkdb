@@ -218,6 +218,8 @@ class ExportService:
             raise ExportLimit("Export exceeds configured byte limit")
 
     def stream_export(self, filter_id, format: str, principal: Principal):
+        if principal.user_id is None:
+            raise AuthorizationDenied("Authentication required for data downloads")
         if format not in {"csv", "zip"}:
             raise ValueError("Unsupported export format")
         if not self.slots.acquire(blocking=False):

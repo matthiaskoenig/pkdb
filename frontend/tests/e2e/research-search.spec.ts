@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-test("draft changes, applied exports and history stay separate", async ({
+test("draft changes, applied results and history stay separate", async ({
   page,
 }) => {
   await page.goto("/data");
@@ -20,11 +20,8 @@ test("draft changes, applied exports and history stay separate", async ({
   await expect(
     page.getByRole("tab", { name: "Studies 1", exact: true }),
   ).toBeVisible();
-  const download = page.waitForEvent("download");
-  await page
-    .getByRole("button", { name: "Download selected dataset (ZIP)" })
-    .click();
-  expect((await download).suggestedFilename()).toMatch(/\.zip$/);
+  await expect(page.getByRole("button", { name: /download/i })).toHaveCount(0);
+  await expect(page.locator("a[download]")).toHaveCount(0);
   await page.getByRole("button", { name: "Search", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "No results for this selection" }),

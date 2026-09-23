@@ -110,7 +110,9 @@ def test_published_file_survives_expiry_cleanup(file_store, owner, session_facto
         session.add(StudyAttachment(study_id=study.id, file_id=staged.id, name="paper"))
         session.get(StoredFile, staged.id).expires_at = now - timedelta(seconds=1)
     cleanup_expired_files(now, session_factory, file_store)
-    with file_store.open_authorized(Principal(), staged.id) as handle:
+    with pytest.raises(AuthorizationDenied, match="Authentication required"):
+        file_store.open_authorized(Principal(), staged.id)
+    with file_store.open_authorized(owner, staged.id) as handle:
         assert handle.read() == b"published"
 
 

@@ -136,7 +136,7 @@ def test_container_nonroot_upload_and_graceful_shutdown(
             )
             assert response.status_code == 200
             file_url = response.json()["files"][0]["file"]
-            assert client.get(file_url).status_code == 403
+            assert client.get(file_url).status_code == 401
             assert (
                 client.get(
                     file_url, headers={"Authorization": f"Bearer {token}"}

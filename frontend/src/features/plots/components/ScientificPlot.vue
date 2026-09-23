@@ -62,6 +62,7 @@ watch(
           responsive: true,
           displaylogo: false,
           displayModeBar: true,
+          modeBarButtonsToRemove: ["toImage"],
         });
         if (disposed) {
           loaded.purge(element);

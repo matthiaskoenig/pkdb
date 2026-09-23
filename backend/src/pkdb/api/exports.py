@@ -106,8 +106,10 @@ def filter_studies(request: Request):
 
     from pkdb.schemas.filters import FilterSpec
 
-    actor = request.app.state.principal(request, required=False)
     params = request.query_params
+    actor = request.app.state.principal(
+        request, required=params.get("download") == "true"
+    )
     if params.get("format", "json") != "json":
         raise HTTPException(404, "Unsupported response format")
     concise = params.get("concise", "true")

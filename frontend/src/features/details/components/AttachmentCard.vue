@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { computed, watch } from "vue";
 import { VBtn } from "vuetify/components";
-import { useFileDownload } from "../../exports/useFileDownload";
+import { useImagePreview } from "../useImagePreview";
 const props = defineProps<{ path: string; name: string }>();
-const { busy, failure, preview, load, clear } = useFileDownload();
+const { busy, failure, preview, load, clear } = useImagePreview();
 const image = computed(() => /\.(png|jpe?g|gif|webp|avif)$/i.test(props.name));
 watch(() => props.path, clear);
 </script>
@@ -11,12 +11,11 @@ watch(() => props.path, clear);
   <article class="attachment">
     <h4>{{ name }}</h4>
     <div class="actions">
-      <VBtn :disabled="busy" @click="load(path, name)">Download file</VBtn
-      ><VBtn
+      <VBtn
         v-if="image"
         :disabled="busy"
         variant="outlined"
-        @click="load(path, name, true)"
+        @click="load(path)"
       >
         Preview image </VBtn
       ><VBtn v-if="busy || preview" variant="text" @click="clear">

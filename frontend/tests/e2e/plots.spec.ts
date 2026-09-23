@@ -28,6 +28,8 @@ test("study exploration loads Plotly on demand and preserves complete subset val
     .click();
   await expect(page.locator(".plot .main-svg").first()).toBeVisible();
   expect(engineRequests.length).toBeGreaterThan(0);
+  await expect(page.locator('.modebar-btn[data-title*="Download"]')).toHaveCount(0);
+  await expect(page.locator('a[download]')).toHaveCount(0);
   const trace = await page.locator(".plot").evaluate((element) => {
     const data: unknown = Reflect.get(element, "data");
     if (!Array.isArray(data))

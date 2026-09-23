@@ -88,7 +88,7 @@ def test_disabled_subjects_and_types_do_not_broaden_selection(
 
 
 def test_entity_count_and_export_preserve_zero_and_precision(
-    client, scientific_fixture
+    client, scientific_fixture, creator_headers
 ):
     selected = selection(client)
     response = client.get(
@@ -104,7 +104,9 @@ def test_entity_count_and_export_preserve_zero_and_precision(
         ).status_code
         == 404
     )
-    downloaded = client.get("/api/v1/filter/", params={"download": "true"})
+    downloaded = client.get(
+        "/api/v1/filter/", headers=creator_headers, params={"download": "true"}
+    )
     assert downloaded.status_code == 200
     with ZipFile(BytesIO(downloaded.content)) as archive:
         rows = list(csv.DictReader(StringIO(archive.read("outputs.csv").decode())))
@@ -184,7 +186,7 @@ def test_licence_and_visibility_rechecked_for_existing_selection(
 
 
 def test_table_refinement_does_not_change_selection_counts_or_export(
-    client, scientific_fixture
+    client, scientific_fixture, creator_headers
 ):
     selected = selection(client)
     refined = client.get(
@@ -197,7 +199,9 @@ def test_table_refinement_does_not_change_selection_counts_or_export(
     assert refined.status_code == 200
     assert refined.json()["data"]["count"] == 0
     assert selected["studies"] == 1
-    exported = client.get("/api/v1/filter/", params={"download": "true"})
+    exported = client.get(
+        "/api/v1/filter/", headers=creator_headers, params={"download": "true"}
+    )
     with ZipFile(BytesIO(exported.content)) as archive:
         assert (
             len(list(csv.DictReader(StringIO(archive.read("studies.csv").decode()))))
@@ -285,9 +289,12 @@ def test_expired_uuid_is_distinct_from_empty_selection(
 
 
 @pytest.mark.parametrize("concise,expected", [("true", set()), ("false", {0.0, 2.125})])
-def test_compound_scope_zip_parity(client, scientific_fixture, concise, expected):
+def test_compound_scope_zip_parity(
+    client, scientific_fixture, concise, expected, creator_headers
+):
     response = client.get(
         "/api/v1/filter/",
+        headers=creator_headers,
         params={
             "download": "true",
             "concise": concise,

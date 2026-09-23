@@ -10,7 +10,7 @@ export function fileUrl(path: string): string {
   return target.href;
 }
 
-export function useFileDownload() {
+export function useImagePreview() {
   const session = useSessionStore();
   const busy = ref(false);
   const failure = ref("");
@@ -25,7 +25,7 @@ export function useFileDownload() {
     busy.value = false;
     failure.value = "";
   }
-  async function load(path: string, filename: string, image = false) {
+  async function load(path: string) {
     clear();
     const current = generation;
     const epoch = session.epoch;
@@ -39,23 +39,9 @@ export function useFileDownload() {
       if (current !== generation || epoch !== session.epoch) return;
       if (!(response.data instanceof Blob))
         throw new Error("The server returned an invalid file.");
-      if (
-        image &&
-        !/^image\/(png|jpeg|gif|webp|avif)$/.test(response.data.type)
-      )
+      if (!/^image\/(png|jpeg|gif|webp|avif)$/.test(response.data.type))
         throw new Error("This attachment cannot be previewed as an image.");
-      const objectUrl = URL.createObjectURL(response.data);
-      if (image) preview.value = objectUrl;
-      else {
-        const link = document.createElement("a");
-        link.href = objectUrl;
-        link.download = filename.split("/").pop() || "attachment";
-        document.body.append(link);
-        link.click();
-        link.remove();
-        // Keep the URL alive through the click dispatch, then release it.
-        setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
-      }
+      preview.value = URL.createObjectURL(response.data);
     } catch (error) {
       if (current === generation && epoch === session.epoch)
         failure.value = errorMessage(error);

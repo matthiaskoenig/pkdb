@@ -10,6 +10,7 @@ declare module "plotly.js-dist-min" {
         responsive: boolean;
         displaylogo: boolean;
         displayModeBar: boolean;
+        modeBarButtonsToRemove: string[];
       },
     ): Promise<unknown>;
     purge(element: HTMLElement): void;

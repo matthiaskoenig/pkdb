@@ -7,7 +7,7 @@ defineEmits<{ choose: [criteria: Criteria] }>();
   <details class="search-examples">
     <summary>Example searches</summary>
     <p>
-      Choose an example to replace your draft. Results and downloads change only
+      Choose an example to replace your draft. Results change only
       after you select Search.
     </p>
     <ul>
