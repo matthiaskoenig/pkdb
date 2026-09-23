@@ -52,6 +52,9 @@ target-version = "py314"
 [tool.ruff.lint]
 select = ["E4", "E7", "E9", "F", "I", "UP"]
 
+[tool.ruff.lint.isort]
+known-first-party = ["pkdb", "pkdb_server"]
+
 [tool.ty.environment]
 python-version = "3.14"
 
