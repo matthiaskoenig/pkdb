@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 # SDD ledger — plan: docs/superpowers/plans/2026-09-21-backend-replacement.md
 
 Branch: backend/fastapi-replacement Worktree: /tmp/pkdb-backend-replacement Base: 75e29fd4 Execution: native, authorized by user.

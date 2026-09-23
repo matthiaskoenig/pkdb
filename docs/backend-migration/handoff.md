@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 > Historical handoff. Source retirement supersedes these checkout instructions. See [current migration status](README.md) and [local setup](../installation.md).
 
 # Backend replacement handoff — 2026-09-22

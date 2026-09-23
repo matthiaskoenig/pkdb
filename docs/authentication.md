@@ -34,9 +34,9 @@ Keys expire and can be **rotated** or **revoked** from the same tab. Rotation gi
 
 ## Study access and curation
 
-New accounts can read public studies and studies explicitly shared with them. In account settings, request curator access if you need to upload data. Curators can upload new studies and edit their assigned studies; reviewers have broader study access. An API key never grants more access than its owner, even when it has `studies:write`.
+Public studies are visible to everyone. Private studies are visible only to their assigned curators and the administrator. In account settings, request curator access if you need to upload data. Curators can upload new studies with either visibility and edit their assigned studies. Reviewers can edit public studies, but need a curator assignment to access a private study. An API key never grants more access than its owner, even when it has `studies:write`.
 
-The contributor names recorded in a study describe attribution; they do not grant editing permission. If a study you need is unavailable, ask its curator or the PK-DB team for access.
+The contributor names recorded in a study describe attribution; they do not grant private-data access or editing permission. If a study you need is unavailable, ask its curator or the PK-DB team for access.
 
 Downloads require an active account even for public studies. A download includes only data and attachments your account can access. Check the study licence before reusing or redistributing data.
 

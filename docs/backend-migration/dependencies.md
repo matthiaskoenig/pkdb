@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 # Dependency compatibility evidence
 
 Resolved from stable packages into `backend-next/uv.lock`.

@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 # Frontend modernization implementation plan
 
 Date: 2026-09-23. Status: Implemented; final local acceptance is recorded in [the verification report](https://github.com/matthiaskoenig/pkdb/blob/develop/frontend/docs/modernization-verification.md). Specification: [Frontend modernization and researcher search experience](../specs/2026-09-23-frontend-modernization-design.md). Baseline: `0562a566` on `develop`. The user subsequently authorized implementation without interruption. Deployment and a new release remain separate from this implementation request.

@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 # Current backend runbook
 
 Use [Installation](../installation.md) to start the current Docker stack and [Local upload testing](../local-upload-testing.md) to prepare attribution accounts, validate a study, upload it, and inspect the result.

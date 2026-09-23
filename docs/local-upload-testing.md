@@ -22,7 +22,7 @@ The folder is mounted read-only and retains its original name, which must match 
 
 ## Create a personal API key
 
-In **Account settings → API keys**, create a named key with `read` and `studies:write` scopes. Confirm administrator identity when prompted. Copy the secret shown once. The old `/api-token-auth/` endpoint is retired. API keys cannot perform administrator account or study-access changes; new uploads are private. Use the password-authenticated browser to change study visibility or protected ownership fields.
+In **Account settings → API keys**, create a named key with `read` and `studies:write` scopes. Confirm administrator identity when prompted. Copy the secret shown once. The old `/api-token-auth/` endpoint is retired. A key with `studies:write` can upload studies with either `access: public` or `access: private`; no private draft is required. Visibility is preserved from the source, and an authorized writer can change it on replacement. Private data is visible only to assigned curators and the administrator. Account administration, changing existing ownership, and changing an existing licence still require the appropriate administrator session.
 
 Read it into your shell without echoing it or recording it in command history:
 

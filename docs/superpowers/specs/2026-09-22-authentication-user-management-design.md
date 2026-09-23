@@ -1,3 +1,8 @@
+---
+search:
+  exclude: true
+---
+
 # Authentication, user management, and API keys
 
 Date: 2026-09-22. Issue: [#775 - Improved user authentification and management, API keys](https://github.com/matthiaskoenig/pkdb/issues/775). Status: Implementation specification. This document specifies future behavior; it does not describe functionality already delivered.

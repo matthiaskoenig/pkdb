@@ -301,3 +301,41 @@ def test_interrupted_download_preserves_existing_file(tmp_path):
                 client.download(destination)
     assert destination.read_bytes() == b"original"
     assert list(tmp_path.iterdir()) == [destination]
+
+
+@pytest.mark.parametrize("envelope", [True, False])
+def test_upload_preserves_server_validation_report(study_folder, vocabulary, envelope):
+    from pkdb.errors import ClientError
+
+    prepared = prepare(study_folder, vocabulary=vocabulary)
+    issue = {
+        "code": "unknown_user",
+        "message": "Study refers to an unknown user",
+        "source": {"file": "study.json", "path": ["creator"]},
+    }
+    payload = {"issues": [issue], "error_count": 1, "truncated": False}
+    if envelope:
+        payload["valid"] = False
+    calls = []
+
+    def handler(request):
+        calls.append(request.method)
+        if request.method == "GET":
+            return httpx2.Response(200, json=capabilities(prepared))
+        return httpx2.Response(422, json=payload)
+
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+        with Client(
+            endpoint="https://example.test", api_key="secret", transport=transport
+        ) as api:
+            with pytest.raises(
+                ClientError, match="unknown_user: Study refers"
+            ) as caught:
+                api.upload(prepared)
+    assert caught.value.status_code == 422
+    assert caught.value.report is not None
+    assert caught.value.report.error_count == 1
+    source = caught.value.report.issues[0].source
+    assert source is not None
+    assert source.path == ("creator",)
+    assert calls == ["GET", "PUT"]
