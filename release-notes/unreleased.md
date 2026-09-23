@@ -1,5 +1,7 @@
 # Unreleased
 
+- Run regular Python CI on Linux with Python 3.14; reserve the complete Python and operating-system matrix for release tag pushes.
+
 - Show the frontend release version, linked build commit, and Matthias König copyright and group link in the shared footer on every page.
 - Replace the frontend and documentation branding and favicons with the new PK-DB logo.
 - Start documentation with Introduction and Webinterface, and place Accounts and API keys before REST API and Python client.
