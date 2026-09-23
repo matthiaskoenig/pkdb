@@ -12,23 +12,7 @@ router = APIRouter(prefix="/api/v1")
 
 @router.get("/me")
 def me(request: Request):
-    from datetime import UTC, datetime, timedelta
-
-    from pkdb.db.models.mfa import MfaCredential
-
-    principal = request.app.state.principal(request)
-    result = request.app.state.profiles.read(principal)
-    with request.app.state.session_factory() as session:
-        mfa = session.get(MfaCredential, principal.user_id)
-    result.update(
-        mfa_required=principal.role == "admin" and principal.mfa_at is None,
-        mfa_enrolled=bool(mfa and mfa.confirmed),
-        mfa_recent=bool(
-            principal.mfa_at
-            and principal.mfa_at > datetime.now(UTC) - timedelta(minutes=10)
-        ),
-    )
-    return result
+    return request.app.state.profiles.read(request.app.state.principal(request))
 
 
 @router.patch("/me")

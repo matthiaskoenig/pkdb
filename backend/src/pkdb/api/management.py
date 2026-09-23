@@ -7,14 +7,12 @@ from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import delete, select, text
 
+from pkdb.db.models.audit import AuditEvent
 from pkdb.db.models.credentials import ApiKey
-from pkdb.db.models.mfa import AuditEvent
-from pkdb.db.models.providers import ExternalIdentity
 from pkdb.db.models.studies import Study, StudyGrant
 from pkdb.db.models.users import EmailAddress, Token, User
-from pkdb.services.credentials import revoke_user_credentials
+from pkdb.services.credentials import require_admin_session, revoke_user_credentials
 from pkdb.services.ingestion import sid_lock
-from pkdb.services.mfa import require_admin_session
 from pkdb.services.profiles import public_profile
 
 router = APIRouter(prefix="/api/v1/admin")
@@ -64,18 +62,11 @@ def users(
                 )
             )
         }
-        linked = set(
-            session.scalars(
-                select(ExternalIdentity.user_id).where(
-                    ExternalIdentity.user_id.in_(ids)
-                )
-            )
-        )
         result = []
         for row in rows:
             email = contacts.get(row.id)
             contact_id = email.id if email and email.email == row.email else None
-            has_credentials = bool(row.password_hash) or row.id in linked
+            has_credentials = bool(row.password_hash)
             can_invite = bool(
                 not row.active
                 and not has_credentials
@@ -128,14 +119,6 @@ def update_user(user_id: int, data: PatchUser, request: Request):
         if user.role == "admin":
             raise HTTPException(403, "Cannot change the designated administrator")
         changes = data.model_dump(exclude_none=True)
-        has_provider = (
-            session.scalar(
-                select(ExternalIdentity.id)
-                .where(ExternalIdentity.user_id == user.id)
-                .limit(1)
-            )
-            is not None
-        )
         verified_contact = session.scalar(
             select(EmailAddress.id).where(
                 EmailAddress.user_id == user.id,
@@ -146,7 +129,7 @@ def update_user(user_id: int, data: PatchUser, request: Request):
         )
         if data.active is True and (
             user.pending_verification
-            or not (user.password_hash or has_provider)
+            or not user.password_hash
             or verified_contact is None
         ):
             raise HTTPException(
@@ -314,7 +297,7 @@ account_router = APIRouter(prefix="/api/v1/me")
 
 @account_router.post("/role-requests", status_code=201)
 def request_role(data: RequestReason, request: Request):
-    from pkdb.db.models.mfa import RoleRequest
+    from pkdb.db.models.audit import RoleRequest
     from pkdb.services.credentials import require_session
 
     with request.app.state.session_factory.begin() as session:
@@ -341,7 +324,7 @@ def request_role(data: RequestReason, request: Request):
 def requests(
     request: Request, offset: int = Query(0, ge=0), limit: int = Query(50, ge=1, le=100)
 ):
-    from pkdb.db.models.mfa import RoleRequest
+    from pkdb.db.models.audit import RoleRequest
 
     with request.app.state.session_factory() as session:
         actor(request, session)
@@ -365,7 +348,7 @@ def requests(
 
 @router.patch("/role-requests/{identifier}")
 def decide(identifier: int, data: RequestDecision, request: Request):
-    from pkdb.db.models.mfa import RoleRequest
+    from pkdb.db.models.audit import RoleRequest
 
     with request.app.state.session_factory.begin() as session:
         administrator = actor(request, session)

@@ -27,6 +27,14 @@ test("cookie-session account profile, private credentials and explicit sign-out"
   ).toBeVisible();
   const display = page.getByLabel("Display name", { exact: true }),
     original = await display.inputValue();
+  const github = page.getByLabel("GitHub handle (optional)", { exact: true });
+  const orcid = page.getByLabel("ORCID iD (optional)", { exact: true });
+  const originalGithub = await github.inputValue();
+  const originalOrcid = await orcid.inputValue();
+  await expect(github).toBeEditable();
+  await expect(orcid).toBeEditable();
+  await github.fill("frontend-researcher");
+  await orcid.fill("0000-0002-1825-0097");
   await display.fill("Frontend researcher");
   await page
     .getByLabel("Show GitHub on my public profile", { exact: true })
@@ -35,11 +43,15 @@ test("cookie-session account profile, private credentials and explicit sign-out"
   await expect(page.getByText("Profile saved.", { exact: true })).toBeVisible();
   await page.reload();
   await expect(display).toHaveValue("Frontend researcher");
+  await expect(github).toHaveValue("frontend-researcher");
+  await expect(orcid).toHaveValue("0000-0002-1825-0097");
   await expect(
     page.getByLabel("Show GitHub on my public profile", { exact: true }),
   ).not.toBeChecked();
   // Restore the fixture profile; every browser project uses the same isolated data.
   await display.fill(original);
+  await github.fill(originalGithub);
+  await orcid.fill(originalOrcid);
   await page
     .getByLabel("Show GitHub on my public profile", { exact: true })
     .check();
@@ -149,28 +161,15 @@ for (const role of ["curator", "reviewer"]) {
     ).toBeVisible();
   });
 }
-test("administrator MFA gate and verified administration use real permissions", async ({
+test("administrator password login grants administration using real permissions", async ({
   page,
-}, testInfo) => {
+}) => {
   await login(page, "administrator");
-  await expect(
-    page.getByRole("heading", {
-      name: "Administrator verification",
-      exact: true,
-    }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("tab", { name: "Administration", exact: true }),
-  ).not.toBeVisible();
-  const response = await page.request.get("/api/v1/admin/users");
-  expect(response.status()).toBe(403);
-  await page
-    .getByLabel("Verification code", { exact: true })
-    .fill(`frontend-${testInfo.project.name}-${testInfo.retry}`);
-  await page.getByRole("button", { name: "Verify", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "Account settings", exact: true }),
   ).toBeVisible();
+  const response = await page.request.get("/api/v1/admin/users");
+  expect(response.status()).toBe(200);
   await page.getByRole("tab", { name: "Administration", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "User administration", exact: true }),

@@ -6,8 +6,8 @@ from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import select, update
 
+from pkdb.db.models.audit import AuditEvent
 from pkdb.db.models.credentials import ApiKey, BrowserSession
-from pkdb.db.models.mfa import AuditEvent
 from pkdb.db.models.users import EmailAddress, User
 from pkdb.schemas.security import Principal
 from pkdb.services.authentication import AuthenticationFailed, password_hash
@@ -26,7 +26,6 @@ def session_principal(user, credential):
         credential_kind="session",
         credential_id=credential.id,
         authenticated_at=credential.authenticated_at,
-        mfa_at=credential.mfa_at,
     )
 
 
@@ -54,6 +53,21 @@ def require_session(principal, session, *, recent=False, now=None, lock=False):
     if recent and credential.authenticated_at <= now - timedelta(minutes=10):
         raise AuthorizationDenied("Recent authentication required")
     return user, credential
+
+
+def require_admin_session(principal, session):
+    """Require the designated administrator's valid browser session."""
+    from pkdb.db.models.security import SecurityConfiguration
+
+    user, _ = require_session(principal, session, lock=True)
+    config = session.get(SecurityConfiguration, 1)
+    if (
+        user.role != "admin"
+        or config is None
+        or config.designated_administrator_id != user.id
+    ):
+        raise AuthorizationDenied("Designated administrator session required")
+    return user
 
 
 def authenticate_session(raw, session):
@@ -244,8 +258,6 @@ class CredentialService:
         with self.session_factory.begin() as session:
             user, _ = require_session(principal, session, recent=True, lock=True)
             if user.role == "admin":
-                from pkdb.services.mfa import require_admin_session
-
                 require_admin_session(principal, session)
             session.execute(select(User.id).where(User.id == user.id).with_for_update())
             session.refresh(user)

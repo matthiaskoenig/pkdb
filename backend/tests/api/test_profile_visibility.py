@@ -1,11 +1,10 @@
 from sqlalchemy import select
 
-from pkdb.db.models.providers import ExternalIdentity
 from pkdb.db.models.users import User
 from pkdb.services.profiles import public_profile
 
 
-def test_owner_can_hide_provider_references_without_disconnecting_login(
+def test_owner_can_edit_and_hide_optional_profile_references(
     client, admin_headers, session_factory
 ):
     references = {"github": "example-person", "orcid": "0000-0002-1825-0097"}
@@ -14,19 +13,7 @@ def test_owner_can_hide_provider_references_without_disconnecting_login(
         user_id = user.id
         for provider, reference in references.items():
             setattr(user, provider, reference)
-            setattr(user, f"{provider}_provenance", "authenticated")
-            session.add(
-                ExternalIdentity(
-                    user_id=user_id,
-                    provider=provider,
-                    issuer="https://github.com"
-                    if provider == "github"
-                    else "https://orcid.org",
-                    subject="12345" if provider == "github" else reference,
-                    label=reference,
-                )
-            )
-    before = client.get("/api/v1/me/identities", headers=admin_headers).json()
+            setattr(user, f"{provider}_provenance", "self_asserted")
     response = client.patch(
         "/api/v1/me",
         headers=admin_headers,
@@ -36,7 +23,7 @@ def test_owner_can_hide_provider_references_without_disconnecting_login(
     owner = client.get("/api/v1/me", headers=admin_headers).json()
     for provider, reference in references.items():
         assert owner[provider] == reference
-        assert owner[f"{provider}_provenance"] == "authenticated"
+        assert owner[f"{provider}_provenance"] == "self_asserted"
         assert owner[f"{provider}_visible"] is False
     with session_factory() as session:
         public = public_profile(session.get(User, user_id))
@@ -44,12 +31,11 @@ def test_owner_can_hide_provider_references_without_disconnecting_login(
             assert public[provider] is None
             assert public[f"{provider}_provenance"] is None
             assert f"{provider}_visible" not in public
-    assert client.get("/api/v1/me/identities", headers=admin_headers).json() == before
     assert (
         client.patch(
-            "/api/v1/me", headers=admin_headers, json={"github": "someone-else"}
+            "/api/v1/me", headers=admin_headers, json={"github": "example-person"}
         ).status_code
-        == 403
+        == 200
     )
     assert (
         client.patch(

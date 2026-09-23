@@ -4,11 +4,8 @@ import {
   boolean,
   nullableText,
   number,
-  provider,
   record,
   text,
-  type Profile,
-  type Provider,
 } from "./session";
 export interface ProfileForm {
   display_name: string;
@@ -36,11 +33,6 @@ export interface BrowserSession {
   expires_at: string;
   revoked_at: string | null;
 }
-export interface Identity {
-  id: number;
-  provider: Provider;
-  label: string;
-}
 export interface AssignedStudy {
   sid: string;
   name: string;
@@ -60,29 +52,10 @@ export function parseEvent(value: unknown): SecurityEvent {
     created_at: text(row.created_at),
   };
 }
-export function profilePayload(
-  form: ProfileForm,
-  profile: Profile,
-): ProfileForm {
-  const values = { ...form };
-  if (profile.github_provenance === "authenticated") delete values.github;
-  if (profile.orcid_provenance === "authenticated") delete values.orcid;
-  return values;
+export function profilePayload(form: ProfileForm): ProfileForm {
+  return { ...form };
 }
 export const accountApi = {
-  async providers(signal?: AbortSignal) {
-    return array(
-      record(
-        (
-          await api.get<unknown>(
-            "/api/v1/auth/providers",
-            signal ? { signal } : {},
-          )
-        ).data,
-      ).providers,
-      provider,
-    );
-  },
   async register(username: string, email: string, password: string) {
     await api.post("/api/v1/auth/register", { username, email, password });
   },
@@ -100,33 +73,6 @@ export const accountApi = {
       token: token.trim(),
       password,
     });
-  },
-  async onboarding(username: string, email: string) {
-    await api.post("/api/v1/auth/onboarding", { username, email });
-  },
-  async claimInvitation(token: string) {
-    await api.post("/api/v1/auth/onboarding/invitation", {
-      token: token.trim(),
-    });
-  },
-  async enroll() {
-    const row = record(
-      (await api.post<unknown>("/api/v1/auth/mfa/enroll")).data,
-    );
-    return { secret: text(row.secret) };
-  },
-  async verifyMfa(code: string, confirm: boolean) {
-    const row = record(
-      (
-        await api.post<unknown>(
-          "/api/v1/auth/mfa/" + (confirm ? "confirm" : "verify"),
-          { code },
-        )
-      ).data,
-    );
-    return row.recovery_codes === undefined
-      ? []
-      : array(row.recovery_codes, text);
   },
   async saveProfile(values: ProfileForm) {
     await api.patch("/api/v1/me", values);
@@ -213,37 +159,6 @@ export const accountApi = {
   },
   async revokeSession(id: number) {
     await api.delete(`/api/v1/me/sessions/${id}`);
-  },
-  async identities(signal: AbortSignal): Promise<Identity[]> {
-    return array(
-      (await api.get<unknown>("/api/v1/me/identities", { signal })).data,
-      (item) => {
-        const row = record(item);
-        return {
-          id: number(row.id),
-          provider: provider(row.provider),
-          label: text(row.label),
-        };
-      },
-    );
-  },
-  async providerAction(value: Provider, action: "link" | "reauthenticate") {
-    const url = text(
-      record(
-        (await api.post<unknown>(`/api/v1/me/identities/${value}/${action}`))
-          .data,
-      ).authorization_url,
-    );
-    const target = new URL(url);
-    if (
-      target.protocol !== "https:" ||
-      !["github.com", "orcid.org"].includes(target.hostname)
-    )
-      throw new Error("Invalid provider redirect");
-    return url;
-  },
-  async unlink(id: number) {
-    await api.delete(`/api/v1/me/identities/${id}`);
   },
   async requestCurator(reason: string) {
     await api.post("/api/v1/me/role-requests", { reason });

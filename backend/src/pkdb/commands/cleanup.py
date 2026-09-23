@@ -4,11 +4,10 @@ from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import delete
 
+from pkdb.db.models.audit import AuditEvent
 from pkdb.db.models.credentials import ApiKey, BrowserSession
 from pkdb.db.models.drafts import ReferenceDraft, StudyDraft
 from pkdb.db.models.limits import WorkLease
-from pkdb.db.models.mfa import AuditEvent
-from pkdb.db.models.providers import OAuthTransaction
 from pkdb.db.models.saved_queries import SavedQuery
 from pkdb.db.models.users import AccountThrottle, Token
 from pkdb.files.cleanup import cleanup_expired_files, cleanup_untracked_files
@@ -30,7 +29,7 @@ def cleanup(session_factory, file_store, *, now=None):
                 delete(model).where(model.expires_at <= now).returning(model.sid)
             )
             draft_count += sum(1 for _ in expired)
-        for model in (OAuthTransaction, WorkLease, AccountThrottle):
+        for model in (WorkLease, AccountThrottle):
             session.execute(delete(model).where(model.expires_at <= now))
         for model in (ApiKey, BrowserSession, Token):
             session.execute(

@@ -14,7 +14,7 @@ npx playwright install --with-deps
 npm run test:e2e
 ```
 
-Development uses port 8080. Configure the Vite development proxy to the backend at `http://127.0.0.1:18083`. The backend browser origin must match the browser-visible origin exactly. `VITE_API_BASE` is a public API origin, normally empty for same-origin requests; never place passwords, provider secrets or bearer credentials in Vite variables. Frontend requests use same-origin session cookies and CSRF.
+Development uses port 8080. Configure the Vite development proxy to the backend at `http://127.0.0.1:18083`. The backend browser origin must match the browser-visible origin exactly. `VITE_API_BASE` is a public API origin, normally empty for same-origin requests; never place passwords or bearer credentials in Vite variables. Frontend requests use same-origin session cookies and CSRF.
 
 Browser tests run the actual `dist/` through Nginx against the isolated `compose.frontend-test.yaml` backend. The harness owns only the `pkdb-frontend-test` Compose project and removes its disposable resources after testing. It never seeds the default deployment. Scientific fixture data and test passwords are artificial. Traces are disabled to avoid recording passwords or session tokens; failure screenshots and reports remain local/CI artifacts.
 
@@ -22,4 +22,4 @@ Browser tests run the actual `dist/` through Nginx against the isolated `compose
 
 Preserve the currently deployed image/artifact before replacing `/vue`, and retain the corresponding source and dependency graph. Roll back by atomically restoring that artifact in the existing static server; this frontend cutover requires no database migration. Local migration artifact details and limitations are in [the baseline](docs/modernization-baseline.md).
 
-The fixture seeds separate reader accounts per browser project to exercise the real account throttle without tests interfering with one another. Administrator MFA uses deterministic, test-only encrypted credentials and single-use recovery codes scoped to each browser/retry. These fixtures are accepted only by the guarded disposable database loader and are never deployment credentials. Account tests disable screenshots as well as traces while exercising show-once secrets.
+The fixture seeds separate reader accounts per browser project to exercise the real account throttle without tests interfering with one another. Administrators sign in with the same username/password form as other users. Fixture passwords are accepted only by the guarded disposable database loader and are never deployment credentials. Account tests disable screenshots as well as traces while exercising show-once secrets.

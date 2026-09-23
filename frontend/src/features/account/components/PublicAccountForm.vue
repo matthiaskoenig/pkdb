@@ -3,7 +3,6 @@ import { computed, onUnmounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { accountApi } from "../../../api/account";
 import { useAccountAction } from "../useAccountAction";
-import ProviderLogin from "./ProviderLogin.vue";
 const props = defineProps<{
   mode:
     "registration" | "verification" | "request-reset" | "reset" | "invitation";
@@ -132,13 +131,7 @@ onUnmounted(() => {
                 : "Submit"
           }}
         </v-btn> </v-form
-      ><template v-if="mode === 'invitation' && !complete">
-        <p class="mt-6">
-          Or continue with a provider, then choose “I have an invitation” to
-          claim your existing account.
-        </p>
-        <ProviderLogin />
-      </template>
+      >
     </v-card>
   </v-container>
 </template>

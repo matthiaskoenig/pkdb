@@ -21,11 +21,6 @@ class Settings(BaseSettings):
     cors_origins: list[str] = Field(default_factory=list)
     browser_origin: str = "http://localhost:8080"
     secure_cookies: bool = False
-    mfa_encryption_key: SecretStr | None = None
-    github_client_id: str = ""
-    github_client_secret: SecretStr | None = None
-    orcid_client_id: str = ""
-    orcid_client_secret: SecretStr | None = None
     rate_limits_enabled: bool = True
     quota_anonymous_per_minute: int = Field(default=30, gt=0)
     quota_account_per_minute: int = Field(default=120, gt=0)

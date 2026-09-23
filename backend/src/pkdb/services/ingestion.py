@@ -57,7 +57,7 @@ class IngestionService:
             return True
         if principal.credential_kind != "session":
             return False
-        from pkdb.services.mfa import require_admin_session
+        from pkdb.services.credentials import require_admin_session
 
         require_admin_session(principal, session)
         return True

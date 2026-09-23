@@ -2,8 +2,6 @@
 import { onUnmounted, ref } from "vue";
 import { useSessionStore } from "../../../stores/session";
 import { errorMessage } from "../../../api/client";
-import MfaChallenge from "./MfaChallenge.vue";
-import ProviderLogin from "./ProviderLogin.vue";
 const emit = defineEmits<{ close: [] }>();
 const session = useSessionStore();
 const username = ref(""),
@@ -21,7 +19,7 @@ async function login() {
   error.value = "";
   try {
     await session.login(username.value, password.value);
-    if (active && session.profile && !session.profile.mfa_required)
+    if (active && session.profile)
       emit("close");
   } catch (cause) {
     if (active) error.value = errorMessage(cause);
@@ -50,10 +48,7 @@ async function logout() {
       {{ session.profile ? "Your account" : "Sign in to PK-DB" }}
     </h1>
     <v-alert v-if="error" type="error" role="alert">{{ error }}</v-alert
-    ><MfaChallenge
-      v-if="session.profile?.mfa_required"
-      @verified="emit('close')"
-    /><template v-else-if="session.profile">
+    ><template v-if="session.profile">
       <p>{{ session.profile.display_name }} · {{ session.profile.role }}</p>
       <v-btn to="/account" color="primary" @click="emit('close')">
         Account settings </v-btn
@@ -90,7 +85,6 @@ async function logout() {
           Accept an invitation
         </router-link>
       </div>
-      <ProviderLogin />
     </v-form>
   </v-card>
 </template>

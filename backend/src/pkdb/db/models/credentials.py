@@ -18,7 +18,6 @@ class BrowserSession(Identity, Timestamped, Base):
     last_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     authenticated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
-    mfa_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     device: Mapped[str] = mapped_column(String(200), default="")
 

@@ -17,7 +17,6 @@ class Principal(BaseModel):
     credential_id: int | None = None
     scopes: frozenset[str] = frozenset()
     authenticated_at: datetime | None = None
-    mfa_at: datetime | None = None
 
 
 class StudyAccess(BaseModel):

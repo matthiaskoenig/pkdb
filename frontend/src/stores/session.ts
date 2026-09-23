@@ -35,13 +35,7 @@ export const useSessionStore = defineStore("session", () => {
       const before = profile.value;
       if (
         !before ||
-        [
-          before.id,
-          before.role,
-          before.mfa_required,
-          before.mfa_recent,
-        ].join() !==
-          [next.id, next.role, next.mfa_required, next.mfa_recent].join()
+        [before.id, before.role].join() !== [next.id, next.role].join()
       ) {
         epoch.value++;
         clearCsrf();

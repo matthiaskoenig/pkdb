@@ -250,68 +250,6 @@ def test_import_input_rejects_privilege_bypass_and_unknown_contacts(tmp_path):
         load_roster(path, contacts)
 
 
-def test_offline_mfa_recovery_binds_identity_and_revokes_credentials(session_factory):
-    from datetime import UTC, datetime, timedelta
-
-    from pkdb.commands.admin import recover_admin_mfa
-    from pkdb.db.models.credentials import ApiKey, BrowserSession
-    from pkdb.db.models.mfa import AuditEvent, MfaCredential
-    from pkdb.db.models.users import Token
-
-    user_id = create_admin(
-        session_factory, "mkoenig", "admin@example.org", "Long-strong-password!"
-    )
-    now = datetime.now(UTC)
-    with session_factory.begin() as session:
-        original_password = session.get(User, user_id).password_hash
-        session.add(
-            MfaCredential(user_id=user_id, encrypted_secret="encrypted", confirmed=True)
-        )
-        session.add(
-            BrowserSession(
-                user_id=user_id,
-                digest="a" * 64,
-                expires_at=now + timedelta(days=1),
-                last_seen_at=now,
-                authenticated_at=now,
-            )
-        )
-        session.add(
-            ApiKey(
-                user_id=user_id,
-                digest="b" * 64,
-                prefix="pkdb_b",
-                name="test",
-                scopes=["read"],
-                expires_at=now + timedelta(days=1),
-            )
-        )
-        session.add(
-            Token(
-                user_id=user_id,
-                digest="c" * 64,
-                purpose="api",
-                expires_at=now + timedelta(days=1),
-            )
-        )
-    with pytest.raises(ValueError):
-        recover_admin_mfa(session_factory, "mkoenig", user_id)
-    with pytest.raises(ValueError):
-        recover_admin_mfa(session_factory, "mkoenig", user_id + 1, confirm=True)
-    assert recover_admin_mfa(session_factory, "mkoenig", user_id, confirm=True)[
-        "mfa_enrollment_required"
-    ]
-    with session_factory() as session:
-        assert session.get(MfaCredential, user_id) is None
-        assert session.get(User, user_id).password_hash == original_password
-        for model in (BrowserSession, ApiKey, Token):
-            assert session.scalar(select(model)).revoked_at is not None
-        assert (
-            session.scalar(select(AuditEvent)).action
-            == "administrator.mfa_recovered_offline"
-        )
-
-
 def test_designated_administrator_profile_import_never_changes_identity_or_credentials(
     session_factory, tmp_path
 ):

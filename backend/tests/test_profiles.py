@@ -129,8 +129,9 @@ def test_owner_update_contact_privacy_and_session_requirement(
     with session_factory.begin() as session:
         user = session.get(User, actor.user_id)
         user.github_provenance = "authenticated"
-    with pytest.raises(AuthorizationDenied):
-        service.update(actor, {"github": "someone-else"})
+    result = service.update(actor, {"github": "someone-else"})
+    assert result["github"] == "someone-else"
+    assert result["github_provenance"] == "self_asserted"
     with session_factory.begin() as session:
         session.get(BrowserSession, actor.credential_id).revoked_at = datetime.now(UTC)
     with pytest.raises(AuthenticationFailed):

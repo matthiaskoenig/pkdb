@@ -19,7 +19,6 @@ services:
       PKDB_DATABASE_URL: postgresql+psycopg://pkdb_frontend_test:frontend-test-only@db/pkdb_frontend_test
       PKDB_FILE_ROOT: /data/files
       PKDB_BROWSER_ORIGIN: http://127.0.0.1:18184
-      PKDB_MFA_ENCRYPTION_KEY: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
       PKDB_RATE_LIMITS_ENABLED: 'false'
       PYTHONPATH: /app
       PKDB_FRONTEND_FIXTURE: 'isolated-test-only'

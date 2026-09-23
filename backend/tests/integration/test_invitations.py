@@ -3,8 +3,8 @@ from datetime import UTC, datetime, timedelta
 import pytest
 from sqlalchemy import select
 
+from pkdb.db.models.audit import AuditEvent
 from pkdb.db.models.credentials import BrowserSession
-from pkdb.db.models.mfa import AuditEvent
 from pkdb.db.models.security import SecurityConfiguration
 from pkdb.db.models.users import EmailAddress, Token, User
 from pkdb.schemas.security import Principal
@@ -44,7 +44,6 @@ def invitation_context(session_factory):
             digest="a" * 64,
             last_seen_at=now,
             authenticated_at=now,
-            mfa_at=now,
             expires_at=now + timedelta(days=1),
         )
         email = EmailAddress(

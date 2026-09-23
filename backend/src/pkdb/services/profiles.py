@@ -13,7 +13,6 @@ from pkdb.db.models.users import AccountThrottle, AvatarAsset, EmailAddress, Use
 from pkdb.schemas.profiles import ProfileUpdate
 from pkdb.services.accounts import AccountThrottled
 from pkdb.services.authentication import AuthenticationFailed
-from pkdb.services.authorization import AuthorizationDenied
 
 MAX_AVATAR_BYTES = 5 * 1024 * 1024
 MAX_AVATAR_PIXELS = 16_000_000
@@ -127,14 +126,6 @@ class ProfileService:
         values = ProfileUpdate.model_validate(values).model_dump(exclude_unset=True)
         with self.session_factory.begin() as session:
             user = self._owner(session, principal)
-            for provider in ("github", "orcid"):
-                if (
-                    provider in values
-                    and getattr(user, f"{provider}_provenance") == "authenticated"
-                ):
-                    raise AuthorizationDenied(
-                        "Use the provider unlink/link flow to change this reference"
-                    )
             for field, value in values.items():
                 setattr(user, field, value)
                 if field in {"github", "orcid"}:

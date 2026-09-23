@@ -1,7 +1,6 @@
 import { api } from "./client";
 import { isRecord } from "./errors";
 export type Role = "user" | "curator" | "reviewer" | "admin";
-export type Provider = "github" | "orcid";
 export interface EmailAddress {
   id: number;
   email: string;
@@ -19,13 +18,8 @@ export interface Profile {
   orcid: string;
   github_visible: boolean;
   orcid_visible: boolean;
-  github_provenance: string;
-  orcid_provenance: string;
   avatar_url: string;
   emails: EmailAddress[];
-  mfa_required: boolean;
-  mfa_enrolled: boolean;
-  mfa_recent: boolean;
 }
 export function record(value: unknown): Record<string, unknown> {
   if (!isRecord(value)) throw new Error("Invalid API response");
@@ -61,10 +55,6 @@ export function role(value: unknown): Role {
     return value;
   throw new Error("Invalid role");
 }
-export function provider(value: unknown): Provider {
-  if (value === "github" || value === "orcid") return value;
-  throw new Error("Invalid provider");
-}
 export function parseProfile(value: unknown): Profile {
   const p = record(value);
   return {
@@ -78,9 +68,7 @@ export function parseProfile(value: unknown): Profile {
     orcid: nullableText(p.orcid) || "",
     github_visible: boolean(p.github_visible),
     orcid_visible: boolean(p.orcid_visible),
-    github_provenance: nullableText(p.github_provenance) || "",
-    orcid_provenance: nullableText(p.orcid_provenance) || "",
-    avatar_url: text(p.avatar_url),
+        avatar_url: text(p.avatar_url),
     emails: array(p.emails, (item) => {
       const e = record(item);
       return {
@@ -90,10 +78,7 @@ export function parseProfile(value: unknown): Profile {
         is_verified: boolean(e.is_verified),
       };
     }),
-    mfa_required: boolean(p.mfa_required),
-    mfa_enrolled: boolean(p.mfa_enrolled),
-    mfa_recent: boolean(p.mfa_recent),
-  };
+        };
 }
 export const sessionApi = {
   async profile() {

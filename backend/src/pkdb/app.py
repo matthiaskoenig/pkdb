@@ -28,9 +28,7 @@ from pkdb.api import (
     legacy_uploads,
     management,
     media,
-    mfa,
     profiles,
-    providers,
     reads,
     staging,
 )
@@ -57,14 +55,12 @@ from pkdb.services.exports import ExportService
 from pkdb.services.ingestion import IngestionService, PublicationConflict
 from pkdb.services.invitations import InvitationService
 from pkdb.services.mailer import SMTPMailer
-from pkdb.services.mfa import MfaService
 from pkdb.services.profiles import ProfileService
-from pkdb.services.providers import ProviderService
 from pkdb.services.queries import QueryService
 from pkdb.services.quotas import QuotaService
 
 log = logging.getLogger(__name__)
-SCHEMA_REVISION = "p775privacy01"
+SCHEMA_REVISION = "p788simpleauth01"
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -97,37 +93,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.credentials = CredentialService(session_factory, app.state.accounts)
     app.state.profiles = ProfileService(session_factory, settings.file_root)
     app.state.quotas = QuotaService(session_factory, settings)
-    app.state.providers = ProviderService(
-        session_factory,
-        app.state.accounts,
-        origin=settings.browser_origin,
-        providers={
-            name: {
-                "client_id": getattr(settings, f"{name}_client_id"),
-                "client_secret": getattr(
-                    settings, f"{name}_client_secret"
-                ).get_secret_value()
-                if getattr(settings, f"{name}_client_secret")
-                else "",
-            }
-            for name in ("github", "orcid")
-        },
-    )
-    app.state.mfa = MfaService(
-        session_factory,
-        app.state.accounts,
-        settings.mfa_encryption_key.get_secret_value()
-        if settings.mfa_encryption_key
-        else None,
-    )
     install_browser_security(
         app, origin=settings.browser_origin, secure=settings.secure_cookies
     )
     app.include_router(profiles.router)
-    app.include_router(mfa.router)
     app.include_router(management.router)
     app.include_router(management.account_router)
-    app.include_router(providers.router)
     if settings.rate_limits_enabled:
         app.add_middleware(RequestQuotas)
     app.state.admin_users = AdminUserService(session_factory)

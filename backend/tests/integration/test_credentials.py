@@ -182,7 +182,7 @@ def test_refresh_uses_stored_scopes_and_rechecks_original_credential(
             revalidate_principal(actor, session, lock=True)
 
 
-def test_pending_admin_cannot_export_or_read_staged_files(
+def test_password_admin_can_export_and_read_own_staged_files(
     credentials, session_factory, tmp_path
 ):
     import io
@@ -199,7 +199,6 @@ def test_pending_admin_cannot_export_or_read_staged_files(
     with session_factory.begin() as session:
         session.get(User, principal.user_id).role = "admin"
     exports = ExportService(session_factory, None)
-    with pytest.raises(AuthorizationDenied):
-        exports.create_filter(QuerySpec(entity="studies"), principal)
-    with pytest.raises(AuthorizationDenied):
-        files.open_authorized(principal, staged.id)
+    assert exports.create_filter(QuerySpec(entity="studies"), principal) is not None
+    with files.open_authorized(principal, staged.id) as stream:
+        assert stream.read() == b"private scientific data"

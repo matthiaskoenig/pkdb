@@ -57,8 +57,8 @@ export function useAdministration() {
     upload: "Study uploads",
     export: "Exports",
   };
-  const recent = computed(
-    () => session.profile?.role === "admin" && session.profile.mfa_recent,
+  const canAdminister = computed(
+    () => session.profile?.role === "admin",
   );
   let controller = new AbortController();
   function reset() {
@@ -214,7 +214,7 @@ export function useAdministration() {
     roles,
     usageKinds,
     usageLabels,
-    recent,
+    canAdminister,
     load,
     search,
     closeInvitation,

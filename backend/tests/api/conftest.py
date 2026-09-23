@@ -55,7 +55,6 @@ def admin_headers(session_factory):
                 digest=digest(raw),
                 last_seen_at=now,
                 authenticated_at=now,
-                mfa_at=now,
                 expires_at=now + timedelta(days=7),
                 device="test",
             )

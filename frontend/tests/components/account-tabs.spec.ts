@@ -13,12 +13,10 @@ it("associates every account tab with its named panel and activates the selected
   const pinia = createPinia();
   setActivePinia(pinia);
   const session = useSessionStore();
-  session.profile = profileFixture({ role: "admin", mfa_recent: true });
+  session.profile = profileFixture({ role: "admin" });
   session.ready = true;
   vi.spyOn(accountApi, "keys").mockResolvedValue([]);
   vi.spyOn(accountApi, "sessions").mockResolvedValue([]);
-  vi.spyOn(accountApi, "identities").mockResolvedValue([]);
-  vi.spyOn(accountApi, "providers").mockResolvedValue([]);
   vi.spyOn(accountApi, "studies").mockResolvedValue([]);
   vi.spyOn(accountApi, "events").mockResolvedValue([]);
   vi.spyOn(adminApi, "users").mockResolvedValue([]);
@@ -38,7 +36,17 @@ it("associates every account tab with its named panel and activates the selected
     "Account settings sections",
   );
   const tabs = wrapper.findAll('[role="tab"]');
-  expect(tabs).toHaveLength(8);
+  expect(tabs).toHaveLength(7);
+  expect(wrapper.text()).not.toContain("Connected accounts");
+  expect(wrapper.text()).not.toContain("Confirm administrator identity");
+  for (const label of ["GitHub handle (optional)", "ORCID iD (optional)"]) {
+    const input = wrapper.findAll("input").find((value) => {
+      const id = value.attributes("id");
+      return id && wrapper.find(`label[for="${id}"]`).text() === label;
+    });
+    expect(input).toBeDefined();
+    expect(input?.attributes("readonly")).toBeUndefined();
+  }
   for (const tab of tabs) {
     const panel = wrapper.get("#" + tab.attributes("aria-controls"));
     expect(panel.attributes("role")).toBe("tabpanel");

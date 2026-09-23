@@ -6,8 +6,7 @@ from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import select, update
 
-from pkdb.db.models.mfa import AuditEvent
-from pkdb.db.models.providers import ExternalIdentity
+from pkdb.db.models.audit import AuditEvent
 from pkdb.db.models.users import EmailAddress, Token, User
 from pkdb.services.accounts import AccountService, MailDeliveryFailed
 from pkdb.services.admin_users import require_admin
@@ -34,12 +33,6 @@ class InvitationService:
                 or user.password_hash
                 or user.role == "admin"
                 or user.suspended_at is not None
-                or session.scalar(
-                    select(ExternalIdentity.id)
-                    .where(ExternalIdentity.user_id == user.id)
-                    .limit(1)
-                )
-                is not None
             ):
                 raise ValueError(
                     "Only unclaimed non-administrator accounts can be invited"
@@ -138,12 +131,6 @@ class InvitationService:
             or user.active
             or user.password_hash
             or user.suspended_at is not None
-            or session.scalar(
-                select(ExternalIdentity.id)
-                .where(ExternalIdentity.user_id == user.id)
-                .limit(1)
-            )
-            is not None
             or not user.pending_verification
             or user.role == "admin"
         ):

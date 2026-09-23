@@ -292,7 +292,7 @@ class AccountService:
 
         user, _ = require_session(principal, session, recent=recent, lock=True)
         if recent and user.role == "admin":
-            from pkdb.services.mfa import require_admin_session
+            from pkdb.services.credentials import require_admin_session
 
             require_admin_session(principal, session)
         return user
