@@ -15,7 +15,7 @@ Specification: [Authentication, user management, and API keys](../specs/2026-09-
 
 ## Execution and ownership
 
-Follow `/home/mkoenig/AGENTS.md` and `CLAUDE.md`. Use parallel agents for independent roster/avatar work and profile implementation while the primary agent owns authorization, integration, and this plan. Coordinate shared user-model and migration changes before edits. Use the disposable database in `compose.test.yaml`; never migrate the live deployment while implementing. Keep production provider credentials, roster contact addresses, invitations, and delivery out of source changes.
+Follow `/home/USERNAME/AGENTS.md` and `CLAUDE.md`. Use parallel agents for independent roster/avatar work and profile implementation while the primary agent owns authorization, integration, and this plan. Coordinate shared user-model and migration changes before edits. Use the disposable database in `compose.test.yaml`; never migrate the live deployment while implementing. Keep production provider credentials, roster contact addresses, invitations, and delivery out of source changes.
 
 ## Verification
 
@@ -41,7 +41,7 @@ Run meaningful permission regressions before changing authorization, then run ta
 - Run connected-browser desktop/mobile visual QA. The available browser runtime returned no browser connection during implementation; production compilation and component tests do not substitute for this check.
 - Benchmark the configured budgets against representative production data before release. Current counters/leases enforce bounded requests; dedicated query-cost weighting, persistent historical usage analytics, per-account quota overrides, and saturation alerts remain follow-up operational work.
 - Invitation delivery is synchronous with explicit retries; a durable mail outbox is not implemented. Password and browser-bound GitHub/ORCID invitation claiming are supported.
-- Automatic dataset snapshot publication remains follow-up product work. Primary-address change notifications are implemented with rollback on delivery failure; registration reserves `mkoenig`. Database uniqueness constraints protect case-insensitive usernames and primary email selection; migration preflight reports conflicting legacy identities instead of merging them.
+- Automatic dataset snapshot publication remains follow-up product work. Primary-address change notifications are implemented with rollback on delivery failure; registration reserves `USERNAME`. Database uniqueness constraints protect case-insensitive usernames and primary email selection; migration preflight reports conflicting legacy identities instead of merging them.
 - Do not deploy or declare all specification acceptance criteria met until the outstanding staging and operational checks are resolved. The implementation is a reviewable first delivery of #775, with the above gaps explicit.
 
 ## Verification results

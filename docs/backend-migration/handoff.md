@@ -6,7 +6,7 @@ Work is paused at the user's explicit request to continue on another machine. Im
 
 ## Resume here
 
-Branch: `backend/fastapi-replacement`. Original working copy: `/tmp/pkdb-backend-replacement`; original repository: `/home/mkoenig/git/pkdb`. The final saved commit includes this document and a read-only administrator role catalogue. Additional original-workspace source/resources/tests are now included via checkpoint branch `handoff/local-workspace-20260922`, as explicitly requested by the user. Develop itself remains unchanged. The legacy uploader is not a replacement runtime dependency.
+Branch: `backend/fastapi-replacement`. Original working copy: `/tmp/pkdb-backend-replacement`; original repository: `/home/USERNAME/git/pkdb`. The final saved commit includes this document and a read-only administrator role catalogue. Additional original-workspace source/resources/tests are now included via checkpoint branch `handoff/local-workspace-20260922`, as explicitly requested by the user. Develop itself remains unchanged. The legacy uploader is not a replacement runtime dependency.
 
 Read these committed files first:
 

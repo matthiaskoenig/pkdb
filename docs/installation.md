@@ -1,34 +1,156 @@
-# Installation
+# Local setup and development
 
-The backend runs with Docker Engine and the Docker Compose plugin. No host Python, PostgreSQL, or external search service is required.
+Run the backend, frontend, and PostgreSQL locally with Docker Engine and the Docker Compose plugin. No host Python, Node.js, PostgreSQL, mail server, or external authentication service is needed for this setup.
 
-```bash
-git clone https://github.com/matthiaskoenig/pkdb.git
-cd pkdb
-docker compose up --build --wait
-```
+## Quick start
 
-The first build downloads dependencies. Startup applies database migrations and loads the bundled vocabulary. Open <http://localhost:18083/docs> for the API interface, or <http://localhost:18083/health/ready> to check readiness.
-
-The two services are the FastAPI backend and PostgreSQL 18. The API binds only to localhost. The frontend is maintained separately and is not part of this setup.
-
-## Create an administrator
+Clone the repository (`git clone https://github.com/matthiaskoenig/pkdb.git`) and change into it (`cd pkdb`). From the repository root, run these two commands, replacing `USERNAME` and `ADMIN_EMAIL` with your chosen administrator username and email address:
 
 ```bash
-docker compose exec backend pkdb create-admin mkoenig --email YOUR_EMAIL
+docker compose --profile dev up --build --wait
+docker compose exec backend pkdb create-admin USERNAME --email ADMIN_EMAIL
 ```
 
-The sole administrator username is `mkoenig`. Enter a password at the hidden prompt. Sign in to the account frontend with that password and create a personal API key. No external provider or MFA setup is needed. For an ordinary local login, use `pkdb create-user developer`; see [Local development accounts](authentication.md#local-development-accounts). Follow [Local upload testing](local-upload-testing.md) to configure the frontend proxy port, authenticate, validate, and upload a study. The former `/api-token-auth/` endpoint is retired.
+Enter a password at the hidden prompt. Create the administrator once; subsequent starts preserve the account. There is one designated administrator per database, identified by its internal account ID. The username is your choice. The email is marked verified by this operator command, so local login and API-key creation work without SMTP.
 
-## Configuration and persistence
+The first build downloads dependencies. Startup applies database migrations and loads the bundled vocabulary. Defaults work without an environment file.
 
-Defaults work without an environment file. To change the HTTP port, Python version, or local database password, copy `.env.example` to `.env` before first startup. The database password must be URL-safe because it is included in a connection URL. Changing it after database initialization does not change the stored database password.
+| Open | Purpose |
+| --- | --- |
+| <http://localhost:8080> | Frontend; sign in with the username and password you chose |
+| <http://localhost:18083/docs> | Backend API documentation |
+| <http://localhost:18083/health/ready> | Backend readiness check |
 
-The Compose project is named `pkdb-current`. Separate named volumes hold PostgreSQL data and attachments. Older deployment volumes are not reused or migrated.
+The frontend proxies API requests to the backend, including browser session cookies and CSRF. Use `localhost` consistently for browser login. Both HTTP ports bind only to the local machine.
+
+## Populate the database with our users
+
+As the third setup command, load the bundled historical curator/reviewer roster and avatars:
 
 ```bash
-docker compose stop
-docker compose up --wait
+docker compose exec backend pkdb import-users /app/bootstrap/curator-roster.json --avatar-root /app/frontend/public --apply
 ```
 
-These commands preserve data. `docker compose down` also preserves named volumes; adding `--volumes` deletes them. Inspect startup failures with `docker compose logs --tail=100 backend db`.
+Use `--dry-run` instead of `--apply` to preview changes first, especially on an existing database. The public roster contains 69 historical entries: 67 curator/reviewer accounts are imported on a fresh database; the historical test account is excluded, and the historical administrator profile is skipped unless it matches the already designated administrator. Choosing another admin username does not rename or adopt that historical identity. The empty `users.json` is not the user roster. Compose mounts the bundled avatars read-only and the importer copies them into persistent backend storage.
+
+Imported users retain their attribution, roles, and profile data, but new imported accounts have no usable password and remain disabled. Repeating the same import is safe: it preserves credentials, account state, and later profile edits. Existing role or study-assignment changes require a reviewed dry run and `--update-existing` on both preview and apply.
+
+### Active accounts for local testing
+
+For immediate login as a curator, create a separate test account with a username absent from the historical roster:
+
+```bash
+docker compose exec backend pkdb create-user local-curator --role curator --email local-curator@example.org
+```
+
+Enter its password when prompted. Use `--role reviewer` to test access to all studies, or omit `--role` for an ordinary reader. Email is optional for browser login; supply it when testing personal API keys. These commands create new accounts and never overwrite imported users or reset existing passwords.
+
+### Invite the real users
+
+Provide reviewed email addresses in a private JSON file outside the repository, for example `/absolute/path/contacts.json`:
+
+```json
+[
+  {"username": "MariiaMysh", "email": "reviewed-contact@example.org"}
+]
+```
+
+Mount it read-only for the import. Preview, resolve any conflicts, then repeat with `--apply` in place of `--dry-run`:
+
+```bash
+docker compose run --rm --no-deps \
+  --volume /absolute/path/contacts.json:/private/contacts.json:ro \
+  backend pkdb import-users /app/bootstrap/curator-roster.json \
+  --avatar-root /app/frontend/public --contacts /private/contacts.json --dry-run
+```
+
+Configure SMTP in `.env` and recreate the backend with `docker compose --profile dev up -d --wait`. Sign in as the administrator and use **User administration → Invite**. Recipients accept the invitation and choose their own password. Importing does not send mail or activate users. See [accounts and API keys](authentication.md#existing-curators-and-avatars) for contact overlays, existing account IDs, and study assignments.
+
+## Load studies and test uploads
+
+The initial database contains vocabulary and any users you imported, but no studies. Follow [local upload testing](local-upload-testing.md) to prepare attribution accounts from a source study folder, create a personal API key, validate the study, and upload it. This uses the same running stack and does not require another backend installation.
+
+## Daily development
+
+Frontend edits under `frontend/src/` and `frontend/public/` are mounted into the Vite container and reload automatically. Rebuild after dependency or frontend configuration changes. Backend code is built into its image; after changing it, run:
+
+```bash
+docker compose --profile dev up --build --wait
+```
+
+Stop and resume without losing database or attachment data:
+
+```bash
+docker compose --profile dev stop
+docker compose --profile dev up --wait
+```
+
+`docker compose --profile dev down` also preserves named volumes. Adding `--volumes` deletes the local database and attachments. The project is named `pkdb-current`; it does not reuse older deployment volumes. Inspect failures with `docker compose --profile dev logs --tail=100 backend db frontend`.
+
+### Configuration
+
+Copy `.env.example` to `.env` if you need overrides. `PKDB_HTTP_PORT` changes the backend's host port (default `18083`); the container frontend always reaches it on `http://backend:8000`. Keep `PKDB_BROWSER_ORIGIN=http://localhost:8080` for the default frontend. The database password must be URL-safe because it appears in the connection URL. Changing it after database initialization does not change the stored PostgreSQL password.
+
+### Native frontend and frontend checks
+
+For a host frontend, start only the database and API with `docker compose up --build --wait` and stop any Docker frontend with `docker compose --profile dev stop frontend`. Install Node **24.21.0** and npm **12.1.0**, then run:
+
+```bash
+cd frontend
+npm install --global npm@12.1.0
+npm ci
+npm run dev
+```
+
+The development proxy defaults to `http://127.0.0.1:18083`. Set `PKDB_DEV_API_TARGET=http://127.0.0.1:YOUR_PORT` when starting Vite if you changed the backend host port. Keep `VITE_API_BASE` empty for same-origin requests.
+
+Run frontend checks from `frontend/`:
+
+```bash
+npm run test:source
+npm run typecheck
+npm run lint
+npm run test:unit -- --run
+npm run build
+npx playwright install --with-deps
+npm run test:e2e
+```
+
+Browser tests use a separate disposable Compose project. See [isolated frontend browser checks](local-upload-testing.md#isolated-frontend-browser-checks).
+
+## Backend tests and checks
+
+Install uv and Python 3.14 for the application, tests, and development hooks. Run from the repository root:
+
+```bash
+uv sync --project backend --locked --python 3.14
+uv run --project backend pre-commit install
+docker compose -f compose.test.yaml up -d --wait
+export PKDB_TEST_DATABASE_URL=postgresql+psycopg://pkdb_test:local-test-only@127.0.0.1:15439/pkdb_test
+uv run --project backend pytest backend/tests -q -x
+uv run --project backend python -m pytest tools/backend_migration -q -x
+uv run --project backend ruff check .
+uv run --project backend ruff format --check .
+uv run --project backend ty check --project backend
+```
+
+The test database uses temporary container storage. Tests create isolated schemas. Keep it separate from your upload-testing database. Stop it with `docker compose -f compose.test.yaml down`.
+
+Image lifecycle and backup/restore tests live in `backend/system_tests`. They require Docker, a built image selected by `PKDB_TEST_IMAGE`, and the test database URL. CI runs these tests on Python 3.14. Corpus tests require explicitly configured source data and are not part of the default suite.
+
+## Migrations
+
+Commit Alembic migrations in `backend/alembic/versions/`. Compose applies them before starting the API. The ASGI application itself does not mutate database schemas. For native development, set `PKDB_DATABASE_URL`, change into `backend/`, and run `uv run alembic upgrade head`. Check model/schema agreement with `uv run alembic check`.
+
+## Documentation
+
+Zensical builds independently of the backend:
+
+```bash
+uvx --python 3.14 --with-requirements docs/requirements.txt zensical build --clean
+uv run --no-project --python 3.14 python scripts/llms_txt.py
+```
+
+## Branches and releases
+
+Use a topic branch and a pull request against `develop`. Required checks are `tests`, `ruff`, `ty`, and `docs`. The `tests` check includes Python 3.14 and a fresh Compose startup/restart smoke test. Release automation uses `.bumpversion.toml` to update package metadata, the lockfile, and the runtime version together. Do not edit generated changelogs manually.

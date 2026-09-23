@@ -33,6 +33,17 @@ PK-DB is available from [https://pk-db.com](https://pk-db.com). The terms of use
 
 The source code is at [https://github.com/matthiaskoenig/pkdb](https://github.com/matthiaskoenig/pkdb).
 
+## Local setup
+
+From the repository root, start the frontend, backend, and database, then create your administrator (replace `USERNAME` and `ADMIN_EMAIL`):
+
+```bash
+docker compose --profile dev up --build --wait
+docker compose exec backend pkdb create-admin USERNAME --email ADMIN_EMAIL
+```
+
+Open <http://localhost:8080> and sign in with the password entered at the prompt. See [Local setup and development](installation.md) to import our users and avatars, load studies, and run tests.
+
 ## How to cite
 If you use PK-DB data or the web interface cite
 
@@ -44,9 +55,8 @@ If you use PK-DB code cite in addition
 
 ## Contents
 
-- **[Installation](installation.md)** - run a local development stack with docker compose.
+- **[Local setup and development](installation.md)** - start the backend and frontend, import users, and run tests.
 - **[Deployment](deployment.md)** - runtime configuration, persistent storage, and backup requirements.
-- **[Development](development.md)** - branch model, repository policies, tooling and release.
 - **[Local upload testing](local-upload-testing.md)** - validate and upload your own study with Docker.
 - **[Contributing](contributing.md)** - step by step guide for a first contribution.
 

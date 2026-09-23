@@ -51,8 +51,8 @@ def test_local_account_needs_only_username_and_password(client, session_factory)
 def test_administrator_password_login_grants_access_without_mfa(
     client, session_factory
 ):
-    create_admin(session_factory, "mkoenig", "admin@example.org", "Local-password-42!")
-    response, headers = sign_in(client, "mkoenig")
+    create_admin(session_factory, "USERNAME", "admin@example.org", "Local-password-42!")
+    response, headers = sign_in(client, "USERNAME")
     assert response.status_code == 200
     assert client.get("/api/v1/admin/users").status_code == 200
     assert client.get("/api/v1/studies/").status_code == 200

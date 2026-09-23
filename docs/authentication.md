@@ -11,7 +11,7 @@ This guide describes the current password-based account flows. Earlier authentic
 | `user` | Read public studies and explicitly granted private studies | None |
 | `curator` | Upload new studies; edit only assigned studies | None |
 | `reviewer` | Read and edit every study | None |
-| `admin` | Read and edit every study; delete and manage study access | Designated `mkoenig` account only |
+| `admin` | Read and edit every study; delete and manage study access | Designated administrator account only |
 
 New registrations receive `user`. Users can request curator access through account settings; the administrator reviews pending requests. Reviewer promotion is an explicit administrator change. Creation assigns the uploader; subsequent scientific uploads cannot silently change assignments or visibility. Effective grants are separate from scientific contributor attribution.
 
@@ -51,16 +51,16 @@ The command prompts for a password; it needs no email, mail server, external pro
 
 ## Administrator bootstrap
 
-Apply migrations before provisioning accounts. From the repository root, with deployment environment variables set:
+Replace `USERNAME` and `ADMIN_EMAIL` with your chosen username and email. Apply migrations before provisioning accounts. From the repository root, with deployment environment variables set:
 
 ```bash
-uv run --project backend pkdb create-admin mkoenig --email ADMIN_EMAIL
+uv run --project backend pkdb create-admin USERNAME --email ADMIN_EMAIL
 ```
 
 The command prompts for a password. For a reviewed existing active account, use its exact internal ID instead; adoption preserves its password:
 
 ```bash
-uv run --project backend pkdb create-admin mkoenig --email ADMIN_EMAIL --adopt-user-id EXISTING_ID
+uv run --project backend pkdb create-admin USERNAME --email ADMIN_EMAIL --adopt-user-id EXISTING_ID
 ```
 
 Adoption requires matching ID, username and primary email. It does not reactivate a disabled or suspended account. `--password-stdin` is available for creating a new administrator, but must not be supplied when adopting one.
@@ -75,7 +75,7 @@ The reviewed public manifest is `backend/bootstrap/curator-roster.json`. Its sou
 - Michelle Elias: `mii-halina`.
 - Shubhankar Palwankar: `shubhankarpalwankar`.
 
-`mkoenig` is provisioned through administrator bootstrap. Other historical curators remain curators, including former administrator `janekg`. The historical `reviewer` test account is excluded. Review the separately preserved `deepa`/`DeepaMahm` and `long231a`/`lucialink30` accounts before assigning contacts; the import does not merge them.
+The administrator is provisioned through administrator bootstrap with a chosen username. The historical administrator roster entry is skipped unless it matches that designated account. Other historical curators remain curators, including former administrator `janekg`. The historical `reviewer` test account is excluded. Review the separately preserved `deepa`/`DeepaMahm` and `long231a`/`lucialink30` accounts before assigning contacts; the import does not merge them.
 
 All roster members were checked against `livermetabolism-site`. There are 46 account-to-site-image mappings using 45 distinct images, plus existing PK-DB photos for `kgreen` and `xresearch`. The remaining 21 manifest entries have a local generic fallback, including the excluded test account. Site provenance is revision `6e13b9dff910434b9851296a073ff1642b277343`; the manifest records exact person mappings, source paths and checksums. Production uses copied assets and does not need the sibling checkout.
 
@@ -86,11 +86,11 @@ python3 scripts/check_curator_roster.py
 uv run --project backend pkdb import-users backend/bootstrap/curator-roster.json --contacts /private/contacts.json --dry-run
 ```
 
-The private contact overlay is a JSON list or CSV with `username`, optional `email`, optional exact `user_id`, and optional `assigned_study_ids`. CSV study IDs use semicolons. Keep contacts out of the public repository. Supply only reviewed addresses and explicit account/study mappings. For example:
+The private contact overlay is a JSON list or CSV with `username`, optional `email`, optional exact `user_id`, and optional `assigned_study_ids`. Study IDs are internal positive integer IDs; CSV study IDs use semicolons. Keep contacts out of the public repository. Supply only reviewed addresses and explicit account/study mappings. For example:
 
 ```json
 [
-  {"username": "MariiaMysh", "email": "reviewed-contact@example.org", "user_id": 42, "assigned_study_ids": ["STUDY_ID"]}
+  {"username": "MariiaMysh", "email": "reviewed-contact@example.org", "user_id": 42, "assigned_study_ids": [123]}
 ]
 ```
 
@@ -134,7 +134,7 @@ Avatar replacement removes superseded files. A rolled-back import can leave an u
 
 ## Frontend development and validation
 
-The development frontend proxies `/api` and `/accounts` to `http://127.0.0.1:8000`, with an empty API base. Match `PKDB_BROWSER_ORIGIN` to the frontend's actual local origin, normally `http://localhost:8080`. The Compose backend host port defaults to `18083`; when using it directly, adjust the development proxy target or expose the backend on `8000`.
+Use [Local setup and development](installation.md) for the Docker frontend or native Vite workflow. The host Vite proxy defaults to `http://127.0.0.1:18083`; the Docker frontend uses `http://backend:8000`. The default browser origin is `http://localhost:8080`.
 
 The frontend uses the pinned Node 24.21.x and npm 12.1.x versions with Vite:
 
