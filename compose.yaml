@@ -65,6 +65,7 @@ services:
       dockerfile: Dockerfile-develop
     environment:
       PKDB_DEV_API_TARGET: http://backend:8000
+      PKDB_BUILD_COMMIT: ${PKDB_BUILD_COMMIT:-}
     ports:
       - "127.0.0.1:8080:8080"
     volumes:

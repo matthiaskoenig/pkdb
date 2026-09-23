@@ -8,6 +8,9 @@ const session = useSessionStore(),
   search = useSearchStore(),
   theme = useTheme(),
   drawer = ref(false);
+const releaseVersion = __APP_VERSION__;
+const buildCommit = __APP_COMMIT__;
+const copyrightYear = new Date().getFullYear();
 const avatarUrl = computed(() =>
   session.profile?.avatar_url ? apiBase + session.profile.avatar_url : "",
 );
@@ -149,7 +152,22 @@ onMounted(() => {
       </main>
       <footer class="app-footer">
         <div><strong>PK-DB</strong><span>Pharmacokinetics database</span></div>
-        <p>Curated pharmacokinetic data for reproducible research.</p>
+        <div aria-label="Build information">
+          <span>Release {{ releaseVersion }}</span>
+          <span>
+            Commit
+            <a
+              v-if="buildCommit"
+              :href="`https://github.com/matthiaskoenig/pkdb/commit/${buildCommit}`"
+              :title="buildCommit"
+            >{{ buildCommit.slice(0, 8) }}</a>
+            <span v-else>unavailable</span>
+          </span>
+        </div>
+        <p>
+          © 2017–{{ copyrightYear }} Matthias König ·
+          <a href="https://livermetabolism.com">Systems Medicine of the Liver</a>
+        </p>
       </footer>
     </v-main>
   </v-app>
