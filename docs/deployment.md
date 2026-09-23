@@ -17,3 +17,11 @@ Test restoration into an isolated database and attachment volume before relying 
 ## Migration status
 
 The current backend is the only backend shipped in this repository. Removing the previous implementation is not a production data migration or a claim that every historical client or source study passes acceptance. Historical validation and compatibility evidence remains in [the migration records](backend-migration/README.md).
+
+## Frontend static artifact
+
+The modern frontend uses Node 24.21.0 and npm 12.1.0 with a committed lockfile. `frontend/Dockerfile-production` runs `npm ci`, type checks, and builds `dist/`, then copies the static artifact to `/vue`. This image remains an artifact carrier; the existing deployment supplies its HTTP server. No frontend service is added to the default backend Compose stack.
+
+Use `frontend/tests/deployment/nginx.conf` as the concrete reverse-proxy example and `compose.frontend-test.yaml` to exercise it against isolated test data. Proxy `/api`, `/accounts`, `/media`, `/static` and `/health` before history fallback. Missing JS/CSS assets must return 404, API failures must remain API responses, and `index.html` must be revalidated while fingerprinted assets may be cached immutably. Match `PKDB_BROWSER_ORIGIN` to the external origin and preserve same-origin cookies/CSRF. `VITE_API_BASE` is public API-origin build configuration, normally empty for same-origin requests, never a place for secrets.
+
+Before release, verify these rules in the real deployment proxy and retain the previous deployed artifact in durable storage. Rollback restores that static artifact atomically; this frontend migration introduces no database migration. Local recovered baseline checksums are in `frontend/docs/modernization-baseline.md`; local `/tmp` copies do not replace production rollback retention.

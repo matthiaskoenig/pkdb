@@ -2,7 +2,7 @@
 node_modules
 /dist
 
-package-lock.json
+
 
 # Log files
 npm-debug.log*
@@ -17,3 +17,6 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+/test-results/
+/playwright-report/

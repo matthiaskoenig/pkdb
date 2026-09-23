@@ -1,3 +1,6 @@
+from pkdb import __version__
+
+
 def test_public_output_pagination_and_statistics(client, valid_bundle, admin_headers):
     valid_bundle.study["access"] = "public"
     response = client.put(
@@ -27,6 +30,7 @@ def test_public_output_pagination_and_statistics(client, valid_bundle, admin_hea
     record = data["data"]["data"][0]
     assert client.get(f"/api/v1/outputs/{record['pk']}/").json() == record
     assert client.get("/api/v1/statistics/").json()["study_count"] == 1
+    assert client.get("/api/v1/statistics/").json()["version"] == __version__
     assert client.get("/api/v1/outputs/", params={"page": -1}).status_code == 400
     assert (
         client.get("/api/v1/outputs/", params={"substance__delete": "x"}).status_code

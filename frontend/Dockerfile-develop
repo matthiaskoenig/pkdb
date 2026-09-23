@@ -1,8 +1,9 @@
-FROM node:22-slim AS build-stage
-ENV NODE_OPTIONS=--openssl-legacy-provider
+FROM node:24.21.0-slim@sha256:0e0ff40c39bc087845bfb27465a0df4ea419520094bc35842ff83dd8cbe6f9b6
 WORKDIR /app
-COPY package*.json /app/
-RUN npm install
-COPY . /app/
+RUN npm install --global npm@12.1.0 && test "$(node --version)" = v24.21.0 && test "$(npm --version)" = 12.1.0
+COPY package*.json ./
+COPY scripts/patch-declarations.ts scripts/patch-declarations.ts
+RUN npm ci
+COPY . .
 EXPOSE 8080
-CMD npm run serve
+CMD ["npm", "run", "dev", "--", "--host", "0.0.0.0", "--port", "8080"]
