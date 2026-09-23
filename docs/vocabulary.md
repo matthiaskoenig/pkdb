@@ -1,5 +1,9 @@
 # Update allowed terms
 
+!!! important "For developers and operators only"
+
+    This section is for working on PK-DB itself or running a separate server. General users do not need a source checkout, Docker, a database, or administrator access. To use PK-DB, start with [Browse and access data](web-interface.md) or the [Python client and API](python-client.md).
+
 `backend/info_nodes/definitions/` is the authoritative vocabulary source. Edit these Python definitions to add allowed measurements, categorical choices, substances, tissues, methods, administration routes, forms, and calculation types. The backend reads generated JSON; do not edit `backend/bootstrap/vocabulary.json` or `provenance.json` manually.
 
 ## Edit a definition

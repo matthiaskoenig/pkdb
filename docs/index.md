@@ -1,8 +1,10 @@
 <img src="pkdb_logo.png" alt="PK-DB logo" width="200">
 
+[![PyPI](https://img.shields.io/pypi/v/pkdb.svg)](https://pypi.org/project/pkdb/) [![Python versions](https://img.shields.io/pypi/pyversions/pkdb.svg)](https://pypi.org/project/pkdb/)
+
 # PK-DB – The Pharmacokinetics Database
 
-[PK-DB](https://pk-db.com) is an open database and web platform for the **curation, integration, validation, and analysis of pharmacokinetic (PK) data** from clinical studies and preclinical research.
+[PK-DB](https://alpha.pk-db.com) is an open database and web platform for the **curation, integration, validation, and analysis of pharmacokinetic (PK) data** from clinical studies and preclinical research.
 
 !!! important "PK-DB update in progress"
 
@@ -29,20 +31,44 @@ By combining pharmacokinetic data with structured metadata, semantic annotations
 
 ![PK-DB overview](images/pkdb_overview.png)
 
-PK-DB is available from [https://pk-db.com](https://pk-db.com). The terms of use are listed in the [`TERMS_OF_USE.md`](https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md).
+PK-DB is available from [https://alpha.pk-db.com](https://alpha.pk-db.com). The terms of use are listed in the [`TERMS_OF_USE.md`](https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md).
 
 The source code is at [https://github.com/matthiaskoenig/pkdb](https://github.com/matthiaskoenig/pkdb).
 
-## Local setup
+## Browse and access data
 
-From the repository root, start the frontend, backend, and database, then create your administrator (replace `USERNAME` and `ADMIN_EMAIL`):
+Open [alpha.pk-db.com](https://alpha.pk-db.com) and choose **Explore data** to explore studies, subjects, interventions, and measurements. Public browsing needs no account; sign in for dataset and attachment downloads. Start with the illustrated [Web interface guide](web-interface.md).
+
+## Python client and API
+
+Install [pkdb from PyPI](https://pypi.org/project/pkdb/) with Python 3.14 or 3.15:
 
 ```bash
-docker compose --profile dev up --build --wait
-docker compose exec backend pkdb-server create-admin USERNAME --email ADMIN_EMAIL
+python -m pip install pkdb
 ```
 
-Open <http://localhost:8080> and sign in with the password entered at the prompt. See [Local setup and development](installation.md) to import our users and avatars, load studies, and run tests.
+```python
+from pkdb import Client
+
+with Client(endpoint="https://alpha.pk-db.com") as client:
+    page = client.studies.list(page=1, page_size=20)
+    for study in page.items:
+        print(study.sid)
+```
+
+See [Python client and API](python-client.md) for queries, downloads, and data curation, [REST API](api.md) for HTTP examples, and [Accounts and API keys](authentication.md) for authenticated access. All curation examples use `https://alpha.pk-db.com`.
+
+## Development
+
+!!! important "For developers and operators only"
+
+    General users should use the website or install the PyPI package. Source installation and local hosting are development workflows.
+
+See [Development](development.md) for installing the package from source, working against a local development instance, running tests, and deployment.
+
+## Documentation
+
+Read the [documentation](https://matthiaskoenig.github.io/pkdb/) in order: **Browse and access data**, **Python client and API**, then **Development** when you work on the codebase.
 
 ## How to cite
 If you use PK-DB data or the web interface cite
@@ -52,13 +78,6 @@ If you use PK-DB data or the web interface cite
 If you use PK-DB code cite in addition
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
-
-## Contents
-
-- **[Local setup and development](installation.md)** - start the backend and frontend, import users, and run tests.
-- **[Deployment](deployment.md)** - runtime configuration, persistent storage, and backup requirements.
-- **[Local upload testing](local-upload-testing.md)** - validate and upload your own study with Docker.
-- **[Contributing](contributing.md)** - step by step guide for a first contribution.
 
 ## Data
 
