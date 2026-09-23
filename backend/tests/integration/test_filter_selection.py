@@ -1,14 +1,14 @@
 from sqlalchemy import select
 
-from pkdb.db.models.measurements import Measurement
 from pkdb.schemas.queries import Predicate, QuerySpec
+from pkdb_server.db.models.measurements import Measurement
 
 
 def test_concise_selection_uses_matching_normalized_outputs(
     ingestion_context, valid_bundle, session_factory
 ):
-    from pkdb.db.selection import selection
     from pkdb.schemas.filters import FilterSpec
+    from pkdb_server.db.selection import selection
 
     ingestion, creator = ingestion_context
     ingestion.replace(valid_bundle, creator)
@@ -42,8 +42,8 @@ def test_concise_selection_uses_matching_normalized_outputs(
 def test_selection_subject_filters_compile_together(
     ingestion_context, valid_bundle, session_factory
 ):
-    from pkdb.db.selection import selection
     from pkdb.schemas.filters import FilterSpec
+    from pkdb_server.db.selection import selection
 
     ingestion, creator = ingestion_context
     ingestion.replace(valid_bundle, creator)

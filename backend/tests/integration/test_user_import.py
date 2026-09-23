@@ -5,12 +5,12 @@ from pathlib import Path
 import pytest
 from sqlalchemy import func, select
 
-from pkdb.commands.admin import create_admin
-from pkdb.commands.user_import import import_roster
-from pkdb.db.models.security import SecurityConfiguration, UserImportRun
-from pkdb.db.models.studies import Study, StudyGrant
-from pkdb.db.models.users import EmailAddress, User
-from pkdb.services.user_import import load_roster
+from pkdb_server.commands.admin import create_admin
+from pkdb_server.commands.user_import import import_roster
+from pkdb_server.db.models.security import SecurityConfiguration, UserImportRun
+from pkdb_server.db.models.studies import Study, StudyGrant
+from pkdb_server.db.models.users import EmailAddress, User
+from pkdb_server.services.user_import import load_roster
 
 
 def write_roster(tmp_path, users):

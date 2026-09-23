@@ -6,7 +6,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from pkdb.db.bootstrap import bootstrap, load_vocabulary
+from pkdb_server.db.bootstrap import bootstrap, load_vocabulary
 
 
 def test_authored_term_reaches_backend_and_invalid_edit_preserves_json(

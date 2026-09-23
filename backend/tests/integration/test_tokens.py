@@ -3,8 +3,8 @@ from datetime import UTC, datetime, timedelta
 import pytest
 from sqlalchemy import select
 
-from pkdb.db.models.users import Token, User
-from pkdb.services.authentication import (
+from pkdb_server.db.models.users import Token, User
+from pkdb_server.services.authentication import (
     AuthenticationFailed,
     authenticate_token,
     issue_token,
@@ -51,8 +51,8 @@ def test_unknown_token_is_rejected(db_session):
 
 @pytest.mark.parametrize("cutoff", [None, datetime(2020, 1, 1, tzinfo=UTC)])
 def test_legacy_tokens_fail_closed_after_transition(db_session, active_user, cutoff):
-    from pkdb.db.models.security import SecurityConfiguration
-    from pkdb.services.authentication import revalidate_principal
+    from pkdb_server.db.models.security import SecurityConfiguration
+    from pkdb_server.services.authentication import revalidate_principal
 
     raw = issue_token(active_user, db_session)
     actor = authenticate_token(raw, db_session)

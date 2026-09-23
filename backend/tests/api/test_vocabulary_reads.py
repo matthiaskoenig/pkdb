@@ -1,6 +1,10 @@
 import json
 
-from pkdb.db.models.vocabulary import VocabularyEdge, VocabularyNode, VocabularyTerm
+from pkdb_server.db.models.vocabulary import (
+    VocabularyEdge,
+    VocabularyNode,
+    VocabularyTerm,
+)
 
 
 def test_vocabulary_detail_search_and_filters(client, session_factory):
@@ -110,7 +114,7 @@ def test_refreshed_vocabulary_preserves_legacy_api_contract(
 ):
     from pathlib import Path
 
-    from pkdb.db.bootstrap import bootstrap
+    from pkdb_server.db.bootstrap import bootstrap
 
     root = Path(__file__).parents[2]
     (tmp_path / "users.json").write_text("[]")

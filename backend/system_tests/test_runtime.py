@@ -12,8 +12,8 @@ import httpx2
 from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 
-from pkdb.db.models.users import EmailAddress, User
-from pkdb.services.authentication import password_hash
+from pkdb_server.db.models.users import EmailAddress, User
+from pkdb_server.services.authentication import password_hash
 
 
 def test_container_nonroot_upload_and_graceful_shutdown(
@@ -66,7 +66,7 @@ def test_container_nonroot_upload_and_graceful_shutdown(
             "/data/files:rw,uid=10001,gid=10001,mode=0700",
             image,
             "uvicorn",
-            "pkdb.app:create_app",
+            "pkdb_server.app:create_app",
             "--factory",
             "--host",
             "127.0.0.1",

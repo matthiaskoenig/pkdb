@@ -61,7 +61,7 @@ def compile_vocabulary(cache_path: Path, *, offline: bool) -> dict[str, str]:
     snapshot["version"] = hashlib.sha256(
         json.dumps(snapshot["nodes"], sort_keys=True).encode()
     ).hexdigest()
-    from pkdb.db.bootstrap import Snapshot, validate_snapshot
+    from pkdb_server.db.bootstrap import Snapshot, validate_snapshot
 
     validate_snapshot(Snapshot.model_validate(snapshot))
     inputs = [*DEFINITIONS.rglob("*.py"), Path(__file__).resolve()]

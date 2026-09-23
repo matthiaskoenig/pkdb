@@ -11,11 +11,11 @@ from sqlalchemy.engine import make_url
 from sqlalchemy.orm import Session
 
 from alembic import command
-from pkdb.db.models.studies import Study
-from pkdb.db.models.subjects import Group
-from pkdb.db.models.users import User
-from pkdb.db.models.vocabulary import VocabularyNode
-from pkdb.db.session import make_session_factory
+from pkdb_server.db.models.studies import Study
+from pkdb_server.db.models.subjects import Group
+from pkdb_server.db.models.users import User
+from pkdb_server.db.models.vocabulary import VocabularyNode
+from pkdb_server.db.session import make_session_factory
 
 
 @pytest.fixture
@@ -93,11 +93,11 @@ def schema_seed(db_session):
 def ingestion_context(session_factory, tmp_path, vocabulary):
     import json
 
-    from pkdb.config import Settings
-    from pkdb.db.bootstrap import bootstrap
-    from pkdb.files.store import FileStore
     from pkdb.schemas.security import Principal
-    from pkdb.services.ingestion import IngestionService
+    from pkdb_server.config import Settings
+    from pkdb_server.db.bootstrap import bootstrap
+    from pkdb_server.files.store import FileStore
+    from pkdb_server.services.ingestion import IngestionService
 
     nodes = []
     for rule in vocabulary.measurements:

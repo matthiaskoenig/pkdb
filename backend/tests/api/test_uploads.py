@@ -3,7 +3,7 @@ import json
 import pytest
 from sqlalchemy import func, select
 
-from pkdb.db.models.studies import Study
+from pkdb_server.db.models.studies import Study
 
 
 def multipart(bundle):

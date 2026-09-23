@@ -72,3 +72,9 @@ repos:
       language: system
       files: ^backend/.*\.py$
       pass_filenames: false
+    - id: ty-client
+      name: ty-client
+      entry: uv run --project python --locked --python 3.14 ty check --project python
+      language: system
+      files: ^python/.*\.py$
+      pass_filenames: false

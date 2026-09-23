@@ -2,14 +2,14 @@ import pytest
 
 from pkdb.schemas.queries import Predicate, QuerySpec
 from pkdb.schemas.security import Principal
-from pkdb.services.authorization import AuthorizationDenied
-from pkdb.services.queries import QueryService
+from pkdb_server.services.authorization import AuthorizationDenied
+from pkdb_server.services.queries import QueryService
 
 
 def test_saved_filter_is_not_a_capability(
     ingestion_context, valid_bundle, session_factory
 ):
-    from pkdb.services.exports import ExportService
+    from pkdb_server.services.exports import ExportService
 
     ingestion, creator = ingestion_context
     valid_bundle.study["access"] = "private"
@@ -27,7 +27,7 @@ def test_saved_filter_is_not_a_capability(
 def test_export_limits_release_capacity(
     ingestion_context, valid_bundle, session_factory
 ):
-    from pkdb.services.exports import ExportLimit, ExportService
+    from pkdb_server.services.exports import ExportLimit, ExportService
 
     ingestion, creator = ingestion_context
     ingestion.replace(valid_bundle, creator)
@@ -48,9 +48,9 @@ def test_export_rechecks_visibility_and_account(
 ):
     from sqlalchemy import update
 
-    from pkdb.db.models.studies import Study
-    from pkdb.db.models.users import User
-    from pkdb.services.exports import ExportService
+    from pkdb_server.db.models.studies import Study
+    from pkdb_server.db.models.users import User
+    from pkdb_server.services.exports import ExportService
 
     ingestion, creator = ingestion_context
     valid_bundle.study["access"] = "private"
@@ -79,7 +79,7 @@ def test_export_rechecks_visibility_and_account(
         session.execute(
             update(User).where(User.id == creator.user_id).values(active=False)
         )
-    from pkdb.services.authentication import AuthenticationFailed
+    from pkdb_server.services.authentication import AuthenticationFailed
 
     with pytest.raises(AuthenticationFailed, match="Inactive"):
         next(exports.stream_export(owned_id, "csv", creator))
@@ -90,8 +90,8 @@ def test_expired_saved_filter_is_unavailable(ingestion_context, session_factory)
 
     from sqlalchemy import update
 
-    from pkdb.db.models.saved_queries import SavedQuery
-    from pkdb.services.exports import ExportService
+    from pkdb_server.db.models.saved_queries import SavedQuery
+    from pkdb_server.services.exports import ExportService
 
     _, creator = ingestion_context
     exports = ExportService(session_factory, QueryService(session_factory))
@@ -114,7 +114,7 @@ def test_zip_snapshot_stays_consistent_during_atomic_replacement(
     from zipfile import ZipFile
 
     from pkdb.schemas.filters import FilterSpec
-    from pkdb.services.exports import ExportService
+    from pkdb_server.services.exports import ExportService
 
     ingestion, creator = ingestion_context
     ingestion.replace(valid_bundle, creator)
@@ -156,10 +156,10 @@ def test_saved_filter_rechecks_removed_collaborator(
 ):
     from sqlalchemy import delete, select
 
-    from pkdb.db.models.studies import Study, StudyGrant
-    from pkdb.db.models.users import User
     from pkdb.schemas.filters import FilterSpec
-    from pkdb.services.exports import ExportService
+    from pkdb_server.db.models.studies import Study, StudyGrant
+    from pkdb_server.db.models.users import User
+    from pkdb_server.services.exports import ExportService
 
     ingestion, creator = ingestion_context
     valid_bundle.study["access"] = "private"

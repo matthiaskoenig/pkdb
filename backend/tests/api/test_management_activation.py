@@ -1,6 +1,6 @@
 import pytest
 
-from pkdb.db.models.users import EmailAddress, User
+from pkdb_server.db.models.users import EmailAddress, User
 
 
 @pytest.mark.parametrize("without_password", [False, True])

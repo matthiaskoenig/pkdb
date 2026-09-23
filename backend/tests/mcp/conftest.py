@@ -10,10 +10,10 @@ from mcp import ClientSession
 from mcp.client.streamable_http import streamable_http_client
 from mcp.shared._context_streams import ContextReceiveStream, ContextSendStream
 
-from pkdb.app import create_app
-from pkdb.config import Settings
-from pkdb.db.models.users import User
-from pkdb.services.authentication import issue_token
+from pkdb_server.app import create_app
+from pkdb_server.config import Settings
+from pkdb_server.db.models.users import User
+from pkdb_server.services.authentication import issue_token
 
 
 @pytest.fixture

@@ -3,16 +3,16 @@ from datetime import UTC, datetime, timedelta
 import pytest
 from sqlalchemy import select
 
-from pkdb.db.models.credentials import ApiKey, BrowserSession
-from pkdb.db.models.users import EmailAddress, User
-from pkdb.services.accounts import AccountService
-from pkdb.services.authentication import (
+from pkdb_server.db.models.credentials import ApiKey, BrowserSession
+from pkdb_server.db.models.users import EmailAddress, User
+from pkdb_server.services.accounts import AccountService
+from pkdb_server.services.authentication import (
     AuthenticationFailed,
     authenticate_token,
     password_hash,
 )
-from pkdb.services.authorization import AuthorizationDenied
-from pkdb.services.credentials import (
+from pkdb_server.services.authorization import AuthorizationDenied
+from pkdb_server.services.credentials import (
     CredentialService,
     authenticate_session,
     require_session,
@@ -164,7 +164,7 @@ def test_verified_primary_email_and_live_key_limit(credentials, session_factory)
 def test_refresh_uses_stored_scopes_and_rechecks_original_credential(
     credentials, session_factory
 ):
-    from pkdb.services.authentication import revalidate_principal
+    from pkdb_server.services.authentication import revalidate_principal
 
     service, _, principal, _ = credentials
     key = service.create_key(principal, "read only")
@@ -187,9 +187,9 @@ def test_password_admin_can_export_and_read_own_staged_files(
 ):
     import io
 
-    from pkdb.files.store import FileStore
     from pkdb.schemas.queries import QuerySpec
-    from pkdb.services.exports import ExportService
+    from pkdb_server.files.store import FileStore
+    from pkdb_server.services.exports import ExportService
 
     _, _, principal, _ = credentials
     files = FileStore(tmp_path / "staged", session_factory, 1024)

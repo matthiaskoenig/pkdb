@@ -12,8 +12,8 @@ from urllib.parse import quote
 import httpx2
 from pydantic import ValidationError
 
-from pkdb.commands.upload import api_root, send_folder
 from pkdb.schemas.replacement import PublicationState
+from pkdb_server.commands.upload import api_root, send_folder
 
 # Support both module invocation and the documented direct script invocation.
 if __package__ in (None, ""):

@@ -1,9 +1,9 @@
 import pytest
 from sqlalchemy import func, select
 
-from pkdb.db.models.studies import Study
-from pkdb.db.read import read_study
 from pkdb.schemas.validation import StudyValidationError
+from pkdb_server.db.models.studies import Study
+from pkdb_server.db.read import read_study
 
 
 def test_replacement_roundtrips_prepared_graph(
@@ -48,7 +48,7 @@ def test_replacement_keeps_root_and_removes_omitted_children(
 def test_failure_after_deletion_rolls_back(
     ingestion_context, valid_bundle, session_factory, monkeypatch
 ):
-    from pkdb.db import replace
+    from pkdb_server.db import replace
 
     ingestion, principal = ingestion_context
     result = ingestion.replace(valid_bundle, principal)

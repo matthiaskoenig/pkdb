@@ -120,14 +120,14 @@ def test_frost2014_postgresql_outputs_match_legacy(
 
     from sqlalchemy import select
 
-    from pkdb.db.bootstrap import bootstrap
-    from pkdb.db.models.studies import Study
-    from pkdb.db.models.users import User
-    from pkdb.db.replace import insert_graph
     from pkdb.domain.validation import prepare_study
     from pkdb.schemas.queries import QuerySpec
     from pkdb.schemas.security import Principal
-    from pkdb.services.queries import QueryService
+    from pkdb_server.db.bootstrap import bootstrap
+    from pkdb_server.db.models.studies import Study
+    from pkdb_server.db.models.users import User
+    from pkdb_server.db.replace import insert_graph
+    from pkdb_server.services.queries import QueryService
 
     study = prepare_study(
         parse_bundle(load_folder(ROOT / "Frost2014")), full_vocabulary
@@ -385,8 +385,8 @@ def test_frost2014_postgresql_outputs_match_legacy(
         )
     compare(without_ids(public_study), without_ids(expected_study))
 
-    from pkdb.db.analysis import ENTITIES
-    from pkdb.services.analysis import AnalysisService
+    from pkdb_server.db.analysis import ENTITIES
+    from pkdb_server.services.analysis import AnalysisService
 
     analysis_golden = json.loads(
         (
@@ -474,15 +474,15 @@ def test_frost2014_postgresql_outputs_match_legacy(
     # Frost measurements, inside a rollback-only transaction on both backends.
     from sqlalchemy import select
 
-    from pkdb.db.models.measurements import (
+    from pkdb.schemas.filters import FilterSpec
+    from pkdb_server.db.models.measurements import (
         Measurement,
         Scatter,
         Subset,
         SubsetDimension,
         SubsetPoint,
     )
-    from pkdb.db.scatter_export import rows as scatter_rows
-    from pkdb.schemas.filters import FilterSpec
+    from pkdb_server.db.scatter_export import rows as scatter_rows
 
     expected = json.loads(
         (

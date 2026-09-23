@@ -67,6 +67,6 @@ CI runs this check. Output is deterministic, including the vocabulary version an
 docker compose up --build --wait
 ```
 
-The rebuilt image contains the new JSON. Startup applies it to PostgreSQL using `pkdb bootstrap /app/bootstrap`. Existing accounts and studies are preserved. Repeat [validation and upload](local-upload-testing.md) to use the new allowed terms.
+The rebuilt image contains the new JSON. Startup applies it to PostgreSQL using `pkdb-server bootstrap /app/bootstrap`. Existing accounts and studies are preserved. Repeat [validation and upload](local-upload-testing.md) to use the new allowed terms.
 
 Bootstrap inserts and updates definitions; it retains database nodes omitted from a later snapshot. Removing a definition from the source is therefore not a database deletion mechanism. Coordinate term retirement and affected studies explicitly.

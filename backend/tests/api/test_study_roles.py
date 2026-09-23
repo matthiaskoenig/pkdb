@@ -4,9 +4,9 @@ import json
 
 from sqlalchemy import delete, select
 
-from pkdb.db.models.studies import Study, StudyGrant
-from pkdb.db.models.users import User
-from pkdb.services.authentication import issue_token
+from pkdb_server.db.models.studies import Study, StudyGrant
+from pkdb_server.db.models.users import User
+from pkdb_server.services.authentication import issue_token
 
 
 def payload(bundle):

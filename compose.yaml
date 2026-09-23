@@ -19,7 +19,8 @@ services:
   backend:
     image: pkdb-local:latest
     build:
-      context: ./backend
+      context: .
+      dockerfile: backend/Dockerfile
       args:
         PYTHON_VERSION: ${PKDB_PYTHON_VERSION:-3.14}
     environment:
@@ -47,8 +48,8 @@ services:
       - -c
       - >-
         alembic upgrade head &&
-        pkdb bootstrap /app/bootstrap &&
-        exec uvicorn pkdb.app:create_app --factory --host 0.0.0.0 --port 8000 --no-access-log
+        pkdb-server bootstrap /app/bootstrap &&
+        exec uvicorn pkdb_server.app:create_app --factory --host 0.0.0.0 --port 8000 --no-access-log
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)"]
       interval: 3s

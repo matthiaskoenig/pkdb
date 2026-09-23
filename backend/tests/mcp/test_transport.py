@@ -76,7 +76,7 @@ async def test_transport_requires_current_bearer_token(mcp_http, session_factory
     import httpx2
     from sqlalchemy import update
 
-    from pkdb.db.models.users import Token
+    from pkdb_server.db.models.users import Token
 
     _, url, token = mcp_http
     payload = {
@@ -128,8 +128,8 @@ async def test_staged_handles_require_owner_and_never_accept_paths(
 ):
     import httpx2
 
-    from pkdb.db.models.users import User
-    from pkdb.services.authentication import issue_token
+    from pkdb_server.db.models.users import User
+    from pkdb_server.services.authentication import issue_token
 
     _, url, token = mcp_http
     async with httpx2.AsyncClient(
@@ -221,9 +221,9 @@ async def test_concurrent_calls_keep_principals_separate(
 
     from sqlalchemy import select
 
-    from pkdb.db.models.users import User
     from pkdb.schemas.security import Principal
-    from pkdb.services.authentication import issue_token
+    from pkdb_server.db.models.users import User
+    from pkdb_server.services.authentication import issue_token
 
     app, url, token = mcp_http
     with session_factory.begin() as session:
@@ -277,7 +277,7 @@ async def test_cancelled_validation_releases_capacity_and_shuts_down(
     import anyio
     from sqlalchemy import func, select
 
-    from pkdb.db.models.studies import Study
+    from pkdb_server.db.models.studies import Study
 
     app, url, token = mcp_http
     entered, release, finished = threading.Event(), threading.Event(), threading.Event()
@@ -325,7 +325,7 @@ async def test_staged_file_integrity_is_checked(
 
     import httpx2
 
-    from pkdb.db.models.files import StoredFile
+    from pkdb_server.db.models.files import StoredFile
 
     app, url, token = mcp_http
     async with httpx2.AsyncClient(
@@ -366,7 +366,7 @@ async def test_handle_limits_and_expiry(
 
     import httpx2
 
-    from pkdb.db.models.files import StoredFile
+    from pkdb_server.db.models.files import StoredFile
 
     app, url, token = mcp_http
     async with httpx2.AsyncClient(

@@ -20,8 +20,8 @@ def test_anonymous_download_requires_authentication_but_browsing_is_public(
 def test_registered_reader_can_download_until_account_is_deactivated(
     client, session_factory
 ):
-    from pkdb.db.models.users import User
-    from pkdb.services.authentication import issue_token
+    from pkdb_server.db.models.users import User
+    from pkdb_server.services.authentication import issue_token
 
     with session_factory.begin() as session:
         user = User(username="download-reader", role="user", active=True)
@@ -178,7 +178,7 @@ def test_export_releases_capacity_when_headers_cannot_be_sent():
 
     import pytest
 
-    from pkdb.api.exports import download_response
+    from pkdb_server.api.exports import download_response
 
     class Service:
         closed = False
@@ -236,7 +236,7 @@ def test_subject_analysis_distinguishes_measurement_sid_from_name(
 ):
     from sqlalchemy import update
 
-    from pkdb.db.models.vocabulary import VocabularyNode
+    from pkdb_server.db.models.vocabulary import VocabularyNode
 
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
@@ -295,7 +295,7 @@ def test_frontend_multi_match_search_alias_filters_study_membership(
 def test_analysis_details_match_list_rows_and_enforce_saved_visibility(
     client, creator_headers, valid_bundle, session_factory
 ):
-    from pkdb.db.models.vocabulary import VocabularyNode
+    from pkdb_server.db.models.vocabulary import VocabularyNode
 
     with session_factory.begin() as session:
         session.add_all(

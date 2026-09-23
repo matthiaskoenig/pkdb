@@ -1,0 +1,60 @@
+[build-system]
+requires = ["hatchling>=1.32.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pkdb"
+version = "0.11.0"
+description = "Prepare, validate, query, and upload PK-DB studies"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Matthias König" }]
+keywords = ["pharmacokinetics", "validation", "pk-db"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.14",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+]
+requires-python = ">=3.14,<3.15"
+dependencies = [
+  "pydantic>=2.13.5,<3",
+  "pandas>=3.0.6,<4",
+  "numpy>=2.5.3,<3",
+  "scipy>=1.18.1,<2",
+  "pint>=0.26.1,<1",
+  "openpyxl>=3.1.5,<4",
+  "pkpdutils>=1.2.0,<2",
+  "httpx2>=2.13.0,<3",
+]
+
+[project.urls]
+Homepage = "https://pk-db.com"
+Documentation = "https://matthiaskoenig.github.io/pkdb/"
+Repository = "https://github.com/matthiaskoenig/pkdb"
+Issues = "https://github.com/matthiaskoenig/pkdb/issues"
+
+[project.scripts]
+pkdb = "pkdb.cli:main"
+
+[dependency-groups]
+dev = ["pytest>=9.1.1", "ruff>=0.16.8", "ty>=0.0.83"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/pkdb"]
+
+[tool.ruff]
+target-version = "py314"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP"]
+
+[tool.ty.environment]
+python-version = "3.14"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers"

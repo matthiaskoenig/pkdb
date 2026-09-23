@@ -8,13 +8,13 @@ import uvicorn
 from sqlalchemy import select
 from sqlalchemy.engine import make_url
 
-from pkdb.config import Settings
-from pkdb.db.models.users import EmailAddress, User
-from pkdb.db.session import make_session_factory
-from pkdb.files.store import FileStore
 from pkdb.schemas.security import Principal
-from pkdb.services.authentication import password_hash
-from pkdb.services.ingestion import IngestionService
+from pkdb_server.config import Settings
+from pkdb_server.db.models.users import EmailAddress, User
+from pkdb_server.db.session import make_session_factory
+from pkdb_server.files.store import FileStore
+from pkdb_server.services.authentication import password_hash
+from pkdb_server.services.ingestion import IngestionService
 
 
 def main():
@@ -36,10 +36,10 @@ def main():
         publish_frontend_fixture,
     )
 
-    from pkdb.app import create_app
+    from pkdb_server.app import create_app
 
     subprocess.run(["alembic", "upgrade", "head"], check=True)
-    subprocess.run(["pkdb", "bootstrap", "/app/bootstrap"], check=True)
+    subprocess.run(["pkdb-server", "bootstrap", "/app/bootstrap"], check=True)
     app = create_app(settings)
     # Seed after schema/bootstrap using the same service lifecycle as API tests.
     import asyncio
@@ -85,7 +85,7 @@ def main():
                         "Frontend-test-password-42!"
                     )
                 session.flush()
-                from pkdb.db.models.security import SecurityConfiguration
+                from pkdb_server.db.models.security import SecurityConfiguration
 
                 config = session.get(SecurityConfiguration, 1)
                 if config is None:
@@ -99,7 +99,7 @@ def main():
                     user_id=creator.id, username=creator.username, role=creator.role
                 )
                 add_frontend_vocabulary(session)
-                from pkdb.db.models.vocabulary import VocabularyNode
+                from pkdb_server.db.models.vocabulary import VocabularyNode
 
                 species = session.get(VocabularyNode, "species")
                 species.definition = {**species.definition, "choices": ["Homo sapiens"]}
@@ -110,7 +110,7 @@ def main():
             )
             from sqlalchemy import update
 
-            from pkdb.db.models.studies import Study
+            from pkdb_server.db.models.studies import Study
 
             with factory.begin() as session:
                 session.execute(

@@ -135,7 +135,7 @@ def test_legacy_integer_file_handles_publish_and_explicit_delete_removes_study(
     )
     from sqlalchemy import func, select
 
-    from pkdb.db.models.files import StoredFile
+    from pkdb_server.db.models.files import StoredFile
 
     with client.app.state.session_factory() as session:
         assert session.scalar(select(func.count()).select_from(StoredFile)) == 1
@@ -209,9 +209,9 @@ def test_owned_draft_reads_and_reference_edits_stay_unpublished(
 
     from sqlalchemy import update
 
-    from pkdb.db.models.drafts import ReferenceDraft, StudyDraft
-    from pkdb.db.models.users import User
-    from pkdb.services.authentication import issue_token
+    from pkdb_server.db.models.drafts import ReferenceDraft, StudyDraft
+    from pkdb_server.db.models.users import User
+    from pkdb_server.services.authentication import issue_token
 
     core = deepcopy(valid_bundle.study)
     for key in ("groupset", "individualset", "interventionset", "outputset", "dataset"):

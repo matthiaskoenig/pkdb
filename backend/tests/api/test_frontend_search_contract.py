@@ -22,7 +22,7 @@ def scientific_fixture(ingestion_context, session_factory):
     def install(related=False):
         from sqlalchemy import update
 
-        from pkdb.db.models.studies import Study
+        from pkdb_server.db.models.studies import Study
 
         with session_factory.begin() as session:
             session.execute(
@@ -120,8 +120,8 @@ def test_subject_union_inheritance_and_all_toggle_combinations(
 ):
     from sqlalchemy import select
 
-    from pkdb.db.models.measurements import Measurement
-    from pkdb.db.models.subjects import Group, Individual
+    from pkdb_server.db.models.measurements import Measurement
+    from pkdb_server.db.models.subjects import Group, Individual
 
     with session_factory.begin() as session:
         group = session.scalar(select(Group))
@@ -170,7 +170,7 @@ def test_licence_and_visibility_rechecked_for_existing_selection(
 ):
     from sqlalchemy import update
 
-    from pkdb.db.models.studies import Study
+    from pkdb_server.db.models.studies import Study
 
     selected = selection(client)
     assert selected["studies"] == 1
@@ -235,8 +235,8 @@ def test_output_type_toggles_select_only_normalized_records(
 ):
     from sqlalchemy import select
 
-    from pkdb.db.models.measurements import Measurement
-    from pkdb.db.models.subjects import Group
+    from pkdb_server.db.models.measurements import Measurement
+    from pkdb_server.db.models.subjects import Group
 
     with session_factory.begin() as session:
         group = session.scalar(select(Group))
@@ -272,7 +272,7 @@ def test_expired_uuid_is_distinct_from_empty_selection(
     from datetime import UTC, datetime, timedelta
     from uuid import UUID
 
-    from pkdb.db.models.saved_queries import SavedQuery
+    from pkdb_server.db.models.saved_queries import SavedQuery
 
     selected = selection(client)
     with session_factory.begin() as session:

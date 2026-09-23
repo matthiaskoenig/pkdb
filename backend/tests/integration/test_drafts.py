@@ -2,9 +2,9 @@ from copy import deepcopy
 
 import pytest
 
-from pkdb.db.read import read_study
 from pkdb.schemas.security import Principal
 from pkdb.schemas.validation import StudyValidationError
+from pkdb_server.db.read import read_study
 
 
 def core_and_sections(bundle):
@@ -26,7 +26,7 @@ def core_and_sections(bundle):
 def test_draft_is_invisible_and_replacement_failure_preserves_publication(
     ingestion_context, valid_bundle, session_factory
 ):
-    from pkdb.services.drafts import DraftConflict, DraftService
+    from pkdb_server.services.drafts import DraftConflict, DraftService
 
     ingestion, creator = ingestion_context
     valid_bundle.study["access"] = "private"
@@ -68,7 +68,7 @@ def test_overlapping_finalize_rejects_new_generation(
     from concurrent.futures import ThreadPoolExecutor
     from threading import Event
 
-    from pkdb.services.drafts import DraftConflict, DraftService
+    from pkdb_server.services.drafts import DraftConflict, DraftService
 
     ingestion, creator = ingestion_context
     service = DraftService(session_factory, ingestion)
@@ -106,9 +106,9 @@ def test_expired_and_foreign_drafts_cannot_finalize(
 
     from sqlalchemy import update
 
-    from pkdb.db.models.drafts import StudyDraft
-    from pkdb.db.models.users import User
-    from pkdb.services.drafts import DraftConflict, DraftService
+    from pkdb_server.db.models.drafts import StudyDraft
+    from pkdb_server.db.models.users import User
+    from pkdb_server.services.drafts import DraftConflict, DraftService
 
     ingestion, creator = ingestion_context
     service = DraftService(session_factory, ingestion)
@@ -140,10 +140,10 @@ def test_foreign_attachment_handle_cannot_be_used_in_draft(
 ):
     from io import BytesIO
 
-    from pkdb.db.models.drafts import LegacyFileHandle
-    from pkdb.db.models.users import User
-    from pkdb.services.authorization import AuthorizationDenied
-    from pkdb.services.drafts import DraftService
+    from pkdb_server.db.models.drafts import LegacyFileHandle
+    from pkdb_server.db.models.users import User
+    from pkdb_server.services.authorization import AuthorizationDenied
+    from pkdb_server.services.drafts import DraftService
 
     ingestion, creator = ingestion_context
     staged = ingestion.file_store.stage(creator, "owned.txt", BytesIO(b"private bytes"))

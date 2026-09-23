@@ -1,6 +1,6 @@
 from copy import deepcopy
 
-from pkdb.db.read import read_study
+from pkdb_server.db.read import read_study
 
 
 def test_scatter_survives_atomic_publication_and_readback(
@@ -37,7 +37,7 @@ def test_scatter_survives_atomic_publication_and_readback(
     assert len(actual.scatters[0].subsets[0].points) == 2
     from sqlalchemy import select
 
-    from pkdb.db.models.measurements import SubsetDimension
+    from pkdb_server.db.models.measurements import SubsetDimension
 
     with session_factory() as session:
         dimensions = list(
@@ -72,7 +72,7 @@ def test_reported_and_normalized_outputs_share_source_identity(
 ):
     from sqlalchemy import select
 
-    from pkdb.db.models.measurements import Measurement
+    from pkdb_server.db.models.measurements import Measurement
 
     service, principal = ingestion_context
     service.replace(valid_bundle, principal)

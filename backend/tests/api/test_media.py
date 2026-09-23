@@ -2,8 +2,8 @@ import io
 
 import pytest
 
-from pkdb.db.models.files import StudyAttachment
-from pkdb.db.models.studies import Study
+from pkdb_server.db.models.files import StudyAttachment
+from pkdb_server.db.models.studies import Study
 
 
 @pytest.mark.parametrize(
@@ -48,8 +48,8 @@ def test_public_media_respects_access_and_licence(
     assert owner_files[0]["file"] == f"/media/{staged.id}/paper.pdf"
     url = f"/media/{staged.id}/paper.pdf"
     assert client.get(url).status_code == 401
-    from pkdb.db.models.users import User
-    from pkdb.services.authentication import issue_token
+    from pkdb_server.db.models.users import User
+    from pkdb_server.services.authentication import issue_token
 
     with session_factory.begin() as session:
         reader = User(username="media-reader", role="user", active=True)
@@ -86,7 +86,7 @@ def test_media_closes_file_when_headers_cannot_be_sent(
 
     from starlette.requests import Request
 
-    from pkdb.api.media import download
+    from pkdb_server.api.media import download
 
     ingestion, principal = ingestion_context
     staged = ingestion.file_store.stage(

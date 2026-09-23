@@ -8,10 +8,11 @@ FROM base AS build
 COPY --from=uv /uv /usr/local/bin/uv
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && rm -rf /var/lib/apt/lists/*
 ENV UV_PROJECT_ENVIRONMENT=/opt/venv UV_PYTHON=/usr/local/bin/python UV_PYTHON_DOWNLOADS=never UV_LINK_MODE=copy
-WORKDIR /build
-COPY pyproject.toml uv.lock ./
-RUN --mount=type=cache,target=/root/.cache/uv uv sync --locked --no-dev --no-install-project
-COPY src ./src
+WORKDIR /build/backend
+COPY backend/pyproject.toml backend/uv.lock ./
+COPY python /build/python
+RUN --mount=type=cache,target=/root/.cache/uv uv sync --locked --no-dev --no-install-project --no-editable
+COPY backend/src ./src
 RUN --mount=type=cache,target=/root/.cache/uv uv build --wheel && uv pip install --python /opt/venv/bin/python --no-deps dist/*.whl
 
 FROM base AS runtime
@@ -19,10 +20,10 @@ ENV PATH=/opt/venv/bin:$PATH PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 PKDB_F
 RUN groupadd --gid 10001 pkdb && useradd --uid 10001 --gid pkdb --create-home pkdb && mkdir -p /app /data/files && chown pkdb:pkdb /app /data/files
 COPY --from=build /opt/venv /opt/venv
 WORKDIR /app
-COPY alembic.ini ./
-COPY alembic ./alembic
-COPY bootstrap ./bootstrap
+COPY backend/alembic.ini ./
+COPY backend/alembic ./alembic
+COPY backend/bootstrap ./bootstrap
 USER 10001:10001
 EXPOSE 8000
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s CMD python -c "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready', timeout=3)"
-CMD ["uvicorn", "pkdb.app:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "pkdb_server.app:create_app", "--factory", "--host", "0.0.0.0", "--port", "8000"]

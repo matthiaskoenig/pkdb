@@ -4,10 +4,10 @@ import pytest
 from sqlalchemy import delete, select
 from sqlalchemy.exc import IntegrityError
 
-from pkdb.db.models.studies import Study
-from pkdb.db.models.subjects import Group, Individual
-from pkdb.db.models.users import User
-from pkdb.db.models.vocabulary import VocabularyNode
+from pkdb_server.db.models.studies import Study
+from pkdb_server.db.models.subjects import Group, Individual
+from pkdb_server.db.models.users import User
+from pkdb_server.db.models.vocabulary import VocabularyNode
 
 
 def test_duplicate_sid_is_rejected(db_session, schema_seed):
@@ -53,7 +53,7 @@ def test_dangling_group_is_rejected(db_session, schema_seed):
 
 
 def test_reference_cannot_be_assigned_to_two_studies(db_session, schema_seed):
-    from pkdb.db.models.studies import Reference
+    from pkdb_server.db.models.studies import Reference
 
     first, second, _ = schema_seed
     reference = Reference(sid="R1", name="reference")
@@ -66,7 +66,11 @@ def test_reference_cannot_be_assigned_to_two_studies(db_session, schema_seed):
 
 
 def test_duplicate_timecourse_position_is_rejected(db_session, schema_seed):
-    from pkdb.db.models.measurements import Measurement, Timecourse, TimecoursePoint
+    from pkdb_server.db.models.measurements import (
+        Measurement,
+        Timecourse,
+        TimecoursePoint,
+    )
 
     first, _, group = schema_seed
     course = Timecourse(study_id=first, key="curve")
@@ -98,7 +102,11 @@ def test_duplicate_timecourse_position_is_rejected(db_session, schema_seed):
 
 
 def test_cross_study_timecourse_point_is_rejected(db_session, schema_seed):
-    from pkdb.db.models.measurements import Measurement, Timecourse, TimecoursePoint
+    from pkdb_server.db.models.measurements import (
+        Measurement,
+        Timecourse,
+        TimecoursePoint,
+    )
 
     first, second, group = schema_seed
     course = Timecourse(study_id=second, key="curve")

@@ -4,12 +4,12 @@ from uuid import uuid4
 
 import pytest
 
-from pkdb.db.models.files import StoredFile
-from pkdb.db.models.users import User
-from pkdb.files.cleanup import cleanup_expired_files
-from pkdb.files.store import FileStore, FileTooLarge
 from pkdb.schemas.security import Principal
-from pkdb.services.authorization import AuthorizationDenied
+from pkdb_server.db.models.files import StoredFile
+from pkdb_server.db.models.users import User
+from pkdb_server.files.cleanup import cleanup_expired_files
+from pkdb_server.files.store import FileStore, FileTooLarge
+from pkdb_server.services.authorization import AuthorizationDenied
 
 
 @pytest.fixture
@@ -92,8 +92,8 @@ def test_symlink_bytes_are_never_opened(file_store, owner, tmp_path):
 
 
 def test_published_file_survives_expiry_cleanup(file_store, owner, session_factory):
-    from pkdb.db.models.files import StudyAttachment
-    from pkdb.db.models.studies import Study
+    from pkdb_server.db.models.files import StudyAttachment
+    from pkdb_server.db.models.studies import Study
 
     staged = file_store.stage(owner, "paper", io.BytesIO(b"published"))
     now = datetime.now(UTC)
@@ -119,7 +119,7 @@ def test_published_file_survives_expiry_cleanup(file_store, owner, session_facto
 def test_untracked_files_have_a_grace_period(file_store, session_factory):
     import os
 
-    from pkdb.files.cleanup import cleanup_untracked_files
+    from pkdb_server.files.cleanup import cleanup_untracked_files
 
     old = file_store.root / uuid4().hex
     fresh = file_store.root / uuid4().hex

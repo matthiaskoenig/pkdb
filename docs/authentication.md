@@ -46,7 +46,7 @@ Back up PostgreSQL and managed file storage together. Do not log Authorization h
 After applying migrations, create an active account with a password:
 
 ```bash
-uv run --project backend pkdb create-user developer
+uv run --project backend pkdb-server create-user developer
 ```
 
 The command prompts for a password; it needs no email, mail server, external provider, or authenticator. Use `--role curator --email developer@example.org` for local API-key upload testing or `--role reviewer` to test reviewer access. API-key creation requires a verified primary contact; the operator-supplied `--email` creates that contact without mail delivery. For browser login, email is optional; `--password-stdin` supports scripted provisioning without placing the password in command arguments. Existing identities are not overwritten. Sign in using the new username and password.
@@ -56,13 +56,13 @@ The command prompts for a password; it needs no email, mail server, external pro
 Replace `USERNAME` and `ADMIN_EMAIL` with your chosen username and email. Apply migrations before provisioning accounts. From the repository root, with deployment environment variables set:
 
 ```bash
-uv run --project backend pkdb create-admin USERNAME --email ADMIN_EMAIL
+uv run --project backend pkdb-server create-admin USERNAME --email ADMIN_EMAIL
 ```
 
 The command prompts for a password. For a reviewed existing active account, use its exact internal ID instead; adoption preserves its password:
 
 ```bash
-uv run --project backend pkdb create-admin USERNAME --email ADMIN_EMAIL --adopt-user-id EXISTING_ID
+uv run --project backend pkdb-server create-admin USERNAME --email ADMIN_EMAIL --adopt-user-id EXISTING_ID
 ```
 
 Adoption requires matching ID, username and primary email. It does not reactivate a disabled or suspended account. `--password-stdin` is available for creating a new administrator, but must not be supplied when adopting one.
@@ -85,7 +85,7 @@ Validate the manifest, then preview the import:
 
 ```bash
 python3 scripts/check_curator_roster.py
-uv run --project backend pkdb import-users backend/bootstrap/curator-roster.json --contacts /private/contacts.json --dry-run
+uv run --project backend pkdb-server import-users backend/bootstrap/curator-roster.json --contacts /private/contacts.json --dry-run
 ```
 
 The private contact overlay is a JSON list or CSV with `username`, optional `email`, optional exact `user_id`, and optional `assigned_study_ids`. Study IDs are internal positive integer IDs; CSV study IDs use semicolons. Keep contacts out of the public repository. Supply only reviewed addresses and explicit account/study mappings. For example:
@@ -99,7 +99,7 @@ The private contact overlay is a JSON list or CSV with `username`, optional `ema
 Apply only after resolving dry-run conflicts:
 
 ```bash
-uv run --project backend pkdb import-users backend/bootstrap/curator-roster.json --contacts /private/contacts.json --apply
+uv run --project backend pkdb-server import-users backend/bootstrap/curator-roster.json --contacts /private/contacts.json --apply
 ```
 
 Changes to existing roles or explicit grants require `--update-existing`; add it to both preview and apply after reviewing the proposed differences. A conflicting primary address requires separate resolution. `--avatar-root` defaults to `frontend/public` and must contain the manifest's `assets/images/avatars/` paths. In a backend-only container, mount those assets and pass the corresponding root explicitly.
@@ -132,7 +132,7 @@ Rate counters are shared in PostgreSQL across keys for an account. Initial ordin
 
 The ordinary budgets can be configured with `PKDB_QUOTA_ANONYMOUS_PER_MINUTE`, `PKDB_QUOTA_ACCOUNT_PER_MINUTE`, `PKDB_QUOTA_KEY_PER_MINUTE`, `PKDB_QUOTA_IP_PER_MINUTE`, `PKDB_QUOTA_UPLOADS_PER_HOUR`, and `PKDB_QUOTA_EXPORTS_PER_MINUTE`. Concurrent-request settings are `PKDB_QUOTA_ACCOUNT_CONCURRENCY` and `PKDB_QUOTA_ANONYMOUS_CONCURRENCY`; global upload/export settings are `PKDB_UPLOAD_CONCURRENCY` and `PKDB_EXPORT_CONCURRENCY`. Inject overrides into the backend environment. `PKDB_RATE_LIMITS_ENABLED=false` disables admission limits and is intended for controlled testing. The administrator account page includes read-only selected-user usage counters and a paginated security audit table. Per-account quota overrides remain implementation-plan work.
 
-Avatar replacement removes superseded files. A rolled-back import can leave an unreferenced file; `pkdb cleanup` removes these after a one-day grace period. It also removes expired concurrency leases, throttle counters, credentials expired more than 30 days ago, and audit events older than 365 days. Schedule this maintenance regularly.
+Avatar replacement removes superseded files. A rolled-back import can leave an unreferenced file; `pkdb-server cleanup` removes these after a one-day grace period. It also removes expired concurrency leases, throttle counters, credentials expired more than 30 days ago, and audit events older than 365 days. Schedule this maintenance regularly.
 
 ## Frontend development and validation
 

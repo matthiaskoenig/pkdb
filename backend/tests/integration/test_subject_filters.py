@@ -1,11 +1,11 @@
 from sqlalchemy import select
 
-from pkdb.db.models.studies import Study
-from pkdb.db.models.subjects import Characteristic, Group, Individual
-from pkdb.db.models.vocabulary import VocabularyEdge, VocabularyNode
 from pkdb.schemas.queries import Predicate, QuerySpec
 from pkdb.schemas.security import Principal
-from pkdb.services.queries import QueryService
+from pkdb_server.db.models.studies import Study
+from pkdb_server.db.models.subjects import Characteristic, Group, Individual
+from pkdb_server.db.models.vocabulary import VocabularyEdge, VocabularyNode
+from pkdb_server.services.queries import QueryService
 
 
 def test_inherited_filters_use_effective_same_characteristic(

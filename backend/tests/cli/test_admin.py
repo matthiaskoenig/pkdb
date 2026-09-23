@@ -3,9 +3,9 @@
 import pytest
 from sqlalchemy import select
 
-from pkdb.commands.admin import create_admin
-from pkdb.db.models.users import EmailAddress, User
-from pkdb.services.authentication import authenticate_password
+from pkdb_server.commands.admin import create_admin
+from pkdb_server.db.models.users import EmailAddress, User
+from pkdb_server.services.authentication import authenticate_password
 
 
 def test_local_admin_creation_hashes_password_and_verifies_email(session_factory):
@@ -47,7 +47,7 @@ def test_admin_cli_accepts_protected_stdin_and_never_prints_password(
     import io
     import json
 
-    from pkdb.cli import main
+    from pkdb_server.cli import main
 
     password = "Private-administrator-password-42!"
     monkeypatch.setenv(

@@ -1,7 +1,7 @@
 from sqlalchemy import select
 
-from pkdb.db.models.users import User
-from pkdb.services.profiles import public_profile
+from pkdb_server.db.models.users import User
+from pkdb_server.services.profiles import public_profile
 
 
 def test_owner_can_edit_and_hide_optional_profile_references(

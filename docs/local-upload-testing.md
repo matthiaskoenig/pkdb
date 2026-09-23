@@ -1,6 +1,6 @@
 # Test a study upload locally
 
-Use the current `pkdb validate` and `pkdb upload` commands against your local backend. Complete [Local setup and development](installation.md#quick-start) first, then sign in at <http://localhost:8080> with your chosen administrator username. All commands below run from the repository root and use Docker plus a local study folder.
+Use the current `pkdb-server validate` and `pkdb-server upload` commands against your local backend. Complete [Local setup and development](installation.md#quick-start) first, then sign in at <http://localhost:8080> with your chosen administrator username. All commands below run from the repository root and use Docker plus a local study folder.
 
 ## Select a study and prepare attribution accounts
 
@@ -11,7 +11,7 @@ export STUDY_DIR=/absolute/path/to/pkdb_data/studies/apixaban/Frost2014
 export STUDY_NAME=$(basename "$STUDY_DIR")
 docker compose run --rm --no-deps \
   --volume "$STUDY_DIR:/studies/$STUDY_NAME:ro" \
-  backend pkdb bootstrap-study /studies
+  backend pkdb-server bootstrap-study /studies
 ```
 
 The folder is mounted read-only and retains its original name, which must match the study name. `bootstrap-study` creates missing accounts named in study attribution, including comment authors, with login disabled. It preserves existing passwords, roles, and activation. Your administrator account performs the upload; you do not need to change the study's creator. This is local database administration, not an API operation.
@@ -33,11 +33,11 @@ export PKDB_API_TOKEN
 ```bash
 docker compose run --rm --no-deps -e PKDB_API_TOKEN \
   --volume "$STUDY_DIR:/studies/$STUDY_NAME:ro" \
-  backend pkdb validate /studies --api-url http://backend:8000
+  backend pkdb-server validate /studies --api-url http://backend:8000
 
 docker compose run --rm --no-deps -e PKDB_API_TOKEN \
   --volume "$STUDY_DIR:/studies/$STUDY_NAME:ro" \
-  backend pkdb upload /studies --api-url http://backend:8000
+  backend pkdb-server upload /studies --api-url http://backend:8000
 ```
 
 Inside Compose, the backend address is `http://backend:8000`. Your browser uses `http://localhost:18083`. Do not use localhost for the container's API URL.
