@@ -104,7 +104,7 @@ def test_only_explicit_volatile_paths_are_ignored():
 
 **Files:** Create `backend-next/pyproject.toml`, `uv.lock`, `.python-version`, `src/pkdb/__init__.py`, `src/pkdb/config.py`, `tests/test_runtime.py`, and `tests/conftest.py`. Create `.github/workflows/backend-next.yml` as an additive workflow; do not alter the old required CI checks yet.
 
-**Interfaces:** Importable `pkdb` package; `Settings` in `pkdb.config` reads `PKDB_DATABASE_URL`, `PKDB_FILE_ROOT`, `PKDB_UPLOAD_MAX_BYTES`, `PKDB_UPLOAD_MAX_FILES`, `PKDB_UPLOAD_CONCURRENCY`, `PKDB_UPLOAD_MAX_ROWS`. Production settings have no default password or production/test DB fallback. Tests override file root and database URL explicitly.
+**Interfaces:** Importable `pkdb` package; `Settings` in `pkdb_server.config` reads `PKDB_DATABASE_URL`, `PKDB_FILE_ROOT`, `PKDB_UPLOAD_MAX_BYTES`, `PKDB_UPLOAD_MAX_FILES`, `PKDB_UPLOAD_CONCURRENCY`, `PKDB_UPLOAD_MAX_ROWS`. Production settings have no default password or production/test DB fallback. Tests override file root and database URL explicitly.
 
 - [ ] Add a package/runtime test:
 

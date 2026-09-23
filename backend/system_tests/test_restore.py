@@ -7,17 +7,17 @@ from uuid import uuid4
 
 import pytest
 from fastapi.testclient import TestClient
+from pkdb.schemas.security import Principal
 from sqlalchemy import create_engine, select, text
 
-from pkdb.app import create_app
-from pkdb.config import Settings
-from pkdb.db.models.files import StoredFile
-from pkdb.db.read import read_study
-from pkdb.db.session import make_session_factory
-from pkdb.files.store import FileStore
-from pkdb.schemas.security import Principal
-from pkdb.services.authorization import AuthorizationDenied
-from pkdb.services.ingestion import IngestionService
+from pkdb_server.app import create_app
+from pkdb_server.config import Settings
+from pkdb_server.db.models.files import StoredFile
+from pkdb_server.db.read import read_study
+from pkdb_server.db.session import make_session_factory
+from pkdb_server.files.store import FileStore
+from pkdb_server.services.authorization import AuthorizationDenied
+from pkdb_server.services.ingestion import IngestionService
 
 
 def test_database_and_attachment_restore_preserves_science_and_permissions(

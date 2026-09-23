@@ -2,7 +2,7 @@
 
 from sqlalchemy import func, select
 
-from pkdb.db.subject_filters import effective_characteristics
+from pkdb_server.db.subject_filters import effective_characteristics
 
 
 def test_inherited_subject_queries_can_share_one_statement(db_session):

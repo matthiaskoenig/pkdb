@@ -5,8 +5,8 @@ from copy import deepcopy
 
 from sqlalchemy import select
 
-from pkdb.cli import main
-from pkdb.db.models.users import User
+from pkdb_server.cli import main
+from pkdb_server.db.models.users import User
 
 
 def test_bootstrap_study_creates_disabled_identities_and_preserves_accounts(

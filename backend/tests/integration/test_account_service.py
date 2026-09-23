@@ -3,9 +3,9 @@ from datetime import UTC, datetime, timedelta
 import pytest
 from sqlalchemy import select
 
-from pkdb.db.models.users import User
-from pkdb.services.accounts import AccountService, AccountThrottled
-from pkdb.services.authentication import (
+from pkdb_server.db.models.users import User
+from pkdb_server.services.accounts import AccountService, AccountThrottled
+from pkdb_server.services.authentication import (
     AuthenticationFailed,
     authenticate_token,
     password_hash,
@@ -38,7 +38,7 @@ def accounts(session_factory):
 
 def test_reset_token_is_one_use_and_revokes_sessions(accounts, session_factory):
     service, mailbox = accounts
-    from pkdb.db.models.users import EmailAddress
+    from pkdb_server.db.models.users import EmailAddress
 
     with session_factory.begin() as session:
         user = session.scalar(select(User).where(User.username == "account"))
@@ -99,7 +99,7 @@ def test_reset_requires_verified_email(accounts, session_factory):
 
 @pytest.mark.parametrize("action", ["expired", "wrong-purpose", "disabled"])
 def test_invalid_reset_cannot_change_password(accounts, session_factory, action):
-    from pkdb.db.models.users import EmailAddress
+    from pkdb_server.db.models.users import EmailAddress
 
     service, mailbox = accounts
     with session_factory.begin() as session:
@@ -128,8 +128,8 @@ def test_invalid_reset_cannot_change_password(accounts, session_factory, action)
 
 @pytest.fixture
 def primary_change_context(accounts, session_factory):
-    from pkdb.db.models.users import EmailAddress
-    from pkdb.services.credentials import CredentialService
+    from pkdb_server.db.models.users import EmailAddress
+    from pkdb_server.services.credentials import CredentialService
 
     service, mailbox = accounts
     with session_factory.begin() as session:
@@ -155,7 +155,7 @@ def primary_change_context(accounts, session_factory):
 def test_primary_change_notifies_both_verified_addresses_once(
     primary_change_context, session_factory
 ):
-    from pkdb.db.models.users import EmailAddress
+    from pkdb_server.db.models.users import EmailAddress
 
     service, mailbox, principal, primary_id, secondary_id = primary_change_context
     service.change_email(principal, secondary_id, {"is_primary": True})
@@ -179,8 +179,8 @@ def test_primary_change_notifies_both_verified_addresses_once(
 def test_primary_change_mail_failure_retains_working_primary(
     primary_change_context, session_factory, fail_on
 ):
-    from pkdb.db.models.users import EmailAddress
-    from pkdb.services.accounts import MailDeliveryFailed
+    from pkdb_server.db.models.users import EmailAddress
+    from pkdb_server.services.accounts import MailDeliveryFailed
 
     service, mailbox, principal, primary_id, secondary_id = primary_change_context
     delivered = []
@@ -203,7 +203,7 @@ def test_primary_change_mail_failure_retains_working_primary(
 def test_primary_change_does_not_notify_unverified_previous_address(
     primary_change_context, session_factory
 ):
-    from pkdb.db.models.users import EmailAddress
+    from pkdb_server.db.models.users import EmailAddress
 
     service, mailbox, principal, primary_id, secondary_id = primary_change_context
     with session_factory.begin() as session:

@@ -2,9 +2,9 @@ import json
 
 import pytest
 
-from pkdb.cli import main
-from pkdb.db.models.users import EmailAddress, User
-from pkdb.services.authentication import password_hash
+from pkdb_server.cli import main
+from pkdb_server.db.models.users import EmailAddress, User
+from pkdb_server.services.authentication import password_hash
 
 
 @pytest.mark.parametrize("credential_kind", ["legacy", "personal"])

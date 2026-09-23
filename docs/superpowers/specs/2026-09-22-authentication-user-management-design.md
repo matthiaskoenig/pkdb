@@ -16,15 +16,15 @@ The remaining choices in this document are implementation defaults from the desi
 
 | Location | Current behavior and required change |
 | --- | --- |
-| `backend/src/pkdb/db/models/users.py` | Users, email addresses, hashed purpose-specific tokens, and account throttles exist. Change the user role default from `curator` to `user`; add the credential and identity records below. |
-| `backend/src/pkdb/services/accounts.py` | Registration explicitly creates ordinary users; verification, password reset, and throttling exist. Reuse these services and extend recovery/session behavior. |
-| `backend/src/pkdb/services/authentication.py` | Opaque API tokens are hashed and expire after 30 days by default. Separate browser sessions from personal API keys. |
-| `backend/src/pkdb/services/authorization.py` | Reviewers can read private studies but cannot write globally; membership can currently grant writes without a curator role. Replace with section 3. |
-| `backend/src/pkdb/services/ingestion.py` | Permissions are rechecked during publication, but uploaded graphs can replace study metadata and relationships. Protect access-control fields and preserve credential scope during rechecks. |
-| `backend/src/pkdb/services/admin_users.py` | Administrative creation issues an API token and accepts role changes. Replace automatic credential issuance with invitations and enforce the sole-administrator invariant. |
-| `backend/src/pkdb/mcp/authentication.py` | Tokens are checked against the database, with a generic `pkdb` scope. Preserve immediate rechecks and enforce actual key scopes per tool. |
-| `backend/src/pkdb/commands/admin.py` | Administrator creation rejects existing identities. Add explicit, verified adoption of the existing `USERNAME` account. |
-| `backend/src/pkdb/db/bootstrap.py` and `backend/bootstrap/users.json` | Bootstrap role defaults need tightening; the roster is currently empty. Add a private, reviewed account import. |
+| `backend/src/pkdb_server/db/models/users.py` | Users, email addresses, hashed purpose-specific tokens, and account throttles exist. Change the user role default from `curator` to `user`; add the credential and identity records below. |
+| `backend/src/pkdb_server/services/accounts.py` | Registration explicitly creates ordinary users; verification, password reset, and throttling exist. Reuse these services and extend recovery/session behavior. |
+| `backend/src/pkdb_server/services/authentication.py` | Opaque API tokens are hashed and expire after 30 days by default. Separate browser sessions from personal API keys. |
+| `backend/src/pkdb_server/services/authorization.py` | Reviewers can read private studies but cannot write globally; membership can currently grant writes without a curator role. Replace with section 3. |
+| `backend/src/pkdb_server/services/ingestion.py` | Permissions are rechecked during publication, but uploaded graphs can replace study metadata and relationships. Protect access-control fields and preserve credential scope during rechecks. |
+| `backend/src/pkdb_server/services/admin_users.py` | Administrative creation issues an API token and accepts role changes. Replace automatic credential issuance with invitations and enforce the sole-administrator invariant. |
+| `backend/src/pkdb_server/mcp/authentication.py` | Tokens are checked against the database, with a generic `pkdb` scope. Preserve immediate rechecks and enforce actual key scopes per tool. |
+| `backend/src/pkdb_server/commands/admin.py` | Administrator creation rejects existing identities. Add explicit, verified adoption of the existing `USERNAME` account. |
+| `backend/src/pkdb_server/db/bootstrap.py` and `backend/bootstrap/users.json` | Bootstrap role defaults need tightening; the roster is currently empty. Add a private, reviewed account import. |
 | `frontend/src/store.js` and frontend API callers | Browser tokens are kept in local storage. Replace this with cookie sessions and centralized request handling. |
 
 ## 3. Authorization contract

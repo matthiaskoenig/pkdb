@@ -5,7 +5,7 @@ import os
 from sqlalchemy import create_engine, pool
 
 from alembic import context
-from pkdb.db.models import Base
+from pkdb_server.db.models import Base
 
 config = context.config
 url = config.get_main_option("sqlalchemy.url") or os.environ.get("PKDB_DATABASE_URL")

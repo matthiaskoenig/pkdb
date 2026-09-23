@@ -39,7 +39,7 @@ From the repository root, start the frontend, backend, and database, then create
 
 ```bash
 docker compose --profile dev up --build --wait
-docker compose exec backend pkdb create-admin USERNAME --email ADMIN_EMAIL
+docker compose exec backend pkdb-server create-admin USERNAME --email ADMIN_EMAIL
 ```
 
 Open <http://localhost:8080> and sign in with the password entered at the prompt. See [Local setup and development](installation.md) to import our users and avatars, load studies, and run tests.

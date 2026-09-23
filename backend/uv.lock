@@ -1212,7 +1212,41 @@ wheels = [
 
 [[package]]
 name = "pkdb"
-version = "0.10.2"
+version = "0.11.0"
+source = { editable = "../python" }
+dependencies = [
+    { name = "httpx2" },
+    { name = "numpy" },
+    { name = "openpyxl" },
+    { name = "pandas" },
+    { name = "pint" },
+    { name = "pkpdutils" },
+    { name = "pydantic" },
+    { name = "scipy" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "httpx2", specifier = ">=2.13.0,<3" },
+    { name = "numpy", specifier = ">=2.5.3,<3" },
+    { name = "openpyxl", specifier = ">=3.1.5,<4" },
+    { name = "pandas", specifier = ">=3.0.6,<4" },
+    { name = "pint", specifier = ">=0.26.1,<1" },
+    { name = "pkpdutils", specifier = ">=1.2.0,<2" },
+    { name = "pydantic", specifier = ">=2.13.5,<3" },
+    { name = "scipy", specifier = ">=1.18.1,<2" },
+]
+
+[package.metadata.requires-dev]
+dev = [
+    { name = "pytest", specifier = ">=9.1.1" },
+    { name = "ruff", specifier = ">=0.16.8" },
+    { name = "ty", specifier = ">=0.0.83" },
+]
+
+[[package]]
+name = "pkdb-server"
+version = "0.11.0"
 source = { editable = "." }
 dependencies = [
     { name = "alembic" },
@@ -1220,18 +1254,12 @@ dependencies = [
     { name = "fastmcp" },
     { name = "httpx2" },
     { name = "mcp" },
-    { name = "numpy" },
-    { name = "openpyxl" },
-    { name = "pandas" },
     { name = "pillow" },
-    { name = "pint" },
-    { name = "pkpdutils" },
+    { name = "pkdb" },
     { name = "psycopg", extra = ["binary"] },
     { name = "pwdlib", extra = ["argon2"] },
-    { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "python-multipart" },
-    { name = "scipy" },
     { name = "sqlalchemy" },
     { name = "uvicorn" },
 ]
@@ -1258,18 +1286,12 @@ requires-dist = [
     { name = "fastmcp", specifier = ">=4.0.5,<5" },
     { name = "httpx2", specifier = ">=2.13.0,<3" },
     { name = "mcp", specifier = "==2.2.0" },
-    { name = "numpy", specifier = ">=2.5.3,<3" },
-    { name = "openpyxl", specifier = ">=3.1.5,<4" },
-    { name = "pandas", specifier = ">=3.0.6,<4" },
     { name = "pillow", specifier = ">=12.3.0,<13" },
-    { name = "pint", specifier = ">=0.26.1,<1" },
-    { name = "pkpdutils", specifier = ">=1.2.0,<2" },
+    { name = "pkdb", editable = "../python" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.3.6,<4" },
     { name = "pwdlib", extras = ["argon2"], specifier = ">=0.3.1,<1" },
-    { name = "pydantic", specifier = ">=2.13.5,<3" },
     { name = "pydantic-settings", specifier = ">=2.15.0,<3" },
     { name = "python-multipart", specifier = ">=0.0.32" },
-    { name = "scipy", specifier = ">=1.18.1,<2" },
     { name = "sqlalchemy", specifier = ">=2.0.54,<3" },
     { name = "uvicorn", specifier = ">=0.53.0,<1" },
 ]

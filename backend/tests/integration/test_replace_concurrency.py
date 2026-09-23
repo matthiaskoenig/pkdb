@@ -4,12 +4,12 @@ from threading import Barrier
 import pytest
 from sqlalchemy import event, func, select
 
-from pkdb.db.models.studies import Study
-from pkdb.db.models.users import User
-from pkdb.db.models.vocabulary import VocabularyVersion
-from pkdb.db.read import assemble_study, read_study
-from pkdb.services.authentication import AuthenticationFailed
-from pkdb.services.ingestion import PublicationConflict
+from pkdb_server.db.models.studies import Study
+from pkdb_server.db.models.users import User
+from pkdb_server.db.models.vocabulary import VocabularyVersion
+from pkdb_server.db.read import assemble_study, read_study
+from pkdb_server.services.authentication import AuthenticationFailed
+from pkdb_server.services.ingestion import PublicationConflict
 
 
 def test_concurrent_first_upload_has_one_complete_root(

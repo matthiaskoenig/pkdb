@@ -1,10 +1,10 @@
 from datetime import UTC, datetime, timedelta
 
 import pytest
+from pkdb.schemas.security import Principal
 from sqlalchemy import select
 
-from pkdb.schemas.security import Principal
-from pkdb.services.quotas import QuotaExceeded, QuotaService
+from pkdb_server.services.quotas import QuotaExceeded, QuotaService
 
 
 def test_account_quota_shared_across_keys_and_service_instances(session_factory):
@@ -31,7 +31,7 @@ def test_anonymous_bulk_export_denied(session_factory):
 
 
 def test_shared_work_leases_release_and_expire(session_factory):
-    from pkdb.db.models.limits import WorkLease
+    from pkdb_server.db.models.limits import WorkLease
 
     quotas = QuotaService(session_factory)
     principal = Principal(user_id=42, role="curator")

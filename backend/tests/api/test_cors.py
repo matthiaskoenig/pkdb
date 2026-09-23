@@ -2,8 +2,8 @@
 
 from fastapi.testclient import TestClient
 
-from pkdb.app import create_app
-from pkdb.config import Settings
+from pkdb_server.app import create_app
+from pkdb_server.config import Settings
 
 
 def test_explicit_browser_origin_can_send_authorization(

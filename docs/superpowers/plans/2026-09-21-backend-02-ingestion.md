@@ -83,7 +83,7 @@ def bootstrap(directory: Path, session: Session) -> BootstrapReport: ...
 ```python
 import pytest
 from sqlalchemy.exc import IntegrityError
-from pkdb.db.models.studies import Study
+from pkdb_server.db.models.studies import Study
 
 def test_duplicate_sid_is_rejected(db_session, schema_seed):
     db_session.add(Study(sid='S1', name='duplicate', access='public', licence='open'))
@@ -106,7 +106,7 @@ def test_duplicate_sid_is_rejected(db_session, schema_seed):
 
 ```python
 import pytest
-from pkdb.services.authorization import authorize, AuthorizationDenied
+from pkdb_server.services.authorization import authorize, AuthorizationDenied
 
 def test_public_read_does_not_allow_replacement(anonymous, private_study):
     study = private_study.model_copy(update={'access': 'public'})
@@ -131,7 +131,7 @@ def test_public_read_does_not_allow_replacement(anonymous, private_study):
 ```python
 import io
 import pytest
-from pkdb.services.authorization import AuthorizationDenied
+from pkdb_server.services.authorization import AuthorizationDenied
 
 def test_staged_file_is_not_public(file_store, creator, anonymous):
     staged = file_store.stage(creator, 'paper.pdf', io.BytesIO(b'%PDF-test'))
@@ -156,7 +156,7 @@ def test_staged_file_is_not_public(file_store, creator, anonymous):
 ```python
 import pytest
 from pkdb.schemas.validation import StudyValidationError
-from pkdb.db.read import read_study
+from pkdb_server.db.read import read_study
 
 def test_invalid_replacement_preserves_published_study(
     ingestion, valid_bundle, creator, session_factory
@@ -188,7 +188,7 @@ def test_invalid_replacement_preserves_published_study(
 
 ```python
 from sqlalchemy import func, select
-from pkdb.db.models.studies import Study
+from pkdb_server.db.models.studies import Study
 
 def test_validation_does_not_publish(client, creator_headers,
                                      bundle_multipart, db_session):

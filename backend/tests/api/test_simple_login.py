@@ -5,10 +5,10 @@ from datetime import UTC, datetime, timedelta
 import pytest
 from sqlalchemy import select
 
-from pkdb.commands.admin import create_admin
-from pkdb.commands.users import create_user
-from pkdb.db.models.credentials import BrowserSession
-from pkdb.db.models.users import User
+from pkdb_server.commands.admin import create_admin
+from pkdb_server.commands.users import create_user
+from pkdb_server.db.models.credentials import BrowserSession
+from pkdb_server.db.models.users import User
 
 
 def sign_in(client, username, password="Local-password-42!"):
@@ -110,7 +110,7 @@ def test_create_user_cli_provisions_login_without_mail(
 ):
     import io
 
-    from pkdb.cli import main
+    from pkdb_server.cli import main
 
     monkeypatch.setenv(
         "PKDB_DATABASE_URL",

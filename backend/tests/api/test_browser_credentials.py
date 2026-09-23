@@ -1,7 +1,7 @@
 import pytest
 
-from pkdb.db.models.users import EmailAddress, User
-from pkdb.services.authentication import password_hash
+from pkdb_server.db.models.users import EmailAddress, User
+from pkdb_server.services.authentication import password_hash
 
 
 @pytest.fixture
@@ -90,8 +90,8 @@ def test_administrator_api_key_cannot_change_study_access_control(
 
     from sqlalchemy import select
 
-    from pkdb.db.models.credentials import ApiKey
-    from pkdb.services.credentials import digest
+    from pkdb_server.db.models.credentials import ApiKey
+    from pkdb_server.services.credentials import digest
 
     valid_bundle.study["licence"] = "open"
     endpoint = f"/api/v2/studies/{valid_bundle.study['sid']}"

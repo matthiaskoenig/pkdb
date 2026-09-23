@@ -23,7 +23,7 @@ def folder(tmp_path, name="Example", sid="TEST1"):
 def test_complete_bundle_one_request_no_source_edits(
     tmp_path, monkeypatch, capsys, command, method, path
 ):
-    from pkdb.cli import main
+    from pkdb_server.cli import main
 
     root = folder(tmp_path)
     before = {p.name: p.read_bytes() for p in root.iterdir()}
@@ -57,7 +57,7 @@ def test_complete_bundle_one_request_no_source_edits(
 
 
 def test_all_studies_reported_and_failures_are_nonzero(tmp_path, monkeypatch, capsys):
-    from pkdb.cli import main
+    from pkdb_server.cli import main
 
     folder(tmp_path, "First", "FIRST")
     folder(tmp_path, "Second", "SECOND")
@@ -86,7 +86,7 @@ def test_all_studies_reported_and_failures_are_nonzero(tmp_path, monkeypatch, ca
 
 
 def test_missing_token_and_empty_folder_do_not_report_success(tmp_path, monkeypatch):
-    from pkdb.cli import main
+    from pkdb_server.cli import main
 
     monkeypatch.delenv("PKDB_API_TOKEN", raising=False)
     assert main(["upload", str(tmp_path), "--api-url", "http://example.test"]) == 1
@@ -98,7 +98,7 @@ def test_missing_token_and_empty_folder_do_not_report_success(tmp_path, monkeypa
 def test_failed_or_ambiguous_responses_are_not_retried(
     tmp_path, monkeypatch, capsys, failure
 ):
-    from pkdb.cli import main
+    from pkdb_server.cli import main
 
     root = folder(tmp_path)
     monkeypatch.setenv("PKDB_API_TOKEN", "private-token")
@@ -130,7 +130,7 @@ def test_failed_or_ambiguous_responses_are_not_retried(
 
 
 def test_integer_study_sid_is_uploaded_as_canonical_text(tmp_path):
-    from pkdb.commands.upload import send_folder
+    from pkdb_server.commands.upload import send_folder
 
     root = folder(tmp_path, sid=123)
     calls = []
@@ -155,7 +155,7 @@ def test_integer_study_sid_is_uploaded_as_canonical_text(tmp_path):
 def test_redaction_preserves_json_types_and_hides_escaped_tokens(
     tmp_path, monkeypatch, capsys, token
 ):
-    from pkdb.cli import main
+    from pkdb_server.cli import main
 
     root = folder(tmp_path)
     monkeypatch.setenv("PKDB_API_TOKEN", token)

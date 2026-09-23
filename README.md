@@ -36,13 +36,25 @@ By combining pharmacokinetic data with structured metadata, semantic annotations
 PK-DB is available from [https://pk-db.com](https://pk-db.com). The terms of use are listed in the [`TERMS_OF_USE.md`](./TERMS_OF_USE.md).
 
 
+## Python client and command line
+
+Install the public package from this checkout with `uv tool install ./python` (Python 3.14). Existing `pkdb_data` study folders work directly:
+
+```bash
+pkdb prepare /path/to/pkdb_data/studies/ExampleStudy
+pkdb validate /path/to/pkdb_data/studies/ExampleStudy --offline
+pkdb upload /path/to/pkdb_data/studies/ExampleStudy --endpoint https://pk-db.com
+```
+
+Preparation and validation run locally. Upload validates first and uses `PKDB_API_KEY` for authentication. See the [Python client guide](docs/python-client.md) for vocabulary snapshots, Python examples, and reproducible validation.
+
 ## Local setup
 
 From the repository root, start the frontend, backend, and database, then create your administrator (replace `USERNAME` and `ADMIN_EMAIL`):
 
 ```bash
 docker compose --profile dev up --build --wait
-docker compose exec backend pkdb create-admin USERNAME --email ADMIN_EMAIL
+docker compose exec backend pkdb-server create-admin USERNAME --email ADMIN_EMAIL
 ```
 
 Open <http://localhost:8080> and sign in with the password entered at the prompt. See [Local setup and development](docs/installation.md) to import our users and avatars, load studies, and run tests.

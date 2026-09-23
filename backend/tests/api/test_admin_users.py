@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy import select
 
-from pkdb.db.models.users import EmailAddress, User
+from pkdb_server.db.models.users import EmailAddress, User
 
 
 def payload():
@@ -139,8 +139,9 @@ def test_duplicate_admin_creation_rolls_back(client, admin_headers, session_fact
 def test_admin_service_rejects_stale_authorization(session_factory):
     from pkdb.schemas.admin_users import AdminUserCreate
     from pkdb.schemas.security import Principal
-    from pkdb.services.admin_users import AdminUserService
-    from pkdb.services.authorization import AuthorizationDenied
+
+    from pkdb_server.services.admin_users import AdminUserService
+    from pkdb_server.services.authorization import AuthorizationDenied
 
     with session_factory.begin() as session:
         user = User(username="former-operator", role="admin", active=True)

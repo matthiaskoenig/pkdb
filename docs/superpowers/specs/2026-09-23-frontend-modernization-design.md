@@ -24,8 +24,8 @@ Implementation defaults specified below make the agreed design concrete. They re
 | `frontend/src/components/search/` | Existing domain filter groups and autocomplete controls; scope is labeled ambiguously as “Concise.” |
 | `frontend/src/components/tables/` | Entity-specific tables with shared request, pagination, and presentation mixins. |
 | `frontend/src/components/plots/` | Plotly wrappers and Vega integration require compatibility and scientific-output checks. |
-| `backend/src/pkdb/api/exports.py` | Existing filter creation, selection-based reads, and export contracts. |
-| `backend/src/pkdb/db/selection.py` | Authoritative distinction between measurement-constrained selections and whole-study selections. |
+| `backend/src/pkdb_server/api/exports.py` | Existing filter creation, selection-based reads, and export contracts. |
+| `backend/src/pkdb_server/db/selection.py` | Authoritative distinction between measurement-constrained selections and whole-study selections. |
 
 The migration must inspect actual usage before classifying a dependency as unused or deprecated. Vue 2 incompatibility, npm deprecation, maintenance status, and redundancy are separate reasons for replacement and must be recorded separately.
 

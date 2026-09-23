@@ -1,4 +1,4 @@
-from pkdb import __version__
+from pkdb_server import __version__
 
 
 def test_public_output_pagination_and_statistics(client, valid_bundle, admin_headers):
@@ -218,7 +218,7 @@ def test_legacy_name_and_sid_filters_are_distinct(
 ):
     import json
 
-    from pkdb.db.models.vocabulary import VocabularyNode
+    from pkdb_server.db.models.vocabulary import VocabularyNode
 
     with session_factory.begin() as session:
         session.get(VocabularyNode, "drug").name = "Drug display name"

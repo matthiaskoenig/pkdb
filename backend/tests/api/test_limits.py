@@ -2,7 +2,7 @@ import asyncio
 
 import pytest
 
-from pkdb.api.limits import UploadLimits
+from pkdb_server.api.limits import UploadLimits
 
 
 @pytest.mark.parametrize("path", ["/api/v2/studies/TEST", "/mcp/"])

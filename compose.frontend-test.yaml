@@ -14,7 +14,9 @@ services:
       timeout: 5s
       retries: 30
   backend:
-    build: ./backend
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
     environment:
       PKDB_DATABASE_URL: postgresql+psycopg://pkdb_frontend_test:frontend-test-only@db/pkdb_frontend_test
       PKDB_FILE_ROOT: /data/files

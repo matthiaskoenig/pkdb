@@ -3,19 +3,13 @@ requires = ["hatchling>=1.32.4"]
 build-backend = "hatchling.build"
 
 [project]
-name = "pkdb"
-version = "0.10.2"
+name = "pkdb-server"
+version = "0.11.0"
 description = "PK-DB backend"
 requires-python = ">=3.14,<3.15"
 dependencies = [
-  "pydantic>=2.13.5,<3",
+  "pkdb==0.11.0",
   "pydantic-settings>=2.15.0,<3",
-  "pandas>=3.0.6,<4",
-  "numpy>=2.5.3,<3",
-  "scipy>=1.18.1,<2",
-  "pint>=0.26.1,<1",
-  "openpyxl>=3.1.5,<4",
-  "pkpdutils>=1.2.0,<2",
   "sqlalchemy>=2.0.54,<3",
   "psycopg[binary]>=3.3.6,<4",
   "alembic>=1.20.0,<2",
@@ -30,7 +24,7 @@ dependencies = [
 ]
 
 [project.scripts]
-pkdb = "pkdb.cli:main"
+pkdb-server = "pkdb_server.cli:main"
 
 [dependency-groups]
 vocabulary = [
@@ -47,7 +41,7 @@ dev = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/pkdb"]
+packages = ["src/pkdb_server"]
 
 [tool.hatch.metadata]
 allow-direct-references = true
@@ -65,3 +59,6 @@ python-version = "3.14"
 testpaths = ["tests"]
 addopts = "--strict-markers"
 markers = ["corpus: requires explicitly configured source corpus", "integration: PostgreSQL integration"]
+
+[tool.uv.sources]
+pkdb = { path = "../python", editable = true }

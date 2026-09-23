@@ -1,7 +1,7 @@
 import pytest
-
 from pkdb.schemas.security import Principal, StudyAccess
-from pkdb.services.authorization import AuthorizationDenied, authorize
+
+from pkdb_server.services.authorization import AuthorizationDenied, authorize
 
 
 @pytest.fixture
@@ -74,7 +74,7 @@ def test_public_access_does_not_grant_write_or_closed_files(private_study):
     ],
 )
 def test_creation_requires_permitted_role(role, allowed):
-    from pkdb.services.authorization import authorize_creation
+    from pkdb_server.services.authorization import authorize_creation
 
     principal = Principal(user_id=None if role == "anonymous" else 1, role=role)
     if allowed:

@@ -8,7 +8,7 @@ Clone the repository (`git clone https://github.com/matthiaskoenig/pkdb.git`) an
 
 ```bash
 docker compose --profile dev up --build --wait
-docker compose exec backend pkdb create-admin USERNAME --email ADMIN_EMAIL
+docker compose exec backend pkdb-server create-admin USERNAME --email ADMIN_EMAIL
 ```
 
 Enter a password at the hidden prompt. Create the administrator once; subsequent starts preserve the account. There is one designated administrator per database, identified by its internal account ID. The username is your choice. The email is marked verified by this operator command, so local login and API-key creation work without SMTP.
@@ -28,7 +28,7 @@ The frontend proxies API requests to the backend, including browser session cook
 As the third setup command, load the bundled historical curator/reviewer roster and avatars:
 
 ```bash
-docker compose exec backend pkdb import-users /app/bootstrap/curator-roster.json --avatar-root /app/frontend/public --apply
+docker compose exec backend pkdb-server import-users /app/bootstrap/curator-roster.json --avatar-root /app/frontend/public --apply
 ```
 
 Use `--dry-run` instead of `--apply` to preview changes first, especially on an existing database. The public roster contains 69 historical entries: 67 curator/reviewer accounts are imported on a fresh database; the historical test account is excluded, and the historical administrator profile is skipped unless it matches the already designated administrator. Choosing another admin username does not rename or adopt that historical identity. The empty `users.json` is not the user roster. Compose mounts the bundled avatars read-only and the importer copies them into persistent backend storage.
@@ -40,7 +40,7 @@ Imported users retain their attribution, roles, and profile data, but new import
 For immediate login as a curator, create a separate test account with a username absent from the historical roster:
 
 ```bash
-docker compose exec backend pkdb create-user local-curator --role curator --email local-curator@example.org
+docker compose exec backend pkdb-server create-user local-curator --role curator --email local-curator@example.org
 ```
 
 Enter its password when prompted. Use `--role reviewer` to test access to all studies, or omit `--role` for an ordinary reader. Email is optional for browser login; supply it when testing personal API keys. These commands create new accounts and never overwrite imported users or reset existing passwords.
@@ -60,7 +60,7 @@ Mount it read-only for the import. Preview, resolve any conflicts, then repeat w
 ```bash
 docker compose run --rm --no-deps \
   --volume /absolute/path/contacts.json:/private/contacts.json:ro \
-  backend pkdb import-users /app/bootstrap/curator-roster.json \
+  backend pkdb-server import-users /app/bootstrap/curator-roster.json \
   --avatar-root /app/frontend/public --contacts /private/contacts.json --dry-run
 ```
 

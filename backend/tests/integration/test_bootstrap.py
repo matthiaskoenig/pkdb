@@ -3,9 +3,9 @@ import json
 import pytest
 from sqlalchemy import select
 
-from pkdb.db.bootstrap import bootstrap, load_vocabulary
-from pkdb.db.models.users import User
-from pkdb.db.models.vocabulary import VocabularyVersion
+from pkdb_server.db.bootstrap import bootstrap, load_vocabulary
+from pkdb_server.db.models.users import User
+from pkdb_server.db.models.vocabulary import VocabularyVersion
 
 
 @pytest.fixture

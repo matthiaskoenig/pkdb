@@ -4,7 +4,7 @@ from alembic.config import Config
 from sqlalchemy import select
 
 from alembic import command
-from pkdb.db.models.users import User
+from pkdb_server.db.models.users import User
 
 
 def test_forward_migrations_preserve_existing_users(session_factory):
@@ -23,7 +23,7 @@ def test_forward_migrations_preserve_existing_users(session_factory):
 
 
 def test_reference_authors_have_public_identifiers(session_factory):
-    from pkdb.db.models.studies import Author, Reference
+    from pkdb_server.db.models.studies import Author, Reference
 
     with session_factory.begin() as session:
         reference = Reference(sid="r", name="reference")

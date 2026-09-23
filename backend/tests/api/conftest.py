@@ -1,10 +1,10 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from pkdb.app import create_app
-from pkdb.config import Settings
-from pkdb.db.models.users import User
-from pkdb.services.authentication import issue_token
+from pkdb_server.app import create_app
+from pkdb_server.config import Settings
+from pkdb_server.db.models.users import User
+from pkdb_server.services.authentication import issue_token
 
 
 @pytest.fixture
@@ -34,9 +34,9 @@ def admin_headers(session_factory):
     import secrets
     from datetime import UTC, datetime, timedelta
 
-    from pkdb.db.models.credentials import BrowserSession
-    from pkdb.db.models.security import SecurityConfiguration
-    from pkdb.services.credentials import digest
+    from pkdb_server.db.models.credentials import BrowserSession
+    from pkdb_server.db.models.security import SecurityConfiguration
+    from pkdb_server.services.credentials import digest
 
     with session_factory.begin() as session:
         user = User(username="mkoenig", role="admin", active=True)

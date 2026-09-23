@@ -1,16 +1,16 @@
 from datetime import UTC, datetime, timedelta
 
 import pytest
+from pkdb.schemas.security import Principal
 from sqlalchemy import select
 
-from pkdb.db.models.audit import AuditEvent
-from pkdb.db.models.credentials import BrowserSession
-from pkdb.db.models.security import SecurityConfiguration
-from pkdb.db.models.users import EmailAddress, Token, User
-from pkdb.schemas.security import Principal
-from pkdb.services.accounts import MailDeliveryFailed
-from pkdb.services.authentication import AuthenticationFailed, password_hash
-from pkdb.services.invitations import InvitationService
+from pkdb_server.db.models.audit import AuditEvent
+from pkdb_server.db.models.credentials import BrowserSession
+from pkdb_server.db.models.security import SecurityConfiguration
+from pkdb_server.db.models.users import EmailAddress, Token, User
+from pkdb_server.services.accounts import MailDeliveryFailed
+from pkdb_server.services.authentication import AuthenticationFailed, password_hash
+from pkdb_server.services.invitations import InvitationService
 
 
 class Mailer:

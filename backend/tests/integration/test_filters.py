@@ -1,14 +1,14 @@
 import pytest
-from pydantic import ValidationError
-
-from pkdb.db.models.measurements import Measurement
-from pkdb.db.models.studies import Study
-from pkdb.db.models.subjects import Group
-from pkdb.db.models.users import User
-from pkdb.db.models.vocabulary import VocabularyNode
 from pkdb.schemas.queries import Predicate, QuerySpec
 from pkdb.schemas.security import Principal
-from pkdb.services.queries import QueryService
+from pydantic import ValidationError
+
+from pkdb_server.db.models.measurements import Measurement
+from pkdb_server.db.models.studies import Study
+from pkdb_server.db.models.subjects import Group
+from pkdb_server.db.models.users import User
+from pkdb_server.db.models.vocabulary import VocabularyNode
+from pkdb_server.services.queries import QueryService
 
 
 @pytest.fixture

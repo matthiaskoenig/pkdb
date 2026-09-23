@@ -6,17 +6,17 @@ import shutil
 from pathlib import Path
 
 import pytest
-from sqlalchemy import select
-
-from pkdb.config import Settings
-from pkdb.db.bootstrap import bootstrap
-from pkdb.db.models.users import User
-from pkdb.db.read import read_study
 from pkdb.domain.provenance import comment_authors
-from pkdb.files.store import FileStore
 from pkdb.importers.folder import load_folder, parse_bundle
 from pkdb.schemas.security import Principal
-from pkdb.services.ingestion import IngestionService
+from sqlalchemy import select
+
+from pkdb_server.config import Settings
+from pkdb_server.db.bootstrap import bootstrap
+from pkdb_server.db.models.users import User
+from pkdb_server.db.read import read_study
+from pkdb_server.files.store import FileStore
+from pkdb_server.services.ingestion import IngestionService
 
 
 @pytest.mark.parametrize(

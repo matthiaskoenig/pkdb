@@ -4,12 +4,12 @@ from datetime import UTC, datetime, timedelta
 from fastapi.testclient import TestClient
 from sqlalchemy import func, select
 
-from pkdb.app import create_app
-from pkdb.config import Settings
-from pkdb.db.models.credentials import BrowserSession
-from pkdb.db.models.limits import WorkLease
-from pkdb.db.models.users import User
-from pkdb.services.credentials import digest
+from pkdb_server.app import create_app
+from pkdb_server.config import Settings
+from pkdb_server.db.models.credentials import BrowserSession
+from pkdb_server.db.models.limits import WorkLease
+from pkdb_server.db.models.users import User
+from pkdb_server.services.credentials import digest
 
 
 def test_curator_request_requires_session_and_explicit_admin_decision(

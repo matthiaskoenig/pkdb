@@ -51,6 +51,8 @@ jobs:
       - run: uv run --python ${{ matrix.python }} --locked alembic upgrade head
       - name: Verify generated vocabulary matches authoring sources
         run: uv run --python ${{ matrix.python }} --locked python ../scripts/update_vocabulary.py --check
+      - name: Verify bundled client vocabulary matches server reference data
+        run: uv run --python ${{ matrix.python }} --locked python ../scripts/update_client_vocabulary.py --check
       - run: uv run --python ${{ matrix.python }} --locked pytest -q
       - run: uv run --python ${{ matrix.python }} --locked ruff check .
       - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
@@ -59,11 +61,16 @@ jobs:
       - name: Install wheel in clean environment
         run: |
           uv venv --python ${{ matrix.python }} /tmp/pkdb-wheel
+          uv build --project ../python --out-dir dist
           uv pip install --python /tmp/pkdb-wheel/bin/python dist/*.whl
           cd /tmp
-          /tmp/pkdb-wheel/bin/python -c 'import pkdb, numpy, scipy, pandas, pint; from pkpdutils import Timecourse, nca_single'
+          /tmp/pkdb-wheel/bin/python -c 'import pkdb, pkdb_server, numpy, scipy, pandas, pint; from pkpdutils import Timecourse, nca_single'
+      - uses: actions/upload-artifact@v7
+        with:
+          name: server-distributions
+          path: backend/dist/pkdb_server-*
       - name: Build pinned runtime image
-        run: docker build --build-arg PYTHON_VERSION=${{ matrix.python }} -t pkdb:py${{ matrix.python }} .
+        run: docker build --build-arg PYTHON_VERSION=${{ matrix.python }} -t pkdb:py${{ matrix.python }} -f Dockerfile ..
       - name: Verify installed container runtime
         env:
           PKDB_TEST_IMAGE: pkdb:py${{ matrix.python }}
@@ -77,6 +84,51 @@ jobs:
         env:
           PKDB_TEST_POSTGRES_CONTAINER: ${{ job.services.postgres.id }}
         run: uv run --python ${{ matrix.python }} --locked pytest system_tests/test_restore.py -q
+
+  client:
+    name: Client (${{ matrix.os }}, Python 3.14)
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    defaults:
+      run:
+        working-directory: python
+        shell: bash
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v10.1.0
+        with:
+          python-version: '3.14'
+          enable-cache: true
+      - run: uv sync --locked
+      - run: uv run --locked pytest -q
+      - run: uv run --locked ruff check .
+      - run: uv run --locked ruff format --check .
+      - run: uv run --locked ty check
+      - run: uv build
+      - name: Verify isolated public wheel and CLI
+        run: |
+          uv venv wheel-env
+          if [ "$RUNNER_OS" = Windows ]; then
+            PYTHON_BIN=wheel-env/Scripts/python.exe
+            PKDB_BIN=wheel-env/Scripts/pkdb.exe
+          else
+            PYTHON_BIN=wheel-env/bin/python
+            PKDB_BIN=wheel-env/bin/pkdb
+          fi
+          uv pip install --python "$PYTHON_BIN" dist/*.whl
+          "$PYTHON_BIN" -c 'import pkdb, importlib.util; from pkdb.domain.validation import prepare_study; from pkdb.cache import bundled_vocabulary; assert bundled_vocabulary().substances; assert importlib.util.find_spec("pkdb_server") is None; assert importlib.util.find_spec("sqlalchemy") is None'
+          "$PKDB_BIN" --help
+      - uses: actions/upload-artifact@v7
+        if: runner.os == 'Linux'
+        with:
+          name: python-distributions
+          path: python/dist/*
 
   compose:
     runs-on: ubuntu-latest
@@ -93,7 +145,7 @@ jobs:
         run: |
           curl --fail http://127.0.0.1:18083/health/ready
           curl --fail 'http://127.0.0.1:18083/api/v1/info_nodes/?page_size=1'
-          printf '%s\n' 'Local-CI-password-42!' | docker compose exec -T backend pkdb create-admin mkoenig --email ci@example.org --password-stdin
+          printf '%s\n' 'Local-CI-password-42!' | docker compose exec -T backend pkdb-server create-admin mkoenig --email ci@example.org --password-stdin
           docker compose restart backend
           docker compose up -d --wait --wait-timeout 180
           python - <<'PYTHON'
@@ -150,24 +202,57 @@ jobs:
 
   tests:
     name: tests
-    needs: [python, compose, frontend]
+    needs: [python, client, compose, frontend]
     if: always()
     runs-on: ubuntu-latest
     steps:
       - name: Require backend, frontend, and local Docker setup
         env:
           PYTHON_RESULT: ${{ needs.python.result }}
+          CLIENT_RESULT: ${{ needs.client.result }}
           COMPOSE_RESULT: ${{ needs.compose.result }}
           FRONTEND_RESULT: ${{ needs.frontend.result }}
         run: |
           test "$PYTHON_RESULT" = success
+          test "$CLIENT_RESULT" = success
           test "$COMPOSE_RESULT" = success
           test "$FRONTEND_RESULT" = success
 
-  release:
-    # the backend is not published on PyPI, a release is the tag with its
-    # GitHub release
+  publish-pypi:
+    name: Publish public Python package
     needs: tests
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: pypi
+      url: https://pypi.org/project/pkdb/
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: python-distributions
+          path: dist
+      - name: Verify public distributions match the release tag
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          python - <<'PYTHON'
+          import os
+          from pathlib import Path
+          version = os.environ["RELEASE_TAG"].removeprefix("v")
+          expected = {f"pkdb-{version}.tar.gz", f"pkdb-{version}-py3-none-any.whl"}
+          actual = {path.name for path in Path("dist").iterdir()}
+          assert actual == expected, (actual, expected)
+          PYTHON
+      - name: Publish to PyPI with Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  release:
+    # Matching client and server distributions are attached to the tagged release.
+    needs: [tests, publish-pypi]
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -184,10 +269,16 @@ jobs:
     - name: Determine the release notes path
       # the tag v0.10.0 releases with release-notes/0.10.0.md
       run: echo "NOTES_PATH=release-notes/${GITHUB_REF_NAME#v}.md" >> "$GITHUB_ENV"
+    - uses: actions/download-artifact@v8
+      with:
+        pattern: "*-distributions"
+        merge-multiple: true
+        path: dist
     - name: Create GitHub release
       uses: softprops/action-gh-release@v3
       with:
         body_path: ${{ env.NOTES_PATH }}
+        files: dist/*
         draft: false
         prerelease: false
 

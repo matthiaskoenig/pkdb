@@ -15,7 +15,7 @@ from pathlib import Path
 
 import httpx2
 
-from pkdb.commands.upload import api_root, send_folder, study_folders
+from pkdb_server.commands.upload import api_root, send_folder, study_folders
 
 if __package__ in (None, ""):
     sys.path.insert(0, str(Path(__file__).resolve().parents[2]))

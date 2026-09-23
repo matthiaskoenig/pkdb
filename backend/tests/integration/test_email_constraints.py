@@ -6,7 +6,7 @@ from sqlalchemy import select, text
 from sqlalchemy.exc import IntegrityError
 
 from alembic import command
-from pkdb.db.models.users import EmailAddress, User
+from pkdb_server.db.models.users import EmailAddress, User
 
 
 def test_database_rejects_two_primary_email_addresses(session_factory):

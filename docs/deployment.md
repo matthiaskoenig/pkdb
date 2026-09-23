@@ -4,7 +4,7 @@ The root `compose.yaml` is a local setup with an optional `dev` profile for the 
 
 ## Deployment requirements
 
-For an externally accessible deployment, provide a TLS reverse proxy, managed secrets, a durable PostgreSQL database, persistent attachment storage, and an appropriate backup policy. Configure the backend with `PKDB_DATABASE_URL`, `PKDB_FILE_ROOT`, and explicit `PKDB_CORS_ORIGINS` when using a separately hosted frontend. Additional settings are listed in `backend/src/pkdb/config.py`. The local default database password is only for local testing. The repository does not install a production reverse proxy.
+For an externally accessible deployment, provide a TLS reverse proxy, managed secrets, a durable PostgreSQL database, persistent attachment storage, and an appropriate backup policy. Configure the backend with `PKDB_DATABASE_URL`, `PKDB_FILE_ROOT`, and explicit `PKDB_CORS_ORIGINS` when using a separately hosted frontend. Additional settings are listed in `backend/src/pkdb_server/config.py`. The local default database password is only for local testing. The repository does not install a production reverse proxy.
 
 The container runs as UID 10001. A custom attachment mount must be writable by that user. Do not expose PostgreSQL publicly. Apply migrations once before starting API workers; the Compose startup command handles this for the single local API service.
 

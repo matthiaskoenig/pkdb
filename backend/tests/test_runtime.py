@@ -25,7 +25,7 @@ def test_supported_runtime_and_scientific_imports():
 def test_settings_reject_invalid_resource_limits(tmp_path):
     from pydantic import ValidationError
 
-    from pkdb.config import Settings
+    from pkdb_server.config import Settings
 
     with pytest.raises(ValidationError):
         Settings(
@@ -38,7 +38,7 @@ def test_settings_reject_invalid_resource_limits(tmp_path):
 def test_settings_require_explicit_storage_locations(monkeypatch):
     from pydantic import ValidationError
 
-    from pkdb.config import Settings
+    from pkdb_server.config import Settings
 
     monkeypatch.delenv("PKDB_DATABASE_URL", raising=False)
     monkeypatch.delenv("PKDB_FILE_ROOT", raising=False)

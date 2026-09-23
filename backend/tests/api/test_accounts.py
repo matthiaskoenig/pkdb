@@ -1,7 +1,7 @@
 import pytest
 from sqlalchemy import select
 
-from pkdb.db.models.users import User
+from pkdb_server.db.models.users import User
 
 
 @pytest.fixture
@@ -96,8 +96,8 @@ def test_email_addresses_are_owner_scoped_and_must_be_verified(
 ):
     from datetime import UTC, datetime, timedelta
 
-    from pkdb.db.models.credentials import BrowserSession
-    from pkdb.services.credentials import digest
+    from pkdb_server.db.models.credentials import BrowserSession
+    from pkdb_server.services.credentials import digest
 
     _, principal = ingestion_context
     now = datetime.now(UTC)

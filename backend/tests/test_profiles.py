@@ -3,17 +3,21 @@ from io import BytesIO
 
 import pytest
 from PIL import Image
-from pydantic import ValidationError
-
-from pkdb.db.models.credentials import BrowserSession
-from pkdb.db.models.users import EmailAddress, User
 from pkdb.schemas.profiles import ProfileUpdate
 from pkdb.schemas.responses import UserResponse
 from pkdb.schemas.security import Principal
-from pkdb.services.authentication import AuthenticationFailed
-from pkdb.services.authorization import AuthorizationDenied
-from pkdb.services.credentials import session_principal
-from pkdb.services.profiles import ProfileService, public_profile, sanitize_avatar
+from pydantic import ValidationError
+
+from pkdb_server.db.models.credentials import BrowserSession
+from pkdb_server.db.models.users import EmailAddress, User
+from pkdb_server.services.authentication import AuthenticationFailed
+from pkdb_server.services.authorization import AuthorizationDenied
+from pkdb_server.services.credentials import session_principal
+from pkdb_server.services.profiles import (
+    ProfileService,
+    public_profile,
+    sanitize_avatar,
+)
 
 
 def picture(size=(128, 128), format="WEBP"):

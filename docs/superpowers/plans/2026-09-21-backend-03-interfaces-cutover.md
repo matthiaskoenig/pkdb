@@ -48,7 +48,7 @@
 
 ```python
 import pytest
-from pkdb.services.authentication import AuthenticationFailed
+from pkdb_server.services.authentication import AuthenticationFailed
 
 def test_reset_token_cannot_be_reused(account_service, account_user, mailbox):
     account_service.request_reset(account_user.email)
@@ -100,7 +100,7 @@ def test_predicates_bind_to_same_measurement(queries, crossed_measurements, crea
 
 ```python
 import pytest
-from pkdb.services.authorization import AuthorizationDenied
+from pkdb_server.services.authorization import AuthorizationDenied
 
 def test_saved_filter_is_not_a_capability(exports, private_query, creator, anonymous):
     filter_id = exports.create_filter(private_query, creator)
@@ -184,7 +184,7 @@ def test_rebuild_accounts_for_every_study(rebuild_report):
 
 - [ ] Run the explicit system test expecting failure before the rebuild exists. Start a disposable PostgreSQL-only service, apply Alembic, bootstrap vocabulary and disabled user identities, and upload apixaban then the complete authorized corpus. Compare counts, relationships, warnings, PK values and every F1 contract. Investigate existing invalid studies; never edit sources or downgrade rules just to obtain green results. Record approved dispositions rather than hiding failures; the all-published test remains the target for a valid release corpus.
 - [ ] Run full suites and five-run benchmarks on both Pythons using F1 inputs; record absolute/relative results and stage profiles. Fix demonstrated SQL, parsing or calculation bottlenecks; only add COPY/process workers after a benchmark demonstrates need and their fault tests pass.
-- [ ] Build images with `ARG PYTHON_VERSION=3.14` and a tested 3.13 override. Use the lockfile, copy/install the built package, run as a non-root user and start Uvicorn `pkdb.app:create_app --factory`; I5 defines the optional Settings argument so this factory loads runtime configuration. Both images must pass health, authenticated upload, scientific smoke and MCP transport tests. Test signal shutdown releases files/sessions. Pin base/uv image digests during execution, recording updates through normal dependency review.
+- [ ] Build images with `ARG PYTHON_VERSION=3.14` and a tested 3.13 override. Use the lockfile, copy/install the built package, run as a non-root user and start Uvicorn `pkdb_server.app:create_app --factory`; I5 defines the optional Settings argument so this factory loads runtime configuration. Both images must pass health, authenticated upload, scientific smoke and MCP transport tests. Test signal shutdown releases files/sessions. Pin base/uv image digests during execution, recording updates through normal dependency review.
 - [ ] Test pg_dump/restore plus attachment-volume restore into a disposable environment; re-run scientific and protected-file reads. Rehearse interrupted uploads and cleanup. Write bootstrap steps for database-only content and require an explicit disposition for each category before cutover.
 - [ ] Move the replacement into `backend/` only after acceptance evidence is complete. Remove tracked Django/DRF/Elasticsearch modules and runtime config; retain required pure scientific/importer functionality under the new package. Preserve unrelated/untracked files. Update bump/version config to the new version source without inventing a release number; retain the repository release version.
 - [ ] Replace the old Python 3.9/tox path with direct uv matrix jobs for 3.13/3.14. Keep the required `tests` aggregate check name, failing if either matrix entry or image fails. Remove Elasticsearch CI/compose services, obsolete env vars, generated-Django-migration steps, stubs and dependencies. Run Ruff/ty/tests, package/wheel installation and containers on both targets from a fresh checkout.

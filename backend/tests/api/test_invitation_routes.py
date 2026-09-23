@@ -1,6 +1,6 @@
 from sqlalchemy import select
 
-from pkdb.db.models.users import EmailAddress, User
+from pkdb_server.db.models.users import EmailAddress, User
 
 
 def test_admin_invitation_and_public_accept_claim_existing_user(

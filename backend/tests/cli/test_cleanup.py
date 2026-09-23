@@ -2,12 +2,12 @@ from datetime import UTC, datetime, timedelta
 
 from sqlalchemy import select
 
-from pkdb.db.models.saved_queries import SavedQuery
+from pkdb_server.db.models.saved_queries import SavedQuery
 
 
 def test_cleanup_removes_only_expired_saved_filters(session_factory, tmp_path):
-    from pkdb.commands.cleanup import cleanup
-    from pkdb.files.store import FileStore
+    from pkdb_server.commands.cleanup import cleanup
+    from pkdb_server.files.store import FileStore
 
     now = datetime.now(UTC)
     with session_factory.begin() as session:
