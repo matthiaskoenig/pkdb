@@ -47,7 +47,19 @@ def test_public_media_respects_access_and_licence(
     assert owner_files[0]["name"] == "data/paper.pdf"
     assert owner_files[0]["file"] == f"/media/{staged.id}/paper.pdf"
     url = f"/media/{staged.id}/paper.pdf"
-    assert client.get(url).status_code == status
+    assert client.get(url).status_code == 401
+    from pkdb.db.models.users import User
+    from pkdb.services.authentication import issue_token
+
+    with session_factory.begin() as session:
+        reader = User(username="media-reader", role="user", active=True)
+        session.add(reader)
+        session.flush()
+        token = issue_token(reader, session)
+    assert (
+        client.get(url, headers={"Authorization": f"Token {token}"}).status_code
+        == status
+    )
     response = client.get(url, headers=creator_headers)
     assert response.status_code == 200
     assert response.content == b"%PDF-test"
@@ -60,7 +72,7 @@ def test_draft_media_is_not_public(client, ingestion_context, creator_headers):
     staged = ingestion.file_store.stage(
         principal, "paper.pdf", io.BytesIO(b"%PDF-test")
     )
-    assert client.get(f"/media/{staged.id}/paper.pdf").status_code == 403
+    assert client.get(f"/media/{staged.id}/paper.pdf").status_code == 401
     assert (
         client.get(f"/media/{staged.id}/wrong.pdf", headers=creator_headers).status_code
         == 404

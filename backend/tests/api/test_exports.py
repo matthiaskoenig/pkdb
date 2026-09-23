@@ -1,6 +1,48 @@
 import json
 from copy import deepcopy
 
+import pytest
+
+
+@pytest.mark.parametrize("suffix", ["/", ".json", ".json/"])
+def test_anonymous_download_requires_authentication_but_browsing_is_public(
+    client, suffix
+):
+    path = "/api/v1/filter" + suffix
+    assert client.get(path).status_code == 200
+    response = client.get(path, params={"download": "true"})
+    assert response.status_code == 401
+    assert response.headers["www-authenticate"] == "Bearer"
+    assert "content-disposition" not in response.headers
+    assert client.get("/api/v1/pkdata/outputs/").status_code == 200
+
+
+def test_registered_reader_can_download_until_account_is_deactivated(
+    client, session_factory
+):
+    from pkdb.db.models.users import User
+    from pkdb.services.authentication import issue_token
+
+    with session_factory.begin() as session:
+        user = User(username="download-reader", role="user", active=True)
+        session.add(user)
+        session.flush()
+        user_id = user.id
+        token = issue_token(user, session)
+    headers = {"Authorization": f"Token {token}"}
+    response = client.get(
+        "/api/v1/filter/", headers=headers, params={"download": "true"}
+    )
+    assert response.status_code == 200
+    assert response.headers["content-disposition"] == "attachment; filename=pkdata.zip"
+    with session_factory.begin() as session:
+        session.get(User, user_id).active = False
+    response = client.get(
+        "/api/v1/filter/", headers=headers, params={"download": "true"}
+    )
+    assert response.status_code == 401
+    assert "content-disposition" not in response.headers
+
 
 def test_analysis_pagination_counts_expanded_pairs(client, admin_headers, valid_bundle):
     valid_bundle.study["access"] = "public"

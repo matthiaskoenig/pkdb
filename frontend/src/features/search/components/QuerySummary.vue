@@ -68,7 +68,7 @@ function remove(key: string, id: string) {
     </p>
     <div v-if="search.dirty" class="draft-summary">
       <strong>Changes not applied</strong>
-      <p>Rows, counts and downloads still use the applied query above.</p>
+      <p>Rows and counts still use the applied query above.</p>
       <div class="chip-list">
         <v-chip
           v-for="item in drafts"

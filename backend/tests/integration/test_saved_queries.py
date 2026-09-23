@@ -63,7 +63,18 @@ def test_export_rechecks_visibility_and_account(
     owned_id = exports.create_filter(QuerySpec(entity="studies"), creator)
     with session_factory.begin() as session:
         session.execute(update(Study).values(access="private"))
-    assert b"".join(exports.stream_export(public_id, "csv", Principal())) == b'""\n'
+    with pytest.raises(AuthorizationDenied, match="Authentication required"):
+        next(exports.stream_export(public_id, "csv", Principal()))
+    with session_factory.begin() as session:
+        reader = User(username="export-reader", role="user", active=True)
+        session.add(reader)
+        session.flush()
+        reader_principal = Principal(
+            user_id=reader.id, username=reader.username, role=reader.role
+        )
+    assert (
+        b"".join(exports.stream_export(public_id, "csv", reader_principal)) == b'""\n'
+    )
     with session_factory.begin() as session:
         session.execute(
             update(User).where(User.id == creator.user_id).values(active=False)

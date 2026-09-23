@@ -13,8 +13,10 @@ body {
   margin: 0;
 }
 a {
-  color: rgb(var(--v-theme-primary));
   text-underline-offset: 3px;
+}
+a:not(.v-btn) {
+  color: rgb(var(--v-theme-primary));
 }
 button,
 a,
@@ -57,6 +59,7 @@ p {
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }
 .brand {
+  display: flex;
   font-size: 1.7rem;
   font-weight: 800;
   text-decoration: none;
@@ -64,15 +67,32 @@ p {
   letter-spacing: -0.08em;
   color: rgb(var(--v-theme-on-surface));
 }
-.brand span {
-  color: rgb(var(--v-theme-primary));
+.brand-logo {
+  object-fit: contain;
+}
+.v-theme--dark .brand-logo {
+  filter: invert(1);
+}
+.account-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.account-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+.resource-menu {
+  text-transform: none;
+  letter-spacing: normal;
 }
 .brand-description {
   font-size: 0.85rem;
   opacity: 0.7;
 }
 .desktop-nav {
-  gap: 28px;
+  gap: 20px;
   align-items: center;
 }
 .desktop-nav a {
@@ -98,10 +118,22 @@ p {
 }
 .app-footer {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
   gap: 24px;
   padding: 24px 32px;
   border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   font-size: 0.85rem;
+}
+.app-footer div {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.app-footer p {
+  margin: 0;
+  color: rgba(var(--v-theme-on-surface), 0.75);
 }
 .page-heading {
   display: flex;

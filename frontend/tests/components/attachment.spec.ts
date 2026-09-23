@@ -2,7 +2,7 @@ import { beforeEach, expect, it, vi } from "vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import AttachmentCard from "../../src/features/details/components/AttachmentCard.vue";
-import { fileUrl } from "../../src/features/exports/useFileDownload";
+import { fileUrl } from "../../src/features/details/useImagePreview";
 import { useSessionStore } from "../../src/stores/session";
 const mocks = vi.hoisted(() => ({ get: vi.fn() }));
 vi.mock("../../src/api/client", () => ({
@@ -34,7 +34,7 @@ it("revokes a private preview on identity change and unmount", async () => {
   const wrapper = mount(AttachmentCard, {
     props: { path: "/media/a/image.png", name: "image.png" },
   });
-  await wrapper.findAll("button")[1]?.trigger("click");
+  await wrapper.findAll("button")[0]?.trigger("click");
   await flushPromises();
   expect(wrapper.find("img").attributes("src")).toBe("blob:preview");
   useSessionStore().invalidate();
@@ -54,7 +54,7 @@ it("does not install a preview whose response arrives after cancellation", async
   const wrapper = mount(AttachmentCard, {
     props: { path: "/media/a/image.png", name: "image.png" },
   });
-  await wrapper.findAll("button")[1]?.trigger("click");
+  await wrapper.findAll("button")[0]?.trigger("click");
   await wrapper
     .findAll("button")
     .find((button) => button.text() === "Cancel")
@@ -62,5 +62,15 @@ it("does not install a preview whose response arrives after cancellation", async
   finish?.({ data: new Blob(["image"], { type: "image/png" }) });
   await flushPromises();
   expect(URL.createObjectURL).not.toHaveBeenCalled();
+  wrapper.unmount();
+});
+
+it("shows non-image attachment metadata without a download action", () => {
+  const wrapper = mount(AttachmentCard, {
+    props: { path: "/media/a/dataset.csv", name: "dataset.csv" },
+  });
+  expect(wrapper.text()).toContain("dataset.csv");
+  expect(wrapper.find("button, a").exists()).toBe(false);
+  expect(mocks.get).not.toHaveBeenCalled();
   wrapper.unmount();
 });

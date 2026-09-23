@@ -6,7 +6,6 @@ import { useSearchController } from "../useSearchController";
 import { tabs, tabLabels } from "../model";
 import { encodeLocation } from "../codec";
 import { endpoints } from "../../../api/results";
-import { useSelectionExport } from "../../exports/useSelectionExport";
 import SearchPanel from "./SearchPanel.vue";
 import QuerySummary from "./QuerySummary.vue";
 import ResultsTable from "../../results/components/ResultsTable.vue";
@@ -24,8 +23,7 @@ const { search, submit, changeView, retry } = useSearchController(),
   router = useRouter(),
   route = useRoute(),
   session = useSessionStore(),
-  { mdAndUp } = useDisplay(),
-  exports = useSelectionExport();
+  { mdAndUp } = useDisplay();
 const showFilters = ref(false),
   detail = ref<{ entity: string; identifier: string | number } | null>(null),
   tableDraft = ref(""),
@@ -233,28 +231,10 @@ async function copyLink() {
                 Apply table search
               </v-btn>
             </form>
-            <v-btn
-              color="primary"
-              :disabled="search.selection.status !== 'ready'"
-              :loading="exports.busy.value"
-              @click="exports.download"
-            >
-              Download selected dataset (ZIP) </v-btn
-            ><v-btn
-              v-if="exports.busy.value"
-              variant="text"
-              @click="exports.cancel"
-            >
-              Cancel download
-            </v-btn>
           </div>
           <p class="muted">
-            Downloads contain the applied dataset, not only this page. Table
-            search refines this table only and is excluded from dataset exports.
+            Table search refines this table only.
           </p>
-          <v-alert v-if="exports.error.value" type="error" role="alert">
-            {{ exports.error.value }}
-          </v-alert>
           <p v-if="pending" role="status" class="result-state">
             Loading {{ tabLabels[search.view.tab].toLowerCase() }} for the
             applied query…

@@ -4,6 +4,8 @@ PK-DB owns its accounts, study permissions, and API keys. Browsers use server-si
 
 This guide describes the current password-based account flows. Earlier authentication design documents are historical and include provider and MFA requirements that have been removed.
 
+Public study browsing and filter overviews are available without signing in. Data downloads through `/api/v1/filter/?download=true` and study attachments under `/media/` require an authenticated, active account, including for public studies. Scripts should authenticate with a personal API key. Downloads include only studies and attachments the account can access.
+
 ## Roles and study access
 
 | Role | Study permissions | Account and vocabulary administration |

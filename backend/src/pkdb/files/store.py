@@ -168,6 +168,8 @@ class FileStore:
             raise ValueError("Attachment integrity check failed")
 
     def open_authorized(self, principal: Principal, attachment_id: UUID) -> BinaryIO:
+        if principal.user_id is None:
+            raise AuthorizationDenied("Authentication required for file downloads")
         with self.session_factory.begin() as session:
             if principal.user_id is not None:
                 principal = revalidate_principal(principal, session)
