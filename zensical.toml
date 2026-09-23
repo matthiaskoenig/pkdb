@@ -13,14 +13,12 @@ edit_uri = "edit/develop/docs/"
 extra_css = ["stylesheets/extra.css"]
 
 nav = [
-  { "Browse and access data" = [
-    { "Introduction" = "index.md" },
-    { "Web interface" = "web-interface.md" },
-  ] },
+  { "Introduction" = "index.md" },
+  { "Webinterface" = "web-interface.md" },
   { "Python client and API" = [
-    { "Python client" = "python-client.md" },
-    { "REST API" = "api.md" },
     { "Accounts and API keys" = "authentication.md" },
+    { "REST API" = "api.md" },
+    { "Python client" = "python-client.md" },
   ] },
   { "Development" = [
     { "Overview and source installation" = "development.md" },
@@ -35,6 +33,7 @@ nav = [
 [project.theme]
 language = "en"
 logo = "pkdb_logo.png"
+favicon = "pkdb_logo.png"
 features = [
   "content.action.edit",
   "content.code.annotate",

@@ -55,8 +55,8 @@ onMounted(() => {
           class="brand-logo"
           src="/assets/images/pkdb_logo.png"
           alt="PK-DB"
-          width="120"
-          height="33"
+          width="56"
+          height="56"
         />
       </RouterLink><span class="brand-description d-none d-xl-inline"
         >Pharmacokinetics database</span

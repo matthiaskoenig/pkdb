@@ -35,7 +35,7 @@ PK-DB is available from [https://alpha.pk-db.com](https://alpha.pk-db.com). The 
 
 The source code is at [https://github.com/matthiaskoenig/pkdb](https://github.com/matthiaskoenig/pkdb).
 
-## Browse and access data
+## Webinterface
 
 Open [alpha.pk-db.com](https://alpha.pk-db.com) and choose **Explore data** to explore studies, subjects, interventions, and measurements. Public browsing needs no account; sign in for dataset and attachment downloads. Start with the illustrated [Web interface guide](web-interface.md).
 
@@ -56,7 +56,7 @@ with Client(endpoint="https://alpha.pk-db.com") as client:
         print(study.sid)
 ```
 
-See [Python client and API](python-client.md) for queries, downloads, and data curation, [REST API](api.md) for HTTP examples, and [Accounts and API keys](authentication.md) for authenticated access. All curation examples use `https://alpha.pk-db.com`.
+Start with [Accounts and API keys](authentication.md) for authenticated access, then see [REST API](api.md) for HTTP examples and [Python client](python-client.md) for queries, downloads, and data curation. All curation examples use `https://alpha.pk-db.com`.
 
 ## Development
 
@@ -68,7 +68,7 @@ See [Development](development.md) for installing the package from source, workin
 
 ## Documentation
 
-Read the [documentation](https://matthiaskoenig.github.io/pkdb/) in order: **Browse and access data**, **Python client and API**, then **Development** when you work on the codebase.
+Read the [documentation](https://matthiaskoenig.github.io/pkdb/) in order: **Introduction**, **Webinterface**, then **Python client and API**, starting with **Accounts and API keys** before **REST API** and **Python client**. **Development** is for work on the codebase.
 
 ## How to cite
 If you use PK-DB data or the web interface cite

@@ -70,9 +70,6 @@ p {
 .brand-logo {
   object-fit: contain;
 }
-.v-theme--dark .brand-logo {
-  filter: invert(1);
-}
 .account-link {
   display: flex;
   align-items: center;
