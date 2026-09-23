@@ -18,7 +18,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python: ['3.14']
+        python: ['3.14', '3.15']
     services:
       postgres:
         image: postgres:18.6
@@ -56,16 +56,17 @@ jobs:
       - run: uv run --python ${{ matrix.python }} --locked pytest -q
       - run: uv run --python ${{ matrix.python }} --locked ruff check .
       - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
-      - run: uv run --python ${{ matrix.python }} --locked ty check
+      - run: uv run --python ${{ matrix.python }} --locked ty check --python-version ${{ matrix.python }}
       - run: uv build --python ${{ matrix.python }}
       - name: Install wheel in clean environment
         run: |
           uv venv --python ${{ matrix.python }} /tmp/pkdb-wheel
-          uv build --project ../python --out-dir dist
+          uv build --python ${{ matrix.python }} --project ../python --out-dir dist
           uv pip install --python /tmp/pkdb-wheel/bin/python dist/*.whl
           cd /tmp
           /tmp/pkdb-wheel/bin/python -c 'import pkdb, pkdb_server, numpy, scipy, pandas, pint; from pkpdutils import Timecourse, nca_single'
       - uses: actions/upload-artifact@v7
+        if: matrix.python == '3.14'
         with:
           name: server-distributions
           path: backend/dist/pkdb_server-*
@@ -86,13 +87,14 @@ jobs:
         run: uv run --python ${{ matrix.python }} --locked pytest system_tests/test_restore.py -q
 
   client:
-    name: Client (${{ matrix.os }}, Python 3.14)
+    name: Client (${{ matrix.os }}, Python ${{ matrix.python }})
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ['3.14', '3.15']
     defaults:
       run:
         working-directory: python
@@ -103,17 +105,17 @@ jobs:
           persist-credentials: false
       - uses: astral-sh/setup-uv@v10.1.0
         with:
-          python-version: '3.14'
+          python-version: ${{ matrix.python }}
           enable-cache: true
-      - run: uv sync --locked
-      - run: uv run --locked pytest -q
-      - run: uv run --locked ruff check .
-      - run: uv run --locked ruff format --check .
-      - run: uv run --locked ty check
-      - run: uv build
+      - run: uv sync --python ${{ matrix.python }} --locked
+      - run: uv run --python ${{ matrix.python }} --locked pytest -q
+      - run: uv run --python ${{ matrix.python }} --locked ruff check .
+      - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
+      - run: uv run --python ${{ matrix.python }} --locked ty check --python-version ${{ matrix.python }}
+      - run: uv build --python ${{ matrix.python }}
       - name: Verify isolated public wheel and CLI
         run: |
-          uv venv wheel-env
+          uv venv --python ${{ matrix.python }} wheel-env
           if [ "$RUNNER_OS" = Windows ]; then
             PYTHON_BIN=wheel-env/Scripts/python.exe
             PKDB_BIN=wheel-env/Scripts/pkdb.exe
@@ -125,7 +127,7 @@ jobs:
           "$PYTHON_BIN" -c 'import pkdb, importlib.util; from pkdb.domain.validation import prepare_study; from pkdb.cache import bundled_vocabulary; assert bundled_vocabulary().substances; assert importlib.util.find_spec("pkdb_server") is None; assert importlib.util.find_spec("sqlalchemy") is None'
           "$PKDB_BIN" --help
       - uses: actions/upload-artifact@v7
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' && matrix.python == '3.14'
         with:
           name: python-distributions
           path: python/dist/*
