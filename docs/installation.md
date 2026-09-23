@@ -120,7 +120,9 @@ Browser tests use a separate disposable Compose project. See [isolated frontend 
 
 ## Backend tests and checks
 
-Install uv and Python 3.14 for the application, tests, and development hooks. Run from the repository root:
+The library and backend support Python 3.14 and 3.15 (currently tested with 3.15.0rc2). Python 3.15 currently uses the Pydantic 2.14 beta for native dependency wheels and the beartype 0.23 release candidate for MCP compatibility. Python 3.14 remains the default for local development, hooks, and Docker. To build the Python 3.15 runtime, use `docker build --build-arg PYTHON_VERSION=3.15 -f backend/Dockerfile .`.
+
+Install uv and Python 3.14 for the development hooks. Run from the repository root (use `--python 3.15` to select Python 3.15):
 
 ```bash
 uv sync --project backend --locked --python 3.14
@@ -136,7 +138,7 @@ uv run --project backend ty check --project backend
 
 The test database uses temporary container storage. Tests create isolated schemas. Keep it separate from your upload-testing database. Stop it with `docker compose -f compose.test.yaml down`.
 
-Image lifecycle and backup/restore tests live in `backend/system_tests`. They require Docker, a built image selected by `PKDB_TEST_IMAGE`, and the test database URL. CI runs these tests on Python 3.14. Corpus tests require explicitly configured source data and are not part of the default suite.
+Image lifecycle and backup/restore tests live in `backend/system_tests`. They require Docker, a built image selected by `PKDB_TEST_IMAGE`, and the test database URL. CI runs these tests on Python 3.14 and 3.15. Corpus tests require explicitly configured source data and are not part of the default suite.
 
 ## Migrations
 
@@ -153,4 +155,4 @@ uv run --no-project --python 3.14 python scripts/llms_txt.py
 
 ## Branches and releases
 
-Use a topic branch and a pull request against `develop`. Required checks are `tests`, `ruff`, `ty`, and `docs`. The `tests` check includes Python 3.14 and a fresh Compose startup/restart smoke test. Release automation uses `.bumpversion.toml` to update package metadata, the lockfile, and the runtime version together. Do not edit generated changelogs manually.
+Use a topic branch and a pull request against `develop`. Required checks are `tests`, `ruff`, `ty`, and `docs`. The `tests` check covers both Python versions and a fresh Compose startup/restart smoke test. Release automation uses `.bumpversion.toml` to update package metadata, the lockfile, and the runtime version together. Do not edit generated changelogs manually.

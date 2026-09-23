@@ -1,6 +1,6 @@
 # PK-DB Python client
 
-Prepare, validate, query, and upload pharmacokinetic studies with the same scientific validation engine used by the PK-DB server. Python 3.14 is supported on Linux, macOS, and Windows.
+Prepare, validate, query, and upload pharmacokinetic studies with the same scientific validation engine used by the PK-DB server. Python 3.14 and 3.15 are supported on Linux, macOS, and Windows.
 
 Install a published release with `pip install pkdb`, or install this checkout with `pip install ./python` from the repository root.
 

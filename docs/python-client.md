@@ -4,7 +4,7 @@ The public `pkdb` package prepares, validates, uploads, and queries studies. It 
 
 ## Install
 
-Python 3.14 is required. From a checkout of this repository:
+Python 3.14 or 3.15 is required. From a checkout of this repository:
 
 ```bash
 uv tool install ./python

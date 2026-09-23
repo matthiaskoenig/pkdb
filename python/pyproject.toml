@@ -17,11 +17,14 @@ classifiers = [
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: 3.15",
   "Topic :: Scientific/Engineering :: Bio-Informatics",
 ]
-requires-python = ">=3.14,<3.15"
+requires-python = ">=3.14,<3.16"
 dependencies = [
-  "pydantic>=2.13.5,<3",
+  "pydantic>=2.13.5,<3; python_version < '3.15'",
+  # The 2.14 beta provides pydantic-core wheels for Python 3.15.
+  "pydantic>=2.14.0b2,<3; python_version >= '3.15'",
   "pandas>=3.0.6,<4",
   "numpy>=2.5.3,<3",
   "scipy>=1.18.1,<2",

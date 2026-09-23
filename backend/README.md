@@ -1,6 +1,6 @@
 # PK-DB backend
 
-This is the sole backend implementation: FastAPI, SQLAlchemy, PostgreSQL, and the `pkdb-server` command-line interface. Python 3.14 is required.
+This is the sole backend implementation: FastAPI, SQLAlchemy, PostgreSQL, and the `pkdb-server` command-line interface. Python 3.14 and 3.15 are supported.
 
 From the repository root, run `docker compose --profile dev up --build --wait`. Startup applies migrations and imports the bundled vocabulary. The API documentation is available at <http://localhost:18083/docs>.
 

@@ -38,7 +38,7 @@ PK-DB is available from [https://pk-db.com](https://pk-db.com). The terms of use
 
 ## Python client and command line
 
-Install the public package from this checkout with `uv tool install ./python` (Python 3.14). Existing `pkdb_data` study folders work directly:
+Install the public package from this checkout with `uv tool install ./python` (Python 3.14 or 3.15). Existing `pkdb_data` study folders work directly:
 
 ```bash
 pkdb prepare /path/to/pkdb_data/studies/ExampleStudy

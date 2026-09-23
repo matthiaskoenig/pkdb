@@ -1,6 +1,7 @@
 # syntax=docker/dockerfile:1
 ARG PYTHON_VERSION=3.14
 FROM python:3.14-slim-bookworm@sha256:82bc3c539b8813ada9d68c63b40158fa002f7f33de9bf3312a3dfdc0620dff56 AS python-3.14
+FROM python:3.15-rc-slim-bookworm@sha256:1776b3fd7a71293417958958442a2ee7a7e7098f952a9c65b3b1c65de629aee7 AS python-3.15
 FROM ghcr.io/astral-sh/uv:0.12.5@sha256:e85be844203885286c60ffad8a858d48afb6c5a5c237ca0e67f12e74b8f174b1 AS uv
 FROM python-${PYTHON_VERSION} AS base
 
