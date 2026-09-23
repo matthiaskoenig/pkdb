@@ -1,5 +1,7 @@
 # Dependency audit
 
+Current follow-up: [package review](package-review-2026-09-23.md) removes unused Sass/the inactive Vuetify Vite plugin and the redundant direct compiler-dom entry, narrows icon CSS, and records fresh registry/security evidence. The table below preserves the original Vue 2 migration decisions.
+
 Inspected 2026-09-23. Versions below are recovered from the local legacy build, not inferred from manifest ranges. npm deprecation metadata is separate from source reachability; exact recovered-version metadata was queried from the official npm registry. The replacement graph is defined by the committed lockfile.
 
 | Package | Declared | Recovered version | Disposition / callers | npm deprecated |

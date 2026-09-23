@@ -1,0 +1,1927 @@
+{
+  "checked_at_utc": "2026-09-23T04:22:22.133136+00:00",
+  "baseline_commit": "e61937a1",
+  "direct_before": {
+    "vue": {
+      "installed": "3.5.43",
+      "latest": "3.5.43",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "typescript": "*"
+      },
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/vue"
+    },
+    "vuetify": {
+      "installed": "4.2.1",
+      "latest": "4.2.1",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "vue": "^3.5.0 || ^3.6.0-0",
+        "typescript": ">=4.7",
+        "vite-plugin-vuetify": ">=2.1.0",
+        "webpack-plugin-vuetify": ">=3.1.0"
+      },
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/vuetify"
+    },
+    "vue-router": {
+      "installed": "5.3.1",
+      "latest": "5.3.1",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "vue": "^3.5.34 || ^4.0.0",
+        "vite": "^7.3.0 || ^8.0.0",
+        "pinia": "^3.0.4 || ^4.0.2",
+        "@pinia/colada": ">=0.21.2",
+        "@vue/compiler-sfc": "^3.5.34 || ^4.0.0"
+      },
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/vue-router"
+    },
+    "pinia": {
+      "installed": "4.0.3",
+      "latest": "4.0.3",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "vue": "^3.5.11",
+        "typescript": ">=5.6.0",
+        "@vue/devtools-api": "^8.1.5"
+      },
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/pinia"
+    },
+    "axios": {
+      "installed": "1.20.0",
+      "latest": "1.20.0",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {},
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/axios"
+    },
+    "@fortawesome/fontawesome-free": {
+      "installed": "7.3.1",
+      "latest": "7.3.1",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {},
+      "latest_engines": {
+        "node": ">=6"
+      },
+      "source": "https://registry.npmjs.org/%40fortawesome%2Ffontawesome-free"
+    },
+    "plotly.js-dist-min": {
+      "installed": "4.1.1",
+      "latest": "4.1.1",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {},
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/plotly.js-dist-min"
+    },
+    "vite": {
+      "installed": "8.3.0",
+      "latest": "8.3.0",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "tsx": "^4.8.1",
+        "jiti": ">=1.21.0",
+        "less": "^4.0.0",
+        "sass": "^1.70.0",
+        "yaml": "^2.4.2",
+        "stylus": ">=0.54.8",
+        "terser": "^5.16.0",
+        "esbuild": "^0.27.0 || ^0.28.0",
+        "sugarss": "^5.0.0",
+        "@types/node": "^20.19.0 || >=22.12.0",
+        "sass-embedded": "^1.70.0",
+        "@vitejs/devtools": "^0.7.1"
+      },
+      "latest_engines": {
+        "node": "^20.19.0 || >=22.12.0"
+      },
+      "source": "https://registry.npmjs.org/vite"
+    },
+    "@vitejs/plugin-vue": {
+      "installed": "6.0.9",
+      "latest": "6.0.9",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "vue": "^3.2.25",
+        "vite": "^5.0.0 || ^6.0.0 || ^7.0.0 || ^8.0.0"
+      },
+      "latest_engines": {
+        "node": "^20.19.0 || >=22.12.0"
+      },
+      "source": "https://registry.npmjs.org/%40vitejs%2Fplugin-vue"
+    },
+    "vite-plugin-vuetify": {
+      "installed": "2.1.3",
+      "latest": "2.1.3",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "vite": ">=5",
+        "vue": "^3.0.0",
+        "vuetify": ">=3"
+      },
+      "latest_engines": {
+        "node": "^18.0.0 || >=20.0.0"
+      },
+      "source": "https://registry.npmjs.org/vite-plugin-vuetify"
+    },
+    "@vue/compiler-sfc": {
+      "installed": "3.5.43",
+      "latest": "3.5.43",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {},
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/%40vue%2Fcompiler-sfc"
+    },
+    "@vue/compiler-dom": {
+      "installed": "3.5.43",
+      "latest": "3.5.43",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {},
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/%40vue%2Fcompiler-dom"
+    },
+    "typescript": {
+      "installed": "6.0.3",
+      "latest": "7.0.2",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {},
+      "latest_engines": {
+        "node": ">=16.20.0"
+      },
+      "source": "https://registry.npmjs.org/typescript"
+    },
+    "vue-tsc": {
+      "installed": "3.3.11",
+      "latest": "3.3.11",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "typescript": ">=5.0.0"
+      },
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/vue-tsc"
+    },
+    "@types/node": {
+      "installed": "24.13.6",
+      "latest": "26.6.2",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {},
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/%40types%2Fnode"
+    },
+    "eslint": {
+      "installed": "10.11.0",
+      "latest": "10.11.0",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "jiti": "*"
+      },
+      "latest_engines": {
+        "node": "^20.19.0 || ^22.13.0 || >=24"
+      },
+      "source": "https://registry.npmjs.org/eslint"
+    },
+    "@eslint/js": {
+      "installed": "10.0.1",
+      "latest": "10.0.1",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "eslint": "^10.0.0"
+      },
+      "latest_engines": {
+        "node": "^20.19.0 || ^22.13.0 || >=24"
+      },
+      "source": "https://registry.npmjs.org/%40eslint%2Fjs"
+    },
+    "eslint-plugin-vue": {
+      "installed": "10.11.0",
+      "latest": "10.11.0",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0",
+        "vue-eslint-parser": "^10.3.0",
+        "@stylistic/eslint-plugin": "^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0",
+        "@typescript-eslint/parser": "^7.0.0 || ^8.0.0"
+      },
+      "latest_engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "source": "https://registry.npmjs.org/eslint-plugin-vue"
+    },
+    "vue-eslint-parser": {
+      "installed": "10.4.1",
+      "latest": "10.4.1",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0"
+      },
+      "latest_engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "source": "https://registry.npmjs.org/vue-eslint-parser"
+    },
+    "typescript-eslint": {
+      "installed": "8.70.1",
+      "latest": "8.70.1",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "eslint": "^8.57.0 || ^9.0.0 || ^10.0.0",
+        "typescript": ">=4.8.4 <6.1.0"
+      },
+      "latest_engines": {
+        "node": "^18.18.0 || ^20.9.0 || >=21.1.0"
+      },
+      "source": "https://registry.npmjs.org/typescript-eslint"
+    },
+    "jiti": {
+      "installed": "2.7.0",
+      "latest": "2.7.0",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {},
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/jiti"
+    },
+    "vitest": {
+      "installed": "5.0.1",
+      "latest": "5.0.1",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "vite": "^6.4.0 || ^7.0.0 || ^8.0.0",
+        "jsdom": "*",
+        "happy-dom": "*",
+        "@vitest/ui": "5.0.1",
+        "@types/node": "^22.0.0 || >=24.0.0",
+        "@edge-runtime/vm": "*",
+        "@opentelemetry/api": "^1.9.0",
+        "@vitest/coverage-v8": "5.0.1",
+        "@vitest/browser-preview": "5.0.1",
+        "@vitest/coverage-istanbul": "5.0.1",
+        "@vitest/browser-playwright": "5.0.1",
+        "@vitest/browser-webdriverio": "^5.0.0-beta.5 || >=5.0.0"
+      },
+      "latest_engines": {
+        "node": "^22.12.0 || ^24.0.0 || >=26.0.0"
+      },
+      "source": "https://registry.npmjs.org/vitest"
+    },
+    "@vue/test-utils": {
+      "installed": "2.5.1",
+      "latest": "2.5.1",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "vue": "3.x",
+        "@vue/compiler-dom": "3.x",
+        "@vue/server-renderer": "3.x"
+      },
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/%40vue%2Ftest-utils"
+    },
+    "jsdom": {
+      "installed": "30.1.1",
+      "latest": "30.1.1",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "canvas": "^3.2.3"
+      },
+      "latest_engines": {
+        "node": "^22.22.2 || ^24.15.0 || >=26.0.0"
+      },
+      "source": "https://registry.npmjs.org/jsdom"
+    },
+    "@playwright/test": {
+      "installed": "1.63.0",
+      "latest": "1.63.0",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {},
+      "latest_engines": {
+        "node": ">=20"
+      },
+      "source": "https://registry.npmjs.org/%40playwright%2Ftest"
+    },
+    "@axe-core/playwright": {
+      "installed": "4.13.0",
+      "latest": "4.13.0",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {
+        "playwright-core": ">= 1.0.0"
+      },
+      "latest_engines": {},
+      "source": "https://registry.npmjs.org/%40axe-core%2Fplaywright"
+    },
+    "sass": {
+      "installed": "1.105.0",
+      "latest": "1.105.0",
+      "deprecated": null,
+      "latest_deprecated": null,
+      "latest_peers": {},
+      "latest_engines": {
+        "node": ">=20.19.0"
+      },
+      "source": "https://registry.npmjs.org/sass"
+    }
+  },
+  "remaining_locked_versions": [
+    {
+      "name": "@asamuzakjp/css-color",
+      "version": "7.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "@asamuzakjp/dom-selector",
+      "version": "9.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "@axe-core/playwright",
+      "version": "4.13.0",
+      "deprecated": null
+    },
+    {
+      "name": "@babel/helper-string-parser",
+      "version": "7.29.7",
+      "deprecated": null
+    },
+    {
+      "name": "@babel/helper-validator-identifier",
+      "version": "7.29.7",
+      "deprecated": null
+    },
+    {
+      "name": "@babel/parser",
+      "version": "7.29.9",
+      "deprecated": null
+    },
+    {
+      "name": "@babel/types",
+      "version": "7.29.8",
+      "deprecated": null
+    },
+    {
+      "name": "@bramus/specificity",
+      "version": "2.4.2",
+      "deprecated": null
+    },
+    {
+      "name": "@cacheable/memory",
+      "version": "2.2.0",
+      "deprecated": null
+    },
+    {
+      "name": "@cacheable/utils",
+      "version": "2.5.0",
+      "deprecated": null
+    },
+    {
+      "name": "@csstools/color-helpers",
+      "version": "6.1.1",
+      "deprecated": null
+    },
+    {
+      "name": "@csstools/css-calc",
+      "version": "3.4.0",
+      "deprecated": null
+    },
+    {
+      "name": "@csstools/css-color-parser",
+      "version": "4.2.3",
+      "deprecated": null
+    },
+    {
+      "name": "@csstools/css-parser-algorithms",
+      "version": "4.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "@csstools/css-syntax-patches-for-csstree",
+      "version": "1.1.14",
+      "deprecated": null
+    },
+    {
+      "name": "@csstools/css-tokenizer",
+      "version": "4.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "@eslint-community/eslint-utils",
+      "version": "4.10.1",
+      "deprecated": null
+    },
+    {
+      "name": "@eslint-community/regexpp",
+      "version": "4.12.2",
+      "deprecated": null
+    },
+    {
+      "name": "@eslint/config-array",
+      "version": "0.23.5",
+      "deprecated": null
+    },
+    {
+      "name": "@eslint/config-helpers",
+      "version": "0.7.0",
+      "deprecated": null
+    },
+    {
+      "name": "@eslint/core",
+      "version": "1.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "@eslint/js",
+      "version": "10.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "@eslint/object-schema",
+      "version": "3.0.5",
+      "deprecated": null
+    },
+    {
+      "name": "@eslint/plugin-kit",
+      "version": "0.7.3",
+      "deprecated": null
+    },
+    {
+      "name": "@exodus/bytes",
+      "version": "1.16.0",
+      "deprecated": null
+    },
+    {
+      "name": "@fortawesome/fontawesome-free",
+      "version": "7.3.1",
+      "deprecated": null
+    },
+    {
+      "name": "@humanfs/core",
+      "version": "0.19.2",
+      "deprecated": null
+    },
+    {
+      "name": "@humanfs/node",
+      "version": "0.16.8",
+      "deprecated": null
+    },
+    {
+      "name": "@humanfs/types",
+      "version": "0.15.0",
+      "deprecated": null
+    },
+    {
+      "name": "@humanwhocodes/module-importer",
+      "version": "1.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "@humanwhocodes/retry",
+      "version": "0.4.3",
+      "deprecated": null
+    },
+    {
+      "name": "@jridgewell/gen-mapping",
+      "version": "0.3.13",
+      "deprecated": null
+    },
+    {
+      "name": "@jridgewell/remapping",
+      "version": "2.3.5",
+      "deprecated": null
+    },
+    {
+      "name": "@jridgewell/resolve-uri",
+      "version": "3.1.2",
+      "deprecated": null
+    },
+    {
+      "name": "@jridgewell/sourcemap-codec",
+      "version": "1.6.0",
+      "deprecated": null
+    },
+    {
+      "name": "@jridgewell/trace-mapping",
+      "version": "0.3.31",
+      "deprecated": null
+    },
+    {
+      "name": "@keyv/bigmap",
+      "version": "1.3.1",
+      "deprecated": null
+    },
+    {
+      "name": "@keyv/serialize",
+      "version": "1.1.1",
+      "deprecated": null
+    },
+    {
+      "name": "@one-ini/wasm",
+      "version": "0.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "@oxc-project/types",
+      "version": "0.150.0",
+      "deprecated": null
+    },
+    {
+      "name": "@playwright/test",
+      "version": "1.63.0",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-android-arm-eabi",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-android-arm64",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-darwin-arm64",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-darwin-x64",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-freebsd-x64",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-linux-arm-gnueabihf",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-linux-arm64-gnu",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-linux-arm64-musl",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-linux-ppc64-gnu",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-linux-s390x-gnu",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-linux-x64-gnu",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-linux-x64-musl",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-openharmony-arm64",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-win32-arm64-msvc",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/binding-win32-x64-msvc",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "@rolldown/pluginutils",
+      "version": "1.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "@types/chai",
+      "version": "5.2.3",
+      "deprecated": null
+    },
+    {
+      "name": "@types/deep-eql",
+      "version": "4.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "@types/esrecurse",
+      "version": "4.3.1",
+      "deprecated": null
+    },
+    {
+      "name": "@types/estree",
+      "version": "1.0.9",
+      "deprecated": null
+    },
+    {
+      "name": "@types/json-schema",
+      "version": "7.0.15",
+      "deprecated": null
+    },
+    {
+      "name": "@types/node",
+      "version": "24.13.6",
+      "deprecated": null
+    },
+    {
+      "name": "@typescript-eslint/eslint-plugin",
+      "version": "8.70.1",
+      "deprecated": null
+    },
+    {
+      "name": "@typescript-eslint/parser",
+      "version": "8.70.1",
+      "deprecated": null
+    },
+    {
+      "name": "@typescript-eslint/project-service",
+      "version": "8.70.1",
+      "deprecated": null
+    },
+    {
+      "name": "@typescript-eslint/scope-manager",
+      "version": "8.70.1",
+      "deprecated": null
+    },
+    {
+      "name": "@typescript-eslint/tsconfig-utils",
+      "version": "8.70.1",
+      "deprecated": null
+    },
+    {
+      "name": "@typescript-eslint/type-utils",
+      "version": "8.70.1",
+      "deprecated": null
+    },
+    {
+      "name": "@typescript-eslint/types",
+      "version": "8.70.1",
+      "deprecated": null
+    },
+    {
+      "name": "@typescript-eslint/typescript-estree",
+      "version": "8.70.1",
+      "deprecated": null
+    },
+    {
+      "name": "@typescript-eslint/utils",
+      "version": "8.70.1",
+      "deprecated": null
+    },
+    {
+      "name": "@typescript-eslint/visitor-keys",
+      "version": "8.70.1",
+      "deprecated": null
+    },
+    {
+      "name": "@vitejs/plugin-vue",
+      "version": "6.0.9",
+      "deprecated": null
+    },
+    {
+      "name": "@vitest/mocker",
+      "version": "5.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "@vitest/spy",
+      "version": "5.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "@volar/language-core",
+      "version": "2.4.28",
+      "deprecated": null
+    },
+    {
+      "name": "@volar/source-map",
+      "version": "2.4.28",
+      "deprecated": null
+    },
+    {
+      "name": "@volar/typescript",
+      "version": "2.4.28",
+      "deprecated": null
+    },
+    {
+      "name": "@vue-macros/common",
+      "version": "3.1.4",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/compiler-core",
+      "version": "3.5.43",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/compiler-dom",
+      "version": "3.5.43",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/compiler-sfc",
+      "version": "3.5.43",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/compiler-ssr",
+      "version": "3.5.43",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/devtools-api",
+      "version": "8.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/devtools-kit",
+      "version": "8.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/devtools-shared",
+      "version": "8.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/language-core",
+      "version": "3.3.11",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/reactivity",
+      "version": "3.5.43",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/runtime-core",
+      "version": "3.5.43",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/runtime-dom",
+      "version": "3.5.43",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/server-renderer",
+      "version": "3.5.43",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/shared",
+      "version": "3.5.43",
+      "deprecated": null
+    },
+    {
+      "name": "@vue/test-utils",
+      "version": "2.5.1",
+      "deprecated": null
+    },
+    {
+      "name": "@vuetify/v0",
+      "version": "1.2.2",
+      "deprecated": null
+    },
+    {
+      "name": "abbrev",
+      "version": "5.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "acorn",
+      "version": "8.18.0",
+      "deprecated": null
+    },
+    {
+      "name": "acorn-jsx",
+      "version": "5.3.2",
+      "deprecated": null
+    },
+    {
+      "name": "agent-base",
+      "version": "6.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "ajv",
+      "version": "6.15.0",
+      "deprecated": null
+    },
+    {
+      "name": "alien-signals",
+      "version": "3.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "assertion-error",
+      "version": "2.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "ast-kit",
+      "version": "2.2.0",
+      "deprecated": null
+    },
+    {
+      "name": "ast-walker-scope",
+      "version": "0.9.0",
+      "deprecated": null
+    },
+    {
+      "name": "asynckit",
+      "version": "0.4.0",
+      "deprecated": null
+    },
+    {
+      "name": "axe-core",
+      "version": "4.13.0",
+      "deprecated": null
+    },
+    {
+      "name": "axios",
+      "version": "1.20.0",
+      "deprecated": null
+    },
+    {
+      "name": "balanced-match",
+      "version": "4.0.4",
+      "deprecated": null
+    },
+    {
+      "name": "bidi-js",
+      "version": "1.1.0",
+      "deprecated": null
+    },
+    {
+      "name": "birpc",
+      "version": "2.9.0",
+      "deprecated": null
+    },
+    {
+      "name": "boolbase",
+      "version": "1.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "brace-expansion",
+      "version": "5.0.12",
+      "deprecated": null
+    },
+    {
+      "name": "cacheable",
+      "version": "2.5.0",
+      "deprecated": null
+    },
+    {
+      "name": "call-bind-apply-helpers",
+      "version": "1.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "chai",
+      "version": "6.2.2",
+      "deprecated": null
+    },
+    {
+      "name": "chokidar",
+      "version": "5.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "combined-stream",
+      "version": "1.0.8",
+      "deprecated": null
+    },
+    {
+      "name": "commander",
+      "version": "14.0.3",
+      "deprecated": null
+    },
+    {
+      "name": "confbox",
+      "version": "0.1.8",
+      "deprecated": null
+    },
+    {
+      "name": "confbox",
+      "version": "0.2.4",
+      "deprecated": null
+    },
+    {
+      "name": "confbox",
+      "version": "0.3.1",
+      "deprecated": null
+    },
+    {
+      "name": "config-chain",
+      "version": "1.1.13",
+      "deprecated": null
+    },
+    {
+      "name": "cross-spawn",
+      "version": "7.0.6",
+      "deprecated": null
+    },
+    {
+      "name": "css-tree",
+      "version": "3.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "cssesc",
+      "version": "3.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "csstype",
+      "version": "3.2.3",
+      "deprecated": null
+    },
+    {
+      "name": "data-urls",
+      "version": "7.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "debug",
+      "version": "4.4.3",
+      "deprecated": null
+    },
+    {
+      "name": "decimal.js",
+      "version": "10.6.0",
+      "deprecated": null
+    },
+    {
+      "name": "deep-is",
+      "version": "0.1.4",
+      "deprecated": null
+    },
+    {
+      "name": "delayed-stream",
+      "version": "1.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "detect-libc",
+      "version": "2.1.2",
+      "deprecated": null
+    },
+    {
+      "name": "dunder-proto",
+      "version": "1.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "editorconfig",
+      "version": "3.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "entities",
+      "version": "7.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "entities",
+      "version": "8.1.0",
+      "deprecated": null
+    },
+    {
+      "name": "es-define-property",
+      "version": "1.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "es-errors",
+      "version": "1.3.0",
+      "deprecated": null
+    },
+    {
+      "name": "es-module-lexer",
+      "version": "2.3.2",
+      "deprecated": null
+    },
+    {
+      "name": "es-object-atoms",
+      "version": "1.1.2",
+      "deprecated": null
+    },
+    {
+      "name": "es-set-tostringtag",
+      "version": "2.1.0",
+      "deprecated": null
+    },
+    {
+      "name": "escape-string-regexp",
+      "version": "4.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "eslint",
+      "version": "10.11.0",
+      "deprecated": null
+    },
+    {
+      "name": "eslint-plugin-vue",
+      "version": "10.11.0",
+      "deprecated": null
+    },
+    {
+      "name": "eslint-scope",
+      "version": "9.1.2",
+      "deprecated": null
+    },
+    {
+      "name": "eslint-visitor-keys",
+      "version": "3.4.3",
+      "deprecated": null
+    },
+    {
+      "name": "eslint-visitor-keys",
+      "version": "5.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "espree",
+      "version": "11.2.0",
+      "deprecated": null
+    },
+    {
+      "name": "esquery",
+      "version": "1.7.0",
+      "deprecated": null
+    },
+    {
+      "name": "esrecurse",
+      "version": "4.3.0",
+      "deprecated": null
+    },
+    {
+      "name": "estraverse",
+      "version": "5.3.0",
+      "deprecated": null
+    },
+    {
+      "name": "estree-walker",
+      "version": "2.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "estree-walker",
+      "version": "3.0.3",
+      "deprecated": null
+    },
+    {
+      "name": "esutils",
+      "version": "2.0.3",
+      "deprecated": null
+    },
+    {
+      "name": "expect-type",
+      "version": "1.4.0",
+      "deprecated": null
+    },
+    {
+      "name": "exsolve",
+      "version": "1.1.1",
+      "deprecated": null
+    },
+    {
+      "name": "fast-deep-equal",
+      "version": "3.1.3",
+      "deprecated": null
+    },
+    {
+      "name": "fast-json-stable-stringify",
+      "version": "2.1.0",
+      "deprecated": null
+    },
+    {
+      "name": "fast-levenshtein",
+      "version": "2.0.6",
+      "deprecated": null
+    },
+    {
+      "name": "fdir",
+      "version": "6.5.0",
+      "deprecated": null
+    },
+    {
+      "name": "file-entry-cache",
+      "version": "11.1.5",
+      "deprecated": null
+    },
+    {
+      "name": "find-up",
+      "version": "5.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "flat-cache",
+      "version": "6.1.23",
+      "deprecated": null
+    },
+    {
+      "name": "flatted",
+      "version": "3.4.4",
+      "deprecated": null
+    },
+    {
+      "name": "follow-redirects",
+      "version": "1.16.0",
+      "deprecated": null
+    },
+    {
+      "name": "form-data",
+      "version": "4.0.6",
+      "deprecated": null
+    },
+    {
+      "name": "fsevents",
+      "version": "2.3.3",
+      "deprecated": null
+    },
+    {
+      "name": "function-bind",
+      "version": "1.1.2",
+      "deprecated": null
+    },
+    {
+      "name": "get-intrinsic",
+      "version": "1.3.0",
+      "deprecated": null
+    },
+    {
+      "name": "get-proto",
+      "version": "1.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "glob",
+      "version": "13.0.6",
+      "deprecated": null
+    },
+    {
+      "name": "glob-parent",
+      "version": "6.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "gopd",
+      "version": "1.2.0",
+      "deprecated": null
+    },
+    {
+      "name": "has-symbols",
+      "version": "1.1.0",
+      "deprecated": null
+    },
+    {
+      "name": "has-tostringtag",
+      "version": "1.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "hashery",
+      "version": "1.5.1",
+      "deprecated": null
+    },
+    {
+      "name": "hasown",
+      "version": "2.0.4",
+      "deprecated": null
+    },
+    {
+      "name": "hookable",
+      "version": "5.5.3",
+      "deprecated": null
+    },
+    {
+      "name": "hookified",
+      "version": "1.15.1",
+      "deprecated": null
+    },
+    {
+      "name": "hookified",
+      "version": "2.2.0",
+      "deprecated": null
+    },
+    {
+      "name": "html-encoding-sniffer",
+      "version": "7.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "https-proxy-agent",
+      "version": "5.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "ignore",
+      "version": "5.3.2",
+      "deprecated": null
+    },
+    {
+      "name": "ignore",
+      "version": "7.0.10",
+      "deprecated": null
+    },
+    {
+      "name": "imurmurhash",
+      "version": "0.1.4",
+      "deprecated": null
+    },
+    {
+      "name": "ini",
+      "version": "1.3.8",
+      "deprecated": null
+    },
+    {
+      "name": "is-extglob",
+      "version": "2.1.1",
+      "deprecated": null
+    },
+    {
+      "name": "is-glob",
+      "version": "4.0.3",
+      "deprecated": null
+    },
+    {
+      "name": "is-potential-custom-element-name",
+      "version": "1.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "isexe",
+      "version": "2.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "jiti",
+      "version": "2.7.0",
+      "deprecated": null
+    },
+    {
+      "name": "js-beautify",
+      "version": "2.0.3",
+      "deprecated": null
+    },
+    {
+      "name": "js-cookie",
+      "version": "3.0.8",
+      "deprecated": null
+    },
+    {
+      "name": "jsdom",
+      "version": "30.1.1",
+      "deprecated": null
+    },
+    {
+      "name": "json-schema-traverse",
+      "version": "0.4.1",
+      "deprecated": null
+    },
+    {
+      "name": "json-stable-stringify-without-jsonify",
+      "version": "1.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "keyv",
+      "version": "5.6.0",
+      "deprecated": null
+    },
+    {
+      "name": "levn",
+      "version": "0.4.1",
+      "deprecated": null
+    },
+    {
+      "name": "lightningcss",
+      "version": "1.33.0",
+      "deprecated": null
+    },
+    {
+      "name": "lightningcss-android-arm64",
+      "version": "1.33.0",
+      "deprecated": null
+    },
+    {
+      "name": "lightningcss-darwin-arm64",
+      "version": "1.33.0",
+      "deprecated": null
+    },
+    {
+      "name": "lightningcss-darwin-x64",
+      "version": "1.33.0",
+      "deprecated": null
+    },
+    {
+      "name": "lightningcss-freebsd-x64",
+      "version": "1.33.0",
+      "deprecated": null
+    },
+    {
+      "name": "lightningcss-linux-arm-gnueabihf",
+      "version": "1.33.0",
+      "deprecated": null
+    },
+    {
+      "name": "lightningcss-linux-arm64-gnu",
+      "version": "1.33.0",
+      "deprecated": null
+    },
+    {
+      "name": "lightningcss-linux-arm64-musl",
+      "version": "1.33.0",
+      "deprecated": null
+    },
+    {
+      "name": "lightningcss-linux-x64-gnu",
+      "version": "1.33.0",
+      "deprecated": null
+    },
+    {
+      "name": "lightningcss-linux-x64-musl",
+      "version": "1.33.0",
+      "deprecated": null
+    },
+    {
+      "name": "lightningcss-win32-arm64-msvc",
+      "version": "1.33.0",
+      "deprecated": null
+    },
+    {
+      "name": "lightningcss-win32-x64-msvc",
+      "version": "1.33.0",
+      "deprecated": null
+    },
+    {
+      "name": "local-pkg",
+      "version": "1.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "locate-path",
+      "version": "6.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "lru-cache",
+      "version": "11.5.3",
+      "deprecated": null
+    },
+    {
+      "name": "magic-string",
+      "version": "0.30.21",
+      "deprecated": null
+    },
+    {
+      "name": "magic-string",
+      "version": "1.4.1",
+      "deprecated": null
+    },
+    {
+      "name": "magic-string-ast",
+      "version": "1.0.3",
+      "deprecated": null
+    },
+    {
+      "name": "math-intrinsics",
+      "version": "1.1.0",
+      "deprecated": null
+    },
+    {
+      "name": "mdn-data",
+      "version": "2.27.1",
+      "deprecated": null
+    },
+    {
+      "name": "mime-db",
+      "version": "1.52.0",
+      "deprecated": null
+    },
+    {
+      "name": "mime-types",
+      "version": "2.1.35",
+      "deprecated": null
+    },
+    {
+      "name": "minimatch",
+      "version": "10.2.6",
+      "deprecated": null
+    },
+    {
+      "name": "minipass",
+      "version": "7.1.3",
+      "deprecated": null
+    },
+    {
+      "name": "mlly",
+      "version": "1.8.2",
+      "deprecated": null
+    },
+    {
+      "name": "ms",
+      "version": "2.1.3",
+      "deprecated": null
+    },
+    {
+      "name": "muggle-string",
+      "version": "0.4.1",
+      "deprecated": null
+    },
+    {
+      "name": "nanoid",
+      "version": "3.3.19",
+      "deprecated": null
+    },
+    {
+      "name": "natural-compare",
+      "version": "1.4.0",
+      "deprecated": null
+    },
+    {
+      "name": "nopt",
+      "version": "10.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "nostics",
+      "version": "1.3.0",
+      "deprecated": null
+    },
+    {
+      "name": "nth-check",
+      "version": "2.1.1",
+      "deprecated": null
+    },
+    {
+      "name": "obug",
+      "version": "2.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "optionator",
+      "version": "0.9.4",
+      "deprecated": null
+    },
+    {
+      "name": "p-limit",
+      "version": "3.1.0",
+      "deprecated": null
+    },
+    {
+      "name": "p-locate",
+      "version": "5.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "parse5",
+      "version": "8.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "path-browserify",
+      "version": "1.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "path-exists",
+      "version": "4.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "path-key",
+      "version": "3.1.1",
+      "deprecated": null
+    },
+    {
+      "name": "path-scurry",
+      "version": "2.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "pathe",
+      "version": "2.0.3",
+      "deprecated": null
+    },
+    {
+      "name": "perfect-debounce",
+      "version": "2.1.0",
+      "deprecated": null
+    },
+    {
+      "name": "picocolors",
+      "version": "1.1.1",
+      "deprecated": null
+    },
+    {
+      "name": "picomatch",
+      "version": "4.0.7",
+      "deprecated": null
+    },
+    {
+      "name": "pinia",
+      "version": "4.0.3",
+      "deprecated": null
+    },
+    {
+      "name": "pkg-types",
+      "version": "1.3.1",
+      "deprecated": null
+    },
+    {
+      "name": "pkg-types",
+      "version": "2.3.3",
+      "deprecated": null
+    },
+    {
+      "name": "playwright",
+      "version": "1.63.0",
+      "deprecated": null
+    },
+    {
+      "name": "playwright-core",
+      "version": "1.63.0",
+      "deprecated": null
+    },
+    {
+      "name": "plotly.js-dist-min",
+      "version": "4.1.1",
+      "deprecated": null
+    },
+    {
+      "name": "postcss",
+      "version": "8.5.28",
+      "deprecated": null
+    },
+    {
+      "name": "postcss-selector-parser",
+      "version": "7.1.6",
+      "deprecated": null
+    },
+    {
+      "name": "prelude-ls",
+      "version": "1.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "proto-list",
+      "version": "1.2.4",
+      "deprecated": null
+    },
+    {
+      "name": "proxy-from-env",
+      "version": "2.1.0",
+      "deprecated": null
+    },
+    {
+      "name": "punycode",
+      "version": "2.3.1",
+      "deprecated": null
+    },
+    {
+      "name": "qified",
+      "version": "0.10.1",
+      "deprecated": null
+    },
+    {
+      "name": "quansync",
+      "version": "0.2.11",
+      "deprecated": null
+    },
+    {
+      "name": "readdirp",
+      "version": "5.1.1",
+      "deprecated": null
+    },
+    {
+      "name": "require-from-string",
+      "version": "2.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "rolldown",
+      "version": "1.2.9",
+      "deprecated": null
+    },
+    {
+      "name": "saxes",
+      "version": "6.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "scule",
+      "version": "1.3.0",
+      "deprecated": null
+    },
+    {
+      "name": "semver",
+      "version": "7.8.5",
+      "deprecated": null
+    },
+    {
+      "name": "shebang-command",
+      "version": "2.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "shebang-regex",
+      "version": "3.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "siginfo",
+      "version": "2.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "source-map-js",
+      "version": "1.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "stackback",
+      "version": "0.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "std-env",
+      "version": "4.2.0",
+      "deprecated": null
+    },
+    {
+      "name": "tinybench",
+      "version": "6.1.4",
+      "deprecated": null
+    },
+    {
+      "name": "tinyexec",
+      "version": "1.3.0",
+      "deprecated": null
+    },
+    {
+      "name": "tinyglobby",
+      "version": "0.2.17",
+      "deprecated": null
+    },
+    {
+      "name": "tldts",
+      "version": "7.4.14",
+      "deprecated": null
+    },
+    {
+      "name": "tldts-core",
+      "version": "7.4.14",
+      "deprecated": null
+    },
+    {
+      "name": "tough-cookie",
+      "version": "6.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "tr46",
+      "version": "6.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "ts-api-utils",
+      "version": "2.5.0",
+      "deprecated": null
+    },
+    {
+      "name": "type-check",
+      "version": "0.4.0",
+      "deprecated": null
+    },
+    {
+      "name": "typescript",
+      "version": "6.0.3",
+      "deprecated": null
+    },
+    {
+      "name": "typescript-eslint",
+      "version": "8.70.1",
+      "deprecated": null
+    },
+    {
+      "name": "ufo",
+      "version": "1.6.4",
+      "deprecated": null
+    },
+    {
+      "name": "undici",
+      "version": "8.11.0",
+      "deprecated": null
+    },
+    {
+      "name": "undici-types",
+      "version": "7.18.2",
+      "deprecated": null
+    },
+    {
+      "name": "unplugin",
+      "version": "3.4.0",
+      "deprecated": null
+    },
+    {
+      "name": "unplugin-utils",
+      "version": "0.3.2",
+      "deprecated": null
+    },
+    {
+      "name": "uri-js",
+      "version": "4.4.1",
+      "deprecated": null
+    },
+    {
+      "name": "util-deprecate",
+      "version": "1.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "vite",
+      "version": "8.3.0",
+      "deprecated": null
+    },
+    {
+      "name": "vitest",
+      "version": "5.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "vscode-uri",
+      "version": "3.2.0",
+      "deprecated": null
+    },
+    {
+      "name": "vue",
+      "version": "3.5.43",
+      "deprecated": null
+    },
+    {
+      "name": "vue-component-type-helpers",
+      "version": "3.3.11",
+      "deprecated": null
+    },
+    {
+      "name": "vue-eslint-parser",
+      "version": "10.4.1",
+      "deprecated": null
+    },
+    {
+      "name": "vue-router",
+      "version": "5.3.1",
+      "deprecated": null
+    },
+    {
+      "name": "vue-tsc",
+      "version": "3.3.11",
+      "deprecated": null
+    },
+    {
+      "name": "vuetify",
+      "version": "4.2.1",
+      "deprecated": null
+    },
+    {
+      "name": "w3c-xmlserializer",
+      "version": "6.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "webidl-conversions",
+      "version": "8.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "webpack-virtual-modules",
+      "version": "0.6.2",
+      "deprecated": null
+    },
+    {
+      "name": "whatwg-mimetype",
+      "version": "5.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "whatwg-url",
+      "version": "16.0.1",
+      "deprecated": null
+    },
+    {
+      "name": "whatwg-url",
+      "version": "17.1.2",
+      "deprecated": null
+    },
+    {
+      "name": "which",
+      "version": "2.0.2",
+      "deprecated": null
+    },
+    {
+      "name": "why-is-node-running",
+      "version": "2.3.0",
+      "deprecated": null
+    },
+    {
+      "name": "word-wrap",
+      "version": "1.2.5",
+      "deprecated": null
+    },
+    {
+      "name": "xml-name-validator",
+      "version": "5.0.0",
+      "deprecated": null
+    },
+    {
+      "name": "xmlchars",
+      "version": "2.2.0",
+      "deprecated": null
+    },
+    {
+      "name": "yocto-queue",
+      "version": "0.1.0",
+      "deprecated": null
+    }
+  ],
+  "security_audit": {
+    "auditReportVersion": 2,
+    "vulnerabilities": {},
+    "metadata": {
+      "vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "dependencies": {
+        "prod": 106,
+        "dev": 177,
+        "optional": 27,
+        "peer": 0,
+        "peerOptional": 0,
+        "total": 309
+      }
+    }
+  },
+  "node_24_latest_typings": "24.13.6",
+  "removed_direct": [
+    "vite-plugin-vuetify",
+    "sass",
+    "@vue/compiler-dom"
+  ],
+  "lock_entries_before": 328,
+  "lock_entries_after": 309,
+  "emitted_css_bytes_before": 461384,
+  "emitted_css_bytes_after": 444395,
+  "emitted_woff2_bytes_before": 258588,
+  "emitted_woff2_bytes_after": 139000
+}
