@@ -1,5 +1,8 @@
 # Unreleased
 
+- Search vocabulary while typing, copy exact curation names with one click, and show annotations, cross-references, units, and parents in a compact table.
+- Allow negative values for all change measurements in server and Python client validation, including absolute, relative, and derived changes; baseline measurement restrictions remain unchanged.
+
 - Add a GitHub issue reporting link to desktop and mobile navigation, and use `PKDB_ADMIN` and `PKDB_ADMIN_EMAIL` placeholders in administrator setup documentation.
 - Run regular Python CI on Linux with Python 3.14; reserve the complete Python and operating-system matrix for release tag pushes.
 

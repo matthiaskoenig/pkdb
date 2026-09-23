@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "4c7ac1acde038367925a888ea8aab135d4a66eba039427ae30949e04166f62ea",
+    "version": "5d1d4fc46485dfe6cbf607aac8ca02ca2b058a1784f0abd57c97c642cc483bc6",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -379,7 +379,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -425,7 +425,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -2220,7 +2220,7 @@
           "percent*hr"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -2232,7 +2232,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -2244,7 +2244,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -2354,7 +2354,7 @@
           "hr"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -2876,7 +2876,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -2937,7 +2937,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -3419,7 +3419,7 @@
           "dimensionless"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -3741,7 +3741,7 @@
           "hr"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -3753,7 +3753,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -4164,7 +4164,7 @@
           "dimensionless"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -4344,7 +4344,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -4356,7 +4356,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -4636,7 +4636,7 @@
           "dimensionless"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -4960,7 +4960,7 @@
           "dimensionless"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -5080,7 +5080,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -5168,7 +5168,7 @@
           "l"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -5330,7 +5330,7 @@
           "percent"
         ],
         "choices": [],
-        "can_negative": false,
+        "can_negative": true,
         "time_required": false,
         "deprecated": false
       },
@@ -11653,5 +11653,5 @@
       "sample mean"
     ]
   },
-  "vocabulary_hash": "b825374e2a10bdf9576b32b43b94c71ba063c926bd71d2d768a675a39dcca4fd"
+  "vocabulary_hash": "55417e292f1b6590ceeb57c35e660c18258a13a07562b4bef61d1f24cfb7fbe6"
 }

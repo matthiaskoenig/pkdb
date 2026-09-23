@@ -6,6 +6,8 @@
 
 `backend/info_nodes/definitions/` is the authoritative vocabulary source. Edit these Python definitions to add allowed measurements, categorical choices, substances, tissues, methods, administration routes, forms, and calculation types. The backend reads generated JSON; do not edit `backend/bootstrap/vocabulary.json` or `provenance.json` manually.
 
+On the frontend Vocabulary page, results update while you type. Click a term's name to copy the exact curation name; use Details to inspect its record. The compact table also shows ontology annotations, cross-references, parents, units, and categorical choices where available.
+
 ## Edit a definition
 
 Choose the relevant module, such as `anthropometry.py`, `measurement.py`, `substance.py`, or `method.py`. Preserve existing stable SIDs. Add the definition to the module's existing list. For example, inside `ANTHROPOMETRY_NODES`:
@@ -26,6 +28,8 @@ Choice(
 ```
 
 Parents may use existing names or SIDs; generation normalizes them into SIDs. Boolean and categorical measurements receive the existing automatic Y/N and NR choices as appropriate. Units are defined in `info_nodes/units.py`. Measurement rules requiring time or allowing negative values live in `info_nodes/policies.py`.
+
+All change measurements, including absolute, relative, and derived changes, allow negative values to represent decreases from baseline. Add new change measurements to `CAN_NEGATIVE`; regression tests check this policy in both server and Python client vocabularies. Baseline measurements such as `inr` retain their nonnegative constraint.
 
 Omit `name` when it is identical to the supplied `sid`, and omit empty `annotations` lists. Use compact identifiers when the collection and identifier prefix match, for example `CHEBI:27732` instead of `chebi/CHEBI:27732`. Keep collection-qualified identifiers when their prefixes differ or the accession has no CURIE prefix. For CHMO, use direct BioRegistry URLs such as `https://bioregistry.io/CHMO:0000001`; CHMO is not present in the committed identifiers.org registry.
 
