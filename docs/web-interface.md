@@ -1,4 +1,4 @@
-# Browse and access data
+# Webinterface
 
 Open [alpha.pk-db.com](https://alpha.pk-db.com) to explore PK-DB in your browser. No installation is needed. Public study browsing is available without an account; downloads and access to shared private studies require [sign-in](authentication.md).
 
