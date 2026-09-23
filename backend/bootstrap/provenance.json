@@ -2,7 +2,7 @@
   "generator": "scripts/update_vocabulary.py",
   "nodes": 2144,
   "version": "24f155e1b0947956870e2a8ce9d15b150053f6f081414ca2007c9d231f43dccf",
-  "inputs_sha256": "1fdd17a2fb62f0deea7519af02ac678facc3080e52af77195e0f5d03ac7dfcfd",
+  "inputs_sha256": "a5c6d2a8d751968a3fac42d6875daf9d6f9ff96aea703c4f750dbc07ab53c3df",
   "definition_sha256": {
     "backend/info_nodes/__init__.py": "40d4e2142ce1b3f6b7bbd15a90f212899ea63aa79af84ec53984a8e7d24891d3",
     "backend/info_nodes/audit.py": "c2c63adb91a81949c69cd7cfd5d56a16bd5fa4f91d278ba004a998881017be99",
@@ -29,7 +29,7 @@
     "backend/info_nodes/nodes.py": "7470ba80613b9a03d97a3ae32c312236a3db26bdca65bbb13ab679dc054a06dc",
     "backend/info_nodes/policies.py": "d1a3b30ef47f13b7396f13e650594bc8704e23273ae88c0714649329eb9b32f1",
     "backend/info_nodes/units.py": "1d4087425ea9b997f782451507ad566ddfeed8654379b214a74376832e62b88b",
-    "scripts/update_vocabulary.py": "d5b4c534b4cb81afbfd6ada4922236706a41458dcdaac15c1f2f5417ebdd711b"
+    "scripts/update_vocabulary.py": "aad9e387d073af99126624c85a3aa7887cbecf7c3d83ba561018cdc0bc8a22e8"
   },
   "uncached_optional_metadata": [],
   "metadata_issues": []
