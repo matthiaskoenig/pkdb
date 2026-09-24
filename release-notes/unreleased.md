@@ -1,5 +1,7 @@
 # Unreleased
 
+- Show vocabulary resource names alongside external annotation links and resolve legacy URL placeholders using term identifiers.
+
 - Display a large PK-DB logo beside the landing-page heading, with responsive sizing and a contrasting background in dark mode.
 
 - Name the Pharmacokinetics Database prominently on the landing page and enable reliable Docker frontend hot reload with configurable polling, and document the live development workflow.
