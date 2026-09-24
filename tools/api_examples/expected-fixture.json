@@ -1,0 +1,20 @@
+{
+  "study_sids": [
+    "TEST1"
+  ],
+  "canonical_sid": "TEST1",
+  "measurement_total": 2,
+  "group_total": 1,
+  "archive_files": [
+    "README.md",
+    "TERMS_OF_USE.md",
+    "groups.csv",
+    "individuals.csv",
+    "info_nodes.csv",
+    "interventions.csv",
+    "outputs.csv",
+    "scatters.csv",
+    "studies.csv",
+    "timecourses.csv"
+  ]
+}

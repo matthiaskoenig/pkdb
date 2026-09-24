@@ -153,15 +153,23 @@ def test_typed_get_and_query_filter_serialization(study_folder, vocabulary):
         assert "authorization" not in request.headers
         if request.url.path == "/api/v2/studies/TEST1":
             return httpx2.Response(200, json=prepared.study.model_dump(mode="json"))
-        assert request.url.path == "/api/v1/studies/"
-        assert dict(request.url.params) == {
-            "substance": "a,b",
-            "concise": "true",
-            "page": "2",
-        }
+        assert request.url.path == "/api/v2/query"
+        assert request.method == "POST"
+        body = json.loads(request.content)
+        assert body["page"] == 2
+        assert body["predicates"] == [
+            {"field": "substance_name", "operator": "in", "value": ["a", "b"]}
+        ]
         return httpx2.Response(
             200,
-            json={"data": {"data": [], "count": 0}, "current_page": 2, "last_page": 2},
+            json={
+                "items": [],
+                "total": 0,
+                "page": 2,
+                "page_size": 100,
+                "next": None,
+                "previous": 1,
+            },
         )
 
     with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
@@ -169,9 +177,7 @@ def test_typed_get_and_query_filter_serialization(study_folder, vocabulary):
             endpoint="https://example.test", api_key="", transport=transport
         ) as client:
             assert client.studies.get("TEST1") == prepared.study
-            page = client.studies.list(
-                substance=["a", "b"], concise=True, page=2, ignored=None
-            )
+            page = client.studies.list(substance=["a", "b"], page=2, ignored=None)
             assert page.items == []
             assert page.page == 2
 
@@ -217,8 +223,8 @@ def test_download_authentication_and_atomic_destination(tmp_path, success):
 
     def handler(request):
         assert request.headers["authorization"] == "Bearer pkdb_live_secret"
-        assert request.url.path == "/api/v1/filter/"
-        assert request.url.params["download"] == "true"
+        assert request.url.path == "/api/v2/exports"
+        assert request.method == "POST"
         if success:
             return httpx2.Response(
                 200,
@@ -244,11 +250,11 @@ def test_download_authentication_and_atomic_destination(tmp_path, success):
 
 def test_download_uses_same_filter_serialization_as_queries(tmp_path):
     def handler(request):
-        assert dict(request.url.params) == {
-            "studies__sid": "PK1,PK2",
-            "download": "true",
-            "concise": "true",
-        }
+        body = json.loads(request.content)
+        assert body["concise"] is True
+        assert body["queries"]["studies"]["predicates"] == [
+            {"field": "sid", "operator": "in", "value": ["PK1", "PK2"]}
+        ]
         return httpx2.Response(
             200, content=b"PKtest", headers={"content-type": "application/zip"}
         )
@@ -339,3 +345,60 @@ def test_upload_preserves_server_validation_report(study_folder, vocabulary, env
     assert source is not None
     assert source.path == ("creator",)
     assert calls == ["GET", "PUT"]
+
+
+def test_query_network_failure_is_not_an_ambiguous_upload():
+    from pkdb.errors import ClientError
+
+    def handler(request):
+        assert request.url.path == "/api/v2/query"
+        raise httpx2.ConnectError("offline", request=request)
+
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+        client = Client(
+            endpoint="https://example.test", api_key="", transport=transport
+        )
+        with pytest.raises(ClientError) as failure:
+            client.query("measurements", substance_sid="apixaban")
+        assert failure.value.persistence == "not_attempted"
+        assert "upload" not in str(failure.value)
+
+
+def test_query_keywords_preserve_scientific_types_and_aliases():
+    from pkdb.querying import export_from_filters, query_from_filters
+
+    query = query_from_filters(
+        "measurements",
+        {
+            "substance_sid": "apixaban",
+            "value__gte": "2.5",
+            "normed": "false",
+            "pk__in": [1, 2],
+            "ordering": "-value",
+        },
+    )
+    assert query.entity == "outputs" and query.sort == "-value"
+    assert [(p.field, p.operator, p.value) for p in query.predicates] == [
+        ("substance", "eq", "apixaban"),
+        ("value", "gte", 2.5),
+        ("normed", "eq", False),
+        ("id", "in", [1, 2]),
+    ]
+    query = query_from_filters(
+        "groups", {"measurement_type_sid": "sex", "choice_sid": "male"}
+    )
+    assert [p.field for p in query.predicates] == [
+        "characteristics.measurement_type",
+        "characteristics.choice_sid",
+    ]
+    export = export_from_filters(
+        {"measurements__substance_sid": "apixaban", "concise": "false"}
+    )
+    assert (
+        not export.concise
+        and export.queries["outputs"].predicates[0].field == "substance"
+    )
+    with pytest.raises(ValueError):
+        query_from_filters("outputs", {"value__gte": "NaN"})
+    with pytest.raises(ValueError):
+        export_from_filters({"substance": "apixaban"})

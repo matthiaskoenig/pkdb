@@ -91,8 +91,9 @@ def test_unknown_reset_email_uses_legacy_response(client, mailbox):
     assert mailbox.messages == []
 
 
+@pytest.mark.parametrize("email_base", ["/accounts/emails", "/api/v1/me/emails"])
 def test_email_addresses_are_owner_scoped_and_must_be_verified(
-    client, mailbox, ingestion_context, session_factory
+    client, mailbox, ingestion_context, session_factory, email_base
 ):
     from datetime import UTC, datetime, timedelta
 
@@ -116,7 +117,7 @@ def test_email_addresses_are_owner_scoped_and_must_be_verified(
     csrf = client.get("/api/v1/auth/csrf").json()["csrf_token"]
     creator_headers = {"Origin": client.app.state.browser_origin, "X-CSRF-Token": csrf}
     response = client.post(
-        "/accounts/emails/",
+        f"{email_base}/",
         headers=creator_headers,
         json={"email": "extra@example.org"},
     )
@@ -124,7 +125,7 @@ def test_email_addresses_are_owner_scoped_and_must_be_verified(
     entry = response.json()
     assert entry["email"] == "extra@example.org"
     assert not entry["is_verified"]
-    detail = f"/accounts/emails/{entry['id']}/"
+    detail = f"{email_base}/{entry['id']}/"
     assert (
         client.get(detail, headers={"Authorization": "Bearer invalid"}).status_code
         == 401
@@ -151,17 +152,17 @@ def test_email_addresses_are_owner_scoped_and_must_be_verified(
         ).status_code
         == 400
     )
-    assert client.get("/accounts/emails/", headers=creator_headers).status_code == 200
+    assert client.get(f"{email_base}/", headers=creator_headers).status_code == 200
     assert client.delete(detail, headers=creator_headers).status_code == 400
     secondary = client.post(
-        "/accounts/emails/",
+        f"{email_base}/",
         headers=creator_headers,
         json={"email": "secondary@example.org"},
     )
     assert secondary.status_code == 201
     assert (
         client.post(
-            "/accounts/emails/",
+            f"{email_base}/",
             headers=creator_headers,
             json={"email": "third@example.org"},
         ).status_code
@@ -174,7 +175,7 @@ def test_email_addresses_are_owner_scoped_and_must_be_verified(
         ).status_code
         == 200
     )
-    second_detail = f"/accounts/emails/{secondary.json()['id']}/"
+    second_detail = f"{email_base}/{secondary.json()['id']}/"
     assert (
         client.patch(
             second_detail, headers=creator_headers, json={"is_primary": True}

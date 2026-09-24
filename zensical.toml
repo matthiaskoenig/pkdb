@@ -19,6 +19,8 @@ nav = [
   { "API" = [
     { "Accounts and API keys" = "authentication.md" },
     { "REST API" = "api.md" },
+    { "API examples" = "api-examples.md" },
+    { "MCP for agents" = "mcp.md" },
     { "Python client" = "python-client.md" },
   ] },
   { "Citation" = "citation.md" },

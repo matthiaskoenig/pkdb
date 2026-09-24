@@ -1,6 +1,7 @@
 """Synchronous, typed HTTP API with explicit offline preparation."""
 
 import json
+import math
 import os
 from contextlib import ExitStack
 from pathlib import Path
@@ -24,6 +25,8 @@ from pkdb.errors import ClientError, CompatibilityError
 from pkdb.importers.folder import parse_bundle
 from pkdb.preparation import PreparedBundle, prepare
 from pkdb.progress import ProgressCallback, emit
+from pkdb.querying import export_from_filters, query_from_filters
+from pkdb.schemas.data import DataPage
 from pkdb.schemas.replacement import ReplacementResult
 from pkdb.schemas.responses import (
     GroupResponse,
@@ -233,6 +236,7 @@ class Client:
         )
 
     def _request(self, method, path, *, headers=None, **kwargs):
+        read_only = method == "GET" or path == "/api/v2/query"
         request_headers = {**self._headers(), **(headers or {})}
         try:
             if self.progress and method == "PUT" and "files" in kwargs:
@@ -273,19 +277,19 @@ class Client:
                 )
         except httpx2.RequestError:
             message = "PK-DB request failed"
-            if method != "GET":
+            if not read_only:
                 message += (
                     "; upload outcome may be unknown. Inspect the study before retrying"
                 )
             raise ClientError(
                 message,
-                persistence="unknown" if method != "GET" else "not_attempted",
-                stage="transfer" if method != "GET" else "compatibility",
+                persistence="unknown" if not read_only else "not_attempted",
+                stage="transfer" if not read_only else "compatibility",
             ) from None
         try:
             self._check(response)
         except ClientError as error:
-            if method == "GET":
+            if read_only:
                 error.persistence = "not_attempted"
             raise
         return response
@@ -436,30 +440,20 @@ class Client:
             emit(self.progress, "complete")
             return result
 
-    @staticmethod
-    def _params(filters: dict) -> dict:
-        params = {}
-        for key, value in filters.items():
-            if isinstance(value, (list, tuple)):
-                value = ",".join(str(item) for item in value)
-            elif isinstance(value, bool):
-                value = str(value).lower()
-            if value is not None:
-                params[key] = value
-        return params
-
     def _page[T: BaseModel](
         self, entity: str, model: type[T], filters: dict
     ) -> ResultPage[T]:
-        params = self._params(filters)
-        response = self._request("GET", f"/api/v1/{entity}/", params=params)
+        query = query_from_filters(entity, filters)
+        response = self._request(
+            "POST", "/api/v2/query", json=query.model_dump(mode="json")
+        )
         try:
-            body = response.json()
+            body = DataPage[dict].model_validate(response.json())
             return ResultPage(
-                items=[model.model_validate(item) for item in body["data"]["data"]],
-                count=body["data"]["count"],
-                page=body["current_page"],
-                pages=body["last_page"],
+                items=[model.model_validate(item) for item in body.items],
+                count=body.total,
+                page=body.page,
+                pages=max(1, math.ceil(body.total / body.page_size)),
             )
         except ValueError, KeyError, TypeError, ValidationError:
             raise ClientError("Server returned an invalid result page") from None
@@ -468,6 +462,7 @@ class Client:
         models = {
             "studies": StudyResponse,
             "outputs": OutputResponse,
+            "measurements": OutputResponse,
             "groups": GroupResponse,
             "individuals": IndividualResponse,
             "interventions": InterventionResponse,
@@ -484,9 +479,9 @@ class Client:
         temporary = None
         try:
             with self._transport.stream(
-                "GET",
-                self.endpoint + "/api/v1/filter/",
-                params={**self._params(filters), "download": "true"},
+                "POST",
+                self.endpoint + "/api/v2/exports",
+                json=export_from_filters(filters).model_dump(mode="json"),
                 headers=headers,
                 follow_redirects=False,
             ) as response:

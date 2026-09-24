@@ -29,12 +29,12 @@ with Client(endpoint="https://alpha.pk-db.com") as client:
 
     if page.items:
         sid = page.items[0].sid
-        measurements = client.query("outputs", study_sid=sid, page=1, page_size=20)
+        measurements = client.query("measurements", study_sid=sid, page=1, page_size=20)
         for measurement in measurements.items:
             print(measurement.model_dump())
 ```
 
-`client.query()` also accepts `groups`, `individuals`, `interventions`, `references`, and `studies`. Results are paginated: use `page` and `page_size`, and inspect `count` and `pages`. See the [REST API guide](api.md) for response structure and endpoint references.
+The client uses the v2 data API. `measurements` is the public name for measurement rows; `outputs` remains an accepted alias. `client.query()` also accepts `groups`, `individuals`, `interventions`, `references`, and `studies`. Results are paginated: use `page` and `page_size`, and inspect `count` and `pages`. The client preserves its `count` and `pages` convenience attributes while REST responses use `total`, `page`, and `page_size`. See the [REST API guide](api.md) and [executable HTTP examples](api-examples.md).
 
 ## Download data
 

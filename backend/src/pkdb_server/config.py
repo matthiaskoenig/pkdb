@@ -21,6 +21,7 @@ class Settings(BaseSettings):
     cors_origins: list[str] = Field(default_factory=list)
     browser_origin: str = "http://localhost:8080"
     secure_cookies: bool = False
+    legacy_api_enabled: bool = False
     rate_limits_enabled: bool = True
     quota_anonymous_per_minute: int = Field(default=120, gt=0)
     # Legacy authenticated quota settings remain accepted for deployment compatibility;
