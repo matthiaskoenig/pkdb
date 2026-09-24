@@ -170,3 +170,9 @@ def test_avatar_lifecycle_and_import_preserves_edits(profile_context, session_fa
     assert result["affiliation"] == "My lab"
     assert result["avatar_url"].endswith("default.svg")
     assert result["github_provenance"] == "imported"
+
+
+def test_avatar_updates_have_no_rate_limit(profile_context):
+    service, actor = profile_context
+    for _ in range(21):
+        service.set_avatar(actor)

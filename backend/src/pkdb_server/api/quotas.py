@@ -38,6 +38,9 @@ class RequestQuotas:
                 principal = request.app.state.principal(request, required=False)
             except AuthenticationFailed, AuthorizationDenied:
                 principal = Principal()
+            if principal.user_id is not None:
+                scope.setdefault("state", {})["authenticated_unthrottled"] = True
+                return None
             operation = "read"
             if request.method not in {"GET", "HEAD"} and (
                 "studies" in path or "upload" in path or "files" in path
@@ -73,6 +76,9 @@ class RequestQuotas:
                 status_code=503,
                 headers={"Retry-After": "5"},
             )(scope, receive, send)
+
+        if identifier is None:
+            return await self.app(scope, receive, send)
 
         async def heartbeat():
             while True:

@@ -4,7 +4,6 @@ from fastapi import APIRouter, HTTPException, Request
 from starlette.responses import FileResponse, Response
 
 from pkdb.schemas.profiles import ProfileUpdate
-from pkdb_server.services.accounts import AccountThrottled
 from pkdb_server.services.profiles import MAX_AVATAR_BYTES
 
 router = APIRouter(prefix="/api/v1")
@@ -36,22 +35,11 @@ async def upload_avatar(request: Request):
         return request.app.state.profiles.set_avatar(actor, bytes(content))
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from exc
-    except AccountThrottled as exc:
-        raise HTTPException(
-            429, "Too many avatar changes", headers={"Retry-After": "3600"}
-        ) from exc
 
 
 @router.delete("/me/avatar")
 def remove_avatar(request: Request):
-    try:
-        return request.app.state.profiles.set_avatar(
-            request.app.state.principal(request)
-        )
-    except AccountThrottled as exc:
-        raise HTTPException(
-            429, "Too many avatar changes", headers={"Retry-After": "3600"}
-        ) from exc
+    return request.app.state.profiles.set_avatar(request.app.state.principal(request))
 
 
 @router.get("/avatars/default.svg")

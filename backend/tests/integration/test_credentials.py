@@ -202,3 +202,16 @@ def test_password_admin_can_export_and_read_own_staged_files(
     assert exports.create_filter(QuerySpec(entity="studies"), principal) is not None
     with files.open_authorized(principal, staged.id) as stream:
         assert stream.read() == b"private scientific data"
+
+
+def test_authenticated_account_actions_have_no_rate_limit(credentials):
+    service, _, principal, _ = credentials
+    for _ in range(11):
+        assert service.reauthenticate(principal, "Example-password-42")
+    for _ in range(4):
+        assert (
+            service.accounts.add_email(principal, "secondary@example.org")["email"]
+            == "secondary@example.org"
+        )
+    with pytest.raises(AuthenticationFailed):
+        service.reauthenticate(principal, "incorrect-password")

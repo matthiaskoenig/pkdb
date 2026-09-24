@@ -5,7 +5,6 @@ import json
 from datetime import UTC, datetime, timedelta
 from importlib.resources import files
 from tempfile import TemporaryFile
-from threading import BoundedSemaphore
 from zipfile import ZIP_DEFLATED, ZipFile
 
 from sqlalchemy import delete, func, select
@@ -20,10 +19,6 @@ from pkdb_server.db.selection import selection
 from pkdb_server.services.analysis import AnalysisService
 from pkdb_server.services.authentication import revalidate_principal
 from pkdb_server.services.authorization import AuthorizationDenied
-
-
-class ExportBusy(RuntimeError):
-    pass
 
 
 class ExportLimit(ValueError):
@@ -52,7 +47,6 @@ class ExportService:
         self.analysis = AnalysisService(session_factory)
         self.max_bytes = settings.export_max_bytes if settings else 256 * 1024 * 1024
         self.max_rows = settings.export_max_rows if settings else 1_000_000
-        self.slots = BoundedSemaphore(settings.export_concurrency if settings else 2)
 
     @staticmethod
     def current_principal(session, principal):
@@ -226,25 +220,20 @@ class ExportService:
             raise AuthorizationDenied("Authentication required for data downloads")
         if format not in {"csv", "zip"}:
             raise ValueError("Unsupported export format")
-        if not self.slots.acquire(blocking=False):
-            raise ExportBusy("Export capacity reached")
-        try:
-            with TemporaryFile(mode="w+b") as artifact:
-                # Build under one repeatable-read snapshot in one worker. Only the
-                # resulting file is streamed, so a Session never crosses workers.
-                with self.session_factory() as session:
-                    session.connection(
-                        execution_options={"isolation_level": "REPEATABLE READ"}
-                    )
-                    query, current = self.load_filter(filter_id, principal, session)
-                    if format == "zip":
-                        self.write_zip(artifact, session, query, current)
-                    elif isinstance(query, QuerySpec):
-                        self.write_csv(artifact, session, query.entity, query, current)
-                    else:
-                        raise ValueError("CSV requires a single-entity filter")
-                artifact.seek(0)
-                while chunk := artifact.read(64 * 1024):
-                    yield chunk
-        finally:
-            self.slots.release()
+        with TemporaryFile(mode="w+b") as artifact:
+            # Build under one repeatable-read snapshot in one worker. Only the
+            # resulting file is streamed, so a Session never crosses workers.
+            with self.session_factory() as session:
+                session.connection(
+                    execution_options={"isolation_level": "REPEATABLE READ"}
+                )
+                query, current = self.load_filter(filter_id, principal, session)
+                if format == "zip":
+                    self.write_zip(artifact, session, query, current)
+                elif isinstance(query, QuerySpec):
+                    self.write_csv(artifact, session, query.entity, query, current)
+                else:
+                    raise ValueError("CSV requires a single-entity filter")
+            artifact.seek(0)
+            while chunk := artifact.read(64 * 1024):
+                yield chunk

@@ -7,6 +7,16 @@ export function errorStatus(error: unknown): number | undefined {
 }
 export function errorMessage(error: unknown): string {
   if (error instanceof RangeError) return error.message;
+  if (axios.isAxiosError(error) && error.response?.status === 429) {
+    const retry = error.response.headers["retry-after"];
+    const raw = typeof retry === "string" || typeof retry === "number" ? String(retry).trim() : "";
+    const seconds = /^\d+$/.test(raw)
+      ? Number(raw)
+      : raw ? Math.ceil((Date.parse(raw) - Date.now()) / 1000) : NaN;
+    return Number.isFinite(seconds) && seconds >= 0
+      ? `Too many requests. Please wait ${Math.max(1, seconds)} ${Math.max(1, seconds) === 1 ? "second" : "seconds"} before trying again.`
+      : "Too many requests. Please wait a moment before trying again.";
+  }
   const data: unknown = axios.isAxiosError(error)
     ? error.response?.data
     : undefined;

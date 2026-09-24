@@ -173,7 +173,7 @@ def test_legacy_zip_download_members_and_normalized_rows(
         assert archive.read("README.md")
 
 
-def test_export_releases_capacity_when_headers_cannot_be_sent():
+def test_export_closes_artifact_when_headers_cannot_be_sent():
     import asyncio
 
     import pytest
@@ -205,7 +205,7 @@ def test_export_releases_capacity_when_headers_cannot_be_sent():
     assert service.closed
 
 
-def test_export_limit_and_capacity_errors_precede_headers(client, creator_headers):
+def test_export_size_limit_precedes_headers(client, creator_headers):
     service = client.app.state.exports
     service.max_bytes = 1
     response = client.get(
@@ -214,17 +214,6 @@ def test_export_limit_and_capacity_errors_precede_headers(client, creator_header
     assert response.status_code == 413
     assert response.headers["content-type"].startswith("application/json")
     service.max_bytes = 1_000_000
-    assert service.slots.acquire(blocking=False)
-    assert service.slots.acquire(blocking=False)
-    try:
-        response = client.get(
-            "/api/v1/filter/", headers=creator_headers, params={"download": "true"}
-        )
-        assert response.status_code == 503
-        assert response.headers["retry-after"] == "1"
-    finally:
-        service.slots.release()
-        service.slots.release()
     response = client.get(
         "/api/v1/filter/", headers=creator_headers, params={"download": "true"}
     )
@@ -374,3 +363,18 @@ def test_analysis_details_match_list_rows_and_enforce_saved_visibility(
         ).status_code
         == 404
     )
+
+
+def test_authenticated_exports_have_no_concurrency_limit(client, ingestion_context):
+    from pkdb.schemas.filters import FilterSpec
+
+    _, principal = ingestion_context
+    service = client.app.state.exports
+    identifier = service.create_filter(FilterSpec(), principal)
+    streams = [service.stream_export(identifier, "zip", principal) for _ in range(3)]
+    try:
+        for stream in streams:
+            assert next(stream).startswith(b"PK")
+    finally:
+        for stream in streams:
+            stream.close()

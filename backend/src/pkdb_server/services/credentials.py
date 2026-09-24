@@ -134,9 +134,6 @@ class CredentialService:
             return raw, session_principal(user, row)
 
     def reauthenticate(self, principal, password):
-        self.accounts._throttle(
-            "reauthenticate", str(principal.user_id), 10, timedelta(minutes=10)
-        )
         with self.session_factory.begin() as session:
             user, credential = require_session(principal, session, lock=True)
             try:

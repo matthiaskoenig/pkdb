@@ -105,3 +105,41 @@ def test_canonical_validation_does_not_echo_password(client):
     )
     assert response.status_code == 422
     assert "do-not-echo" not in response.text
+
+
+def test_authenticated_http_bypasses_exhausted_limits(
+    ingestion_context, session_factory, admin_headers, creator_headers
+):
+    settings = Settings(
+        database_url=session_factory.kw["bind"].url.render_as_string(
+            hide_password=False
+        ),
+        file_root=ingestion_context[0].file_store.root,
+        quota_anonymous_per_minute=1,
+        quota_ip_per_minute=1,
+        quota_account_per_minute=1,
+        quota_key_per_minute=1,
+    )
+    app = create_app(settings)
+    with TestClient(app) as browser:
+        assert browser.get("/api/v1/studies/").status_code == 200
+        assert browser.get("/api/v1/studies/").status_code == 429
+        for headers in (admin_headers, creator_headers):
+            for _ in range(5):
+                assert (
+                    browser.get("/api/v1/studies/", headers=headers).status_code == 200
+                )
+        from pkdb_server.api.limits import UploadLimits
+
+        middleware = app.middleware_stack
+        while not isinstance(middleware, UploadLimits):
+            middleware = getattr(middleware, "app")
+        for _ in range(settings.upload_concurrency):
+            assert middleware.slots.acquire(blocking=False)
+        # Even a fully occupied anonymous upload gate cannot throttle a session.
+        response = browser.post("/api/v2/studies/validate", headers=admin_headers)
+        assert response.status_code == 422, response.text
+        for _ in range(settings.upload_concurrency):
+            middleware.slots.release()
+    with session_factory() as session:
+        assert session.scalar(select(func.count()).select_from(WorkLease)) == 0

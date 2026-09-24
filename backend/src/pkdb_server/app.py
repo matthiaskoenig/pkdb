@@ -103,8 +103,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(profiles.router)
     app.include_router(management.router)
     app.include_router(management.account_router)
-    if settings.rate_limits_enabled:
-        app.add_middleware(RequestQuotas)
     app.state.admin_users = AdminUserService(session_factory)
     app.state.file_store = file_store
     app.state.ingestion = ingestion
@@ -117,7 +115,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         UploadLimits,
         max_bytes=settings.upload_max_bytes,
         concurrency=settings.upload_concurrency,
+        admission_enabled=settings.rate_limits_enabled,
     )
+    if settings.rate_limits_enabled:
+        app.add_middleware(RequestQuotas)
     app.add_middleware(UploadReports)
     app.add_middleware(
         CORSMiddleware,
