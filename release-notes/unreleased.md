@@ -1,5 +1,7 @@
 # Unreleased
 
+- Display a large PK-DB logo beside the landing-page heading, with responsive sizing and a contrasting background in dark mode.
+
 - Name the Pharmacokinetics Database prominently on the landing page and enable reliable Docker frontend hot reload with configurable polling, and document the live development workflow.
 
 - Publish Terms of Use in the documentation with required source citation, coauthorship for reuse of more than 10 studies, and commercial data licensing; update site links and the terms bundled with data exports.
