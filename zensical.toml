@@ -4,7 +4,7 @@ site_description = "PK-DB - the open pharmacokinetics database"
 site_url = "https://matthiaskoenig.github.io/pkdb/"
 site_author = "Matthias König"
 
-copyright = 'Copyright &copy; 2017-2026 Matthias König; <a href="https://livermetabolism.com">https://livermetabolism.com</a>'
+copyright = 'Copyright &copy; 2017-2026 Matthias König · <a href="https://livermetabolism.com">Systems Medicine of the Liver</a> · <a href="mailto:koenigmx@hu-berlin.de">koenigmx@hu-berlin.de</a> · <a href="https://github.com/matthiaskoenig/pkdb/issues/new">Report an issue</a> · <a href="https://matthiaskoenig.github.io/pkdb/terms-of-use/">Terms of use</a>'
 
 repo_url = "https://github.com/matthiaskoenig/pkdb"
 repo_name = "matthiaskoenig/pkdb"
@@ -15,11 +15,14 @@ extra_css = ["stylesheets/extra.css"]
 nav = [
   { "Introduction" = "index.md" },
   { "Webinterface" = "web-interface.md" },
-  { "Python client and API" = [
+  { "Example study" = "example-study.md" },
+  { "API" = [
     { "Accounts and API keys" = "authentication.md" },
     { "REST API" = "api.md" },
     { "Python client" = "python-client.md" },
   ] },
+  { "Citation" = "citation.md" },
+  { "Terms of use" = "terms-of-use.md" },
   { "Development" = [
     { "Overview and source installation" = "development.md" },
     { "Local setup and development server" = "installation.md" },

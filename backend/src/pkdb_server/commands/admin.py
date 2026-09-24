@@ -2,6 +2,7 @@
 
 import re
 
+from pydantic import ValidationError
 from sqlalchemy import select
 
 from pkdb.schemas.accounts import Registration
@@ -11,20 +12,41 @@ from pkdb_server.services.accounts import AccountService
 from pkdb_server.services.authentication import password_hash
 
 
+class AdminProvisioningError(ValueError):
+    """A fixed operator-facing provisioning error containing no secret input."""
+
+
 def create_admin(
     session_factory, username, email, password=None, *, adopt_user_id=None
 ):
     if not re.fullmatch(r"[A-Za-z0-9_.-]{1,150}", username):
-        raise ValueError("Invalid username")
+        raise AdminProvisioningError("Invalid username")
     if adopt_user_id is None:
         if password is None:
-            raise ValueError("A password is required for a new administrator")
-        values = Registration(username=username, email=email, password=password)
-        AccountService._password(values.password)
+            raise AdminProvisioningError(
+                "A password is required for a new administrator"
+            )
+        try:
+            values = Registration(username=username, email=email, password=password)
+        except ValidationError as error:
+            fields = {item["loc"][0] for item in error.errors(include_input=False)}
+            if "email" in fields:
+                raise AdminProvisioningError(
+                    "Invalid administrator email address"
+                ) from None
+            raise AdminProvisioningError(
+                "Password must contain between 8 and 1024 characters"
+            ) from None
+        try:
+            AccountService._password(values.password)
+        except ValueError:
+            raise AdminProvisioningError(
+                "Password must contain between 8 and 1024 characters"
+            ) from None
         encoded = password_hash.hash(values.password)
     else:
         if password is not None:
-            raise ValueError(
+            raise AdminProvisioningError(
                 "Adoption preserves existing credentials; do not supply a password"
             )
         encoded = None
@@ -36,7 +58,7 @@ def create_admin(
             .with_for_update()
         )
         if configuration is None:
-            raise ValueError("Run security schema migrations first")
+            raise AdminProvisioningError("Run security schema migrations first")
         user = session.scalar(
             select(User).where(User.username == username).with_for_update()
         )
@@ -46,7 +68,7 @@ def create_admin(
             )
         )
         if other_admin is not None:
-            raise ValueError(
+            raise AdminProvisioningError(
                 "Review and demote conflicting legacy administrators before designation"
             )
         if configuration.designated_administrator_id is not None:
@@ -55,7 +77,7 @@ def create_admin(
                 or configuration.designated_administrator_id != user.id
                 or adopt_user_id != user.id
             ):
-                raise ValueError(
+                raise AdminProvisioningError(
                     "Administrator already designated; identity replacement is prohibited"
                 )
         if adopt_user_id is not None:
@@ -64,11 +86,11 @@ def create_admin(
                 or user.id != adopt_user_id
                 or (user.email or "").casefold() != address
             ):
-                raise ValueError(
+                raise AdminProvisioningError(
                     "Adoption requires exact existing ID, username, and primary email"
                 )
             if not user.active or user.suspended_at is not None:
-                raise ValueError(
+                raise AdminProvisioningError(
                     "Administrator adoption must not reactivate a disabled account"
                 )
             user.role = "admin"
@@ -82,7 +104,7 @@ def create_admin(
                 )
                 is not None
             ):
-                raise ValueError(
+                raise AdminProvisioningError(
                     "Identity exists; use explicit adoption with its internal user ID"
                 )
             user = User(

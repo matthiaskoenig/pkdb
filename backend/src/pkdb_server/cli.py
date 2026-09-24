@@ -102,7 +102,7 @@ def redact_values(value, token):
 def local_command(args):
     from sqlalchemy.exc import SQLAlchemyError
 
-    from pkdb_server.commands.admin import create_admin
+    from pkdb_server.commands.admin import AdminProvisioningError, create_admin
     from pkdb_server.commands.bootstrap import bootstrap, bootstrap_study
     from pkdb_server.commands.cleanup import cleanup
     from pkdb_server.commands.user_import import import_roster
@@ -117,7 +117,7 @@ def local_command(args):
         if args.command == "create-admin":
             if args.adopt_user_id is not None:
                 if args.password_stdin:
-                    raise ValueError(
+                    raise AdminProvisioningError(
                         "Adoption preserves credentials; omit --password-stdin"
                     )
                 password = None
@@ -126,7 +126,9 @@ def local_command(args):
             elif sys.stdin.isatty():
                 password = getpass("Administrator password: ")
             else:
-                raise ValueError("Use an interactive terminal or --password-stdin")
+                raise AdminProvisioningError(
+                    "Use an interactive terminal or --password-stdin"
+                )
             create_admin(
                 factory,
                 args.username,
@@ -167,6 +169,9 @@ def local_command(args):
             result = {"ok": True, **cleanup(factory, store)}
         print(json.dumps(result))
         return int(not result["ok"])
+    except AdminProvisioningError as error:
+        print(json.dumps({"ok": False, "error": str(error)}))
+        return 1
     except ValueError, OSError, SQLAlchemyError:
         # Connection/configuration exceptions can contain database credentials.
         print(

@@ -33,14 +33,20 @@ By combining pharmacokinetic data with structured metadata, semantic annotations
 ![PK-DB overview](./docs/images/pkdb_overview.png)
 
 
-PK-DB is available from [https://alpha.pk-db.com](https://alpha.pk-db.com). The terms of use are listed in the [`TERMS_OF_USE.md`](./TERMS_OF_USE.md).
+PK-DB is available from [https://alpha.pk-db.com](https://alpha.pk-db.com). The terms of use are listed in the [Terms of use](docs/terms-of-use.md).
 
+
+PK-DB is developed by the [Systems Medicine of the Liver Group](https://livermetabolism.com) at Humboldt University Berlin.
 
 ## Browse and access data
 
 Open [alpha.pk-db.com](https://alpha.pk-db.com) and choose **Explore data** to explore studies, subjects, interventions, and measurements. Public browsing needs no account; sign in for dataset and attachment downloads. Start with the illustrated [Web interface guide](docs/web-interface.md).
 
-## Python client and API
+## Example study
+
+Follow the [example study](docs/example-study.md) to see how a publication connects to structured subjects, interventions, and measurements.
+
+## API
 
 Install [pkdb from PyPI](https://pypi.org/project/pkdb/) with Python 3.14 or 3.15:
 
@@ -57,7 +63,7 @@ with Client(endpoint="https://alpha.pk-db.com") as client:
         print(study.sid)
 ```
 
-See [Python client and API](docs/python-client.md) for queries, downloads, and data curation, [REST API](docs/api.md) for HTTP examples, and [Accounts and API keys](docs/authentication.md) for authenticated access. All curation examples use `https://alpha.pk-db.com`.
+See [Python client](docs/python-client.md) for queries, downloads, and data curation, [REST API](docs/api.md) for HTTP examples, and [Accounts and API keys](docs/authentication.md) for authenticated access. All curation examples use `https://alpha.pk-db.com`.
 
 ## Development
 
@@ -68,16 +74,11 @@ See [Development](docs/development.md) for installing the package from source, w
 
 ## Documentation
 
-Read the [documentation](https://matthiaskoenig.github.io/pkdb/) in order: **Browse and access data**, **Python client and API**, then **Development** when you work on the codebase.
+Read the [documentation](https://matthiaskoenig.github.io/pkdb/) in order: **Browse and access data**, **API**, then **Development** when you work on the codebase.
 
 ## How to cite
-If you use PK-DB data or the web interface cite
 
-> Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M. *PK-DB: pharmacokinetics database for individualized and stratified computational modeling*. Nucleic Acids Res. 2021 Jan 8;49(D1):D1358-D1364. doi: [10.1093/nar/gkaa990](https://doi.org/10.1093/nar/gkaa990). PMID: [33151297](https://pubmed.ncbi.nlm.nih.gov/33151297/).
-
-If you use PK-DB code cite in addition 
-
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.1406979.svg)](https://doi.org/10.5281/zenodo.1406979)
+See [Citing PK-DB](docs/citation.md) for the database publication and software citation.
 
 ## License
 PK-DB code and documentation is licensed as
@@ -85,6 +86,9 @@ PK-DB code and documentation is licensed as
 - Documentation: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)
 
 ## Funding
+
 Matthias König (MK) and Jan Grzegorzewski were supported by the Federal Ministry of Education and Research (BMBF, Germany) within the research network Systems Medicine of the Liver (LiSyM, grant number 031L0054). MK is supported by the Federal Ministry of Education and Research (BMBF, Germany) within ATLAS by grant number 031L0304B and by the German Research Foundation (DFG) within the Research Unit Program FOR 5151 QuaLiPerF (Quantifying Liver Perfusion-Function Relationship in Complex Resection - A Systems Medicine Approach) by grant number 436883643 and by grant number 465194077 (Priority Programme SPP 2311, Subproject SimLivA).
+
+The infrastructure is provided by the BMBF-funded de.NBI Cloud within the German Network for Bioinformatics Infrastructure (de.NBI), grants 031A537B, 031A533A, 031A538A, 031A533B, 031A535A, 031A537C, 031A534A, and 031A532B.
 
 &copy; 2017-2026 Matthias König; https://livermetabolism.com.

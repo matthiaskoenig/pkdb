@@ -14,18 +14,6 @@ const copyrightYear = new Date().getFullYear();
 const avatarUrl = computed(() =>
   session.profile?.avatar_url ? apiBase + session.profile.avatar_url : "",
 );
-const resourceLinks = [
-  {
-    title: "Terms of use",
-    href: "https://github.com/matthiaskoenig/pkdb/blob/develop/TERMS_OF_USE.md",
-  },
-  { title: "Contact", href: "mailto:koenigmx@hu-berlin.de" },
-  {
-    title: "Report an issue",
-    href: "https://github.com/matthiaskoenig/pkdb/issues/new",
-  },
-  { title: "REST API", href: `${apiBase}/docs` },
-];
 function toggleTheme() {
   const next = theme.global.name.value === "dark" ? "light" : "dark";
   theme.change(next);
@@ -72,24 +60,8 @@ onMounted(() => {
         <RouterLink to="/data">Explore data</RouterLink
         ><RouterLink to="/curation">Vocabulary</RouterLink
         ><a href="https://matthiaskoenig.github.io/pkdb">Documentation</a
-        ><v-menu>
-          <template #activator="{ props }">
-            <v-btn
-              v-bind="props"
-              class="resource-menu"
-              append-icon="fas fa-chevron-down"
-            >About PK-DB</v-btn>
-          </template>
-          <v-list aria-label="About PK-DB resources">
-            <v-list-item to="/" title="About PK-DB" />
-            <v-list-item
-              v-for="link in resourceLinks"
-              :key="link.title"
-              :href="link.href"
-              :title="link.title"
-            />
-          </v-list>
-        </v-menu><RouterLink to="/account" class="account-link">
+        ><a :href="`${apiBase}/docs`">API</a
+        ><RouterLink to="/account" class="account-link">
           <img
             v-if="avatarUrl"
             :src="avatarUrl"
@@ -125,13 +97,7 @@ onMounted(() => {
         >
           {{ link.text }} </RouterLink
         ><a href="https://matthiaskoenig.github.io/pkdb">Documentation</a>
-        <RouterLink to="/" @click="drawer = false">About PK-DB</RouterLink>
-        <a
-          v-for="link in resourceLinks"
-          :key="link.title"
-          :href="link.href"
-          @click="drawer = false"
-        >{{ link.title }}</a>
+        <a :href="`${apiBase}/docs`" @click="drawer = false">API</a>
         <RouterLink to="/account" class="account-link" @click="drawer = false">
           <img
             v-if="avatarUrl"
@@ -155,7 +121,20 @@ onMounted(() => {
         ><RouterView />
       </main>
       <footer class="app-footer">
-        <div><strong>PK-DB</strong><span>Pharmacokinetics database</span></div>
+        <div class="footer-identity">
+          <strong>PK-DB</strong>
+          <span>Pharmacokinetics database</span>
+          <span>
+            <a href="https://livermetabolism.com">Systems Medicine of the Liver</a>
+            · Humboldt University Berlin
+          </span>
+        </div>
+        <nav class="footer-links" aria-label="Contact and resources">
+          <a href="mailto:koenigmx@hu-berlin.de">Contact Matthias König</a>
+          <a href="https://github.com/matthiaskoenig/pkdb/issues/new">Report an issue</a>
+          <a href="https://matthiaskoenig.github.io/pkdb/citation/">How to cite</a>
+          <a href="https://matthiaskoenig.github.io/pkdb/terms-of-use/">Terms of use</a>
+        </nav>
         <div aria-label="Build information">
           <span>Release {{ releaseVersion }}</span>
           <span>
@@ -169,8 +148,7 @@ onMounted(() => {
           </span>
         </div>
         <p>
-          © 2017–{{ copyrightYear }} Matthias König ·
-          <a href="https://livermetabolism.com">Systems Medicine of the Liver</a>
+          © 2017–{{ copyrightYear }} Matthias König
         </p>
       </footer>
     </v-main>

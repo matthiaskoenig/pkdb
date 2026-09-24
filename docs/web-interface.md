@@ -4,6 +4,8 @@ Open [alpha.pk-db.com](https://alpha.pk-db.com) to explore PK-DB in your browser
 
 The screenshots below show the current frontend with artificial demonstration data. Study names, counts, and values illustrate the interface, not scientific results from the public collection. Select a screenshot to view it at full size.
 
+For a scientific example of how a publication is represented in PK-DB, see the [example study](example-study.md).
+
 ## Find studies
 
 Open **Explore data** to reach **Search pharmacokinetic data**. The research filters appear on the left on a desktop; on a smaller screen, open **Filters and Search**.

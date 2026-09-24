@@ -1,5 +1,9 @@
 # Unreleased
 
+- Publish Terms of Use in the documentation with required source citation, coauthorship for reuse of more than 10 studies, and commercial data licensing; update site links and the terms bundled with data exports.
+
+- Simplify the landing page to mission, vision, and live database statistics; move the example study and citation information into documentation. Promote API to top-level navigation and show contact and issue reporting links in shared frontend and documentation footers.
+- Report actionable `create-admin` errors for existing administrators and invalid input without exposing passwords or database credentials.
 - Search vocabulary while typing, copy exact curation names with one click, and show annotations, cross-references, units, and parents in a compact table.
 - Allow negative values for all change measurements in server and Python client validation, including absolute, relative, and derived changes; baseline measurement restrictions remain unchanged.
 

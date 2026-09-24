@@ -1,25 +1,33 @@
 import { test, expect } from "@playwright/test";
 import { fileURLToPath } from "node:url";
 
-test("documentation branding and resource navigation work on desktop and mobile", async ({ page }) => {
+test("lean landing page and API navigation work on desktop and mobile", async ({ page }, testInfo) => {
   await page.goto("/");
   await expect(page.getByRole("link", { name: "PK-DB home" }).locator("img")).toHaveAttribute("src", "/assets/images/pkdb_logo.png");
-  await expect(page.locator('link[rel="icon"]')).toHaveAttribute("href", "/assets/images/pkdb_logo.png");
-  await page.getByRole("button", { name: "About PK-DB" }).click();
-  const resources = page.getByRole("list", { name: "About PK-DB resources" });
-  for (const name of ["About PK-DB", "Terms of use", "Contact", "REST API"]) {
-    await expect(resources.getByRole("link", { name, exact: true })).toBeVisible();
-  }
-  await page.keyboard.press("Escape");
+  await expect(page.getByRole("heading", { name: "Our mission", exact: true })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Our vision", exact: true })).toBeVisible();
+  await expect(page.locator(".statistic-grid a")).toHaveCount(7);
+  await expect(page.getByRole("heading", { name: "Example study", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "How to cite", exact: true })).toHaveCount(0);
+  const desktop = page.getByRole("navigation", { name: "Main navigation", exact: true });
+  await expect(desktop.getByRole("link", { name: "API", exact: true })).toHaveAttribute("href", "/docs");
+  await page.screenshot({ path: testInfo.outputPath("landing-desktop.png"), fullPage: true });
+  await page.getByRole("button", { name: "Toggle color theme" }).click();
+  await page.screenshot({ path: testInfo.outputPath("landing-dark.png"), fullPage: true });
+  await page.getByRole("button", { name: "Toggle color theme" }).click();
   await page.setViewportSize({ width: 390, height: 844 });
   await page.getByRole("button", { name: "Open navigation" }).click();
   const mobile = page.getByRole("navigation", { name: "Mobile navigation" });
-  for (const name of ["About PK-DB", "Terms of use", "Contact", "REST API"]) {
+  for (const name of ["Explore data", "Vocabulary", "Documentation", "API", "Account"]) {
     await expect(mobile.getByRole("link", { name, exact: true })).toBeVisible();
   }
-  await mobile.getByRole("link", { name: "About PK-DB", exact: true }).click();
+  await expect(mobile.getByRole("link", { name: "API", exact: true })).toHaveAttribute("href", "/docs");
+  await mobile.getByRole("link", { name: "Vocabulary", exact: true }).click();
   await expect(mobile).not.toBeVisible();
-  await expect(page.getByRole("contentinfo")).toContainText("Pharmacokinetics database");
+  await page.getByRole("link", { name: "PK-DB home" }).click();
+  await expect(page.locator(".statistic-grid a")).toHaveCount(7);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await page.screenshot({ path: testInfo.outputPath("landing-mobile.png"), fullPage: true });
 });
 
 test("login avatar appears in both navigation layouts and clears on logout", async ({ page }, testInfo) => {
@@ -63,6 +71,10 @@ test("release and copyright footer is shared by all page types", async ({ page }
     await expect(footer).toContainText(/Release \d+\.\d+\.\d+/);
     await expect(footer).toContainText(`© 2017–${new Date().getFullYear()} Matthias König`);
     await expect(footer.getByRole("link", { name: "Systems Medicine of the Liver" })).toHaveAttribute("href", "https://livermetabolism.com");
+    await expect(footer.getByRole("link", { name: "Contact Matthias König" })).toHaveAttribute("href", "mailto:koenigmx@hu-berlin.de");
+    await expect(footer.getByRole("link", { name: "Report an issue" })).toHaveAttribute("href", "https://github.com/matthiaskoenig/pkdb/issues/new");
+    await expect(footer.getByRole("link", { name: "How to cite" })).toHaveAttribute("href", "https://matthiaskoenig.github.io/pkdb/citation/");
+    await expect(footer.getByRole("link", { name: "Terms of use", exact: true })).toHaveAttribute("href", "https://matthiaskoenig.github.io/pkdb/terms-of-use/");
     const commit = footer.locator('a[href*="/commit/"]');
     await expect(commit).toHaveAttribute("href", /\/commit\/[a-f0-9]{40,64}$/i);
     await expect(commit).toHaveText(/^[a-f0-9]{8}$/i);
