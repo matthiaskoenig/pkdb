@@ -18,7 +18,7 @@ You can also choose a substance directory or a single study folder. The app disp
 
 ## Select local studies
 
-Workspace, file-watching, upload target, identity, and vocabulary controls are in the navigation header menus. The responsive workspace shows the study overview beside the selected study’s problems; on narrow screens these stack vertically. Selecting a study name or checkbox opens its problems immediately. Use the detail panel to validate or validate and upload one study, or select several studies for batch actions.
+Workspace, file-watching, upload target, identity, and vocabulary controls are in the navigation header menus. The responsive workspace shows the study overview beside the selected study’s problems; on narrow screens these stack vertically. Selecting a study row, name, or checkbox opens its validation results immediately. Focus a row and press Enter or Space to open it with the keyboard. Use the detail panel to validate or validate and upload one study, or select several studies for batch actions.
 
 The frontend has no GitHub user field. The command-line assignment options remain available for existing integrations.
 
@@ -63,6 +63,8 @@ File watching continues while the local `pkdb curation` process runs, even if yo
 ## Vocabulary, credentials, and offline work
 
 Connected validation uses the target server's vocabulary. When its hash changes, the app retrieves and verifies the new snapshot and invalidates previous validation results. A processing-version mismatch requires upgrading the package; the app will not silently install software or change scientific values.
+
+Uploads read Excel workbooks directly and send the original source files, including any existing TSV files. Uploading does not generate TSV exports from Excel sheets.
 
 Uploads use your PK-DB API key and normal server permissions. Configure the endpoint and key as described in [Python client and API](python-client.md). GitHub access is separate from PK-DB authentication.
 
