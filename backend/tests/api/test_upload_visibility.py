@@ -8,7 +8,7 @@ from sqlalchemy import delete, select
 
 from pkdb_server.db.models.credentials import ApiKey
 from pkdb_server.db.models.files import StudyAttachment
-from pkdb_server.db.models.studies import Study, StudyGrant
+from pkdb_server.db.models.studies import Study, StudyGrant, StudyUser
 from pkdb_server.db.models.users import User
 from pkdb_server.services.credentials import digest
 
@@ -134,7 +134,9 @@ def test_private_visibility_matches_details_lists_exports_and_attachments(
             session.add(user)
             session.flush()
             if grant:
-                session.add(StudyGrant(study_id=study.id, user_id=user.id, role=grant))
+                # Collaborators are attribution only; effective grants are curators.
+                model = StudyUser if grant == "collaborator" else StudyGrant
+                session.add(model(study_id=study.id, user_id=user.id, role=grant))
             cases.append((name, key_for(session, user), allowed))
     for name, headers, allowed in cases:
         assert client.get(url, headers=headers).status_code == (

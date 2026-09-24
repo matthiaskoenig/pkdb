@@ -6,8 +6,6 @@ import {
   type EditableRole,
   type RoleRequest,
   type StudyAccess,
-  type Usage,
-  type UsageKind,
 } from "../../api/admin";
 import { errorMessage } from "../../api/client";
 import { useSessionStore } from "../../stores/session";
@@ -43,20 +41,11 @@ export function useAdministration() {
     auditLoaded = ref(false);
   const invitationUser = ref<AdminUser | null>(null),
     invitationError = ref("");
-  const usageUser = ref<AdminUser | null>(null),
-    usage = ref<Usage | null>(null);
   const studySid = ref(""),
     loadedSid = ref(""),
     studyAccess = ref<StudyAccess | null>(null),
-    curatorIds = ref(""),
-    readerIds = ref("");
+    curatorIds = ref("");
   const roles: EditableRole[] = ["user", "curator", "reviewer"];
-  const usageKinds: UsageKind[] = ["account", "upload", "export"];
-  const usageLabels: Record<UsageKind, string> = {
-    account: "All requests",
-    upload: "Study uploads",
-    export: "Exports",
-  };
   const canAdminister = computed(
     () => session.profile?.role === "admin",
   );
@@ -69,12 +58,9 @@ export function useAdministration() {
     events.value = [];
     invitationUser.value = null;
     invitationError.value = "";
-    usage.value = null;
-    usageUser.value = null;
     studyAccess.value = null;
     loadedSid.value = "";
     curatorIds.value = "";
-    readerIds.value = "";
   }
   watch(() => session.epoch, reset, { flush: "sync" });
   onScopeDispose(reset);
@@ -137,14 +123,6 @@ export function useAdministration() {
       "Request " + status + ".",
     );
   }
-  function loadUsage(user: AdminUser) {
-    return run(async (current) => {
-      usageUser.value = user;
-      usage.value = null;
-      const result = await adminApi.usage(user.id, controller.signal);
-      if (current()) usage.value = result;
-    });
-  }
   function loadAudit(next = auditOffset.value) {
     return run(async (current) => {
       const result = await adminApi.audit(next, controller.signal);
@@ -164,7 +142,6 @@ export function useAdministration() {
         studyAccess.value = result;
         loadedSid.value = sid;
         curatorIds.value = result.curator_ids.join(", ");
-        readerIds.value = result.reader_ids.join(", ");
       }
     });
   }
@@ -174,7 +151,6 @@ export function useAdministration() {
       await adminApi.saveAccess(loadedSid.value, {
         ...studyAccess.value,
         curator_ids: parseAccountIds(curatorIds.value),
-        reader_ids: parseAccountIds(readerIds.value),
       });
     }, "Study access updated.");
   }
@@ -204,16 +180,11 @@ export function useAdministration() {
     auditLoaded,
     invitationUser,
     invitationError,
-    usageUser,
-    usage,
     studySid,
     loadedSid,
     studyAccess,
     curatorIds,
-    readerIds,
     roles,
-    usageKinds,
-    usageLabels,
     canAdminister,
     load,
     search,
@@ -221,7 +192,6 @@ export function useAdministration() {
     sendInvitation,
     update,
     resolve,
-    loadUsage,
     loadAudit,
     loadStudy,
     saveStudy,

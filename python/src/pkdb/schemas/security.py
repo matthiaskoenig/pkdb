@@ -26,4 +26,3 @@ class StudyAccess(BaseModel):
     licence: Literal["open", "closed"]
     creator_id: int
     curator_ids: frozenset[int] = frozenset()
-    collaborator_ids: frozenset[int] = frozenset()

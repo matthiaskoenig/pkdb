@@ -32,12 +32,10 @@ from pkdb_server.api import (
     data,
     exports,
     invitations,
-    legacy_uploads,
     management,
     media,
     profiles,
     reads,
-    staging,
 )
 from pkdb_server.api.credentials import install_browser_security
 from pkdb_server.api.errors import account_validation_error
@@ -56,7 +54,6 @@ from pkdb_server.services.analysis import AnalysisService
 from pkdb_server.services.authentication import AuthenticationFailed, authenticate_token
 from pkdb_server.services.authorization import AuthorizationDenied
 from pkdb_server.services.credentials import CredentialService, authenticate_session
-from pkdb_server.services.drafts import DraftService
 from pkdb_server.services.exports import ExportService
 from pkdb_server.services.ingestion import IngestionService, PublicationConflict
 from pkdb_server.services.invitations import InvitationService
@@ -66,7 +63,7 @@ from pkdb_server.services.queries import QueryService
 from pkdb_server.services.quotas import QuotaService
 
 log = logging.getLogger(__name__)
-SCHEMA_REVISION = "p001initial"
+SCHEMA_REVISION = "p002retirelegacy"
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -78,7 +75,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     ingestion = IngestionService(session_factory, file_store, settings)
 
     queries = QueryService(session_factory)
-    mcp = create_mcp(queries, session_factory, settings)
+    mcp = create_mcp(queries, session_factory)
     mcp_app = mcp.http_app(path="/", json_response=True, stateless_http=False)
 
     @asynccontextmanager
@@ -110,8 +107,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.ingestion = ingestion
     app.state.queries = queries
     app.state.analysis = AnalysisService(session_factory)
-    app.state.exports = ExportService(session_factory, queries, settings)
-    app.state.drafts = DraftService(session_factory, ingestion)
+    app.state.exports = ExportService(session_factory, settings)
     app.state.session_factory = session_factory
     app.add_middleware(
         UploadLimits,
@@ -440,9 +436,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             admin_users.router,
             admin_roles.router,
             reads.router,
-            staging.router,
             exports.router,
-            legacy_uploads.router,
         ):
             include_legacy_router(app, router)
     else:

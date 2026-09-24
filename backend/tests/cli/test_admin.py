@@ -5,7 +5,7 @@ from sqlalchemy import select
 
 from pkdb_server.commands.admin import create_admin
 from pkdb_server.db.models.users import EmailAddress, User
-from pkdb_server.services.authentication import authenticate_password
+from pkdb_server.services.authentication import password_hash
 
 
 def test_local_admin_creation_hashes_password_and_verifies_email(session_factory):
@@ -13,7 +13,8 @@ def test_local_admin_creation_hashes_password_and_verifies_email(session_factory
         session_factory, "USERNAME", "operator@example.test", "Initial-password-42!"
     )
     with session_factory() as session:
-        user = authenticate_password("USERNAME", "Initial-password-42!", session)
+        user = session.scalar(select(User).where(User.username == "USERNAME"))
+        assert password_hash.verify("Initial-password-42!", user.password_hash)
         assert user.role == "admin" and user.active
         assert user.password_hash != "Initial-password-42!"
         email = session.scalar(
@@ -72,7 +73,9 @@ def test_admin_cli_accepts_protected_stdin_and_never_prints_password(
     assert password not in output
     assert json.loads(output) == {"ok": True, "username": "USERNAME"}
     with session_factory() as session:
-        assert authenticate_password("USERNAME", password, session).role == "admin"
+        user = session.scalar(select(User).where(User.username == "USERNAME"))
+        assert user.role == "admin"
+        assert password_hash.verify(password, user.password_hash)
 
 
 def test_second_administrator_is_rejected(session_factory):

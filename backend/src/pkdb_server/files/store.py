@@ -52,9 +52,6 @@ def study_access(study: Study, session: Session) -> StudyAccess:
             "licence": study.licence,
             "creator_id": study.creator_id,
             "curator_ids": frozenset(m.user_id for m in members if m.role == "curator"),
-            "collaborator_ids": frozenset(
-                m.user_id for m in members if m.role == "collaborator"
-            ),
         }
     )
 

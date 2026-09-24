@@ -8,50 +8,22 @@ from pkdb_server.db.read import read_study
 from pkdb_server.mcp.authentication import DatabaseTokenVerifier
 from pkdb_server.services.authentication import AuthenticationFailed
 from pkdb_server.services.authorization import AuthorizationDenied
-from pkdb_server.services.quotas import QuotaExceeded, QuotaService
 
 
-def create_mcp(queries, session_factory, settings):
+def create_mcp(queries, session_factory):
     authentication = DatabaseTokenVerifier(session_factory)
     server = FastMCP("PK-DB", auth=authentication, mask_error_details=True)
 
     def execute(operation, *args):
-        from threading import Event, Thread
-
-        quotas = QuotaService(session_factory, settings)
-        lease = None
-        stop = Event()
-        heartbeat = None
         try:
             principal = authentication.current_principal()
-            if settings.rate_limits_enabled:
-                quotas.charge(principal, "mcp", "read")
-                lease = quotas.acquire(principal, "mcp", "read")
-
-            def renew():
-                while not stop.wait(30):
-                    quotas.renew(lease)
-
-            if lease:
-                heartbeat = Thread(target=renew, daemon=True)
-                heartbeat.start()
             return operation(principal, *args)
-        except QuotaExceeded as error:
-            raise ToolError(
-                f"Request quota exceeded; retry after {error.retry_after} seconds"
-            ) from None
         except AuthenticationFailed, AuthorizationDenied:
             raise ToolError("Action not permitted") from None
         except LookupError:
             raise ToolError("Not found") from None
         except ValueError:
             raise ToolError("Invalid request") from None
-        finally:
-            stop.set()
-            if heartbeat:
-                heartbeat.join()
-            if lease:
-                quotas.release(lease)
 
     def search(principal, query):
         if query.entity != "studies":

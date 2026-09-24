@@ -78,20 +78,6 @@ class QuotaService:
                         max(1, int((row.expires_at - now).total_seconds()))
                     )
 
-    def usage(self, user_id):
-        labels = [f"account:{user_id}", f"upload:{user_id}", f"export:{user_id}"]
-        with self.session_factory() as session:
-            result = {}
-            for label in labels:
-                key = hashlib.sha256(("quota:" + label).encode()).hexdigest()
-                row = session.get(AccountThrottle, key)
-                result[label.split(":")[0]] = (
-                    {"requests": row.attempts, "resets_at": row.expires_at}
-                    if row and row.expires_at > datetime.now(UTC)
-                    else {"requests": 0, "resets_at": None}
-                )
-            return result
-
     def acquire(self, principal, ip, operation="read"):
         if principal.user_id is not None:
             return None

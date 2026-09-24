@@ -198,7 +198,7 @@ def test_password_admin_can_export_and_read_own_staged_files(
     )
     with session_factory.begin() as session:
         session.get(User, principal.user_id).role = "admin"
-    exports = ExportService(session_factory, None)
+    exports = ExportService(session_factory)
     assert exports.create_filter(QuerySpec(entity="studies"), principal) is not None
     with files.open_authorized(principal, staged.id) as stream:
         assert stream.read() == b"private scientific data"

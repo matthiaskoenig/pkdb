@@ -6,7 +6,6 @@ from sqlalchemy import delete
 
 from pkdb_server.db.models.audit import AuditEvent
 from pkdb_server.db.models.credentials import ApiKey, BrowserSession
-from pkdb_server.db.models.drafts import ReferenceDraft, StudyDraft
 from pkdb_server.db.models.limits import WorkLease
 from pkdb_server.db.models.saved_queries import SavedQuery
 from pkdb_server.db.models.users import AccountThrottle, Token
@@ -23,12 +22,6 @@ def cleanup(session_factory, file_store, *, now=None):
             .returning(SavedQuery.id)
         )
         count = sum(1 for _ in removed)
-        draft_count = 0
-        for model in (StudyDraft, ReferenceDraft):
-            expired = session.execute(
-                delete(model).where(model.expires_at <= now).returning(model.sid)
-            )
-            draft_count += sum(1 for _ in expired)
         for model in (WorkLease, AccountThrottle):
             session.execute(delete(model).where(model.expires_at <= now))
         for model in (ApiKey, BrowserSession, Token):
@@ -40,7 +33,6 @@ def cleanup(session_factory, file_store, *, now=None):
         )
     return {
         "saved_queries": count,
-        "drafts": draft_count,
         "orphan_avatars": ProfileService(
             session_factory, file_store.root
         ).cleanup_orphans(),

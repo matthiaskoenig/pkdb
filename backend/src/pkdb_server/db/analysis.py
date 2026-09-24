@@ -154,17 +154,18 @@ def statement(entity, query, principal):
             data_point_pk=cells.c.point_id,
             output_pk=cells.c.measurement_id,
         )
+    related = []
     for predicate in query.predicates:
         if predicate.field in fields:
             extra.append(comparison(fields[predicate.field], predicate))
         elif entity == "studies":
-            extra.append(
-                conditions(
-                    query.model_copy(update={"predicates": [predicate], "search": None})
-                )
-            )
+            related.append(predicate)
         else:
             raise ValueError("Unknown analysis filter")
+    if related:
+        extra.append(
+            conditions(query.model_copy(update={"predicates": related, "search": None}))
+        )
     if query.search:
         for term in query.search.split():
             extra.append(search_condition(query.entity, term))

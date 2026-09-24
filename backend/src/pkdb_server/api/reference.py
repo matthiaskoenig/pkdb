@@ -36,10 +36,7 @@ TAGS = [
 
 
 def category(path: str, method: str) -> str:
-    if (
-        path.startswith(("/accounts/", "/api-token-auth", "/api/v1/_", "/api/v2/files"))
-        or path == "/api/v1/update_index/"
-    ):
+    if path.startswith(("/accounts/", "/api-token-auth", "/api/v1/_")):
         return "Legacy compatibility"
     if path.startswith("/api/v1/admin/"):
         return "Administration"

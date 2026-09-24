@@ -193,11 +193,6 @@ def study_responses(session, rows, principal):
             curator_ids=frozenset(
                 member.user_id for member in grants[row.id] if member.role == "curator"
             ),
-            collaborator_ids=frozenset(
-                member.user_id
-                for member in grants[row.id]
-                if member.role == "collaborator"
-            ),
         )
         try:
             authorize(principal, "read_file", access)

@@ -69,7 +69,7 @@ Inspect the HTTP status and response body. Validation failures include structure
 
 `POST /api/v2/query` accepts an entity and typed predicates. For example, `{"entity":"groups","predicates":[{"field":"study_sid","operator":"eq","value":"PKDB01110"}],"page":1,"page_size":100}` selects groups in one study. Predicates combine with AND. The public `measurements` entity accepts the historical `outputs` alias. Consult the reference schemas for supported fields and operators.
 
-The frontend retains compatibility reads under `/api/v1/`. New integrations should use v2. Legacy account aliases, underscore CRUD/staging endpoints, and JSON-suffix routes are disabled by default. Deployments needing a migration window may explicitly enable `PKDB_LEGACY_API_ENABLED=true`.
+The frontend retains compatibility reads under `/api/v1/`. New integrations should use v2. Legacy account/admin aliases and JSON-suffix read routes are disabled by default; `PKDB_LEGACY_API_ENABLED=true` enables those remaining compatibility routes. Legacy study/reference drafts, file-handle staging (including `/api/v2/files`), and `/api/v1/update_index/` have been retired permanently. Upload a complete bundle through `PUT /api/v2/studies/{sid}` instead.
 
 MCP exposes read operations only. Use REST or the Python client for validation, upload, and replacement.
 

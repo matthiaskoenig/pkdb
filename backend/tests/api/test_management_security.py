@@ -117,8 +117,6 @@ def test_authenticated_http_bypasses_exhausted_limits(
         file_root=ingestion_context[0].file_store.root,
         quota_anonymous_per_minute=1,
         quota_ip_per_minute=1,
-        quota_account_per_minute=1,
-        quota_key_per_minute=1,
     )
     app = create_app(settings)
     with TestClient(app) as browser:

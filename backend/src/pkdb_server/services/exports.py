@@ -41,9 +41,8 @@ class LimitedTextWriter:
 
 
 class ExportService:
-    def __init__(self, session_factory, queries, settings=None):
+    def __init__(self, session_factory, settings=None):
         self.session_factory = session_factory
-        self.queries = queries
         self.analysis = AnalysisService(session_factory)
         self.max_bytes = settings.export_max_bytes if settings else 256 * 1024 * 1024
         self.max_rows = settings.export_max_rows if settings else 1_000_000
