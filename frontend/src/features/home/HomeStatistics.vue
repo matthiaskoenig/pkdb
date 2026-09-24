@@ -58,10 +58,9 @@ function destination(tab: ResultTab) {
     aria-labelledby="database-statistics-title"
     :aria-busy="state.status === 'loading'"
   >
-    <h2 id="database-statistics-title">Explore the database</h2>
+    <h2 id="database-statistics-title">Database at a glance</h2>
     <p>
-      Records from all studies you can access. Choose a category to browse all
-      data from qualifying studies.
+      Live counts from the studies you can access. Select a category to explore.
     </p>
     <p
       v-if="state.status === 'idle' || state.status === 'loading'"
@@ -85,7 +84,9 @@ function destination(tab: ResultTab) {
 </template>
 <style scoped>
 .database-statistics {
-  padding: 2rem clamp(1rem, 4vw, 3.5rem);
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 12px;
   background: rgb(var(--v-theme-surface));
 }
 .database-statistics p {

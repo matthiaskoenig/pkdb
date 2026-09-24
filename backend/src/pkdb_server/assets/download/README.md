@@ -19,14 +19,16 @@ Important features include:
 - workflows for collaborative data curation
 - strong validation rules on data and simple access via a REST API
 
-PK-DB is available at [https://pk-db.com](https://pk-db.com) and [https://alpha.pk-db.com](https://alpha.pk-db.com). The terms of use are listed in the [`TERMS_OF_USE.md`](./TERMS_OF_USE.md).
+PK-DB is available at [https://pk-db.com](https://pk-db.com) and [https://alpha.pk-db.com](https://alpha.pk-db.com). Read the bundled [Terms of use](./TERMS_OF_USE.md) or the [online documentation](https://matthiaskoenig.github.io/pkdb/terms-of-use/).
 
 ![PK-DB overview](./docs/images/data_extraction.png)
 
 ## How to cite
-If you use PK-DB data or the web interface cite
+All outputs using PK-DB data must cite the PK-DB paper and the original study publications. Reuse of more than 10 studies requires collaboration and coauthorship with Matthias König; commercial use requires a data license. See the [Terms of use](./TERMS_OF_USE.md) and contact [Matthias König](mailto:koenigmx@hu-berlin.de).
 
-> Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M. *PK-DB: pharmacokinetics database for individualized and stratified computational modeling*. Nucleic Acids Res. 2020 Nov 5:gkaa990. doi: [10.1093/nar/gkaa990](https://doi.org/10.1093/nar/gkaa990). Epub ahead of print. PMID: [33151297](https://pubmed.ncbi.nlm.nih.gov/33151297/).
+Cite the PK-DB paper as follows:
+
+> Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M. *PK-DB: pharmacokinetics database for individualized and stratified computational modeling*. Nucleic Acids Res. 2021 Jan 8;49(D1):D1358-D1364. doi: [10.1093/nar/gkaa990](https://doi.org/10.1093/nar/gkaa990). PMID: [33151297](https://pubmed.ncbi.nlm.nih.gov/33151297/).
 
 If you use PK-DB code cite in addition
 

@@ -70,6 +70,11 @@ p {
 .brand-logo {
   object-fit: contain;
 }
+.v-theme--dark .brand-logo {
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px;
+}
 .account-link {
   display: flex;
   align-items: center;
@@ -79,10 +84,6 @@ p {
   border-radius: 50%;
   object-fit: cover;
   flex-shrink: 0;
-}
-.resource-menu {
-  text-transform: none;
-  letter-spacing: normal;
 }
 .brand-description {
   font-size: 0.85rem;
@@ -127,6 +128,15 @@ p {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
+}
+.app-footer .footer-identity {
+  flex-direction: column;
+  gap: 4px;
+}
+.footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
 }
 .app-footer p {
   margin: 0;
