@@ -1,5 +1,9 @@
 # Unreleased
 
+- Make flat study analysis apply related measurement filters to the same measurement, matching normal study queries.
+- Retire legacy study/reference drafts, attachment-handle upload routes, and index finalization. Use complete-bundle uploads through `PUT /api/v2/studies/{sid}`. Migration `p002retirelegacy` preserves published studies and attachments but removes pending legacy drafts and ineffective reader grants; downgrade restores their schema, not discarded data.
+- Remove ineffective reader assignment controls and unused authenticated quota settings, usage reporting, and MCP quota bookkeeping. Curator assignments and collaborator attribution retain their existing meanings.
+
 - Unify groups and individuals as subjects and characteristics and outputs as observations. Share reported/normalized context and intervention links, and replace timecourse/scatter point tables with ordered dataset arrays. Consolidate migration history into `p001initial` for an empty database and fresh study uploads; historical database upgrades are no longer supported. Use a processing-version-6 client. Characteristics and outputs now share count defaults and statistical completion.
 
 - Add `pkdb curation`, a local browser interface with GitHub assignment selection, default-application file opening, validation or upload on save, detailed diagnostics, and explicit recovery for uncertain uploads. Include an authenticated read-only curation-context endpoint and documentation with screenshots.
