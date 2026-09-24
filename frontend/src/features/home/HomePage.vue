@@ -5,9 +5,20 @@ defineOptions({ name: "HomePage" });
 <template>
   <div class="home-page">
     <section class="home-hero" aria-labelledby="home-title">
-      <p class="eyebrow">PK-DB</p>
-      <h1 id="home-title">Pharmacokinetics Database</h1>
-      <p class="home-tagline">Evidence for better models.</p>
+      <div class="home-brand">
+        <img
+          class="home-logo"
+          src="/assets/images/pkdb_logo.png"
+          alt="PK-DB"
+          width="240"
+          height="240"
+          fetchpriority="high"
+        />
+        <div>
+          <h1 id="home-title">Pharmacokinetics Database</h1>
+          <p class="home-tagline">Evidence for better models.</p>
+        </div>
+      </div>
       <div class="home-purpose">
         <div>
           <h2>Our mission</h2>
@@ -38,17 +49,31 @@ defineOptions({ name: "HomePage" });
   max-width: none;
   padding: 2rem 0 2.5rem;
 }
+.home-brand {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+.home-logo {
+  display: block;
+  width: 240px;
+  height: 240px;
+  object-fit: contain;
+  border-radius: 16px;
+}
+.v-theme--dark .home-logo {
+  background: #fff;
+}
 .home-hero h1 {
   font-size: clamp(2.2rem, 4vw, 3.5rem);
   margin-bottom: 0.5rem;
 }
 .home-tagline {
   font-size: 1.2rem;
-  margin: 0 0 1.75rem;
+  margin: 0;
   color: rgba(var(--v-theme-on-surface), 0.8);
-}
-.home-hero .v-btn {
-  color: #fff;
 }
 .home-purpose {
   display: grid;
@@ -66,6 +91,16 @@ defineOptions({ name: "HomePage" });
   line-height: 1.65;
   margin: 0;
   color: rgba(var(--v-theme-on-surface), 0.8);
+}
+@media (max-width: 800px) {
+  .home-brand {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .home-logo {
+    width: 180px;
+    height: 180px;
+  }
 }
 @media (max-width: 600px) {
   .home-hero { padding: 1.25rem 0 2rem; }

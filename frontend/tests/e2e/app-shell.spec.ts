@@ -5,6 +5,10 @@ test("lean landing page and API navigation work on desktop and mobile", async ({
   await page.goto("/");
   await expect(page.getByRole("link", { name: "PK-DB home" }).locator("img")).toHaveAttribute("src", "/assets/images/pkdb_logo.png");
   await expect(page.getByRole("heading", { name: "Pharmacokinetics Database", level: 1, exact: true })).toBeVisible();
+  const heroLogo = page.locator(".home-hero").getByRole("img", { name: "PK-DB", exact: true });
+  await expect(heroLogo).toBeVisible();
+  await expect.poll(() => heroLogo.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBeGreaterThan(0);
+  expect((await heroLogo.boundingBox())!.width).toBeGreaterThanOrEqual(200);
   await expect(page.getByRole("heading", { name: "Our mission", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Our vision", exact: true })).toBeVisible();
   await expect(page.locator(".statistic-grid a")).toHaveCount(7);
@@ -14,6 +18,9 @@ test("lean landing page and API navigation work on desktop and mobile", async ({
   await expect(desktop.getByRole("link", { name: "API", exact: true })).toHaveAttribute("href", "/docs");
   await page.screenshot({ path: testInfo.outputPath("landing-desktop.png"), fullPage: true });
   await page.getByRole("button", { name: "Toggle color theme" }).click();
+  await expect(heroLogo).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect(page.locator(".v-application")).not.toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveCSS("color", /^(rgb\(255, 255, 255\)|color\(srgb 1 1 1\))$/);
   await page.screenshot({ path: testInfo.outputPath("landing-dark.png"), fullPage: true });
   await page.getByRole("button", { name: "Toggle color theme" }).click();
   await page.setViewportSize({ width: 390, height: 844 });
@@ -28,6 +35,8 @@ test("lean landing page and API navigation work on desktop and mobile", async ({
   await page.getByRole("link", { name: "PK-DB home" }).click();
   await expect(page.locator(".statistic-grid a")).toHaveCount(7);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+  await expect(heroLogo).toBeVisible();
+  expect((await heroLogo.boundingBox())!.width).toBeGreaterThanOrEqual(160);
   await page.screenshot({ path: testInfo.outputPath("landing-mobile.png"), fullPage: true });
 });
 
