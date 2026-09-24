@@ -75,9 +75,6 @@ defineOptions({ name: "HomePage" });
   margin: 0;
   color: rgba(var(--v-theme-on-surface), 0.8);
 }
-.home-hero .v-btn {
-  color: #fff;
-}
 .home-purpose {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

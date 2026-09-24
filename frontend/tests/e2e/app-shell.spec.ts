@@ -20,6 +20,7 @@ test("lean landing page and API navigation work on desktop and mobile", async ({
   await page.getByRole("button", { name: "Toggle color theme" }).click();
   await expect(heroLogo).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await expect(page.locator(".v-application")).not.toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveCSS("color", /^(rgb\(255, 255, 255\)|color\(srgb 1 1 1\))$/);
   await page.screenshot({ path: testInfo.outputPath("landing-dark.png"), fullPage: true });
   await page.getByRole("button", { name: "Toggle color theme" }).click();
   await page.setViewportSize({ width: 390, height: 844 });
