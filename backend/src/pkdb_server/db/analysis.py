@@ -1,14 +1,15 @@
 """Flat analysis rows, paginated after expanding scientific associations."""
 
 from sqlalchemy import select
+from sqlalchemy.orm import aliased
 
+from pkdb_server.db.dataset_arrays import dataset_cells, dataset_type
 from pkdb_server.db.models.interventions import Intervention
 from pkdb_server.db.models.measurements import (
     Measurement,
     MeasurementIntervention,
     Scatter,
     Subset,
-    SubsetDimension,
 )
 from pkdb_server.db.models.studies import Study
 from pkdb_server.db.models.subjects import Characteristic, Group, Individual
@@ -76,6 +77,7 @@ def statement(entity, query, principal):
         effective = effective_characteristics(entity)
         stmt = (
             select(model, Characteristic)
+            .select_from(model)
             .join(effective, effective.c.subject_id == model.id)
             .join(Characteristic, Characteristic.id == effective.c.id)
             .join(Study, Study.id == model.study_id)
@@ -124,29 +126,33 @@ def statement(entity, query, principal):
                 individual_group_pk=Individual.group_id,
             )
     elif entity == "timecourses":
-        stmt = (
-            select(Subset)
-            .join(Scatter, Scatter.id == Subset.scatter_id)
-            .join(Study, Study.id == Subset.study_id)
-        )
-        extra.append(Scatter.data_type == "timecourse")
+        stmt = select(Subset).join(Study, Study.id == Subset.study_id)
+        extra.append(dataset_type() == "timecourse")
         keys = [Subset.id]
         fields.update(subset_pk=Subset.id, subset_name=Subset.name)
     else:
+        cells = dataset_cells()
+        dataset = aliased(Scatter)
         stmt = (
-            select(SubsetDimension, Subset, Scatter)
-            .join(Subset, Subset.id == SubsetDimension.subset_id)
-            .join(Scatter, Scatter.id == Subset.scatter_id)
+            select(
+                Subset,
+                dataset,
+                cells.c.point_id,
+                cells.c.measurement_id,
+                cells.c.dimension,
+            )
+            .join(cells, cells.c.subset_id == Subset.id)
+            .join(dataset, dataset.id == Subset.scatter_id)
             .join(Study, Study.id == Subset.study_id)
         )
-        keys = [Subset.id, SubsetDimension.position]
+        keys = [Subset.id, cells.c.position]
         fields.update(
-            data_pk=Scatter.id,
-            data_name=Scatter.name,
+            data_pk=dataset.id,
+            data_name=dataset.name,
             subset_pk=Subset.id,
             subset_name=Subset.name,
-            data_point_pk=SubsetDimension.point_id,
-            output_pk=SubsetDimension.measurement_id,
+            data_point_pk=cells.c.point_id,
+            output_pk=cells.c.measurement_id,
         )
     for predicate in query.predicates:
         if predicate.field in fields:
@@ -348,15 +354,15 @@ def _serialize(session, entity, rows, principal):
         return result
     return [
         {
-            **study(dimension),
+            **study(subset),
             "data_pk": dataset.id,
             "data_name": dataset.name,
             "data_type": dataset.data_type,
             "subset_pk": subset.id,
             "subset_name": subset.name,
-            "data_point_pk": dimension.point_id,
-            "output_pk": dimension.measurement_id,
-            "dimension": int(dimension.dimension),
+            "data_point_pk": point_id,
+            "output_pk": measurement_id,
+            "dimension": dimension,
         }
-        for dimension, subset, dataset in rows
+        for subset, dataset, point_id, measurement_id, dimension in rows
     ]

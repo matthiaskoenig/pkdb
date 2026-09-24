@@ -3,41 +3,51 @@
 from sqlalchemy import func, literal, or_, select
 from sqlalchemy.orm import aliased
 
-from pkdb_server.db.models.subjects import Characteristic, Group, Individual
+from pkdb_server.db.models.subjects import Characteristic, Group, Individual, Subject
 from pkdb_server.db.models.vocabulary import VocabularyEdge, VocabularyNode
 
 
 def effective_characteristics(entity):
-    individual = entity == "individuals"
-    subject = Individual if individual else Group
-    group_id = Individual.group_id if individual else Group.id
+    subject = Individual if entity == "individuals" else Group
     lineage = select(
         subject.id.label("subject_id"),
-        group_id.label("ancestor_id"),
-        literal(1 if individual else 0).label("depth"),
+        subject.id.label("ancestor_id"),
+        literal(0).label("depth"),
     ).cte(recursive=True)
-    ancestor = aliased(Group)
+    ancestor = aliased(Subject)
     lineage = lineage.union_all(
         select(lineage.c.subject_id, ancestor.parent_id, lineage.c.depth + 1)
         .join(ancestor, ancestor.id == lineage.c.ancestor_id)
         .where(ancestor.parent_id.is_not(None))
     )
-    candidates = (
-        select(lineage.c.subject_id, lineage.c.depth, *Characteristic.__table__.c)
-        .join(Characteristic, Characteristic.group_id == lineage.c.ancestor_id)
-        .where(Characteristic.origin == "normalized")
+    columns = (
+        "id",
+        "key",
+        "study_id",
+        "measurement_type",
+        "substance",
+        "calculation_type",
+        "choice",
+        "unit",
+        "value",
+        "mean",
+        "median",
+        "minimum",
+        "maximum",
+        "sd",
+        "se",
+        "cv",
+        "count",
     )
-    if individual:
-        candidates = candidates.union_all(
-            select(
-                Individual.id.label("subject_id"),
-                literal(0).label("depth"),
-                *Characteristic.__table__.c,
-            )
-            .join(Characteristic, Characteristic.individual_id == Individual.id)
-            .where(Characteristic.origin == "normalized")
+    candidates = (
+        select(
+            lineage.c.subject_id,
+            lineage.c.depth,
+            *[getattr(Characteristic, name).label(name) for name in columns],
         )
-    candidates = candidates.cte()
+        .join(Characteristic, Characteristic.subject_id == lineage.c.ancestor_id)
+        .where(Characteristic.origin == "normalized")
+    ).cte()
     ranked = select(
         candidates,
         func.min(candidates.c.depth)

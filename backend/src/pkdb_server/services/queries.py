@@ -4,13 +4,12 @@ from sqlalchemy import func, select
 
 from pkdb.schemas.queries import Page, QuerySpec
 from pkdb.schemas.security import Principal
+from pkdb_server.db.dataset_arrays import dataset_type
 from pkdb_server.db.models.interventions import Intervention
 from pkdb_server.db.models.measurements import (
     Measurement,
-    Scatter,
     Subset,
     Timecourse,
-    TimecoursePoint,
 )
 from pkdb_server.db.models.studies import Reference, Study
 from pkdb_server.db.models.subjects import Group, Individual
@@ -18,6 +17,7 @@ from pkdb_server.db.models.vocabulary import VocabularyNode
 from pkdb_server.db.queries import MODELS, conditions, ordering, visibility
 from pkdb_server.db.serialize import (
     intervention_responses,
+    observation_projection,
     output_responses,
     reference_responses,
     subject_responses,
@@ -37,12 +37,12 @@ class QueryService:
         where, order = conditions(query), ordering(query)
         model = MODELS[query.entity]
         statement = select(model)
+        if model is Measurement:
+            statement = statement.options(*observation_projection(model))
         if model is Reference:
             statement = statement.join(Study, Study.reference_id == Reference.id)
         elif model is not Study and model is not VocabularyNode:
             statement = statement.join(Study, model.study_id == Study.id)
-        if model is Subset:
-            statement = statement.join(Scatter, Subset.scatter_id == Scatter.id)
         if filter_spec is not None:
             from pkdb_server.db.selection import constraint
 
@@ -121,19 +121,16 @@ class QueryService:
             ).label("output_calculated_count"),
             owned(
                 Timecourse,
-                select(TimecoursePoint.timecourse_id)
-                .join(Measurement, Measurement.id == TimecoursePoint.measurement_id)
+                select(Measurement.id)
                 .where(
-                    TimecoursePoint.timecourse_id == Timecourse.id,
+                    Measurement.id == Timecourse.measurement_ids.any_(),
                     Measurement.origin == "normalized",
                 )
                 .exists(),
             ).label("timecourse_count"),
             owned(
                 Subset,
-                Subset.scatter_id.in_(
-                    select(Scatter.id).where(Scatter.data_type == "scatter")
-                ),
+                dataset_type() == "scatter",
             ).label("scatter_count"),
         )
         with self.session_factory() as session:

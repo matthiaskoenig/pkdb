@@ -1,0 +1,131 @@
+{
+  "baseline_commit": "91e96916",
+  "corpus": "pkdb_data/studies/apixaban",
+  "method": "Fresh isolated schemas; 30 folders, create then replace; authenticated page_size=100 reads, one warm-up and mean of five; allocated table/index sizes after replacement. Local single-run observations, not production guarantees.",
+  "previous": {
+    "outcomes": [
+      {
+        "created": 24,
+        "rejected": 6
+      },
+      {
+        "replaced": 24,
+        "rejected": 6
+      }
+    ],
+    "seconds": [
+      23.683351401006803,
+      26.22571466199588
+    ],
+    "read_seconds": {
+      "studies": 0.02847470879787579,
+      "outputs": 0.010801652201917023,
+      "groups": 0.019287452392745763,
+      "individuals": 0.014221708790864795,
+      "subsets": 0.07374087480129674
+    },
+    "scientific_tables": {
+      "characteristics": {
+        "rows": 1952,
+        "bytes": 2293760
+      },
+      "groups": {
+        "rows": 79,
+        "bytes": 163840
+      },
+      "individuals": {
+        "rows": 362,
+        "bytes": 352256
+      },
+      "measurement_interventions": {
+        "rows": 11364,
+        "bytes": 2449408
+      },
+      "measurement_sources": {
+        "rows": 73,
+        "bytes": 122880
+      },
+      "measurements": {
+        "rows": 10106,
+        "bytes": 14934016
+      },
+      "scatters": {
+        "rows": 24,
+        "bytes": 81920
+      },
+      "subset_dimensions": {
+        "rows": 1596,
+        "bytes": 401408
+      },
+      "subset_points": {
+        "rows": 1596,
+        "bytes": 1032192
+      },
+      "subsets": {
+        "rows": 152,
+        "bytes": 188416
+      },
+      "timecourse_points": {
+        "rows": 3192,
+        "bytes": 778240
+      },
+      "timecourses": {
+        "rows": 304,
+        "bytes": 237568
+      }
+    },
+    "scientific_rows": 30800,
+    "scientific_bytes": 23035904
+  },
+  "unified": {
+    "outcomes": [
+      {
+        "created": 24,
+        "rejected": 6
+      },
+      {
+        "replaced": 24,
+        "rejected": 6
+      }
+    ],
+    "seconds": [
+      22.06407705397578,
+      24.202506506000645
+    ],
+    "read_seconds": {
+      "studies": 0.0269309344002977,
+      "outputs": 0.01353228879161179,
+      "groups": 0.020860695594456045,
+      "individuals": 0.018569574202410878,
+      "subsets": 0.06235035579884425
+    },
+    "scientific_tables": {
+      "datasets": {
+        "rows": 480,
+        "bytes": 811008
+      },
+      "measurement_sources": {
+        "rows": 73,
+        "bytes": 122880
+      },
+      "observation_interventions": {
+        "rows": 5682,
+        "bytes": 1310720
+      },
+      "observation_values": {
+        "rows": 12058,
+        "bytes": 8863744
+      },
+      "observations": {
+        "rows": 6029,
+        "bytes": 7053312
+      },
+      "subjects": {
+        "rows": 441,
+        "bytes": 434176
+      }
+    },
+    "scientific_rows": 24763,
+    "scientific_bytes": 18595840
+  }
+}

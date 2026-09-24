@@ -25,7 +25,7 @@ On a first setup, start directly with `up`. To erase an existing local setup fir
 docker compose --profile dev up --build --wait
 ```
 
-Startup applies migrations and loads the vocabulary. Defaults work without a `.env` file. The frontend runs at <http://localhost:8080> and the API at <http://localhost:18083>.
+Startup applies migrations and loads the vocabulary. The current `p001initial` baseline requires an empty database; databases using the old migration history must be recreated before following this fresh-upload workflow. See [fresh database setup](data-model.md#fresh-database-setup). Defaults work without a `.env` file. The frontend runs at <http://localhost:8080> and the API at <http://localhost:18083>.
 
 ### Create the administrator and import users
 

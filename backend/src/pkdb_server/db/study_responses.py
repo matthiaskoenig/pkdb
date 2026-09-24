@@ -8,9 +8,10 @@ from sqlalchemy import select, union
 
 from pkdb.schemas.responses import StudyResponse
 from pkdb.schemas.security import StudyAccess
+from pkdb_server.db.dataset_arrays import dataset_type
 from pkdb_server.db.models.files import StoredFile, StudyAttachment
 from pkdb_server.db.models.interventions import Intervention
-from pkdb_server.db.models.measurements import Measurement, Scatter, Subset
+from pkdb_server.db.models.measurements import Measurement, Subset
 from pkdb_server.db.models.studies import Note, Reference, StudyGrant, StudyUser
 from pkdb_server.db.models.subjects import Group, Individual
 from pkdb_server.db.models.users import User
@@ -124,8 +125,7 @@ def study_responses(session, rows, principal):
         calculated[study_id] += 1
     subset_types = defaultdict(lambda: defaultdict(int))
     for study_id, identifier, data_type in session.execute(
-        select(Subset.study_id, Subset.id, Scatter.data_type)
-        .join(Scatter, Subset.scatter_id == Scatter.id)
+        select(Subset.study_id, Subset.id, dataset_type())
         .where(Subset.study_id.in_(study_ids))
         .order_by(Subset.id)
     ):

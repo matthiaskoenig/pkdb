@@ -1,6 +1,9 @@
 """Bulk insertion of a study-owned graph inside its caller's transaction."""
 
-from sqlalchemy import delete, insert, select, update
+import hashlib
+import json
+
+from sqlalchemy import delete, func, insert, select, update
 from sqlalchemy.orm import Session
 
 from pkdb.schemas.study import CanonicalStudy, ScientificRecord
@@ -14,18 +17,16 @@ from pkdb_server.db.models.vocabulary import VocabularyNode
 
 
 def clear_children(session: Session, study_id: int) -> None:
+    # Children with array memberships are removed before their referenced values.
     for model in (
         s.Note,
         s.StudyUser,
         StudyAttachment,
-        m.Scatter,
-        m.Measurement,
+        m.Dataset,
+        m.ObservationContext,
         m.MeasurementSource,
-        m.Timecourse,
-        g.Characteristic,
         i.Intervention,
-        g.Individual,
-        g.Group,
+        g.Subject,
     ):
         session.execute(delete(model).where(model.study_id == study_id))
 
@@ -140,7 +141,8 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
                 **owned(individual),
                 name=individual.name,
                 image=individual.image,
-                group_id=group_names.get(individual.group),
+                parent_id=group_names.get(individual.group),
+                count=1,
             )
             for individual in study.individuals
         ],
@@ -148,26 +150,15 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
     individual_names = {
         individual.name: individuals[individual.key] for individual in study.individuals
     }
-    characteristics = []
-    for subject in [*study.groups, *study.individuals]:
-        for record in subject.characteristica:
-            row = science(record)
-            row.update(
-                group_id=groups.get(subject.key) if subject in study.groups else None,
-                individual_id=individuals.get(subject.key)
-                if subject in study.individuals
-                else None,
-            )
-            characteristics.append((record, row))
-    characteristics_map = bulk(
-        session, g.Characteristic, [row for _, row in characteristics]
-    )
-    for record, _ in characteristics:
-        if record.derived_from:
-            session.execute(
-                update(g.Characteristic)
-                .where(g.Characteristic.id == characteristics_map[record.key])
-                .values(derived_from_id=characteristics_map[record.derived_from])
+    observation_records = []
+    for kind, subjects, identifiers in (
+        ("group", study.groups, groups),
+        ("individual", study.individuals, individuals),
+    ):
+        for subject in subjects:
+            observation_records.extend(
+                ("characteristic", record, identifiers[subject.key])
+                for record in subject.characteristica
             )
     intervention_rows = []
     for record in study.interventions:
@@ -195,11 +186,6 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
                 .where(i.Intervention.id == intervention_ids[record.key])
                 .values(derived_from_id=intervention_ids[record.derived_from])
             )
-    courses = bulk(
-        session,
-        m.Timecourse,
-        [dict(study_id=sid, key=course.key) for course in study.timecourses],
-    )
     source_records = {}
     measurement_source_keys = {}
     for record in study.measurements:
@@ -217,62 +203,117 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
             )
             measurement_source_keys[record.key] = key
     source_ids = bulk(session, m.MeasurementSource, list(source_records.values()))
-    measurements = []
-    for record in study.measurements:
-        row = science(record)
-        row.update(
-            source_id=source_ids.get(measurement_source_keys.get(record.key)),
-            group_id=group_names.get(record.group),
-            individual_id=individual_names.get(record.individual),
-            series_key=record.series_key,
-            label=record.label,
-            output_type=record.output_type,
-            time=record.time,
-            time_unit=record.time_unit,
-            time_not_reported=record.time_not_reported,
-            time_unit_not_reported=record.time_unit_not_reported,
-            tissue=node("tissue", record.tissue),
-            method=node("method", record.method),
-            image=record.image,
+    observation_records.extend(
+        (
+            "output",
+            record,
+            group_names.get(record.group) or individual_names.get(record.individual),
         )
-        measurements.append(row)
-    measurement_ids = bulk(session, m.Measurement, measurements)
+        for record in study.measurements
+    )
+    contexts = {}
+    value_rows = []
+    record_contexts = {}
+    value_fields = {
+        "unit",
+        "value",
+        "mean",
+        "median",
+        "minimum",
+        "maximum",
+        "sd",
+        "se",
+        "cv",
+        "count",
+        "origin",
+    }
+    for kind, record, subject_id in observation_records:
+        values = science(record)
+        context = {
+            key: value
+            for key, value in values.items()
+            if key not in value_fields | {"key"}
+        }
+        context.update(
+            kind=kind,
+            subject_id=subject_id,
+            source_id=source_ids.get(measurement_source_keys.get(record.key))
+            if kind == "output"
+            else None,
+            series_key=getattr(record, "series_key", None),
+            label=getattr(record, "label", None),
+            output_type=getattr(record, "output_type", "output"),
+            time=getattr(record, "time", None),
+            time_unit=getattr(record, "time_unit", None),
+            time_not_reported=getattr(record, "time_not_reported", False),
+            time_unit_not_reported=getattr(record, "time_unit_not_reported", False),
+            tissue=node("tissue", getattr(record, "tissue", None)),
+            method=node("method", getattr(record, "method", None)),
+            image=getattr(record, "image", None),
+        )
+        # Only representations of the same observation with identical context share identity.
+        identity = record.derived_from if record.origin == "normalized" else record.key
+        key = hashlib.sha256(
+            json.dumps(
+                [kind, identity, context, getattr(record, "interventions", [])],
+                sort_keys=True,
+            ).encode()
+        ).hexdigest()
+        contexts.setdefault(key, dict(context, key=key))
+        record_contexts[kind, record.key] = key
+        value_rows.append(
+            dict(
+                study_id=sid,
+                key=record.key,
+                **{name: values[name] for name in value_fields},
+            )
+        )
+    context_ids = bulk(session, m.ObservationContext, list(contexts.values()))
+    for value_row, (kind, record, _) in zip(
+        value_rows, observation_records, strict=True
+    ):
+        value_row["observation_id"] = context_ids[record_contexts[kind, record.key]]
+    representation_ids = bulk(session, m.ObservationValue, value_rows)
+    courses = bulk(
+        session,
+        m.Timecourse,
+        [
+            dict(
+                study_id=sid,
+                key=course.key,
+                measurement_ids=[
+                    representation_ids[point.key] for point in course.points
+                ],
+            )
+            for course in study.timecourses
+        ],
+    )
+    # Canonical validation guarantees scientific keys are study-unique.
+    associations = {}
     derived_updates = []
-    associations = []
-    for record in study.measurements:
+    for kind, record, _ in observation_records:
         if record.derived_from:
             derived_updates.append(
                 dict(
-                    id=measurement_ids[record.key],
-                    derived_from_id=measurement_ids.get(record.derived_from),
+                    id=representation_ids[record.key],
+                    derived_from_id=representation_ids.get(record.derived_from),
                     derived_from_course_id=courses.get(record.derived_from),
                 )
             )
-        associations.extend(
-            dict(
+        observation_id = context_ids[record_contexts[kind, record.key]]
+        for index, name in enumerate(getattr(record, "interventions", [])):
+            intervention_id = intervention_names[name]
+            associations[observation_id, intervention_id] = dict(
                 study_id=sid,
-                measurement_id=measurement_ids[record.key],
-                intervention_id=intervention_names[name],
+                observation_id=observation_id,
+                intervention_id=intervention_id,
                 position=index,
             )
-            for index, name in enumerate(record.interventions)
-        )
     if derived_updates:
-        session.execute(update(m.Measurement), derived_updates)
+        session.execute(update(m.ObservationValue), derived_updates)
     if associations:
-        session.execute(insert(m.MeasurementIntervention), associations)
-    points = [
-        dict(
-            study_id=sid,
-            timecourse_id=courses[course.key],
-            position=index,
-            measurement_id=measurement_ids[point.key],
-        )
-        for course in study.timecourses
-        for index, point in enumerate(course.points)
-    ]
-    if points:
-        session.execute(insert(m.TimecoursePoint), points)
+        session.execute(insert(m.ObservationIntervention), list(associations.values()))
+    measurement_ids = representation_ids
     datasets = bulk(
         session,
         m.Scatter,
@@ -291,53 +332,40 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
         for dataset in study.scatters
         for index, subset in enumerate(dataset.subsets)
     ]
-    subsets = bulk(
+    row_count = sum(len(subset.points) for _, _, subset, _ in subset_records)
+    row_ids = (
+        iter(
+            session.scalars(
+                select(func.nextval("dataset_row_id_seq")).select_from(
+                    func.generate_series(1, row_count)
+                )
+            )
+        )
+        if row_count
+        else iter(())
+    )
+    bulk(
         session,
         m.Subset,
         [
             dict(
                 study_id=sid,
                 key=key,
-                scatter_id=datasets[dataset.key],
+                parent_id=datasets[dataset.key],
                 name=subset.name,
                 position=index,
                 shared_fields=subset.shared,
                 dimension_labels=[
                     dimension.model_dump(mode="json") for dimension in subset.dimensions
                 ],
+                measurement_ids=[
+                    measurement_ids[item] for point in subset.points for item in point
+                ],
+                point_ids=[next(row_ids) for _ in subset.points],
             )
             for dataset, index, subset, key in subset_records
         ],
     )
-    point_ids = bulk(
-        session,
-        m.SubsetPoint,
-        [
-            dict(
-                study_id=sid,
-                key=f"{key}:point:{index}",
-                subset_id=subsets[key],
-                position=index,
-            )
-            for _, _, subset, key in subset_records
-            for index in range(len(subset.points))
-        ],
-    )
-    dimensions = [
-        dict(
-            study_id=sid,
-            subset_id=subsets[key],
-            position=point_index * len(subset.dimensions) + dimension,
-            dimension=subset.dimensions[dimension].dimension,
-            point_id=point_ids[f"{key}:point:{point_index}"],
-            measurement_id=measurement_ids[measurement_key],
-        )
-        for _, _, subset, key in subset_records
-        for point_index, point in enumerate(subset.points)
-        for dimension, measurement_key in enumerate(point)
-    ]
-    if dimensions:
-        session.execute(insert(m.SubsetDimension), dimensions)
     notes = []
     records = [
         ("study", study),
