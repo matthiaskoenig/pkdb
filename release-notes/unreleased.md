@@ -1,5 +1,7 @@
 # Unreleased
 
+- Add `pkdb curation`, a local browser interface with GitHub assignment selection, default-application file opening, validation or upload on save, detailed diagnostics, and explicit recovery for uncertain uploads. Include an authenticated read-only curation-context endpoint and documentation with screenshots.
+
 - Remove authenticated-user request and concurrency throttling, allow normal anonymous browsing bursts, expose Docker anonymous quota settings, and show retry delays for frontend quota errors.
 
 - Add readable study upload progress and atomic batch reports to `pkdb`, negotiated backend diagnostics with correction guidance and save outcomes, and accurate physical spreadsheet cell locations.

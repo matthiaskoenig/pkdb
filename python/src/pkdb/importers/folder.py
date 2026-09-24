@@ -24,6 +24,7 @@ from pkdb.schemas.validation import (
     ValidationReport,
     fail,
 )
+from pkdb.source_files import ignored_source
 
 SECTIONS = {
     "groupset": "groups",
@@ -83,6 +84,8 @@ def load_folder(path: Path) -> SourceBundle:
     root = path.resolve(strict=True)
     files = {}
     for file in sorted(root.rglob("*")):
+        if ignored_source(file.relative_to(root)):
+            continue
         if file.is_symlink():
             fail("symlink", f"Symlinks are not accepted: {file.name}")
         if file.is_file() and file.name not in {"study.json", "reference.json"}:

@@ -19,6 +19,7 @@ from pkdb.schemas.prepared import PreparedStudy
 from pkdb.schemas.source import SourceBundle, SourceLocation
 from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import ValidationReport, fail
+from pkdb.source_files import ignored_source
 
 
 def study_folders(path: str | Path) -> list[Path]:
@@ -36,6 +37,8 @@ def study_folders(path: str | Path) -> list[Path]:
 def source_hashes(folder: Path) -> dict[str, str]:
     result = {}
     for path in sorted(folder.rglob("*")):
+        if ignored_source(path.relative_to(folder)):
+            continue
         if path.is_symlink():
             fail(
                 "symlink",

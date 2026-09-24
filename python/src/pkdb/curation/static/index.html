@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Local curation · PK-DB</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script type="module" src="/static/app.js"></script>
+</head>
+<body>
+  <header><a class="brand" href="/">PK-DB <span>/ Local curation</span></a><div class="header-actions"><span id="connection" class="badge">Connecting…</span><button id="settings-open">Connection settings</button></div></header>
+  <div id="notice" role="status" aria-live="polite" hidden></div>
+  <div class="shell">
+    <aside>
+      <h2>GitHub user</h2>
+      <label class="sr-only" for="user-search">Search GitHub users</label><input id="user-search" type="search" placeholder="Search repository users…" autocomplete="off">
+      <label class="sr-only" for="github-user">Available GitHub users</label><select id="github-user"><option value="">Choose a user</option></select>
+      <p id="github-status" class="muted small">Assignments and upload permissions are separate.</p>
+      <label class="sr-only" for="issue-state">Issue state</label><select id="issue-state"><option value="open">Open issues</option><option value="closed">Closed issues</option><option value="all">All issues</option></select>
+      <button id="refresh-assignments" class="full">Refresh assignments</button>
+      <h2>Views</h2><nav aria-label="Study views"><button data-view="all" class="nav active">All local studies</button><button data-view="assigned" class="nav">Assigned studies</button><button data-view="contributed" class="nav">Contributed by…</button></nav>
+      <h2>Workspace</h2><p id="workspace-name" class="path small">No workspace selected</p><button id="workspace-open" class="full">Choose workspace</button><button id="refresh-files" class="full">Refresh files</button>
+      <h2>File watching</h2><p id="watch-status">Observing source files</p><button id="pause" class="full">Pause automatic actions</button><p class="small muted">Files open in your default applications. Watching continues while the local service runs, even if you close this tab.</p>
+    </aside>
+    <main>
+      <section class="page-heading"><div><p class="eyebrow">Pharmacokinetics Database</p><h1 id="view-title">All local studies</h1><p class="muted" id="view-description">Select studies, open source files, and review saved changes.</p></div><span id="study-count" class="badge"></span></section>
+      <div class="connection-card"><div><span class="label">Upload target</span><strong id="endpoint">Not configured</strong></div><div><span class="label">PK-DB identity</span><strong id="account">Not authenticated</strong></div><div><span class="label">Vocabulary</span><strong id="vocabulary">Not checked</strong></div></div>
+      <div class="toolbar"><label class="sr-only" for="study-search">Search studies</label><input type="search" id="study-search" placeholder="Search by name, SID, or folder…"><label class="sr-only" for="scope">Folder</label><select id="scope"><option value="">All folders</option></select></div>
+      <div class="toolbar batch"><strong id="selection-count">0 studies selected</strong><label for="batch-mode">On save</label><select id="batch-mode"><option value="validate">Validate</option><option value="upload">Upload</option><option value="off">Off</option></select><button id="apply-mode" data-selection>Apply to selected</button><button id="validate" data-selection>Validate now</button><button id="upload" class="primary" data-selection>Upload selected</button></div>
+      <div class="card table-wrap"><table><thead><tr><th><input type="checkbox" id="select-all" aria-label="Select all visible studies"></th><th>Study / folder</th><th>Validation</th><th>On save</th><th>Last upload</th></tr></thead><tbody id="studies"></tbody></table><p id="empty" class="empty" hidden>No studies match this view.</p></div>
+      <section id="assignments" hidden><h2>Assigned issues without a local study</h2><div id="unmatched"></div></section>
+      <section id="study-detail" class="detail" hidden aria-label="Selected study details"></section>
+      <section class="activity"><div class="section-heading"><h2>Activity</h2><div class="actions"><button id="resume">Resume suspended work</button><button id="clear-history">Clear finished history</button></div></div><div id="jobs" class="card"><p class="empty">No jobs yet.</p></div></section>
+      <p class="foot">Editing happens in your own applications. Validation describes the current inputs; upload results describe the snapshot sent to the displayed server.</p>
+    </main>
+  </div>
+  <dialog id="settings-dialog"><form id="settings-form"><h2>Connection settings</h2><label for="settings-endpoint">PK-DB server</label><input id="settings-endpoint" type="url" placeholder="https://alpha.pk-db.com"><label for="settings-key">Personal API key</label><input id="settings-key" type="password" autocomplete="new-password" placeholder="Leave blank to keep the current key"><p class="small muted">The key stays in the local service’s memory. It is never stored in the browser.</p><label class="check"><input id="settings-offline" type="checkbox"> Work offline (no network requests)</label><div class="actions"><button type="button" data-close="settings-dialog">Cancel</button><button class="primary" type="submit">Save settings</button></div></form></dialog>
+  <dialog id="workspace-dialog"><form id="workspace-form"><h2>Choose workspace</h2><label for="workspace-path">Folder on this computer</label><input id="workspace-path" required placeholder="/path/to/pkdb_data"><p class="muted small">Choose a repository, substance folder, or individual study. Source files stay unchanged.</p><div class="actions"><button type="button" data-close="workspace-dialog">Cancel</button><button type="submit" class="primary">Open workspace</button></div></form></dialog>
+  <dialog id="upload-dialog"><form id="upload-form"><h2 id="upload-title">Review upload</h2><p id="upload-context"></p><ul id="upload-list"></ul><p class="muted small">Existing studies may be replaced. Remote publication and permission are checked by the server. Every upload validates the source first.</p><div class="actions"><button type="button" data-close="upload-dialog">Cancel</button><button type="submit" class="primary" id="confirm-upload">Validate and upload</button></div></form></dialog>
+  <dialog id="retry-dialog"><form id="retry-form"><h2>Review unknown upload outcome</h2><p id="retry-context"></p><p>The previous request may have saved successfully. Inspect the server before retrying; the retry can replace the study.</p><p id="retry-link"></p><label class="check"><input id="retry-acknowledge" type="checkbox" required> I inspected the server; retry this study.</label><div class="actions"><button type="button" data-close="retry-dialog">Cancel</button><button type="submit" class="primary">Validate and retry upload</button></div></form></dialog>
+  <noscript><p class="empty">Enable JavaScript to use the local curation interface.</p></noscript>
+</body>
+</html>
