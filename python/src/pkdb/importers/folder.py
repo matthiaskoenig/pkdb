@@ -15,7 +15,7 @@ from pkdb.importers.expressions import (
     split_entry,
 )
 from pkdb.importers.structure import entry_structure, list_value, validate_json_tree
-from pkdb.importers.workbook import read_table
+from pkdb.importers.workbook import table_reader
 from pkdb.schemas.source import SourceBundle, SourceLocation
 from pkdb.schemas.study import CanonicalStudy, Statistics
 from pkdb.schemas.validation import (
@@ -166,6 +166,11 @@ def _scientific(data: dict, key: str, source: SourceLocation) -> dict:
 
 
 def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> CanonicalStudy:
+    with table_reader() as read_table:
+        return _parse_bundle(bundle, max_rows=max_rows, read_table=read_table)
+
+
+def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> CanonicalStudy:
     if max_rows <= 0:
         fail("row_limit", "Row limit must be positive")
     validate_json_tree(bundle.study, "study.json")

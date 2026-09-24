@@ -444,3 +444,37 @@ def test_vocabulary_retry_is_bounded_and_never_replays_unknown(
     assert client.upload.call_count == attempts
     assert job["status"] == ("unknown" if persistence == "unknown" else "failed")
     assert engine.paused
+
+
+@pytest.mark.parametrize("explicit", [False, True])
+def test_environment_connection_defaults(tmp_path, monkeypatch, explicit):
+    monkeypatch.setenv("PKDB_ENDPOINT", "https://environment.example/")
+    monkeypatch.setenv("PKDB_API_KEY", "environment-secret")
+    state_dir = tmp_path / "state"
+    state_dir.mkdir()
+    (state_dir / "state.json").write_text(
+        json.dumps({"endpoint": "https://saved.example"})
+    )
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    engine = module.CurationEngine(
+        sources,
+        state_dir=state_dir,
+        offline=True,
+        start=False,
+        endpoint="https://explicit.example" if explicit else None,
+        api_key="explicit-secret" if explicit else None,
+    )
+    try:
+        assert engine.endpoint == (
+            "https://explicit.example" if explicit else "https://environment.example"
+        )
+        assert engine.api_key == (
+            "explicit-secret" if explicit else "environment-secret"
+        )
+        engine._save()
+        for secret in ("environment-secret", "explicit-secret"):
+            assert secret not in json.dumps(engine.snapshot())
+            assert secret not in (state_dir / "state.json").read_text()
+    finally:
+        engine.close()

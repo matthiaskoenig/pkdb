@@ -16,17 +16,11 @@ pkdb curation /path/to/pkdb_data
 
 You can also choose a substance directory or a single study folder. The app displays the selected workspace, server endpoint, authenticated PK-DB account, and vocabulary status. No local PK-DB server or Docker setup is required when uploading to a remote server.
 
-## Select a GitHub user and find assigned studies
+## Select local studies
 
-Choose a user from a searchable list of available GitHub users. The selector shows the login and display name when available. Assigned studies come from that user's issues in the configured data repository, initially `matthiaskoenig/pkdb_data`.
+Workspace, file-watching, upload target, identity, and vocabulary controls are in the navigation header menus. The responsive workspace shows the study overview beside the selected study’s problems; on narrow screens these stack vertically. Selecting a study name or checkbox opens its problems immediately. Use the detail panel to validate or validate and upload one study, or select several studies for batch actions.
 
-Issue titles such as `apixaban/Frost2013a` are matched to local folders. Unmatched or ambiguous assignments remain visible so you can locate the correct folder. **All local studies** provides a separate view of your workspace, including studies without a matched issue.
-
-[![Running local curation app with apixaban studies, offline validation, and save-action controls.](images/curation/workspace.png)](images/curation/workspace.png)
-
-*Actual app: offline validation of the local apixaban workspace, filtered to Frost2013 studies. No GitHub user is selected and no server account is connected in this screenshot.*
-
-GitHub assignments, contributor names in `study.json`, and PK-DB upload permissions are separate. Selecting `matthiaskoenig` can show that user's queue while the connected PK-DB account is `mkoenig`. Selecting another GitHub user never signs you in as that person or grants their permissions.
+The frontend has no GitHub user field. The command-line assignment options remain available for existing integrations.
 
 ## Open problems in your usual applications
 
@@ -87,7 +81,7 @@ pkdb curation /path/to/pkdb_data --endpoint https://alpha.pk-db.com
 pkdb curation /path/to/pkdb_data --github-user matthiaskoenig
 ```
 
-Use **Connection settings** to set the endpoint, enter an API key, or switch offline mode. Keys entered here stay in service memory; they are not saved in browser storage. Refresh GitHub assignments explicitly with **Refresh assignments**. A cached or limited user list is labeled accordingly. The current selector shows logins and available display names; it does not fetch avatar images.
+Startup loads the endpoint from `PKDB_ENDPOINT` and the API key from `PKDB_API_KEY`. An explicit endpoint overrides the environment; a saved endpoint is the fallback when neither is provided. The key stays in service memory and is never returned to the browser. Open **Connection → Connection settings** to override the endpoint, enter an API key, or switch offline mode. Keys entered here stay in service memory; they are not saved in browser storage.
 
 The app requires no Node installation, Docker, or hosted frontend. It binds to loopback and opens a protected launch URL in your default browser. With `--no-browser`, open the printed URL manually. Keep the local process running while you work; press **Ctrl+C** in its terminal to stop it. Use `--state-dir /path/to/app-state` for an isolated configuration and history directory outside your study workspace.
 
