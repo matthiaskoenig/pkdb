@@ -62,10 +62,11 @@ class CurationEngine:
         except OSError, ValueError:
             saved = {}
         self.api_key = api_key or os.environ.get("PKDB_API_KEY")
+        configured_endpoint = (
+            endpoint or os.environ.get("PKDB_ENDPOINT") or saved.get("endpoint")
+        )
         self.endpoint = (
-            endpoint_root(str(endpoint or saved.get("endpoint")))
-            if (endpoint or saved.get("endpoint"))
-            else ""
+            endpoint_root(str(configured_endpoint)) if configured_endpoint else ""
         )
         self.offline = offline
         self.github_user = github_user or saved.get("github_user", "")

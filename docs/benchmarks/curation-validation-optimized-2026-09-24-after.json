@@ -1,0 +1,343 @@
+{
+  "python": "3.14.4",
+  "platform": "Linux-6.8.0-138-generic-x86_64-with-glibc2.35",
+  "vocabulary_seconds": 0.08082145400112495,
+  "results": [
+    {
+      "study": "Abdollahizad2025",
+      "runs": [
+        {
+          "seconds": 1.2578590989869554,
+          "stages": {
+            "setup": 9.241698717232794e-05,
+            "read": 0.07431723800254986,
+            "parse": 0.3579250070033595,
+            "validate": 0.8255244369938737
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "b77c9d29f7d22aab45c7c207ef9f7ef2cf86446ef26ee2ee4706f65aef86276a"
+        },
+        {
+          "seconds": 0.999977518004016,
+          "stages": {
+            "setup": 5.560000136028975e-05,
+            "read": 0.09272422599315178,
+            "parse": 0.41574033501092345,
+            "validate": 0.4914573569985805
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "b77c9d29f7d22aab45c7c207ef9f7ef2cf86446ef26ee2ee4706f65aef86276a"
+        },
+        {
+          "seconds": 0.9616862059920095,
+          "stages": {
+            "setup": 4.1229999624192715e-05,
+            "read": 0.0802526100014802,
+            "parse": 0.4439688949933043,
+            "validate": 0.4374234709976008
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "b77c9d29f7d22aab45c7c207ef9f7ef2cf86446ef26ee2ee4706f65aef86276a"
+        }
+      ],
+      "median_seconds": 0.999977518004016
+    },
+    {
+      "study": "Bashir2018",
+      "runs": [
+        {
+          "seconds": 1.7543523810018087,
+          "stages": {
+            "setup": 3.7218997022137046e-05,
+            "read": 0.08499271700566169,
+            "parse": 0.9913178529968718,
+            "validate": 0.678004592002253
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "876b3638d0166e4384c6017e113c1ea5679e11e009af8c20d6dbdfbc786ec124"
+        },
+        {
+          "seconds": 1.855656710002222,
+          "stages": {
+            "setup": 3.8730999222025275e-05,
+            "read": 0.1034509379969677,
+            "parse": 1.213989133000723,
+            "validate": 0.5381779080053093
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "876b3638d0166e4384c6017e113c1ea5679e11e009af8c20d6dbdfbc786ec124"
+        },
+        {
+          "seconds": 1.614843823001138,
+          "stages": {
+            "setup": 5.482698907144368e-05,
+            "read": 0.08778191900637466,
+            "parse": 0.9956201440072618,
+            "validate": 0.53138693299843
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "876b3638d0166e4384c6017e113c1ea5679e11e009af8c20d6dbdfbc786ec124"
+        }
+      ],
+      "median_seconds": 1.7543523810018087
+    },
+    {
+      "study": "Chang2016",
+      "runs": [
+        {
+          "seconds": 1.881719406999764,
+          "stages": {
+            "setup": 3.8386002415791154e-05,
+            "read": 0.1323528030043235,
+            "parse": 0.5633565089956392,
+            "validate": 1.1859717089973856
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "102bfd98dbef16bd66631eca02d76ae6e6c2d6507375961fa8d5a54ac76c183e"
+        },
+        {
+          "seconds": 1.626945282012457,
+          "stages": {
+            "setup": 5.422699905466288e-05,
+            "read": 0.15090852000867017,
+            "parse": 0.5351503059937386,
+            "validate": 0.9408322290109936
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "102bfd98dbef16bd66631eca02d76ae6e6c2d6507375961fa8d5a54ac76c183e"
+        },
+        {
+          "seconds": 1.4495384670008207,
+          "stages": {
+            "setup": 5.1373994210734963e-05,
+            "read": 0.15242306800791994,
+            "parse": 0.49655257299309596,
+            "validate": 0.800511452005594
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "102bfd98dbef16bd66631eca02d76ae6e6c2d6507375961fa8d5a54ac76c183e"
+        }
+      ],
+      "median_seconds": 1.626945282012457
+    },
+    {
+      "study": "Cui2013",
+      "runs": [
+        {
+          "seconds": 1.0404388479946647,
+          "stages": {
+            "setup": 4.0547995013184845e-05,
+            "read": 0.06629000199609436,
+            "parse": 0.415153886002372,
+            "validate": 0.5589544120011851
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "551759c701e0da7296bb3e18d12443b921fab68dd61b7d877c5f1547ae1ea0d0"
+        },
+        {
+          "seconds": 1.3758385109977098,
+          "stages": {
+            "setup": 4.263099981471896e-05,
+            "read": 0.09933926399389748,
+            "parse": 0.5000682319951011,
+            "validate": 0.7763883840088965
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "551759c701e0da7296bb3e18d12443b921fab68dd61b7d877c5f1547ae1ea0d0"
+        },
+        {
+          "seconds": 0.8940622599911876,
+          "stages": {
+            "setup": 4.595199425239116e-05,
+            "read": 0.08954527899913955,
+            "parse": 0.4576357170008123,
+            "validate": 0.34683531199698336
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "551759c701e0da7296bb3e18d12443b921fab68dd61b7d877c5f1547ae1ea0d0"
+        }
+      ],
+      "median_seconds": 1.0404388479946647
+    },
+    {
+      "study": "Frost2013",
+      "runs": [
+        {
+          "seconds": 2.455251406005118,
+          "stages": {
+            "setup": 3.7546997191384435e-05,
+            "read": 0.18410139200568665,
+            "parse": 0.8867504529916914,
+            "validate": 1.3843620140105486
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "685b73e5385a4e96a6c1472a97397814775fab3ce42377de27f793d698c94d1d"
+        },
+        {
+          "seconds": 1.8693412739958148,
+          "stages": {
+            "setup": 3.8439990021288395e-05,
+            "read": 0.18091686500702053,
+            "parse": 0.5652323399990564,
+            "validate": 1.1231536289997166
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "685b73e5385a4e96a6c1472a97397814775fab3ce42377de27f793d698c94d1d"
+        },
+        {
+          "seconds": 1.565341271008947,
+          "stages": {
+            "setup": 3.987600211985409e-05,
+            "read": 0.17501730000367388,
+            "parse": 0.5033595419954509,
+            "validate": 0.8869245530077023
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "685b73e5385a4e96a6c1472a97397814775fab3ce42377de27f793d698c94d1d"
+        }
+      ],
+      "median_seconds": 1.8693412739958148
+    },
+    {
+      "study": "Frost2013a",
+      "runs": [
+        {
+          "seconds": 12.263073021007585,
+          "stages": {
+            "setup": 4.0507002267986536e-05,
+            "read": 0.31699368300905917,
+            "parse": 3.9380831960006617,
+            "validate": 8.007955634995596
+          },
+          "status": "invalid",
+          "issues": 1,
+          "output_sha256": "7b68911afcc9c2d12a1a42fcc22124212fe5e6a964f548b63ef8869f739fe44f"
+        },
+        {
+          "seconds": 12.356145482001011,
+          "stages": {
+            "setup": 3.739699604921043e-05,
+            "read": 0.3395314569934271,
+            "parse": 4.316631564011914,
+            "validate": 7.699945063999621
+          },
+          "status": "invalid",
+          "issues": 1,
+          "output_sha256": "7b68911afcc9c2d12a1a42fcc22124212fe5e6a964f548b63ef8869f739fe44f"
+        },
+        {
+          "seconds": 13.3147117819899,
+          "stages": {
+            "setup": 3.7954989238642156e-05,
+            "read": 0.3405279910075478,
+            "parse": 3.9667387810040964,
+            "validate": 9.007407054989017
+          },
+          "status": "invalid",
+          "issues": 1,
+          "output_sha256": "7b68911afcc9c2d12a1a42fcc22124212fe5e6a964f548b63ef8869f739fe44f"
+        }
+      ],
+      "median_seconds": 12.356145482001011
+    },
+    {
+      "study": "Frost2014",
+      "runs": [
+        {
+          "seconds": 3.9345192889886675,
+          "stages": {
+            "setup": 3.1136994948610663e-05,
+            "read": 0.16930863200104795,
+            "parse": 1.6700939970032778,
+            "validate": 2.095085522989393
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "f5b6f6c5db5e180cac075b95b5f3483d79b3142107aef85eb8fd47da0a9d11ab"
+        },
+        {
+          "seconds": 2.9404009920108365,
+          "stages": {
+            "setup": 4.030700074508786e-05,
+            "read": 0.16863061900949106,
+            "parse": 1.4229061229998479,
+            "validate": 1.3488239430007525
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "f5b6f6c5db5e180cac075b95b5f3483d79b3142107aef85eb8fd47da0a9d11ab"
+        },
+        {
+          "seconds": 3.283619351001107,
+          "stages": {
+            "setup": 4.8008994781412184e-05,
+            "read": 0.18121437900117598,
+            "parse": 1.6864524319971679,
+            "validate": 1.4159045310079819
+          },
+          "status": "valid",
+          "issues": 0,
+          "output_sha256": "f5b6f6c5db5e180cac075b95b5f3483d79b3142107aef85eb8fd47da0a9d11ab"
+        }
+      ],
+      "median_seconds": 3.283619351001107
+    },
+    {
+      "study": "Frost2014a",
+      "runs": [
+        {
+          "seconds": 1.371885487009422,
+          "stages": {
+            "setup": 5.394400795921683e-05,
+            "read": 0.09176368899352383,
+            "parse": 0.6081109420047142,
+            "validate": 0.6719569120032247
+          },
+          "status": "invalid",
+          "issues": 18,
+          "output_sha256": "1b5c41864449c41721d7f2dceace25fd145a2bd2f9e1c7d1f00fb72b6054cbef"
+        },
+        {
+          "seconds": 1.573081449008896,
+          "stages": {
+            "setup": 3.240200749132782e-05,
+            "read": 0.09051909900153987,
+            "parse": 0.7060139379900647,
+            "validate": 0.7765160100098001
+          },
+          "status": "invalid",
+          "issues": 18,
+          "output_sha256": "1b5c41864449c41721d7f2dceace25fd145a2bd2f9e1c7d1f00fb72b6054cbef"
+        },
+        {
+          "seconds": 1.4433939950104104,
+          "stages": {
+            "setup": 4.606900620274246e-05,
+            "read": 0.1428282209963072,
+            "parse": 0.6928865880036028,
+            "validate": 0.6076331170042977
+          },
+          "status": "invalid",
+          "issues": 18,
+          "output_sha256": "1b5c41864449c41721d7f2dceace25fd145a2bd2f9e1c7d1f00fb72b6054cbef"
+        }
+      ],
+      "median_seconds": 1.4433939950104104
+    }
+  ]
+}

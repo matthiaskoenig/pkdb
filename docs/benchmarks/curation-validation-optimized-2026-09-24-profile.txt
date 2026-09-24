@@ -1,0 +1,58 @@
+         19069313 function calls (16086031 primitive calls) in 78.545 seconds
+
+   Ordered by: cumulative time
+   List reduced from 1164 to 50 due to restriction <50>
+
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        8    0.250    0.031   78.550    9.819 benchmark_validation.py:48(measure)
+        8    0.029    0.004   78.300    9.788 preparation.py:120(prepare)
+        8    0.503    0.063   45.821    5.728 validation.py:36(prepare_study)
+    49593    0.630    0.000   40.728    0.001 main.py:393(model_copy)
+2188938/71569    8.649    0.000   38.437    0.001 copy.py:110(deepcopy)
+291903/19259    5.524    0.000   37.694    0.002 copy.py:198(_deepcopy_dict)
+23554/4023    0.664    0.000   36.604    0.009 main.py:990(__deepcopy__)
+139438/14506    3.066    0.000   31.813    0.002 source.py:30(__deepcopy__)
+        8    0.019    0.002   30.855    3.857 folder.py:168(parse_bundle)
+        8    1.219    0.152   30.834    3.854 folder.py:173(_parse_bundle)
+44650/22225    0.315    0.000   22.987    0.001 copy.py:172(_deepcopy_list)
+       52    0.003    0.000   14.627    0.281 folder.py:272(table)
+       47    1.643    0.035   14.624    0.311 workbook.py:59(read_table)
+     3846    0.266    0.000   13.846    0.004 normalization.py:41(normalize_record)
+   181306    4.715    0.000    8.375    0.000 main.py:971(__copy__)
+     6025    0.099    0.000    7.337    0.001 workbook.py:29(_xlsx_rows)
+   374200    1.799    0.000    7.107    0.000 main.py:1015(__getattr__)
+     6072    0.450    0.000    7.064    0.001 _reader.py:125(parse)
+983107/621567    2.402    0.000    5.701    0.000 {built-in method builtins.hasattr}
+    35235    1.006    0.000    5.157    0.000 source.py:52(for_header)
+   375702    1.812    0.000    3.762    0.000 main.py:1044(__setattr__)
+     6025    0.535    0.000    3.578    0.001 _reader.py:282(parse_row)
+   361540    3.176    0.000    3.527    0.000 fields.py:1432(__getattr__)
+       25    0.027    0.001    3.278    0.131 pharmacokinetics.py:161(derive_pk)
+   491850    2.026    0.000    3.070    0.000 copy.py:212(_keep_alive)
+572881/572873    1.959    0.000    3.006    0.000 copy.py:62(copy)
+   130158    1.498    0.000    2.993    0.000 _reader.py:189(parse_cell)
+186513/186485    0.334    0.000    2.939    0.000 ElementTree.py:1243(iterator)
+     2980    0.134    0.000    2.614    0.001 registry.py:1461(parse_expression)
+       21    0.003    0.000    2.440    0.116 nca.py:1825(nca_single)
+        8    0.000    0.000    2.266    0.283 excel.py:316(load_workbook)
+        8    0.005    0.001    2.237    0.280 excel.py:286(read)
+  1589274    2.118    0.000    2.118    0.000 {method 'get' of 'dict' objects}
+  337/321    0.002    0.000    1.991    0.006 {built-in method builtins.next}
+     4288    0.969    0.000    1.979    0.000 expressions.py:23(split_entry)
+55567/3702    1.107    0.000    1.873    0.001 expressions.py:64(bind_columns)
+       21    0.007    0.000    1.686    0.080 nca.py:1418(nca)
+   147376    0.809    0.000    1.672    0.000 __init__.py:454(suffix)
+5677/2355    0.249    0.000    1.648    0.001 serialisable.py:46(from_tree)
+  1365993    1.447    0.000    1.552    0.000 {built-in method builtins.isinstance}
+   731620    1.100    0.000    1.521    0.000 {built-in method builtins.getattr}
+   244291    1.033    0.000    1.521    0.000 expressions.py:14(clean)
+       16    0.008    0.000    1.491    0.093 preparation.py:56(source_snapshot)
+  1511248    1.483    0.000    1.483    0.000 {built-in method builtins.id}
+      351    0.381    0.001    1.442    0.004 ElementTree.py:1295(feed)
+       16    0.000    0.000    1.431    0.089 contextlib.py:136(__enter__)
+   349346    0.909    0.000    1.363    0.000 main.py:100(_private_setattr_handler)
+9137/9101    0.565    0.000    1.319    0.000 {method 'validate_python' of 'pydantic_core._pydantic_core.SchemaValidator' objects}
+        8    0.002    0.000    1.229    0.154 stylesheet.py:199(apply_stylesheet)
+       21    0.043    0.002    1.191    0.057 nca.py:1709(_to_result)
+
+

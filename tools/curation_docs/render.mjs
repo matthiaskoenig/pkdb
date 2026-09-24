@@ -24,7 +24,7 @@ try {
   await page.locator("#studies tr").filter({ hasText: "invalid" }).first().waitFor({ timeout: 120000 });
   await page.screenshot({ path: fileURLToPath(new URL("workspace.png", destination)), fullPage: false });
   await page.locator("#studies tr").filter({ hasText: "invalid" }).first().locator(".study-link").click({ timeout: 120000 });
-  await page.getByRole("button", { name: "Problems", exact: true }).click();
+  await page.getByRole("button", { name: /^Problems \(/ }).click();
   await page.locator(".problem").first().waitFor();
   await page.locator("#study-detail").scrollIntoViewIfNeeded();
   await page.locator("#study-detail").screenshot({ path: fileURLToPath(new URL("problems.png", destination)) });
