@@ -1,5 +1,7 @@
 # Unreleased
 
+- Document the minimal local Docker setup, administrator and attribution accounts, and study upload through the `pkdb` Python package.
+
 - Show vocabulary resource names alongside external annotation links and resolve legacy URL placeholders using term identifiers.
 
 - Display a large PK-DB logo beside the landing-page heading, with responsive sizing and a contrasting background in dark mode.
