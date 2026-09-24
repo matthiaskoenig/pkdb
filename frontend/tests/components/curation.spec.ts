@@ -2,6 +2,7 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest";
 import { flushPromises, mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import CurationPage from "../../src/features/curation/components/CurationPage.vue";
+import VocabularyMetadata from "../../src/features/curation/components/VocabularyMetadata.vue";
 import VocabularyHighlight from "../../src/features/curation/components/VocabularyHighlight.vue";
 const mocks = vi.hoisted(() => ({ get: vi.fn() }));
 vi.mock("../../src/api/client", () => ({
@@ -135,5 +136,32 @@ it("ignores a stale response when the next typed search is pending", async () =>
   await flushPromises();
   expect(mocks.get).toHaveBeenCalledTimes(2);
   expect(wrapper.text()).toContain("Caffeine");
+  wrapper.unmount();
+});
+
+it("resolves legacy annotation templates without duplicating ontology prefixes", () => {
+  const wrapper = mount(VocabularyMetadata, { props: { row: {
+    annotations: [
+      { collection: "chebi", term: "CHEBI:691622", url: "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:{$id}" },
+      { collection: "pubchem.compound", term: "79437", url: "https://pubchem.ncbi.nlm.nih.gov/compound/%7B$id%7D" },
+      { collection: "test", term: "a&b#c", url: "https://example.org/?id={$id}" },
+      { collection: "missing", url: "https://example.org/{$id}" },
+      { term: "unsafe", url: "javascript:alert('{$id}')" },
+    ],
+    xrefs: [{ name: "EFO", accession: "0004503", url: "http://www.ebi.ac.uk/efo/EFO_0004503" }],
+  } } });
+  const links = wrapper.findAll("a");
+  expect(links.map(link => link.attributes("href"))).toEqual([
+    "https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:691622",
+    "https://pubchem.ncbi.nlm.nih.gov/compound/79437",
+    "https://example.org/?id=a%26b%23c",
+    "http://www.ebi.ac.uk/efo/EFO_0004503",
+  ]);
+  expect(links[1]!.text()).toContain("pubchem.compound: 79437");
+  expect(links[3]!.text()).toContain("EFO: 0004503");
+  for (const link of links) {
+    expect(link.attributes("target")).toBe("_blank");
+    expect(link.attributes("rel")).toBe("noopener noreferrer");
+  }
   wrapper.unmount();
 });
