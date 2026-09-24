@@ -1,5 +1,7 @@
 # Unreleased
 
+- Add Matthias König’s academic title and affiliations to the bundled user roster (#821).
+
 - Document the minimal local Docker setup, administrator and attribution accounts, and study upload through the `pkdb` Python package.
 
 - Show vocabulary resource names alongside external annotation links and resolve legacy URL placeholders using term identifiers.
