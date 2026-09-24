@@ -26,13 +26,34 @@ export default defineConfig(({ mode }) => {
       __APP_VERSION__: JSON.stringify(version),
       __APP_COMMIT__: JSON.stringify(commit),
     },
-    plugins: [vue()],
+    plugins: [
+      vue(),
+      {
+        name: "pkdb-public-asset-reload",
+        apply: "serve",
+        hotUpdate({ file, server }) {
+          if (
+            this.environment.name === "client" &&
+            server.config.publicDir &&
+            file.startsWith(`${server.config.publicDir}/`)
+          ) {
+            this.environment.hot.send({ type: "full-reload", path: "*" });
+            return [];
+          }
+        },
+      },
+    ],
     resolve: {
       alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) },
     },
     server: {
       port: 8080,
       strictPort: true,
+      watch: {
+        usePolling:
+          (process.env.PKDB_DEV_USE_POLLING ?? env.PKDB_DEV_USE_POLLING) === "true",
+        interval: 250,
+      },
       proxy: Object.fromEntries(
         ["/api", "/accounts", "/media", "/docs", "/redoc", "/openapi.json"].map(
           (path) => [

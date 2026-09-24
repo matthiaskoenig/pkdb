@@ -4,6 +4,7 @@ import { fileURLToPath } from "node:url";
 test("lean landing page and API navigation work on desktop and mobile", async ({ page }, testInfo) => {
   await page.goto("/");
   await expect(page.getByRole("link", { name: "PK-DB home" }).locator("img")).toHaveAttribute("src", "/assets/images/pkdb_logo.png");
+  await expect(page.getByRole("heading", { name: "Pharmacokinetics Database", level: 1, exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Our mission", exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Our vision", exact: true })).toBeVisible();
   await expect(page.locator(".statistic-grid a")).toHaveCount(7);

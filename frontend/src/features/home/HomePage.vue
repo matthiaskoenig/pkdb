@@ -5,8 +5,9 @@ defineOptions({ name: "HomePage" });
 <template>
   <div class="home-page">
     <section class="home-hero" aria-labelledby="home-title">
-      <p class="eyebrow">The pharmacokinetics database</p>
-      <h1 id="home-title">Evidence for better models.</h1>
+      <p class="eyebrow">PK-DB</p>
+      <h1 id="home-title">Pharmacokinetics Database</h1>
+      <p class="home-tagline">Evidence for better models.</p>
       <div class="home-purpose">
         <div>
           <h2>Our mission</h2>
@@ -39,7 +40,12 @@ defineOptions({ name: "HomePage" });
 }
 .home-hero h1 {
   font-size: clamp(2.2rem, 4vw, 3.5rem);
-  margin-bottom: 1.75rem;
+  margin-bottom: 0.5rem;
+}
+.home-tagline {
+  font-size: 1.2rem;
+  margin: 0 0 1.75rem;
+  color: rgba(var(--v-theme-on-surface), 0.8);
 }
 .home-hero .v-btn {
   color: #fff;

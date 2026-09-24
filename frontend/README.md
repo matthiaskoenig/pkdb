@@ -16,6 +16,8 @@ npx playwright install --with-deps
 npm run test:e2e
 ```
 
+For live GUI development, keep `npm run dev` running and open **http://localhost:8080**. Saving Vue, TypeScript, or CSS source updates the browser automatically through Vite hot module replacement; public asset changes reload the page. With Docker, use `docker compose --profile dev up --build --wait` from the repository root for the same live workflow; Docker enables polling to detect changes reliably across bind mounts. Native development can opt into polling with `PKDB_DEV_USE_POLLING=true`. `npm run build` and `npm run preview` serve production-build workflows and do not provide live source updates.
+
 Development uses port 8080. The Vite development proxy defaults to `http://127.0.0.1:18083`. The backend browser origin must match the browser-visible origin exactly. `VITE_API_BASE` is a public API origin, normally empty for same-origin requests; never place passwords or bearer credentials in Vite variables. Frontend requests use same-origin session cookies and CSRF.
 
 Browser tests run the actual `dist/` through Nginx against the isolated `compose.frontend-test.yaml` backend. The harness owns only the `pkdb-frontend-test` Compose project and removes its disposable resources after testing. It never seeds the default deployment. Scientific fixture data and test passwords are artificial. Traces are disabled to avoid recording passwords or session tokens; failure screenshots and reports remain local/CI artifacts.

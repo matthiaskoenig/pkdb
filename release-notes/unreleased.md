@@ -1,5 +1,7 @@
 # Unreleased
 
+- Name the Pharmacokinetics Database prominently on the landing page and enable reliable Docker frontend hot reload with configurable polling, and document the live development workflow.
+
 - Publish Terms of Use in the documentation with required source citation, coauthorship for reuse of more than 10 studies, and commercial data licensing; update site links and the terms bundled with data exports.
 
 - Simplify the landing page to mission, vision, and live database statistics; move the example study and citation information into documentation. Promote API to top-level navigation and show contact and issue reporting links in shared frontend and documentation footers.

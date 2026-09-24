@@ -76,7 +76,13 @@ The initial database contains vocabulary and any users you imported, but no stud
 
 ## Daily development
 
-Frontend edits under `frontend/src/` and `frontend/public/` are mounted into the Vite container and reload automatically. Rebuild after dependency or frontend configuration changes. Backend code is built into its image; after changing it, run:
+Start the live frontend at **http://localhost:8080** with:
+
+```bash
+docker compose --profile dev up --build --wait
+```
+
+Keep this stack running while editing the GUI. Save a Vue, TypeScript, or CSS file under `frontend/src/` and Vite updates the open browser through hot module replacement, preserving component state where possible. Changes to assets in `frontend/public/` trigger a page reload. You do not need to rebuild the image or refresh the browser for these edits. The source directories are mounted into the Vite container. Docker development uses polling every 250 ms so changes are detected even when bind-mount filesystem events are missed. Set `PKDB_DEV_USE_POLLING=false` in `.env` to use native filesystem events when those work reliably. Rebuild after dependency or frontend configuration changes. Backend code is built into its image; after changing it, run:
 
 ```bash
 PKDB_BUILD_COMMIT="$(git rev-parse HEAD)" docker compose --profile dev up --build --wait
@@ -106,7 +112,7 @@ npm ci
 npm run dev
 ```
 
-The development proxy defaults to `http://127.0.0.1:18083`. Set `PKDB_DEV_API_TARGET=http://127.0.0.1:YOUR_PORT` when starting Vite if you changed the backend host port. Keep `VITE_API_BASE` empty for same-origin requests.
+The development proxy defaults to `http://127.0.0.1:18083`. Set `PKDB_DEV_API_TARGET=http://127.0.0.1:YOUR_PORT` when starting Vite if you changed the backend host port. Keep `VITE_API_BASE` empty for same-origin requests. Native Vite uses filesystem events by default; set `PKDB_DEV_USE_POLLING=true` if your filesystem does not reliably deliver change notifications.
 
 Run frontend checks from `frontend/`:
 
