@@ -13,7 +13,11 @@ it("associates every account tab with its named panel and activates the selected
   const pinia = createPinia();
   setActivePinia(pinia);
   const session = useSessionStore();
-  session.profile = profileFixture({ role: "admin" });
+  session.profile = profileFixture({
+    role: "admin",
+    title: "Prof. Dr.",
+    affiliation: "Humboldt-Universität zu Berlin; University Hospital Schleswig-Holstein",
+  });
   session.ready = true;
   vi.spyOn(accountApi, "keys").mockResolvedValue([]);
   vi.spyOn(accountApi, "sessions").mockResolvedValue([]);
@@ -35,6 +39,16 @@ it("associates every account tab with its named panel and activates the selected
   expect(wrapper.get('[role="tablist"]').attributes("aria-label")).toBe(
     "Account settings sections",
   );
+  for (const [label, expected] of [
+    ["Title (optional)", session.profile.title],
+    ["Affiliation (optional)", session.profile.affiliation],
+  ]) {
+    const input = wrapper.findAll("input").find((value) => {
+      const id = value.attributes("id");
+      return id && wrapper.find(`label[for="${id}"]`).text() === label;
+    });
+    expect(input?.element.value).toBe(expected);
+  }
   const tabs = wrapper.findAll('[role="tab"]');
   expect(tabs).toHaveLength(7);
   expect(wrapper.text()).not.toContain("Connected accounts");
