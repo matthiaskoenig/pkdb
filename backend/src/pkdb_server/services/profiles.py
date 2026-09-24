@@ -10,8 +10,7 @@ from PIL import Image, ImageOps, UnidentifiedImageError
 from sqlalchemy import select
 
 from pkdb.schemas.profiles import ProfileUpdate
-from pkdb_server.db.models.users import AccountThrottle, AvatarAsset, EmailAddress, User
-from pkdb_server.services.accounts import AccountThrottled
+from pkdb_server.db.models.users import AvatarAsset, EmailAddress, User
 from pkdb_server.services.authentication import AuthenticationFailed
 
 MAX_AVATAR_BYTES = 5 * 1024 * 1024
@@ -219,22 +218,6 @@ class ProfileService:
         try:
             with self.session_factory.begin() as session:
                 user = self._owner(session, principal)
-                now = datetime.now(UTC)
-                throttle_key = sha256(f"avatar:{user.id}".encode()).hexdigest()
-                throttle = session.get(AccountThrottle, throttle_key)
-                if throttle is None:
-                    throttle = AccountThrottle(
-                        key=throttle_key,
-                        attempts=0,
-                        expires_at=now + timedelta(hours=1),
-                    )
-                    session.add(throttle)
-                elif throttle.expires_at <= now:
-                    throttle.attempts = 0
-                    throttle.expires_at = now + timedelta(hours=1)
-                if throttle.attempts >= 20:
-                    raise AccountThrottled()
-                throttle.attempts += 1
                 old_key = user.avatar_key
                 if normalized:
                     data, size = normalized

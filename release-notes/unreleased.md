@@ -1,5 +1,7 @@
 # Unreleased
 
+- Remove authenticated-user request and concurrency throttling, allow normal anonymous browsing bursts, expose Docker anonymous quota settings, and show retry delays for frontend quota errors.
+
 - Add readable study upload progress and atomic batch reports to `pkdb`, negotiated backend diagnostics with correction guidance and save outcomes, and accurate physical spreadsheet cell locations.
 
 - Document the minimal local Docker setup, administrator and attribution accounts, and study upload through the `pkdb` Python package.

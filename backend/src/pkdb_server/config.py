@@ -21,8 +21,11 @@ class Settings(BaseSettings):
     cors_origins: list[str] = Field(default_factory=list)
     browser_origin: str = "http://localhost:8080"
     secure_cookies: bool = False
+    legacy_api_enabled: bool = False
     rate_limits_enabled: bool = True
-    quota_anonymous_per_minute: int = Field(default=30, gt=0)
+    quota_anonymous_per_minute: int = Field(default=120, gt=0)
+    # Legacy authenticated quota settings remain accepted for deployment compatibility;
+    # authenticated requests no longer charge these budgets or acquire quota leases.
     quota_account_per_minute: int = Field(default=120, gt=0)
     quota_key_per_minute: int = Field(default=60, gt=0)
     quota_ip_per_minute: int = Field(default=600, gt=0)

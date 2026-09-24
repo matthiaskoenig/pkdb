@@ -181,7 +181,7 @@ jobs:
               profile = json.load(response)
               assert profile["role"] == "admin"
               assert "mfa_required" not in profile
-          for path, expected in (("/api/v1/admin/users", 200), ("/api-token-auth/", 410)):
+          for path, expected in (("/api/v1/admin/users", 200), ("/api-token-auth/", 404)):
               request = urllib.request.Request(base + path)
               if path == "/api-token-auth/":
                   request.data = json.dumps({"username": "mkoenig", "password": "Local-CI-password-42!"}).encode()

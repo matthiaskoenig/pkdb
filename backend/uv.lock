@@ -1467,7 +1467,7 @@ wheels = [
 
 [[package]]
 name = "pkdb"
-version = "0.11.0"
+version = "0.11.1"
 source = { editable = "../python" }
 dependencies = [
     { name = "httpx2" },
@@ -1505,7 +1505,7 @@ dev = [
 
 [[package]]
 name = "pkdb-server"
-version = "0.11.0"
+version = "0.11.1"
 source = { editable = "." }
 dependencies = [
     { name = "alembic" },

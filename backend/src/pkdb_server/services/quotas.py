@@ -23,43 +23,25 @@ class QuotaService:
         return getattr(self.settings, name, default)
 
     def charge(self, principal, ip, operation="read"):
+        if principal.user_id is not None:
+            return
         now = datetime.now(UTC)
         buckets = [
             (
                 f"ip:{ip}",
-                self.limit("quota_ip_per_minute", 600)
-                if principal.user_id
-                else self.limit("quota_anonymous_per_minute", 30),
+                self.limit("quota_ip_per_minute", 600),
                 60,
             )
         ]
-        if principal.user_id:
+        if not principal.user_id:
             buckets.append(
                 (
-                    f"account:{principal.user_id}",
-                    self.limit("quota_account_per_minute", 120),
+                    f"anonymous-ip:{ip}",
+                    self.limit("quota_anonymous_per_minute", 120),
                     60,
                 )
             )
-            if principal.credential_kind in {"api_key", "legacy"}:
-                buckets.append(
-                    (
-                        f"key:{principal.credential_kind}:{principal.credential_id}",
-                        self.limit("quota_key_per_minute", 60),
-                        60,
-                    )
-                )
-            if operation in {"upload", "export"}:
-                buckets.append(
-                    (
-                        f"{operation}:{principal.user_id}",
-                        self.limit("quota_uploads_per_hour", 10)
-                        if operation == "upload"
-                        else self.limit("quota_exports_per_minute", 10),
-                        3600 if operation == "upload" else 60,
-                    )
-                )
-        elif operation == "export":
+        if operation == "export":
             buckets.append((f"anonymous-export:{ip}", 0, 60))
         for_login = operation == "login"
         if for_login:
@@ -111,6 +93,8 @@ class QuotaService:
             return result
 
     def acquire(self, principal, ip, operation="read"):
+        if principal.user_id is not None:
+            return None
         from uuid import uuid4
 
         from sqlalchemy import delete, func, text
@@ -119,21 +103,12 @@ class QuotaService:
 
         identifier = uuid4().hex
         now = datetime.now(UTC)
-        buckets = (
-            [
-                (
-                    f"account:{principal.user_id}",
-                    self.limit("quota_account_concurrency", 6),
-                )
-            ]
-            if principal.user_id
-            else [
-                (
-                    f"ip:{hashlib.sha256(ip.encode()).hexdigest()}",
-                    self.limit("quota_anonymous_concurrency", 2),
-                )
-            ]
-        )
+        buckets = [
+            (
+                f"ip:{hashlib.sha256(ip.encode()).hexdigest()}",
+                self.limit("quota_anonymous_concurrency", 2),
+            )
+        ]
         if operation in {"upload", "export"}:
             buckets += [
                 (f"{operation}:{principal.user_id}", 1),

@@ -315,7 +315,6 @@ class AccountService:
         if is_primary:
             raise ValueError("Unverified email cannot be primary")
         address = email.strip().casefold()
-        self._throttle("add_email", str(principal.user_id), 3, timedelta(hours=1))
         try:
             with self.session_factory.begin() as session:
                 user = self._account(session, principal, recent=True)

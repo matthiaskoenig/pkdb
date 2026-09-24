@@ -28,6 +28,7 @@ from pkdb_server.api import (
     accounts,
     admin_roles,
     admin_users,
+    data,
     exports,
     invitations,
     legacy_uploads,
@@ -76,7 +77,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     ingestion = IngestionService(session_factory, file_store, settings)
 
     queries = QueryService(session_factory)
-    mcp = create_mcp(ingestion, queries, file_store, session_factory)
+    mcp = create_mcp(queries, session_factory, settings)
     mcp_app = mcp.http_app(path="/", json_response=True, stateless_http=False)
 
     @asynccontextmanager
@@ -103,8 +104,6 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.include_router(profiles.router)
     app.include_router(management.router)
     app.include_router(management.account_router)
-    if settings.rate_limits_enabled:
-        app.add_middleware(RequestQuotas)
     app.state.admin_users = AdminUserService(session_factory)
     app.state.file_store = file_store
     app.state.ingestion = ingestion
@@ -117,7 +116,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         UploadLimits,
         max_bytes=settings.upload_max_bytes,
         concurrency=settings.upload_concurrency,
+        admission_enabled=settings.rate_limits_enabled,
     )
+    if settings.rate_limits_enabled:
+        app.add_middleware(RequestQuotas)
     app.add_middleware(UploadReports)
     app.add_middleware(
         CORSMiddleware,
@@ -427,13 +429,25 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     from pkdb_server.api.compatibility import include_legacy_router
 
     app.state.principal = principal
-    include_legacy_router(app, accounts.router)
-    include_legacy_router(app, admin_users.router)
-    include_legacy_router(app, admin_roles.router)
+    app.include_router(data.router)
+    app.include_router(accounts.email_router, prefix="/api/v1/me")
     app.include_router(media.router)
-    include_legacy_router(app, reads.router)
-    include_legacy_router(app, staging.router)
-    include_legacy_router(app, exports.router)
-    include_legacy_router(app, legacy_uploads.router)
+    if settings.legacy_api_enabled:
+        for router in (
+            accounts.router,
+            admin_users.router,
+            admin_roles.router,
+            reads.router,
+            staging.router,
+            exports.router,
+            legacy_uploads.router,
+        ):
+            include_legacy_router(app, router)
+    else:
+        app.include_router(reads.router)
+        app.include_router(exports.router)
     app.mount("/mcp", mcp_app)
+    from pkdb_server.api.reference import install_reference
+
+    install_reference(app)
     return app

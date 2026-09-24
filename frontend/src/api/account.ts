@@ -86,13 +86,13 @@ export const accountApi = {
     await api.delete("/api/v1/me/avatar");
   },
   async addEmail(email: string) {
-    await api.post("/accounts/emails/", { email });
+    await api.post("/api/v1/me/emails/", { email });
   },
   async makePrimary(id: number) {
-    await api.patch(`/accounts/emails/${id}/`, { is_primary: true });
+    await api.patch(`/api/v1/me/emails/${id}/`, { is_primary: true });
   },
   async removeEmail(id: number) {
-    await api.delete(`/accounts/emails/${id}/`);
+    await api.delete(`/api/v1/me/emails/${id}/`);
   },
   async resend(email: string) {
     await api.post("/api/v1/auth/resend-verification", { email });

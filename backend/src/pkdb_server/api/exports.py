@@ -156,15 +156,11 @@ def download_response(service, identifier, actor):
     from starlette.concurrency import run_in_threadpool
 
     from pkdb_server.api.streaming import ClosingStreamingResponse
-    from pkdb_server.services.exports import ExportBusy, ExportLimit
+    from pkdb_server.services.exports import ExportLimit
 
     iterator = service.stream_export(identifier, "zip", actor)
     try:
         first = next(iterator)
-    except ExportBusy:
-        raise HTTPException(
-            503, "Export capacity reached", headers={"Retry-After": "1"}
-        ) from None
     except ExportLimit as error:
         raise HTTPException(413, str(error)) from None
 

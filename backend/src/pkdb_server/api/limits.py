@@ -10,8 +10,11 @@ class BodyLimitExceeded(Exception):
 
 
 class UploadLimits:
-    def __init__(self, app, max_bytes: int, concurrency: int):
+    def __init__(
+        self, app, max_bytes: int, concurrency: int, admission_enabled: bool = True
+    ):
         self.app = app
+        self.admission_enabled = admission_enabled
         self.max_bytes = max_bytes
         self.slots = BoundedSemaphore(concurrency)
 
@@ -24,7 +27,11 @@ class UploadLimits:
         # executor holds operation-specific quota leases; transport requests
         # must not compete for upload slots, but still need the byte limit.
         path = scope.get("path", "")
-        admission = not (path == "/mcp" or path.startswith("/mcp/"))
+        admission = (
+            self.admission_enabled
+            and not scope.get("state", {}).get("authenticated_unthrottled", False)
+            and not (path == "/mcp" or path.startswith("/mcp/"))
+        )
         if admission and not self.slots.acquire(blocking=False):
             await JSONResponse(
                 {"detail": "Upload capacity reached"},

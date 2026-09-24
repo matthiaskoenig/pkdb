@@ -107,13 +107,13 @@ def resend_verification(data: EmailRequest, request: Request):
     )
 
 
-@email_router.get("/accounts/emails/")
+@email_router.get("/emails/")
 def emails(request: Request):
     actor = request.state.account_actor
     return perform(request, "emails", {"principal": actor}, lambda rows: rows)
 
 
-@email_router.post("/accounts/emails/", status_code=201)
+@email_router.post("/emails/", status_code=201)
 def add_email(data: EmailCreate, request: Request):
     actor = request.state.account_actor
     return perform(
@@ -121,7 +121,7 @@ def add_email(data: EmailCreate, request: Request):
     )
 
 
-@email_router.get("/accounts/emails/{email_id}/")
+@email_router.get("/emails/{email_id}/")
 def email_detail(email_id: int, request: Request):
     actor = request.state.account_actor
     return perform(
@@ -129,8 +129,8 @@ def email_detail(email_id: int, request: Request):
     )
 
 
-@email_router.put("/accounts/emails/{email_id}/")
-@email_router.patch("/accounts/emails/{email_id}/")
+@email_router.put("/emails/{email_id}/")
+@email_router.patch("/emails/{email_id}/")
 def change_email(email_id: int, data: EmailUpdate, request: Request):
     actor = request.state.account_actor
     return perform(
@@ -145,7 +145,7 @@ def change_email(email_id: int, data: EmailUpdate, request: Request):
     )
 
 
-@email_router.delete("/accounts/emails/{email_id}/", status_code=204)
+@email_router.delete("/emails/{email_id}/", status_code=204)
 def delete_email(email_id: int, request: Request):
     actor = request.state.account_actor
     return perform(
@@ -156,4 +156,4 @@ def delete_email(email_id: int, request: Request):
     )
 
 
-router.include_router(email_router)
+router.include_router(email_router, prefix="/accounts")

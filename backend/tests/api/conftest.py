@@ -16,6 +16,7 @@ def client(ingestion_context, session_factory):
         ),
         file_root=ingestion.file_store.root,
         rate_limits_enabled=False,
+        legacy_api_enabled=True,
     )
     with TestClient(create_app(settings)) as client:
         yield client

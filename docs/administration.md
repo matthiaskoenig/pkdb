@@ -77,3 +77,10 @@ Dry runs create no accounts or asset files. Applying preserves existing IDs, cre
 ## Maintenance
 
 Run `pkdb-server cleanup` regularly to remove unreferenced avatar files after their grace period, expired credentials and leases, and old audit events. Back up the database and managed files together; see [Deployment](deployment.md).
+
+
+## Browsing request limits
+
+Authenticated users, including session, API-key, and MCP clients, have no request-rate or quota-concurrency limits. Their requests do not consume anonymous IP budgets. Anonymous browsing allows 120 requests per minute by default within an anonymous IP limit of 600 requests per minute; unauthenticated login and registration protections remain active. Source-file size and scientific validation rules still apply. HTTP 429 responses include `Retry-After`; the frontend displays how long to wait.
+
+For Docker, set `PKDB_QUOTA_ANONYMOUS_PER_MINUTE` or `PKDB_QUOTA_IP_PER_MINUTE` in `.env` to override these defaults, then run `docker compose --profile dev up -d --wait` to recreate services with the settings. Backend code changes require `--build`. Request counters are temporary; a quota error does not require resetting the database.

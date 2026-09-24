@@ -4,11 +4,11 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pkdb-server"
-version = "0.11.0"
+version = "0.11.1"
 description = "PK-DB backend"
 requires-python = ">=3.14,<3.16"
 dependencies = [
-  "pkdb==0.11.0",
+  "pkdb==0.11.1",
   "pydantic-settings>=2.15.0,<3",
   "sqlalchemy>=2.0.54,<3",
   "psycopg[binary]>=3.3.6,<4",

@@ -153,7 +153,13 @@ def test_container_nonroot_upload_and_graceful_shutdown(
                 ) as (read, write):
                     async with ClientSession(read, write) as session:
                         await session.initialize()
-                        assert len((await session.list_tools()).tools) == 4
+                        assert {
+                            tool.name for tool in (await session.list_tools()).tools
+                        } == {
+                            "search_studies",
+                            "get_study",
+                            "query_data",
+                        }
                         result = await session.call_tool(
                             "get_study", {"sid": valid_bundle.study["sid"]}
                         )

@@ -9,64 +9,57 @@ async def test_only_explicit_tools_are_exposed(mcp_http, mcp_connect):
         assert {tool.name for tool in result.tools} == {
             "search_studies",
             "get_study",
-            "validate_study",
-            "replace_study",
+            "query_data",
         }
+        assert all(tool.annotations.read_only_hint for tool in result.tools)
+        assert all(tool.annotations.destructive_hint is False for tool in result.tools)
 
 
 @pytest.mark.anyio
-async def test_tools_share_rest_validation_and_atomic_publication(
-    mcp_http, mcp_connect, valid_bundle
+async def test_read_tools_match_rest_and_removed_tools_cannot_write(
+    mcp_http, mcp_connect, valid_bundle, ingestion_context, session_factory
 ):
-    import json
-
     import httpx2
+    from sqlalchemy import func, select
 
-    _, url, token = mcp_http
-    bundle = {"study": valid_bundle.study, "reference": valid_bundle.reference}
-    headers = {"Authorization": f"Bearer {token}"}
-    async with httpx2.AsyncClient(base_url=url, headers=headers) as rest:
-        response = await rest.post(
-            "/api/v2/studies/validate",
-            data={
-                "study": json.dumps(bundle["study"]),
-                "reference": json.dumps(bundle["reference"]),
-            },
+    from pkdb_server.db.models.studies import Study
+
+    app, url, token = mcp_http
+    _, principal = ingestion_context
+    app.state.ingestion.replace(valid_bundle, principal)
+    sid = valid_bundle.study["sid"]
+    async with (
+        httpx2.AsyncClient(
+            base_url=url, headers={"Authorization": f"Bearer {token}"}
+        ) as rest,
+        mcp_connect(url, token) as client,
+    ):
+        before = (await rest.get(f"/api/v2/studies/{sid}")).json()
+        study = await client.call_tool("get_study", {"sid": sid})
+        assert not study.is_error
+        assert study.structured_content == before
+        matches = await client.call_tool(
+            "search_studies", {"query": {"entity": "studies"}}
         )
-        assert response.status_code == 200
-        async with mcp_connect(url, token) as client:
-            report = await client.call_tool("validate_study", {"bundle": bundle})
-            assert not report.is_error
-            assert report.structured_content == response.json()
-            published = await client.call_tool(
-                "replace_study", {"sid": valid_bundle.study["sid"], "bundle": bundle}
-            )
-            assert not published.is_error
-            assert published.structured_content["created"] is True
-            study = await client.call_tool(
-                "get_study", {"sid": valid_bundle.study["sid"]}
-            )
-            assert not study.is_error
-            assert (
-                study.structured_content
-                == (
-                    await rest.get("/api/v2/studies/" + valid_bundle.study["sid"])
-                ).json()
-            )
-            matches = await client.call_tool(
-                "search_studies", {"query": {"entity": "studies"}}
-            )
-            assert matches.structured_content["count"] == 1
-            before = study.structured_content
-            bundle["study"]["outputset"]["outputs"] = False
-            report = await client.call_tool(
-                "replace_study", {"sid": valid_bundle.study["sid"], "bundle": bundle}
-            )
-            assert report.structured_content["valid"] is False
-            assert report.structured_content["error_count"] == 1
-            assert (
-                await client.call_tool("get_study", {"sid": valid_bundle.study["sid"]})
-            ).structured_content == before
+        assert matches.structured_content["count"] == 1
+        data = await client.call_tool(
+            "query_data", {"query": {"entity": "measurements"}}
+        )
+        assert not data.is_error
+        assert data.structured_content["total"] >= 1
+        assert data.structured_content["page"] == 1
+        bundle = {"study": valid_bundle.study, "reference": valid_bundle.reference}
+        bundle["study"]["name"] = "Must not be saved"
+        for tool, arguments in (
+            ("validate_study", {"bundle": bundle}),
+            ("replace_study", {"sid": sid, "bundle": bundle}),
+            ("replace_study", {"sid": "NEW", "bundle": bundle}),
+        ):
+            response = await client.call_tool(tool, arguments)
+            assert response.is_error
+        assert (await rest.get(f"/api/v2/studies/{sid}")).json() == before
+    with session_factory() as session:
+        assert session.scalar(select(func.count()).select_from(Study)) == 1
 
 
 @pytest.mark.anyio
@@ -123,59 +116,7 @@ async def test_transport_requires_current_bearer_token(mcp_http, session_factory
 
 
 @pytest.mark.anyio
-async def test_staged_handles_require_owner_and_never_accept_paths(
-    mcp_http, mcp_connect, valid_bundle, session_factory
-):
-    import httpx2
-
-    from pkdb_server.db.models.users import User
-    from pkdb_server.services.authentication import issue_token
-
-    _, url, token = mcp_http
-    async with httpx2.AsyncClient(
-        base_url=url, headers={"Authorization": f"Bearer {token}"}
-    ) as rest:
-        response = await rest.post(
-            "/api/v2/files", files={"file": ("figure.png", b"image bytes")}
-        )
-        assert response.status_code == 201
-        staged = response.json()
-        assert set(staged) == {"id", "name", "size", "sha256", "expires_at"}
-    bundle = {
-        "study": valid_bundle.study,
-        "reference": valid_bundle.reference,
-        "handles": [staged["id"]],
-    }
-    with session_factory.begin() as session:
-        other = User(username="other", role="curator", active=True)
-        session.add(other)
-        session.flush()
-        other_token = issue_token(other, session)
-    async with mcp_connect(url, other_token) as client:
-        response = await client.call_tool("validate_study", {"bundle": bundle})
-        assert response.is_error
-        assert "Action not permitted" in response.content[0].text
-    async with mcp_connect(url, token) as client:
-        response = await client.call_tool(
-            "replace_study", {"sid": valid_bundle.study["sid"], "bundle": bundle}
-        )
-        assert not response.is_error
-        study = await client.call_tool("get_study", {"sid": valid_bundle.study["sid"]})
-        assert study.structured_content["attachments"][0]["name"] == "figure.png"
-        response = await client.call_tool(
-            "validate_study", {"bundle": {**bundle, "handles": ["/etc/passwd"]}}
-        )
-        assert response.is_error
-        response = await client.call_tool(
-            "validate_study", {"bundle": {**bundle, "files": {"secret": "/etc/passwd"}}}
-        )
-        assert response.is_error
-
-
-@pytest.mark.anyio
-async def test_blocking_scientific_work_keeps_http_responsive(
-    mcp_http, mcp_connect, valid_bundle, monkeypatch
-):
+async def test_blocking_query_keeps_http_responsive(mcp_http, mcp_connect, monkeypatch):
     import asyncio
     import threading
 
@@ -184,24 +125,19 @@ async def test_blocking_scientific_work_keeps_http_responsive(
 
     app, url, token = mcp_http
     entered, release = threading.Event(), threading.Event()
-    original = app.state.ingestion.validate
+    original = app.state.queries.search
 
     def blocked(*args):
         entered.set()
         assert release.wait(timeout=5)
         return original(*args)
 
-    monkeypatch.setattr(app.state.ingestion, "validate", blocked)
+    monkeypatch.setattr(app.state.queries, "search", blocked)
     async with mcp_connect(url, token) as client:
         task = asyncio.create_task(
             client.call_tool(
-                "validate_study",
-                {
-                    "bundle": {
-                        "study": valid_bundle.study,
-                        "reference": valid_bundle.reference,
-                    }
-                },
+                "search_studies",
+                {"query": {"entity": "studies"}},
             )
         )
         try:
@@ -265,11 +201,21 @@ async def test_concurrent_calls_keep_principals_separate(
             for result in results
         ] == [[valid_bundle.study["sid"]], ["SECOND"]]
         assert (await first.call_tool("get_study", {"sid": "SECOND"})).is_error
+        for client, expected in (
+            (first, valid_bundle.study["sid"]),
+            (second_client, "SECOND"),
+        ):
+            data = await client.call_tool(
+                "query_data", {"query": {"entity": "studies"}}
+            )
+            assert [row["sid"] for row in data.structured_content["items"]] == [
+                expected
+            ]
 
 
 @pytest.mark.anyio
-async def test_cancelled_validation_releases_capacity_and_shuts_down(
-    mcp_http, mcp_connect, valid_bundle, monkeypatch, session_factory
+async def test_cancelled_query_shuts_down(
+    mcp_http, mcp_connect, monkeypatch, session_factory
 ):
     import asyncio
     import threading
@@ -281,7 +227,7 @@ async def test_cancelled_validation_releases_capacity_and_shuts_down(
 
     app, url, token = mcp_http
     entered, release, finished = threading.Event(), threading.Event(), threading.Event()
-    original = app.state.ingestion.validate
+    original = app.state.queries.search
 
     def blocked(*args):
         entered.set()
@@ -291,17 +237,12 @@ async def test_cancelled_validation_releases_capacity_and_shuts_down(
         finally:
             finished.set()
 
-    monkeypatch.setattr(app.state.ingestion, "validate", blocked)
+    monkeypatch.setattr(app.state.queries, "search", blocked)
     async with mcp_connect(url, token) as client:
         task = asyncio.create_task(
             client.call_tool(
-                "validate_study",
-                {
-                    "bundle": {
-                        "study": valid_bundle.study,
-                        "reference": valid_bundle.reference,
-                    }
-                },
+                "search_studies",
+                {"query": {"entity": "studies"}},
             )
         )
         try:
@@ -312,93 +253,6 @@ async def test_cancelled_validation_releases_capacity_and_shuts_down(
         finally:
             release.set()
         assert await anyio.to_thread.run_sync(finished.wait, 2)
-        assert len((await client.list_tools()).tools) == 4
+        assert len((await client.list_tools()).tools) == 3
     with session_factory() as session:
         assert session.scalar(select(func.count()).select_from(Study)) == 0
-
-
-@pytest.mark.anyio
-async def test_staged_file_integrity_is_checked(
-    mcp_http, mcp_connect, valid_bundle, session_factory
-):
-    from uuid import UUID
-
-    import httpx2
-
-    from pkdb_server.db.models.files import StoredFile
-
-    app, url, token = mcp_http
-    async with httpx2.AsyncClient(
-        base_url=url, headers={"Authorization": f"Bearer {token}"}
-    ) as client:
-        response = await client.post(
-            "/api/v2/files", files={"file": ("figure.png", b"original")}
-        )
-        handle = response.json()["id"]
-    with session_factory() as session:
-        row = session.get(StoredFile, UUID(handle))
-        app.state.file_store.path(row.storage_key).write_bytes(b"corrupt!")
-    async with mcp_connect(url, token) as client:
-        response = await client.call_tool(
-            "validate_study",
-            {
-                "bundle": {
-                    "study": valid_bundle.study,
-                    "reference": valid_bundle.reference,
-                    "handles": [handle],
-                }
-            },
-        )
-        assert response.structured_content["valid"] is False
-        assert response.structured_content["issues"][0]["code"] == "source_changed"
-
-
-@pytest.mark.anyio
-@pytest.mark.parametrize(
-    "case,code",
-    [("duplicate", "invalid_handles"), ("size", "file_limit"), ("expired", None)],
-)
-async def test_handle_limits_and_expiry(
-    mcp_http, mcp_connect, valid_bundle, session_factory, case, code
-):
-    from datetime import UTC, datetime, timedelta
-    from uuid import UUID
-
-    import httpx2
-
-    from pkdb_server.db.models.files import StoredFile
-
-    app, url, token = mcp_http
-    async with httpx2.AsyncClient(
-        base_url=url, headers={"Authorization": f"Bearer {token}"}
-    ) as rest:
-        response = await rest.post(
-            "/api/v2/files", files={"file": ("figure.png", b"bytes")}
-        )
-        handle = response.json()["id"]
-    handles = [handle]
-    if case == "duplicate":
-        handles *= 2
-    elif case == "size":
-        app.state.ingestion.settings.upload_max_bytes = 4
-    else:
-        with session_factory.begin() as session:
-            session.get(StoredFile, UUID(handle)).expires_at = datetime.now(
-                UTC
-            ) - timedelta(seconds=1)
-    async with mcp_connect(url, token) as client:
-        response = await client.call_tool(
-            "validate_study",
-            {
-                "bundle": {
-                    "study": valid_bundle.study,
-                    "reference": valid_bundle.reference,
-                    "handles": handles,
-                }
-            },
-        )
-        if code:
-            assert response.structured_content["valid"] is False
-            assert response.structured_content["issues"][0]["code"] == code
-        else:
-            assert response.is_error
