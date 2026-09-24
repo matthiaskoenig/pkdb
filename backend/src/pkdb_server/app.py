@@ -28,6 +28,7 @@ from pkdb_server.api import (
     accounts,
     admin_roles,
     admin_users,
+    curation,
     data,
     exports,
     invitations,
@@ -430,6 +431,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app.state.principal = principal
     app.include_router(data.router)
+    app.include_router(curation.router)
     app.include_router(accounts.email_router, prefix="/api/v1/me")
     app.include_router(media.router)
     if settings.legacy_api_enabled:

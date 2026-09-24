@@ -70,7 +70,31 @@ def main(argv=None, *, client=None) -> int:
     sync.add_argument(
         "--output", type=Path, help="Portable project vocabulary lock file"
     )
+    curation = commands.add_parser(
+        "curation", help="Open the local study curation interface"
+    )
+    curation.add_argument("path", nargs="?", type=Path)
+    curation.add_argument("--endpoint", default=os.environ.get("PKDB_ENDPOINT"))
+    curation.add_argument("--github-user")
+    curation.add_argument("--repository")
+    curation.add_argument("--offline", action="store_true")
+    curation.add_argument("--port", type=int, default=0)
+    curation.add_argument("--no-browser", action="store_true")
+    curation.add_argument("--state-dir", type=Path)
     args = parser.parse_args(argv)
+    if args.command == "curation":
+        from pkdb.curation.launch import run
+
+        try:
+            return run(
+                **{key: value for key, value in vars(args).items() if key != "command"}
+            )
+        except ValueError, OSError:
+            print(
+                "Unable to start curation. Check the workspace, state directory, and port.",
+                file=sys.stderr,
+            )
+            return 1
     if args.command == "upload" and args.offline:
         parser.error("upload requires network access; use validate --offline")
     token = os.environ.get("PKDB_API_KEY")
