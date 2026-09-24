@@ -107,14 +107,12 @@ def publish_frontend_fixture(session):
 
 def add_frontend_plot_context(session):
     """Relate both existing normalized points; one may be outside a selection."""
-    from sqlalchemy import select
+    from sqlalchemy import func, select
 
     from pkdb_server.db.models.measurements import (
         Measurement,
         Scatter,
         Subset,
-        SubsetDimension,
-        SubsetPoint,
     )
     from pkdb_server.db.models.studies import Study
 
@@ -145,23 +143,12 @@ def add_frontend_plot_context(session):
         )
         session.add(subset)
         session.flush()
-        for offset in range(0, len(points), width):
-            point = SubsetPoint(
-                study_id=study.id,
-                key=f"point-{kind}-{offset}",
-                subset_id=subset.id,
-                position=offset // width,
-            )
-            session.add(point)
-            session.flush()
-            for dimension, measurement in enumerate(points[offset : offset + width]):
-                session.add(
-                    SubsetDimension(
-                        study_id=study.id,
-                        subset_id=subset.id,
-                        position=offset + dimension,
-                        dimension="Y" if width == 1 else ["X", "Y"][dimension],
-                        point_id=point.id,
-                        measurement_id=measurement.id,
-                    )
+        subset.measurement_ids = [point.id for point in points]
+        subset.point_ids = list(
+            session.scalars(
+                select(func.nextval("dataset_row_id_seq")).select_from(
+                    func.generate_series(1, len(points) // width)
                 )
+            )
+        )
+        session.flush()

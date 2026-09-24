@@ -257,6 +257,22 @@ def test_frost2014_postgresql_outputs_match_legacy(
         ).read_text()
     )
 
+    def complete_expected_group_errors(row):
+        # Processing v6 now completes group characteristics just like outputs.
+        # Keep every legacy reported value; independently check added SE/CV.
+        row = dict(row)
+        if row.get("sd") is not None:
+            if row.get("se") is None and row.get("count", 0) > 0:
+                row["se"] = row["sd"] / math.sqrt(row["count"])
+            if row.get("cv") is None and row.get("mean"):
+                row["cv"] = row["sd"] / row["mean"]
+        return row
+
+    for group in [*subjects["groups"], *subjects["individuals"]]:
+        group["characteristica"] = [
+            complete_expected_group_errors(row) for row in group["characteristica"]
+        ]
+
     def stable(value):
         if isinstance(value, list):
             return sorted(
@@ -267,6 +283,7 @@ def test_frost2014_postgresql_outputs_match_legacy(
         return value
 
     for entity in ("groups", "individuals"):
+        subjects[entity] = stable(subjects[entity])
         page = QueryService(session_factory).search(
             QuerySpec.model_validate({"entity": entity, "page_size": 1000}), Principal()
         )
@@ -313,6 +330,23 @@ def test_frost2014_postgresql_outputs_match_legacy(
 
     def without_ids(value):
         if isinstance(value, dict):
+            # Public profiles gained additive fields after this scientific golden snapshot.
+            if "username" in value:
+                value = {
+                    key: item
+                    for key, item in value.items()
+                    if key
+                    not in {
+                        "display_name",
+                        "affiliation",
+                        "title",
+                        "github",
+                        "github_provenance",
+                        "orcid",
+                        "orcid_provenance",
+                        "avatar_url",
+                    }
+                }
             return {
                 key: without_ids(item) for key, item in value.items() if key != "pk"
             }
@@ -459,6 +493,8 @@ def test_frost2014_postgresql_outputs_match_legacy(
         return sorted(result, key=lambda row: json.dumps(row, sort_keys=True))
 
     for entity, expected in analysis_golden["rows"].items():
+        if entity in {"groups", "individuals"}:
+            expected = [complete_expected_group_errors(row) for row in expected]
         actual = AnalysisService(session_factory).search(
             entity,
             QuerySpec.model_validate({"entity": ENTITIES[entity], "page_size": 1000}),
@@ -479,8 +515,6 @@ def test_frost2014_postgresql_outputs_match_legacy(
         Measurement,
         Scatter,
         Subset,
-        SubsetDimension,
-        SubsetPoint,
     )
     from pkdb_server.db.scatter_export import rows as scatter_rows
 
@@ -521,26 +555,8 @@ def test_frost2014_postgresql_outputs_match_legacy(
         )
         session.add(subset)
         session.flush()
-        for offset in (0, 2):
-            point = SubsetPoint(
-                study_id=study_id,
-                key=f"export-point-{offset}",
-                subset_id=subset.id,
-                position=offset // 2,
-            )
-            session.add(point)
-            session.flush()
-            for axis in (0, 1):
-                session.add(
-                    SubsetDimension(
-                        study_id=study_id,
-                        subset_id=subset.id,
-                        point_id=point.id,
-                        position=offset + axis,
-                        dimension=str(axis),
-                        measurement_id=measurements[offset + axis].id,
-                    )
-                )
+        subset.measurement_ids = [measurement.id for measurement in measurements]
+        subset.point_ids = [1, 2]
         session.flush()
         actual = json.loads(
             json.dumps(list(scatter_rows(session, FilterSpec(), Principal()))[0])

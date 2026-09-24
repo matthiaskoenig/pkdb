@@ -4,17 +4,32 @@ import json
 from collections import defaultdict
 
 from sqlalchemy import select
+from sqlalchemy.orm import defer
 
 from pkdb.schemas.responses import OutputResponse
 from pkdb_server.db.models.interventions import Intervention
 from pkdb_server.db.models.measurements import MeasurementIntervention
 from pkdb_server.db.models.studies import Study
-from pkdb_server.db.models.subjects import Group, Individual
+from pkdb_server.db.models.subjects import Group, Subject
 from pkdb_server.db.models.vocabulary import (
     VocabularyEdge,
     VocabularyNode,
     VocabularyTerm,
 )
+
+
+def observation_projection(model):
+    """Omit source snapshots and compatibility lookups from public response reads."""
+    return [
+        defer(getattr(model, name), raiseload=True)
+        for name in (
+            "context_source",
+            "value_source",
+            "value_source_present",
+            "context_key",
+            "subject_kind",
+        )
+    ]
 
 
 class VocabularyResponses:
@@ -100,23 +115,20 @@ def output_responses(session, rows):
             select(Study).where(Study.id.in_({r.study_id for r in rows}))
         )
     }
+    subjects = list(
+        session.scalars(
+            select(Subject).where(Subject.id.in_({row.subject_id for row in rows}))
+        )
+    )
     groups = {
         row.id: {"pk": row.id, "name": row.name, "count": row.count}
-        for row in session.scalars(
-            select(Group).where(
-                Group.id.in_({r.group_id for r in rows if r.group_id is not None})
-            )
-        )
+        for row in subjects
+        if row.kind == "group"
     }
     individuals = {
         row.id: {"pk": row.id, "name": row.name}
-        for row in session.scalars(
-            select(Individual).where(
-                Individual.id.in_(
-                    {r.individual_id for r in rows if r.individual_id is not None}
-                )
-            )
-        )
+        for row in subjects
+        if row.kind == "individual"
     }
     interventions = defaultdict(list)
     for association, intervention in session.execute(
@@ -138,8 +150,8 @@ def output_responses(session, rows):
             label=row.label,
             output_type="" if row.calculated else row.output_type,
             study=studies[row.study_id],
-            group=groups.get(row.group_id),
-            individual=individuals.get(row.individual_id),
+            group=groups.get(row.subject_id),
+            individual=individuals.get(row.subject_id),
             interventions=interventions[row.id],
             time=row.time,
             time_unit=row.time_unit,
@@ -175,11 +187,9 @@ def subject_responses(session, rows, individual=False):
     characteristics = list(
         session.scalars(
             select(Characteristic)
+            .options(*observation_projection(Characteristic))
             .where(
-                (
-                    Characteristic.group_id.in_(groups)
-                    | Characteristic.individual_id.in_(individual_ids)
-                ),
+                Characteristic.subject_id.in_([*groups, *individual_ids]),
                 Characteristic.origin == "normalized",
             )
             .order_by(Characteristic.id)
@@ -188,10 +198,10 @@ def subject_responses(session, rows, individual=False):
     vocabulary = VocabularyResponses(session, characteristics)
     by_group, by_individual = defaultdict(list), defaultdict(list)
     for row in characteristics:
-        if row.group_id is not None:
-            by_group[row.group_id].append(row)
+        if row.subject_id in groups:
+            by_group[row.subject_id].append(row)
         else:
-            by_individual[row.individual_id].append(row)
+            by_individual[row.subject_id].append(row)
     additive = {
         sid
         for sid, node in vocabulary.nodes.items()
@@ -249,8 +259,8 @@ def subject_responses(session, rows, individual=False):
             {
                 **vocabulary.science(record),
                 "count": record.count,
-                "group_count": groups[record.group_id].count
-                if record.group_id
+                "group_count": groups[record.subject_id].count
+                if record.subject_id in groups
                 else None,
             }
             for record in values
@@ -351,37 +361,40 @@ def reference_responses(session, rows):
     ]
 
 
-def subset_responses(session, rows):
+def subset_responses(session, rows, *, measurements=None):
     from pkdb.schemas.responses import ArrayOutput, SubsetResponse
-    from pkdb_server.db.models.measurements import Measurement, Scatter, SubsetDimension
+    from pkdb_server.db.models.measurements import Measurement, Scatter
 
     if not rows:
         return []
-    associations = list(
-        session.execute(
-            select(SubsetDimension, Measurement)
-            .join(Measurement, SubsetDimension.measurement_id == Measurement.id)
-            .where(SubsetDimension.subset_id.in_([row.id for row in rows]))
-            .order_by(SubsetDimension.position)
-        )
-    )
-    measurements = {record.id: record for _, record in associations}
+    if measurements is None:
+        ids = {identifier for row in rows for identifier in row.measurement_ids}
+        measurements = {
+            record.id: record
+            for record in session.scalars(
+                select(Measurement)
+                .options(*observation_projection(Measurement))
+                .where(Measurement.id.in_(ids))
+            )
+        }
     outputs = {
         row["pk"]: row for row in output_responses(session, list(measurements.values()))
     }
     arrays = defaultdict(list)
-    for dimension, record in associations:
-        output = {
-            key: value
-            for key, value in outputs[record.id].items()
-            if key in ArrayOutput.model_fields
-        }
-        output.update(
-            group=output["group"] or {},
-            individual=output["individual"] or {},
-            ex={"pk": record.source_id} if record.source_id is not None else {},
-        )
-        arrays[dimension.subset_id].append(output)
+    for subset in rows:
+        for identifier in subset.measurement_ids:
+            record = measurements[identifier]
+            output = {
+                key: value
+                for key, value in outputs[record.id].items()
+                if key in ArrayOutput.model_fields
+            }
+            output.update(
+                group=output["group"] or {},
+                individual=output["individual"] or {},
+                ex={"pk": record.source_id} if record.source_id is not None else {},
+            )
+            arrays[subset.id].append(output)
     datasets = {
         row.id: row
         for row in session.scalars(

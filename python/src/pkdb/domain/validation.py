@@ -19,9 +19,11 @@ from pkdb.domain.vocabulary import Vocabulary
 from pkdb.schemas.prepared import PreparedStudy
 from pkdb.schemas.study import (
     CanonicalStudy,
+    Group,
     Intervention,
     Measurement,
     ScientificRecord,
+    subject_observations,
 )
 from pkdb.schemas.validation import (
     StudyValidationError,
@@ -29,7 +31,7 @@ from pkdb.schemas.validation import (
     ValidationReport,
 )
 
-PROCESSING_VERSION = "5"
+PROCESSING_VERSION = "6"
 NUMERIC_FIELDS = ("value", "mean", "median", "min", "max", "sd", "se", "cv")
 
 
@@ -39,27 +41,18 @@ def prepare_study(
     if max_issues < 1:
         raise ValueError("max_issues must be positive")
     study = study.model_copy(deep=True)
-    group_counts = {group.name: group.count for group in study.groups}
-    for group in study.groups:
-        for record in group.characteristica:
-            if record.statistics.count is None:
-                record.statistics.count = group.count
-            if (
-                record.calculation_type is None
-                and "sample mean" in vocabulary.calculation_types
-            ):
-                record.calculation_type = "sample mean"
-    for individual in study.individuals:
-        for record in individual.characteristica:
-            if record.statistics.count is None:
-                record.statistics.count = 1
-    for record in study.measurements:
-        if record.group:
-            if (
-                record.calculation_type is None
-                and "sample mean" in vocabulary.calculation_types
-            ):
-                record.calculation_type = "sample mean"
+    observation_subjects = dict()
+    for subject, record in subject_observations(study):
+        observation_subjects[record.key] = subject
+        count = subject.count if isinstance(subject, Group) else 1
+        if record.statistics.count is None:
+            record.statistics.count = count
+        if (
+            isinstance(subject, Group)
+            and record.calculation_type is None
+            and "sample mean" in vocabulary.calculation_types
+        ):
+            record.calculation_type = "sample mean"
     report = ValidationReport()
 
     def issue(code, message, record=None, severity="error", **details):
@@ -265,6 +258,7 @@ def prepare_study(
         for subject in [*study.groups, *study.individuals]
         for c in subject.characteristica
     )
+    unique([record.key for record in records], "observation", records, "key")
     for record in records:
         rule = rules.get(record.measurement_type)
         if rule is None:
@@ -482,10 +476,11 @@ def prepare_study(
                 )
     if not report.valid:
         raise StudyValidationError(report)
-    for candidate in normalized.values():
-        if isinstance(candidate, Measurement) and candidate.group:
+    for key, candidate in normalized.items():
+        subject = observation_subjects.get(key)
+        if isinstance(subject, Group):
             candidate.statistics = complete_statistics(
-                candidate.statistics, group_counts.get(candidate.group)
+                candidate.statistics, subject.count
             )
     prepared = study.model_copy(deep=True)
     prepared.measurements.extend(

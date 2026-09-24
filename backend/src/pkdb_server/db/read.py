@@ -40,24 +40,64 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
 
     if root.creator_id is None:
         raise RuntimeError("Published study has no creator")
-    users = {user.id: user.username for user in session.scalars(select(User))}
-    vocab = {node.sid: node.name for node in session.scalars(select(VocabularyNode))}
+    members = list(
+        session.scalars(
+            select(s.StudyUser)
+            .where(s.StudyUser.study_id == root.id)
+            .order_by(s.StudyUser.user_id)
+        )
+    )
+    note_rows = list(
+        session.scalars(
+            select(s.Note).where(s.Note.study_id == root.id).order_by(s.Note.position)
+        )
+    )
+    user_ids = (
+        {root.creator_id}
+        | {row.user_id for row in members}
+        | {row.user_id for row in note_rows}
+    )
+    users = {
+        user.id: user.username
+        for user in session.scalars(select(User).where(User.id.in_(user_ids)))
+    }
     notes = defaultdict(lambda: {"descriptions": [], "comments": []})
-    for note in session.scalars(
-        select(s.Note).where(s.Note.study_id == root.id).order_by(s.Note.position)
-    ):
+    for note in note_rows:
         if note.kind == "description":
             notes[note.record_key]["descriptions"].append({"text": note.text})
         else:
             notes[note.record_key]["comments"].append(
                 {"text": note.text, "user": users.get(note.user_id)}
             )
-    groups = rows(g.Group)
-    individuals = rows(g.Individual)
+    subjects = rows(g.Subject)
+    groups = [row for row in subjects if row.kind == "group"]
+    individuals = [row for row in subjects if row.kind == "individual"]
     interventions = rows(i.Intervention)
-    measurements = rows(m.Measurement)
-    characteristics = rows(g.Characteristic)
-    courses = rows(m.Timecourse)
+    observations = rows(m.Observation)
+    measurements = [row for row in observations if row.kind == "output"]
+    characteristics = [row for row in observations if row.kind == "characteristic"]
+    dataset_rows = rows(m.Dataset)
+    courses = [row for row in dataset_rows if row.kind == "course"]
+    node_ids = {
+        getattr(row, field, None)
+        for row in [*observations, *interventions]
+        for field in (
+            "measurement_type",
+            "substance",
+            "calculation_type",
+            "tissue",
+            "method",
+            "route",
+            "form",
+            "application",
+        )
+    }
+    vocab = {
+        node.sid: node.name
+        for node in session.scalars(
+            select(VocabularyNode).where(VocabularyNode.sid.in_(node_ids))
+        )
+    }
     group_names = {row.id: row.name for row in groups}
     individual_names = {row.id: row.name for row in individuals}
     intervention_names = {row.id: row.name for row in interventions}
@@ -134,28 +174,19 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
         )
         outputs.append(record)
     by_key = {output["key"]: output for output in outputs}
-    course_points = defaultdict(list)
-    for row in session.scalars(
-        select(m.TimecoursePoint)
-        .where(m.TimecoursePoint.study_id == root.id)
-        .order_by(m.TimecoursePoint.position)
-    ):
-        course_points[row.timecourse_id].append(
-            by_key[measurement_keys[row.measurement_id]]
-        )
-    datasets = rows(m.Scatter)
-    subset_rows = rows(m.Subset)
-    dimensions = defaultdict(list)
-    for row in session.scalars(
-        select(m.SubsetDimension)
-        .where(m.SubsetDimension.study_id == root.id)
-        .order_by(m.SubsetDimension.position)
-    ):
-        dimensions[row.subset_id].append(measurement_keys[row.measurement_id])
+    course_points = {
+        course.id: [
+            by_key[measurement_keys[identifier]]
+            for identifier in course.measurement_ids
+        ]
+        for course in courses
+    }
+    datasets = [row for row in dataset_rows if row.kind == "dataset"]
+    subset_rows = [row for row in dataset_rows if row.kind == "series"]
     dataset_subsets = defaultdict(list)
     for row in sorted(subset_rows, key=lambda item: item.position):
         width = len(row.dimension_labels)
-        values = dimensions[row.id]
+        values = [measurement_keys[identifier] for identifier in row.measurement_ids]
         points = (
             [values[index : index + width] for index in range(0, len(values), width)]
             if width
@@ -170,13 +201,6 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                 points=points,
             )
         )
-    members = list(
-        session.scalars(
-            select(s.StudyUser)
-            .where(s.StudyUser.study_id == root.id)
-            .order_by(s.StudyUser.user_id)
-        )
-    )
     reference = session.get(s.Reference, root.reference_id)
     if reference is None:
         raise RuntimeError("Published study has no reference")

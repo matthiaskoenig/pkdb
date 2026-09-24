@@ -1,5 +1,6 @@
 """Typed scientific records, independent of transport and database models."""
 
+from collections.abc import Iterator
 from datetime import date as Date
 from typing import Annotated, Literal
 
@@ -75,7 +76,9 @@ class Statistics(Record):
     count: Annotated[int, Field(strict=True, ge=0)] | None = None
 
 
-class ScientificRecord(Notes):
+class Observation(Notes):
+    """Scientific values and provenance shared by characteristics and outputs."""
+
     key: RecordKey
     measurement_type: Identifier
     calculation_type: str | None = None
@@ -89,23 +92,27 @@ class ScientificRecord(Notes):
     calculated: bool = False
 
 
-class Group(Notes):
+# Source and API compatibility name; all scientific records share Observation.
+ScientificRecord = Observation
+
+
+class Subject(Notes):
+    """Identity fields shared by groups and individually identified participants."""
+
     image: str | None = None
     key: RecordKey
     name: Identifier
+    characteristica: list[Observation] = Field(default_factory=list)
+    source: SourceLocation | None = None
+
+
+class Group(Subject):
     count: Annotated[int, Field(strict=True, ge=0)]
     parent: str | None = None
-    characteristica: list[ScientificRecord] = Field(default_factory=list)
-    source: SourceLocation | None = None
 
 
-class Individual(Notes):
-    image: str | None = None
-    key: RecordKey
-    name: Identifier
+class Individual(Subject):
     group: str | None = None
-    characteristica: list[ScientificRecord] = Field(default_factory=list)
-    source: SourceLocation | None = None
 
 
 class Intervention(ScientificRecord):
@@ -180,3 +187,22 @@ class CanonicalStudy(Notes):
     attachments: list[Attachment] = Field(default_factory=list)
     section_notes: dict[str, Notes] = Field(default_factory=dict)
     source_digest: str
+
+
+def subject_observations(
+    study: CanonicalStudy,
+) -> Iterator[tuple[Subject, Observation]]:
+    """Yield subject/observation pairs for characteristics and measured outputs."""
+    groups = {subject.name: subject for subject in study.groups}
+    individuals = {subject.name: subject for subject in study.individuals}
+    for subject in [*study.groups, *study.individuals]:
+        for observation in subject.characteristica:
+            yield subject, observation
+    for observation in study.measurements:
+        subject = (
+            groups.get(observation.group)
+            if observation.group
+            else individuals.get(observation.individual)
+        )
+        if subject is not None:
+            yield subject, observation

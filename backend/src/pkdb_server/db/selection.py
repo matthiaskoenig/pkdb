@@ -1,15 +1,14 @@
 """Relational legacy filter selections, evaluated with current visibility."""
 
-from sqlalchemy import or_, select
+from sqlalchemy import func, or_, select
 
 from pkdb.schemas.queries import QuerySpec
+from pkdb_server.db.dataset_arrays import dataset_type
 from pkdb_server.db.models.interventions import Intervention
 from pkdb_server.db.models.measurements import (
     Measurement,
     MeasurementIntervention,
-    Scatter,
     Subset,
-    SubsetDimension,
 )
 from pkdb_server.db.models.studies import Study
 from pkdb_server.db.models.subjects import Group, Individual
@@ -31,8 +30,6 @@ def selection(spec, principal):
         stmt = select(model.id)
         if model is not Study:
             stmt = stmt.join(Study, Study.id == model.study_id)
-        if entity == "subsets":
-            stmt = stmt.join(Scatter, Scatter.id == Subset.scatter_id)
         stmt = stmt.where(
             visibility(principal),
             conditions(spec.queries.get(entity, QuerySpec(entity=entity))),
@@ -86,8 +83,8 @@ def selection(spec, principal):
         subsets = matches("subsets")
         output_constraints.append(
             Measurement.id.in_(
-                select(SubsetDimension.measurement_id).where(
-                    SubsetDimension.subset_id.in_(subsets)
+                select(func.unnest(Subset.measurement_ids)).where(
+                    Subset.id.in_(subsets)
                 )
             )
         )
@@ -96,9 +93,12 @@ def selection(spec, principal):
         )
     if not spec.concise:
         studies = studies.where(*study_constraints)
-    outputs = select(Measurement).where(
-        Measurement.study_id.in_(studies), Measurement.origin == "normalized"
-    )
+    outputs = select(
+        Measurement.id.label("id"),
+        Measurement.study_id.label("study_id"),
+        Measurement.group_id.label("group_id"),
+        Measurement.individual_id.label("individual_id"),
+    ).where(Measurement.study_id.in_(studies), Measurement.origin == "normalized")
     if spec.concise:
         outputs = outputs.where(*output_constraints)
     outputs = outputs.cte()
@@ -117,11 +117,12 @@ def selection(spec, principal):
             .distinct(),
         )
         subsets = select(Subset.id).where(
-            Subset.id.in_(
-                select(SubsetDimension.subset_id).where(
-                    SubsetDimension.measurement_id.in_(result["outputs"])
-                )
+            select(Measurement.id)
+            .where(
+                Measurement.id == Subset.measurement_ids.any_(),
+                Measurement.id.in_(result["outputs"]),
             )
+            .exists()
         )
     else:
         result["studies"] = studies
@@ -137,9 +138,7 @@ def selection(spec, principal):
         subsets = select(Subset.id).where(Subset.study_id.in_(studies))
     result["subsets"] = subsets
     for entity, kind in (("timecourses", "timecourse"), ("scatters", "scatter")):
-        result[entity] = subsets.join(Scatter, Scatter.id == Subset.scatter_id).where(
-            Scatter.data_type == kind
-        )
+        result[entity] = subsets.where(dataset_type() == kind)
     return result
 
 

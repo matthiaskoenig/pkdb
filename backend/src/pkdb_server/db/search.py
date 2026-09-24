@@ -1,14 +1,14 @@
 """Parameterized related-record text membership for public read queries."""
 
 from sqlalchemy import exists, or_, select
+from sqlalchemy.orm import aliased
 
+from pkdb_server.db.dataset_arrays import dataset_type
 from pkdb_server.db.models.interventions import Intervention
 from pkdb_server.db.models.measurements import (
     Measurement,
     MeasurementIntervention,
-    Scatter,
     Subset,
-    SubsetDimension,
 )
 from pkdb_server.db.models.studies import Reference, Study, StudyUser
 from pkdb_server.db.models.subjects import Group, Individual
@@ -159,23 +159,22 @@ def search_condition(entity, term):
         model = Group if entity == "groups" else Individual
         parts.append(text_match([model.name], term))
         if model is Individual:
+            parent = aliased(Group)
             parts.append(
                 exists(
-                    select(Group.id).where(
-                        Group.id == Individual.group_id,
-                        text_match([Group.name], term),
+                    select(parent.id).where(
+                        parent.id == Individual.group_id,
+                        text_match([parent.name], term),
                     )
                 )
             )
     elif entity == "subsets":
         parts.extend(
             [
-                text_match([Subset.name, Scatter.data_type], term),
+                text_match([Subset.name, dataset_type()], term),
                 exists(
-                    select(SubsetDimension.subset_id)
-                    .join(Measurement, Measurement.id == SubsetDimension.measurement_id)
-                    .where(
-                        SubsetDimension.subset_id == Subset.id,
+                    select(Measurement.id).where(
+                        Measurement.id == Subset.measurement_ids.any_(),
                         science_match(Measurement, term),
                     )
                 ),

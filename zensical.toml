@@ -28,6 +28,7 @@ nav = [
   { "Terms of use" = "terms-of-use.md" },
   { "Development" = [
     { "Overview and source installation" = "development.md" },
+    { "Internal data model" = "data-model.md" },
     { "Local setup and development server" = "installation.md" },
     { "Local upload testing" = "local-upload-testing.md" },
     { "Account administration" = "administration.md" },

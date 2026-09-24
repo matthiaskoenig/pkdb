@@ -66,7 +66,7 @@ from pkdb_server.services.queries import QueryService
 from pkdb_server.services.quotas import QuotaService
 
 log = logging.getLogger(__name__)
-SCHEMA_REVISION = "p788simpleauth01"
+SCHEMA_REVISION = "p001initial"
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:

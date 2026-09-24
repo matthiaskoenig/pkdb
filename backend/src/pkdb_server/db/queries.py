@@ -7,8 +7,9 @@ from sqlalchemy import String, and_, case, exists, func, or_, select, true
 
 from pkdb.schemas.queries import Predicate, QuerySpec
 from pkdb.schemas.security import Principal
+from pkdb_server.db.dataset_arrays import dataset_type
 from pkdb_server.db.models.interventions import Intervention
-from pkdb_server.db.models.measurements import Measurement, Scatter, Subset
+from pkdb_server.db.models.measurements import Measurement, Subset
 from pkdb_server.db.models.studies import Reference, Study, StudyGrant, StudyUser
 from pkdb_server.db.models.subjects import Group, Individual
 from pkdb_server.db.models.users import User
@@ -187,7 +188,7 @@ def fields_for(entity):
             **fields,
             "id": Subset.id,
             "name": Subset.name,
-            "data_type": Scatter.data_type,
+            "data_type": dataset_type(),
         }
     model = Group if entity == "groups" else Individual
     return {**fields, "id": model.id, "name": model.name}

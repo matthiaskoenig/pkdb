@@ -1,5 +1,7 @@
 # Unreleased
 
+- Unify groups and individuals as subjects and characteristics and outputs as observations. Share reported/normalized context and intervention links, and replace timecourse/scatter point tables with ordered dataset arrays. Consolidate migration history into `p001initial` for an empty database and fresh study uploads; historical database upgrades are no longer supported. Use a processing-version-6 client. Characteristics and outputs now share count defaults and statistical completion.
+
 - Add `pkdb curation`, a local browser interface with GitHub assignment selection, default-application file opening, validation or upload on save, detailed diagnostics, and explicit recovery for uncertain uploads. Include an authenticated read-only curation-context endpoint and documentation with screenshots.
 
 - Remove authenticated-user request and concurrency throttling, allow normal anonymous browsing bursts, expose Docker anonymous quota settings, and show retry delays for frontend quota errors.
@@ -30,4 +32,4 @@
 - Allow authorized API-key uploads to create public or private studies and change visibility on replacement. Restrict private-study access to explicitly assigned curators and administrators; creator attribution, collaborator assignments, and reviewer status alone no longer grant access.
 - Show server validation details in Python client and CLI HTTP 422 errors.
 - Update upload and access documentation, and exclude internal specifications, plans, and migration records from documentation search.
-- Simplify browser login to username and password. Remove GitHub/ORCID authentication and administrator MFA, retaining editable optional GitHub/ORCID profile fields. Add `pkdb create-user` for active local accounts without SMTP or email setup. Apply the authentication cleanup migration when upgrading; provider-only accounts need a password reset.
+- Simplify browser login to username and password. Remove GitHub/ORCID authentication and administrator MFA, retaining editable optional GitHub/ORCID profile fields. Add `pkdb create-user` for active local accounts without SMTP or email setup. Fresh installations include the simplified authentication schema.

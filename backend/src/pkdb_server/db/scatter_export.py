@@ -5,7 +5,7 @@ from collections import defaultdict
 from sqlalchemy import select
 
 from pkdb_server.db.analysis import science
-from pkdb_server.db.models.measurements import Measurement, Subset, SubsetDimension
+from pkdb_server.db.models.measurements import Measurement, Subset
 from pkdb_server.db.models.studies import Study
 from pkdb_server.db.selection import selection
 from pkdb_server.db.serialize import subset_responses
@@ -42,20 +42,33 @@ def rows(session, spec, principal):
                 )
             )
         }
-        points = {
-            (dimension.subset_id, dimension.measurement_id): (
-                dimension.point_id,
-                measurement.calculated,
-                measurement.output_type,
-            )
-            for dimension, measurement in session.execute(
-                select(SubsetDimension, Measurement)
-                .join(Measurement, Measurement.id == SubsetDimension.measurement_id)
-                .where(SubsetDimension.subset_id.in_([subset.id for subset in subsets]))
+        measurements = {
+            record.id: record
+            for record in session.scalars(
+                select(Measurement).where(
+                    Measurement.id.in_(
+                        {
+                            identifier
+                            for subset in subsets
+                            for identifier in subset.measurement_ids
+                        }
+                    )
+                )
             )
         }
+        points = {
+            (subset.id, identifier): (
+                subset.point_ids[position // len(subset.dimension_labels)],
+                measurements[identifier].calculated,
+                measurements[identifier].output_type,
+            )
+            for subset in subsets
+            for position, identifier in enumerate(subset.measurement_ids)
+        }
         for subset, public in zip(
-            subsets, subset_responses(session, subsets), strict=True
+            subsets,
+            subset_responses(session, subsets, measurements=measurements),
+            strict=True,
         ):
             study = studies[subset.study_id]
             record = {
