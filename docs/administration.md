@@ -74,6 +74,12 @@ Changes to existing roles or explicit grants require `--update-existing`; add it
 Dry runs create no accounts or asset files. Applying preserves existing IDs, credentials, suspension and user edits. New imported identities remain disabled. Matching import digests become no-ops, so rerunning the same manifest does not undo a later demotion or cleared photo. Invitations are a separate authenticated administrator action in **User administration → Invite**, or through `POST /api/v1/admin/users/{id}/invitations` with a reviewed `email_id`. The dialog shows the reviewed primary contact and requires an explicit send; failures allow a retry. Unclaimed accounts cannot be activated instead of completing verification. Acceptance claims that identity without changing its assigned role. Imported GitHub/ORCID references are public metadata, not sign-in credentials.
 
 
+### Refresh imported title and affiliation
+
+The bundled `mkoenig` profile includes the title `Prof. Dr.` and the Humboldt-Universität zu Berlin / University Hospital Schleswig-Holstein affiliations. These values enter the account database through `import-users`; deploying a new frontend or restarting the server does not import profile metadata. After updating the roster, preview and apply the import again as above, then reload Account settings. The changed roster has a new import digest, so it can fill previously missing fields. The administrator must already be designated before importing their profile.
+
+Imports fill only empty fields that the account owner has not edited. If a title or affiliation was previously saved or intentionally cleared in Account settings, update it there; `--update-existing` does not override profile edits.
+
 ## Maintenance
 
 Run `pkdb-server cleanup` regularly to remove unreferenced avatar files after their grace period, expired credentials and leases, and old audit events. Back up the database and managed files together; see [Deployment](deployment.md).

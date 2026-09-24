@@ -297,3 +297,63 @@ def test_import_reports_case_collision_without_guessing_identity(
     ]
     with session_factory() as session:
         assert list(session.scalars(select(User.username))) == ["Existing"]
+
+
+def test_bundled_admin_profile_reaches_account_api(session_factory, tmp_path):
+    from fastapi.testclient import TestClient
+
+    from pkdb_server.app import create_app
+    from pkdb_server.config import Settings
+
+    root = Path(__file__).resolve().parents[3]
+    create_admin(
+        session_factory, "mkoenig", "admin@example.org", "Long-strong-password!"
+    )
+    # Reproduce an account already imported from the previous release roster.
+    old_manifest = json.loads(
+        (root / "backend/bootstrap/curator-roster.json").read_text()
+    )
+    for row in old_manifest["users"]:
+        if row["username"] == "mkoenig":
+            row.pop("title", None)
+            row.pop("affiliation", None)
+    old_path = write_roster(tmp_path, old_manifest)
+    old_report = import_roster(
+        old_path,
+        session_factory,
+        apply=True,
+        file_root=tmp_path / "files",
+        avatar_root=root / "frontend/public",
+    )
+    assert old_report["ok"] and old_report["applied"]
+    report = import_roster(
+        root / "backend/bootstrap/curator-roster.json",
+        session_factory,
+        apply=True,
+        file_root=tmp_path / "files",
+        avatar_root=root / "frontend/public",
+    )
+    assert report["ok"], report["conflicts"]
+    settings = Settings(
+        database_url=session_factory.kw["bind"].url.render_as_string(
+            hide_password=False
+        ),
+        file_root=tmp_path / "files",
+        rate_limits_enabled=False,
+    )
+    with TestClient(create_app(settings)) as client:
+        csrf = client.get("/api/v1/auth/csrf").json()["csrf_token"]
+        response = client.post(
+            "/api/v1/auth/login",
+            json={"username": "mkoenig", "password": "Long-strong-password!"},
+            headers={"Origin": settings.browser_origin, "X-CSRF-Token": csrf},
+        )
+        assert response.status_code == 200
+        response = client.get("/api/v1/me")
+        assert response.status_code == 200
+        profile = response.json()
+        assert profile["title"] == "Prof. Dr."
+        assert profile["affiliation"] == (
+            "Humboldt-Universität zu Berlin, Institute for Biology, ITB; "
+            "University Hospital Schleswig-Holstein, Campus Lübeck, First Department of Medicine"
+        )
