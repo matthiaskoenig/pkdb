@@ -10,10 +10,18 @@ class ClientError(RuntimeError):
         *,
         status_code: int | None = None,
         report: ValidationReport | None = None,
+        request_id: str | None = None,
+        stage: str | None = None,
+        persistence: str = "not_attempted",
+        envelope: dict | None = None,
     ):
         super().__init__(message)
         self.status_code = status_code
         self.report = report
+        self.request_id = request_id
+        self.stage = stage
+        self.persistence = persistence
+        self.envelope = envelope
 
 
 class CompatibilityError(ClientError):

@@ -58,7 +58,32 @@ def normalize_record[T: ScientificRecord](
     try:
         factor, target = conversion(record.unit, rule.units, molar_mass)
     except UnitDimensionError as error:
-        fail("unit_dimension", f"{error} in {rule.name}", record.source)
+        fail(
+            "unit_dimension",
+            f"{error} in {rule.name}",
+            record.source.for_field("unit") if record.source else None,
+            category="scientific",
+            stage="validate",
+            field="unit",
+            actual=record.unit,
+            expected={
+                "supported_units": list(rule.units),
+                "dimensions": sorted(
+                    {str(ureg(unit).dimensionality) for unit in rule.units}
+                ),
+            },
+            context={
+                "measurement_type": rule.name,
+                "unit": record.unit,
+                "dimensions": str(ureg(record.unit).dimensionality),
+            },
+            suggestions=[
+                {
+                    "kind": "inspect_unit",
+                    "message": "Check the source unit and measurement type against the publication and the supported units. Do not relabel a value without converting it.",
+                }
+            ],
+        )
     except (pint.PintError, ValueError, TypeError) as error:
         fail("invalid_unit", str(error), record.source)
     for field in SCALED_FIELDS:

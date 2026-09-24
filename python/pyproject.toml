@@ -32,6 +32,7 @@ dependencies = [
   "openpyxl>=3.1.5,<4",
   "pkpdutils>=1.2.0,<2",
   "httpx2>=2.13.0,<3",
+  "rich>=15,<16",
 ]
 
 [project.urls]

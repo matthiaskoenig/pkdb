@@ -58,7 +58,7 @@ pkdb prepare /path/to/pkdb_data/studies/ExampleStudy --output prepared.json
 pkdb validate /path/to/pkdb_data/studies/ExampleStudy --offline
 ```
 
-Both commands run on your machine, using a bundled vocabulary snapshot by default, and leave source files unchanged. Store generated reports outside the study directory so they do not become source attachments. Errors identify the source file, sheet, row, and column where available. The command returns a nonzero exit code on failure and produces JSON suitable for scripts and continuous integration.
+Both commands run on your machine, using a bundled vocabulary snapshot by default, and leave source files unchanged. Store generated reports outside the study directory so they do not become source attachments. Errors identify the source file, sheet, row, and column where available. The command returns a nonzero exit code on failure. Interactive terminals show readable progress and diagnostics; redirected output defaults to JSON Lines for scripts and continuous integration.
 
 For curation, your account needs upload permission and a key with `studies:write`. To upload, set `PKDB_API_KEY` in your environment using an API key from your profile. `PKDB_ENDPOINT` supplies the default API endpoint; `--endpoint` overrides it.
 
@@ -69,7 +69,25 @@ pkdb upload /path/to/pkdb_data/studies/ExampleStudy
 
 Upload automatically prepares and validates the folder, checks compatibility with the processing engine used by the service and vocabulary, then sends the original source bundle. Uploading an existing SID replaces that study, subject to your study permissions. The service validates the bundle again and checks authorization. An offline validation result does not grant upload permission. A valid key with `studies:write` can upload either a public or a private study. The study's `access` field determines visibility: public data is visible to everyone; private data is visible only to its assigned curators and the administrator. An authorized uploader can also change visibility when replacing a study. The uploader receives a curator assignment on creation; source contributor attribution alone does not grant access. Writes are not retried automatically.
 
-The public commands also accept a parent directory containing multiple study folders, emitting one JSON record per study and returning a nonzero exit code if any study fails. `--output` requires a single study folder.
+The public commands also accept a parent directory containing multiple study folders. In JSON mode they emit one record per attempted study. `--output` requires a single study folder.
+
+## Progress and upload reports
+
+```bash
+pkdb upload /path/to/pkdb_data/studies/apixaban --report upload-report.json
+pkdb validate /path/to/pkdb_data/studies/apixaban --format human --verbose
+pkdb upload /path/to/pkdb_data/studies/apixaban --format json > upload-results.jsonl
+```
+
+The terminal shows source reading, parsing, validation, server compatibility checks, bytes transferred, and waiting for server validation/save. Transferring all bytes does not mean a study has been saved: success appears only after the server confirms creation or replacement. A synchronous server response cannot expose a reliable processing percentage, so this stage shows elapsed time. `--format human` also works without a terminal using stable text lines; `--format json` emits machine-readable JSON without animation. `NO_COLOR` disables color.
+
+Errors show the source file, worksheet, physical row/cell where known, offending value, expected rule, and correction guidance. Repeated errors are grouped for readability. By default the terminal shows five issue groups; `--verbose` shows all returned groups. Candidate vocabulary terms are suggestions to review against the publication, not automatic scientific corrections. A report marked incomplete or truncated does not enumerate every possible issue: fix the reported problems and validate again.
+
+`--report` writes a batch JSON report after each study, including confirmed outcomes, all returned diagnostics, request IDs, rule versions, and summary counts. Choose a path outside the input study folders. An existing report requires `--overwrite-report`; `--output` and `--report` must use different paths. Reports may contain source values, so handle them as study data.
+
+Study-specific validation failures normally allow the batch to continue. `--fail-fast` stops at the first failure. Shared authentication/permission or compatibility failures stop the batch. A lost upload response is marked **unknown** and also stops the batch: inspect the server before retrying, because it may have committed the study. Ctrl-C preserves completed outcomes in the batch report and marks an interrupted in-flight write as unknown.
+
+Exit codes are 0 for all studies successful, 1 for a failure or unknown outcome (including report-writing failure), 2 for invalid command syntax, and 130 for interruption. Warnings alone do not fail the command. The summary distinguishes created, replaced, validated, failed, unknown, and unattempted studies.
 
 ## Pin a vocabulary snapshot
 
@@ -112,7 +130,7 @@ Use the client version compatible with the API deployment. If compatibility chec
 
 ## Inspect a rejected upload
 
-An HTTP 422 response means the API rejected the study bundle. The CLI prints the validation code and message, plus the full `report` with source locations when available. In Python, catch `pkdb.errors.ClientError` and inspect its `report` attribute.
+An HTTP 422 response means the API rejected the study bundle. The CLI presents the validation code, message, and source diagnostics; JSON output and `--report` retain the returned structured details. In Python, catch `pkdb.errors.ClientError` and inspect its `report`, `request_id`, `stage`, and `persistence` attributes. When supported by the server, `envelope` retains the full versioned API response.
 
 - `unknown_user`: an attribution identity in the study is absent from the destination. Ask its administrator to provision the identity; changing attribution is not a substitute for preserving the original contributors.
 

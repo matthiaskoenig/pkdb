@@ -80,14 +80,14 @@ export PKDB_ENDPOINT=http://localhost:18083
 
 pkdb vocabulary sync
 pkdb validate "$PKDB_STUDY_DIR" --offline
-pkdb upload "$PKDB_STUDY_DIR"
+pkdb upload "$PKDB_STUDY_DIR" --report local-upload-report.json
 ```
 
 If `pkdb` is already installed with uv from another checkout or release, reinstall it with `uv tool install --reinstall --python 3.14 ./python`. If your shell cannot find `pkdb`, run `uv tool update-shell` and open a new shell, then restore the study path, endpoint, and API-key variables above.
 
 `pkdb vocabulary sync` caches the local server's vocabulary. Validation uses that snapshot without uploading; upload also validates automatically before sending the source bundle. These commands run on your host, so use `http://localhost:18083`, not the Docker-internal address `http://backend:8000`. The public package reads `PKDB_API_KEY` for authentication.
 
-Each command prints a JSON result and exits nonzero if any study fails. Validation does not persist the study. A first upload returns status 201; uploading the same study again returns status 200 and replaces that study atomically.
+Interactive commands show readable progress and source diagnostics; redirected output uses JSON Lines. The batch report retains returned details and outcomes. Keep the report outside your study directory; choose a new report filename or use `--overwrite-report` on subsequent runs. Commands exit nonzero if any study fails. See [progress and upload reports](python-client.md#progress-and-upload-reports) for output modes and interrupted uploads. Validation does not persist the study. A first upload returns status 201; uploading the same study again returns status 200 and replaces that study atomically.
 
 Open **Explore data** at <http://localhost:8080> to see your study. To inspect the stored study, use the API interface's study endpoints with the token, or make an authenticated request from your shell:
 

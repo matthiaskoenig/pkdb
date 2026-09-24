@@ -84,7 +84,22 @@ def bind_columns(template, row: dict, source: SourceLocation | None = None):
         if len(parts) != 2 or parts[0] != "col" or not parts[1]:
             fail("invalid_expression", f"Invalid column expression: {template}", source)
         if parts[1] not in row:
-            fail("unknown_column", f"Unknown column: {parts[1]}", source)
+            fail(
+                "unknown_column",
+                f"Referenced column {parts[1]!r} is absent from the source table.",
+                source,
+                category="schema",
+                stage="parse",
+                field="column",
+                actual=parts[1],
+                expected={"available_columns": sorted(row)},
+                suggestions=[
+                    {
+                        "kind": "correct_column_reference",
+                        "message": "Compare the col== reference in study.json with the table headers. Correct the reference or restore the missing header; no cell exists for the absent column.",
+                    }
+                ],
+            )
         return clean(row[parts[1]])
     return clean(template)
 

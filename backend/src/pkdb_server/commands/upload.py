@@ -106,7 +106,7 @@ def send_folder(path, *, client, api_url, token, validate=False):
                 record["issues"] = body["issues"]
     except StudyValidationError as error:
         record["error"] = "Invalid source bundle"
-        record["issues"] = error.report.model_dump(mode="json")["issues"]
+        record["issues"] = error.report.legacy_dict()["issues"]
     except OSError, ValueError:
         record["error"] = "Unable to read a valid source bundle"
     except httpx2.RequestError:
