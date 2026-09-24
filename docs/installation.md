@@ -72,7 +72,7 @@ Configure SMTP in `.env` and recreate the backend with `docker compose --profile
 
 ## Load studies and test uploads
 
-The initial database contains vocabulary and any users you imported, but no studies. Follow [local upload testing](local-upload-testing.md) to prepare attribution accounts from a source study folder, create a personal API key, validate the study, and upload it. This uses the same running stack and does not require another backend installation.
+The initial database contains vocabulary and any users you imported, but no studies. Follow the [minimal local upload setup](local-upload-testing.md#minimal-local-setup) for the complete sequence: start Docker, create the administrator, import users, prepare attribution accounts, and validate and upload with the `pkdb` Python package. This uses the same running stack and does not require another backend installation.
 
 ## Daily development
 
