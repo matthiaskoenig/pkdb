@@ -2,6 +2,7 @@
 
 import re
 from collections import Counter
+from difflib import get_close_matches
 
 import pint
 
@@ -33,7 +34,7 @@ NUMERIC_FIELDS = ("value", "mean", "median", "min", "max", "sd", "se", "cv")
 
 
 def prepare_study(
-    study: CanonicalStudy, vocabulary: Vocabulary, *, max_issues: int = 100
+    study: CanonicalStudy, vocabulary: Vocabulary, *, max_issues: int = 1000
 ) -> PreparedStudy:
     if max_issues < 1:
         raise ValueError("max_issues must be positive")
@@ -61,9 +62,39 @@ def prepare_study(
                 record.calculation_type = "sample mean"
     report = ValidationReport()
 
-    def issue(code, message, record=None, severity="error"):
+    def issue(code, message, record=None, severity="error", **details):
+        reference_fields = {
+            "unknown_parent": "parent",
+            "unknown_group": "group",
+            "unknown_individual": "individual",
+            "unknown_intervention": "interventions",
+        }
+        if code in reference_fields:
+            field = reference_fields[code]
+            available = {
+                "parent": groups,
+                "group": groups,
+                "individual": individuals,
+                "interventions": interventions,
+            }[field]
+            details.setdefault("category", "reference")
+            details.setdefault("stage", "validate")
+            details.setdefault("field", field)
+            details.setdefault("actual", getattr(record, field, None))
+            details.setdefault("expected", {"defined_identifiers": sorted(available)})
+            details.setdefault(
+                "suggestions",
+                [
+                    {
+                        "kind": "check_reference",
+                        "message": "Correct the reference or add the missing definition within this study. Identifiers must match exactly.",
+                    }
+                ],
+            )
         if severity == "error":
             report.error_count += 1
+        else:
+            report.warning_count += 1
         if len(report.issues) >= max_issues:
             report.truncated = True
             return
@@ -72,21 +103,58 @@ def prepare_study(
                 code=code,
                 message=message,
                 severity=severity,
-                source=getattr(record, "source", None),
+                source=(
+                    record.source.for_field(details["field"])
+                    if record and record.source and details.get("field")
+                    else getattr(record, "source", None)
+                ),
+                **details,
             )
         )
 
-    def unique(values, kind):
+    def unique(values, kind, definitions=None, field="name"):
         for value, count in Counter(values).items():
             if count > 1:
-                issue("duplicate_identifier", f"Duplicate {kind}: {value}")
+                matches = [
+                    item
+                    for item in (definitions or [])
+                    if getattr(item, field, None) == value
+                ]
+                related = [
+                    {
+                        "label": "Conflicting definition",
+                        "source": item.source.for_field(field),
+                    }
+                    for item in matches[1:]
+                    if getattr(item, "source", None)
+                ]
+                issue(
+                    "duplicate_identifier",
+                    f"Duplicate {kind}: {value}",
+                    matches[0] if matches else None,
+                    category="reference",
+                    stage="validate",
+                    field=field,
+                    actual=value,
+                    expected={"unique": True},
+                    context={"entity_type": kind, "occurrences": count},
+                    related_sources=related,
+                    suggestions=[
+                        {
+                            "kind": "resolve_duplicate",
+                            "message": "Give each definition a unique identifier and update references to the intended definition.",
+                        }
+                    ],
+                )
 
-    unique([g.name for g in study.groups], "group")
-    unique([i.name for i in study.individuals], "individual")
-    unique([i.name for i in study.interventions], "intervention")
-    unique([m.key for m in study.measurements], "measurement")
-    unique([c.user for c in study.metadata.curators], "curator")
-    unique(study.metadata.collaborators, "collaborator")
+    unique([g.name for g in study.groups], "group", study.groups)
+    unique([i.name for i in study.individuals], "individual", study.individuals)
+    unique([i.name for i in study.interventions], "intervention", study.interventions)
+    unique(
+        [m.key for m in study.measurements], "measurement", study.measurements, "key"
+    )
+    unique([c.user for c in study.metadata.curators], "curator", field="user")
+    unique(study.metadata.collaborators, "collaborator", field="collaborators")
     groups = {g.name: g for g in study.groups}
     individuals = {i.name: i for i in study.individuals}
     interventions = {i.name: i for i in study.interventions}
@@ -184,7 +252,10 @@ def prepare_study(
         for name in measurement.interventions:
             if name not in interventions:
                 issue(
-                    "unknown_intervention", f"Unknown intervention: {name}", measurement
+                    "unknown_intervention",
+                    f"Unknown intervention: {name}",
+                    measurement,
+                    actual=name,
                 )
         if measurement.output_type == "timecourse" and not measurement.label:
             issue("missing_label", "Timecourse points require a label", measurement)
@@ -201,10 +272,42 @@ def prepare_study(
                 "unknown_measurement",
                 f"Unknown measurement: {record.measurement_type}",
                 record,
+                category="vocabulary",
+                stage="validate",
+                field="measurement_type",
+                actual=record.measurement_type,
+                expected={"vocabulary": "measurement_types"},
+                suggestions=[
+                    {
+                        "kind": "check_vocabulary",
+                        "message": "Check the term against the active vocabulary. Candidates are spelling suggestions, not equivalent scientific concepts.",
+                        "candidates": get_close_matches(
+                            record.measurement_type, sorted(rules), n=10, cutoff=0.6
+                        ),
+                    }
+                ],
             )
             continue
         if record.substance and record.substance not in substances:
-            issue("unknown_substance", f"Unknown substance: {record.substance}", record)
+            issue(
+                "unknown_substance",
+                f"Unknown substance: {record.substance}",
+                record,
+                category="vocabulary",
+                stage="validate",
+                field="substance",
+                actual=record.substance,
+                expected={"vocabulary": "substances"},
+                suggestions=[
+                    {
+                        "kind": "check_vocabulary",
+                        "message": "Check the substance against the active vocabulary. Candidates are spelling suggestions, not equivalent substances.",
+                        "candidates": get_close_matches(
+                            record.substance, sorted(substances), n=10, cutoff=0.6
+                        ),
+                    }
+                ],
+            )
         for field, allowed in [
             ("tissue", vocabulary.tissues),
             ("method", vocabulary.methods),
@@ -215,7 +318,25 @@ def prepare_study(
         ]:
             value = getattr(record, field, None)
             if value and value not in allowed:
-                issue("unknown_" + field, f"Unknown {field}: {value}", record)
+                issue(
+                    "unknown_" + field,
+                    f"Unknown {field}: {value}",
+                    record,
+                    category="vocabulary",
+                    stage="validate",
+                    field=field,
+                    actual=value,
+                    expected={"vocabulary": field},
+                    suggestions=[
+                        {
+                            "kind": "check_vocabulary",
+                            "message": "Verify the term against the active vocabulary. Candidates are suggestions only.",
+                            "candidates": get_close_matches(
+                                value, sorted(allowed), n=10, cutoff=0.6
+                            ),
+                        }
+                    ],
+                )
         if record.choice:
             if (
                 rule.dtype not in {"categorical", "boolean", "numeric_categorical"}
@@ -233,8 +354,20 @@ def prepare_study(
             if value is not None and value < 0 and not rule.can_negative:
                 issue(
                     "negative_value",
-                    f"{field} must be nonnegative for {rule.name}",
+                    f"{field} must be nonnegative for {rule.name}; received {value}.",
                     record,
+                    category="scientific",
+                    stage="validate",
+                    field=field,
+                    actual=value,
+                    expected={"minimum": 0},
+                    context={"measurement_type": rule.name, "unit": record.unit},
+                    suggestions=[
+                        {
+                            "kind": "inspect_source",
+                            "message": "Check the value and measurement type against the publication. If this is a change measurement, verify the appropriate change term. Do not replace the value automatically.",
+                        }
+                    ],
                 )
         if (
             record.statistics.min is not None
@@ -309,7 +442,15 @@ def prepare_study(
                         issue("recovery_range", "Recovery cannot exceed 200%", record)
         except StudyValidationError as error:
             for detail in error.report.issues:
-                issue(detail.code, detail.message, record)
+                issue(
+                    detail.code,
+                    detail.message,
+                    record,
+                    **detail.model_dump(
+                        exclude={"code", "message", "source", "severity"},
+                        exclude_unset=True,
+                    ),
+                )
     for intervention in study.interventions:
         if intervention.measurement_type in {"dosing", "medication"}:
             for field in ("substance", "route", "unit"):
@@ -402,6 +543,7 @@ def prepare_study(
                     issue(detail.code, detail.message, generated)
     if not report.valid:
         raise StudyValidationError(report)
+    report.finalize(max_issues)
     return PreparedStudy(
         study=prepared,
         report=report,

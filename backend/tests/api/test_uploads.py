@@ -218,3 +218,77 @@ def test_normalized_key_overflow_is_a_validation_error(
         **multipart(valid_bundle),
     )
     assert response.status_code == 422
+
+
+def test_negotiated_report_create_replace_and_reject(
+    client, creator_headers, valid_bundle
+):
+    headers = {**creator_headers, "X-PKDB-Report-Version": "2"}
+    url = "/api/v2/studies/" + valid_bundle.study["sid"]
+    assert client.get("/api/v2/capabilities").json()["upload_report_versions"] == [1, 2]
+    for status, persistence in ((201, "created"), (200, "replaced")):
+        response = client.put(url, headers=headers, **multipart(valid_bundle))
+        assert response.status_code == status
+        body = response.json()
+        assert body["report_version"] == 2
+        assert body["request_id"] == response.headers["X-Request-ID"]
+        assert body["persistence"] == persistence
+        assert body["result"]["sid"] == valid_bundle.study["sid"]
+    response = client.put(
+        "/api/v2/studies/WRONG", headers=headers, **multipart(valid_bundle)
+    )
+    assert response.status_code == 422
+    assert response.json()["persistence"] == "not_saved"
+    assert response.json()["report"]["issues"][0]["code"] == "sid_mismatch"
+
+
+def test_negotiated_compatibility_report(client, creator_headers, valid_bundle):
+    response = client.put(
+        "/api/v2/studies/" + valid_bundle.study["sid"],
+        headers={
+            **creator_headers,
+            "X-PKDB-Report-Version": "2",
+            "X-PKDB-Processing-Version": "old-version",
+        },
+        **multipart(valid_bundle),
+    )
+    assert response.status_code == 409
+    body = response.json()
+    assert body["stage"] == "compatibility"
+    assert body["versions"]["client_processing_version"] == "old-version"
+    assert body["versions"]["server_processing_version"]
+    assert body["report"]["issues"][0]["code"] == "processing_version_mismatch"
+
+
+def test_negotiated_authentication_report_and_cors(client, session_factory, tmp_path):
+    response = client.put(
+        "/api/v2/studies/TEST", headers={"X-PKDB-Report-Version": "2"}
+    )
+    assert response.status_code == 401
+    assert response.headers["WWW-Authenticate"] == "Bearer"
+    assert response.json()["report"]["issues"][0]["code"] == "authentication_required"
+    from starlette.testclient import TestClient
+
+    from pkdb_server.app import create_app
+    from pkdb_server.config import Settings
+
+    cors_client = TestClient(
+        create_app(
+            Settings(
+                cors_origins=["http://localhost:8080"],
+                database_url=session_factory.kw["bind"].url.render_as_string(
+                    hide_password=False
+                ),
+                file_root=tmp_path,
+            )
+        )
+    )
+    preflight = cors_client.options(
+        "/api/v2/studies/TEST",
+        headers={
+            "Origin": "http://localhost:8080",
+            "Access-Control-Request-Method": "PUT",
+            "Access-Control-Request-Headers": "X-PKDB-Report-Version",
+        },
+    )
+    assert preflight.status_code == 200

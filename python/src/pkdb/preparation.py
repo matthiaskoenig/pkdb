@@ -14,6 +14,7 @@ from pkdb.domain.validation import prepare_study
 from pkdb.domain.vocabulary import Vocabulary, vocabulary_hash
 from pkdb.errors import SourceChangedError
 from pkdb.importers.folder import load_folder, parse_bundle
+from pkdb.progress import ProgressCallback, emit
 from pkdb.schemas.prepared import PreparedStudy
 from pkdb.schemas.source import SourceBundle, SourceLocation
 from pkdb.schemas.study import CanonicalStudy
@@ -119,12 +120,17 @@ def prepare(
     vocabulary: Vocabulary | None = None,
     max_rows: int = 1_000_000,
     max_files: int = 256,
+    progress: ProgressCallback | None = None,
 ) -> PreparedBundle:
+    emit(progress, "read")
     path = Path(folder).resolve(strict=True)
     vocabulary = vocabulary if vocabulary is not None else bundled_vocabulary()
     with source_snapshot(path) as (root, hashes):
         bundle: SourceBundle = load_folder(root)
         if len(bundle.files) > max_files:
             fail("file_limit", "Too many source files")
-        prepared = prepare_study(parse_bundle(bundle, max_rows=max_rows), vocabulary)
+        emit(progress, "parse")
+        canonical = parse_bundle(bundle, max_rows=max_rows)
+        emit(progress, "validate")
+        prepared = prepare_study(canonical, vocabulary)
     return PreparedBundle(path, prepared, vocabulary, hashes, max_rows)

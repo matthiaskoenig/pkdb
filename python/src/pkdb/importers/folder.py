@@ -62,7 +62,18 @@ def _read_json(path: Path) -> dict:
             parse_constant=lambda value: fail("invalid_number", value),
         )
     except (ValueError, OSError, RecursionError) as error:
-        fail("invalid_json", str(error), SourceLocation(file=path.name))
+        message = (
+            (error.strerror or "Cannot read source JSON file")
+            if isinstance(error, OSError)
+            else str(error)
+        )
+        fail(
+            "invalid_json",
+            message,
+            SourceLocation(file=path.name),
+            category="parsing",
+            stage="read",
+        )
     if not isinstance(value, dict):
         fail("invalid_json", "Expected a JSON object", SourceLocation(file=path.name))
     return value
@@ -268,12 +279,34 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
                 fail("unknown_source", f"No source file for {source}")
         return tables[source]
 
-    def image_name(value):
+    def image_name(value, location):
         if not value:
             return None
         name = value if Path(value).suffix else f"{metadata['name']}_{value}.png"
         if name not in bundle.files:
-            fail("unknown_image", f"No image file for {value}")
+            fail(
+                "unknown_image",
+                f"No image file for {value}",
+                location,
+                category="reference",
+                stage="parse",
+                field="image",
+                actual=value,
+                expected={"filename": name},
+                context={
+                    "available_images": sorted(
+                        n
+                        for n in bundle.files
+                        if Path(n).suffix.lower() in {".png", ".jpg", ".jpeg", ".svg"}
+                    )[:10]
+                },
+                suggestions=[
+                    {
+                        "kind": "add_attachment",
+                        "message": "Include the referenced image with the expected filename, or correct the image reference against the publication.",
+                    }
+                ],
+            )
         return name
 
     for section, entity in SECTIONS.items():
@@ -342,6 +375,19 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
                             keep = keep and actual == expected
                         if not keep:
                             continue
+                    location = location.model_copy(deep=True)
+                    definition = SourceLocation(
+                        file="study.json", path=(section, entity, template_index)
+                    )
+                    for field, value in template.items():
+                        if isinstance(value, str) and value.strip().startswith("col=="):
+                            location._fields[field] = location.for_header(
+                                value.split("==", 1)[1].strip()
+                            )
+                        elif not isinstance(value, (dict, list)):
+                            location._fields[field] = definition.model_copy(
+                                update={"path": (*definition.path, field)}
+                            )
                     bound = bind_columns(template, row, location)
                     entry_structure(bound, location)
                     for entry in split_entry(bound):
@@ -472,7 +518,9 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
                                     ]
                                 subset_entry[field] = value
                     if "image" in entry:
-                        entry["image"] = image_name(entry["image"])
+                        entry["image"] = image_name(
+                            entry["image"], location.for_field("image")
+                        )
                     records[destination].append(entry)
     try:
         return CanonicalStudy.model_validate(result)
@@ -483,12 +531,20 @@ def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> Canonica
                 ValidationIssue(
                     code=item["type"],
                     message=item["msg"],
-                    source=SourceLocation(file="study.json", path=item["loc"]),
+                    source=SourceLocation(file="study.json"),
+                    category="schema",
+                    stage="parse",
+                    field=".".join(str(part) for part in item["loc"]),
+                    context={
+                        "location_precision": "The field is a canonical schema path; exact source coordinates are unavailable."
+                    },
                 )
             )
         raise StudyValidationError(
             ValidationReport(
                 issues=issues,
+                complete=False,
+                stopped_reason="schema_validation",
                 truncated=error.error_count() > 100,
                 error_count=error.error_count(),
             )

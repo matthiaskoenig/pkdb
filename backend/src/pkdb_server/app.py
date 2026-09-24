@@ -41,6 +41,7 @@ from pkdb_server.api.credentials import install_browser_security
 from pkdb_server.api.errors import account_validation_error
 from pkdb_server.api.limits import UploadLimits
 from pkdb_server.api.quotas import RequestQuotas
+from pkdb_server.api.upload_reports import UploadReports
 from pkdb_server.config import Settings
 from pkdb_server.db.bootstrap import load_vocabulary
 from pkdb_server.db.read import publication_state, read_study
@@ -117,6 +118,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         max_bytes=settings.upload_max_bytes,
         concurrency=settings.upload_concurrency,
     )
+    app.add_middleware(UploadReports)
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
@@ -128,14 +130,23 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             "X-CSRF-Token",
             "X-PKDB-Vocabulary-Hash",
             "X-PKDB-Processing-Version",
+            "X-PKDB-Report-Version",
         ],
-        expose_headers=["Content-Disposition", "Retry-After"],
+        expose_headers=["Content-Disposition", "Retry-After", "X-Request-ID"],
     )
 
     @app.exception_handler(StudyValidationError)
     async def validation_error(request, error):
         return JSONResponse(
-            {**error.report.model_dump(mode="json"), "valid": False}, status_code=422
+            {
+                **(
+                    error.report.model_dump(mode="json")
+                    if request.headers.get("X-PKDB-Report-Version") == "2"
+                    else error.report.legacy_dict()
+                ),
+                "valid": False,
+            },
+            status_code=422,
         )
 
     @app.exception_handler(AuthenticationFailed)
@@ -208,12 +219,29 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             fail("invalid_json", "Malformed JSON form field")
 
     async def upload(request: Request, sid: str | None = None):
+        request.state.upload_stage = "compatibility"
         actor = await run_in_threadpool(principal, request)
         expected_hash = request.headers.get("X-PKDB-Vocabulary-Hash")
         expected_processing = request.headers.get("X-PKDB-Processing-Version")
+        request.state.upload_versions.update(
+            {
+                "client_processing_version": expected_processing,
+                "client_vocabulary_hash": expected_hash,
+            }
+        )
+        if request.headers.get("X-PKDB-Report-Version") == "2":
+
+            def current_hash():
+                with session_factory() as session:
+                    return vocabulary_hash(load_vocabulary(session))
+
+            request.state.upload_versions[
+                "server_vocabulary_hash"
+            ] = await run_in_threadpool(current_hash)
         await run_in_threadpool(
             ingestion.check_compatibility, expected_hash, expected_processing
         )
+        request.state.upload_stage = "parse"
         try:
             async with request.form(
                 max_files=settings.upload_max_files,
@@ -233,6 +261,11 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 reference = parse_json(form["reference"])
                 if not isinstance(study, dict) or not isinstance(reference, dict):
                     fail("invalid_json", "Study and reference must be JSON objects")
+                request.state.upload_study = {
+                    key: study[key]
+                    for key in ("sid", "name")
+                    if isinstance(study.get(key), str)
+                }
                 if sid is not None and str(study.get("sid")) != sid:
                     fail("sid_mismatch", "Path SID must match study SID")
                 with TemporaryDirectory(prefix="pkdb-upload-") as directory:
@@ -254,14 +287,20 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                         await run_in_threadpool(copy_upload, item.file, path)
                         files[name] = path
                     bundle = SourceBundle(study=study, reference=reference, files=files)
+                    request.state.upload_stage = "server_validation"
                     if sid is None:
                         prepared = await run_in_threadpool(
                             ingestion.validate, bundle, actor
                         )
                         return {
-                            **prepared.report.model_dump(mode="json"),
+                            **(
+                                prepared.report.model_dump(mode="json")
+                                if request.headers.get("X-PKDB-Report-Version") == "2"
+                                else prepared.report.legacy_dict()
+                            ),
                             "valid": True,
                         }
+                    request.state.upload_save_started = True
                     result = await run_in_threadpool(
                         ingestion.replace,
                         bundle,
@@ -269,11 +308,35 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                         expected_vocabulary_hash=expected_hash,
                         expected_processing_version=expected_processing,
                     )
+                    request.state.upload_stage = "save"
+                    request.state.upload_persistence = (
+                        "created" if result.created else "replaced"
+                    )
+                    payload = result.model_dump(mode="json", exclude_unset=False)
+                    if request.headers.get("X-PKDB-Report-Version") != "2":
+                        payload["warnings"] = [
+                            issue.legacy_dict() for issue in result.warnings
+                        ]
                     return JSONResponse(
-                        result.model_dump(mode="json"),
+                        payload,
                         status_code=201 if result.created else 200,
                     )
-        except ValidationError, HTTPException:
+        except ValidationError as error:
+            if request.headers.get("X-PKDB-Report-Version") == "2":
+                return JSONResponse(
+                    {
+                        "detail": error.errors(
+                            include_input=False,
+                            include_context=False,
+                            include_url=False,
+                        )
+                    },
+                    status_code=422,
+                )
+            fail("invalid_bundle", "Malformed study bundle")
+        except HTTPException:
+            if request.headers.get("X-PKDB-Report-Version") == "2":
+                raise
             fail("invalid_bundle", "Malformed study bundle")
 
     def copy_upload(source, path):
@@ -300,6 +363,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             vocabulary = load_vocabulary(session)
         return {
             "schema_version": 1,
+            "upload_report_versions": [1, 2],
             "server_version": __version__,
             "processing_version": PROCESSING_VERSION,
             "vocabulary_version": vocabulary.version,

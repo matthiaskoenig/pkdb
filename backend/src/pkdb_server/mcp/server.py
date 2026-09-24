@@ -44,7 +44,7 @@ def create_mcp(ingestion, queries, file_store, session_factory):
                 f"Request quota exceeded; retry after {error.retry_after} seconds"
             ) from None
         except StudyValidationError as error:
-            return {**error.report.model_dump(mode="json"), "valid": False}
+            return {**error.report.legacy_dict(), "valid": False}
         except AuthenticationFailed, AuthorizationDenied:
             raise ToolError("Action not permitted") from None
         except LookupError:
@@ -71,7 +71,7 @@ def create_mcp(ingestion, queries, file_store, session_factory):
             bundle, principal, file_store, ingestion.settings
         ) as source:
             prepared = ingestion.validate(source, principal)
-        return {**prepared.report.model_dump(mode="json"), "valid": True}
+        return {**prepared.report.legacy_dict(), "valid": True}
 
     def replace(principal, sid, bundle):
         if str(bundle.study.get("sid")) != sid:
@@ -79,7 +79,11 @@ def create_mcp(ingestion, queries, file_store, session_factory):
         with materialize_bundle(
             bundle, principal, file_store, ingestion.settings
         ) as source:
-            return ingestion.replace(source, principal).model_dump(mode="json")
+            result = ingestion.replace(source, principal)
+            return {
+                **result.model_dump(mode="json"),
+                "warnings": [issue.legacy_dict() for issue in result.warnings],
+            }
 
     @server.tool
     async def search_studies(query: QuerySpec) -> dict:

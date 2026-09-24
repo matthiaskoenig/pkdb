@@ -40,6 +40,9 @@ class UploadLimits:
             if message["type"] == "http.request":
                 size += len(message.get("body", b""))
                 if size > self.max_bytes:
+                    scope.setdefault("state", {}).update(
+                        upload_limit_actual=size, upload_limit_maximum=self.max_bytes
+                    )
                     raise BodyLimitExceeded
             return message
 
@@ -56,6 +59,9 @@ class UploadLimits:
                     )(scope, receive, send)
                     return
                 if length > self.max_bytes:
+                    scope.setdefault("state", {}).update(
+                        upload_limit_actual=length, upload_limit_maximum=self.max_bytes
+                    )
                     raise BodyLimitExceeded
             await self.app(scope, bounded_receive, send)
         except BodyLimitExceeded:

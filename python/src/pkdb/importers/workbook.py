@@ -1,10 +1,11 @@
-"""Read legacy workbooks without generating or changing source TSV files."""
+"""Read tables with one-based physical coordinates, including blank/comment rows."""
 
 import csv
 from pathlib import Path
+from zipfile import BadZipFile
 
 import openpyxl
-import pandas as pd
+from openpyxl.utils import get_column_letter
 
 from pkdb.importers.expressions import clean
 from pkdb.schemas.source import SourceLocation
@@ -17,63 +18,104 @@ def read_table(
     if max_rows < 1:
         raise ValueError("max_rows must be positive")
     location = SourceLocation(file=path.name, sheet=sheet)
+    workbook = None
+    handle = None
     try:
         if path.suffix.lower() == ".xlsx":
             if sheet is None:
                 fail("missing_sheet", "Workbook sheet is required", location)
             workbook = openpyxl.load_workbook(path, read_only=True, data_only=True)
-            try:
-                headers = next(
-                    workbook[sheet].iter_rows(min_row=2, max_row=2, values_only=True),
-                    (),
+            if sheet not in workbook.sheetnames:
+                fail(
+                    "missing_sheet",
+                    "Referenced sheet is absent from the workbook",
+                    location,
+                    category="reference",
+                    stage="read",
+                    field="sheet",
+                    actual=sheet,
+                    expected={"available_sheets": workbook.sheetnames},
                 )
-            finally:
-                workbook.close()
-        else:
-            with path.open(newline="", encoding="utf-8-sig") as handle:
-                headers = next(csv.reader(handle, delimiter="\t"), [])
-        named = [
-            header.strip()
-            for header in headers
-            if isinstance(header, str) and header.strip()
-        ]
-        if len(named) != len(set(named)):
-            fail("duplicate_column", "Column headers must be unique", location)
-        if path.suffix.lower() == ".xlsx":
-            if sheet is None:
-                fail("missing_sheet", "Workbook sheet is required")
-            frame = pd.read_excel(
-                path, sheet_name=sheet, skiprows=[0], comment="#", nrows=max_rows + 1
-            )
+            worksheet = workbook[sheet]
+            # Excel can retain a million-row used range after deleted formatting.
+            # Read actual XML cells without padding to stale worksheet dimensions.
+            worksheet.reset_dimensions()
+            iterator = worksheet.iter_rows(min_row=2, values_only=True)
             first_row = 3
         else:
-            frame = pd.read_csv(
-                path,
-                sep="\t",
-                nrows=max_rows + 1,
-                keep_default_na=False,
-                na_values=["na", "NA", "nan", "NAN"],
-            )
+            handle = path.open(newline="", encoding="utf-8-sig")
+            iterator = iter(csv.reader(handle, delimiter="\t"))
             first_row = 2
+        headers = next(iterator, ())
+        columns = {}
+        for index, header in enumerate(headers):
+            if header is None or header == "":
+                continue
+            if not isinstance(header, str):
+                fail("invalid_header", "Column headers must be strings", location)
+            header = header.strip()
+            if not header:
+                continue
+            if header in columns:
+                fail("duplicate_column", "Column headers must be unique", location)
+            columns[header] = index
+        rows = []
+        for physical_row, raw in enumerate(iterator, first_row):
+            values = []
+            commented = False
+            for value in raw:
+                if (
+                    path.suffix.lower() == ".xlsx"
+                    and isinstance(value, str)
+                    and "#" in value
+                ):
+                    value = value.split("#", 1)[0]
+                    commented = True
+                    values.append(clean(value) or None)
+                elif commented:
+                    values.append(None)
+                else:
+                    values.append(clean(value))
+            if not any(value is not None and value != "" for value in values):
+                continue
+            if len(rows) >= max_rows:
+                fail(
+                    "row_limit",
+                    "Source table exceeds configured row limit",
+                    location,
+                    category="limit",
+                    stage="read",
+                    expected={"maximum_rows": max_rows},
+                )
+            source = SourceLocation(file=path.name, sheet=sheet, row=physical_row)
+            source._columns.update(
+                {
+                    header: get_column_letter(index + 1)
+                    for header, index in columns.items()
+                }
+            )
+            rows.append(
+                (
+                    {
+                        header: values[index] if index < len(values) else None
+                        for header, index in columns.items()
+                    },
+                    source,
+                )
+            )
+        return rows
     except StudyValidationError:
         raise
-    except (ValueError, KeyError, OSError) as error:
-        fail("invalid_table", str(error), SourceLocation(file=path.name, sheet=sheet))
-    if len(frame) > max_rows:
-        fail("row_limit", "Source table exceeds configured row limit")
-    frame = frame.loc[
-        :, [c for c in frame.columns if not str(c).startswith("Unnamed:")]
-    ]
-    if any(not isinstance(column, str) for column in frame.columns):
-        fail("invalid_header", "Column headers must be strings")
-    frame.columns = frame.columns.str.strip()
-    if frame.columns.duplicated().any():
-        fail("duplicate_column", "Column headers must be unique")
-    return [
-        (
-            dict(zip(frame.columns, (clean(value) for value in row))),
-            SourceLocation(file=path.name, sheet=sheet, row=index + first_row),
+    except ValueError, KeyError, OSError, BadZipFile:
+        fail(
+            "invalid_table",
+            "Cannot read the source table. Check its format and encoding and that the workbook is not corrupted.",
+            location,
+            category="parsing",
+            stage="read",
         )
-        for index, row in enumerate(frame.itertuples(index=False, name=None))
-        if not all(pd.isna(value) for value in row)
-    ]
+    finally:
+        if workbook is not None:
+            workbook.close()
+        if handle is not None:
+            handle.close()
