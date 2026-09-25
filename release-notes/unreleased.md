@@ -1,5 +1,7 @@
 # Unreleased
 
+- Add permission-filtered `/api/v2/statistics` coverage metrics and interactive landing-page charts for studies, substances with timecourses, and reported/calculated PK parameters by study year. Include cumulative views, year and parameter filters, current substance coverage, accessible data tables, and explicit undated totals (#767).
+
 - Make flat study analysis apply related measurement filters to the same measurement, matching normal study queries.
 - Retire legacy study/reference drafts, attachment-handle upload routes, and index finalization. Use complete-bundle uploads through `PUT /api/v2/studies/{sid}`. Migration `p002retirelegacy` preserves published studies and attachments but removes pending legacy drafts and ineffective reader grants; downgrade restores their schema, not discarded data.
 - Remove ineffective reader assignment controls and unused authenticated quota settings, usage reporting, and MCP quota bookkeeping. Curator assignments and collaborator attribution retain their existing meanings.

@@ -2,13 +2,14 @@
 import { onUnmounted, ref, watch } from "vue";
 import { useSessionStore } from "../../stores/session";
 import { errorMessage } from "../../api/client";
-import { fetchStatistics, type DatabaseStatistic } from "./statistics";
+import { fetchStatistics, type StatisticsOverview } from "./statistics";
+import StatisticsDashboard from "./StatisticsDashboard.vue";
 import { defaultCriteria, defaultView } from "../search/defaults";
 import { encodeLocation } from "../search/codec";
 import type { ResultTab } from "../search/model";
 type StatisticsState =
   | { status: "idle" | "loading" }
-  | { status: "ready"; rows: DatabaseStatistic[] }
+  | { status: "ready"; overview: StatisticsOverview }
   | { status: "error"; message: string };
 const session = useSessionStore(),
   state = ref<StatisticsState>({ status: "idle" });
@@ -25,9 +26,9 @@ async function load() {
   controller = request;
   state.value = { status: "loading" };
   try {
-    const rows = await fetchStatistics(request.signal);
+    const overview = await fetchStatistics(request.signal);
     if (own === generation && !request.signal.aborted)
-      state.value = { status: "ready", rows };
+      state.value = { status: "ready", overview };
   } catch (error) {
     if (own === generation && !request.signal.aborted)
       state.value = { status: "error", message: errorMessage(error) };
@@ -72,14 +73,17 @@ function destination(tab: ResultTab) {
       {{ state.message }}
       <v-btn variant="text" @click="load">Retry database counts</v-btn>
     </v-alert>
-    <ul v-else-if="state.status === 'ready'" class="statistic-grid">
-      <li v-for="row in state.rows" :key="row.tab">
-        <RouterLink :to="destination(row.tab)">
-          <strong>{{ row.count.toLocaleString() }}</strong
-          ><span>{{ row.label }}</span>
-        </RouterLink>
-      </li>
-    </ul>
+    <template v-else-if="state.status === 'ready'">
+      <ul class="statistic-grid">
+        <li v-for="row in state.overview.rows" :key="row.tab">
+          <RouterLink :to="destination(row.tab)">
+            <strong>{{ row.count.toLocaleString() }}</strong
+            ><span>{{ row.label }}</span>
+          </RouterLink>
+        </li>
+      </ul>
+      <StatisticsDashboard :overview="state.overview" />
+    </template>
   </section>
 </template>
 <style scoped>
