@@ -4,8 +4,8 @@ declare module "plotly.js-dist-min" {
   interface Engine {
     react(
       element: HTMLElement,
-      data: import("../features/plots/types").Trace[],
-      layout: import("../features/plots/types").PlotLayout,
+      data: import("../features/plots/types").Trace[] | import("../features/home/chart").OverviewTrace[],
+      layout: import("../features/plots/types").PlotLayout | import("../features/home/chart").OverviewLayout,
       config: {
         responsive: boolean;
         displaylogo: boolean;

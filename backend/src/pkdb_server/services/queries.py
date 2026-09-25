@@ -1,6 +1,7 @@
 """Consistent PostgreSQL reads with permissions applied before count and paging."""
 
 from sqlalchemy import func, select
+from sqlalchemy.orm import Session
 
 from pkdb.schemas.queries import Page, QuerySpec
 from pkdb.schemas.security import Principal
@@ -25,6 +26,7 @@ from pkdb_server.db.serialize import (
 )
 from pkdb_server.db.study_responses import study_responses
 from pkdb_server.db.vocabulary_responses import vocabulary_responses
+from pkdb_server.services.statistics import StatisticsOverview, overview
 
 
 class QueryService:
@@ -85,7 +87,9 @@ class QueryService:
                 previous=query.page - 1 if query.page > 1 else None,
             )
 
-    def statistics(self, principal: Principal) -> dict[str, int]:
+    def statistics(
+        self, principal: Principal, *, session: Session | None = None
+    ) -> dict[str, int]:
         visible = select(Study.id).where(visibility(principal))
 
         def owned(model, *extra):
@@ -133,5 +137,16 @@ class QueryService:
                 dataset_type() == "scatter",
             ).label("scatter_count"),
         )
+        if session is not None:
+            return dict(session.execute(statement).mappings().one())
         with self.session_factory() as session:
             return dict(session.execute(statement).mappings().one())
+
+    def statistics_overview(self, principal: Principal) -> StatisticsOverview:
+        """Read counts and yearly coverage from one consistent database snapshot."""
+
+        with self.session_factory() as session:
+            session.connection(execution_options={"isolation_level": "REPEATABLE READ"})
+            return overview(
+                session, principal, self.statistics(principal, session=session)
+            )

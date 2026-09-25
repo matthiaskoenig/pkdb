@@ -1,0 +1,100 @@
+{
+  "date_basis": "study.date",
+  "generated_at": "2026-09-25T10:00:00Z",
+  "counts": {
+    "study_count": 4,
+    "group_count": 7,
+    "individual_count": 0,
+    "intervention_count": 8,
+    "output_count": 33,
+    "timecourse_count": 4,
+    "scatter_count": 1,
+    "substance_count": 2,
+    "pk_count": 8,
+    "pk_calculated_count": 4
+  },
+  "years": [
+    {
+      "year": 2020,
+      "study_count": 1,
+      "timecourse_count": 1,
+      "substance_count": 1,
+      "pk_count": 2,
+      "pk_calculated_count": 1,
+      "cumulative_study_count": 1,
+      "cumulative_substance_count": 1
+    },
+    {
+      "year": 2021,
+      "study_count": 0,
+      "timecourse_count": 0,
+      "substance_count": 0,
+      "pk_count": 0,
+      "pk_calculated_count": 0,
+      "cumulative_study_count": 1,
+      "cumulative_substance_count": 1
+    },
+    {
+      "year": 2022,
+      "study_count": 2,
+      "timecourse_count": 2,
+      "substance_count": 2,
+      "pk_count": 4,
+      "pk_calculated_count": 2,
+      "cumulative_study_count": 3,
+      "cumulative_substance_count": 2
+    }
+  ],
+  "undated": {
+    "year": null,
+    "study_count": 1,
+    "timecourse_count": 1,
+    "substance_count": 1,
+    "pk_count": 2,
+    "pk_calculated_count": 1,
+    "cumulative_study_count": 0,
+    "cumulative_substance_count": 0
+  },
+  "substances": [
+    {
+      "sid": "A",
+      "name": "Caffeine",
+      "timecourse_count": 2
+    },
+    {
+      "sid": "B",
+      "name": "Midazolam",
+      "timecourse_count": 2
+    }
+  ],
+  "parameters": [
+    {
+      "sid": "auc",
+      "name": "AUC",
+      "year": 2020,
+      "reported": 1,
+      "calculated": 1
+    },
+    {
+      "sid": "auc",
+      "name": "AUC",
+      "year": 2022,
+      "reported": 1,
+      "calculated": 1
+    },
+    {
+      "sid": "clearance",
+      "name": "Clearance",
+      "year": 2022,
+      "reported": 1,
+      "calculated": 1
+    },
+    {
+      "sid": "auc",
+      "name": "AUC",
+      "year": null,
+      "reported": 1,
+      "calculated": 1
+    }
+  ]
+}

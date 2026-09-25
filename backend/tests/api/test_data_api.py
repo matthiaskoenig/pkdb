@@ -196,3 +196,28 @@ def test_data_endpoints_require_read_scope_for_api_keys(client, session_factory)
         == 403
     )
     assert client.post("/api/v2/exports", headers=headers, json={}).status_code == 403
+
+
+def test_statistics_overview_contract_and_private_access(
+    client, valid_bundle, creator_headers
+):
+    upload(client, valid_bundle, creator_headers, public=False)
+    public = client.get("/api/v2/statistics")
+    assert public.status_code == 200, public.text
+    assert public.json()["counts"]["study_count"] == 0
+    assert public.json()["years"] == []
+    response = client.get("/api/v2/statistics", headers=creator_headers)
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data["date_basis"] == "study.date"
+    assert data["generated_at"]
+    assert data["counts"]["study_count"] == 1
+    legacy = client.get("/api/v1/statistics/", headers=creator_headers).json()
+    for key, value in legacy.items():
+        if key != "version":
+            assert data["counts"][key] == value
+    assert (
+        sum(row["study_count"] for row in data["years"])
+        + data["undated"]["study_count"]
+        == 1
+    )

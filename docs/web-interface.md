@@ -6,6 +6,12 @@ The screenshots below show the current frontend with artificial demonstration da
 
 For a scientific example of how a publication is represented in PK-DB, see the [example study](example-study.md).
 
+## Explore database coverage
+
+The landing page shows current totals and interactive charts for studies, substances with timecourses, and PK parameter values. Choose a year range, switch studies and substances between annual and cumulative counts, or select a PK parameter to compare reported and calculated values. The substance chart ranks current timecourse coverage.
+
+Hover for values, drag to zoom, and double-click to reset. Each chart includes a data table and a PNG download. Counts reflect studies you can access and refresh when your session changes. Years use the study date; undated studies appear in current totals and a separate notice. Cumulative substance counts include each substance only once. These charts describe the current collection by study date, not earlier database snapshots.
+
 ## Find studies
 
 Open **Explore data** to reach **Search pharmacokinetic data**. The research filters appear on the left on a desktop; on a smaller screen, open **Filters and Search**.

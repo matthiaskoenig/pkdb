@@ -20,6 +20,7 @@ Replace `STUDY_SID` with a study identifier returned by the study list. Lists an
 | Endpoint | Use |
 | --- | --- |
 | `GET /api/v2/studies` | Find studies |
+| `GET /api/v2/statistics` | Current database coverage and annual study, substance, and PK metrics |
 | `GET /api/v2/measurements` | Select measurement rows |
 | `GET /api/v2/studies/{sid}` | Complete canonical study |
 | `POST /api/v2/query` | Advanced typed queries, including groups, individuals, interventions, and references |
@@ -30,6 +31,23 @@ Replace `STUDY_SID` with a study identifier returned by the study list. Lists an
 | `PUT /api/v2/studies/{sid}` | Create or replace a study |
 
 A study substance search matches studies containing relevant data; it does not mean every measurement in each study concerns that substance. Combine substance and measurement-type filters on `/api/v2/measurements` to match both on the same observation. Study-level selections can include broader context than a measurement-level match. See [search scopes](web-interface.md#choose-the-scope-of-your-search) and the API reference before combining filters.
+
+## Database statistics
+
+`GET /api/v2/statistics` returns one consistent, permission-filtered overview. Anonymous requests include public studies; authenticated requests additionally include studies the caller can access.
+
+```bash
+curl --fail 'https://alpha.pk-db.com/api/v2/statistics'
+```
+
+- `counts`: current totals, including `substance_count` (distinct substances with timecourses), `pk_count`, and `pk_calculated_count`.
+- `years`: ascending calendar years from the first to the last dated study, with empty years included. Each row has `study_count`, `timecourse_count`, `substance_count`, `pk_count`, `pk_calculated_count`, `cumulative_study_count`, and `cumulative_substance_count`. Cumulative substances are distinct across years, not a sum of yearly counts.
+- `undated`: the same annual metrics for studies without a date. These contribute to current totals but not cumulative dated counts; its cumulative fields are zero.
+- `substances`: vocabulary `sid`, `name`, and distinct `timecourse_count`, ordered by descending coverage. A course containing several observations for the same substance counts once.
+- `parameters`: sparse counts by vocabulary `sid`, `name`, and `year` (null for undated studies), split into `reported` and `calculated` values. Absent combinations have zero counts.
+- `date_basis`: `study.date`; `generated_at`: UTC response generation time.
+
+Years use the **study date**, not the reference publication date or upload timestamp. These are the dates of currently accessible studies, not historical database snapshots. PK parameter types follow descendants of `pharmacokinetic-measurement` in the vocabulary. Measurement metrics use normalized records, avoiding duplicate reported/normalized representations; calculated PK values are included in PK totals. Substance coverage requires a normalized observation in a timecourse. The existing `/api/v1/statistics/` count response remains compatible.
 
 ## Authenticate requests
 

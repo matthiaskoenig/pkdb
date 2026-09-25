@@ -18,11 +18,14 @@ const data = {
   timecourse_count: 2,
   scatter_count: 1,
 };
+function overview(studyCount = 4): statistics.StatisticsOverview {
+  return { rows: statistics.parseStatistics({ ...data, study_count: studyCount }), counts: { substance_count: 0, pk_count: 0, pk_calculated_count: 0 }, years: [], parameters: [], substances: [], undated: { year: null, study_count: studyCount, substance_count: 0, timecourse_count: 0, pk_count: 0, pk_calculated_count: 0, cumulative_study_count: 0, cumulative_substance_count: 0 } };
+}
 beforeEach(() => {
   pinia = createPinia();
   setActivePinia(pinia);
   vi.spyOn(statistics, "fetchStatistics").mockResolvedValue(
-    statistics.parseStatistics(data),
+    overview(),
   );
 });
 afterEach(() => {
@@ -79,14 +82,14 @@ describe("permission-scoped home database statistics", () => {
     expect(wrapper.findAll("a")).toHaveLength(7);
   });
   it("discards counts from a previous identity and cancels on unmount", async () => {
-    const old = deferred<statistics.DatabaseStatistic[]>();
+    const old = deferred<statistics.StatisticsOverview>();
     vi.mocked(statistics.fetchStatistics).mockReturnValueOnce(old.promise);
     const session = useSessionStore();
     session.ready = true;
     const wrapper = await mounted();
     session.invalidate();
     await flushPromises();
-    old.complete(statistics.parseStatistics({ ...data, study_count: 999 }));
+    old.complete(overview(999));
     await flushPromises();
     expect(wrapper.text()).not.toContain("999");
     expect(wrapper.findAll("a")[0]?.text()).toBe("4Studies");

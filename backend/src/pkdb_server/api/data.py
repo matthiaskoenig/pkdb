@@ -10,6 +10,7 @@ from pkdb.schemas.filters import FilterSpec
 from pkdb.schemas.queries import Predicate, QuerySpec
 from pkdb.schemas.responses import OutputResponse, StudyResponse
 from pkdb_server.api.exports import download_response
+from pkdb_server.services.statistics import StatisticsOverview
 
 router = APIRouter(prefix="/api/v2", tags=["Data"])
 
@@ -128,3 +129,10 @@ def export_data(spec: FilterSpec, request: Request):
         return download_response(request.app.state.exports, identifier, actor)
     except ValueError as error:
         raise HTTPException(400, str(error)) from None
+
+
+@router.get("/statistics", response_model=StatisticsOverview)
+def statistics(request: Request) -> StatisticsOverview:
+    """Current coverage and annual metrics using the study date field."""
+    actor = request.app.state.principal(request, required=False)
+    return request.app.state.queries.statistics_overview(actor)
