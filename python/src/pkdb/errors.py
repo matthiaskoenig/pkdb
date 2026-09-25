@@ -9,6 +9,8 @@ class ClientError(RuntimeError):
         message: str,
         *,
         status_code: int | None = None,
+        code: str | None = None,
+        retry_after: str | None = None,
         report: ValidationReport | None = None,
         request_id: str | None = None,
         stage: str | None = None,
@@ -17,6 +19,8 @@ class ClientError(RuntimeError):
     ):
         super().__init__(message)
         self.status_code = status_code
+        self.code = code
+        self.retry_after = retry_after
         self.report = report
         self.request_id = request_id
         self.stage = stage

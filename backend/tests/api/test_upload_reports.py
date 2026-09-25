@@ -172,3 +172,14 @@ def test_request_schema_errors_keep_locations_but_never_raw_input():
     assert all(issue["source"] is None for issue in report["issues"])
     assert "secret" not in response.text
     assert "private content" not in response.text
+
+
+@pytest.mark.parametrize("status", [429, 503])
+def test_retry_guidance_is_available_in_json_and_header(status):
+    response = application(status=status, headers={"Retry-After": "30"}).put(
+        "/api/v2/studies/TEST", headers={"X-PKDB-Report-Version": "2"}
+    )
+    issue = response.json()["report"]["issues"][0]
+    assert issue["code"] == ("rate_limit" if status == 429 else "capacity_unavailable")
+    assert issue["category"] == "limit"
+    assert issue["context"]["retry_after"] == response.headers["Retry-After"] == "30"

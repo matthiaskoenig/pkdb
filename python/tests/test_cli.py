@@ -67,8 +67,9 @@ def test_preparation_artifact_is_written_outside_source(
     assert isinstance(json.loads(output.read_text()), dict)
 
 
+@pytest.mark.parametrize("output_format", ["human", "json"])
 def test_cli_upload_is_complete_folder_workflow(
-    study_folder, vocabulary, tmp_path, capsys, monkeypatch
+    study_folder, vocabulary, tmp_path, capsys, monkeypatch, output_format
 ):
     from pkdb import prepare
     from pkdb.domain.validation import PROCESSING_VERSION
@@ -102,19 +103,38 @@ def test_cli_upload_is_complete_folder_workflow(
             )
         return httpx2.Response(
             201,
-            json={"sid": "TEST1", "created": True, "digest": "digest", "counts": {}},
+            json={
+                "sid": "TEST1",
+                "created": True,
+                "digest": "digest",
+                "counts": {"groups": 3, "individuals": 0, "measurements": 12},
+            },
         )
 
     with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
         assert (
             main(
-                ["upload", str(study_folder), "--vocabulary", str(lock)],
+                [
+                    "upload",
+                    str(study_folder),
+                    "--vocabulary",
+                    str(lock),
+                    "--format",
+                    output_format,
+                ],
                 client=transport,
             )
             == 0
         )
     output = capsys.readouterr().out
-    assert json.loads(output)["sid"] == "TEST1"
+    if output_format == "json":
+        result = json.loads(output)
+        assert result["sid"] == "TEST1"
+        assert result["relative_path"] == study_folder.name
+        assert result["counts"] == {"groups": 3, "individuals": 0, "measurements": 12}
+    else:
+        assert f"[1/1] {study_folder.name}" in output
+        assert "groups=3, individuals=0, measurements=12" in output
     assert "pkdb_live_secret" not in output
     assert calls == ["GET", "PUT"]
 

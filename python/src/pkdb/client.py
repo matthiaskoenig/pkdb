@@ -209,6 +209,23 @@ class Client:
                 message += f": {summary}"
                 if len(issues) > 3 or report.truncated:
                     message += "; see validation report for further issues"
+        elif isinstance(detail, str) and response.status_code < 500:
+            message += f": {detail[:1000]}"
+        code = body.get("code") if isinstance(body, dict) else None
+        if report and report.issues:
+            code = next(
+                (issue.code for issue in report.issues if issue.severity == "error"),
+                code,
+            )
+        if not isinstance(code, str):
+            code = {403: "upload_forbidden", 429: "rate_limit"}.get(
+                response.status_code
+            )
+        retry_after = response.headers.get("Retry-After")
+        if response.status_code == 429:
+            message += "; rate limit reached"
+        if retry_after and response.status_code in {429, 503}:
+            message += f"; Retry-After: {retry_after}"
         error = ClientError
         if (
             response.status_code == 409
@@ -222,14 +239,19 @@ class Client:
         raise error(
             message,
             status_code=response.status_code,
+            code=code,
+            retry_after=retry_after,
             report=report,
-            request_id=body.get("request_id") if isinstance(body, dict) else None,
+            request_id=(body.get("request_id") if isinstance(body, dict) else None)
+            or response.headers.get("X-Request-ID"),
             stage=body.get("stage") if isinstance(body, dict) else None,
             persistence=body.get(
                 "persistence", "unknown" if response.status_code >= 500 else "not_saved"
             )
             if isinstance(body, dict)
-            else "unknown",
+            else "unknown"
+            if response.status_code >= 500
+            else "not_saved",
             envelope=body
             if isinstance(body, dict) and "report_version" in body
             else None,

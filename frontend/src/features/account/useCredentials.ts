@@ -14,7 +14,7 @@ export function useCredentials() {
     rotated = ref(false),
     keyName = ref(""),
     keyDays = ref(90),
-    keyWrite = ref(false);
+    keyWrite = ref(true);
   let controller = new AbortController(),
     generation = 0;
   function reset() {
@@ -26,7 +26,7 @@ export function useCredentials() {
     secret.value = "";
     secretDialog.value = false;
     keyName.value = "";
-    keyWrite.value = false;
+    keyWrite.value = true;
   }
   watch(() => session.epoch, reset, { flush: "sync" });
   onScopeDispose(reset);

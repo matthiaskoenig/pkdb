@@ -181,7 +181,10 @@ class IngestionService:
                 else:
                     authorize(current, "write", study_access(root, session))
                     if not can_manage and root.licence != study.metadata.licence:
-                        raise AuthorizationDenied("Only administrators change licence")
+                        raise AuthorizationDenied(
+                            "Only administrators change licence",
+                            code="licence_change_forbidden",
+                        )
                 names = {
                     study.metadata.creator,
                     *study.metadata.collaborators,
@@ -202,7 +205,8 @@ class IngestionService:
                 creator_id = users[study.metadata.creator].id
                 if not created and not can_manage and creator_id != root.creator_id:
                     raise AuthorizationDenied(
-                        "Only administrators transfer study ownership"
+                        "Only administrators transfer study ownership",
+                        code="creator_change_forbidden",
                     )
                 root.creator_id = creator_id
                 root.name = study.metadata.name

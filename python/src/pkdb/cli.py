@@ -209,12 +209,18 @@ def main(argv=None, *, client=None) -> int:
             ),
         }
 
+    source_root = args.folder.resolve()
+    if (source_root / "study.json").is_file():
+        source_root = source_root.parent
+
     for index, folder in enumerate(folders, 1):
         started = time.monotonic()
         stop = False
-        terminal.start(folder.name, index, len(folders))
+        relative_path = folder.resolve().relative_to(source_root).as_posix()
+        terminal.start(relative_path, index, len(folders))
         result = {
             "path": str(folder),
+            "relative_path": relative_path,
             "name": folder.name,
             "ok": False,
             "persistence": "not_attempted",
@@ -261,6 +267,8 @@ def main(argv=None, *, client=None) -> int:
             result.update(
                 error=str(error),
                 status_code=error.status_code,
+                code=error.code,
+                retry_after=error.retry_after,
                 persistence=error.persistence,
                 request_id=error.request_id,
                 stage=error.stage,
@@ -269,7 +277,7 @@ def main(argv=None, *, client=None) -> int:
                 result["server_report"] = error.envelope
             stop = (
                 isinstance(error, CompatibilityError)
-                or error.status_code in {401, 403}
+                or error.status_code in {401, 429}
                 or (error.status_code is not None and error.status_code >= 500)
                 or error.persistence == "unknown"
             )

@@ -100,6 +100,7 @@ class Terminal:
                 part
                 for part in (
                     label,
+                    safe_text(result.get("relative_path", "")),
                     safe_text(result.get("sid", "")),
                     f"{result.get('elapsed_seconds', 0):.1f}s",
                 )
@@ -107,6 +108,24 @@ class Terminal:
             ),
             style="green" if ok else "red",
         )
+        if state in {"created", "replaced"} and result.get("counts"):
+            counts = result["counts"]
+            preferred = (
+                "groups",
+                "individuals",
+                "interventions",
+                "measurements",
+                "timecourses",
+                "attachments",
+            )
+            names = [name for name in preferred if name in counts]
+            names.extend(sorted(set(counts) - set(preferred)))
+            self.console.print(
+                "  Uploaded: "
+                + ", ".join(
+                    f"{safe_text(name)}={safe_text(counts[name])}" for name in names
+                )
+            )
         if state == "unknown":
             self.console.print(
                 "  Save outcome is unknown. Check the server before retrying."
@@ -119,6 +138,22 @@ class Terminal:
             self.console.print("  This attempt did not save study data.")
         if result.get("error"):
             self.console.print(f"  {safe_text(result['error'])}")
+        if result.get("status_code") == 403:
+            self.console.print(
+                "  Forbidden (HTTP 403). PK-DB reports rate limits as HTTP 429."
+            )
+            if not result.get("report"):
+                self.console.print(
+                    "  Check the API key upload scope, account role, study assignment, and changes to creator or licence."
+                )
+        if result.get("status_code") == 429:
+            self.console.print(
+                "  Rate limited (HTTP 429). Batch stopped; review this study before restarting."
+            )
+        if result.get("retry_after") and result.get("status_code") in {429, 503}:
+            self.console.print(
+                f"  Retry-After: {safe_text(result['retry_after'])} (seconds or HTTP date)."
+            )
         if result.get("url"):
             self.console.print(f"  {safe_text(result['url'])}")
         if result.get("request_id"):

@@ -153,3 +153,72 @@ def test_private_visibility_matches_details_lists_exports_and_attachments(
         assert response.status_code == (
             200 if allowed else 401 if name == "anonymous" else 403
         ), name
+
+
+@pytest.mark.parametrize("version", ["1", "2"])
+@pytest.mark.parametrize(
+    "reason",
+    [
+        "missing_scope",
+        "upload_role_required",
+        "study_write_forbidden",
+        "licence_change_forbidden",
+        "creator_change_forbidden",
+    ],
+)
+def test_actionable_upload_permission_feedback(
+    client, valid_bundle, session_factory, creator_headers, version, reason
+):
+    with session_factory.begin() as session:
+        uploader = User(
+            username="uploader",
+            role="user"
+            if reason == "upload_role_required"
+            else "admin"
+            if reason in {"licence_change_forbidden", "creator_change_forbidden"}
+            else "curator",
+            active=True,
+        )
+        session.add(uploader)
+        session.flush()
+        headers = key_for(
+            session,
+            uploader,
+            ("read",) if reason == "missing_scope" else ("read", "studies:write"),
+        )
+    url = f"/api/v2/studies/{valid_bundle.study['sid']}"
+    if reason in {
+        "study_write_forbidden",
+        "licence_change_forbidden",
+        "creator_change_forbidden",
+    }:
+        assert (
+            client.put(
+                url, headers=creator_headers, data=body(valid_bundle)
+            ).status_code
+            == 201
+        )
+    if reason == "licence_change_forbidden":
+        valid_bundle.study["licence"] = (
+            "closed" if valid_bundle.study.get("licence", "open") == "open" else "open"
+        )
+    if reason == "creator_change_forbidden":
+        valid_bundle.study["creator"] = "uploader"
+    response = client.put(
+        url,
+        headers={**headers, "X-PKDB-Report-Version": version},
+        data=body(valid_bundle),
+    )
+    assert response.status_code == 403, response.text
+    assert "Retry-After" not in response.headers
+    result = response.json()
+    if version == "2":
+        assert result["persistence"] == "not_saved"
+        issue = result["report"]["issues"][0]
+        assert issue["code"] == reason
+        assert issue["category"] == "permission"
+        assert issue["suggestions"][0]["message"]
+    else:
+        assert result["code"] == reason
+        assert result["detail"]
+        assert result["suggestion"]
