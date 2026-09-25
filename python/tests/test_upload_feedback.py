@@ -112,7 +112,7 @@ def test_interrupt_saves_partial_report(
     def interrupt(*args, **kwargs):
         raise KeyboardInterrupt
 
-    monkeypatch.setattr("pkdb.cli.prepare", interrupt)
+    monkeypatch.setattr("pkdb.preparation.prepare", interrupt)
     assert (
         main(
             [

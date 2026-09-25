@@ -1,6 +1,8 @@
 """A study folder is sufficient for the offline command-line workflow."""
 
 import json
+import subprocess
+import sys
 
 import httpx2
 import pytest
@@ -158,3 +160,59 @@ def test_output_inside_study_is_rejected(study_folder, vocabulary, tmp_path, cap
     )
     assert not output.exists()
     assert json.loads(capsys.readouterr().err)["ok"] is False
+
+
+@pytest.mark.parametrize(
+    "arguments",
+    [
+        ["--help"],
+        ["--version"],
+        ["curate", "--help"],
+        ["prepare", "--help"],
+        ["validate", "--help"],
+        ["upload", "--help"],
+        ["vocabulary", "--help"],
+        ["vocabulary", "sync", "--help"],
+    ],
+)
+def test_help_and_version_do_not_load_runtime_dependencies(arguments):
+    # Use a fresh interpreter: the test suite itself imports the scientific stack.
+    result = subprocess.run(
+        [
+            sys.executable,
+            "-c",
+            """
+import sys
+from pkdb.cli import main
+try:
+    main(sys.argv[1:])
+except SystemExit as error:
+    assert error.code == 0
+else:
+    raise AssertionError("Expected help/version to exit")
+heavy = {"pandas", "numpy", "scipy", "pint", "pydantic", "httpx2", "rich"}
+assert not heavy.intersection(sys.modules), heavy.intersection(sys.modules)
+assert "pkdb.preparation" not in sys.modules
+assert "pkdb.curation.launch" not in sys.modules
+""",
+            *arguments,
+        ],
+        capture_output=True,
+        text=True,
+        timeout=10,
+    )
+    assert result.returncode == 0, result.stderr
+    assert result.stdout.startswith("usage: pkdb" if "--help" in arguments else "pkdb ")
+
+
+def test_help_describes_every_command_with_curate_first(capsys):
+    with pytest.raises(SystemExit) as error:
+        main(["--help"])
+    assert error.value.code == 0
+    output = capsys.readouterr().out
+    assert "{curate,prepare,validate,upload,vocabulary}" in output
+    for command in ("curate", "prepare", "validate", "upload", "vocabulary"):
+        line = next(
+            line for line in output.splitlines() if line.startswith(f"    {command} ")
+        )
+        assert len(line.split()) > 2

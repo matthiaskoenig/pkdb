@@ -4,15 +4,22 @@ from typing import TYPE_CHECKING
 
 __version__ = "0.11.1"
 
-from pkdb.domain.vocabulary import Vocabulary
-from pkdb.preparation import PreparedBundle, prepare
-
 if TYPE_CHECKING:
     from pkdb.batch import upload_many
     from pkdb.client import Client
+    from pkdb.domain.vocabulary import Vocabulary
+    from pkdb.preparation import PreparedBundle, prepare
 
 
 def __getattr__(name):
+    if name == "Vocabulary":
+        from pkdb.domain.vocabulary import Vocabulary
+
+        return Vocabulary
+    if name in {"PreparedBundle", "prepare"}:
+        from pkdb.preparation import PreparedBundle, prepare
+
+        return PreparedBundle if name == "PreparedBundle" else prepare
     if name == "upload_many":
         from pkdb.batch import upload_many
 

@@ -51,7 +51,7 @@ Replace `STUDY_SID` with an identifier from your search. Downloads require an ac
 
 ## Prepare, validate, and upload a study folder
 
-The development version includes a [local curation app](local-curation.md) with file watching, external file opening, and validation/upload on save. Launch it with `pkdb curation /path/to/pkdb_data`; the illustrated guide covers setup and offline work. This command is not yet available in a published release.
+The development version includes a [local curation app](local-curation.md) with file watching, external file opening, and validation/upload on save. Launch it with `pkdb curate /path/to/pkdb_data`; the illustrated guide covers setup and offline work. This command is not yet available in a published release.
 
 Pass the existing study directory from `pkdb_data` directly. Keep its original `study.json`, `reference.json`, workbooks, tables, and attachments together. The directory name must match the study's name. The parser understands existing spreadsheet sheet names, second-row workbook headers, `col==...` expressions, and TSV sources; no intermediate conversion is needed.
 

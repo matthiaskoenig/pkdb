@@ -37,9 +37,11 @@ try {
   await page.getByRole('button', {name:'Overview', exact:true}).click();
   await page.locator('#studies tr').first().locator('td').nth(3).click();
   assert.match(await page.locator('.problem').textContent(), /C10/);
-  const logo = page.locator('#study-detail img[alt="PK-DB"]');
+  const logo = page.locator('header img[alt="PK-DB"]');
   await logo.waitFor();
-  await page.waitForFunction(() => { const img = document.querySelector('#study-detail img'); return img.complete && img.naturalWidth > 0; });
+  assert.equal(await page.locator('#study-detail img').count(), 0);
+  assert((await logo.boundingBox()).width <= 50);
+  await page.waitForFunction(() => { const img = document.querySelector('header img'); return img.complete && img.naturalWidth > 0; });
   await page.locator('#studies tr').nth(1).focus();
   await page.keyboard.press('Enter');
   assert.match(await page.locator('#study-detail').textContent(), /No diagnostics available/);
@@ -94,6 +96,9 @@ try {
   await page.getByRole('button',{name:'Validate and retry upload',exact:true}).click();
   await page.waitForFunction(()=>document.querySelector('#notice').textContent.includes('Explicit retry queued'));
   assert(calls.some(c=>c.path==='/local/retry'&&c.body.id==='one'&&c.body.acknowledge_unknown===true));
+  assert((await page.locator('.problem').boundingBox()).height < 130);
+  await page.locator('#study-search').fill('');
+  assert((await page.locator('#studies tr').first().boundingBox()).height < 60);
   await page.setViewportSize({width:390,height:844});
   assert(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth));
   const mobileOverview = await page.locator('.study-overview').boundingBox();

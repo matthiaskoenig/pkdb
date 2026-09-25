@@ -11,7 +11,7 @@ The app brings study selection, validation feedback, and uploads into a local br
 The launch command opens a browser window and watches an existing `pkdb_data` checkout:
 
 ```bash
-pkdb curation /path/to/pkdb_data
+pkdb curate /path/to/pkdb_data
 ```
 
 You can also choose a substance directory or a single study folder. The app displays the selected workspace, server endpoint, authenticated PK-DB account, and vocabulary status. No local PK-DB server or Docker setup is required when uploading to a remote server.
@@ -58,7 +58,7 @@ If you save again during an upload, the in-flight upload refers to its original 
 
 The activity list lets you cancel queued jobs and clear finished history. Active and unknown-outcome jobs remain visible. **Resume suspended work** attempts reconciliation first. If an upload still has an unknown outcome, **Review unknown outcome** shows the previous server target; an explicit acknowledgment is required before retrying that study. A retry may replace data already saved by the earlier request.
 
-File watching continues while the local `pkdb curation` process runs, even if you close its browser tab. Stop the process to stop watching, or use the app's pause control to suspend automatic actions.
+File watching continues while the local `pkdb curate` process runs, even if you close its browser tab. Stop the process to stop watching, or use the app's pause control to suspend automatic actions.
 
 ## Vocabulary, credentials, and offline work
 
@@ -74,13 +74,13 @@ Offline work supports local browsing, cached assignments, file opening, and loca
 
 ```bash
 # Validate locally without any GitHub or PK-DB requests:
-pkdb curation /path/to/pkdb_data/studies/apixaban --offline
+pkdb curate /path/to/pkdb_data/studies/apixaban --offline
 
 # Connect to a server using the API key already set in your environment:
-pkdb curation /path/to/pkdb_data --endpoint https://alpha.pk-db.com
+pkdb curate /path/to/pkdb_data --endpoint https://alpha.pk-db.com
 
 # Select an assignment queue at launch:
-pkdb curation /path/to/pkdb_data --github-user matthiaskoenig
+pkdb curate /path/to/pkdb_data --github-user matthiaskoenig
 ```
 
 Startup loads the endpoint from `PKDB_ENDPOINT` and the API key from `PKDB_API_KEY`. An explicit endpoint overrides the environment; a saved endpoint is the fallback when neither is provided. The key stays in service memory and is never returned to the browser. Open **Connection → Connection settings** to override the endpoint, enter an API key, or switch offline mode. Keys entered here stay in service memory; they are not saved in browser storage.

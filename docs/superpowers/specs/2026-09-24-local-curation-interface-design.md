@@ -11,7 +11,7 @@ See the [illustrated curation guide](../../local-curation.md) for user-facing wo
 
 ## Product direction
 
-`pkdb curation` opens a local browser application around the Python package. A curator can find assigned work, select local study folders, validate source files, open a problem at its source, and upload a reviewed selection to an explicitly selected PK-DB server. The normal loop is **choose study → open problem → edit and save in the default application → automatically validate → optionally upload**. Manual validation and upload remain available.
+`pkdb curate` opens a local browser application around the Python package. A curator can find assigned work, select local study folders, validate source files, open a problem at its source, and upload a reviewed selection to an explicitly selected PK-DB server. The normal loop is **choose study → open problem → edit and save in the default application → automatically validate → optionally upload**. Manual validation and upload remain available.
 
 The application never edits source files. All editing happens outside the app in the computer’s default applications. It provides study selection, validation, diagnostics, file opening, and uploads. Git commits/pushes and managing GitHub issues are outside its initial scope. MCP remains read-only and is not used for uploads.
 
@@ -28,19 +28,19 @@ The application never edits source files. All editing happens outside the app in
 
 ```bash
 # From a pkdb_data checkout:
-pkdb curation
+pkdb curate
 
 # From anywhere:
-pkdb curation /path/to/pkdb_data --github-user matthiaskoenig
+pkdb curate /path/to/pkdb_data --github-user matthiaskoenig
 
 # Work on one substance or study:
-pkdb curation /path/to/pkdb_data/studies/apixaban
+pkdb curate /path/to/pkdb_data/studies/apixaban
 
 # Choose the upload target explicitly:
-pkdb curation /path/to/pkdb_data --endpoint https://alpha.pk-db.com
+pkdb curate /path/to/pkdb_data --endpoint https://alpha.pk-db.com
 
 # Local inspection and validation without network requests:
-pkdb curation /path/to/pkdb_data --offline
+pkdb curate /path/to/pkdb_data --offline
 ```
 
 The command starts a loopback-only service, opens the default browser, and prints the local URL and shutdown instructions. `--no-browser` supports manually opening the URL; `--port` is optional and the default selects a free port. No Docker, database, Node installation, or frontend build is needed on the curator's machine. Bundle built UI assets in the Python distribution. Support the same Python and operating-system matrix as the package.
@@ -149,7 +149,7 @@ Validation errors block upload and update the problems panel. A subsequent exter
 
 Authentication, permission, compatibility, or connectivity failures visibly pause the affected automatic work and provide **Resume** once resolved. An uncertain write outcome blocks further uploads for that study until reconciled; new saves must not bypass that block. Do not automatically retry ambiguous writes. A pause control stops new automatic jobs and pending uploads; it cannot undo an already-sent request. If changes occur while paused, **Resume** shows and processes the latest pending revision for the selected mode.
 
-The service watches while the local app process is running, even if a browser tab is closed; state this in the UI and terminal. Stopping `pkdb curation` stops watching. Opening the UI again reconnects to existing jobs rather than starting duplicate work.
+The service watches while the local app process is running, even if a browser tab is closed; state this in the UI and terminal. Stopping `pkdb curate` stops watching. Opening the UI again reconnects to existing jobs rather than starting duplicate work.
 
 ## Vocabulary and compatibility
 
@@ -216,7 +216,7 @@ Later candidates: read-only scientific plots/previews, source diffs, GitHub issu
 
 ## Acceptance scenarios
 
-- A clean supported installation launches the UI with `pkdb curation` without Docker or Node and without altering source studies.
+- A clean supported installation launches the UI with `pkdb curate` without Docker or Node and without altering source studies.
 - A curator can search and select from available GitHub users without manually entering a handle, including from the cached list offline. Changing the selected user changes the assignment queue but not authentication or permissions.
 - GitHub user `matthiaskoenig` and PK-DB user `mkoenig` can coexist visibly; assignment filtering works without equating those identities or granting permissions.
 - Assigned issues with exact local folders appear; unmatched, ambiguous, outside-scope, malformed, and missing-SID studies remain discoverable with useful actions.

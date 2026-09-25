@@ -14,7 +14,7 @@
 
 - Unify groups and individuals as subjects and characteristics and outputs as observations. Share reported/normalized context and intervention links, and replace timecourse/scatter point tables with ordered dataset arrays. Consolidate migration history into `p001initial` for an empty database and fresh study uploads; historical database upgrades are no longer supported. Use a processing-version-6 client. Characteristics and outputs now share count defaults and statistical completion.
 
-- Add `pkdb curation`, a local browser interface with GitHub assignment selection, default-application file opening, validation or upload on save, detailed diagnostics, and explicit recovery for uncertain uploads. Include an authenticated read-only curation-context endpoint and documentation with screenshots.
+- Add `pkdb curate`, a local browser interface with GitHub assignment selection, default-application file opening, validation or upload on save, detailed diagnostics, and explicit recovery for uncertain uploads. Include an authenticated read-only curation-context endpoint and documentation with screenshots.
 
 - Remove authenticated-user request and concurrency throttling, allow normal anonymous browsing bursts, expose Docker anonymous quota settings, and show retry delays for frontend quota errors.
 
