@@ -39,6 +39,7 @@ function render() {
   $('scope').value = [...$('scope').options].some(o => o.value === scopeValue) ? scopeValue : '';
   renderStudies(); renderJobs(); if (current && !$('study-detail').contains(document.activeElement)) renderDetail();
 }
+function selectStudy(id) { current = id; tab = 'problems'; renderDetail(); renderStudies(); }
 function renderStudies() {
   const visible = visibleStudies(), ids = new Set(visible.map(s => s.id));
   selected = new Set([...selected].filter(id => ids.has(id)));
@@ -46,8 +47,17 @@ function renderStudies() {
   const tbody = $('studies'); tbody.replaceChildren();
   for (const s of visible) {
     const row = el('tr'); if (s.id === current) row.className = 'current';
+    row.tabIndex = 0;
+    row.setAttribute('aria-label', `Show validation results for ${s.name || s.sid || s.id}`);
+    row.addEventListener('click', event => { if (!event.target.closest('button, input, a, select')) selectStudy(s.id); });
+    row.addEventListener('keydown', event => {
+      if (event.target === row && ['Enter', ' '].includes(event.key)) {
+        event.preventDefault(); selectStudy(s.id);
+        $('studies').querySelector('tr.current')?.focus();
+      }
+    });
     const checkCell = el('td'), check = el('input'); check.type = 'checkbox'; check.checked = selected.has(s.id); check.setAttribute('aria-label', `Select ${s.name || s.sid || s.id}`); check.addEventListener('change', () => { check.checked ? selected.add(s.id) : selected.delete(s.id); if (check.checked) { current = s.id; tab = 'problems'; renderDetail(); } renderStudies(); }); checkCell.append(check); row.append(checkCell);
-    const identity = el('td'); identity.append(button(s.name || s.sid || s.id, () => { current = s.id; tab = 'problems'; renderDetail(); renderStudies(); }, 'study-link'), el('div', [s.sid, s.path].filter(Boolean).join(' · '), 'small muted'));
+    const identity = el('td'); identity.append(button(s.name || s.sid || s.id, () => selectStudy(s.id), 'study-link'), el('div', [s.sid, s.path].filter(Boolean).join(' · '), 'small muted'));
     row.append(identity);
     const status = el('td'); status.append(badge(s.stale ? 'Changed since validation' : (s.status === 'valid' && state.offline ? 'Locally valid' : human(s.status || 'discovered')), s.stale ? 'changed' : s.status)); if (s.progress?.stage) status.append(el('div', human(s.progress.stage), 'small muted')); row.append(status);
     row.append(el('td', human(s.mode || 'validate'))); const upload = el('td'); upload.append(badge(human(s.last_upload?.persistence || 'Not uploaded'), s.last_upload?.persistence)); row.append(upload); tbody.append(row);
@@ -60,7 +70,7 @@ function locationText(problem) { const l = problem.location || problem.source ||
 async function openFile(study, file, reveal = false) { await mutate('/local/files/open', {study_id: study.id, ...(file ? {file: typeof file === 'string' ? file : file.id || file.path} : {}), reveal}, 'Opened with the default application.'); }
 function renderDetail() {
   const s = state.studies.find(s => s.id === current), container = $('study-detail'); container.hidden = false; if (!s) { container.replaceChildren(el('h2', 'Study problems'), el('p', 'Select a study to review its problems, validate, or upload.', 'empty')); return; }
-  container.replaceChildren(); const heading = el('div', null, 'detail-head'), name = el('div'); name.append(el('h2', s.name || s.sid || s.id), el('p', [s.sid, s.path].filter(Boolean).join(' · '), 'small muted')); heading.append(name, button('Close details', () => { current = ''; renderDetail(); renderStudies(); })); container.append(heading);
+  container.replaceChildren(); const logo = el('img', null, 'report-logo'); logo.src = '/static/pkdb_logo.png'; logo.alt = 'PK-DB'; container.append(logo); const heading = el('div', null, 'detail-head'), name = el('div'); name.append(el('h2', s.name || s.sid || s.id), el('p', [s.sid, s.path].filter(Boolean).join(' · '), 'small muted')); heading.append(name, button('Close details', () => { current = ''; renderDetail(); renderStudies(); })); container.append(heading);
   const controls = el('div', null, 'detail-controls'); controls.append(button('Validate', () => jobs([s.id], 'validate')), button('Validate and upload', () => reviewUpload([s.id]), 'primary'), button('Open folder', () => openFile(s, null, true))); if (state.offline) controls.children[1].disabled = true; const serverValidate = button('Validate on server', () => jobs([s.id], 'validate_remote')); serverValidate.disabled = state.offline || !state.endpoint; controls.append(serverValidate);
   const mode = el('select'); mode.id = 'study-mode'; mode.setAttribute('aria-label', 'Action on save for this study'); for (const value of ['validate','upload','off']) option(mode, value, human(value)); mode.value = s.mode || 'validate'; mode.addEventListener('change', () => run(() => setMode([s.id], mode.value))); controls.append(el('label', 'On save'), mode); container.append(controls);
   const tabs = el('nav', null, 'tabs'); tabs.setAttribute('aria-label', 'Study detail views'); for (const value of ['problems','overview','activity']) { const b = button(value === 'problems' ? `Problems (${(s.problems || []).length})` : human(value[0].toUpperCase() + value.slice(1)), () => { tab = value; renderDetail(); }); if (tab === value) b.className = 'active'; b.setAttribute('aria-current', tab === value ? 'page' : 'false'); tabs.append(b); } container.append(tabs);

@@ -17,7 +17,7 @@ try {
       await route.fulfill({contentType:'application/json',body:JSON.stringify(path==='/local/state'?state:{csrf_token:'fixture-csrf'})});return;
     }
     const file=path==='/'?'index.html':path.replace('/static/','');
-    await route.fulfill({contentType:file.endsWith('.js')?'text/javascript':file.endsWith('.css')?'text/css':'text/html',body:await readFile(new URL(file,root),'utf8')});
+    await route.fulfill({contentType:file.endsWith('.js')?'text/javascript':file.endsWith('.css')?'text/css':file.endsWith('.png')?'image/png':'text/html',body:await readFile(new URL(file,root))});
   });
   await page.goto('http://curation.test/#token=fixture-launch');
   await page.getByRole('button',{name:'Example2026',exact:true}).waitFor();
@@ -31,6 +31,21 @@ try {
   await page.locator('#pause').click();
   await page.waitForFunction(()=>document.querySelector('#watch-indicator').textContent === 'Paused');
   await page.keyboard.press('Escape');
+  await page.locator('#studies tr').first().locator('td').nth(2).click();
+  assert.match(await page.locator('.problem').textContent(), /C10/);
+  assert.equal(await page.locator('#selection-count').textContent(), '0 studies selected');
+  await page.getByRole('button', {name:'Overview', exact:true}).click();
+  await page.locator('#studies tr').first().locator('td').nth(3).click();
+  assert.match(await page.locator('.problem').textContent(), /C10/);
+  const logo = page.locator('#study-detail img[alt="PK-DB"]');
+  await logo.waitFor();
+  await page.waitForFunction(() => { const img = document.querySelector('#study-detail img'); return img.complete && img.naturalWidth > 0; });
+  await page.locator('#studies tr').nth(1).focus();
+  await page.keyboard.press('Enter');
+  assert.match(await page.locator('#study-detail').textContent(), /No diagnostics available/);
+  await page.locator('#studies tr').first().focus();
+  await page.keyboard.press('Space');
+  assert.match(await page.locator('.problem').textContent(), /C10/);
   await page.getByRole('checkbox',{name:'Select Example2026',exact:true}).check();
   assert.match(await page.locator('.problem').textContent(), /C10/);
   await page.getByRole('button',{name:'Validate now',exact:true}).click();
