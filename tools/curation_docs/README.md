@@ -11,7 +11,7 @@ The smoke test loads the actual bundled assets with isolated local API fixtures.
 To regenerate screenshots, launch the current package against a local workspace using `--no-browser`. Let the renderer consume the fresh launch URL; it validates the selected studies itself. The committed images show real offline validation of the apixaban workspace on 2026-09-24. They are examples of that source revision, not fixed scientific acceptance counts.
 
 ```bash
-pkdb curation /path/to/pkdb_data/studies/apixaban --offline --no-browser
+pkdb curate /path/to/pkdb_data/studies/apixaban --offline --no-browser
 # Pass the fresh printed launch URL to the renderer before opening it elsewhere.
 PKDB_CURATION_URL='http://127.0.0.1:PORT/#token=LAUNCH_TOKEN' node tools/curation_docs/render.mjs
 ```

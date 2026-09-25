@@ -7,4 +7,43 @@
 @media(max-width:1000px){.study-layout{grid-template-columns:1fr}.study-layout .detail{position:static;max-height:none}.table-wrap{max-height:45vh}}
 @media(max-width:600px){main{padding:16px}.app-header{padding:12px 16px;gap:10px}.header-menu{width:100%;gap:6px}.header-dropdown{position:static}.header-dropdown summary{font-size:12px;padding:6px}.menu-panel{left:16px;right:16px;top:auto;margin-top:8px;width:auto}.header-dropdown .badge{font-size:10px;padding:2px 4px}.study-layout{gap:16px}.section-heading{flex-wrap:wrap}}
 
-#studies tr{cursor:pointer}#studies tr:hover{background:#eaf4f4}#studies tr:focus-visible{outline:3px solid #e3aa4b;outline-offset:-3px}.report-logo{display:block;width:140px;max-width:100%;height:auto;margin-bottom:16px}
+#studies tr{cursor:pointer}#studies tr:hover{background:#eaf4f4}#studies tr:focus-visible{outline:3px solid #e3aa4b;outline-offset:-3px}
+
+/* Keep navigation and report controls compact so diagnostics stay in view. */
+.brand{display:flex;align-items:center;gap:12px}
+.brand-logo{display:block;width:48px;height:auto;flex:none}
+.brand span{font-size:16px}
+.app-header{padding:10px 24px}
+main{padding:20px 24px}
+.study-layout{gap:16px;grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr)}
+.study-layout button,.study-layout input:not([type=checkbox]),.study-layout select{padding:5px 8px;font-size:12px;line-height:1.4;min-height:28px}
+.study-layout .study-link{padding:0;min-height:24px;font-size:13px}
+.study-layout th,.study-layout td{padding:6px 8px;line-height:1.35;vertical-align:top}
+.study-layout td:first-child,.study-layout th:first-child{width:32px}
+.study-layout td:nth-child(2){overflow-wrap:anywhere}
+.study-layout .badge{padding:2px 5px;font-size:11px;line-height:1.4}
+.toolbar{margin:10px 0;gap:6px}
+.batch strong{font-size:12px}
+.detail{padding:14px}
+.detail-head{gap:10px;align-items:flex-start}
+.detail-head h2{margin:0;font-size:17px}
+.detail-head p{margin:3px 0 0;line-height:1.4}
+.detail-head>button{flex:none}
+.detail-controls{gap:6px;margin-top:10px}
+.tabs{gap:14px;margin:10px 0}
+.tabs button{padding:6px 2px}
+.problem-filter{gap:6px;margin-bottom:6px}
+.problem{padding:8px 10px;margin-top:0;border:0;border-bottom:1px solid var(--border);border-left:3px solid #cf7a40;border-radius:0;line-height:1.4}
+.problem:nth-child(even){background:#f9fbfb}
+.problem-heading{display:flex;gap:7px;align-items:baseline}
+.problem-heading .badge{flex:none}
+.problem h3{margin:0;font-size:13px;line-height:1.4;overflow-wrap:anywhere;min-width:0}
+.problem p{margin:4px 0;font-size:12px}
+.problem .location{padding:0;margin:4px 0;background:none;font-size:11px;line-height:1.4}
+.problem .actions{gap:6px;margin-top:6px}
+.problem .actions button{padding:3px 7px;min-height:26px;font-size:11px}
+.problem details{margin-top:4px;font-size:12px}
+.files li,.job{padding:8px 10px;gap:8px}
+.activity{margin-top:18px}
+@media(max-width:1000px){.study-layout{grid-template-columns:1fr}}
+@media(max-width:600px){main{padding:14px}.app-header{padding:10px 14px}.brand-logo{width:44px}.brand span{font-size:15px}.detail{padding:10px}.study-layout th,.study-layout td{padding:6px}.problem{padding:8px}.problem-heading{align-items:flex-start}.job .grow{flex-basis:100%}.job{flex-wrap:wrap}.activity .section-heading{gap:8px}.activity .actions{margin-top:0}}

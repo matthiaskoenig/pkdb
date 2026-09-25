@@ -1,4 +1,4 @@
-"""Prepare, validate, and upload existing PK-DB study folders."""
+"""Curate, prepare, validate, and upload PK-DB study folders."""
 
 import argparse
 import json
@@ -9,13 +9,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 
 from pkdb import __version__
-from pkdb.cache import VocabularyCache, atomic_json, bundled_vocabulary
-from pkdb.client import Client
-from pkdb.domain.vocabulary import Vocabulary
-from pkdb.errors import ClientError, CompatibilityError
-from pkdb.preparation import prepare, study_folders
-from pkdb.schemas.validation import StudyValidationError
-from pkdb.terminal import Terminal, safe_text
 
 
 def _redact(value, token):
@@ -31,9 +24,29 @@ def _redact(value, token):
 def main(argv=None, *, client=None) -> int:
     parser = argparse.ArgumentParser(prog="pkdb", description=__doc__)
     parser.add_argument("--version", action="version", version=f"pkdb {__version__}")
-    commands = parser.add_subparsers(dest="command", required=True)
-    for name in ("prepare", "validate", "upload"):
-        command = commands.add_parser(name)
+    commands = parser.add_subparsers(
+        dest="command",
+        required=True,
+        title="commands",
+        description="Run pkdb COMMAND --help for command-specific options.",
+    )
+    curate = commands.add_parser(
+        "curate", help="Open the local study curation interface"
+    )
+    curate.add_argument("path", nargs="?", type=Path)
+    curate.add_argument("--endpoint", default=os.environ.get("PKDB_ENDPOINT"))
+    curate.add_argument("--github-user")
+    curate.add_argument("--repository")
+    curate.add_argument("--offline", action="store_true")
+    curate.add_argument("--port", type=int, default=0)
+    curate.add_argument("--no-browser", action="store_true")
+    curate.add_argument("--state-dir", type=Path)
+    for name, description in (
+        ("prepare", "Prepare study folders for validation or upload"),
+        ("validate", "Validate study folders against vocabulary rules"),
+        ("upload", "Upload study folders to a PK-DB server"),
+    ):
+        command = commands.add_parser(name, help=description, description=description)
         command.add_argument(
             "folder", type=Path, help="Existing study folder or parent directory"
         )
@@ -62,7 +75,11 @@ def main(argv=None, *, client=None) -> int:
             type=Path,
             help="JSON output file outside the study folder (one study only)",
         )
-    vocabulary = commands.add_parser("vocabulary")
+    vocabulary = commands.add_parser(
+        "vocabulary",
+        help="Manage cached validation vocabulary",
+        description="Manage cached validation vocabulary.",
+    )
     actions = vocabulary.add_subparsers(dest="action", required=True)
     sync = actions.add_parser(
         "sync", help="Explicitly retrieve and cache the endpoint's validation rules"
@@ -72,19 +89,8 @@ def main(argv=None, *, client=None) -> int:
     sync.add_argument(
         "--output", type=Path, help="Portable project vocabulary lock file"
     )
-    curation = commands.add_parser(
-        "curation", help="Open the local study curation interface"
-    )
-    curation.add_argument("path", nargs="?", type=Path)
-    curation.add_argument("--endpoint", default=os.environ.get("PKDB_ENDPOINT"))
-    curation.add_argument("--github-user")
-    curation.add_argument("--repository")
-    curation.add_argument("--offline", action="store_true")
-    curation.add_argument("--port", type=int, default=0)
-    curation.add_argument("--no-browser", action="store_true")
-    curation.add_argument("--state-dir", type=Path)
     args = parser.parse_args(argv)
-    if args.command == "curation":
+    if args.command == "curate":
         from pkdb.curation.launch import run
 
         try:
@@ -102,6 +108,14 @@ def main(argv=None, *, client=None) -> int:
     if args.command == "upload":
         if args.jobs < 1:
             parser.error("--jobs must be positive")
+    from pkdb.cache import VocabularyCache, atomic_json, bundled_vocabulary
+    from pkdb.client import Client
+    from pkdb.domain.vocabulary import Vocabulary
+    from pkdb.errors import ClientError, CompatibilityError
+    from pkdb.preparation import prepare, study_folders
+    from pkdb.schemas.validation import StudyValidationError
+    from pkdb.terminal import Terminal, safe_text
+
     token = os.environ.get("PKDB_API_KEY")
     human = getattr(args, "format", None) == "human" or (
         getattr(args, "format", None) is None and sys.stdout.isatty()

@@ -148,7 +148,7 @@ def test_open_default_app_uses_argument_array(tmp_path, monkeypatch):
     assert runner.call_args.args[0] == ["xdg-open", str(tmp_path)]
 
 
-def test_curation_cli_routes_options(monkeypatch):
+def test_curate_cli_routes_options(monkeypatch):
     from pkdb.cli import main
 
     run = Mock(return_value=0)
@@ -156,7 +156,7 @@ def test_curation_cli_routes_options(monkeypatch):
     assert (
         main(
             [
-                "curation",
+                "curate",
                 "/tmp/studies",
                 "--offline",
                 "--no-browser",
