@@ -139,7 +139,7 @@ for (const role of ["curator", "reviewer"]) {
     await page.getByRole("tab", { name: "API keys", exact: true }).click();
     await expect(
       page.getByLabel("Allow study uploads and edits within my permissions"),
-    ).toBeVisible();
+    ).toBeChecked();
     await page
       .getByRole("tab", { name: "Assigned studies", exact: true })
       .click();

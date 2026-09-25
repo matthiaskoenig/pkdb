@@ -60,7 +60,15 @@ def atomic_json(path: Path, value: dict) -> None:
             temporary = Path(handle.name)
             json.dump(value, handle, ensure_ascii=False, allow_nan=False, indent=2)
             handle.write("\n")
+            handle.flush()
+            os.fsync(handle.fileno())
         temporary.replace(path)
+        if os.name == "posix":
+            directory_fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
+            try:
+                os.fsync(directory_fd)
+            finally:
+                os.close(directory_fd)
     finally:
         if temporary is not None:
             temporary.unlink(missing_ok=True)

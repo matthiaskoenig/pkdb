@@ -80,6 +80,8 @@ Use the [Python client preparation and upload workflow](python-client.md#prepare
 
 ## Handle errors
 
+Upload permission rejections return HTTP 403 with an actionable code: `missing_scope`, `upload_role_required`, `study_write_forbidden`, `licence_change_forbidden`, or `creator_change_forbidden`. Standard responses include `detail` and `suggestion`; negotiated upload reports include the code, message, and suggestions in `report.issues`. These messages do not reveal existing private-study metadata. Rate limits use HTTP 429 and `Retry-After`; negotiated rate/capacity reports also expose the header value in issue `context.retry_after`.
+
 Inspect the HTTP status and response body. Validation failures include structured issues where available. `401` indicates an authentication problem; `403` indicates insufficient access; `409` can indicate incompatible vocabulary or processing versions. Authenticated callers are not rate limited. Anonymous callers receiving `429` should respect `Retry-After`. Do not automatically retry an upload with an uncertain outcome: inspect the study first.
 
 

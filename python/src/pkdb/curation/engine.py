@@ -9,7 +9,6 @@ from collections import Counter
 from contextlib import ExitStack
 from datetime import UTC, datetime
 from pathlib import Path
-from urllib.parse import quote
 from uuid import uuid4
 
 from pkdb.cache import (
@@ -956,9 +955,7 @@ class CurationEngine:
                     "Inspect the original server before retrying the unknown upload"
                 )
             with Client(self.endpoint, api_key=self.api_key) as client:
-                publication = client._request(
-                    "GET", f"/api/v2/studies/{quote(job['sid'], safe='')}/publication"
-                ).json()
+                publication = client.publication(job["sid"]).model_dump()
             if publication.get("digest") != job["source_digest"]:
                 raise ValueError(
                     "Server publication differs; outcome cannot be established automatically"

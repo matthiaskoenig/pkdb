@@ -1,5 +1,11 @@
 # Unreleased
 
+- Continue CLI batch uploads after HTTP 403 unless `--fail-fast` is requested. Return actionable upload permission codes and guidance, preserve request IDs and retry metadata, and distinguish rate limits (429) from permission errors. Stop on rate limits rather than rejecting the rest of the batch in a burst.
+
+- Identify CLI batch uploads by relative study path and show server-confirmed uploaded object counts in human-readable results. Include relative paths in JSON output and batch reports.
+
+- Select study upload and edit permissions by default when creating API keys for eligible accounts. Users can deselect the option to create a read-only key.
+
 - Add permission-filtered `/api/v2/statistics` coverage metrics and interactive landing-page charts for studies, substances with timecourses, and reported/calculated PK parameters by study year. Include cumulative views, year and parameter filters, current substance coverage, accessible data tables, and explicit undated totals (#767).
 
 - Make flat study analysis apply related measurement filters to the same measurement, matching normal study queries.

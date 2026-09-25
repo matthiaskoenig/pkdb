@@ -99,10 +99,12 @@ def authenticate_token(raw_token: str, session: Session) -> Principal:
 
 
 def revalidate_principal(
-    principal: Principal, session: Session, *, lock=False
+    principal: Principal, session: Session, *, lock=False, publication_lock=False
 ) -> Principal:
     """Refresh identity and original credential inside the operation transaction.
 
+    Publication SHARE locks coexist but block revocation and account mutation.
+    Other callers retain exclusive locks when requesting ``lock=True``.
     Locks always acquire the user before its credential. Internal principals are
     reserved for trusted services and tests, never constructed by HTTP/MCP input.
     """
@@ -110,8 +112,8 @@ def revalidate_principal(
 
     now = datetime.now(UTC)
     statement = select(User).where(User.id == principal.user_id, User.active.is_(True))
-    if lock:
-        statement = statement.with_for_update()
+    if lock or publication_lock:
+        statement = statement.with_for_update(read=publication_lock and not lock)
     user = session.scalar(statement.execution_options(populate_existing=True))
     if user is None:
         raise AuthenticationFailed("Inactive or missing account")
@@ -129,8 +131,8 @@ def revalidate_principal(
         model.revoked_at.is_(None),
         model.expires_at > now,
     )
-    if lock:
-        statement = statement.with_for_update()
+    if lock or publication_lock:
+        statement = statement.with_for_update(read=publication_lock and not lock)
     row = session.scalar(statement.execution_options(populate_existing=True))
     if row is None:
         raise AuthenticationFailed("Invalid credentials")

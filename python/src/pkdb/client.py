@@ -22,8 +22,8 @@ from pkdb.cache import (
 from pkdb.domain.validation import PROCESSING_VERSION, prepare_study
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.errors import ClientError, CompatibilityError
-from pkdb.importers.folder import parse_bundle
-from pkdb.preparation import PreparedBundle, prepare
+from pkdb.importers.folder import load_folder, parse_bundle
+from pkdb.preparation import PreparedBundle, prepare, source_snapshot
 from pkdb.progress import ProgressCallback, emit
 from pkdb.querying import export_from_filters, query_from_filters
 from pkdb.schemas.data import DataPage
@@ -209,6 +209,23 @@ class Client:
                 message += f": {summary}"
                 if len(issues) > 3 or report.truncated:
                     message += "; see validation report for further issues"
+        elif isinstance(detail, str) and response.status_code < 500:
+            message += f": {detail[:1000]}"
+        code = body.get("code") if isinstance(body, dict) else None
+        if report and report.issues:
+            code = next(
+                (issue.code for issue in report.issues if issue.severity == "error"),
+                code,
+            )
+        if not isinstance(code, str):
+            code = {403: "upload_forbidden", 429: "rate_limit"}.get(
+                response.status_code
+            )
+        retry_after = response.headers.get("Retry-After")
+        if response.status_code == 429:
+            message += "; rate limit reached"
+        if retry_after and response.status_code in {429, 503}:
+            message += f"; Retry-After: {retry_after}"
         error = ClientError
         if (
             response.status_code == 409
@@ -222,14 +239,19 @@ class Client:
         raise error(
             message,
             status_code=response.status_code,
+            code=code,
+            retry_after=retry_after,
             report=report,
-            request_id=body.get("request_id") if isinstance(body, dict) else None,
+            request_id=(body.get("request_id") if isinstance(body, dict) else None)
+            or response.headers.get("X-Request-ID"),
             stage=body.get("stage") if isinstance(body, dict) else None,
             persistence=body.get(
                 "persistence", "unknown" if response.status_code >= 500 else "not_saved"
             )
             if isinstance(body, dict)
-            else "unknown",
+            else "unknown"
+            if response.status_code >= 500
+            else "not_saved",
             envelope=body
             if isinstance(body, dict) and "report_version" in body
             else None,
@@ -349,96 +371,143 @@ class Client:
         with prepared.source() as source:
             canonical = parse_bundle(source, max_rows=prepared.max_rows)
             checked = prepare_study(canonical, prepared.vocabulary)
-            emit(self.progress, "compatibility")
-            capabilities = self.capabilities()
-            if 2 in capabilities.upload_report_versions:
-                headers["X-PKDB-Report-Version"] = "2"
-            if capabilities.processing_version != PROCESSING_VERSION:
-                raise CompatibilityError(
-                    "Server processing rules differ; install the matching pkdb release and prepare again"
-                )
-            if capabilities.vocabulary_hash != prepared.vocabulary_hash:
-                raise CompatibilityError(
-                    "Server vocabulary differs; run pkdb vocabulary sync and prepare again"
-                )
-            limits = capabilities.upload_limits
-            if len(source.files) > limits.max_files:
-                fail("file_limit", "Too many source files for this server")
-            if limits.max_rows < prepared.max_rows:
-                parse_bundle(source, max_rows=limits.max_rows)
-            sizes = [path.stat().st_size for path in source.files.values()]
-            if any(size > limits.max_attachment_bytes for size in sizes):
-                fail("file_limit", "Attachment exceeds the server's byte limit")
-            payloads = {
-                "study": json.dumps(source.study),
-                "reference": json.dumps(source.reference),
-            }
-            if (
-                sum(sizes) + sum(len(value.encode()) for value in payloads.values())
-                > limits.max_upload_bytes
-            ):
-                fail(
-                    "file_limit", "Study bundle exceeds the server's upload byte limit"
-                )
-            headers.update(
-                {
-                    "X-PKDB-Vocabulary-Hash": prepared.vocabulary_hash,
-                    "X-PKDB-Processing-Version": PROCESSING_VERSION,
-                }
+            return self._upload_source(
+                source, checked, prepared.vocabulary_hash, prepared.max_rows, headers
             )
-            with ExitStack() as stack:
-                parts: list[
-                    tuple[str, tuple[None, str] | tuple[str, BinaryIO, str]]
-                ] = [(name, (None, value)) for name, value in payloads.items()]
-                parts.extend(
+
+    def _upload_folder(self, folder, vocabulary, capabilities, before_submit):
+        """Validate and send one private snapshot during its entire lifetime."""
+        from pkdb.domain.vocabulary import vocabulary_hash
+
+        self.last_upload_report = None
+        emit(self.progress, "read")
+        with source_snapshot(Path(folder)) as (root, hashes):
+            source = load_folder(root)
+            emit(self.progress, "parse")
+            canonical = parse_bundle(
+                source, max_rows=capabilities.upload_limits.max_rows
+            )
+            emit(self.progress, "validate")
+            checked = prepare_study(canonical, vocabulary)
+            return self._upload_source(
+                source,
+                checked,
+                vocabulary_hash(vocabulary),
+                capabilities.upload_limits.max_rows,
+                self._headers(required=True),
+                capabilities=capabilities,
+                before_submit=lambda value: before_submit(value, hashes),
+            )
+
+    def publication(self, sid: str):
+        from pkdb.schemas.replacement import PublicationState
+
+        return self._model(
+            PublicationState,
+            self._request("GET", f"/api/v2/studies/{quote(sid, safe='')}/publication"),
+        )
+
+    def _upload_source(
+        self,
+        source,
+        checked,
+        vocabulary_digest,
+        max_rows,
+        headers,
+        *,
+        capabilities=None,
+        before_submit=None,
+    ):
+        emit(self.progress, "compatibility")
+        capabilities = capabilities or self.capabilities()
+        if 2 in capabilities.upload_report_versions:
+            headers["X-PKDB-Report-Version"] = "2"
+        if capabilities.processing_version != PROCESSING_VERSION:
+            raise CompatibilityError(
+                "Server processing rules differ; install the matching pkdb release and prepare again"
+            )
+        if capabilities.vocabulary_hash != vocabulary_digest:
+            raise CompatibilityError(
+                "Server vocabulary differs; run pkdb vocabulary sync and prepare again"
+            )
+        limits = capabilities.upload_limits
+        if len(source.files) > limits.max_files:
+            fail("file_limit", "Too many source files for this server")
+        if limits.max_rows < max_rows:
+            parse_bundle(source, max_rows=limits.max_rows)
+        sizes = [path.stat().st_size for path in source.files.values()]
+        if any(size > limits.max_attachment_bytes for size in sizes):
+            fail("file_limit", "Attachment exceeds the server's byte limit")
+        payloads = {
+            "study": json.dumps(source.study),
+            "reference": json.dumps(source.reference),
+        }
+        if (
+            sum(sizes) + sum(len(value.encode()) for value in payloads.values())
+            > limits.max_upload_bytes
+        ):
+            fail("file_limit", "Study bundle exceeds the server's upload byte limit")
+        headers.update(
+            {
+                "X-PKDB-Vocabulary-Hash": vocabulary_digest,
+                "X-PKDB-Processing-Version": PROCESSING_VERSION,
+            }
+        )
+        with ExitStack() as stack:
+            parts: list[tuple[str, tuple[None, str] | tuple[str, BinaryIO, str]]] = [
+                (name, (None, value)) for name, value in payloads.items()
+            ]
+            parts.extend(
+                (
+                    "files",
                     (
-                        "files",
-                        (
-                            name,
-                            stack.enter_context(path.open("rb")),
-                            "application/octet-stream",
-                        ),
-                    )
-                    for name, path in source.files.items()
+                        name,
+                        stack.enter_context(path.open("rb")),
+                        "application/octet-stream",
+                    ),
                 )
-                response = self._request(
-                    "PUT",
-                    f"/api/v2/studies/{quote(checked.study.sid, safe='')}",
-                    headers=headers,
-                    files=parts,
-                )
-            try:
-                body = response.json()
-                if isinstance(body, dict) and body.get("report_version") == 2:
-                    self.last_upload_report = body
-                    payload = body["result"]
-                    if isinstance(payload, dict):
-                        payload = {
-                            key: value
-                            for key, value in payload.items()
-                            if key in ReplacementResult.model_fields
-                        }
-                        if "warnings" in payload:
-                            payload["warnings"] = _known_report(
-                                {"issues": payload["warnings"]}
-                            )["issues"]
-                    result = ReplacementResult.model_validate(payload)
-                else:
-                    result = self._model(ReplacementResult, response)
-            except ValueError, KeyError, ValidationError, ClientError:
-                raise ClientError(
-                    "Server returned an invalid upload confirmation",
-                    persistence="unknown",
-                    stage="save",
-                ) from None
-            if result.sid != checked.study.sid:
-                raise ClientError(
-                    "Server did not confirm the uploaded study identifier",
-                    persistence="unknown",
-                    stage="save",
-                )
-            emit(self.progress, "complete")
-            return result
+                for name, path in source.files.items()
+            )
+            if before_submit:
+                before_submit(checked)
+            response = self._request(
+                "PUT",
+                f"/api/v2/studies/{quote(checked.study.sid, safe='')}",
+                headers=headers,
+                files=parts,
+            )
+        try:
+            body = response.json()
+            if isinstance(body, dict) and body.get("report_version") == 2:
+                self.last_upload_report = body
+                payload = body["result"]
+                if isinstance(payload, dict):
+                    payload = {
+                        key: value
+                        for key, value in payload.items()
+                        if key in ReplacementResult.model_fields
+                    }
+                    if "warnings" in payload:
+                        payload["warnings"] = _known_report(
+                            {"issues": payload["warnings"]}
+                        )["issues"]
+                result = ReplacementResult.model_validate(payload)
+            else:
+                result = self._model(ReplacementResult, response)
+        except ValueError, KeyError, ValidationError, ClientError:
+            raise ClientError(
+                "Server returned an invalid upload confirmation",
+                persistence="unknown",
+                stage="save",
+            ) from None
+        if result.sid != checked.study.sid:
+            raise ClientError(
+                "Server did not confirm the uploaded study identifier",
+                persistence="unknown",
+                stage="save",
+            )
+        emit(self.progress, "complete")
+        return result
 
     def _page[T: BaseModel](
         self, entity: str, model: type[T], filters: dict

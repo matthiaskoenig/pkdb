@@ -158,7 +158,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.exception_handler(AuthorizationDenied)
     async def authorization_error(request, error):
-        return JSONResponse({"detail": "Action not permitted"}, status_code=403)
+        return JSONResponse(error.feedback(), status_code=403)
 
     @app.exception_handler(PublicationConflict)
     async def conflict_error(request, error):
@@ -300,10 +300,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                             "valid": True,
                         }
                     request.state.upload_save_started = True
+                    request.state.upload_timings = {}
                     result = await run_in_threadpool(
                         ingestion.replace,
                         bundle,
                         actor,
+                        timings=request.state.upload_timings,
                         expected_vocabulary_hash=expected_hash,
                         expected_processing_version=expected_processing,
                     )

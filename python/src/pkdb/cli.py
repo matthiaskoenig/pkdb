@@ -7,7 +7,6 @@ import sys
 import time
 from datetime import UTC, datetime
 from pathlib import Path
-from urllib.parse import quote
 
 from pkdb import __version__
 from pkdb.cache import VocabularyCache, atomic_json, bundled_vocabulary
@@ -50,6 +49,9 @@ def main(argv=None, *, client=None) -> int:
         command.add_argument("--report", type=Path)
         command.add_argument("--overwrite-report", action="store_true")
         command.add_argument("--fail-fast", action="store_true")
+        if name == "upload":
+            command.add_argument("--jobs", type=int, default=1)
+            command.add_argument("--resume", type=Path)
         command.add_argument(
             "--offline",
             action="store_true",
@@ -97,6 +99,9 @@ def main(argv=None, *, client=None) -> int:
             return 1
     if args.command == "upload" and args.offline:
         parser.error("upload requires network access; use validate --offline")
+    if args.command == "upload":
+        if args.jobs < 1:
+            parser.error("--jobs must be positive")
     token = os.environ.get("PKDB_API_KEY")
     human = getattr(args, "format", None) == "human" or (
         getattr(args, "format", None) is None and sys.stdout.isatty()
@@ -132,7 +137,11 @@ def main(argv=None, *, client=None) -> int:
                 for folder in folders
             ):
                 raise ValueError("Write --report outside all study folders")
-            if args.report.exists() and not args.overwrite_report:
+            if (
+                args.report.exists()
+                and not args.overwrite_report
+                and args.report != getattr(args, "resume", None)
+            ):
                 raise ValueError(
                     "Report already exists; choose another path or use --overwrite-report"
                 )
@@ -163,6 +172,62 @@ def main(argv=None, *, client=None) -> int:
                 file=sys.stderr,
             )
         return 1
+    if args.command == "upload":
+        from pkdb.batch import BatchOptions, upload_many
+
+        assert token is not None
+
+        terminal.begin(args.command, args.endpoint, str(args.folder), len(folders))
+
+        def completed(result):
+            if "index" in result:
+                terminal.start(
+                    result["relative_path"], result["index"] + 1, len(folders)
+                )
+            terminal.result(result)
+            if not human:
+                print(
+                    json.dumps(result, ensure_ascii=False, allow_nan=False), flush=True
+                )
+
+        try:
+            batch = upload_many(
+                folders,
+                endpoint=args.endpoint,
+                api_key=token,
+                vocabulary=snapshot,
+                options=BatchOptions(
+                    jobs=args.jobs,
+                    fail_fast=args.fail_fast,
+                    report=args.report,
+                    resume=args.resume,
+                ),
+                on_result=completed,
+                progress=terminal.batch_progress,
+                transport=client,
+            )
+        except (ValueError, OSError, ClientError) as error:
+            completed(_redact({"ok": False, "error": str(error)}, token))
+            return 1
+        if args.output:
+            try:
+                atomic_json(args.output, batch["results"][0])
+            except OSError as error:
+                batch["report_error"] = _redact(str(error), token)
+        terminal.finish(batch["summary"], str(args.report or args.resume or ""))
+        if batch.get("report_error"):
+            print(
+                json.dumps({"ok": False, "error": batch["report_error"]}),
+                file=sys.stderr,
+            )
+        return (
+            130
+            if batch.get("interrupted")
+            else int(
+                bool(batch.get("report_error"))
+                or any(not row["ok"] for row in batch["results"])
+            )
+        )
     failed = False
     interrupted = False
     results = []
@@ -209,12 +274,18 @@ def main(argv=None, *, client=None) -> int:
             ),
         }
 
+    source_root = args.folder.resolve()
+    if (source_root / "study.json").is_file():
+        source_root = source_root.parent
+
     for index, folder in enumerate(folders, 1):
         started = time.monotonic()
         stop = False
-        terminal.start(folder.name, index, len(folders))
+        relative_path = folder.resolve().relative_to(source_root).as_posix()
+        terminal.start(relative_path, index, len(folders))
         result = {
             "path": str(folder),
+            "relative_path": relative_path,
             "name": folder.name,
             "ok": False,
             "persistence": "not_attempted",
@@ -224,25 +295,7 @@ def main(argv=None, *, client=None) -> int:
             batch["vocabulary_hash"] = prepared.vocabulary_hash
             batch["processing_version"] = prepared.prepared.processing_version
             result.update(sid=prepared.study.sid)
-            if args.command == "upload":
-                with Client(
-                    args.endpoint,
-                    api_key=token,
-                    transport=client,
-                    cache=cache,
-                    progress=terminal.progress,
-                ) as api:
-                    result.update(api.upload(prepared).model_dump(mode="json"))
-                    result["persistence"] = (
-                        "created" if result["created"] else "replaced"
-                    )
-                    result["url"] = (
-                        f"{api.endpoint}/api/v1/studies/{quote(str(result['sid']), safe='')}/"
-                    )
-                    if api.last_upload_report:
-                        result["server_report"] = api.last_upload_report
-                        result["request_id"] = api.last_upload_report.get("request_id")
-            elif args.command == "prepare":
+            if args.command == "prepare":
                 result.update(prepared.model_dump())
             else:
                 result.update(
@@ -261,6 +314,8 @@ def main(argv=None, *, client=None) -> int:
             result.update(
                 error=str(error),
                 status_code=error.status_code,
+                code=error.code,
+                retry_after=error.retry_after,
                 persistence=error.persistence,
                 request_id=error.request_id,
                 stage=error.stage,
@@ -269,7 +324,7 @@ def main(argv=None, *, client=None) -> int:
                 result["server_report"] = error.envelope
             stop = (
                 isinstance(error, CompatibilityError)
-                or error.status_code in {401, 403}
+                or error.status_code in {401, 429}
                 or (error.status_code is not None and error.status_code >= 500)
                 or error.persistence == "unknown"
             )

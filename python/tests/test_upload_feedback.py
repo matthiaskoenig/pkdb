@@ -224,6 +224,7 @@ def test_shared_auth_failure_stops_batch_and_records_remaining(
 
     second = tmp_path / "nested" / study_folder.name
     shutil.copytree(study_folder, second)
+    _identity(second, "TEST2", 124)
     lock = tmp_path / "vocabulary.json"
     vocabulary.save(lock)
     prepared = prepare(study_folder, vocabulary=vocabulary)
@@ -347,3 +348,194 @@ def test_human_output_includes_json_pointer_and_transfer_completion(capsys):
     output = capsys.readouterr().out
     assert "100 bytes / 100 (100%)" in output
     assert "/outputset/outputs/3/image" in output
+
+
+@pytest.mark.parametrize("broken", [False, True])
+def test_batch_paths_distinguish_same_named_studies(
+    study_folder, vocabulary, tmp_path, capsys, broken
+):
+    import shutil
+
+    root = tmp_path / "studies"
+    for substance in ("apixaban", "caffeine"):
+        folder = root / substance / "Example"
+        shutil.copytree(study_folder, folder)
+        if broken:
+            (folder / "study.json").write_text("{")
+    lock = tmp_path / "vocabulary.json"
+    vocabulary.save(lock)
+    report = tmp_path / "batch.json"
+    assert main(
+        [
+            "validate",
+            str(root),
+            "--vocabulary",
+            str(lock),
+            "--format",
+            "human",
+            "--report",
+            str(report),
+        ]
+    ) == int(broken)
+    output = capsys.readouterr().out
+    assert "[1/2] apixaban/Example" in output
+    assert "[2/2] caffeine/Example" in output
+    results = json.loads(report.read_text())["results"]
+    assert [row["relative_path"] for row in results] == [
+        "apixaban/Example",
+        "caffeine/Example",
+    ]
+    assert [row["name"] for row in results] == ["Example", "Example"]
+    assert all(row["ok"] is not broken for row in results)
+
+
+@pytest.mark.parametrize("persistence", ["created", "replaced", "unknown", "not_saved"])
+def test_object_summary_only_claims_confirmed_uploads(capsys, persistence):
+    from pkdb.terminal import Terminal
+
+    terminal = Terminal(True)
+    terminal.result(
+        {
+            "ok": False,
+            "relative_path": "apixaban/Frost2013",
+            "persistence": persistence,
+            "counts": {"measurements": 12, "groups": 3, "individuals": 0},
+        }
+    )
+    output = capsys.readouterr().out
+    assert "apixaban/Frost2013" in output
+    if persistence in {"created", "replaced"}:
+        assert "Uploaded: groups=3, individuals=0, measurements=12" in output
+        assert "Save confirmed" in output
+    else:
+        assert "Uploaded:" not in output
+
+
+@pytest.mark.parametrize(
+    "status,fail_fast,attempts",
+    [
+        (403, False, 2),
+        (403, True, 1),
+        (429, False, 1),
+        (401, False, 1),
+        (503, False, 1),
+    ],
+)
+def test_batch_continues_after_forbidden_but_stops_on_systemic_failures(
+    study_folder, vocabulary, tmp_path, monkeypatch, capsys, status, fail_fast, attempts
+):
+    import shutil
+
+    from pkdb.domain.validation import PROCESSING_VERSION
+    from pkdb.domain.vocabulary import vocabulary_hash
+
+    root = tmp_path / "studies"
+    for index, name in enumerate(("a/Example", "b/Example")):
+        shutil.copytree(study_folder, root / name)
+        _identity(root / name, f"TEST{index + 1}", 123 + index)
+    lock = tmp_path / "vocabulary.json"
+    vocabulary.save(lock)
+    monkeypatch.setenv("PKDB_API_KEY", "pkdb_live_secret")
+    calls = []
+
+    def handler(request):
+        if request.method == "GET":
+            return httpx2.Response(
+                200,
+                json={
+                    "schema_version": 1,
+                    "server_version": "test",
+                    "processing_version": PROCESSING_VERSION,
+                    "vocabulary_version": vocabulary.version,
+                    "vocabulary_hash": vocabulary_hash(vocabulary),
+                    "upload_limits": {
+                        "max_rows": 1000000,
+                        "max_files": 256,
+                        "max_upload_bytes": 100000000,
+                        "max_attachment_bytes": 100000000,
+                    },
+                },
+            )
+        calls.append(request.method)
+        if len(calls) == 1:
+            # Also handle plain-text rejections from an older server/proxy.
+            return httpx2.Response(
+                status,
+                text="Rejected",
+                headers={"X-Request-ID": "request-test", "Retry-After": "30"},
+            )
+        return httpx2.Response(
+            201,
+            json={
+                "sid": request.url.path.rsplit("/", 1)[-1],
+                "created": True,
+                "digest": "abc",
+                "counts": {"groups": 1},
+            },
+        )
+
+    report = tmp_path / "batch.json"
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+        assert (
+            main(
+                [
+                    "upload",
+                    str(root),
+                    "--endpoint",
+                    "https://example.test",
+                    "--vocabulary",
+                    str(lock),
+                    "--report",
+                    str(report),
+                    *(["--fail-fast"] if fail_fast else []),
+                ],
+                client=transport,
+            )
+            == 1
+        )
+    assert len(calls) == attempts
+    data = json.loads(report.read_text())
+    first = data["results"][0]
+    assert first["status_code"] == status
+    assert first["retry_after"] == "30"
+    assert first["request_id"] == "request-test"
+    assert data["summary"]["unattempted"] == 2 - attempts
+    if status == 403:
+        assert first["code"] == "upload_forbidden"
+        assert first["persistence"] == "not_saved"
+        if not fail_fast:
+            assert data["results"][1]["persistence"] == "created"
+    if status == 429:
+        assert first["code"] == "rate_limit"
+        assert "rate limit reached" in first["error"]
+    assert "pkdb_live_secret" not in capsys.readouterr().out
+
+
+def test_client_preserves_safe_permission_detail():
+    with httpx2.Client(
+        transport=httpx2.MockTransport(
+            lambda request: httpx2.Response(
+                403,
+                json={
+                    "code": "licence_change_forbidden",
+                    "detail": "The upload would change the licence.",
+                },
+            )
+        )
+    ) as transport:
+        with Client("https://example.test", transport=transport) as api:
+            with pytest.raises(ClientError) as caught:
+                api._request("PUT", "/api/v2/studies/TEST")
+    assert caught.value.code == "licence_change_forbidden"
+    assert "would change the licence" in str(caught.value)
+
+
+def _identity(folder, sid, reference):
+    path = folder / "study.json"
+    data = json.loads(path.read_text())
+    data.update(sid=sid, reference=reference)
+    path.write_text(json.dumps(data))
+    path = folder / "reference.json"
+    data = json.loads(path.read_text())
+    data["sid"] = reference
+    path.write_text(json.dumps(data))

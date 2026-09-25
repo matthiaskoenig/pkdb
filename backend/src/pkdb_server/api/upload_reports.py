@@ -10,6 +10,7 @@ from starlette.responses import JSONResponse
 
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.schemas.validation import Suggestion, ValidationIssue, ValidationReport
+from pkdb_server.services.authorization import PERMISSION_FEEDBACK
 
 log = logging.getLogger(__name__)
 
@@ -27,6 +28,7 @@ class UploadReport(BaseModel):
     report: ValidationReport
     result: dict[str, Any] | None = None
     versions: dict[str, Any] | None = None
+    timings: dict[str, float] | None = None
 
 
 ERRORS = {
@@ -203,7 +205,17 @@ def build_report(scope, status_code, payload):
             if isinstance(detail, str) and status_code < 500
             else "The server could not complete the request."
         )
-        details = {}
+        details: dict[str, Any] = {}
+        permission_code = payload.get("code")
+        if (
+            status_code == 403
+            and isinstance(permission_code, str)
+            and permission_code in PERMISSION_FEEDBACK
+        ):
+            code = permission_code
+            message, advice = PERMISSION_FEEDBACK[code]
+        if status_code in {429, 503} and state.get("upload_retry_after"):
+            details["context"] = {"retry_after": state["upload_retry_after"]}
         if status_code == 409 and detail in {
             "processing_version_mismatch",
             "vocabulary_mismatch",
@@ -275,6 +287,7 @@ def build_report(scope, status_code, payload):
         report=report.finalize(),
         result=result,
         versions=state.get("upload_versions"),
+        timings=state.get("upload_timings"),
     )
     # Successful results repeat warnings for Python API compatibility. Account for
     # both copies in the response budget, retaining total discovered counts.
@@ -340,6 +353,9 @@ class UploadReports:
                 if not message.get("more_body", False):
                     assert start is not None
                     payload = json.loads(body)
+                    retry_after = dict(start["headers"]).get(b"retry-after")
+                    if retry_after is not None:
+                        state["upload_retry_after"] = retry_after.decode("latin-1")
                     report = build_report(scope, start["status"], payload)
                     response = JSONResponse(
                         report.model_dump(mode="json"),
