@@ -14,23 +14,6 @@
   },
   "users": [
     {
-      "username": "janekg",
-      "display_name": "Jan Grzegorzewski",
-      "role": "curator",
-      "import_policy": "reviewed_invitation",
-      "avatar": {
-        "url": "/assets/images/avatars/curators/jan_grzegorzewski.webp",
-        "sha256": "aabef5ac8e56cac56de0e38dd5161d3f2437ef215ae1b5e0f365da94a8f8ad4d",
-        "source_person_id": "jan_grzegorzewski",
-        "source_path": "public/assets/image/people/128/jan_grzegorzewski.webp"
-      },
-      "profile_references": {
-        "orcid": "0000-0002-4588-4925",
-        "repository": "https://github.com/janekg89/"
-      },
-      "identity_match": "explicit_name_mapping"
-    },
-    {
       "username": "mkoenig",
       "display_name": "Matthias König",
       "title": "Prof. Dr.",
@@ -46,6 +29,23 @@
       "profile_references": {
         "orcid": "0000-0003-1725-179X",
         "repository": "https://github.com/matthiaskoenig/"
+      },
+      "identity_match": "explicit_name_mapping"
+    },
+    {
+      "username": "janekg",
+      "display_name": "Jan Grzegorzewski",
+      "role": "curator",
+      "import_policy": "reviewed_invitation",
+      "avatar": {
+        "url": "/assets/images/avatars/curators/jan_grzegorzewski.webp",
+        "sha256": "aabef5ac8e56cac56de0e38dd5161d3f2437ef215ae1b5e0f365da94a8f8ad4d",
+        "source_person_id": "jan_grzegorzewski",
+        "source_path": "public/assets/image/people/128/jan_grzegorzewski.webp"
+      },
+      "profile_references": {
+        "orcid": "0000-0002-4588-4925",
+        "repository": "https://github.com/janekg89/"
       },
       "identity_match": "explicit_name_mapping"
     },
