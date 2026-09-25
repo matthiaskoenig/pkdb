@@ -3,7 +3,6 @@
 from pkdb_server.db.models import (
     audit,
     credentials,
-    drafts,
     files,
     interventions,
     limits,
@@ -21,7 +20,6 @@ __all__ = [
     "Base",
     "audit",
     "credentials",
-    "drafts",
     "files",
     "interventions",
     "limits",

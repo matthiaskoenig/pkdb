@@ -98,19 +98,6 @@ def authenticate_token(raw_token: str, session: Session) -> Principal:
     )
 
 
-def authenticate_password(username: str, password: str, session: Session) -> User:
-    user = session.scalar(select(User).where(User.username == username))
-    if user is None or not user.active or not user.password_hash:
-        raise AuthenticationFailed("Invalid credentials")
-    try:
-        valid = password_hash.verify(password, user.password_hash)
-    except ValueError, TypeError:
-        valid = False
-    if not valid:
-        raise AuthenticationFailed("Invalid credentials")
-    return user
-
-
 def revalidate_principal(
     principal: Principal, session: Session, *, lock=False
 ) -> Principal:

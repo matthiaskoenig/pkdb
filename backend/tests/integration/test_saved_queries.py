@@ -14,7 +14,7 @@ def test_saved_filter_is_not_a_capability(
     ingestion, creator = ingestion_context
     valid_bundle.study["access"] = "private"
     ingestion.replace(valid_bundle, creator)
-    exports = ExportService(session_factory, QueryService(session_factory))
+    exports = ExportService(session_factory)
     query = QuerySpec(
         entity="studies",
         predicates=[Predicate(field="sid", value=valid_bundle.study["sid"])],
@@ -31,7 +31,7 @@ def test_export_limits_release_capacity(
 
     ingestion, creator = ingestion_context
     ingestion.replace(valid_bundle, creator)
-    exports = ExportService(session_factory, QueryService(session_factory))
+    exports = ExportService(session_factory)
     identifier = exports.create_filter(QuerySpec(entity="studies"), creator)
     exports.max_bytes = 1
     with pytest.raises(ExportLimit, match="byte limit"):
@@ -58,7 +58,7 @@ def test_export_rechecks_visibility_and_account(
     # Fixture publication is an administrative state transition.
     with session_factory.begin() as session:
         session.execute(update(Study).values(access="public"))
-    exports = ExportService(session_factory, QueryService(session_factory))
+    exports = ExportService(session_factory)
     public_id = exports.create_filter(QuerySpec(entity="studies"), Principal())
     owned_id = exports.create_filter(QuerySpec(entity="studies"), creator)
     with session_factory.begin() as session:
@@ -94,7 +94,7 @@ def test_expired_saved_filter_is_unavailable(ingestion_context, session_factory)
     from pkdb_server.services.exports import ExportService
 
     _, creator = ingestion_context
-    exports = ExportService(session_factory, QueryService(session_factory))
+    exports = ExportService(session_factory)
     identifier = exports.create_filter(QuerySpec(entity="studies"), creator)
     with session_factory.begin() as session:
         session.execute(
@@ -123,7 +123,7 @@ def test_zip_snapshot_stays_consistent_during_atomic_replacement(
         entity="outputs", predicates=[Predicate(field="normed", value=True)]
     )
     before = queries.search(outputs, creator).items[0]["mean"]
-    exports = ExportService(session_factory, queries)
+    exports = ExportService(session_factory)
     identifier = exports.create_filter(FilterSpec(), creator)
     original = exports.analysis.iter_rows
     replaced = False
@@ -176,7 +176,7 @@ def test_saved_filter_rechecks_removed_curator(
                 role="curator",
             )
         )
-    exports = ExportService(session_factory, QueryService(session_factory))
+    exports = ExportService(session_factory)
     identifier = exports.create_filter(FilterSpec(), actor)
     assert exports.overview(identifier, actor)["outputs"] == 1
     with session_factory.begin() as session:

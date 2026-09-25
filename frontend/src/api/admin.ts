@@ -35,17 +35,11 @@ export interface StudyAccess {
   licence: string;
   creator_id: number | null;
   curator_ids: number[];
-  reader_ids: number[];
 }
 export interface AuditEvent extends SecurityEvent {
   actor_id: number | null;
   details: Record<string, unknown>;
 }
-export type UsageKind = "account" | "upload" | "export";
-export type Usage = Record<
-  UsageKind,
-  { requests: number; resets_at: string | null }
->;
 export const adminApi = {
   async users(
     q: string,
@@ -111,28 +105,6 @@ export const adminApi = {
   async decide(id: number, status: "approved" | "rejected") {
     await api.patch(`/api/v1/admin/role-requests/${id}`, { status });
   },
-  async usage(id: number, signal: AbortSignal): Promise<Usage> {
-    const data = record(
-      (
-        await api.get<unknown>("/api/v1/admin/usage", {
-          params: { user_id: id },
-          signal,
-        })
-      ).data,
-    );
-    function parse(value: unknown) {
-      const row = record(value);
-      return {
-        requests: number(row.requests),
-        resets_at: nullableText(row.resets_at),
-      };
-    }
-    return {
-      account: parse(data.account),
-      upload: parse(data.upload),
-      export: parse(data.export),
-    };
-  },
   async access(sid: string, signal: AbortSignal): Promise<StudyAccess> {
     const row = record(
       (
@@ -147,7 +119,6 @@ export const adminApi = {
       licence: text(row.licence),
       creator_id: row.creator_id === null ? null : number(row.creator_id),
       curator_ids: array(row.curator_ids, number),
-      reader_ids: array(row.reader_ids, number),
     };
   },
   async saveAccess(sid: string, values: StudyAccess) {

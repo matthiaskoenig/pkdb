@@ -81,9 +81,7 @@ class StudyGrant(Base):
     )
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
     role: Mapped[str] = mapped_column(String(16), primary_key=True)
-    __table_args__ = (
-        CheckConstraint("role IN ('curator', 'collaborator')", name="role"),
-    )
+    __table_args__ = (CheckConstraint("role = 'curator'", name="role"),)
 
 
 class Note(Identity, Base):

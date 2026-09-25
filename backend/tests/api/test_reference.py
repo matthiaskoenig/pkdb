@@ -66,3 +66,27 @@ def test_legacy_reference_is_explicitly_deprecated(client):
     full = client.get("/openapi/all.json").json()
     assert "/accounts/emails/" not in primary["paths"]
     assert full["paths"]["/accounts/emails/"]["get"]["deprecated"] is True
+
+
+@pytest.mark.parametrize(
+    "path",
+    [
+        "/api/v1/_studies/",
+        "/api/v1/_studies/TEST/",
+        "/api/v1/_references/",
+        "/api/v1/_references/REF/",
+        "/api/v1/_datafiles/",
+        "/api/v1/_datafiles/1/",
+        "/api/v1/update_index/",
+        "/api/v2/files",
+    ],
+)
+@pytest.mark.parametrize("method", ["GET", "POST", "PATCH", "DELETE"])
+def test_upload_routes_retired_even_with_legacy_enabled(
+    client, creator_headers, path, method
+):
+    for suffix in ("", ".json", ".json/"):
+        target = path.rstrip("/") + suffix if suffix else path
+        assert (
+            client.request(method, target, headers=creator_headers).status_code == 404
+        )

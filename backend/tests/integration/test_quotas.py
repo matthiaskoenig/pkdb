@@ -19,10 +19,7 @@ def test_authenticated_requests_do_not_consume_any_quota(session_factory, kind):
     quotas = QuotaService(
         session_factory,
         SimpleNamespace(
-            quota_account_per_minute=1,
             quota_ip_per_minute=1,
-            quota_key_per_minute=1,
-            quota_uploads_per_hour=1,
         ),
     )
     p = Principal(user_id=42, role="user", credential_kind=kind, credential_id=1)

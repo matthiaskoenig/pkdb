@@ -30,7 +30,6 @@ class PatchUser(BaseModel):
 class Access(BaseModel):
     model_config = ConfigDict(extra="forbid")
     curator_ids: list[int] = Field(default_factory=list, max_length=1000)
-    reader_ids: list[int] = Field(default_factory=list, max_length=1000)
     access: Literal["public", "private"]
     licence: Literal["open", "closed"]
     creator_id: int | None = None
@@ -181,7 +180,7 @@ def study_access(sid: str, data: Access, request: Request):
         study = session.scalar(select(Study).where(Study.sid == sid).with_for_update())
         if study is None:
             raise HTTPException(404, "Study not found")
-        ids = set(data.curator_ids) | set(data.reader_ids)
+        ids = set(data.curator_ids)
         if data.creator_id is not None:
             ids.add(data.creator_id)
         found = set(session.scalars(select(User.id).where(User.id.in_(ids))))
@@ -196,14 +195,10 @@ def study_access(sid: str, data: Access, request: Request):
         if data.creator_id is not None:
             study.creator_id = data.creator_id
         session.execute(delete(StudyGrant).where(StudyGrant.study_id == study.id))
-        for role, ids in (
-            ("curator", data.curator_ids),
-            ("collaborator", data.reader_ids),
-        ):
-            session.add_all(
-                StudyGrant(study_id=study.id, user_id=identifier, role=role)
-                for identifier in sorted(set(ids))
-            )
+        session.add_all(
+            StudyGrant(study_id=study.id, user_id=identifier, role="curator")
+            for identifier in sorted(set(data.curator_ids))
+        )
         session.add(
             AuditEvent(
                 actor_id=administrator.id,
@@ -230,7 +225,6 @@ def read_access(sid: str, request: Request):
             "licence": study.licence,
             "creator_id": study.creator_id,
             "curator_ids": [g.user_id for g in grants if g.role == "curator"],
-            "reader_ids": [g.user_id for g in grants if g.role == "collaborator"],
         }
 
 
@@ -276,13 +270,6 @@ def audit_events(
                 .limit(limit)
             )
         ]
-
-
-@router.get("/usage")
-def usage(request: Request, user_id: int):
-    with request.app.state.session_factory() as session:
-        actor(request, session)
-    return request.app.state.quotas.usage(user_id)
 
 
 class RequestReason(BaseModel):

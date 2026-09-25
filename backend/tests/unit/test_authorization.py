@@ -12,7 +12,6 @@ def private_study():
         licence="closed",
         creator_id=1,
         curator_ids=frozenset({2}),
-        collaborator_ids=frozenset({3}),
     )
 
 

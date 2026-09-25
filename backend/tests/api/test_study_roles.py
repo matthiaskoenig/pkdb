@@ -108,3 +108,29 @@ def test_contributor_payload_cannot_grant_access_but_writer_can_publish(
         ).status_code
         == 403
     )
+
+
+def test_access_contract_has_only_effective_curator_grants(
+    client, creator_headers, admin_headers, valid_bundle, ingestion_context
+):
+    sid = valid_bundle.study["sid"]
+    assert (
+        client.put(
+            f"/api/v2/studies/{sid}", headers=creator_headers, **payload(valid_bundle)
+        ).status_code
+        == 201
+    )
+    url = f"/api/v1/admin/studies/{sid}/access"
+    response = client.get(url, headers=admin_headers)
+    assert response.status_code == 200
+    grants = response.json()
+    assert "reader_ids" not in grants
+    assert grants["curator_ids"] == [ingestion_context[1].user_id]
+    assert (
+        client.put(
+            url, headers=admin_headers, json={**grants, "reader_ids": []}
+        ).status_code
+        == 422
+    )
+    assert client.put(url, headers=admin_headers, json=grants).status_code == 200
+    assert client.get(url, headers=admin_headers).json() == grants

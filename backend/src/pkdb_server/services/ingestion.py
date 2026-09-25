@@ -135,34 +135,6 @@ class IngestionService:
             expected_processing_version=expected_processing_version,
         )
 
-    def replace_staged(self, bundle, principal: Principal) -> ReplacementResult:
-        from pkdb_server.services.bundles import materialize_bundle
-
-        with materialize_bundle(
-            bundle, principal, self.file_store, self.settings
-        ) as source:
-            prepared = self.validate(source, principal)
-        with self.session_factory() as session:
-            rows = list(
-                session.scalars(
-                    select(StoredFile).where(StoredFile.id.in_(bundle.handles))
-                )
-            )
-            if len(rows) != len(bundle.handles):
-                raise PublicationConflict("staged_file_unavailable")
-            staged = [StagedFile.model_validate(row) for row in rows]
-        expected = {
-            attachment.name: attachment for attachment in prepared.study.attachments
-        }
-        for file in staged:
-            attachment = expected.get(file.original_name)
-            if attachment is None or (attachment.sha256, attachment.size) != (
-                file.digest,
-                file.size,
-            ):
-                fail("source_changed", "Staged attachment changed after validation")
-        return self._publish(prepared, principal, staged)
-
     def _publish(
         self,
         prepared: PreparedStudy,
@@ -273,10 +245,6 @@ class IngestionService:
                         grants.update(
                             (users[c.user].id, "curator")
                             for c in study.metadata.curators
-                        )
-                        grants.update(
-                            (users[name].id, "collaborator")
-                            for name in study.metadata.collaborators
                         )
                         for user_id, role in sorted(
                             grants - {(current.user_id, "curator")}

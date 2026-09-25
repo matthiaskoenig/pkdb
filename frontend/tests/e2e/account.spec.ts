@@ -176,13 +176,6 @@ test("administrator password login grants administration using real permissions"
   ).toBeVisible();
   const reader = page.getByRole("row").filter({ hasText: /@reader · ID/ });
   await expect(reader).toBeVisible();
-  await reader.getByRole("button", { name: "Usage", exact: true }).click();
-  await expect(
-    page.getByRole("heading", { name: "Current usage · @reader", exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByRole("cell", { name: "All requests", exact: true }),
-  ).toBeVisible();
   await page
     .getByLabel("Study identifier", { exact: true })
     .fill("FRONTEND_SCOPE");

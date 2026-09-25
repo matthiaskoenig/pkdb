@@ -49,14 +49,6 @@ async def account_validation_error(request, error):
         )
     endpoint = request.scope.get("endpoint")
     module = getattr(endpoint, "__module__", "")
-    if module == "pkdb_server.api.legacy_uploads" and any(
-        item["type"] == "json_invalid" for item in error.errors()
-    ):
-        # FastAPI decodes model bodies before running router dependencies.
-        try:
-            await run_in_threadpool(request.app.state.principal, request)
-        except (AuthenticationFailed, AuthorizationDenied) as denied:
-            return await request.app.exception_handlers[type(denied)](request, denied)
     legacy = path == "/api-token-auth/" or path.startswith(
         ("/accounts/", "/api/v1/_users")
     )

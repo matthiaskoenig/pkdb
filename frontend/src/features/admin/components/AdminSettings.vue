@@ -14,16 +14,11 @@ const {
   auditLoaded,
   invitationUser,
   invitationError,
-  usageUser,
-  usage,
   studySid,
   loadedSid,
   studyAccess,
   curatorIds,
-  readerIds,
   roles,
-  usageKinds,
-  usageLabels,
   canAdminister,
   load,
   search,
@@ -31,7 +26,6 @@ const {
   sendInvitation,
   update,
   resolve,
-  loadUsage,
   loadAudit,
   loadStudy,
   saveStudy,
@@ -70,7 +64,6 @@ onMounted(() => {
           <th>Role</th>
           <th>Status</th>
           <th>Action</th>
-          <th>Activity</th>
         </tr>
       </thead>
       <tbody>
@@ -126,16 +119,6 @@ onMounted(() => {
             </v-btn>
           </td>
           <td v-else>Protected</td>
-          <td>
-            <v-btn
-              size="small"
-              variant="text"
-              :disabled="busy"
-              @click="loadUsage(user)"
-            >
-              Usage
-            </v-btn>
-          </td>
         </tr>
       </tbody>
     </v-table>
@@ -195,41 +178,6 @@ onMounted(() => {
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-card v-if="usageUser" variant="outlined" class="pa-4 mt-5">
-      <div class="d-flex justify-space-between align-center">
-        <h3 class="text-subtitle-1">
-          Current usage · @{{ usageUser.username }}
-        </h3>
-        <v-btn
-          size="small"
-          variant="text"
-          :disabled="busy"
-          @click="loadUsage(usageUser)"
-        >
-          Refresh
-        </v-btn>
-      </div>
-      <p class="text-caption text-medium-emphasis mt-2">
-        Current request budgets are shared across this account's sessions and
-        API keys.
-      </p>
-      <v-table v-if="usage">
-        <thead>
-          <tr>
-            <th>Request class</th>
-            <th>Requests</th>
-            <th>Window resets</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="kind in usageKinds" :key="kind">
-            <td>{{ usageLabels[kind] }}</td>
-            <td>{{ usage[kind].requests }}</td>
-            <td>{{ date(usage[kind].resets_at) }}</td>
-          </tr>
-        </tbody>
-      </v-table>
-    </v-card>
     <v-divider class="my-6" />
     <h2 class="text-h6 mb-3">Curator access requests</h2>
     <p v-if="!requests.length">No pending requests.</p>
@@ -255,7 +203,7 @@ onMounted(() => {
     <v-divider class="my-6" />
     <h2 class="text-h6 mb-3">Study access</h2>
     <p>
-      Load the existing grants before changing curator assignments, readers or
+      Load the existing grants before changing curator assignments or
       visibility.
     </p>
     <v-form @submit.prevent="loadStudy">
@@ -287,14 +235,6 @@ onMounted(() => {
         hint="Comma-separated IDs from user management"
         persistent-hint
         variant="outlined"
-      />
-      <v-text-field
-        v-model="readerIds"
-        label="Reader account IDs"
-        hint="Comma-separated IDs; these grant read access only"
-        persistent-hint
-        variant="outlined"
-        class="mt-4"
       />
       <v-btn type="submit" color="primary" class="mt-4" :disabled="busy">
         Save study access

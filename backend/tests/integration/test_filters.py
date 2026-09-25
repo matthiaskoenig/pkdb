@@ -185,3 +185,24 @@ def test_typed_filters_reject_invalid_values(crossed_measurements, field, value)
             ),
             creator,
         )
+
+
+def test_analysis_predicates_bind_to_same_measurement(crossed_measurements):
+    from pkdb_server.services.analysis import AnalysisService
+
+    queries, creator = crossed_measurements
+    analysis = AnalysisService(queries.session_factory)
+    query = QuerySpec(
+        entity="studies",
+        predicates=[
+            Predicate(field="outputs.substance", value="A"),
+            Predicate(field="outputs.value", operator="gte", value=10),
+        ],
+    )
+    for principal, expected in [(Principal(), ["Y"]), (creator, ["Y", "Z"])]:
+        page = analysis.search("studies", query, principal)
+        assert [item["sid"] for item in page.items] == expected
+        assert page.count == len(expected)
+        with queries.session_factory() as session:
+            rows = list(analysis.iter_rows(session, "studies", query, principal))
+        assert [item["sid"] for item in rows] == expected
