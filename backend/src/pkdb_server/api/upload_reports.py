@@ -28,6 +28,7 @@ class UploadReport(BaseModel):
     report: ValidationReport
     result: dict[str, Any] | None = None
     versions: dict[str, Any] | None = None
+    timings: dict[str, float] | None = None
 
 
 ERRORS = {
@@ -286,6 +287,7 @@ def build_report(scope, status_code, payload):
         report=report.finalize(),
         result=result,
         versions=state.get("upload_versions"),
+        timings=state.get("upload_timings"),
     )
     # Successful results repeat warnings for Python API compatibility. Account for
     # both copies in the response budget, retaining total discovered counts.

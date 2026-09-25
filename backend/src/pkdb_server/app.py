@@ -300,10 +300,12 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                             "valid": True,
                         }
                     request.state.upload_save_started = True
+                    request.state.upload_timings = {}
                     result = await run_in_threadpool(
                         ingestion.replace,
                         bundle,
                         actor,
+                        timings=request.state.upload_timings,
                         expected_vocabulary_hash=expected_hash,
                         expected_processing_version=expected_processing,
                     )

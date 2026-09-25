@@ -94,7 +94,7 @@ class FileStore:
         with self.session_factory.begin() as session:
             from pkdb_server.services.authorization import authorize_creation
 
-            owner = revalidate_principal(owner, session, lock=True)
+            owner = revalidate_principal(owner, session, publication_lock=True)
             authorize_creation(owner)
             user = session.get(User, owner.user_id)
             if user is None or not user.active:

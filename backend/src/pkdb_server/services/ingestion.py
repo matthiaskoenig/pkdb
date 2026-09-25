@@ -1,6 +1,7 @@
 """Prepare outside transactions, then publish under study and vocabulary locks."""
 
 import hashlib
+import time
 from datetime import UTC, datetime
 
 from sqlalchemy import select, text
@@ -64,11 +65,18 @@ class IngestionService:
         return True
 
     def _principal(
-        self, session: Session, principal: Principal, *, lock=False
+        self,
+        session: Session,
+        principal: Principal,
+        *,
+        lock=False,
+        publication_lock=False,
     ) -> Principal:
         from pkdb_server.services.authentication import revalidate_principal
 
-        return revalidate_principal(principal, session, lock=lock)
+        return revalidate_principal(
+            principal, session, lock=lock, publication_lock=publication_lock
+        )
 
     def check_compatibility(
         self,
@@ -113,9 +121,14 @@ class IngestionService:
         *,
         expected_vocabulary_hash: str | None = None,
         expected_processing_version: str | None = None,
+        timings: dict[str, float] | None = None,
     ) -> ReplacementResult:
+        timings = timings if timings is not None else {}
+        started = time.monotonic()
         self.check_compatibility(expected_vocabulary_hash, expected_processing_version)
         prepared = self.validate(bundle, principal)
+        timings["validation"] = time.monotonic() - started
+        started = time.monotonic()
         staged = []
         expected = {
             attachment.name: attachment for attachment in prepared.study.attachments
@@ -127,13 +140,17 @@ class IngestionService:
             if file.digest != attachment.sha256 or file.size != attachment.size:
                 fail("source_changed", "Source file changed after validation")
             staged.append(file)
-        return self._publish(
+        timings["staging"] = time.monotonic() - started
+        started = time.monotonic()
+        result = self._publish(
             prepared,
             principal,
             staged,
             expected_vocabulary_hash=expected_vocabulary_hash,
             expected_processing_version=expected_processing_version,
         )
+        timings["publication"] = time.monotonic() - started
+        return result
 
     def _publish(
         self,
@@ -160,7 +177,12 @@ class IngestionService:
                     expected_processing_version,
                     session=session,
                 )
-                current = self._principal(session, principal, lock=True)
+                current = self._principal(
+                    session,
+                    principal,
+                    lock=principal.credential_kind == "session",
+                    publication_lock=principal.credential_kind != "session",
+                )
                 can_manage = self._can_manage(current, session)
                 version = session.get(VocabularyVersion, 1)
                 if version is None or version.version != prepared.vocabulary_version:

@@ -1,6 +1,17 @@
 # Parallel study uploads for the Python tool
 
-Status: proposed implementation plan; the options below do not exist yet.
+Status: core implementation available (2026-09-25). `--jobs`, version-3 journals,
+`--resume`, shared publication identity locks, one-shot private snapshots, and
+client/server timing instrumentation are implemented. The benchmark driver is
+`scripts/benchmark_batch_upload.py`; usage and recovery are documented in
+`python/README.md`. Real HTTP process-worker overlap and PostgreSQL identity-lock,
+revocation, and serial/parallel equivalence tests cover the core contracts.
+
+Remaining measurement work: run representative small/medium/large source corpora
+at jobs 1/2/4/8, recording server CPU, lock waits, memory, temporary disk and
+connection use for fresh imports and replacements. No deployment speedup or
+higher default worker count is claimed before those measurements. The original
+implementation sequence below records the design and its broader test matrix.
 
 ## Objective
 

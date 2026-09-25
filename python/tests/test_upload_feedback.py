@@ -224,6 +224,7 @@ def test_shared_auth_failure_stops_batch_and_records_remaining(
 
     second = tmp_path / "nested" / study_folder.name
     shutil.copytree(study_folder, second)
+    _identity(second, "TEST2", 124)
     lock = tmp_path / "vocabulary.json"
     vocabulary.save(lock)
     prepared = prepare(study_folder, vocabulary=vocabulary)
@@ -429,8 +430,9 @@ def test_batch_continues_after_forbidden_but_stops_on_systemic_failures(
     from pkdb.domain.vocabulary import vocabulary_hash
 
     root = tmp_path / "studies"
-    for name in ("a/Example", "b/Example"):
+    for index, name in enumerate(("a/Example", "b/Example")):
         shutil.copytree(study_folder, root / name)
+        _identity(root / name, f"TEST{index + 1}", 123 + index)
     lock = tmp_path / "vocabulary.json"
     vocabulary.save(lock)
     monkeypatch.setenv("PKDB_API_KEY", "pkdb_live_secret")
@@ -465,7 +467,7 @@ def test_batch_continues_after_forbidden_but_stops_on_systemic_failures(
         return httpx2.Response(
             201,
             json={
-                "sid": "TEST1",
+                "sid": request.url.path.rsplit("/", 1)[-1],
                 "created": True,
                 "digest": "abc",
                 "counts": {"groups": 1},
@@ -526,3 +528,14 @@ def test_client_preserves_safe_permission_detail():
                 api._request("PUT", "/api/v2/studies/TEST")
     assert caught.value.code == "licence_change_forbidden"
     assert "would change the licence" in str(caught.value)
+
+
+def _identity(folder, sid, reference):
+    path = folder / "study.json"
+    data = json.loads(path.read_text())
+    data.update(sid=sid, reference=reference)
+    path.write_text(json.dumps(data))
+    path = folder / "reference.json"
+    data = json.loads(path.read_text())
+    data["sid"] = reference
+    path.write_text(json.dumps(data))

@@ -78,6 +78,20 @@ class Terminal:
             self.console.print(f"  {message}")
         self.stage = event.stage
 
+    def batch_progress(self, event) -> None:
+        """Render independent task stages without changing single-study state."""
+        if self.enabled:
+            counts = ""
+            if event.completed is not None:
+                counts = f" · {event.completed:,} bytes"
+                if event.total:
+                    counts += (
+                        f" / {event.total:,} ({event.completed / event.total:.0%})"
+                    )
+            self.console.print(
+                f"  [{event.index + 1}] {safe_text(event.path)} · {safe_text(event.stage)}{counts}"
+            )
+
     def stop(self) -> None:
         if self.live is not None:
             self.live.stop()
