@@ -478,3 +478,31 @@ def test_environment_connection_defaults(tmp_path, monkeypatch, explicit):
             assert secret not in (state_dir / "state.json").read_text()
     finally:
         engine.close()
+
+
+def test_reference_preview_save_and_stale_review(workspace):
+    engine, folder = workspace
+    study = json.loads((folder / "study.json").read_text())
+    study["reference"] = "stable-reference"
+    (folder / "study.json").write_text(json.dumps(study))
+    body = {
+        "id": row(engine)["id"],
+        "input": {
+            "title": "Manual report",
+            "authors": [{"organization": "Research team"}],
+            "publication_date": "2020",
+        },
+    }
+    preview = engine.reference_action("preview", body)
+    assert not (folder / "reference.json").exists()
+    assert preview["reference"]["sid"] == "stable-reference"
+    engine.reference_action("save", {"id": body["id"], "token": preview["token"]})
+    assert (
+        engine.reference_action("read", body)["reference"]["publication_date"] == "2020"
+    )
+    with pytest.raises(ValueError, match="expired"):
+        engine.reference_action("save", {"id": body["id"], "token": preview["token"]})
+    preview = engine.reference_action("preview", body)
+    (folder / "study.json").write_text(json.dumps({**study, "name": "changed"}))
+    with pytest.raises(ValueError, match="changed since preview"):
+        engine.reference_action("save", {"id": body["id"], "token": preview["token"]})

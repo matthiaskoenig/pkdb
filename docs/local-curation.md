@@ -90,3 +90,7 @@ The app requires no Node installation, Docker, or hosted frontend. It binds to l
 On-save actions initially use file polling with a quiet period. The app never edits study sources. Existing studies may be replaced by an authorized upload. The **Upload selected** review shows the target and identity, and labels unknown remote state rather than claiming that a study is new.
 
 See the [technical design](superpowers/specs/2026-09-24-local-curation-interface-design.md) for job behavior and access boundaries. A connected server must support the current package API and API-key curation context. Offline validation does not establish server compatibility or upload permission.
+
+## Literature references
+
+Choose **Reference…** in the study detail panel to retrieve metadata from a PMID or DOI, search a manual citation, preview changes, and save `reference.json`. Source edits made since preview prevent saving an outdated result. See the [reference metadata guide](reference-metadata.md) for caching, manual references, publication-date precision, and refresh behavior.

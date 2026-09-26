@@ -335,7 +335,12 @@ def reference_responses(session, rows):
         .order_by(Author.position)
     ):
         authors[row.reference_id].append(
-            {"pk": row.id, "first_name": row.first_name, "last_name": row.last_name}
+            {
+                "pk": row.id,
+                "first_name": row.first_name,
+                "last_name": row.last_name,
+                "organization": row.organization,
+            }
         )
     return [
         ReferenceResponse.model_validate(
@@ -346,6 +351,8 @@ def reference_responses(session, rows):
                     for key in (
                         "sid",
                         "name",
+                        "publication_date",
+                        "provenance",
                         "pmid",
                         "doi",
                         "title",

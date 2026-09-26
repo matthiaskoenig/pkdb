@@ -215,3 +215,31 @@ def test_invalid_bootstrap_does_not_consume_valid_token(local_server):
     server, _ = local_server
     assert request(server, "POST", "/local/session", {"token": "non-ascii-ä"})[0] == 403
     authenticate(server)
+
+
+def test_reference_actions_require_authenticated_review(local_server):
+    from pkdb.references import ReferenceError
+
+    server, engine = local_server
+    body = {"id": "study", "input": {"pmid": "123"}}
+    assert request(server, "POST", "/local/reference/preview", body)[0] == 401
+    headers = authenticate(server)
+    engine.reference_action.return_value = {
+        "token": "preview",
+        "reference": {"pmid": "123"},
+    }
+    status, _, data = request(server, "POST", "/local/reference/preview", body, headers)
+    assert status == 200 and json.loads(data)["token"] == "preview"
+    engine.reference_action.assert_called_once_with("preview", body)
+    engine.reference_action.side_effect = ReferenceError(
+        "Reference sources changed since preview; preview again"
+    )
+    status, _, data = request(
+        server,
+        "POST",
+        "/local/reference/save",
+        {"id": "study", "token": "preview"},
+        headers,
+    )
+    assert status == 400
+    assert "changed since preview" in json.loads(data)["error"]

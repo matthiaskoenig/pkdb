@@ -109,7 +109,12 @@ def test_reference_read_preserves_authors_and_visibility(
     import json
 
     valid_bundle.study["access"] = "public"
-    valid_bundle.reference["authors"] = [{"first_name": "First", "last_name": "Last"}]
+    valid_bundle.reference["authors"] = [
+        {"first_name": "First", "last_name": "Last"},
+        {"organization": "Study Consortium"},
+    ]
+    valid_bundle.reference["publication_date"] = "2020"
+    valid_bundle.reference["provenance"] = {"input": {"doi": "10.1234/example"}}
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
         headers=admin_headers,
@@ -123,6 +128,9 @@ def test_reference_read_preserves_authors_and_visibility(
     assert response.status_code == 200
     row = response.json()["data"]["data"][0]
     assert row["authors"][0]["first_name"] == "First"
+    assert row["authors"][1]["organization"] == "Study Consortium"
+    assert row["publication_date"] == "2020"
+    assert row["provenance"] == valid_bundle.reference["provenance"]
     assert isinstance(row["authors"][0]["pk"], int)
     assert client.get(f"/api/v1/references/{row['sid']}/").json() == row
     valid_bundle.study["access"] = "private"

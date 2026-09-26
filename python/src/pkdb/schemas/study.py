@@ -1,10 +1,18 @@
 """Typed scientific records, independent of transport and database models."""
 
+import re
 from collections.abc import Iterator
 from datetime import date as Date
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    JsonValue,
+    field_validator,
+    model_validator,
+)
 
 from pkdb.schemas.source import SourceLocation
 
@@ -49,7 +57,14 @@ class Metadata(Notes):
 
 class Author(Record):
     first_name: str = ""
-    last_name: str
+    last_name: str = ""
+    organization: str | None = None
+
+    @model_validator(mode="after")
+    def author_name(self):
+        if not self.last_name.strip() and not (self.organization or "").strip():
+            raise ValueError("Author requires a last name or organization")
+        return self
 
 
 class Reference(Record):
@@ -62,6 +77,29 @@ class Reference(Record):
     journal: str | None = None
     date: Date | None = None
     authors: list[Author] = Field(default_factory=list)
+    publication_date: str | None = None
+    provenance: dict[str, JsonValue] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def matching_publication_dates(self):
+        if (
+            self.date
+            and self.publication_date
+            and not self.date.isoformat().startswith(self.publication_date)
+        ):
+            raise ValueError("Exact date must agree with publication_date")
+        return self
+
+    @field_validator("publication_date")
+    @classmethod
+    def valid_publication_date(cls, value):
+        if value is not None:
+            if not re.fullmatch(r"[0-9]{4}(?:-[0-9]{2})?(?:-[0-9]{2})?", value):
+                raise ValueError(
+                    "Publication date must be YYYY, YYYY-MM, or YYYY-MM-DD"
+                )
+            Date.fromisoformat(value + {4: "-01-01", 7: "-01", 10: ""}[len(value)])
+        return value
 
 
 class Statistics(Record):

@@ -49,6 +49,10 @@ with Client(endpoint="https://alpha.pk-db.com") as client:
 
 Replace `STUDY_SID` with an identifier from your search. Downloads require an active account even for public studies and include only accessible data. Review each study's licence before reuse. For expiry, rotation, and access permissions, see [Accounts and API keys](authentication.md).
 
+## Literature references
+
+Create and enrich `reference.json` from a PMID, DOI, or manual citation with `pkdb reference resolve`. The [reference metadata guide](reference-metadata.md) covers previews, candidate search, cached offline use, and preserved curator corrections.
+
 ## Prepare, validate, and upload a study folder
 
 The development version includes a [local curation app](local-curation.md) with file watching, external file opening, and validation/upload on save. Launch it with `pkdb curate /path/to/pkdb_data`; the illustrated guide covers setup and offline work. This command is not yet available in a published release.

@@ -17,6 +17,7 @@ nav = [
   { "Webinterface" = "web-interface.md" },
   { "Example study" = "example-study.md" },
   { "Local curation" = "local-curation.md" },
+  { "Literature references" = "reference-metadata.md" },
   { "API" = [
     { "Accounts and API keys" = "authentication.md" },
     { "REST API" = "api.md" },

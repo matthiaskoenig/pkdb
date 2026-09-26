@@ -9,6 +9,8 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
+from pkdb.references import ReferenceError
+
 MAX_BODY = 64 * 1024
 ASSETS = Path(__file__).parent / "static"
 
@@ -185,6 +187,8 @@ class Handler(BaseHTTPRequestHandler):
                 return
             result = self._action(path, payload)
             self._reply(200, result if isinstance(result, dict) else {"ok": True})
+        except ReferenceError as error:
+            self._reply(400, {"error": str(error)})
         except LookupError:
             self._reply(404, {"error": "Unknown resource or study"})
         except ValueError, TypeError, OSError:
@@ -204,6 +208,13 @@ class Handler(BaseHTTPRequestHandler):
 
     def _action(self, path, body):
         engine = self.server.engine
+        if path in {
+            "/local/reference/read",
+            "/local/reference/search",
+            "/local/reference/preview",
+            "/local/reference/save",
+        }:
+            return engine.reference_action(path.rsplit("/", 1)[-1], body)
         if path == "/local/workspace":
             return engine.select_workspace(body["path"])
         if path == "/local/settings":

@@ -63,3 +63,30 @@ def test_failure_after_deletion_rolls_back(
     with pytest.raises(RuntimeError, match="injected"):
         ingestion.replace(valid_bundle, principal)
     assert read_study(result.sid, principal, session_factory) == before
+
+
+def test_reference_metadata_roundtrip(ingestion_context, valid_bundle, session_factory):
+    ingestion, principal = ingestion_context
+    valid_bundle.reference.update(
+        publication_date="2020-03",
+        authors=[{"organization": "Study Consortium"}],
+        provenance={
+            "version": 1,
+            "input": {"pmid": "123"},
+            "overrides": {"title": "Curated title"},
+            "sources": [
+                {
+                    "provider": "pubmed",
+                    "identifier": "123",
+                    "retrieved_at": "2026-09-25T12:00:00Z",
+                }
+            ],
+        },
+    )
+    prepared = ingestion.validate(valid_bundle, principal)
+    result = ingestion.replace(valid_bundle, principal)
+    restored = read_study(result.sid, principal, session_factory)
+    assert restored == prepared.study
+    assert restored.reference.publication_date == "2020-03"
+    assert restored.reference.authors[0].organization == "Study Consortium"
+    assert restored.reference.provenance == valid_bundle.reference["provenance"]

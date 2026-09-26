@@ -153,7 +153,7 @@ onBeforeUnmount(() => {
       </nav>
       <section v-if="reference" aria-label="Publication">
         <h3>{{ text(reference.title) }}</h3>
-        <p>{{ text(reference.journal) }} · {{ text(reference.date) }}</p>
+        <p>{{ text(reference.journal) }} · {{ text(reference.publication_date || reference.date) }}</p>
         <p>{{ text(reference.abstract) }}</p>
         <a
           v-if="
