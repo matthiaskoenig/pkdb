@@ -89,7 +89,12 @@ def main(argv=None, *, client=None) -> int:
     sync.add_argument(
         "--output", type=Path, help="Portable project vocabulary lock file"
     )
+    from pkdb import reference_cli
+
+    reference_cli.register(commands)
     args = parser.parse_args(argv)
+    if args.command == "reference":
+        return reference_cli.run(args, client=client)
     if args.command == "curate":
         from pkdb.curation.launch import run
 

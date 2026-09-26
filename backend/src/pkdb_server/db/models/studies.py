@@ -17,6 +17,8 @@ class Reference(Identity, Base):
     doi: Mapped[str | None]
     title: Mapped[str | None]
     abstract: Mapped[str | None]
+    publication_date: Mapped[str | None] = mapped_column(String(10))
+    provenance: Mapped[dict] = mapped_column(JSONB, default=dict, server_default="{}")
     journal: Mapped[str | None]
     date: Mapped[Date | None]
 
@@ -30,6 +32,7 @@ class Author(Base):
     position: Mapped[int] = mapped_column(primary_key=True)
     first_name: Mapped[str] = mapped_column(default="")
     last_name: Mapped[str]
+    organization: Mapped[str | None]
     __table_args__ = (CheckConstraint("position >= 0", name="position"),)
 
 

@@ -244,6 +244,8 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                     for field in (
                         "sid",
                         "name",
+                        "publication_date",
+                        "provenance",
                         "pmid",
                         "doi",
                         "title",
@@ -253,7 +255,11 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                     )
                 },
                 authors=[
-                    dict(first_name=row.first_name, last_name=row.last_name)
+                    dict(
+                        first_name=row.first_name,
+                        last_name=row.last_name,
+                        organization=row.organization,
+                    )
                     for row in authors
                 ],
             ),

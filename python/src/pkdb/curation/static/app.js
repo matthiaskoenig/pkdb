@@ -71,7 +71,7 @@ async function openFile(study, file, reveal = false) { await mutate('/local/file
 function renderDetail() {
   const s = state.studies.find(s => s.id === current), container = $('study-detail'); container.hidden = false; if (!s) { container.replaceChildren(el('h2', 'Study problems'), el('p', 'Select a study to review its problems, validate, or upload.', 'empty')); return; }
   container.replaceChildren(); const heading = el('div', null, 'detail-head'), name = el('div'); name.append(el('h2', s.name || s.sid || s.id), el('p', [s.sid, s.path].filter(Boolean).join(' · '), 'small muted')); heading.append(name, button('Close details', () => { current = ''; renderDetail(); renderStudies(); })); container.append(heading);
-  const controls = el('div', null, 'detail-controls'); controls.append(button('Validate', () => jobs([s.id], 'validate')), button('Validate and upload', () => reviewUpload([s.id]), 'primary'), button('Open folder', () => openFile(s, null, true))); if (state.offline) controls.children[1].disabled = true; const serverValidate = button('Validate on server', () => jobs([s.id], 'validate_remote')); serverValidate.disabled = state.offline || !state.endpoint; controls.append(serverValidate);
+  const controls = el('div', null, 'detail-controls'); controls.append(button('Validate', () => jobs([s.id], 'validate')), button('Validate and upload', () => reviewUpload([s.id]), 'primary'), button('Open folder', () => openFile(s, null, true))); if (state.offline) controls.children[1].disabled = true; const serverValidate = button('Validate on server', () => jobs([s.id], 'validate_remote')); serverValidate.disabled = state.offline || !state.endpoint; controls.append(serverValidate, button('Reference…', () => openReference(s)));
   const mode = el('select'); mode.id = 'study-mode'; mode.setAttribute('aria-label', 'Action on save for this study'); for (const value of ['validate','upload','off']) option(mode, value, human(value)); mode.value = s.mode || 'validate'; mode.addEventListener('change', () => run(() => setMode([s.id], mode.value))); controls.append(el('label', 'On save'), mode); container.append(controls);
   const tabs = el('nav', null, 'tabs'); tabs.setAttribute('aria-label', 'Study detail views'); for (const value of ['problems','overview','activity']) { const b = button(value === 'problems' ? `Problems (${(s.problems || []).length})` : human(value[0].toUpperCase() + value.slice(1)), () => { tab = value; renderDetail(); }); if (tab === value) b.className = 'active'; b.setAttribute('aria-current', tab === value ? 'page' : 'false'); tabs.append(b); } container.append(tabs);
   if (s.status === 'unknown') container.append(el('p', 'Upload outcome unknown. Automatic writes are blocked until the server state is reconciled. Resume checks the recorded outcome; it does not blindly replay the upload.', 'notice'));
@@ -129,3 +129,86 @@ document.addEventListener('keydown', event => { if (event.key === 'Escape') docu
 document.addEventListener('click', event => { if (!event.target.closest('.header-dropdown')) document.querySelectorAll('.header-dropdown[open]').forEach(menu => menu.open = false); });
 async function start() { const fragment = new URLSearchParams(location.hash.slice(1)); const token = fragment.get('token') || (location.hash.length > 1 && !location.hash.includes('=') ? location.hash.slice(1) : ''); if (token) { history.replaceState(null,'',location.pathname + location.search); await api('/local/session',{token}); } await refresh(true); setInterval(() => run(() => refresh()),1500); }
 run(start);
+
+let referenceStudy = null, referenceToken = '', referenceInitial = {}, referenceEpoch = 0;
+const referenceInputs = {pmid:'reference-pmid',doi:'reference-doi',title:'reference-citation-title',publication_date:'reference-date'};
+function referenceInput() {
+  const input = {};
+  for (const [field,id] of Object.entries(referenceInputs)) {
+    const value = $(id).value.trim();
+    if (value !== referenceInitial[field]) input[field] = value || null;
+  }
+  const authorText = $('reference-author').value.trim(), organization = $('reference-organization').value.trim();
+  if (authorText !== referenceInitial.authorText || organization !== referenceInitial.organization) {
+    input.authors = authorText.split('\n').filter(Boolean).map(last_name => ({last_name}));
+    if (organization) input.authors.push({organization});
+  }
+  if (!$('reference-pmid').value.trim() && !$('reference-doi').value.trim()) {
+    input.pmid = null; input.doi = null;
+    input.title = $('reference-citation-title').value.trim();
+    input.authors = authorText.split('\n').filter(Boolean).map(last_name => ({last_name}));
+    if (organization) input.authors.push({organization});
+  }
+  return input;
+}
+function invalidateReference() { referenceEpoch++; referenceToken = ''; $('reference-save').disabled = true; }
+async function openReference(study) {
+  referenceStudy = study; invalidateReference();
+  const data = await api('/local/reference/read', {id:study.id});
+  if (referenceStudy !== study) return;
+  const ref = data.reference || {};
+  referenceInitial = {};
+  for (const [field,id] of Object.entries(referenceInputs)) { const value = String(ref[field] || (field === 'publication_date' ? ref.date : '') || ''); $(id).value = value; referenceInitial[field] = value; }
+  referenceInitial.authorText = (ref.authors || []).filter(a => !a.organization).map(a => [a.first_name,a.last_name].filter(Boolean).join(' ')).join('\n');
+  referenceInitial.organization = (ref.authors || []).filter(a => a.organization).map(a => a.organization).join('; ');
+  $('reference-author').value = referenceInitial.authorText; $('reference-organization').value = referenceInitial.organization;
+  $('reference-manual').open = !ref.pmid && !ref.doi && !!ref.title;
+  $('reference-reset').checked = false;
+  $('reference-refresh').checked = false; $('reference-refresh').disabled = state.offline;
+  $('reference-context').textContent = `${study.name} · On save: ${human(study.mode || 'validate')}. ${state.offline ? 'Offline: cached metadata only.' : 'Accepted metadata is saved to reference.json.'}`;
+  $('reference-result').replaceChildren(); $('reference-candidates').replaceChildren(); $('reference-dialog').showModal();
+}
+$('reference-form').addEventListener('input', invalidateReference);
+$('reference-dialog').addEventListener('close', invalidateReference);
+$('reference-form').addEventListener('submit', event => { event.preventDefault(); run(async () => {
+  invalidateReference(); const epoch = referenceEpoch;
+  $('reference-result').replaceChildren(el('p','Retrieving metadata…'));
+  try {
+    const data = await api('/local/reference/preview', {id:referenceStudy.id,input:referenceInput(),refresh:$('reference-refresh').checked,reset_overrides:$('reference-reset').checked});
+    if (epoch !== referenceEpoch) return;
+    referenceToken = data.token; const ref = data.reference, result = $('reference-result'); result.replaceChildren(el('h3',ref.title || 'Untitled reference'));
+    result.append(el('p',(ref.authors || []).map(a => a.organization || [a.first_name,a.last_name].filter(Boolean).join(' ')).join(', ')),el('p',[ref.journal,ref.publication_date || ref.date,ref.pmid ? `PMID ${ref.pmid}` : '',ref.doi].filter(Boolean).join(' · ')));
+    if (ref.abstract) result.append(el('p',ref.abstract,'reference-abstract'));
+    for (const warning of ref.provenance?.warnings || []) result.append(el('p',warning,'notice'));
+    const changes = el('details'); changes.append(el('summary','Review changed fields'));
+    for (const [field,change] of Object.entries(data.changes || {})) { if (field === 'provenance') continue; changes.append(el('p',`${human(field)}: ${JSON.stringify(change.before)} → ${JSON.stringify(change.after)}`,'small')); }
+    result.append(changes); $('reference-save').disabled = false; result.scrollIntoView({block:'nearest'});
+  } catch (error) { if (epoch === referenceEpoch) $('reference-result').replaceChildren(el('p',error.message,'error')); }
+}); });
+$('reference-search').addEventListener('click', () => run(async () => {
+  invalidateReference(); const epoch = referenceEpoch;
+  const citation = [$('reference-citation-title').value,$('reference-author').value,$('reference-organization').value,$('reference-date').value].filter(Boolean).join(' ');
+  $('reference-candidates').replaceChildren(el('p','Searching publications…'));
+  try {
+    const data = await api('/local/reference/search',{id:referenceStudy.id,citation});
+    if (epoch !== referenceEpoch) return;
+    const results = $('reference-candidates'); results.replaceChildren();
+    for (const candidate of data.candidates) results.append(button(`${candidate.title || candidate.doi} · ${candidate.publication_date || 'date unknown'}`, () => {
+      invalidateReference(); $('reference-pmid').value = ''; $('reference-doi').value = candidate.doi;
+      for (const id of ['reference-citation-title','reference-author','reference-organization','reference-date']) $(id).value = '';
+      // Candidate metadata is fetched by identifier; search terms are not overrides.
+      referenceInitial = {pmid:'',doi:'',title:'',publication_date:'',authorText:'',organization:''};
+      $('reference-manual').open = false;
+      results.replaceChildren(el('p','Publication selected. Preview its metadata before saving.'));
+    }));
+    if (!data.candidates.length) results.append(el('p','No matching publications. You can save a manual reference.'));
+  } catch (error) { if (epoch === referenceEpoch) $('reference-candidates').replaceChildren(el('p',error.message,'error')); }
+}));
+$('reference-save').addEventListener('click', () => run(async () => {
+  if (!referenceToken) return;
+  const token = referenceToken; invalidateReference();
+  try {
+    await api('/local/reference/save',{id:referenceStudy.id,token});
+    $('reference-dialog').close(); notify('Reference saved. The study’s selected on-save action applies.'); await refresh(true);
+  } catch (error) { $('reference-result').append(el('p',error.message,'error')); $('reference-result').scrollIntoView({block:'nearest'}); }
+}));

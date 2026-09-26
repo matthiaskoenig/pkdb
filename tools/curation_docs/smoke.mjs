@@ -14,6 +14,11 @@ try {
     const req=route.request(), path=new URL(req.url()).pathname;
     if (path.startsWith('/local/')) {
       if(req.method()==='POST') {const body=req.postDataJSON();calls.push({path,body,csrf:req.headers()['x-csrf-token']});if(path==='/local/settings')Object.assign(state.github,{user:body.github_user || state.github.user});if(path==='/local/pause')state.paused=body.paused;}
+      if (path.startsWith('/local/reference/')) {
+        const reference = {sid:'stable',name:'Example2026',pmid:'123',doi:'10.1234/example',title:'A reference <script> stays text',publication_date:'2020-03',authors:[{organization:'Study Consortium'}],journal:'Test journal',abstract:'METHODS: Some important text.\n\nRESULTS: Second section.',provenance:{warnings:[]}};
+        const value = path.endsWith('/read') ? {reference:{}} : path.endsWith('/search') ? {candidates:[reference]} : path.endsWith('/preview') ? {token:'reference-preview',reference,changes:{title:{before:null,after:reference.title}}} : {ok:true};
+        await route.fulfill({contentType:'application/json',body:JSON.stringify(value)}); return;
+      }
       await route.fulfill({contentType:'application/json',body:JSON.stringify(path==='/local/state'?state:{csrf_token:'fixture-csrf'})});return;
     }
     const file=path==='/'?'index.html':path.replace('/static/','');
@@ -34,6 +39,31 @@ try {
   await page.locator('#studies tr').first().locator('td').nth(2).click();
   assert.match(await page.locator('.problem').textContent(), /C10/);
   assert.equal(await page.locator('#selection-count').textContent(), '0 studies selected');
+  await page.getByRole('button', {name:'Reference…',exact:true}).click();
+  await page.locator('#reference-pmid').fill('123');
+  assert(await page.locator('#reference-save').isDisabled());
+  await page.locator('#reference-preview').click();
+  await page.locator('#reference-save:enabled').waitFor();
+  assert.match(await page.locator('#reference-result').textContent(), /Study Consortium/);
+  assert.equal(await page.locator('#reference-result script').count(), 0);
+  await page.screenshot({path:'/tmp/pkdb-reference-dialog.png'});
+  await page.locator('#reference-pmid').fill('456');
+  assert(await page.locator('#reference-save').isDisabled());
+  await page.locator('#reference-manual summary').click();
+  await page.locator('#reference-citation-title').fill('A citation');
+  await page.locator('#reference-search').click();
+  await page.locator('#reference-candidates button').click();
+  assert.equal(await page.locator('#reference-doi').inputValue(),'10.1234/example');
+  await page.locator('#reference-preview').click();
+  await page.locator('#reference-save:enabled').waitFor();
+  await page.setViewportSize({width:390,height:844});
+  assert(await page.evaluate(()=>document.querySelector('#reference-dialog').scrollWidth<=document.querySelector('#reference-dialog').clientWidth));
+  await page.locator('#reference-result').scrollIntoViewIfNeeded();
+  await page.screenshot({path:'/tmp/pkdb-reference-dialog-mobile.png'});
+  await page.setViewportSize({width:1440,height:1000});
+  await page.locator('#reference-save').click();
+  await page.waitForFunction(()=>!document.querySelector('#reference-dialog').open);
+  assert(calls.some(c=>c.path==='/local/reference/save'&&c.body.token==='reference-preview'));
   await page.getByRole('button', {name:'Overview', exact:true}).click();
   await page.locator('#studies tr').first().locator('td').nth(3).click();
   assert.match(await page.locator('.problem').textContent(), /C10/);

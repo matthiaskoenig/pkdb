@@ -1,6 +1,6 @@
 """Explicit public scientific response contracts."""
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
 
 class ResponseModel(BaseModel):
@@ -92,6 +92,7 @@ class AuthorResponse(ResponseModel):
     pk: int
     first_name: str
     last_name: str
+    organization: str | None = None
 
 
 class ReferenceResponse(ResponseModel):
@@ -105,6 +106,8 @@ class ReferenceResponse(ResponseModel):
     journal: str | None
     date: str | None
     authors: list[AuthorResponse]
+    publication_date: str | None = None
+    provenance: dict[str, JsonValue] = Field(default_factory=dict)
 
 
 class EmptyResponse(ResponseModel):
@@ -175,6 +178,7 @@ class UserResponse(ResponseModel):
     username: str
     first_name: str
     last_name: str
+    organization: str | None = None
 
 
 class CuratorResponse(UserResponse):

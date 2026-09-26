@@ -45,6 +45,23 @@
   <dialog id="workspace-dialog"><form id="workspace-form"><h2>Choose workspace</h2><label for="workspace-path">Folder on this computer</label><input id="workspace-path" required placeholder="/path/to/pkdb_data"><p class="muted small">Choose a repository, substance folder, or individual study. Source files stay unchanged.</p><div class="actions"><button type="button" data-close="workspace-dialog">Cancel</button><button type="submit" class="primary">Open workspace</button></div></form></dialog>
   <dialog id="upload-dialog"><form id="upload-form"><h2 id="upload-title">Review upload</h2><p id="upload-context"></p><ul id="upload-list"></ul><p class="muted small">Existing studies may be replaced. Remote publication and permission are checked by the server. Every upload validates the source first.</p><div class="actions"><button type="button" data-close="upload-dialog">Cancel</button><button type="submit" class="primary" id="confirm-upload">Validate and upload</button></div></form></dialog>
   <dialog id="retry-dialog"><form id="retry-form"><h2>Review unknown upload outcome</h2><p id="retry-context"></p><p>The previous request may have saved successfully. Inspect the server before retrying; the retry can replace the study.</p><p id="retry-link"></p><label class="check"><input id="retry-acknowledge" type="checkbox" required> I inspected the server; retry this study.</label><div class="actions"><button type="button" data-close="retry-dialog">Cancel</button><button type="submit" class="primary">Validate and retry upload</button></div></form></dialog>
+  <dialog id="reference-dialog" aria-labelledby="reference-title"><form id="reference-form">
+    <h2 id="reference-title">Literature reference</h2><p id="reference-context" class="small muted"></p>
+    <p>Enter a PMID or DOI to retrieve metadata. For a manual reference, enter a title and author or organization. Search suggests publications for you to choose.</p>
+    <label for="reference-pmid">PubMed ID</label><input id="reference-pmid" placeholder="6138080">
+    <label for="reference-doi">DOI</label><input id="reference-doi" placeholder="10.…/…">
+    <details id="reference-manual"><summary>Manual citation and metadata corrections</summary>
+    <label for="reference-citation-title">Title</label><input id="reference-citation-title">
+    <label for="reference-author">Author names (one per line)</label><textarea id="reference-author" rows="2"></textarea>
+    <label for="reference-organization">Organization</label><input id="reference-organization">
+    <label for="reference-date">Publication date</label><input id="reference-date" placeholder="YYYY, YYYY-MM, or YYYY-MM-DD">
+    </details>
+    <label class="check"><input id="reference-refresh" type="checkbox"> Refresh metadata from providers</label>
+    <label class="check"><input id="reference-reset" type="checkbox"> Use provider metadata instead of saved corrections</label>
+    <div class="actions"><button type="button" id="reference-search">Search citation</button><button type="submit" id="reference-preview">Preview reference</button></div>
+    <div id="reference-candidates"></div><div id="reference-result" aria-live="polite"></div>
+    <div class="actions reference-footer"><button type="button" data-close="reference-dialog">Cancel</button><button type="button" id="reference-save" class="primary" disabled>Save reference</button></div>
+  </form></dialog>
   <noscript><p class="empty">Enable JavaScript to use the local curation interface.</p></noscript>
 </body>
 </html>

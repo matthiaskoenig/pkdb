@@ -47,3 +47,6 @@ main{padding:20px 24px}
 .activity{margin-top:18px}
 @media(max-width:1000px){.study-layout{grid-template-columns:1fr}}
 @media(max-width:600px){main{padding:14px}.app-header{padding:10px 14px}.brand-logo{width:44px}.brand span{font-size:15px}.detail{padding:10px}.study-layout th,.study-layout td{padding:6px}.problem{padding:8px}.problem-heading{align-items:flex-start}.job .grow{flex-basis:100%}.job{flex-wrap:wrap}.activity .section-heading{gap:8px}.activity .actions{margin-top:0}}
+
+#reference-dialog{width:min(680px,calc(100vw - 32px));max-height:90vh;overflow:auto}#reference-dialog input:not([type=checkbox]),#reference-dialog textarea{width:100%;box-sizing:border-box}#reference-dialog textarea{font:inherit;padding:8px;border:1px solid var(--border);border-radius:6px}#reference-result,#reference-candidates{overflow-wrap:anywhere}#reference-candidates button{display:block;text-align:left;margin:8px 0;width:100%}.reference-abstract{white-space:pre-wrap;max-height:200px;overflow:auto;font-size:13px}
+#reference-manual{margin:12px 0}#reference-manual summary{cursor:pointer;font-weight:600}.reference-footer{position:sticky;bottom:-28px;background:white;padding:12px 0;margin-bottom:0}#reference-result details p{white-space:pre-wrap}

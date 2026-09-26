@@ -83,6 +83,7 @@ class CurationEngine:
         self.vocabulary = {"status": "offline" if offline else "not_checked"}
         self.cache = VocabularyCache(self.state_dir / "vocabulary")
         self.studies = {}
+        self.reference_previews = {}
         self.jobs = saved.get("jobs", [])
         for job in self.jobs:
             if job.get("status") in {"queued", "running"}:
@@ -654,6 +655,56 @@ class CurationEngine:
             ):
                 raise ValueError("File is outside the workspace")
             return resolved
+
+    def reference_action(self, action, body):
+        from pkdb.references import (
+            ReferenceError,
+            ReferenceResolver,
+            preview_reference,
+            save_reference,
+        )
+
+        with self.lock:
+            folder = self.resolve_file(body["id"])
+            workspace = self.root
+            offline = self.offline
+            if action == "read":
+                path = folder / "reference.json"
+                if path.is_symlink():
+                    raise ReferenceError("Reference source must not be a symlink")
+                return {
+                    "reference": json.loads(path.read_text()) if path.exists() else {}
+                }
+            if action == "save":
+                token = body["token"]
+                entry = self.reference_previews.get(token)
+                if not entry or entry[0] != folder:
+                    raise ReferenceError("Reference preview expired; preview again")
+                save_reference(folder, entry[1])
+                del self.reference_previews[token]
+                self.scan()
+                return {"ok": True}
+        resolver = ReferenceResolver(
+            offline=offline, refresh=body.get("refresh", False)
+        )
+        if action == "search":
+            return {"candidates": resolver.search(body["citation"])}
+        if action != "preview":
+            raise ReferenceError("Unknown reference action")
+        preview = preview_reference(
+            folder,
+            body.get("input", {}),
+            resolver,
+            reset_overrides=body.get("reset_overrides", False),
+        )
+        with self.lock:
+            if self.root != workspace or self.resolve_file(body["id"]) != folder:
+                raise ReferenceError("Workspace changed during lookup; preview again")
+            token = uuid4().hex
+            while len(self.reference_previews) >= 20:
+                self.reference_previews.pop(next(iter(self.reference_previews)))
+            self.reference_previews[token] = (folder, preview)
+        return {**preview, "token": token}
 
     def report(self, identifier):
         if not any(job["report_id"] == identifier for job in self.jobs):

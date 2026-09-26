@@ -63,7 +63,7 @@ from pkdb_server.services.queries import QueryService
 from pkdb_server.services.quotas import QuotaService
 
 log = logging.getLogger(__name__)
-SCHEMA_REVISION = "p002retirelegacy"
+SCHEMA_REVISION = "p003reference"
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:

@@ -45,3 +45,5 @@
 - Show server validation details in Python client and CLI HTTP 422 errors.
 - Update upload and access documentation, and exclude internal specifications, plans, and migration records from documentation search.
 - Simplify browser login to username and password. Remove GitHub/ORCID authentication and administrator MFA, retaining editable optional GitHub/ORCID profile fields. Add `pkdb create-user` for active local accounts without SMTP or email setup. Fresh installations include the simplified authentication schema.
+
+- Add cached PubMed/DOI reference resolution and manual citation search through `pkdb reference` and local curation. Preserve structured abstracts, publication-date precision, organizational authors, retrieval provenance, and curator corrections. Add backend migration `p003reference` for the enriched metadata.

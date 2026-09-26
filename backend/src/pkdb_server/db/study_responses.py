@@ -239,7 +239,9 @@ def study_responses(session, rows, principal):
             "reference": {**reference, "study": {"sid": row.sid, "name": row.name}}
             if reference
             else None,
-            "reference_date": reference["date"] if reference else None,
+            "reference_date": (reference["publication_date"] or reference["date"])
+            if reference
+            else None,
             "files": attachments[row.id],
             "substances": [substances[sid] for sid in sorted(study_substances[row.id])],
             **note_data(row.id, "study", "metadata"),
