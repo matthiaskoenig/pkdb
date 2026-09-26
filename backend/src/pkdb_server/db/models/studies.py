@@ -1,6 +1,6 @@
 from datetime import date as Date
 
-from sqlalchemy import CheckConstraint, ForeignKey, Index, String
+from sqlalchemy import CheckConstraint, ForeignKey, Index, String, UniqueConstraint
 from sqlalchemy import Identity as AutoIdentity
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
@@ -9,12 +9,26 @@ from pkdb_server.db.models.base import Base, Identity, Timestamped
 from pkdb_server.db.textsearch import vector
 
 
+class Publication(Identity, Base):
+    __tablename__ = "publications"
+
+
+class PublicationIdentifier(Base):
+    __tablename__ = "publication_identifiers"
+    namespace: Mapped[str] = mapped_column(String(16), primary_key=True)
+    value: Mapped[str] = mapped_column(primary_key=True)
+    publication_id: Mapped[int] = mapped_column(
+        ForeignKey("publications.id"), index=True
+    )
+
+
 class Reference(Identity, Base):
     __tablename__ = "references"
     sid: Mapped[str] = mapped_column(String(255), unique=True)
     name: Mapped[str]
     pmid: Mapped[str | None]
     doi: Mapped[str | None]
+    url: Mapped[str | None]
     title: Mapped[str | None]
     abstract: Mapped[str | None]
     publication_date: Mapped[str | None] = mapped_column(String(10))
@@ -38,6 +52,17 @@ class Author(Base):
 
 class Study(Identity, Timestamped, Base):
     __tablename__ = "studies"
+    publication_id: Mapped[int | None] = mapped_column(
+        ForeignKey("publications.id"), index=True
+    )
+    source_key: Mapped[str] = mapped_column(
+        String(255), default="pkdb.manual", server_default="pkdb.manual"
+    )
+    acquisition: Mapped[dict] = mapped_column(
+        JSONB,
+        default=lambda: {"kind": "manual_curation", "source_key": "pkdb.manual"},
+        server_default='{"kind":"manual_curation","source_key":"pkdb.manual"}',
+    )
     sid: Mapped[str] = mapped_column(String(255), unique=True)
     name: Mapped[str] = mapped_column(index=True)
     date: Mapped[Date | None]
@@ -53,6 +78,7 @@ class Study(Identity, Timestamped, Base):
     validation_report: Mapped[dict] = mapped_column(JSONB, default=dict)
     source_manifest: Mapped[dict] = mapped_column(JSONB, default=dict)
     __table_args__ = (
+        UniqueConstraint("publication_id", "source_key"),
         CheckConstraint("access IN ('public', 'private')", name="access"),
         CheckConstraint("licence IN ('open', 'closed')", name="licence"),
         CheckConstraint("length(sid) > 0", name="sid"),

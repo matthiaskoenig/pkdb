@@ -207,6 +207,9 @@ class IngestionService:
                             "Only administrators change licence",
                             code="licence_change_forbidden",
                         )
+                from pkdb_server.db.publications import assign_publication
+
+                assign_publication(session, root, study)
                 names = {
                     study.metadata.creator,
                     *study.metadata.collaborators,

@@ -2,6 +2,12 @@ import { describe, it, expect } from "vitest";
 import { cellText } from "../../src/features/results/cells";
 import { validOrder } from "../../src/features/results/columns";
 describe("scientific result cells", () => {
+  it("labels all acquisition types and their source", () => {
+    expect(cellText({ provenance: { kind: "data_import", source_key: "osp.observed-data", release: "v1.9" } }, "provenance")).toBe("Automatic import · osp.observed-data · v1.9");
+    expect(cellText({ provenance: { kind: "manual_curation", source_key: "pkdb.manual" } }, "provenance")).toBe("Manual curation · pkdb.manual");
+    expect(cellText({ provenance: { kind: "automatic_curation", source_key: "pipeline" } }, "provenance")).toBe("Automatic curation · pipeline");
+    expect(cellText({}, "provenance")).toBe("Not reported");
+  });
   it("distinguishes measured zero, null, precision and characteristic context", () => {
     expect(cellText({ value: 0 }, "value")).toBe("0");
     expect(cellText({ value: null }, "value")).toBe("Not reported");

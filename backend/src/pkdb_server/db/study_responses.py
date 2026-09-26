@@ -221,6 +221,8 @@ def study_responses(session, rows, principal):
         data = {
             "pk": str(row.id),
             "sid": row.sid,
+            "provenance": row.acquisition,
+            "publication_id": row.publication_id,
             "name": row.name,
             "licence": row.licence,
             "access": row.access,

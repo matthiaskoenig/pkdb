@@ -34,6 +34,7 @@ SECTIONS = {
     "dataset": "data",
 }
 META_KEYS = {
+    "provenance",
     "name",
     "date",
     "creator",

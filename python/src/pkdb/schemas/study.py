@@ -14,6 +14,7 @@ from pydantic import (
     model_validator,
 )
 
+from pkdb.schemas.provenance import ManualCuration, StudyProvenance
 from pkdb.schemas.source import SourceLocation
 
 Number = Annotated[float, Field(strict=True, allow_inf_nan=False)]
@@ -46,6 +47,7 @@ class Curator(Record):
 
 
 class Metadata(Notes):
+    provenance: StudyProvenance = Field(default_factory=ManualCuration)
     name: Identifier
     date: Date | None = None
     creator: Identifier
@@ -72,6 +74,7 @@ class Reference(Record):
     name: str
     pmid: str | None = None
     doi: str | None = None
+    url: str | None = None
     title: str | None = None
     abstract: str | None = None
     journal: str | None = None
@@ -145,7 +148,7 @@ class Subject(Notes):
 
 
 class Group(Subject):
-    count: Annotated[int, Field(strict=True, ge=0)]
+    count: Annotated[int, Field(strict=True, ge=0)] | None
     parent: str | None = None
 
 

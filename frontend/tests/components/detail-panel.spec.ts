@@ -21,6 +21,18 @@ beforeEach(() => {
   mocks.get.mockReset();
 });
 describe("record exploration", () => {
+  it("identifies automatically imported studies with their provider and release", async () => {
+    mocks.get.mockResolvedValueOnce({ data: { sid: "OSP1", name: "OSP study", provenance: {
+      kind: "data_import", source_key: "osp.observed-data", release: "v1.9",
+    } } });
+    const wrapper = mount(DetailPanel, {
+      props: { entity: "studies", identifier: "OSP1" },
+      global: { stubs: { StudyContents: true } },
+    });
+    await flushPromises();
+    expect(wrapper.get('[aria-label="Data source"]').text()).toContain("Automatic import · osp.observed-data · v1.9");
+    wrapper.unmount();
+  });
   it("keeps zero and uncertainty visible and prevents unsafe external links", () => {
     const wrapper = mount(RecordFields, {
       props: {

@@ -145,3 +145,7 @@ An HTTP 422 response means the API rejected the study bundle. The CLI presents t
 - `unknown_user`: an attribution identity in the study is absent from the destination. Ask its administrator to provision the identity; changing attribution is not a substitute for preserving the original contributors.
 
 Offline validation cannot check destination account records or study-editing permissions. If an older client prints only the HTTP status, update the client to a release containing detailed validation reporting or use the [source checkout](development.md#install-the-python-package-from-source).
+
+## External data imports
+
+Use `pkdb import osp --creator USER --output NEW_DIRECTORY` to convert the pinned OSP observed-data release into source-qualified study folders. See the [OSP import guide](osp-import.md) for provenance, scientific mappings, offline conversion, and server loading.

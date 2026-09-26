@@ -18,7 +18,7 @@ def test_initial_schema_round_trip(session_factory):
     )
     scripts = ScriptDirectory.from_config(config)
     assert scripts.get_heads() == [SCHEMA_REVISION]
-    assert len(list(scripts.walk_revisions())) == 3
+    assert len(list(scripts.walk_revisions())) == 4
     command.check(config)
     with engine.connect() as connection:
         assert (

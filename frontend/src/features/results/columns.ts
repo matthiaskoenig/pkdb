@@ -9,6 +9,7 @@ export const columns: Record<ResultTab, Column[]> = {
     { key: "sid", title: "Study", order: "sid" },
     { key: "name", title: "Name", order: "name" },
     { key: "reference", title: "Reference" },
+    { key: "provenance", title: "Source" },
     { key: "licence", title: "Licence", order: "licence" },
     { key: "access", title: "Access", order: "access" },
   ],

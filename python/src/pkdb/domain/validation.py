@@ -31,7 +31,7 @@ from pkdb.schemas.validation import (
     ValidationReport,
 )
 
-PROCESSING_VERSION = "6"
+PROCESSING_VERSION = "7"
 NUMERIC_FIELDS = ("value", "mean", "median", "min", "max", "sd", "se", "cv")
 
 
@@ -181,7 +181,8 @@ def prepare_study(
                 )
         for characteristic in group.characteristica:
             if (
-                characteristic.statistics.count is not None
+                group.count is not None
+                and characteristic.statistics.count is not None
                 and characteristic.statistics.count > group.count
             ):
                 issue(
@@ -478,7 +479,10 @@ def prepare_study(
         raise StudyValidationError(report)
     for key, candidate in normalized.items():
         subject = observation_subjects.get(key)
-        if isinstance(subject, Group):
+        if isinstance(subject, Group) and candidate.calculation_type in {
+            None,
+            "sample mean",
+        }:
             candidate.statistics = complete_statistics(
                 candidate.statistics, subject.count
             )
