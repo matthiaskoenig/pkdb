@@ -10,7 +10,7 @@ Study metadata has discriminated acquisition records: `ManualCuration` (`manual_
 
 Identifiers may be enriched with additional aliases, but contradictory aliases or publication/source changes require explicit reconciliation. Without a PMID or DOI, a source URL or explicit reference SID provides provisional identity; titles alone are not used to infer matches across sources. Migration `p004sources` backfills existing manual studies and stops on duplicate publication identities rather than silently merging them.
 
-See [OSP import](osp-import.md) for conversion, validation, provenance, and known source limitations.
+See [OSP import](osp-import.md) and [public dataset imports](public-dataset-imports.md) for conversion, validation, provenance, and known source limitations. `DataImport` additionally records `evidence_kind`, `reference_scope`, and `source_terms`; missing classifications default to `unknown`. The attached report links native records to original artifact rows and mapping operations.
 
 ## Subjects and observations
 
@@ -18,7 +18,7 @@ A subject has a study, name, kind, count, and optional parent. An individual has
 
 `observations` stores scientific identity and context, including the measurement type, substance, subject, method, tissue, time, source, and whether the result was calculated. `observation_values` stores its numerical representations and units. Reported and normalized values share context when the metadata agrees; their original values, keys, and derivation links remain distinct. Intervention associations are stored once on the shared observation context.
 
-A measured individual value is still a `value`, not silently relabeled a population `mean`. Mean, median, uncertainty, and missing versus zero retain their scientific meanings. Characteristics and outputs use the same subject count defaults and group statistical completion. An explicit measurement count is retained; otherwise group count or one for an individual supplies the default. Processing version 7 preserves unknown group counts as null and restricts arithmetic statistical completion to arithmetic summaries. Geometric summaries keep their reported statistical meaning.
+A measured individual value is still a `value`, not silently relabeled a population `mean`. Mean, median, uncertainty, and missing versus zero retain their scientific meanings. Characteristics and outputs use the same subject count defaults and group statistical completion. An explicit measurement count is retained; otherwise group count or one for an individual supplies the default. Unknown group counts remain null and arithmetic statistical completion is restricted to arithmetic summaries. Geometric summaries keep their reported statistical meaning. Processing version 8 additionally permits a group scalar `value` only with the explicit `unspecified summary` calculation type. This type cannot claim mean/median/uncertainty statistics and does not produce derived PK parameters.
 
 ```mermaid
 erDiagram
@@ -50,7 +50,7 @@ uv run --locked alembic upgrade head
 uv run --locked alembic check
 ```
 
-Use a processing-version-7 client. Re-uploaded studies receive new numeric identifiers; old numeric resource references and saved selections must be recreated. Study SIDs and source keys remain stable. The baseline includes search indexes, scientific integrity triggers, and initial security configuration. No historical ID conversion or point-table migration runs during setup.
+Use a processing-version-8 client. Re-uploaded studies receive new numeric identifiers; old numeric resource references and saved selections must be recreated. Study SIDs and source keys remain stable. The baseline includes search indexes, scientific integrity triggers, and initial security configuration. No historical ID conversion or point-table migration runs during setup.
 
 ## Verification and performance
 

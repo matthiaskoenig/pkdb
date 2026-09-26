@@ -10,6 +10,16 @@ def register(commands):
         "import", help="Import an external dataset as source-qualified studies"
     )
     providers = command.add_subparsers(dest="provider", required=True)
+    for provider in ("frdb", "cvtdb", "warfarin"):
+        parser = providers.add_parser(
+            provider, help=f"Import pinned {provider} dataset"
+        )
+        parser.add_argument(
+            "--source", type=Path, help="Checksum-verified local artifact"
+        )
+        parser.add_argument("--output", type=Path, required=True)
+        parser.add_argument("--creator", required=True)
+        parser.add_argument("--offline", action="store_true")
     osp = providers.add_parser(
         "osp", help="Import pinned OSP observed-data release v1.9"
     )
@@ -35,6 +45,8 @@ def register(commands):
 
 
 def run(args):
+    if args.provider != "osp":
+        return run_dataset(args)
     import httpx2
 
     from pkdb.cache import cache_directory
@@ -80,6 +92,56 @@ def run(args):
                         )
                     },
                 },
+                indent=2,
+            )
+        )
+        return 0
+    except (ValueError, OSError, httpx2.HTTPError) as error:
+        print(json.dumps({"ok": False, "error": str(error)}), file=sys.stderr)
+        return 1
+
+
+def run_dataset(args):
+    import hashlib
+
+    import httpx2
+
+    from pkdb.cache import cache_directory
+    from pkdb.importers.datasets.convert import import_dataset
+    from pkdb.importers.datasets.releases import RELEASES
+
+    pin = RELEASES[args.provider]
+    try:
+        path = args.source
+        if path is None:
+            if args.offline:
+                raise ValueError("Offline import requires --source")
+            path = (
+                cache_directory()
+                / "imports"
+                / args.provider
+                / pin["sha256"]
+                / pin["url"].rsplit("/", 1)[-1]
+            )
+            if not path.exists():
+                with httpx2.Client(timeout=120, follow_redirects=True) as client:
+                    response = client.get(pin["url"])
+                    response.raise_for_status()
+                if hashlib.sha256(response.content).hexdigest() != pin["sha256"]:
+                    raise ValueError(
+                        "Downloaded artifact checksum does not match release pin"
+                    )
+                from tempfile import NamedTemporaryFile
+
+                path.parent.mkdir(parents=True, exist_ok=True)
+                with NamedTemporaryFile(dir=path.parent, delete=False) as handle:
+                    handle.write(response.content)
+                    temporary = Path(handle.name)
+                temporary.replace(path)
+        report = import_dataset(args.provider, path, args.output, creator=args.creator)
+        print(
+            json.dumps(
+                {"ok": True, **{k: v for k, v in report.items() if k != "studies"}},
                 indent=2,
             )
         )

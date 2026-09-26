@@ -148,3 +148,37 @@ def test_explicit_zero_error_is_preserved(valid_study, vocabulary):
     assert (
         prepare_study(valid_study, vocabulary).study.measurements[0].statistics.se == 0
     )
+
+
+def test_unspecified_summary_is_explicit_and_has_no_statistical_completion(
+    valid_study, vocabulary
+):
+    from pkdb.schemas.study import Statistics
+
+    vocabulary = vocabulary.model_copy(
+        update={"calculation_types": ("unspecified summary",)}
+    )
+    record = valid_study.measurements[0]
+    record.statistics = Statistics(value=2)
+    record.calculation_type = "unspecified summary"
+    prepared = prepare_study(valid_study, vocabulary)
+    assert prepared.report.valid
+    assert all(
+        m.statistics.mean is None and m.statistics.sd is None
+        for m in prepared.study.measurements
+    )
+    record.statistics.mean = 2
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(valid_study, vocabulary)
+    assert "unspecified_summary_statistics" in codes(error)
+
+
+def test_unspecified_summary_does_not_generate_pk(valid_study):
+    from pkdb.domain.pharmacokinetics import derive_pk
+    from pkdb.schemas.study import Statistics, Timecourse
+
+    record = valid_study.measurements[0]
+    record.statistics = Statistics(value=2)
+    record.calculation_type = "unspecified summary"
+    course = Timecourse(key="opaque", points=[record])
+    assert derive_pk(course) == []

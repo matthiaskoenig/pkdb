@@ -30,6 +30,11 @@ class DataImport(Acquisition):
     assets: list[SourceAsset] = Field(min_length=1)
     dataset_ids: list[str] = Field(default_factory=list)
     report_file: str | None = None
+    evidence_kind: Literal["observed", "derived", "simulated", "unknown"] = "unknown"
+    reference_scope: Literal[
+        "primary_publication", "source_document", "compilation", "unknown"
+    ] = "unknown"
+    source_terms: str | None = None
 
 
 class AutomaticCuration(Acquisition):
