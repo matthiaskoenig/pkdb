@@ -27,6 +27,7 @@ _LAST_REQUEST = 0.0
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 FIELDS = {
     "pmid",
+    "url",
     "doi",
     "title",
     "abstract",

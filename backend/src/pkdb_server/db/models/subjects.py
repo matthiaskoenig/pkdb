@@ -1,6 +1,6 @@
 """One subject identity for groups and individually identified participants."""
 
-from sqlalchemy import CheckConstraint, ForeignKeyConstraint, UniqueConstraint
+from sqlalchemy import CheckConstraint, ForeignKeyConstraint, Integer, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, synonym
 
 from pkdb_server.db.models.base import Base, Owned
@@ -11,7 +11,7 @@ class Subject(Owned, Base):
     kind: Mapped[str]
     image: Mapped[str | None]
     name: Mapped[str]
-    count: Mapped[int] = mapped_column(default=1)
+    count: Mapped[int | None] = mapped_column(Integer().evaluates_none(), default=1)
     parent_id: Mapped[int | None] = mapped_column(index=True)
     __mapper_args__ = {"polymorphic_on": "kind"}
     __table_args__ = (

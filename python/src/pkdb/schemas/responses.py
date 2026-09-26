@@ -2,6 +2,8 @@
 
 from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
+from pkdb.schemas.provenance import ManualCuration, StudyProvenance
+
 
 class ResponseModel(BaseModel):
     model_config = ConfigDict(extra="forbid")
@@ -24,7 +26,7 @@ class SubjectSummary(ResponseModel):
 
 
 class GroupSummary(SubjectSummary):
-    count: int
+    count: int | None
 
 
 class ScientificResponse(ResponseModel):
@@ -101,6 +103,7 @@ class ReferenceResponse(ResponseModel):
     name: str
     pmid: str | None
     doi: str | None
+    url: str | None = None
     title: str | None
     abstract: str | None
     journal: str | None
@@ -216,6 +219,8 @@ class AttachmentResponse(ResponseModel):
 
 
 class StudyResponse(NotesResponse):
+    provenance: StudyProvenance = Field(default_factory=ManualCuration)
+    publication_id: int | None = None
     pk: str
     sid: str
     name: str

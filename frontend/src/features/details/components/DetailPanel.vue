@@ -9,6 +9,7 @@ import {
   watch,
 } from "vue";
 import { VBtn } from "vuetify/components";
+import { provenanceText } from "../../../api/provenance";
 import { api, errorMessage } from "../../../api/client";
 import { useSessionStore } from "../../../stores/session";
 import {
@@ -151,6 +152,10 @@ onBeforeUnmount(() => {
           {{ relation.title }}
         </VBtn>
       </nav>
+      <section v-if="target.entity === 'studies'" aria-label="Data source">
+        <h3>Data source</h3>
+        <p>{{ provenanceText(data.provenance) }}</p>
+      </section>
       <section v-if="reference" aria-label="Publication">
         <h3>{{ text(reference.title) }}</h3>
         <p>{{ text(reference.journal) }} · {{ text(reference.publication_date || reference.date) }}</p>
@@ -177,7 +182,7 @@ onBeforeUnmount(() => {
         :sid="data.sid"
         @open="open"
       />
-      <RecordFields :data="data" :omit="['files', 'array', 'reference']" />
+      <RecordFields :data="data" :omit="['files', 'array', 'reference', 'provenance', 'publication_id']" />
       <details v-if="data.array">
         <summary>Complete subset measurements</summary>
         <RecordFields :data="{ measurements: data.array }" />

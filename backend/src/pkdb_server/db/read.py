@@ -225,6 +225,7 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
             metadata=dict(
                 **notes["metadata"],
                 name=root.name,
+                provenance=root.acquisition,
                 date=root.date,
                 creator=users[root.creator_id],
                 access=root.access,
@@ -248,6 +249,7 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                         "provenance",
                         "pmid",
                         "doi",
+                        "url",
                         "title",
                         "abstract",
                         "journal",

@@ -24,6 +24,7 @@ nav = [
     { "API examples" = "api-examples.md" },
     { "MCP for agents" = "mcp.md" },
     { "Python client" = "python-client.md" },
+    { "OSP data import" = "osp-import.md" },
   ] },
   { "Citation" = "citation.md" },
   { "Terms of use" = "terms-of-use.md" },

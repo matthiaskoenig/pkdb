@@ -1,3 +1,4 @@
+import { provenanceText } from "../../api/provenance";
 import { label, type ApiRecord, type JsonValue } from "../../api/contracts";
 function record(value: JsonValue | undefined): value is ApiRecord {
   return value !== null && typeof value === "object" && !Array.isArray(value);
@@ -16,6 +17,7 @@ function science(value: JsonValue): string {
     .join(" ");
 }
 export function cellText(row: ApiRecord, key: string): string {
+  if (key === "provenance") return provenanceText(row.provenance);
   if (key === "subject") return label(row.individual ?? row.group);
   if (key === "study") return label(row.study ?? row.study_sid);
   if (key === "characteristica")

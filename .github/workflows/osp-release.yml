@@ -1,0 +1,26 @@
+name: OSP release check
+
+on:
+  schedule:
+    - cron: "23 7 * * 1" # Mondays, 07:23 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: osp-release-check
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Check latest stable observed-data release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python3 scripts/check_osp_release.py --summary "$GITHUB_STEP_SUMMARY"

@@ -355,6 +355,7 @@ def reference_responses(session, rows):
                         "provenance",
                         "pmid",
                         "doi",
+                        "url",
                         "title",
                         "abstract",
                         "journal",
