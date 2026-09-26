@@ -5,6 +5,7 @@ import hashlib
 import io
 import tarfile
 import zipfile
+from importlib import import_module
 from pathlib import Path
 
 from pkdb.importers.datasets.common import Builder, number, reference, text
@@ -13,7 +14,7 @@ from pkdb.importers.datasets.releases import RELEASES
 
 def rda_rows(payload, name):
     try:
-        import rdata
+        rdata = import_module("rdata")
     except ImportError as error:
         raise ValueError(
             "R datasets require the optional dependency: pip install 'pkdb[imports]'"

@@ -14,6 +14,18 @@ from pkdb.importers.datasets.convert import (
 from pkdb.preparation import prepare
 
 
+def test_missing_optional_reader_has_install_instructions(monkeypatch):
+    from pkdb.importers.datasets import convert
+
+    def missing_reader(name):
+        assert name == "rdata"
+        raise ImportError("optional reader is not installed")
+
+    monkeypatch.setattr(convert, "import_module", missing_reader)
+    with pytest.raises(ValueError, match=r"pkdb\[imports\]"):
+        convert.rda_rows(b"", "warfarin")
+
+
 def finish(builder, tmp_path):
     report = builder.write(tmp_path)
     folder = next((tmp_path / "studies").iterdir())
