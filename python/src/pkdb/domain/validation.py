@@ -31,7 +31,7 @@ from pkdb.schemas.validation import (
     ValidationReport,
 )
 
-PROCESSING_VERSION = "7"
+PROCESSING_VERSION = "8"
 NUMERIC_FIELDS = ("value", "mean", "median", "min", "max", "sd", "se", "cv")
 
 
@@ -221,9 +221,22 @@ def prepare_study(
         for characteristic in individual.characteristica:
             validate_individual(characteristic)
     for measurement in study.measurements:
+        if measurement.calculation_type == "unspecified summary" and any(
+            getattr(measurement.statistics, field) is not None
+            for field in ("mean", "median", "min", "max", "sd", "se", "cv")
+        ):
+            issue(
+                "unspecified_summary_statistics",
+                "Unspecified summaries use value and cannot claim population statistics",
+                measurement,
+            )
         if measurement.individual:
             validate_individual(measurement)
-        if measurement.group and measurement.statistics.value is not None:
+        if (
+            measurement.group
+            and measurement.statistics.value is not None
+            and measurement.calculation_type != "unspecified summary"
+        ):
             issue(
                 "group_value",
                 "Group outputs cannot contain individual value",

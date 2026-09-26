@@ -165,6 +165,8 @@ def derive_pk(
     dose_units=DEFAULT_PK_DOSE_UNITS,
 ) -> list[Measurement]:
     points = course.points
+    if any(point.calculation_type == "unspecified summary" for point in points):
+        return []
     if not points or points[0].measurement_type != "concentration":
         return []
     first = points[0]

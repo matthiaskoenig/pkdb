@@ -44,6 +44,11 @@ Issues = "https://github.com/matthiaskoenig/pkdb/issues"
 [project.scripts]
 pkdb = "pkdb.cli:main"
 
+[project.optional-dependencies]
+imports = [
+    "rdata>=1.0,<2",
+]
+
 [dependency-groups]
 dev = ["pytest>=9.1.1", "ruff>=0.16.8", "ty>=0.0.83"]
 

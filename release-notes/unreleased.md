@@ -1,5 +1,7 @@
 # Unreleased
 
+- Add checksum-pinned NCATS FRDB, EPA CvTdb and nlmixr2data warfarin importers, original-row attachments with record lineage, explicit evidence/reference scope and source terms, and weekly upstream checks. Processing version 8 supports explicitly unspecified group summaries without statistical completion or PK inference. Warfarin retains unresolved publication attribution and duplicate observations.
+
 - Add the OSP observed-data v1.9 importer with source-qualified study identity, typed manual/import/automatic curation provenance, preserved source rows, and a weekly upstream release check (#720). Display acquisition source in study results and details. Migration `p004sources` adds shared publication aliases and nullable unknown group sizes; processing version 7 keeps geometric uncertainty separate from arithmetic statistical completion.
 
 - Continue CLI batch uploads after HTTP 403 unless `--fail-fast` is requested. Return actionable upload permission codes and guidance, preserve request IDs and retry metadata, and distinguish rate limits (429) from permission errors. Stop on rate limits rather than rejecting the rest of the batch in a burst.

@@ -25,6 +25,7 @@ nav = [
     { "MCP for agents" = "mcp.md" },
     { "Python client" = "python-client.md" },
     { "OSP data import" = "osp-import.md" },
+    { "Public PK/PD datasets" = "public-dataset-imports.md" },
   ] },
   { "Citation" = "citation.md" },
   { "Terms of use" = "terms-of-use.md" },

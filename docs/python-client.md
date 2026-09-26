@@ -149,3 +149,5 @@ Offline validation cannot check destination account records or study-editing per
 ## External data imports
 
 Use `pkdb import osp --creator USER --output NEW_DIRECTORY` to convert the pinned OSP observed-data release into source-qualified study folders. See the [OSP import guide](osp-import.md) for provenance, scientific mappings, offline conversion, and server loading.
+
+`pkdb import frdb`, `pkdb import cvtdb`, and `pkdb import warfarin` use the same creator/output options. Install `pkdb[imports]` for the R-format sources. See [public dataset imports](public-dataset-imports.md) for exact coverage, source terms, row-level provenance and weekly checks.

@@ -587,6 +587,11 @@ dependencies = [
     { name = "scipy" },
 ]
 
+[package.optional-dependencies]
+imports = [
+    { name = "rdata" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "pytest" },
@@ -604,9 +609,11 @@ requires-dist = [
     { name = "pkpdutils", specifier = ">=1.2.0,<2" },
     { name = "pydantic", marker = "python_full_version < '3.15'", specifier = ">=2.13.5,<3" },
     { name = "pydantic", marker = "python_full_version >= '3.15'", specifier = ">=2.14.0b2,<3" },
+    { name = "rdata", marker = "extra == 'imports'", specifier = ">=1.0,<2" },
     { name = "rich", specifier = ">=15,<16" },
     { name = "scipy", specifier = ">=1.18.1,<2" },
 ]
+provides-extras = ["imports"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -860,6 +867,21 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/66/c0/0c8b6ad9f17a802ee498c46e004a0eb49bc148f2fd230864601a86dcf6db/python-dateutil-2.9.0.post0.tar.gz", hash = "sha256:37dd54208da7e1cd875388217d5e00ebd4179249f90fb72437e91a35459a0ad3", size = 342432, upload-time = "2024-03-01T18:36:20.211Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/ec/57/56b9bcc3c9c6a792fcbaf139543cee77261f3651ca9da0c93f5c1221264b/python_dateutil-2.9.0.post0-py2.py3-none-any.whl", hash = "sha256:a8b2bc7bffae282281c8140a97d3aa9c14da0b136dfe83f850eea9a5f7470427", size = 229892, upload-time = "2024-03-01T18:36:18.57Z" },
+]
+
+[[package]]
+name = "rdata"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "numpy" },
+    { name = "pandas" },
+    { name = "typing-extensions" },
+    { name = "xarray" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/c3/6f/4bf8fc3981569b0fb32815db86aef880b233305353a48d2c1770a29fe9cb/rdata-1.1.0.tar.gz", hash = "sha256:37c8b19e8be82d7d7acb36c6623bfeb7ab1d95d9380ec00a6c063f88b1f50e3a", size = 106564, upload-time = "2026-06-11T18:45:40.187Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/29/ef/acc15553b522a3710837520a76556958d533753d27e5ead18a8600159398/rdata-1.1.0-py3-none-any.whl", hash = "sha256:12efb7597725d6db6cc78d84eb522a9634008f8fce1c2733b7fd42b9013bc41f", size = 287685, upload-time = "2026-06-11T18:45:38.837Z" },
 ]
 
 [[package]]
