@@ -106,7 +106,7 @@ test("vocabulary search opens scientific terminology details and preserves text 
   await page.getByRole("textbox", { name: "Search vocabulary" }).fill("drug-b");
   await searched;
   await expect(
-    page.getByRole("status").filter({ hasText: /vocabulary terms/ }),
+    page.getByRole("status").filter({ hasText: /vocabulary terms?/ }),
   ).toBeVisible();
   await expect(page.getByRole("button", { name: "Copy name drug-b", exact: true })).toBeVisible();
   await expect(page.getByRole("columnheader", { name: "Metadata / annotations" })).toBeVisible();

@@ -22,6 +22,8 @@ class VocabularyNode(Base):
     mass: Mapped[float | None]
     formula: Mapped[str | None]
     charge: Mapped[int | None]
+    # Maintained by refresh_search_documents from the node and its terms.
+    search_text: Mapped[str] = mapped_column(default="", server_default="")
     __table_args__ = (
         CheckConstraint("mass IS NULL OR mass > 0", name="positive_mass"),
     )

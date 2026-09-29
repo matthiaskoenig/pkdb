@@ -18,6 +18,7 @@ from pkdb_server.db.models.vocabulary import (
     VocabularyTerm,
     VocabularyVersion,
 )
+from pkdb_server.db.vocabulary_search import refresh_search_documents
 
 # Shared by bootstrap and publication; locks survive until the caller commits.
 VOCABULARY_LOCK = 741260818467
@@ -174,6 +175,7 @@ def bootstrap(directory: Path, session: Session) -> BootstrapReport:
             for value in set(values)
         )
     session.flush()
+    refresh_search_documents(session, supplied)
     # Hash the entire effective vocabulary, including retained nodes from earlier snapshots.
     effective = [
         (node.sid, node.name, node.kind, node.definition)

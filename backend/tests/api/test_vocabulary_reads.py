@@ -5,6 +5,7 @@ from pkdb_server.db.models.vocabulary import (
     VocabularyNode,
     VocabularyTerm,
 )
+from pkdb_server.db.vocabulary_search import refresh_search_documents
 
 
 def test_vocabulary_detail_search_and_filters(client, session_factory):
@@ -54,7 +55,23 @@ def test_vocabulary_detail_search_and_filters(client, session_factory):
                     kind="dtype",
                     value=json.dumps("categorical"),
                 ),
+                VocabularyTerm(
+                    node_sid="choice-test",
+                    kind="annotations",
+                    value=json.dumps(
+                        {
+                            "collection": "ncit",
+                            "label": None,
+                            "term": "C12345",
+                            "url": "https://example.org/hidden-link",
+                        }
+                    ),
+                ),
             ]
+        )
+        session.flush()
+        refresh_search_documents(
+            session, ["parent", "drug-test", "choice-test", "measure-test"]
         )
     response = client.get("/api/v1/info_nodes/drug-test/")
     assert response.status_code == 200
@@ -86,6 +103,30 @@ def test_vocabulary_detail_search_and_filters(client, session_factory):
     )
     assert response.status_code == 200
     assert [row["sid"] for row in response.json()["data"]["data"]] == ["drug-test"]
+
+    def found(search, **params):
+        response = client.get(
+            "/api/v1/info_nodes/", params={"search": search, **params}
+        )
+        assert response.status_code == 200
+        return [row["sid"] for row in response.json()["data"]["data"]]
+
+    # Partial words match every searchable field while typing.
+    assert found("unusual ali") == ["drug-test"]
+    assert found("vocabulary descr") == ["drug-test"]
+    assert found("c1234") == ["choice-test"]
+    assert "measure-test" in found("categor", ntype="measurement_type")
+    assert found("hidden-link") == []
+    # Exact and prefix matches of names rank before matches in other fields.
+    assert found("example", ordering="-name")[:3] == [
+        "measure-test",
+        "drug-test",
+        "choice-test",
+    ]
+    assert found("example choice", ordering="name")[0] == "choice-test"
+    assert found("example drug", ordering="name") == ["drug-test"]
+    assert found("parent") == ["parent"]
+    assert found("100%") == []
     response = client.get(
         "/api/v1/info_nodes/", params={"dtype__in": "categorical", "ordering": "name"}
     )
@@ -155,3 +196,17 @@ def test_refreshed_vocabulary_preserves_legacy_api_contract(
         "/api/v1/info_nodes/", params={"search": "Eliquis", "ntype": "substance"}
     ).json()["data"]
     assert "apixaban" in {row["sid"] for row in matches["data"]}
+
+    def found(search):
+        return [
+            row["sid"]
+            for row in client.get(
+                "/api/v1/info_nodes/", params={"search": search, "ntype": "substance"}
+            ).json()["data"]["data"]
+        ]
+
+    assert found("caff")[0] == "caf"
+    assert found("caffeine")[0] == "caf"
+    assert "caf" in found("CHEBI:277")
+    assert "caf" in found("RYYVLZVUVIJVGH")
+    assert found("searchId.do") == []

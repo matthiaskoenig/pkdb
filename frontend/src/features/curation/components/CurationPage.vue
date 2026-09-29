@@ -150,11 +150,17 @@ onBeforeUnmount(() => {
       <VBtn @click="load">Retry vocabulary</VBtn>
     </div>
     <template v-else>
-      <p role="status">{{ count }} vocabulary terms</p>
+      <p role="status">
+        {{ count }} vocabulary {{ count === 1 ? "term" : "terms" }}
+      </p>
       <div class="table-scroll">
         <table>
           <caption>
-            Vocabulary terms ordered by name
+            {{
+              search.trim()
+                ? "Vocabulary terms ordered by relevance, then name"
+                : "Vocabulary terms ordered by name"
+            }}
           </caption>
           <colgroup>
             <col style="width: 18%" />
@@ -186,7 +192,7 @@ onBeforeUnmount(() => {
                   <span aria-hidden="true" class="copy-icon"> ⧉</span>
                 </button>
                 <div v-if="row.label && row.label !== row.name" class="term-label">
-                  {{ text(row.label) }}
+                  <VocabularyHighlight :value="text(row.label)" :query="search" />
                 </div>
                 <button
                   type="button"
@@ -203,13 +209,16 @@ onBeforeUnmount(() => {
                 />
               </td>
               <td>
-                {{
-                  Array.isArray(row.synonyms)
-                    ? row.synonyms.map(text).join(", ")
-                    : "None reported"
-                }}
+                <VocabularyHighlight
+                  :value="
+                    Array.isArray(row.synonyms)
+                      ? row.synonyms.map(text).join(', ')
+                      : 'None reported'
+                  "
+                  :query="search"
+                />
               </td>
-              <td><VocabularyMetadata :row="row" /></td>
+              <td><VocabularyMetadata :row="row" :query="search" /></td>
             </tr>
             <tr v-if="!rows.length">
               <td colspan="5">No matching terminology.</td>

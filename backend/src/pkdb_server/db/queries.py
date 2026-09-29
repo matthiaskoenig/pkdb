@@ -24,6 +24,7 @@ from pkdb_server.db.subject_filters import (
     effective_characteristics,
 )
 from pkdb_server.db.textsearch import text_match
+from pkdb_server.db.vocabulary_search import relevance
 from pkdb_server.services.authorization import AuthorizationDenied
 
 STUDY_FIELDS = {
@@ -422,7 +423,10 @@ def ordering(query: QuerySpec):
     column = fields[name]
     model = MODELS[query.entity]
     key = model.sid if model is VocabularyNode else model.id
-    return (
+    order = (
         column.desc().nulls_last() if descending else column.asc().nulls_last(),
         key.asc(),
     )
+    if model is VocabularyNode and query.search and query.search.strip():
+        return (relevance(query.search), *order)
+    return order
