@@ -87,7 +87,10 @@ def test_spawn_workers_overlap_and_checkpoint_before_put(
                 writes.append(sid)
             barrier.wait(timeout=10)
             time.sleep(0.05 if sid.endswith("0") else 0.01)
-            self.reply(dict(sid=sid, created=True, digest="digest", counts={}))
+            page = (
+                {"url": f"https://pk-db.example/data/{sid}"} if sid[-1] in "02" else {}
+            )
+            self.reply(dict(sid=sid, created=True, digest="digest", counts={}, **page))
             with lock:
                 active -= 1
 
@@ -110,6 +113,13 @@ def test_spawn_workers_overlap_and_checkpoint_before_put(
     assert len(writes) == 4
     assert all(row["ok"] for row in result["results"])
     assert [r["index"] for r in result["results"]] == list(range(4))
+    # Prefer the server's study page; older servers only offer the API record.
+    for row in result["results"]:
+        assert row["url"] == (
+            f"https://pk-db.example/data/{row['sid']}"
+            if row["sid"][-1] in "02"
+            else f"http://127.0.0.1:{server.server_port}/api/v1/studies/{row['sid']}/"
+        )
     assert "secret" not in report.read_text()
 
 

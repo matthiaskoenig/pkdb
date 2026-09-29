@@ -1,5 +1,7 @@
 # Unreleased
 
+- Link uploaded studies to their PK-DB web page in the local curation app overview, detail panel, and activity list, and in `pkdb upload` output (#843). Upload responses include the study page `url` on the configured public origin.
+
 - Search vocabulary terms by partial text across all their information, including labels, descriptions, synonyms, annotations, cross references, units and choices, so autocomplete suggestions appear while typing (#844). Exact and prefix matches of identifiers, names, labels and synonyms rank first. Migration `p005vocabsearch` adds the searchable vocabulary document.
 
 - Add checksum-pinned NCATS FRDB, EPA CvTdb and nlmixr2data warfarin importers, original-row attachments with record lineage, explicit evidence/reference scope and source terms, and weekly upstream checks. Processing version 8 supports explicitly unspecified group summaries without statistical completion or PK inference. Warfarin retains unresolved publication attribution and duplicate observations.

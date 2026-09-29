@@ -9,6 +9,8 @@ class ReplacementResult(BaseModel):
     digest: str
     counts: dict[str, int]
     warnings: list[ValidationIssue] = Field(default_factory=list)
+    # Web page of the study on the server's public origin; absent for older servers.
+    url: str | None = None
 
 
 class PublicationState(BaseModel):

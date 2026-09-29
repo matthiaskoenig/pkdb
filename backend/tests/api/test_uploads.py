@@ -29,9 +29,11 @@ def test_validation_does_not_publish(
 
 def test_create_replace_and_read(client, creator_headers, valid_bundle):
     url = "/api/v2/studies/" + valid_bundle.study["sid"]
-    assert (
-        client.put(url, headers=creator_headers, **multipart(valid_bundle)).status_code
-        == 201
+    created = client.put(url, headers=creator_headers, **multipart(valid_bundle))
+    assert created.status_code == 201
+    # The study page lives on the configured public browser origin.
+    assert created.json()["url"] == (
+        f"{client.app.state.browser_origin}/data/{valid_bundle.study['sid']}"
     )
     assert (
         client.put(url, headers=creator_headers, **multipart(valid_bundle)).status_code

@@ -97,7 +97,7 @@ MCP exposes read operations only. Use REST or the Python client for validation, 
 
 The capabilities response advertises supported `upload_report_versions`. Send `X-PKDB-Report-Version: 2` with `POST /api/v2/studies/validate` or `PUT /api/v2/studies/{sid}` to receive a versioned report envelope. Requests without the header retain the legacy response shape. The current Python client negotiates this automatically.
 
-The envelope contains `report_version`, `request_id`, `operation`, `status`, `stage`, `study`, `persistence`, `summary`, `report`, `result`, and `versions`. The successful replacement payload remains available under `result`; HTTP status codes keep their normal meanings. `X-Request-ID` is also returned as a response header for upload and validation requests.
+The envelope contains `report_version`, `request_id`, `operation`, `status`, `stage`, `study`, `persistence`, `summary`, `report`, `result`, and `versions`. The successful replacement payload remains available under `result` and includes `url`, the study page on the public website origin configured by `PKDB_BROWSER_ORIGIN`; HTTP status codes keep their normal meanings. `X-Request-ID` is also returned as a response header for upload and validation requests.
 
 Each report issue includes a stable `code`, severity, message, and available source location. Detailed diagnostics add `category`, `stage`, `field`, `actual`, `expected`, `context`, related sources, and correction suggestions where known. Spreadsheet coordinates refer to physical Excel rows and cells, including skipped comments or blank rows. JSON locations use key/index paths. An absent `actual` means the value is unavailable; an explicit null is an actual null value.
 

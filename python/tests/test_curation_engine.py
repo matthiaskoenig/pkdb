@@ -219,7 +219,9 @@ def test_unexpected_failure_after_write_stays_unknown(workspace, monkeypatch, st
 def test_reports_redact_server_echoed_credentials(workspace, monkeypatch):
     engine, _ = workspace
     prepare_mock(monkeypatch)
-    result = SimpleNamespace(created=True, model_dump=lambda **_: {"created": True})
+    result = SimpleNamespace(
+        created=True, url=None, model_dump=lambda **_: {"created": True}
+    )
     client, _ = enable_upload(engine, monkeypatch, lambda _: result)
     client.last_upload_report = {"message": "echoed private-api-key"}
     engine.enqueue([row(engine)["id"]], "upload")
@@ -227,6 +229,30 @@ def test_reports_redact_server_echoed_credentials(workspace, monkeypatch):
     assert job["status"] == "succeeded"
     report = engine.report(job["report_id"])
     assert report["server_report"]["message"] == "echoed [redacted]"
+
+
+def test_uploaded_study_link_survives_restart(workspace, tmp_path, monkeypatch):
+    engine, _ = workspace
+    prepare_mock(monkeypatch)
+    url = "https://pk-db.example/data/Example2020"
+    result = SimpleNamespace(
+        created=True, url=url, model_dump=lambda **_: {"created": True}
+    )
+    client, _ = enable_upload(engine, monkeypatch, lambda _: result)
+    client.last_upload_report = None
+    engine.enqueue([row(engine)["id"]], "upload")
+    job = run_next(engine)
+    assert job["upload"]["url"] == url
+    assert row(engine)["last_upload"]["url"] == url
+    engine.close()
+    restarted = module.CurationEngine(
+        engine.root, state_dir=tmp_path / "state", offline=True, start=False
+    )
+    try:
+        assert row(restarted)["last_upload"] == job["upload"]
+        assert restarted.snapshot()["studies"][0]["last_upload"]["url"] == url
+    finally:
+        restarted.close()
 
 
 def test_confirmed_upload_persistence_survives_later_source_error(
@@ -240,7 +266,9 @@ def test_confirmed_upload_persistence_survives_later_source_error(
         monkeypatch.setattr(
             module, "source_hashes", Mock(side_effect=OSError("locked"))
         )
-        return SimpleNamespace(created=True, model_dump=lambda **_: {"created": True})
+        return SimpleNamespace(
+            created=True, url=None, model_dump=lambda **_: {"created": True}
+        )
 
     client, _ = enable_upload(engine, monkeypatch, upload)
     client.last_upload_report = None
