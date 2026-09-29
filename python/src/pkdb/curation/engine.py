@@ -20,6 +20,7 @@ from pkdb.cache import (
 )
 from pkdb.client import Client
 from pkdb.curation.github import GitHubAssignments
+from pkdb.curation.metadata import reference_summary, study_summary
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError, SourceChangedError
@@ -231,7 +232,8 @@ class CurationEngine:
             "last_upload": uploads[-1] if uploads else None,
             "progress": None,
             "report_id": None,
-            "attribution": {},
+            "metadata": {},
+            "reference": None,
             "_folder": folder,
             "_fingerprint": None,
             "_signature": None,
@@ -292,9 +294,8 @@ class CurationEngine:
                         name=metadata.get("name") or folder.name,
                         sid=metadata.get("sid"),
                         files=[{"id": name, "path": name} for name in hashes],
-                        attribution={
-                            k: metadata.get(k) for k in ("creator", "curators")
-                        },
+                        metadata=study_summary(metadata),
+                        reference=reference_summary(folder),
                     )
                     row["_signature"] = signature
                     row["_fingerprint"] = digest
