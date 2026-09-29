@@ -243,3 +243,26 @@ def test_reference_actions_require_authenticated_review(local_server):
     )
     assert status == 400
     assert "changed since preview" in json.loads(data)["error"]
+
+
+def test_bundled_curator_avatars_are_served_as_images():
+    from pkdb.curation.metadata import profile
+
+    server = transport.create_server(Mock())
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        url = profile("mkoenig")["avatar_url"]
+        status, headers, data = request(server, "GET", url)
+        assert status == 200
+        assert headers["Content-Type"] == "image/webp"
+        assert data[:4] == b"RIFF"
+        for path in (
+            "/static/avatars/..%2f..%2fmetadata.py",
+            "/static/avatars/missing.webp",
+        ):
+            assert request(server, "GET", path)[0] == 404
+    finally:
+        server.shutdown()
+        server.server_close()
+        thread.join(timeout=3)

@@ -59,6 +59,12 @@ The `pkdb` client bundles an offline copy of the vocabulary for validation witho
 uv run --project backend --python 3.14 python scripts/update_client_vocabulary.py
 ```
 
+The local curation app shows curator names and avatars from `backend/bootstrap/curator-roster.json`. After changing the roster or its avatars, regenerate the bundled copy; CI checks it with `--check`:
+
+```bash
+uv run --project backend --python 3.14 python scripts/update_client_curators.py
+```
+
 Invalid units, duplicate SIDs, missing parents, cycles, or invalid scientific properties fail generation before either JSON file is replaced. Review the source and generated diff together, then commit both.
 
 Generation also prints a metadata review count and records sorted `metadata_issues` in `provenance.json`, with a node SID, diagnostic code, and explanation. These warnings include invalid or unresolved annotations, duplicate annotations, ambiguous chemical identities, unknown measurement policy names, and explicit curation questions. Expected lack of OLS support for non-ontology databases is not a warning. Missing optional remote metadata remains listed separately under `uncached_optional_metadata`.

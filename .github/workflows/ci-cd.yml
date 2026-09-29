@@ -54,6 +54,8 @@ jobs:
         run: uv run --python ${{ matrix.python }} --locked python ../scripts/update_vocabulary.py --check
       - name: Verify bundled client vocabulary matches server reference data
         run: uv run --python ${{ matrix.python }} --locked python ../scripts/update_client_vocabulary.py --check
+      - name: Verify bundled curator profiles match the curator roster
+        run: uv run --python ${{ matrix.python }} --locked python ../scripts/update_client_curators.py --check
       - run: uv run --python ${{ matrix.python }} --locked pytest -q
       - run: uv run --python ${{ matrix.python }} --locked ruff check .
       - run: uv run --python ${{ matrix.python }} --locked ruff format --check .

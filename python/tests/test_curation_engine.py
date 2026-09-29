@@ -574,3 +574,20 @@ def test_validation_creates_missing_reference_without_requeue(
     settle(engine)
     assert not engine.queue
     assert row(engine)["stale"] is False
+
+
+def test_scan_summarizes_study_and_reference_metadata(workspace):
+    engine, folder = workspace
+    study = json.loads((folder / "study.json").read_text())
+    study.update(creator="mkoenig", curators=[["mkoenig", 1.5]], reference=123)
+    (folder / "study.json").write_text(json.dumps(study))
+    engine.scan()
+    state = next(
+        s for s in engine.snapshot()["studies"] if s["id"] == row(engine)["id"]
+    )
+    assert state["metadata"]["creator"]["display_name"] == "Matthias König"
+    assert state["metadata"]["curators"][0]["avatar_url"].endswith(".webp")
+    assert state["reference"] is None
+    (folder / "reference.json").write_text(json.dumps({"sid": 123, "title": "Paper"}))
+    engine.scan()
+    assert row(engine)["reference"]["title"] == "Paper"

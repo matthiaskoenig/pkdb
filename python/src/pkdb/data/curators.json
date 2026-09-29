@@ -1,0 +1,488 @@
+{
+  "schema_version": 1,
+  "curators": [
+    {
+      "username": "adriankl",
+      "display_name": "Adrian Koeller",
+      "title": null,
+      "affiliation": null,
+      "avatar": "adrian_koeller.webp"
+    },
+    {
+      "username": "Ahmed-fub",
+      "display_name": "Ahmed Atta",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "amdangelica",
+      "display_name": "Amanda Lim",
+      "title": null,
+      "affiliation": null,
+      "avatar": "amanda_schwaiger.webp"
+    },
+    {
+      "username": "balcisue",
+      "display_name": "Sükrü Balci",
+      "title": null,
+      "affiliation": null,
+      "avatar": "suekrue_balci.webp"
+    },
+    {
+      "username": "bellatgy",
+      "display_name": "Isabella Tan",
+      "title": null,
+      "affiliation": null,
+      "avatar": "isabella_tan.webp"
+    },
+    {
+      "username": "bibymaths",
+      "display_name": "Abhinav Mishra",
+      "title": null,
+      "affiliation": null,
+      "avatar": "abhinav_mishra.webp"
+    },
+    {
+      "username": "changlinh",
+      "display_name": "Linh Chang",
+      "title": null,
+      "affiliation": null,
+      "avatar": "chang_nguyen.webp"
+    },
+    {
+      "username": "dannythekey",
+      "display_name": "Danny Ke",
+      "title": null,
+      "affiliation": null,
+      "avatar": "danny_ke.webp"
+    },
+    {
+      "username": "DariusSchulze",
+      "display_name": "Darius Schulze",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "DaryaChb",
+      "display_name": "Darya Chobat",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "DaryaLigay",
+      "display_name": "Darya Ligay",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "deepa",
+      "display_name": "Deepa Maheshvare",
+      "title": null,
+      "affiliation": null,
+      "avatar": "deepa_maheshvare.webp"
+    },
+    {
+      "username": "DeepaMahm",
+      "display_name": "Deepa Maheshvare",
+      "title": null,
+      "affiliation": null,
+      "avatar": "deepa_maheshvare.webp"
+    },
+    {
+      "username": "dimitra",
+      "display_name": "Dimitra Eleftheriadou",
+      "title": null,
+      "affiliation": null,
+      "avatar": "dimitra_eleftheriadou.webp"
+    },
+    {
+      "username": "drosdekv",
+      "display_name": "Vanessa Drosdek",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "dzinty",
+      "display_name": "Kseniia Petukhova",
+      "title": null,
+      "affiliation": null,
+      "avatar": "xenia_petukhova.webp"
+    },
+    {
+      "username": "elisabettacasabianca11",
+      "display_name": "Elisabetta Casabianca",
+      "title": null,
+      "affiliation": null,
+      "avatar": "elisabetta_casabianca.webp"
+    },
+    {
+      "username": "ennietensil",
+      "display_name": "Ennie Tensil",
+      "title": null,
+      "affiliation": null,
+      "avatar": "ennie_tensil.webp"
+    },
+    {
+      "username": "FlorBar",
+      "display_name": "Florian Bartsch",
+      "title": null,
+      "affiliation": null,
+      "avatar": "florian_bartsch.webp"
+    },
+    {
+      "username": "FrancaLe",
+      "display_name": "Franca Lemor",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "fuokibedi",
+      "display_name": "Frances Okibedi",
+      "title": null,
+      "affiliation": null,
+      "avatar": "frances_okibedi.webp"
+    },
+    {
+      "username": "gozdemkarapinar",
+      "display_name": "Gozdem Karapinar",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "hannah3menghis",
+      "display_name": "Hannah Menghis",
+      "title": null,
+      "affiliation": null,
+      "avatar": "hannah_menghis.webp"
+    },
+    {
+      "username": "icalledmyselfmoon",
+      "display_name": "Mariia Babaeva",
+      "title": null,
+      "affiliation": null,
+      "avatar": "mariia_babaeva.webp"
+    },
+    {
+      "username": "janekg",
+      "display_name": "Jan Grzegorzewski",
+      "title": null,
+      "affiliation": null,
+      "avatar": "jan_grzegorzewski.webp"
+    },
+    {
+      "username": "jbrandhorst",
+      "display_name": "Janosch Brandhorst",
+      "title": null,
+      "affiliation": null,
+      "avatar": "janosch_brandhorst.webp"
+    },
+    {
+      "username": "jen-ne-sse",
+      "display_name": "Jennesse Alejandro",
+      "title": null,
+      "affiliation": null,
+      "avatar": "jennesse_alejandro.webp"
+    },
+    {
+      "username": "jessicalienx97-wq",
+      "display_name": "Jessica Cruz",
+      "title": null,
+      "affiliation": null,
+      "avatar": "jessica_cruz.webp"
+    },
+    {
+      "username": "jonaspk98",
+      "display_name": "Jonas Küttner",
+      "title": null,
+      "affiliation": null,
+      "avatar": "jonas_kuettner.webp"
+    },
+    {
+      "username": "jonathanspeh",
+      "display_name": "Michel Jonathan Speh",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "Juan-hub129",
+      "display_name": "Juan Pablo Ramos Mendoza",
+      "title": null,
+      "affiliation": null,
+      "avatar": "juan_mendoza.webp"
+    },
+    {
+      "username": "jzhannes",
+      "display_name": "Johannes Metternich",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "kgreen",
+      "display_name": "Kathleen Green",
+      "title": null,
+      "affiliation": null,
+      "avatar": "kgreen_128.png"
+    },
+    {
+      "username": "lepujolh",
+      "display_name": "Helen Leal",
+      "title": null,
+      "affiliation": null,
+      "avatar": "helen_pujol.webp"
+    },
+    {
+      "username": "linafrolova",
+      "display_name": "Lina Frolova",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "lisapolzer",
+      "display_name": "Lisa Polzer",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "long231a",
+      "display_name": "Lucia Link",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "lucialink30",
+      "display_name": "Lucia Link",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "MadNietzsche",
+      "display_name": "Antonio Alvarez",
+      "title": null,
+      "affiliation": null,
+      "avatar": "antonio_aguilar.webp"
+    },
+    {
+      "username": "MariiaMysh",
+      "display_name": "Mariia Myshkina",
+      "title": null,
+      "affiliation": null,
+      "avatar": "mariia_myshkina.webp"
+    },
+    {
+      "username": "Mattimatti1",
+      "display_name": "Mathis Hertel",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "mii-halina",
+      "display_name": "Michelle Elias",
+      "title": null,
+      "affiliation": null,
+      "avatar": "michelle_elias.webp"
+    },
+    {
+      "username": "Ming-Yuen",
+      "display_name": "Ng Ming",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "mkoenig",
+      "display_name": "Matthias König",
+      "title": "Prof. Dr.",
+      "affiliation": "Humboldt-Universität zu Berlin, Institute for Biology, ITB; University Hospital Schleswig-Holstein, Campus Lübeck, First Department of Medicine",
+      "avatar": "matthias_koenig.webp"
+    },
+    {
+      "username": "monajes",
+      "display_name": "Monika Jesionek",
+      "title": null,
+      "affiliation": null,
+      "avatar": "monika_jesionek.webp"
+    },
+    {
+      "username": "MuellTim",
+      "display_name": "Tim Mueller",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "nikenemitz",
+      "display_name": "Nike Nemitz",
+      "title": null,
+      "affiliation": null,
+      "avatar": "nike_nemitz.webp"
+    },
+    {
+      "username": "oliviaayau",
+      "display_name": "Olivia Yau",
+      "title": null,
+      "affiliation": null,
+      "avatar": "olivia_yau.webp"
+    },
+    {
+      "username": "paula-ogata",
+      "display_name": "Paul Ogata",
+      "title": null,
+      "affiliation": null,
+      "avatar": "paula_ogata.webp"
+    },
+    {
+      "username": "Rain-marine",
+      "display_name": "Bahri Zahra",
+      "title": null,
+      "affiliation": null,
+      "avatar": "zahra_bahri.webp"
+    },
+    {
+      "username": "Raj-codes",
+      "display_name": "Raj Prateek Rai",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "reviewer",
+      "display_name": "reviewer test",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "rohinichakraborty",
+      "display_name": "Rohini Chakraborty",
+      "title": null,
+      "affiliation": null,
+      "avatar": "rohini_chakraborty.webp"
+    },
+    {
+      "username": "SamLuca",
+      "display_name": "Luca Samuel Sawady",
+      "title": null,
+      "affiliation": null,
+      "avatar": "luca_sawady.webp"
+    },
+    {
+      "username": "sandeep-konakagautamdas",
+      "display_name": "Sandeep Konaka Gautamdas",
+      "title": null,
+      "affiliation": null,
+      "avatar": "sandeep_gautamdas.webp"
+    },
+    {
+      "username": "SaraD-hub",
+      "display_name": "Sara De Angelis",
+      "title": null,
+      "affiliation": null,
+      "avatar": "sara_angelis.webp"
+    },
+    {
+      "username": "sarahdv7",
+      "display_name": "Sarah Davoudzadeh",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "Shelee97",
+      "display_name": "Shelee Badon",
+      "title": null,
+      "affiliation": null,
+      "avatar": "shelee_bedon.webp"
+    },
+    {
+      "username": "shihabmo",
+      "display_name": "Mohammad Shihab",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "shubhankarpalwankar",
+      "display_name": "Shubhankar Palwankar",
+      "title": null,
+      "affiliation": null,
+      "avatar": "shubhankar_palwankar.webp"
+    },
+    {
+      "username": "Soji4eva",
+      "display_name": "Narudeem Sojimade",
+      "title": null,
+      "affiliation": null,
+      "avatar": "nurudeen_sojimade.webp"
+    },
+    {
+      "username": "SophieSilberhorn",
+      "display_name": "Sophie Silberhorn",
+      "title": null,
+      "affiliation": null,
+      "avatar": "sophie_silberhorn.webp"
+    },
+    {
+      "username": "stemllb",
+      "display_name": "Beatrice Stemmer Mallol",
+      "title": null,
+      "affiliation": null,
+      "avatar": "beatrice_mallol.webp"
+    },
+    {
+      "username": "tereshchuk1",
+      "display_name": "Vera Tereshchuk",
+      "title": null,
+      "affiliation": null,
+      "avatar": "vera_tereshchuk.webp"
+    },
+    {
+      "username": "unfulw",
+      "display_name": "Kim Minjun",
+      "title": null,
+      "affiliation": null,
+      "avatar": "minjun_kim.webp"
+    },
+    {
+      "username": "wumbor",
+      "display_name": "Victor Kumbol",
+      "title": null,
+      "affiliation": null,
+      "avatar": null
+    },
+    {
+      "username": "xresearch",
+      "display_name": "XResearch Group",
+      "title": null,
+      "affiliation": null,
+      "avatar": "xresearch_128.png"
+    },
+    {
+      "username": "yduport",
+      "display_name": "Yannick Duport",
+      "title": null,
+      "affiliation": null,
+      "avatar": "yannick_duport.webp"
+    },
+    {
+      "username": "ykulanoglu",
+      "display_name": "Yusuf Ali Kulanoglu",
+      "title": null,
+      "affiliation": null,
+      "avatar": "yusuf_kulanoglu.webp"
+    }
+  ]
+}
