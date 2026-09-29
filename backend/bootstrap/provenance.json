@@ -1,8 +1,8 @@
 {
   "generator": "scripts/update_vocabulary.py",
-  "nodes": 2144,
-  "version": "7faac9ee30df7f039ab8f64db0df4af50706edf7a40d4a6bbd9a1c3d7817b6f1",
-  "inputs_sha256": "57df932f3d9445dde62f99bc1b86784054a1457a017f9aa292080096332071fd",
+  "nodes": 2146,
+  "version": "bc4c1515335988ecc31e8f043498b2d636ab4ed36da6b093c048eb8a4c6fc6da",
+  "inputs_sha256": "559910c71ce1cfee39ee15ef41e42510b4093ba2b65742073db304d8c2936fc7",
   "definition_sha256": {
     "backend/info_nodes/__init__.py": "40d4e2142ce1b3f6b7bbd15a90f212899ea63aa79af84ec53984a8e7d24891d3",
     "backend/info_nodes/audit.py": "c2c63adb91a81949c69cd7cfd5d56a16bd5fa4f91d278ba004a998881017be99",
@@ -21,7 +21,7 @@
     "backend/info_nodes/definitions/medical_procedure.py": "170f317917f1a858fcc6bc5ffc7fe5dea2251cf7b7f070741acc250e726f7242",
     "backend/info_nodes/definitions/method.py": "1b82990918f1de366d57f85a03b33fa45af208a8d3e41c74a74f5cd57a9d4efb",
     "backend/info_nodes/definitions/specie.py": "72a4eb98c98cbcfd4671c01ded5f0b6dee249f1cfc6ae357559f5ee144720591",
-    "backend/info_nodes/definitions/substance.py": "caf185ae353aa969ebc722e79a583a20b5c880a96590db539db6cca8b388b267",
+    "backend/info_nodes/definitions/substance.py": "4fb298f7845bd7484323df49bff44985e4e9b365d6e016fc3ac1155ce529515a",
     "backend/info_nodes/definitions/tissue.py": "6c752f90574b9369f89a3fdbc26900d453af059a2708c828c312c78d269dd1ff",
     "backend/info_nodes/graph.py": "a0c9c8dcfd7b589541fe77b93768d9af660d16e677d069011e17bba8c0cdea33",
     "backend/info_nodes/metadata_cache.py": "42b57f2b37370833dec40d96d3b876a80ac55fc32660435b92a2af0f30399a4b",
