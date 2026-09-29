@@ -68,7 +68,7 @@ pkdb prepare /path/to/pkdb_data/studies/ExampleStudy --output prepared.json
 pkdb validate /path/to/pkdb_data/studies/ExampleStudy --offline
 ```
 
-Both commands run on your machine, using a bundled vocabulary snapshot by default, and leave source files unchanged, except that a missing or mismatched PubMed `reference.json` is recreated in the study folder (see [automatic repair](reference-metadata.md#automatic-repair-during-validation-and-upload)). Store generated reports outside the study directory so they do not become source attachments. Errors identify the source file, sheet, row, and column where available. The command returns a nonzero exit code on failure. Interactive terminals show readable progress and diagnostics; redirected output defaults to JSON Lines for scripts and continuous integration.
+Both commands run on your machine, using a bundled vocabulary snapshot by default, and leave source files unchanged, with two exceptions that keep derived files current. A missing or mismatched PubMed `reference.json` is recreated in the study folder (see [automatic repair](reference-metadata.md#automatic-repair-during-validation-and-upload)). Hidden TSV tables are regenerated from the study workbook (see below). Store generated reports outside the study directory so they do not become source attachments. Errors identify the source file, sheet, row, and column where available. The command returns a nonzero exit code on failure. Interactive terminals show readable progress and diagnostics; redirected output defaults to JSON Lines for scripts and continuous integration.
 
 For curation, your account needs upload permission and a key with `studies:write`. To upload, set `PKDB_API_KEY` in your environment using an API key from your profile. `PKDB_ENDPOINT` supplies the default API endpoint; `--endpoint` overrides it.
 
@@ -102,6 +102,12 @@ Study-specific validation failures and HTTP 403 permission rejections allow the 
 Exit codes are 0 for all studies successful, 1 for a failure or unknown outcome (including report-writing failure), 2 for invalid command syntax, and 130 for interruption. Warnings alone do not fail the command. The summary distinguishes created, replaced, validated, failed, unknown, and unattempted studies.
 
 Permission feedback includes a stable `code`, explanatory message, and correction guidance. Upload codes distinguish `missing_scope`, `upload_role_required`, `study_write_forbidden`, `licence_change_forbidden`, and `creator_change_forbidden`. The current server exempts authenticated uploads from request quotas. Its rate-limit responses use HTTP 429 (`rate_limit`); temporary capacity failures use 503. Older deployments or external proxies may behave differently. JSON results and batch reports preserve `status_code`, `code`, `retry_after`, and `request_id` when available so clients can display or diagnose the rejection.
+
+## TSV tables from the study workbook
+
+`pkdb prepare`, `validate`, and `upload`, as well as validation and upload in the local curation app, first write each non-empty `Tab…` or `Fig…` sheet of `<Study>/<Study>.xlsx` to a hidden `.<Study>_<Sheet>.tsv` file next to it, as the previous upload scripts did. The first row of a sheet is its description and is skipped, lines starting with `#` are comments, unnamed columns and empty rows are dropped, and missing values are written as `NA`. Files are only written when their content changes, and each result reports the created, updated, and removed files.
+
+A hidden TSV whose sheet was deleted or emptied is removed, unless `study.json` still uses that sheet or file name; then it is kept as the last copy of the table and validation reports the missing sheet. Validation always reads the workbook itself; the TSV files are a reviewable text copy for version control. Folders without a workbook are not changed.
 
 ## Pin a vocabulary snapshot
 

@@ -591,3 +591,33 @@ def test_scan_summarizes_study_and_reference_metadata(workspace):
     (folder / "reference.json").write_text(json.dumps({"sid": 123, "title": "Paper"}))
     engine.scan()
     assert row(engine)["reference"]["title"] == "Paper"
+
+
+def test_validation_exports_workbook_tables_and_marks_them_generated(
+    workspace, monkeypatch
+):
+    import openpyxl
+
+    engine, folder = workspace
+    book = openpyxl.Workbook()
+    book.active.title = "Tab1"
+    for values in (["notes"], ["study", "time"], ["Example2020", 1]):
+        book.active.append(values)
+    book.save(folder / "Example2020.xlsx")
+    prepare_mock(monkeypatch)
+    engine.scan()
+    settle(engine)
+    job = run_next(engine)
+    assert job["status"] == "succeeded"
+    assert (folder / ".Example2020_Tab1.tsv").read_text() == (
+        "study\ttime\nExample2020\t1\n"
+    )
+    report = json.loads(
+        (engine.state_dir / "reports" / f"{job['id']}.json").read_text()
+    )
+    assert report["tables_updated"] == "Created 1 TSV files from Example2020.xlsx"
+    files = {f["path"]: f for f in row(engine)["files"]}
+    assert files[".Example2020_Tab1.tsv"]["generated_from"] == "Example2020.xlsx"
+    assert "generated_from" not in files["Example2020.xlsx"]
+    settle(engine)
+    assert not engine.queue

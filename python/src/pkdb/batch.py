@@ -22,6 +22,7 @@ from pkdb.errors import ClientError, CompatibilityError
 from pkdb.preparation import source_hashes
 from pkdb.references import ReferenceResolver, sync_reference
 from pkdb.schemas.validation import StudyValidationError
+from pkdb.tsv import sync_tsvs
 
 
 class StudyResult(TypedDict, total=False):
@@ -132,6 +133,8 @@ def _worker(
             api.progress = progress
             result = {"ok": False, "persistence": "not_attempted", "stop": False}
             try:
+                if tables := sync_tsvs(path):
+                    result["tables_updated"] = tables
                 change = sync_reference(
                     path, ReferenceResolver(reference_cache, client=transport)
                 )
