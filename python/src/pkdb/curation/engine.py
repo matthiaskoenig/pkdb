@@ -277,6 +277,7 @@ class CurationEngine:
                     continue
                 hashes = source_hashes(folder)
                 digest = fingerprint(hashes)
+                workbook = f"{folder.name}.xlsx"
                 try:
                     metadata = json.loads((folder / "study.json").read_text())
                     if not isinstance(metadata, dict):
@@ -293,7 +294,17 @@ class CurationEngine:
                     row.update(
                         name=metadata.get("name") or folder.name,
                         sid=metadata.get("sid"),
-                        files=[{"id": name, "path": name} for name in hashes],
+                        files=[
+                            {"id": name, "path": name}
+                            | (
+                                {"generated_from": workbook}
+                                if workbook in hashes
+                                and name.startswith(f".{folder.name}_")
+                                and name.endswith(".tsv")
+                                else {}
+                            )
+                            for name in hashes
+                        ],
                         metadata=study_summary(metadata),
                         reference=reference_summary(folder),
                     )
@@ -770,6 +781,7 @@ class CurationEngine:
 
     def run_job(self, job):
         from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
+        from pkdb.tsv import WorkbookError, sync_tsvs
 
         row = self.studies[job["study_id"]]
         with self.lock:
@@ -802,16 +814,20 @@ class CurationEngine:
 
         try:
             row["status"] = "validating"
+            tables = sync_tsvs(row["_folder"])
             change = sync_reference(
                 row["_folder"], ReferenceResolver(offline=self.offline)
             )
-            if change:
+            if tables or change:
                 with self.lock:
                     self.scan()
                     # This job validates the repaired source; do not queue it again.
                     expected = row["_fingerprint"]
                     row.update(status="validating", _pending=False)
-                outcome["reference_updated"] = change
+                if tables:
+                    outcome["tables_updated"] = tables
+                if change:
+                    outcome["reference_updated"] = change
             with Client(
                 job["endpoint"] or "http://localhost",
                 api_key=self.api_key,
@@ -940,7 +956,7 @@ class CurationEngine:
             if not current:
                 row["_pending"] = True
                 row["_changed_at"] = time.monotonic()
-        except ReferenceError as error:
+        except (ReferenceError, WorkbookError) as error:
             job.update(status="failed", message=self._safe(str(error)))
             row.update(status="failed", stale=True)
         except ClientError as error:

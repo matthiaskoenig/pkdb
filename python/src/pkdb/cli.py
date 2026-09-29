@@ -124,6 +124,7 @@ def main(argv=None, *, client=None) -> int:
     from pkdb.references import ReferenceResolver, sync_reference
     from pkdb.schemas.validation import StudyValidationError
     from pkdb.terminal import Terminal, safe_text
+    from pkdb.tsv import sync_tsvs
 
     token = os.environ.get("PKDB_API_KEY")
     human = getattr(args, "format", None) == "human" or (
@@ -315,6 +316,8 @@ def main(argv=None, *, client=None) -> int:
             "persistence": "not_attempted",
         }
         try:
+            if tables := sync_tsvs(folder):
+                result["tables_updated"] = tables
             change = sync_reference(
                 folder,
                 ReferenceResolver(args.cache_dir, client=client, offline=args.offline),
