@@ -9,7 +9,11 @@ ARG PKDB_BUILD_COMMIT
 ENV PKDB_BUILD_COMMIT=${PKDB_BUILD_COMMIT}
 RUN npm run typecheck && npm run build
 
-# Artifact-only handoff: the deployment's static server consumes /vue.
+# Static server for compose.production.yaml; the configuration is mounted from nginx/pkdb.conf.
+FROM nginx:1.29.1-alpine@sha256:42a516af16b852e33b7682d5ef8acbd5d13fe08fecadc7ed98605ba5e3b26ab8 AS web
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+
+# Artifact-only handoff (default target): the deployment's static server consumes /vue.
 FROM alpine:3.22@sha256:5291449c3df73caf6ed85e649dec1b9e818b39a5d8c871e97afc13e9cd5e8fa8 AS production-stage
 COPY --from=build-stage /app/dist /vue
 CMD ["tail", "-f", "/dev/null"]
