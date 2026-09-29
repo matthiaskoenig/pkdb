@@ -121,6 +121,7 @@ def main(argv=None, *, client=None) -> int:
     from pkdb.domain.vocabulary import Vocabulary
     from pkdb.errors import ClientError, CompatibilityError
     from pkdb.preparation import prepare, study_folders
+    from pkdb.references import ReferenceResolver, sync_reference
     from pkdb.schemas.validation import StudyValidationError
     from pkdb.terminal import Terminal, safe_text
 
@@ -223,6 +224,7 @@ def main(argv=None, *, client=None) -> int:
                     fail_fast=args.fail_fast,
                     report=args.report,
                     resume=args.resume,
+                    reference_cache=args.cache_dir,
                 ),
                 on_result=completed,
                 progress=terminal.batch_progress,
@@ -313,6 +315,12 @@ def main(argv=None, *, client=None) -> int:
             "persistence": "not_attempted",
         }
         try:
+            change = sync_reference(
+                folder,
+                ReferenceResolver(args.cache_dir, client=client, offline=args.offline),
+            )
+            if change:
+                result["reference_updated"] = change
             prepared = prepare(folder, vocabulary=snapshot, progress=terminal.progress)
             batch["vocabulary_hash"] = prepared.vocabulary_hash
             batch["processing_version"] = prepared.prepared.processing_version

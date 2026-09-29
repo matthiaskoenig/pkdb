@@ -537,5 +537,5 @@ def _identity(folder, sid, reference):
     path.write_text(json.dumps(data))
     path = folder / "reference.json"
     data = json.loads(path.read_text())
-    data["sid"] = reference
+    data.update(sid=reference, pmid=str(reference))
     path.write_text(json.dumps(data))

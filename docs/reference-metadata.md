@@ -2,6 +2,12 @@
 
 A study's `reference.json` is a saved bibliographic snapshot. Create or enrich it from a PubMed ID, DOI, or manual citation using the Python client or the local curation interface. Retrieval uses HTTP APIs directly; no Biopython or provider SDK is required.
 
+## Automatic repair during validation and upload
+
+When a study's `reference` identifier is a PubMed ID, `pkdb prepare`, `pkdb validate`, `pkdb upload`, and validation or upload in the local curation app keep `reference.json` in step with it. If `reference.json` is missing, or its `sid` or `pmid` differs from the study's reference, the command retrieves the PubMed record and writes a fresh `reference.json` into the study folder before validating. The replaced snapshot described another publication, so none of its fields or curator corrections are kept; review the change with your version control. Each result reports the rewrite, for example `Created reference.json from PubMed 23628617`.
+
+A matching `reference.json` is never changed. Offline commands use cached PubMed responses only and fail with an explanation when the record has not been retrieved before. Studies whose reference is not a PubMed ID need an explicitly resolved `reference.json`, as described below.
+
 ## Resolve a PubMed ID or DOI
 
 The study directory must contain `study.json`, including its stable `reference` identifier. The resolver preserves that identifier and the reference name. It can create a missing `reference.json`.

@@ -122,6 +122,8 @@ class Terminal:
             ),
             style="green" if ok else "red",
         )
+        if result.get("reference_updated"):
+            self.console.print(f"  {safe_text(result['reference_updated'])}")
         if state in {"created", "replaced"} and result.get("counts"):
             counts = result["counts"]
             preferred = (

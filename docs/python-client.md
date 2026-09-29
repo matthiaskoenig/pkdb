@@ -51,7 +51,7 @@ Replace `STUDY_SID` with an identifier from your search. Downloads require an ac
 
 ## Literature references
 
-Create and enrich `reference.json` from a PMID, DOI, or manual citation with `pkdb reference resolve`. The [reference metadata guide](reference-metadata.md) covers previews, candidate search, cached offline use, and preserved curator corrections.
+Create and enrich `reference.json` from a PMID, DOI, or manual citation with `pkdb reference resolve`. When a study's reference is a PMID, `prepare`, `validate`, and `upload` create a missing `reference.json` or replace one that names another publication. The [reference metadata guide](reference-metadata.md) covers previews, candidate search, cached offline use, and preserved curator corrections.
 
 ## Prepare, validate, and upload a study folder
 

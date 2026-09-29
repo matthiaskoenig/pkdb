@@ -534,3 +534,43 @@ def test_reference_preview_save_and_stale_review(workspace):
     (folder / "study.json").write_text(json.dumps({**study, "name": "changed"}))
     with pytest.raises(ValueError, match="changed since preview"):
         engine.reference_action("save", {"id": body["id"], "token": preview["token"]})
+
+
+def test_validation_creates_missing_reference_without_requeue(
+    workspace, monkeypatch, tmp_path
+):
+    import httpx2
+
+    from pkdb.references import ReferenceResolver
+
+    engine, folder = workspace
+    xml = (
+        "<PubmedArticleSet><PubmedArticle><MedlineCitation><PMID>123</PMID>"
+        "<Article><ArticleTitle>Cached title</ArticleTitle></Article>"
+        "</MedlineCitation></PubmedArticle></PubmedArticleSet>"
+    )
+    monkeypatch.setenv("PKDB_CACHE_DIR", str(tmp_path / "cache"))
+    with httpx2.Client(
+        transport=httpx2.MockTransport(lambda _: httpx2.Response(200, text=xml))
+    ) as client:
+        ReferenceResolver(client=client).pubmed("123")
+    study = json.loads((folder / "study.json").read_text())
+    (folder / "study.json").write_text(json.dumps({**study, "reference": 123}))
+    prepare_mock(monkeypatch)
+    engine.scan()
+    settle(engine)
+    job = run_next(engine)
+    assert job["status"] == "succeeded"
+    saved = json.loads((folder / "reference.json").read_text())
+    assert (saved["sid"], saved["pmid"], saved["title"]) == (
+        "123",
+        "123",
+        "Cached title",
+    )
+    report = json.loads(
+        (engine.state_dir / "reports" / f"{job['id']}.json").read_text()
+    )
+    assert report["reference_updated"] == "Created reference.json from PubMed 123"
+    settle(engine)
+    assert not engine.queue
+    assert row(engine)["stale"] is False
