@@ -76,8 +76,9 @@ Offline work supports local browsing, cached assignments, file opening, and loca
 # Validate locally without any GitHub or PK-DB requests:
 pkdb curate /path/to/pkdb_data/studies/apixaban --offline
 
-# Connect to a server using the API key already set in your environment:
-pkdb curate /path/to/pkdb_data --endpoint https://alpha.pk-db.com
+# Connect to the server and API key already set in your environment:
+export PKDB_ENDPOINT=https://beta.pk-db.com
+pkdb curate /path/to/pkdb_data
 
 # Select an assignment queue at launch:
 pkdb curate /path/to/pkdb_data --github-user matthiaskoenig

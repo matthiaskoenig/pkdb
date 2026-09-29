@@ -6,7 +6,7 @@ See how a publication connects to structured subjects, interventions, and measur
 
 R. V. Patwardhan, P. V. Desmond, R. F. Johnson, S. Schenker. *The Journal of Laboratory and Clinical Medicine*, 1980.
 
-[Open example study PKDB00057](https://alpha.pk-db.com/data/PKDB00057)
+[Open example study PKDB00057](https://beta.pk-db.com/data/PKDB00057)
 
 ## From a publication to reusable data
 

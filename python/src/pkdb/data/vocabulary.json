@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "5d1d4fc46485dfe6cbf607aac8ca02ca2b058a1784f0abd57c97c642cc483bc6",
+    "version": "c26c14c0b0f4ab6d52964ebde3dcfe27fd422dac5740fb190f134ee95d487ce5",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -6160,6 +6160,20 @@
         "charge": 0
       },
       {
+        "name": "ambroxol",
+        "sid": "ambroxol",
+        "mass": 378.108,
+        "formula": "C13H18Br2N2O",
+        "charge": 0
+      },
+      {
+        "name": "ambroxol hydrochloride",
+        "sid": "ambroxol-hydrochloride",
+        "mass": 414.569,
+        "formula": "C13H18Br2N2O.HCl",
+        "charge": 0
+      },
+      {
         "name": "amenamevir",
         "sid": "amenamevir",
         "mass": 482.562,
@@ -11653,5 +11667,5 @@
       "sample mean"
     ]
   },
-  "vocabulary_hash": "55417e292f1b6590ceeb57c35e660c18258a13a07562b4bef61d1f24cfb7fbe6"
+  "vocabulary_hash": "a52d70bebede9095617a618dbaaa09050a79050ef35e771a824ddde272fba5f5"
 }

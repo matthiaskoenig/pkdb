@@ -1,5 +1,5 @@
 {
-  "version": "7faac9ee30df7f039ab8f64db0df4af50706edf7a40d4a6bbd9a1c3d7817b6f1",
+  "version": "bc4c1515335988ecc31e8f043498b2d636ab4ed36da6b093c048eb8a4c6fc6da",
   "nodes": [
     {
       "sid": "root",
@@ -71853,6 +71853,151 @@
         ],
         "description": [
           "\"r-salbutamol/s-salbutamol.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"substance\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "ambroxol-hydrochloride",
+      "name": "ambroxol hydrochloride",
+      "kind": "substance",
+      "definition": {
+        "mass": 414.569,
+        "charge": 0,
+        "formula": "C13H18Br2N2O.HCl"
+      },
+      "parents": [],
+      "terms": {
+        "synonyms": [
+          "AMBROXOL HYDROCHLORIDE",
+          "Ambroxol Hydrochloride",
+          "Ambroxol hydrochloride"
+        ],
+        "annotations": [
+          "{\"collection\": \"ncit\", \"description\": null, \"label\": \"Ambroxol Hydrochloride\", \"relation\": \"BQB_IS\", \"term\": \"C78113\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C78113\"}",
+          "{\"collection\": \"chebi\", \"description\": null, \"label\": \"Ambroxol hydrochloride\", \"relation\": \"BQB_IS\", \"term\": \"CHEBI:31198\", \"url\": \"https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:31198\"}",
+          "{\"collection\": \"snomedct\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"703352000\", \"url\": \"https://browser.ihtsdotools.org/?perspective=full&conceptId1=703352000\"}",
+          "{\"collection\": \"pubchem.compound\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"108013\", \"url\": \"https://pubchem.ncbi.nlm.nih.gov/compound/108013\"}",
+          "{\"collection\": \"inchikey\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"QNVKOSLOVOTXKF-UHFFFAOYSA-N\", \"url\": \"https://www.chemspider.com/search?params=QNVKOSLOVOTXKF-UHFFFAOYSA-N\"}",
+          "{\"collection\": \"inchikey\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"QNVKOSLOVOTXKF-MLSVDYMTSA-N\", \"url\": \"https://www.chemspider.com/search?params=QNVKOSLOVOTXKF-MLSVDYMTSA-N\"}"
+        ],
+        "xrefs": [
+          "{\"accession\": \"CHEBI:31198\", \"name\": \"chebi\", \"url\": \"https://www.ebi.ac.uk/chebi/CHEBI:31198\"}",
+          "{\"accession\": \"23828-92-4\", \"name\": \"cas\", \"url\": \"https://commonchemistry.cas.org/detail?cas_rn=23828-92-4\"}"
+        ],
+        "label": [
+          "\"ambroxol hydrochloride\""
+        ],
+        "description": [
+          "\"Ambroxol hydrochloride is a drug that breaks up phlegm, used in the treatment of respiratory diseases associated with viscid or excessive mucus. Ambroxol is often administered as an active ingredient in cough syrup.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"substance\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "ambroxol",
+      "name": "ambroxol",
+      "kind": "substance",
+      "definition": {
+        "mass": 378.108,
+        "charge": 0,
+        "formula": "C13H18Br2N2O"
+      },
+      "parents": [],
+      "terms": {
+        "synonyms": [
+          "AMBROXOL",
+          "Ambroxol",
+          "Tabcin",
+          "ambroxils",
+          "ambroxol",
+          "ambroxol HCl",
+          "ambroxol hydrochloride",
+          "lasolvan"
+        ],
+        "annotations": [
+          "{\"collection\": \"ncit\", \"description\": null, \"label\": \"Ambroxol\", \"relation\": \"BQB_IS\", \"term\": \"C74262\", \"url\": \"https://www.ebi.ac.uk/ols4/ontologies/ncit/terms?short_form=NCIT_C74262\"}",
+          "{\"collection\": \"chebi\", \"description\": null, \"label\": \"ambroxol\", \"relation\": \"BQB_IS\", \"term\": \"CHEBI:135590\", \"url\": \"https://www.ebi.ac.uk/chebi/searchId.do?chebiId=CHEBI:135590\"}",
+          "{\"collection\": \"snomedct\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"698024002\", \"url\": \"https://browser.ihtsdotools.org/?perspective=full&conceptId1=698024002\"}",
+          "{\"collection\": \"pubchem.compound\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"2132\", \"url\": \"https://pubchem.ncbi.nlm.nih.gov/compound/2132\"}",
+          "{\"collection\": \"inchikey\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"JBDGDEWWOUBZPM-UHFFFAOYSA-N\", \"url\": \"https://www.chemspider.com/search?params=JBDGDEWWOUBZPM-UHFFFAOYSA-N\"}",
+          "{\"collection\": \"inchikey\", \"description\": null, \"label\": null, \"relation\": \"BQB_IS\", \"term\": \"JBDGDEWWOUBZPM-XYPYZODXSA-N\", \"url\": \"https://www.chemspider.com/search?params=JBDGDEWWOUBZPM-XYPYZODXSA-N\"}"
+        ],
+        "xrefs": [
+          "{\"accession\": \"DB06742\", \"name\": \"drugbank\", \"url\": \"https://go.drugbank.com/drugs/DB06742\"}",
+          "{\"accession\": \"CHEBI:135590\", \"name\": \"chebi\", \"url\": \"https://www.ebi.ac.uk/chebi/CHEBI:135590\"}",
+          "{\"accession\": \"CHEMBL153479\", \"name\": \"chembl\", \"url\": \"https://www.ebi.ac.uk/chembldb/compound/inspect/CHEMBL153479\"}",
+          "{\"accession\": \"18702\", \"name\": \"surechembl\", \"url\": \"https://www.surechembl.org/chemical/18702\"}",
+          "{\"accession\": \"29380194\", \"name\": \"surechembl\", \"url\": \"https://www.surechembl.org/chemical/29380194\"}",
+          "{\"accession\": \"200168S0CL\", \"name\": \"fdasrs\", \"url\": \"https://d20b1koi85gdl2.cloudfront.net/uniisearch/srs/unii/200168S0CL\"}",
+          "{\"accession\": \"PD012068\", \"name\": \"probes_and_drugs\", \"url\": \"https://www.probes-drugs.org/compounds/PD012068\"}",
+          "{\"accession\": \"FIYBEV\", \"name\": \"CCDC\", \"url\": \"https://www.ccdc.cam.ac.uk/structures/search?sid=UNICHEM&pid=csd:FIYBEV\"}",
+          "{\"accession\": \"71010\", \"name\": \"brenda\", \"url\": \"https://www.brenda-enzymes.org/ligand.php?brenda_ligand_id=71010\"}",
+          "{\"accession\": \"DTXSID8022583\", \"name\": \"comptox\", \"url\": \"https://comptox.epa.gov/dashboard/chemical/details/DTXSID8022583\"}",
+          "{\"accession\": \"NCT00144274\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00144274%22\"}",
+          "{\"accession\": \"NCT00148499\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00148499%22\"}",
+          "{\"accession\": \"NCT00525044\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT00525044%22\"}",
+          "{\"accession\": \"NCT01361802\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01361802%22\"}",
+          "{\"accession\": \"NCT01463215\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01463215%22\"}",
+          "{\"accession\": \"NCT01573663\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01573663%22\"}",
+          "{\"accession\": \"NCT01713179\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT01713179%22\"}",
+          "{\"accession\": \"NCT02194257\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02194257%22\"}",
+          "{\"accession\": \"NCT02194270\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02194270%22\"}",
+          "{\"accession\": \"NCT02194283\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02194283%22\"}",
+          "{\"accession\": \"NCT02194296\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02194296%22\"}",
+          "{\"accession\": \"NCT02572609\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02572609%22\"}",
+          "{\"accession\": \"NCT02914366\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02914366%22\"}",
+          "{\"accession\": \"NCT02941822\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT02941822%22\"}",
+          "{\"accession\": \"NCT03415269\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT03415269%22\"}",
+          "{\"accession\": \"NCT03583658\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT03583658%22\"}",
+          "{\"accession\": \"NCT03843541\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT03843541%22\"}",
+          "{\"accession\": \"NCT03950050\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT03950050%22\"}",
+          "{\"accession\": \"NCT04405596\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT04405596%22\"}",
+          "{\"accession\": \"NCT04588285\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT04588285%22\"}",
+          "{\"accession\": \"NCT05287503\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05287503%22\"}",
+          "{\"accession\": \"NCT05663905\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05663905%22\"}",
+          "{\"accession\": \"NCT05778617\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05778617%22\"}",
+          "{\"accession\": \"NCT05830396\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05830396%22\"}",
+          "{\"accession\": \"NCT05959850\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT05959850%22\"}",
+          "{\"accession\": \"NCT06193421\", \"name\": \"clinicaltrials\", \"url\": \"https://clinicaltrials.gov/study/NCT06193421%22\"}",
+          "{\"accession\": \"Molport-002-507-852\", \"name\": \"molport\", \"url\": \"https://www.molport.com/shop/compound/Molport-002-507-852\"}",
+          "{\"accession\": \"147\", \"name\": \"drugcentral\", \"url\": \"https://drugcentral.org/drugcard/147\"}",
+          "{\"accession\": \"50395322\", \"name\": \"bindingdb\", \"url\": \"https://www.bindingdb.org/rwd/bind/chemsearch/marvin/SDFdownload.jsp?download_file=/rwd/bind/downloads/BindingDB_All_202601_tsv.zip50395322\"}",
+          "{\"accession\": \"18683-91-5\", \"name\": \"cas\", \"url\": \"https://commonchemistry.cas.org/detail?cas_rn=18683-91-5\"}",
+          "{\"accession\": \"147\", \"name\": \"drugcentral\", \"url\": \"http://drugcentral.org/drugcard/147\"}",
+          "{\"accession\": \"20014752\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/20014752/\"}",
+          "{\"accession\": \"20020916\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/20020916/\"}",
+          "{\"accession\": \"20799726\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/20799726/\"}",
+          "{\"accession\": \"22762530\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/22762530/\"}",
+          "{\"accession\": \"23363020\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/23363020/\"}",
+          "{\"accession\": \"28628823\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/28628823/\"}",
+          "{\"accession\": \"33395289\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/33395289/\"}",
+          "{\"accession\": \"37468498\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/37468498/\"}",
+          "{\"accession\": \"3820227\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/3820227/\"}",
+          "{\"accession\": \"38318365\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/38318365/\"}",
+          "{\"accession\": \"38932616\", \"name\": \"pubmed\", \"url\": \"https://pubmed.ncbi.nlm.nih.gov/38932616/\"}"
+        ],
+        "label": [
+          "\"ambroxol\""
+        ],
+        "description": [
+          "\"Ambroxol is a drug that breaks up phlegm, used in the treatment of respiratory diseases associated with viscid or excessive mucus. Ambroxol is often administered as an active ingredient in cough syrup.\""
         ],
         "dtype": [
           "\"undefined\""

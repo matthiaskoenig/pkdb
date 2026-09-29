@@ -3409,6 +3409,32 @@ SUBSTANCE_NODES: list[InfoNode] = [
         parents=["r-salbutamol", "s-salbutamol"],
     ),
     Substance(
+        sid="ambroxol-hydrochloride",
+        name="ambroxol hydrochloride",
+        description="Ambroxol hydrochloride is a drug that breaks up phlegm, used in the treatment of respiratory diseases associated with viscid or excessive mucus. Ambroxol is often administered as an active ingredient in cough syrup.",
+        annotations=[
+            (BQB.IS, "NCIT:C78113"),
+            (BQB.IS, "CHEBI:31198"),
+            (BQB.IS, "SNOMEDCT:703352000"),
+            (BQB.IS, "pubchem.compound/108013"),
+            (BQB.IS, "inchikey/QNVKOSLOVOTXKF-UHFFFAOYSA-N"),
+        ],
+        synonyms=[],
+    ),
+    Substance(
+        sid="ambroxol",
+        name="ambroxol",
+        description="Ambroxol is a drug that breaks up phlegm, used in the treatment of respiratory diseases associated with viscid or excessive mucus. Ambroxol is often administered as an active ingredient in cough syrup.",
+        annotations=[
+            (BQB.IS, "NCIT:C74262"),
+            (BQB.IS, "CHEBI:135590"),
+            (BQB.IS, "SNOMEDCT:698024002"),
+            (BQB.IS, "pubchem.compound/2132"),
+            (BQB.IS, "inchikey/JBDGDEWWOUBZPM-UHFFFAOYSA-N"),
+        ],
+        synonyms=[],
+    ),
+    Substance(
         sid="beclometasone",
         description="Beclometasone, also known as beclometasone dipropionate, and sold under the brand name Qvar "
         "among others, is a steroid medication. It is available as an inhaler, cream, pills, and nasal spray. "

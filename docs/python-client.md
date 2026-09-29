@@ -2,7 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/pkdb.svg)](https://pypi.org/project/pkdb/) [![Python versions](https://img.shields.io/pypi/pyversions/pkdb.svg)](https://pypi.org/project/pkdb/)
 
-The public `pkdb` package prepares, validates, uploads, and queries studies. Prepare study folders on your machine, then use your account at `alpha.pk-db.com` for authenticated data access and curation. Preparation and offline validation do not need an account.
+The public `pkdb` package prepares, validates, uploads, and queries studies. Prepare study folders on your machine, then use your account at `beta.pk-db.com` for authenticated data access and curation. Preparation and offline validation do not need an account.
 
 ## Install
 
@@ -16,12 +16,16 @@ In a uv project, use `uv add pkdb`. For just the command-line tools, use `uv too
 
 ## Query studies and measurements
 
-All user data access and curation examples use [alpha.pk-db.com](https://alpha.pk-db.com). Public browsing works without a key:
+All user data access and curation examples use [beta.pk-db.com](https://beta.pk-db.com). Set it as the endpoint in your environment; the client reads `PKDB_ENDPOINT` when no endpoint is passed. Public browsing works without a key:
+
+```bash
+export PKDB_ENDPOINT=https://beta.pk-db.com
+```
 
 ```python
 from pkdb import Client
 
-with Client(endpoint="https://alpha.pk-db.com") as client:
+with Client() as client:
     page = client.studies.list(page=1, page_size=20)
     print(f"{page.count} studies across {page.pages} pages")
     for item in page.items:
@@ -38,12 +42,12 @@ The client uses the v2 data API. `measurements` is the public name for measureme
 
 ## Download data
 
-Create a read key in [Account settings](https://alpha.pk-db.com/account) and provide it in your environment as `PKDB_API_KEY`. The client reads it automatically:
+Create a read key in [Account settings](https://beta.pk-db.com/account) and provide it in your environment as `PKDB_API_KEY`. The client reads it automatically:
 
 ```python
 from pkdb import Client
 
-with Client(endpoint="https://alpha.pk-db.com") as client:
+with Client() as client:
     client.download("dataset.zip", studies__sid="STUDY_SID")
 ```
 
@@ -64,12 +68,12 @@ pkdb prepare /path/to/pkdb_data/studies/ExampleStudy --output prepared.json
 pkdb validate /path/to/pkdb_data/studies/ExampleStudy --offline
 ```
 
-Both commands run on your machine, using a bundled vocabulary snapshot by default, and leave source files unchanged. Store generated reports outside the study directory so they do not become source attachments. Errors identify the source file, sheet, row, and column where available. The command returns a nonzero exit code on failure. Interactive terminals show readable progress and diagnostics; redirected output defaults to JSON Lines for scripts and continuous integration.
+Both commands run on your machine, using a bundled vocabulary snapshot by default, and leave source files unchanged, except that a missing or mismatched PubMed `reference.json` is recreated in the study folder (see [automatic repair](reference-metadata.md#automatic-repair-during-validation-and-upload)). Store generated reports outside the study directory so they do not become source attachments. Errors identify the source file, sheet, row, and column where available. The command returns a nonzero exit code on failure. Interactive terminals show readable progress and diagnostics; redirected output defaults to JSON Lines for scripts and continuous integration.
 
 For curation, your account needs upload permission and a key with `studies:write`. To upload, set `PKDB_API_KEY` in your environment using an API key from your profile. `PKDB_ENDPOINT` supplies the default API endpoint; `--endpoint` overrides it.
 
 ```bash
-export PKDB_ENDPOINT=https://alpha.pk-db.com
+export PKDB_ENDPOINT=https://beta.pk-db.com
 pkdb upload /path/to/pkdb_data/studies/ExampleStudy
 ```
 
@@ -104,9 +108,9 @@ Permission feedback includes a stable `code`, explanatory message, and correctio
 A vocabulary snapshot contains the measurement rules, substances, and allowed terms needed for scientific validation. Synchronization is an explicit network operation:
 
 ```bash
-pkdb vocabulary sync --endpoint https://alpha.pk-db.com --output vocabulary.lock.json
+pkdb vocabulary sync --endpoint "$PKDB_ENDPOINT" --output vocabulary.lock.json
 pkdb validate /path/to/pkdb_data/studies/ExampleStudy --offline --vocabulary vocabulary.lock.json
-pkdb upload /path/to/pkdb_data/studies/ExampleStudy --endpoint https://alpha.pk-db.com --vocabulary vocabulary.lock.json
+pkdb upload /path/to/pkdb_data/studies/ExampleStudy --endpoint "$PKDB_ENDPOINT" --vocabulary vocabulary.lock.json
 ```
 
 Keep the lock file with your project, outside the study folder. Snapshots include a content hash checked on loading. The client also caches snapshots by endpoint. Set `PKDB_CACHE_DIR` or pass `--cache-dir` to choose the cache location. Passing `--endpoint` to local commands selects an existing cached snapshot without network access; `--vocabulary` pins an explicit snapshot. Preparation records the vocabulary hash, processing version, and source-file hashes, allowing you to identify the inputs used. A prepared result becomes unusable for upload when its source files change: prepare the folder again after editing it.
@@ -125,8 +129,8 @@ study = prepared.study       # CanonicalStudy Pydantic model
 report = prepared.report     # source-aware validation report
 print(study.sid, report.valid)
 
-# Client reads PKDB_API_KEY when api_key is omitted.
-with Client(endpoint="https://alpha.pk-db.com") as client:
+# Client reads PKDB_ENDPOINT and PKDB_API_KEY when they are not passed.
+with Client() as client:
     result = client.upload(prepared)
     page = client.studies.list()
     downloaded_study = client.studies.get(study.sid)

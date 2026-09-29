@@ -53,6 +53,12 @@ Use `--refresh-cache` to discard the old cache contents and fetch active vocabul
 
 The vocabulary dependency uses `pymetadata==0.6.5`, which includes [upstream fix #87](https://github.com/matthiaskoenig/pymetadata/pull/87). This resolves BioRegistry annotations independently of the identifiers.org registry and handles underscore-prefixed SIO/OBI identifiers correctly. FMA queries use its current `http://purl.org/sig/ont/fma/fma` IRI prefix; the old OBO URLs no longer resolve. Refreshes can change labels, synonyms, chemical properties, and cross-references. Verify the resulting metadata and commit cache records and their manifest together with regenerated output.
 
+The `pkdb` client bundles an offline copy of the vocabulary for validation without a server. Regenerate it from the updated bootstrap files and commit `python/src/pkdb/data/vocabulary.json` together with them:
+
+```bash
+uv run --project backend --python 3.14 python scripts/update_client_vocabulary.py
+```
+
 Invalid units, duplicate SIDs, missing parents, cycles, or invalid scientific properties fail generation before either JSON file is replaced. Review the source and generated diff together, then commit both.
 
 Generation also prints a metadata review count and records sorted `metadata_issues` in `provenance.json`, with a node SID, diagnostic code, and explanation. These warnings include invalid or unresolved annotations, duplicate annotations, ambiguous chemical identities, unknown measurement policy names, and explicit curation questions. Expected lack of OLS support for non-ontology databases is not a warning. Missing optional remote metadata remains listed separately under `uncached_optional_metadata`.
@@ -67,7 +73,7 @@ To check that generated files match the sources without writing them:
 uv run --project backend --python 3.14 python scripts/update_vocabulary.py --check
 ```
 
-CI runs this check. Output is deterministic, including the vocabulary version and input hashes. `--output /path/to/directory` can generate files for inspection elsewhere.
+CI runs this check and `scripts/update_client_vocabulary.py --check`, which fails when the bundled client vocabulary is stale. Output is deterministic, including the vocabulary version and input hashes. `--output /path/to/directory` can generate files for inspection elsewhere.
 
 ## Load the updated vocabulary locally
 

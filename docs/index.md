@@ -4,7 +4,7 @@
 
 # PK-DB – The Pharmacokinetics Database
 
-[PK-DB](https://alpha.pk-db.com) is an open database and web platform for the **curation, integration, validation, and analysis of pharmacokinetic (PK) data** from clinical studies and preclinical research.
+[PK-DB](https://beta.pk-db.com) is an open database and web platform for the **curation, integration, validation, and analysis of pharmacokinetic (PK) data** from clinical studies and preclinical research.
 
 !!! important "PK-DB update in progress"
 
@@ -31,7 +31,7 @@ By combining pharmacokinetic data with structured metadata, semantic annotations
 
 ![PK-DB overview](images/pkdb_overview.png)
 
-PK-DB is available from [https://alpha.pk-db.com](https://alpha.pk-db.com). The terms of use are listed in the [Terms of use](terms-of-use.md).
+PK-DB is available from [https://beta.pk-db.com](https://beta.pk-db.com). The terms of use are listed in the [Terms of use](terms-of-use.md).
 
 PK-DB is developed by the [Systems Medicine of the Liver Group](https://livermetabolism.com) at Humboldt University Berlin.
 
@@ -39,7 +39,7 @@ The source code is at [https://github.com/matthiaskoenig/pkdb](https://github.co
 
 ## Webinterface
 
-Open [alpha.pk-db.com](https://alpha.pk-db.com) and choose **Explore data** to explore studies, subjects, interventions, and measurements. Public browsing needs no account; sign in for dataset and attachment downloads. Start with the illustrated [Web interface guide](web-interface.md).
+Open [beta.pk-db.com](https://beta.pk-db.com) and choose **Explore data** to explore studies, subjects, interventions, and measurements. Public browsing needs no account; sign in for dataset and attachment downloads. Start with the illustrated [Web interface guide](web-interface.md).
 
 ## Example study
 
@@ -51,18 +51,20 @@ Install [pkdb from PyPI](https://pypi.org/project/pkdb/) with Python 3.14 or 3.1
 
 ```bash
 python -m pip install pkdb
+export PKDB_ENDPOINT=https://beta.pk-db.com
 ```
 
 ```python
 from pkdb import Client
 
-with Client(endpoint="https://alpha.pk-db.com") as client:
+# Client reads PKDB_ENDPOINT (and PKDB_API_KEY, if set) from the environment.
+with Client() as client:
     page = client.studies.list(page=1, page_size=20)
     for study in page.items:
         print(study.sid)
 ```
 
-Start with [Accounts and API keys](authentication.md) for authenticated access, then see [REST API](api.md) for HTTP examples and [Python client](python-client.md) for queries, downloads, and data curation. All curation examples use `https://alpha.pk-db.com`.
+Start with [Accounts and API keys](authentication.md) for authenticated access, then see [REST API](api.md) for HTTP examples and [Python client](python-client.md) for queries, downloads, and data curation. All curation examples use `https://beta.pk-db.com`.
 
 ## Development
 

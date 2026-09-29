@@ -75,17 +75,19 @@ accounts, files, or import ledger records. Applied content digests make repeated
 imports no-ops, preserving subsequent demotions and profile edits. New identities
 remain disabled; invitations are a separate explicit administrator action.
 
-Choose `PKDB_ADMIN` and `PKDB_ADMIN_EMAIL` for the sole administrator. For a new identity:
+Set `PKDB_ADMIN` and `PKDB_ADMIN_EMAIL` for the sole administrator. For a new identity:
 
 ```bash
-pkdb create-admin PKDB_ADMIN --email PKDB_ADMIN_EMAIL
+export PKDB_ADMIN=your-username
+export PKDB_ADMIN_EMAIL=you@example.org
+pkdb-server create-admin "$PKDB_ADMIN" --email "$PKDB_ADMIN_EMAIL"
 ```
 
 The command prompts for a password. For the existing active identity, explicitly
 supply its internal ID to preserve credentials:
 
 ```bash
-pkdb create-admin PKDB_ADMIN --email PKDB_ADMIN_EMAIL --adopt-user-id EXISTING_ID
+pkdb-server create-admin "$PKDB_ADMIN" --email "$PKDB_ADMIN_EMAIL" --adopt-user-id EXISTING_ID
 ```
 
 Adoption never reactivates a disabled/suspended account. The database migration

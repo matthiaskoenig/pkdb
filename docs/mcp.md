@@ -6,7 +6,7 @@ PK-DB provides a **read-only** Model Context Protocol (MCP) server at `/mcp/`. A
 
 Create a personal API key with the `read` scope in **Account settings → API keys**. Configure your MCP client for Streamable HTTP with:
 
-- URL: `https://alpha.pk-db.com/mcp/` (local development: `http://localhost:18083/mcp/`).
+- URL: `https://beta.pk-db.com/mcp/` (local development: `http://localhost:18083/mcp/`).
 - Header: `Authorization: Bearer <your-personal-api-key>`.
 
 Keep the key in the client's secret store or environment configuration. Do not include it in prompts or checked-in configuration. The server checks the current key on requests, including requests in an established session. Revoked keys stop working. Private study access follows the same permissions as the REST API.
