@@ -11,10 +11,11 @@ Existing `pkdb_data` study folders work directly:
 ```bash
 pkdb prepare studies/ExampleStudy
 pkdb validate studies/ExampleStudy --offline
-pkdb upload studies/ExampleStudy --endpoint https://alpha.pk-db.com
+export PKDB_ENDPOINT=https://beta.pk-db.com
+pkdb upload studies/ExampleStudy
 ```
 
-Preparation and validation work offline using the bundled vocabulary. Upload validates locally first and then the server validates the original files again. Set `PKDB_API_KEY` for authenticated operations and optionally `PKDB_ENDPOINT` for the default endpoint.
+Preparation and validation work offline using the bundled vocabulary. Upload validates locally first and then the server validates the original files again. Set `PKDB_API_KEY` for authenticated operations and `PKDB_ENDPOINT` for the default endpoint; `--endpoint` overrides it.
 
 ```python
 from pkdb import prepare
@@ -29,8 +30,9 @@ See the [client documentation](https://matthiaskoenig.github.io/pkdb/python-clie
 
 ```bash
 # PKDB_API_KEY is read from the environment, never written to reports.
-pkdb upload ./studies --endpoint http://localhost:18083 --jobs 4 --report ./batch.json
-pkdb upload ./studies --endpoint http://localhost:18083 --jobs 4 --resume ./batch.json
+# PKDB_ENDPOINT selects the server, e.g. http://localhost:18083 for local testing.
+pkdb upload ./studies --jobs 4 --report ./batch.json
+pkdb upload ./studies --jobs 4 --resume ./batch.json
 ```
 
 `--jobs` defaults to 1. Larger values use spawned processes, each with its own

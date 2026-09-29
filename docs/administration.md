@@ -19,16 +19,18 @@ The command prompts for a password; it needs no email, mail server, external pro
 
 ## Administrator bootstrap
 
-Replace `PKDB_ADMIN` and `PKDB_ADMIN_EMAIL` with your chosen username and email. Apply migrations before provisioning accounts. From the repository root, with deployment environment variables set:
+Set `PKDB_ADMIN` and `PKDB_ADMIN_EMAIL` to your chosen username and email. Apply migrations before provisioning accounts. From the repository root, with deployment environment variables set:
 
 ```bash
-uv run --project backend pkdb-server create-admin PKDB_ADMIN --email PKDB_ADMIN_EMAIL
+export PKDB_ADMIN=your-username
+export PKDB_ADMIN_EMAIL=you@example.org
+uv run --project backend pkdb-server create-admin "$PKDB_ADMIN" --email "$PKDB_ADMIN_EMAIL"
 ```
 
 The command prompts for a password. For a reviewed existing active account, use its exact internal ID instead; adoption preserves its password:
 
 ```bash
-uv run --project backend pkdb-server create-admin PKDB_ADMIN --email PKDB_ADMIN_EMAIL --adopt-user-id EXISTING_ID
+uv run --project backend pkdb-server create-admin "$PKDB_ADMIN" --email "$PKDB_ADMIN_EMAIL" --adopt-user-id EXISTING_ID
 ```
 
 Adoption requires matching ID, username and primary email. It does not reactivate a disabled or suspended account. `--password-stdin` is available for creating a new administrator, but must not be supplied when adopting one.

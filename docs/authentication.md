@@ -1,6 +1,6 @@
 # Accounts and API keys
 
-Browse public data at [alpha.pk-db.com](https://alpha.pk-db.com) without signing in. Sign in to download datasets or attachments, access studies shared with you, or curate data when your account has permission.
+Browse public data at [beta.pk-db.com](https://beta.pk-db.com) without signing in. Sign in to download datasets or attachments, access studies shared with you, or curate data when your account has permission.
 
 ## Sign in or create an account
 
@@ -22,13 +22,13 @@ Use **Assigned studies** to find studies associated with your account and **Secu
 
 ## Create an API key
 
-1. Sign in at [alpha.pk-db.com/account](https://alpha.pk-db.com/account).
+1. Sign in at [beta.pk-db.com/account](https://beta.pk-db.com/account).
 2. Open **API keys**, enter a descriptive key name, and choose an expiry.
 3. For reading and downloads, use the default `read` scope. If your account can curate studies, enable study uploads and edits to add `studies:write`.
 4. Choose **Create key** and confirm your password if asked.
 5. Save the key when it is displayed; the secret is shown only once.
 
-Set `PKDB_API_KEY` in the environment where you run your script or CLI. Keep it out of notebooks, shared files, command output, and source control. The [Python client](python-client.md) reads this variable automatically. Direct REST requests use `Authorization: Bearer YOUR_API_KEY` over HTTPS.
+Set `PKDB_API_KEY` in the environment where you run your script or CLI. Keep it out of notebooks, shared files, command output, and source control. The [Python client](python-client.md) reads this variable automatically. Direct REST requests use `Authorization: Bearer $PKDB_API_KEY` over HTTPS.
 
 Keys expire and can be **rotated** or **revoked** from the same tab. Rotation gives you a short overlap to update scripts; revocation takes effect on subsequent requests. A key cannot create other keys or manage your account.
 

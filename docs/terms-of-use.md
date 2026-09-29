@@ -10,7 +10,7 @@ All outputs that use PK-DB data, including publications, preprints, reports, pre
 
 > Grzegorzewski J, Brandhorst J, Green K, Eleftheriadou D, Duport Y, Barthorscht F, Köller A, Ke DYJ, De Angelis S, König M. *PK-DB: pharmacokinetics database for individualized and stratified computational modeling*. Nucleic Acids Research. 2021;49(D1):D1358–D1364. [doi:10.1093/nar/gkaa990](https://doi.org/10.1093/nar/gkaa990). [PubMed: 33151297](https://pubmed.ncbi.nlm.nih.gov/33151297/).
 
-You must also cite the original publications for the studies whose data you use. Preserve the study identifiers and source references supplied by PK-DB so that readers can trace reused data to the original evidence. Include links to the PK-DB paper, the database at [alpha.pk-db.com](https://alpha.pk-db.com), and the original study publications wherever the output format supports links. See [Citing PK-DB](https://matthiaskoenig.github.io/pkdb/citation/) for citation details and the software citation.
+You must also cite the original publications for the studies whose data you use. Preserve the study identifiers and source references supplied by PK-DB so that readers can trace reused data to the original evidence. Include links to the PK-DB paper, the database at [beta.pk-db.com](https://beta.pk-db.com), and the original study publications wherever the output format supports links. See [Citing PK-DB](https://matthiaskoenig.github.io/pkdb/citation/) for citation details and the software citation.
 
 ## Substantial reuse and coauthorship
 

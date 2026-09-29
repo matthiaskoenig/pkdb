@@ -8,11 +8,13 @@ Run the backend, frontend, and PostgreSQL locally with Docker Engine and the Doc
 
 ## Quick start
 
-Clone the repository (`git clone https://github.com/matthiaskoenig/pkdb.git`) and change into it (`cd pkdb`). From the repository root, run these two commands, replacing `PKDB_ADMIN` and `PKDB_ADMIN_EMAIL` with your chosen administrator username and email address:
+Clone the repository (`git clone https://github.com/matthiaskoenig/pkdb.git`) and change into it (`cd pkdb`). From the repository root, set `PKDB_ADMIN` and `PKDB_ADMIN_EMAIL` to your chosen administrator username and email address, then start the services and create the administrator:
 
 ```bash
+export PKDB_ADMIN=your-username
+export PKDB_ADMIN_EMAIL=you@example.org
 PKDB_BUILD_COMMIT="$(git rev-parse HEAD)" docker compose --profile dev up --build --wait
-docker compose exec backend pkdb-server create-admin PKDB_ADMIN --email PKDB_ADMIN_EMAIL
+docker compose exec backend pkdb-server create-admin "$PKDB_ADMIN" --email "$PKDB_ADMIN_EMAIL"
 ```
 
 Enter a password at the hidden prompt. Create the administrator once; subsequent starts preserve the account. There is one designated administrator per database, identified by its internal account ID. The username is your choice. The email is marked verified by this operator command, so local login and API-key creation work without SMTP.
@@ -151,15 +153,17 @@ export PKDB_DATABASE_URL=postgresql+psycopg://pkdb_dev:local-development-only@12
 export PKDB_FILE_ROOT="$PWD/.cache/native-files"
 export PKDB_BROWSER_ORIGIN=http://localhost:8080
 export PKDB_SECURE_COOKIES=false
+export PKDB_ADMIN=your-username
+export PKDB_ADMIN_EMAIL=you@example.org
 mkdir -p "$PKDB_FILE_ROOT"
 cd backend
 uv run --locked alembic upgrade head
 uv run --locked pkdb-server bootstrap bootstrap
-uv run --locked pkdb-server create-admin PKDB_ADMIN --email PKDB_ADMIN_EMAIL
+uv run --locked pkdb-server create-admin "$PKDB_ADMIN" --email "$PKDB_ADMIN_EMAIL"
 uv run --locked uvicorn pkdb_server.app:create_app --factory --reload --host 127.0.0.1 --port 18083
 ```
 
-Create the administrator only once and choose its password at the prompt. In another terminal, start the [native frontend](#native-frontend-and-frontend-checks); its default proxy reaches this API on port `18083`. Keep the environment variables set for subsequent native API and migration commands. This local database and its accounts are independent of `alpha.pk-db.com`.
+Create the administrator only once and choose its password at the prompt. In another terminal, start the [native frontend](#native-frontend-and-frontend-checks); its default proxy reaches this API on port `18083`. Keep the environment variables set for subsequent native API and migration commands. This local database and its accounts are independent of `beta.pk-db.com`.
 
 ## Backend tests and checks
 

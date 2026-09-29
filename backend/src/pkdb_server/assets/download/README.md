@@ -19,7 +19,7 @@ Important features include:
 - workflows for collaborative data curation
 - strong validation rules on data and simple access via a REST API
 
-PK-DB is available at [https://pk-db.com](https://pk-db.com) and [https://alpha.pk-db.com](https://alpha.pk-db.com). Read the bundled [Terms of use](./TERMS_OF_USE.md) or the [online documentation](https://matthiaskoenig.github.io/pkdb/terms-of-use/).
+PK-DB is available at [https://pk-db.com](https://pk-db.com) and [https://beta.pk-db.com](https://beta.pk-db.com). Read the bundled [Terms of use](./TERMS_OF_USE.md) or the [online documentation](https://matthiaskoenig.github.io/pkdb/terms-of-use/).
 
 ![PK-DB overview](./docs/images/data_extraction.png)
 

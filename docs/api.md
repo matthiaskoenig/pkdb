@@ -1,16 +1,22 @@
 # REST API
 
-Use `https://alpha.pk-db.com` as the base URL for data access and curation. The [Python client](python-client.md) wraps common operations; you can also make HTTP requests directly. The [research API reference](https://alpha.pk-db.com/docs) focuses on data and curation; the [complete reference](https://alpha.pk-db.com/docs/all) also covers accounts and administration. See [executable examples](api-examples.md) and the separate [read-only MCP interface](mcp.md).
+Use `https://beta.pk-db.com` as the base URL for data access and curation. The [Python client](python-client.md) wraps common operations; you can also make HTTP requests directly. The [research API reference](https://beta.pk-db.com/docs) focuses on data and curation; the [complete reference](https://beta.pk-db.com/docs/all) also covers accounts and administration. See [executable examples](api-examples.md) and the separate [read-only MCP interface](mcp.md).
+
+The examples below read the base URL from `PKDB_ENDPOINT` and, where needed, your key from `PKDB_API_KEY`:
+
+```bash
+export PKDB_ENDPOINT=https://beta.pk-db.com
+```
 
 ## Browse studies and measurements
 
 Public browsing does not require an API key:
 
 ```bash
-curl --fail --get 'https://alpha.pk-db.com/api/v2/studies' \
+curl --fail --get "$PKDB_ENDPOINT/api/v2/studies" \
   --data-urlencode 'substance=apixaban' --data-urlencode 'page_size=20'
 
-curl --fail --get 'https://alpha.pk-db.com/api/v2/measurements' \
+curl --fail --get "$PKDB_ENDPOINT/api/v2/measurements" \
   --data-urlencode 'study_sid=STUDY_SID' \
   --data-urlencode 'page=1' --data-urlencode 'page_size=20'
 ```
@@ -37,7 +43,7 @@ A study substance search matches studies containing relevant data; it does not m
 `GET /api/v2/statistics` returns one consistent, permission-filtered overview. Anonymous requests include public studies; authenticated requests additionally include studies the caller can access.
 
 ```bash
-curl --fail 'https://alpha.pk-db.com/api/v2/statistics'
+curl --fail "$PKDB_ENDPOINT/api/v2/statistics"
 ```
 
 - `counts`: current totals, including `substance_count` (distinct substances with timecourses), `pk_count`, and `pk_calculated_count`.
@@ -51,11 +57,11 @@ Years use the **study date**, not the reference publication date or upload times
 
 ## Authenticate requests
 
-Create a personal key in [Account settings](https://alpha.pk-db.com/account), then provide it through `PKDB_API_KEY` in your environment. Send it as a Bearer credential:
+Create a personal key in [Account settings](https://beta.pk-db.com/account), then provide it through `PKDB_API_KEY` in your environment. Send it as a Bearer credential:
 
 ```bash
 curl --fail --header "Authorization: Bearer ${PKDB_API_KEY}" \
-  'https://alpha.pk-db.com/api/v2/studies'
+  "$PKDB_ENDPOINT/api/v2/studies"
 ```
 
 Authentication adds access only to studies your account is allowed to read. For key scopes, expiry, and rotation, see [Accounts and API keys](authentication.md).
@@ -65,7 +71,7 @@ Authentication adds access only to studies your account is allowed to read. For 
 Downloads require authentication, including downloads of public data:
 
 ```bash
-curl --fail 'https://alpha.pk-db.com/api/v2/exports' \
+curl --fail "$PKDB_ENDPOINT/api/v2/exports" \
   --header "Authorization: Bearer ${PKDB_API_KEY}" \
   --header 'Content-Type: application/json' \
   --data '{"queries":{"studies":{"entity":"studies","predicates":[{"field":"sid","value":"STUDY_SID"}]}},"concise":true}' \
@@ -76,7 +82,7 @@ Export selection uses the `FilterSpec` schema, retaining `outputs` as its measur
 
 ## Curate data
 
-Use the [Python client preparation and upload workflow](python-client.md#prepare-validate-and-upload-a-study-folder) to send study folders to `https://alpha.pk-db.com`. It prepares and validates the source bundle and checks vocabulary compatibility before upload. A curator account and a key with `studies:write` are required; existing studies can be replaced only when your account has permission.
+Use the [Python client preparation and upload workflow](python-client.md#prepare-validate-and-upload-a-study-folder) to send study folders to `https://beta.pk-db.com`. It prepares and validates the source bundle and checks vocabulary compatibility before upload. A curator account and a key with `studies:write` are required; existing studies can be replaced only when your account has permission.
 
 ## Handle errors
 
