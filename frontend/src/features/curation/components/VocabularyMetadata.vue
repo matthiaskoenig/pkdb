@@ -7,8 +7,9 @@ import {
   text,
   type DetailRecord,
 } from "../../details/types";
+import VocabularyHighlight from "./VocabularyHighlight.vue";
 
-const props = defineProps<{ row: DetailRecord }>();
+const props = defineProps<{ row: DetailRecord; query?: string }>();
 const measurement = computed(() =>
   isRecord(props.row.measurement_type) ? props.row.measurement_type : {},
 );
@@ -55,11 +56,15 @@ function annotationName(item: DetailRecord): string {
       {{ records(row.parents).map((item) => text(item.name)).join(", ") }}
     </div>
     <div v-if="units.length">
-      <strong>Units:</strong> {{ units.join(", ") }}
+      <strong>Units:</strong>
+      <VocabularyHighlight :value="units.join(', ')" :query="query ?? ''" />
     </div>
     <div v-if="records(measurement.choices).length">
       <strong>Choices:</strong>
-      {{ records(measurement.choices).map((item) => text(item.name)).join(", ") }}
+      <VocabularyHighlight
+        :value="records(measurement.choices).map((item) => text(item.name)).join(', ')"
+        :query="query ?? ''"
+      />
     </div>
     <div
       v-for="(item, index) in [...records(row.annotations), ...records(row.xrefs)]"
@@ -73,8 +78,15 @@ function annotationName(item: DetailRecord): string {
         rel="noopener noreferrer"
         :title="typeof item.description === 'string' ? item.description : undefined"
         class="resource-link"
-      >{{ annotationName(item) || text(item.url) }} <span aria-hidden="true">↗</span></a>
-      <span v-else>{{ annotationName(item) || text(item.description) }}</span>
+      ><VocabularyHighlight
+        :value="annotationName(item) || text(item.url)"
+        :query="query ?? ''"
+      /> <span aria-hidden="true">↗</span></a>
+      <VocabularyHighlight
+        v-else
+        :value="annotationName(item) || text(item.description)"
+        :query="query ?? ''"
+      />
     </div>
   </div>
 </template>

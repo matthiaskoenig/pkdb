@@ -15,6 +15,7 @@ from pkdb_server.db.models.subjects import Group, Individual
 from pkdb_server.db.models.users import User
 from pkdb_server.db.models.vocabulary import VocabularyNode, VocabularyTerm
 from pkdb_server.db.textsearch import text_match
+from pkdb_server.db.vocabulary_search import search_match
 
 
 def vocabulary_match(columns, term):
@@ -88,15 +89,7 @@ def science_match(model, term):
 
 def search_condition(entity, term):
     if entity == "info_nodes":
-        return or_(
-            text_match([VocabularyNode.sid, VocabularyNode.name], term),
-            exists(
-                select(VocabularyTerm.node_sid).where(
-                    VocabularyTerm.node_sid == VocabularyNode.sid,
-                    text_match([VocabularyTerm.value], term),
-                )
-            ),
-        )
+        return search_match(term)
     parts = [text_match([Study.sid, Study.name], term)]
     if entity == "studies":
         parts.extend(

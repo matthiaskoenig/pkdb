@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
-from sqlalchemy import delete, select, text
+from sqlalchemy import delete, insert, select, text
 from sqlalchemy.orm import Session
 
 from pkdb.domain.vocabulary import MeasurementRule, SubstanceDefinition, Vocabulary
@@ -21,6 +21,8 @@ from pkdb_server.db.models.vocabulary import (
 
 # Shared by bootstrap and publication; locks survive until the caller commits.
 VOCABULARY_LOCK = 741260818467
+# Three parameters per term stay below the PostgreSQL bind parameter limit.
+TERM_BATCH = 10_000
 
 
 class Input(BaseModel):
@@ -168,12 +170,18 @@ def bootstrap(directory: Path, session: Session) -> BootstrapReport:
         session.add_all(
             VocabularyEdge(child=node.sid, parent=parent) for parent in node.parents
         )
-        session.add_all(
-            VocabularyTerm(node_sid=node.sid, kind=kind, value=value)
-            for kind, values in node.terms.items()
-            for value in set(values)
-        )
     session.flush()
+    term_rows = [
+        dict(node_sid=node.sid, kind=kind, value=value)
+        for node in snapshot.nodes
+        for kind, values in node.terms.items()
+        for value in set(values)
+    ]
+    # Few multi-row statements keep the statement-level search triggers cheap.
+    for start in range(0, len(term_rows), TERM_BATCH):
+        session.execute(
+            insert(VocabularyTerm).values(term_rows[start : start + TERM_BATCH])
+        )
     # Hash the entire effective vocabulary, including retained nodes from earlier snapshots.
     effective = [
         (node.sid, node.name, node.kind, node.definition)
