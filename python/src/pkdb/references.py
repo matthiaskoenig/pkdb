@@ -1,7 +1,9 @@
 """Explicit literature lookup and reviewable reference snapshots.
 
-Scientific preparation never calls this module. Provider responses are cached;
-accepted metadata and curator overrides travel with the source reference.
+Scientific preparation never calls this module; the validate and upload commands
+use it beforehand to repair a missing or mismatched PubMed reference.json. Provider
+responses are cached; accepted metadata and curator overrides travel with the
+source reference.
 """
 
 import hashlib
@@ -591,3 +593,58 @@ def save_reference(folder, preview):
             )
         reference = Reference.model_validate(preview["reference"])
         atomic_json(folder / "reference.json", reference.model_dump(mode="json"))
+
+
+def sync_reference(folder, resolver):
+    """Create or replace reference.json when it does not describe the study's PMID.
+
+    Returns a short description of the saved change, or None when reference.json
+    already matches or cannot be derived; validation then reports the source.
+    """
+    folder = Path(folder)
+    revision = _file_digest(folder)
+    try:
+        study = json.loads((folder / "study.json").read_text(encoding="utf-8"))
+        sid = study["reference"]
+    except OSError, ValueError, KeyError, TypeError:
+        return None
+    if type(sid) not in (str, int) or not str(sid):
+        return None
+    sid = str(sid)
+    pmid = sid if re.fullmatch(r"[1-9][0-9]*", sid) else None
+    path = folder / "reference.json"
+    if path.exists():
+        try:
+            existing = json.loads(path.read_text(encoding="utf-8"))
+        except OSError, ValueError:
+            return None
+        if not isinstance(existing, dict) or pmid is None:
+            return None
+        same_sid = str(existing.get("sid")) == sid
+        try:
+            if same_sid and normalize_pmid(existing.get("pmid")) == pmid:
+                return None
+        except ReferenceError:
+            pass
+        change = (
+            f"Replaced reference.json (SID {existing.get('sid')}, "
+            f"PMID {existing.get('pmid')}) with PubMed {pmid}"
+        )
+    else:
+        if pmid is None:
+            raise ReferenceError(
+                f"reference.json is missing and study reference {sid} is not a PMID; "
+                "create it with 'pkdb reference resolve'"
+            )
+        existing, same_sid = {}, False
+        change = f"Created reference.json from PubMed {pmid}"
+    name = (same_sid and existing.get("name")) or study.get("name") or folder.name
+    try:
+        # A mismatched snapshot describes another publication; keep none of it.
+        reference = resolver.resolve({"pmid": pmid}, sid=sid, name=name)
+    except ReferenceError as error:
+        raise ReferenceError(
+            f"Cannot create reference.json from PubMed {pmid}: {error}"
+        ) from error
+    save_reference(folder, {"reference": reference, "revision": revision})
+    return change

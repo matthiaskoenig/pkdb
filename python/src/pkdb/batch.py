@@ -20,6 +20,7 @@ from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import Vocabulary, vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError
 from pkdb.preparation import source_hashes
+from pkdb.references import ReferenceResolver, sync_reference
 from pkdb.schemas.validation import StudyValidationError
 
 
@@ -44,6 +45,7 @@ class BatchOptions:
     report: Path | None = None
     resume: Path | None = None
     drain_seconds: float = 10
+    reference_cache: Path | None = None
 
     def __post_init__(self):
         if self.jobs < 1:
@@ -71,7 +73,17 @@ def redact(value, token):
     return value
 
 
-def _worker(slot, tasks, events, endpoint, token, vocabulary, capabilities, transport):
+def _worker(
+    slot,
+    tasks,
+    events,
+    endpoint,
+    token,
+    vocabulary,
+    capabilities,
+    transport,
+    reference_cache,
+):
     if multiprocessing.current_process().name != "MainProcess":
         signal.signal(signal.SIGINT, signal.SIG_IGN)
     # Spawned processes never inherit an HTTP connection pool.
@@ -120,6 +132,11 @@ def _worker(slot, tasks, events, endpoint, token, vocabulary, capabilities, tran
             api.progress = progress
             result = {"ok": False, "persistence": "not_attempted", "stop": False}
             try:
+                change = sync_reference(
+                    path, ReferenceResolver(reference_cache, client=transport)
+                )
+                if change:
+                    result["reference_updated"] = change
                 uploaded = api._upload_folder(path, vocabulary, capabilities, submit)
                 result.update(
                     uploaded.model_dump(mode="json"),
@@ -364,6 +381,7 @@ def upload_many(
                 vocabulary,
                 capabilities,
                 transport,
+                options.reference_cache,
             )
             worker = (
                 ctx.Process(target=_worker, args=args)

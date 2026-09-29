@@ -90,7 +90,9 @@ def study_folder(tmp_path, request):
         },
     }
     (root / "study.json").write_text(json.dumps(study))
-    (root / "reference.json").write_text(json.dumps({"sid": 123, "name": "Example"}))
+    (root / "reference.json").write_text(
+        json.dumps({"sid": 123, "name": "Example", "pmid": "123"})
+    )
     if request.param == "xlsx":
         book = openpyxl.Workbook()
         sheet = book.active

@@ -768,6 +768,8 @@ class CurationEngine:
             ).json()
 
     def run_job(self, job):
+        from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
+
         row = self.studies[job["study_id"]]
         with self.lock:
             if row["_blocked"]:
@@ -799,6 +801,16 @@ class CurationEngine:
 
         try:
             row["status"] = "validating"
+            change = sync_reference(
+                row["_folder"], ReferenceResolver(offline=self.offline)
+            )
+            if change:
+                with self.lock:
+                    self.scan()
+                    # This job validates the repaired source; do not queue it again.
+                    expected = row["_fingerprint"]
+                    row.update(status="validating", _pending=False)
+                outcome["reference_updated"] = change
             with Client(
                 job["endpoint"] or "http://localhost",
                 api_key=self.api_key,
@@ -927,6 +939,9 @@ class CurationEngine:
             if not current:
                 row["_pending"] = True
                 row["_changed_at"] = time.monotonic()
+        except ReferenceError as error:
+            job.update(status="failed", message=self._safe(str(error)))
+            row.update(status="failed", stale=True)
         except ClientError as error:
             if job["action"] != "upload":
                 error.persistence = "not_attempted"

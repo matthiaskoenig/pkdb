@@ -100,6 +100,7 @@ def test_doi_normalization_and_year_precision(tmp_path):
 
 
 def test_manual_reference_and_search_never_auto_select(study_folder, tmp_path, capsys):
+    (study_folder / "reference.json").write_text('{"sid": 123, "name": "Example"}')
     args = [
         "reference",
         "resolve",
@@ -348,3 +349,164 @@ def test_explicit_reset_replaces_legacy_fields(study_folder, tmp_path):
     assert reset["reference"]["date"] is None
     assert not reset["reference"]["provenance"]["overrides"]
     assert json.loads(path.read_text()) == legacy
+
+
+def validate_args(folder, vocabulary, tmp_path, *extra):
+    lock = tmp_path / "vocabulary.lock.json"
+    vocabulary.save(lock)
+    return [
+        "validate",
+        str(folder),
+        "--vocabulary",
+        str(lock),
+        "--cache-dir",
+        str(tmp_path / "cache"),
+        "--format",
+        "json",
+        *extra,
+    ]
+
+
+def pubmed(calls):
+    def respond(request):
+        calls.append(request)
+        assert request.url.host == "eutils.ncbi.nlm.nih.gov"
+        assert request.url.params["id"] == "123"
+        return httpx2.Response(200, text=XML)
+
+    return respond
+
+
+def no_network(request):
+    pytest.fail(f"Unexpected request: {request.url}")
+
+
+def test_validate_creates_missing_reference_once(
+    study_folder, vocabulary, tmp_path, capsys
+):
+    (study_folder / "reference.json").unlink()
+    calls = []
+    args = validate_args(study_folder, vocabulary, tmp_path)
+    with transport(pubmed(calls)) as client:
+        assert main(args, client=client) == 0
+    result = json.loads(capsys.readouterr().out)
+    assert result["ok"]
+    assert result["reference_updated"] == "Created reference.json from PubMed 123"
+    saved = json.loads((study_folder / "reference.json").read_text())
+    assert saved["sid"] == "123"
+    assert saved["pmid"] == "123"
+    assert saved["name"] == study_folder.name
+    assert saved["title"] == "A nested title"
+    assert len(calls) == 1
+    before = (study_folder / "reference.json").read_bytes()
+    with transport(no_network) as client:
+        assert main([*args, "--offline"], client=client) == 0
+    assert "reference_updated" not in json.loads(capsys.readouterr().out)
+    assert (study_folder / "reference.json").read_bytes() == before
+
+
+@pytest.mark.parametrize(
+    "stale",
+    [
+        {"sid": 123, "pmid": "999", "name": "Example", "title": "Other paper"},
+        {"sid": 999, "pmid": "999", "name": "Other", "title": "Other paper"},
+        {"sid": 123, "name": "Example", "title": "Unidentified paper"},
+    ],
+)
+def test_validate_replaces_reference_for_another_pmid(
+    study_folder, vocabulary, tmp_path, capsys, stale
+):
+    (study_folder / "reference.json").write_text(json.dumps(stale))
+    calls = []
+    with transport(pubmed(calls)) as client:
+        assert (
+            main(validate_args(study_folder, vocabulary, tmp_path), client=client) == 0
+        )
+    result = json.loads(capsys.readouterr().out)
+    assert result["ok"]
+    assert result["reference_updated"].startswith(
+        f"Replaced reference.json (SID {stale['sid']}, PMID {stale.get('pmid')})"
+    )
+    saved = json.loads((study_folder / "reference.json").read_text())
+    assert (saved["sid"], saved["pmid"]) == ("123", "123")
+    assert saved["name"] == ("Example" if stale["sid"] == 123 else study_folder.name)
+    assert saved["title"] == "A nested title"
+    assert saved["provenance"]["overrides"] == {}
+
+
+def test_missing_reference_without_pmid_is_reported(
+    study_folder, vocabulary, tmp_path, capsys
+):
+    path = study_folder / "study.json"
+    path.write_text(path.read_text().replace('"reference": 123', '"reference": "R1"'))
+    (study_folder / "reference.json").unlink()
+    with transport(no_network) as client:
+        assert (
+            main(validate_args(study_folder, vocabulary, tmp_path), client=client) == 1
+        )
+    result = json.loads(capsys.readouterr().out)
+    assert "study reference R1 is not a PMID" in result["error"]
+    assert "pkdb reference resolve" in result["error"]
+    assert not (study_folder / "reference.json").exists()
+
+
+def test_offline_validation_needs_cached_pubmed_record(
+    study_folder, vocabulary, tmp_path, capsys
+):
+    (study_folder / "reference.json").unlink()
+    args = validate_args(study_folder, vocabulary, tmp_path, "--offline")
+    with transport(no_network) as client:
+        assert main(args, client=client) == 1
+    result = json.loads(capsys.readouterr().out)
+    assert result["error"].startswith(
+        "Cannot create reference.json from PubMed 123: No cached pubmed metadata"
+    )
+    assert not (study_folder / "reference.json").exists()
+
+
+def test_upload_sends_created_reference(
+    study_folder, vocabulary, tmp_path, capsys, monkeypatch
+):
+    from pkdb.domain.validation import PROCESSING_VERSION
+    from pkdb.domain.vocabulary import vocabulary_hash
+
+    (study_folder / "reference.json").unlink()
+    monkeypatch.setenv("PKDB_API_KEY", "pkdb_live_secret")
+    uploads = []
+
+    def handler(request):
+        if request.url.host == "eutils.ncbi.nlm.nih.gov":
+            return httpx2.Response(200, text=XML)
+        if request.method == "GET":
+            return httpx2.Response(
+                200,
+                json={
+                    "schema_version": 1,
+                    "server_version": "0.10.2",
+                    "processing_version": PROCESSING_VERSION,
+                    "vocabulary_version": vocabulary.version,
+                    "vocabulary_hash": vocabulary_hash(vocabulary),
+                    "upload_limits": {
+                        "max_rows": 1_000_000,
+                        "max_files": 256,
+                        "max_upload_bytes": 100_000_000,
+                        "max_attachment_bytes": 100_000_000,
+                    },
+                },
+            )
+        uploads.append(request.read())
+        return httpx2.Response(
+            201,
+            json={"sid": "TEST1", "created": True, "digest": "digest", "counts": {}},
+        )
+
+    args = validate_args(study_folder, vocabulary, tmp_path)
+    args[0] = "upload"
+    with transport(handler) as client:
+        assert main([*args, "--endpoint", "https://example.test"], client=client) == 0
+    result = json.loads(capsys.readouterr().out)
+    assert result["persistence"] == "created"
+    assert result["reference_updated"] == "Created reference.json from PubMed 123"
+    assert len(uploads) == 1
+    assert b"A nested title" in uploads[0]
+    assert (study_folder / "reference.json").exists()
