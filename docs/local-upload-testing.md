@@ -32,8 +32,8 @@ Startup applies migrations and loads the vocabulary. The current `p001initial` b
 Choose your administrator username and email, then enter a password at the hidden prompt:
 
 ```bash
-export PKDB_ADMIN=mkoenig
-export PKDB_ADMIN_EMAIL=your-email@example.org
+export PKDB_ADMIN=your-username
+export PKDB_ADMIN_EMAIL=you@example.org
 docker compose exec backend pkdb-server create-admin "$PKDB_ADMIN" \
   --email "$PKDB_ADMIN_EMAIL"
 
@@ -93,7 +93,7 @@ Open **Explore data** at <http://localhost:8080> to see your study. To inspect t
 
 ```bash
 curl --fail -H "Authorization: Bearer $PKDB_API_KEY" \
-  http://localhost:18083/api/v1/studies/PKDB01110/
+  "$PKDB_ENDPOINT/api/v1/studies/PKDB01110/"
 ```
 
 Replace `PKDB01110` with your study SID. The Frost2014 example contains one group, 70 individuals, 782 measurements, and eight timecourses.

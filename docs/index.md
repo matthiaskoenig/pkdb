@@ -51,12 +51,14 @@ Install [pkdb from PyPI](https://pypi.org/project/pkdb/) with Python 3.14 or 3.1
 
 ```bash
 python -m pip install pkdb
+export PKDB_ENDPOINT=https://alpha.pk-db.com
 ```
 
 ```python
 from pkdb import Client
 
-with Client(endpoint="https://alpha.pk-db.com") as client:
+# Client reads PKDB_ENDPOINT (and PKDB_API_KEY, if set) from the environment.
+with Client() as client:
     page = client.studies.list(page=1, page_size=20)
     for study in page.items:
         print(study.sid)

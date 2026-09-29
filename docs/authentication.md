@@ -28,7 +28,7 @@ Use **Assigned studies** to find studies associated with your account and **Secu
 4. Choose **Create key** and confirm your password if asked.
 5. Save the key when it is displayed; the secret is shown only once.
 
-Set `PKDB_API_KEY` in the environment where you run your script or CLI. Keep it out of notebooks, shared files, command output, and source control. The [Python client](python-client.md) reads this variable automatically. Direct REST requests use `Authorization: Bearer YOUR_API_KEY` over HTTPS.
+Set `PKDB_API_KEY` in the environment where you run your script or CLI. Keep it out of notebooks, shared files, command output, and source control. The [Python client](python-client.md) reads this variable automatically. Direct REST requests use `Authorization: Bearer $PKDB_API_KEY` over HTTPS.
 
 Keys expire and can be **rotated** or **revoked** from the same tab. Rotation gives you a short overlap to update scripts; revocation takes effect on subsequent requests. A key cannot create other keys or manage your account.
 
