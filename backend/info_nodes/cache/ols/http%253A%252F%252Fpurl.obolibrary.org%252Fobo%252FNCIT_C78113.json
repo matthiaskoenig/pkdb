@@ -1,0 +1,97 @@
+{
+  "iri": "http://purl.obolibrary.org/obo/NCIT_C78113",
+  "lang": "en",
+  "description": [],
+  "synonyms": [
+    "AMBROXOL HYDROCHLORIDE",
+    "Ambroxol Hydrochloride"
+  ],
+  "annotation": {
+    "CAS_Registry": [
+      "23828-92-4"
+    ],
+    "Chemical_Formula": [
+      "C13H18Br2N2O.ClH"
+    ],
+    "Contributing_Source": [
+      "FDA"
+    ],
+    "FDA_UNII_Code": [
+      "CC995ZMV90"
+    ],
+    "Has_Free_Acid_Or_Base_Form": [
+      "http://purl.obolibrary.org/obo/NCIT_C74262"
+    ],
+    "Legacy Concept Name": [
+      "Ambroxol_Hydrochloride"
+    ],
+    "Preferred_Name": [
+      "Ambroxol Hydrochloride"
+    ],
+    "Semantic_Type": [
+      "Pharmacologic Substance"
+    ],
+    "UMLS_CUI": [
+      "C1367795"
+    ],
+    "code": [
+      "C78113"
+    ]
+  },
+  "label": "Ambroxol Hydrochloride",
+  "ontology_name": "ncit",
+  "ontology_prefix": "NCIT",
+  "ontology_iri": "http://purl.obolibrary.org/obo/ncit.owl",
+  "is_obsolete": false,
+  "term_replaced_by": null,
+  "is_defining_ontology": true,
+  "has_children": false,
+  "is_root": false,
+  "short_form": "NCIT_C78113",
+  "obo_id": "NCIT:C78113",
+  "in_subset": [
+    "NCIT_C63923"
+  ],
+  "obo_definition_citation": null,
+  "obo_xref": null,
+  "obo_synonym": [
+    {
+      "name": "AMBROXOL HYDROCHLORIDE",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    },
+    {
+      "name": "Ambroxol Hydrochloride",
+      "scope": "hasExactSynonym",
+      "type": null,
+      "xrefs": []
+    }
+  ],
+  "is_preferred_root": false,
+  "_links": {
+    "self": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C78113?lang=en"
+    },
+    "parents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C78113/parents"
+    },
+    "ancestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C78113/ancestors"
+    },
+    "hierarchicalParents": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C78113/hierarchicalParents"
+    },
+    "hierarchicalAncestors": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C78113/hierarchicalAncestors"
+    },
+    "jstree": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C78113/jstree"
+    },
+    "graph": {
+      "href": "http://www.ebi.ac.uk/ols4/api/ontologies/ncit/terms/http%253A%252F%252Fpurl.obolibrary.org%252Fobo%252FNCIT_C78113/graph"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}
