@@ -1,11 +1,12 @@
 import json
 
+from sqlalchemy import delete, update
+
 from pkdb_server.db.models.vocabulary import (
     VocabularyEdge,
     VocabularyNode,
     VocabularyTerm,
 )
-from pkdb_server.db.vocabulary_search import refresh_search_documents
 
 
 def test_vocabulary_detail_search_and_filters(client, session_factory):
@@ -69,10 +70,6 @@ def test_vocabulary_detail_search_and_filters(client, session_factory):
                 ),
             ]
         )
-        session.flush()
-        refresh_search_documents(
-            session, ["parent", "drug-test", "choice-test", "measure-test"]
-        )
     response = client.get("/api/v1/info_nodes/drug-test/")
     assert response.status_code == 200
     assert response.json() == {
@@ -127,6 +124,20 @@ def test_vocabulary_detail_search_and_filters(client, session_factory):
     assert found("example drug", ordering="name") == ["drug-test"]
     assert found("parent") == ["parent"]
     assert found("100%") == []
+    assert found("example_") == []
+    # Triggers keep the search document current for every vocabulary writer.
+    with session_factory.begin() as session:
+        session.execute(delete(VocabularyTerm).where(VocabularyTerm.kind == "synonyms"))
+        session.execute(
+            update(VocabularyTerm)
+            .where(VocabularyTerm.kind == "annotations")
+            .values(value=json.dumps({"term": "C67890"}))
+        )
+        session.get(VocabularyNode, "parent").formula = "renamed formula"
+    assert found("unusual ali") == []
+    assert found("c1234") == []
+    assert found("c6789") == ["choice-test"]
+    assert found("renamed formula") == ["parent"]
     response = client.get(
         "/api/v1/info_nodes/", params={"dtype__in": "categorical", "ordering": "name"}
     )

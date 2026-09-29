@@ -1,7 +1,9 @@
-"""Substring search over the complete information of vocabulary nodes."""
+"""Substring search over the complete information of vocabulary nodes.
+
+Database triggers from migration p005vocabsearch keep search_text current.
+"""
 
 from sqlalchemy import (
-    bindparam,
     case,
     cast,
     exists,
@@ -10,51 +12,10 @@ from sqlalchemy import (
     literal_column,
     or_,
     select,
-    text,
 )
 from sqlalchemy.dialects.postgresql import JSONB
-from sqlalchemy.orm import Session
 
 from pkdb_server.db.models.vocabulary import VocabularyNode, VocabularyTerm
-
-# Every string value of a node, its definition and its terms, except link URLs.
-DOCUMENT = """
-lower(concat_ws(' ',
-    n.sid, n.name, n.kind, n.formula,
-    (SELECT string_agg(leaf #>> '{}', ' ')
-     FROM jsonb_path_query(n.definition, 'strict $.** ? (@.type() == "string")')
-        AS leaf),
-    (SELECT string_agg(part, ' ' ORDER BY t.kind, t.value, part)
-     FROM vocabulary_terms AS t
-     CROSS JOIN LATERAL (
-         SELECT CASE WHEN t.kind = 'synonyms' THEN to_jsonb(t.value)
-                ELSE t.value::jsonb END AS document
-     ) AS parsed
-     CROSS JOIN LATERAL (
-         SELECT parsed.document #>> '{}'
-         WHERE jsonb_typeof(parsed.document) = 'string'
-         UNION ALL
-         SELECT field.value #>> '{}'
-         FROM jsonb_each(
-             CASE WHEN jsonb_typeof(parsed.document) = 'object'
-             THEN parsed.document ELSE '{}'::jsonb END
-         ) AS field
-         WHERE field.key <> 'url' AND jsonb_typeof(field.value) = 'string'
-     ) AS parts(part)
-     WHERE t.node_sid = n.sid)
-))
-"""
-
-
-def refresh_search_documents(session: Session, sids) -> None:
-    """Rebuild search documents after the nodes or their terms changed."""
-    session.execute(
-        text(
-            f"UPDATE vocabulary_nodes AS n SET search_text = {DOCUMENT} "
-            "WHERE n.sid IN :sids"
-        ).bindparams(bindparam("sids", expanding=True)),
-        {"sids": list(sids)},
-    )
 
 
 def pattern(value: str, prefix: str = "%"):

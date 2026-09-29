@@ -1,4 +1,4 @@
-from sqlalchemy import CheckConstraint, ForeignKey, Index, String
+from sqlalchemy import CheckConstraint, FetchedValue, ForeignKey, Index, String
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
@@ -22,8 +22,10 @@ class VocabularyNode(Base):
     mass: Mapped[float | None]
     formula: Mapped[str | None]
     charge: Mapped[int | None]
-    # Maintained by refresh_search_documents from the node and its terms.
-    search_text: Mapped[str] = mapped_column(default="", server_default="")
+    # Maintained by database triggers from the node and its terms.
+    search_text: Mapped[str] = mapped_column(
+        server_default="", server_onupdate=FetchedValue()
+    )
     __table_args__ = (
         CheckConstraint("mass IS NULL OR mass > 0", name="positive_mass"),
     )
