@@ -125,7 +125,8 @@ def _worker(slot, tasks, events, endpoint, token, vocabulary, capabilities, tran
                     uploaded.model_dump(mode="json"),
                     ok=True,
                     persistence="created" if uploaded.created else "replaced",
-                    url=f"{endpoint}/api/v1/studies/{quote(uploaded.sid, safe='')}/",
+                    url=uploaded.url
+                    or f"{endpoint}/api/v1/studies/{quote(uploaded.sid, safe='')}/",
                 )
                 if api.last_upload_report:
                     result.update(

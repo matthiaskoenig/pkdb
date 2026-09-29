@@ -212,6 +212,11 @@ class CurationEngine:
     def _row(self, folder):
         identifier = hashlib.sha256(str(folder).encode()).hexdigest()[:20]
         path = folder.relative_to(self.root).as_posix()
+        uploads = [
+            job["upload"]
+            for job in self.jobs
+            if job["study_id"] == identifier and job.get("upload")
+        ]
         return {
             "id": identifier,
             "name": folder.name,
@@ -223,7 +228,7 @@ class CurationEngine:
             "stale": True,
             "files": [],
             "problems": [],
-            "last_upload": None,
+            "last_upload": uploads[-1] if uploads else None,
             "progress": None,
             "report_id": None,
             "attribution": {},
@@ -884,7 +889,10 @@ class CurationEngine:
                         "persistence": outcome["persistence"],
                         "at": now(),
                         "endpoint": job["endpoint"],
+                        "url": result.url,
                     }
+                    # Jobs persist, so the outcome survives restarts of the local service.
+                    job["upload"] = row["last_upload"]
                 job.update(
                     status="succeeded",
                     message="Uploaded"

@@ -56,7 +56,7 @@ Multiple events from one save are combined. The app waits for saves to settle an
 
 If you save again during an upload, the in-flight upload refers to its original snapshot; the newest saved revision is processed afterwards. A connection failure with an uncertain save outcome pauses further uploads for that study until the outcome is checked. Restarting the app will not silently upload changes accumulated while it was stopped.
 
-The activity list lets you cancel queued jobs and clear finished history. Active and unknown-outcome jobs remain visible. **Resume suspended work** attempts reconciliation first. If an upload still has an unknown outcome, **Review unknown outcome** shows the previous server target; an explicit acknowledgment is required before retrying that study. A retry may replace data already saved by the earlier request.
+After a successful upload, the study overview, the detail panel, and the activity entry link to the uploaded study on the PK-DB website. The link remains available after restarting the app. The activity list lets you cancel queued jobs and clear finished history. Active and unknown-outcome jobs remain visible. **Resume suspended work** attempts reconciliation first. If an upload still has an unknown outcome, **Review unknown outcome** shows the previous server target; an explicit acknowledgment is required before retrying that study. A retry may replace data already saved by the earlier request.
 
 File watching continues while the local `pkdb curate` process runs, even if you close its browser tab. Stop the process to stop watching, or use the app's pause control to suspend automatic actions.
 

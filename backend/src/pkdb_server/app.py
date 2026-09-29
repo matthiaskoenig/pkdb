@@ -6,6 +6,7 @@ import shutil
 from contextlib import asynccontextmanager
 from pathlib import Path
 from tempfile import TemporaryDirectory, TemporaryFile
+from urllib.parse import quote
 from uuid import uuid4
 
 from fastapi import FastAPI, Request
@@ -314,6 +315,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                         "created" if result.created else "replaced"
                     )
                     payload = result.model_dump(mode="json", exclude_unset=False)
+                    payload["url"] = (
+                        f"{settings.browser_origin.rstrip('/')}"
+                        f"/data/{quote(result.sid, safe='')}"
+                    )
                     if request.headers.get("X-PKDB-Report-Version") != "2":
                         payload["warnings"] = [
                             issue.legacy_dict() for issue in result.warnings
