@@ -8,7 +8,7 @@ The root `compose.yaml` is a local setup with an optional `dev` profile for the 
 
 ## Deployment requirements
 
-For an externally accessible deployment, provide a TLS reverse proxy, managed secrets, a durable PostgreSQL database, persistent attachment storage, and an appropriate backup policy. Configure the backend with `PKDB_DATABASE_URL`, `PKDB_FILE_ROOT`, and explicit `PKDB_CORS_ORIGINS` when using a separately hosted frontend. Additional settings are listed in `backend/src/pkdb_server/config.py`. The local default database password is only for local testing. The repository does not install a production reverse proxy.
+For an externally accessible deployment, provide a TLS reverse proxy, managed secrets, a durable PostgreSQL database, persistent attachment storage, and an appropriate backup policy. Configure the backend with `PKDB_DATABASE_URL`, `PKDB_FILE_ROOT`, and explicit `PKDB_CORS_ORIGINS` when using a separately hosted frontend. Additional settings are listed in `backend/src/pkdb_server/config.py`. The local default database password is only for local testing. The [reverse proxy](#reverse-proxy) section describes the nginx configuration used for `beta.pk-db.com`.
 
 The container runs as UID 10001. A custom attachment mount must be writable by that user. Do not expose PostgreSQL publicly. Apply migrations once before starting API workers; the Compose startup command handles this for the single local API service.
 
@@ -35,9 +35,43 @@ docker build --build-arg PKDB_BUILD_COMMIT="$(git rev-parse HEAD)" \
 
 For source archives, set `PKDB_BUILD_COMMIT` to the full commit hash before `npm run build`. If no commit is available, the footer says **Commit unavailable** instead of linking to an incorrect revision. Rebuild the frontend artifact to update its release information.
 
-Use `frontend/tests/deployment/nginx.conf` as the concrete reverse-proxy example and `compose.frontend-test.yaml` to exercise it against isolated test data. Proxy `/api`, `/accounts`, `/media`, `/static` and `/health` before history fallback. Missing JS/CSS assets must return 404, API failures must remain API responses, and `index.html` must be revalidated while fingerprinted assets may be cached immutably. Match `PKDB_BROWSER_ORIGIN` to the external origin and preserve same-origin cookies/CSRF. `VITE_API_BASE` is public API-origin build configuration, normally empty for same-origin requests, never a place for secrets.
+`compose.frontend-test.yaml` exercises the production application configuration `nginx/pkdb.conf` against isolated test data. Proxy `/api`, `/accounts`, `/media`, `/static` and `/health` before history fallback. Missing JS/CSS assets must return 404, API failures must remain API responses, and `index.html` must be revalidated while fingerprinted assets may be cached immutably. Match `PKDB_BROWSER_ORIGIN` to the external origin and preserve same-origin cookies/CSRF. `VITE_API_BASE` is public API-origin build configuration, normally empty for same-origin requests, never a place for secrets.
 
 Before release, verify these rules in the real deployment proxy and retain the previous deployed artifact in durable storage. Rollback restores that static artifact atomically; this frontend migration introduces no database migration. Local recovered baseline checksums are in `frontend/docs/modernization-baseline.md`; local `/tmp` copies do not replace production rollback retention.
+
+## Reverse proxy
+
+`beta.pk-db.com` uses two nginx layers, both kept in `nginx/`:
+
+| File | Host | Role |
+| --- | --- | --- |
+| `nginx/beta.pk-db.com` | Gateway | TLS termination, Let's Encrypt webroot, HTTP to HTTPS redirect; forwards everything to the application host `192.168.0.176:18083` |
+| `nginx/ssl.conf` | Gateway | Shared TLS settings, installed as `/etc/nginx/snippets/ssl.conf` |
+| `nginx/pkdb.conf` | Application host | Serves the built frontend and forwards `/api`, `/accounts`, `/media`, `/health`, `/mcp`, `/docs`, `/redoc` and `/openapi.json` to the backend |
+
+On the gateway, install the site and snippet, obtain the certificate with the webroot authenticator, and reload nginx:
+
+```bash
+sudo cp nginx/beta.pk-db.com /etc/nginx/sites-available/beta.pk-db.com
+sudo cp nginx/ssl.conf /etc/nginx/snippets/ssl.conf
+sudo ln -s /etc/nginx/sites-available/beta.pk-db.com /etc/nginx/sites-enabled/
+sudo certbot certonly --webroot -w /usr/share/nginx/letsencrypt -d beta.pk-db.com
+sudo nginx -t && sudo systemctl reload nginx
+```
+
+The TLS snippet expects `/etc/ssl/certs/dhparam.pem` (`openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048`). Until a certificate exists, comment out the HTTPS server block so that nginx can start and answer the ACME challenge.
+
+On the application host, start the stack with the production override. It builds an nginx image containing the frontend, publishes it on `PKDB_WEB_PORT` (default `18083`) on all interfaces, and stops publishing the backend port:
+
+```bash
+export PKDB_BROWSER_ORIGIN=https://beta.pk-db.com
+PKDB_BUILD_COMMIT="$(git rev-parse HEAD)" \
+  docker compose -f compose.yaml -f compose.production.yaml up --build --wait
+```
+
+The override also enables secure cookies. Restrict the published port to the gateway with the host firewall.
+
+The gateway replaces any client-supplied `X-Forwarded-For` header with the connecting address. The application nginx accepts that header only from `192.168.0.0/24` and passes one address to the backend, which trusts it for per-IP quotas (`FORWARDED_ALLOW_IPS`). Adjust `set_real_ip_from` in `nginx/pkdb.conf` if the gateway uses another address. MCP responses are streamed, so the gateway disables proxy buffering for `/mcp/` and the application nginx for all backend routes.
 
 ## Deployment configuration
 

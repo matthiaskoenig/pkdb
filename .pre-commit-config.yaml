@@ -13,6 +13,8 @@ repos:
   hooks:
   - id: check-yaml
     description: Check yaml files for parseable syntax
+    # Syntax only, so that Compose tags such as !reset are accepted.
+    args: [--unsafe]
     exclude: ^(frontend/|docs/presentation/|docs/images/)
   - id: check-toml
     description: Check toml files for parseable syntax
