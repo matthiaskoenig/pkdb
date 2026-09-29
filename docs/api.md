@@ -1,11 +1,11 @@
 # REST API
 
-Use `https://alpha.pk-db.com` as the base URL for data access and curation. The [Python client](python-client.md) wraps common operations; you can also make HTTP requests directly. The [research API reference](https://alpha.pk-db.com/docs) focuses on data and curation; the [complete reference](https://alpha.pk-db.com/docs/all) also covers accounts and administration. See [executable examples](api-examples.md) and the separate [read-only MCP interface](mcp.md).
+Use `https://beta.pk-db.com` as the base URL for data access and curation. The [Python client](python-client.md) wraps common operations; you can also make HTTP requests directly. The [research API reference](https://beta.pk-db.com/docs) focuses on data and curation; the [complete reference](https://beta.pk-db.com/docs/all) also covers accounts and administration. See [executable examples](api-examples.md) and the separate [read-only MCP interface](mcp.md).
 
 The examples below read the base URL from `PKDB_ENDPOINT` and, where needed, your key from `PKDB_API_KEY`:
 
 ```bash
-export PKDB_ENDPOINT=https://alpha.pk-db.com
+export PKDB_ENDPOINT=https://beta.pk-db.com
 ```
 
 ## Browse studies and measurements
@@ -57,7 +57,7 @@ Years use the **study date**, not the reference publication date or upload times
 
 ## Authenticate requests
 
-Create a personal key in [Account settings](https://alpha.pk-db.com/account), then provide it through `PKDB_API_KEY` in your environment. Send it as a Bearer credential:
+Create a personal key in [Account settings](https://beta.pk-db.com/account), then provide it through `PKDB_API_KEY` in your environment. Send it as a Bearer credential:
 
 ```bash
 curl --fail --header "Authorization: Bearer ${PKDB_API_KEY}" \
@@ -82,7 +82,7 @@ Export selection uses the `FilterSpec` schema, retaining `outputs` as its measur
 
 ## Curate data
 
-Use the [Python client preparation and upload workflow](python-client.md#prepare-validate-and-upload-a-study-folder) to send study folders to `https://alpha.pk-db.com`. It prepares and validates the source bundle and checks vocabulary compatibility before upload. A curator account and a key with `studies:write` are required; existing studies can be replaced only when your account has permission.
+Use the [Python client preparation and upload workflow](python-client.md#prepare-validate-and-upload-a-study-folder) to send study folders to `https://beta.pk-db.com`. It prepares and validates the source bundle and checks vocabulary compatibility before upload. A curator account and a key with `studies:write` are required; existing studies can be replaced only when your account has permission.
 
 ## Handle errors
 

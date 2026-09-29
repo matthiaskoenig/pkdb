@@ -2,7 +2,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/pkdb.svg)](https://pypi.org/project/pkdb/) [![Python versions](https://img.shields.io/pypi/pyversions/pkdb.svg)](https://pypi.org/project/pkdb/)
 
-The public `pkdb` package prepares, validates, uploads, and queries studies. Prepare study folders on your machine, then use your account at `alpha.pk-db.com` for authenticated data access and curation. Preparation and offline validation do not need an account.
+The public `pkdb` package prepares, validates, uploads, and queries studies. Prepare study folders on your machine, then use your account at `beta.pk-db.com` for authenticated data access and curation. Preparation and offline validation do not need an account.
 
 ## Install
 
@@ -16,10 +16,10 @@ In a uv project, use `uv add pkdb`. For just the command-line tools, use `uv too
 
 ## Query studies and measurements
 
-All user data access and curation examples use [alpha.pk-db.com](https://alpha.pk-db.com). Set it as the endpoint in your environment; the client reads `PKDB_ENDPOINT` when no endpoint is passed. Public browsing works without a key:
+All user data access and curation examples use [beta.pk-db.com](https://beta.pk-db.com). Set it as the endpoint in your environment; the client reads `PKDB_ENDPOINT` when no endpoint is passed. Public browsing works without a key:
 
 ```bash
-export PKDB_ENDPOINT=https://alpha.pk-db.com
+export PKDB_ENDPOINT=https://beta.pk-db.com
 ```
 
 ```python
@@ -42,7 +42,7 @@ The client uses the v2 data API. `measurements` is the public name for measureme
 
 ## Download data
 
-Create a read key in [Account settings](https://alpha.pk-db.com/account) and provide it in your environment as `PKDB_API_KEY`. The client reads it automatically:
+Create a read key in [Account settings](https://beta.pk-db.com/account) and provide it in your environment as `PKDB_API_KEY`. The client reads it automatically:
 
 ```python
 from pkdb import Client
@@ -73,7 +73,7 @@ Both commands run on your machine, using a bundled vocabulary snapshot by defaul
 For curation, your account needs upload permission and a key with `studies:write`. To upload, set `PKDB_API_KEY` in your environment using an API key from your profile. `PKDB_ENDPOINT` supplies the default API endpoint; `--endpoint` overrides it.
 
 ```bash
-export PKDB_ENDPOINT=https://alpha.pk-db.com
+export PKDB_ENDPOINT=https://beta.pk-db.com
 pkdb upload /path/to/pkdb_data/studies/ExampleStudy
 ```
 

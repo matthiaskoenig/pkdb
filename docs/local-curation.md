@@ -77,7 +77,7 @@ Offline work supports local browsing, cached assignments, file opening, and loca
 pkdb curate /path/to/pkdb_data/studies/apixaban --offline
 
 # Connect to the server and API key already set in your environment:
-export PKDB_ENDPOINT=https://alpha.pk-db.com
+export PKDB_ENDPOINT=https://beta.pk-db.com
 pkdb curate /path/to/pkdb_data
 
 # Select an assignment queue at launch:

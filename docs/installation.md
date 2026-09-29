@@ -163,7 +163,7 @@ uv run --locked pkdb-server create-admin "$PKDB_ADMIN" --email "$PKDB_ADMIN_EMAI
 uv run --locked uvicorn pkdb_server.app:create_app --factory --reload --host 127.0.0.1 --port 18083
 ```
 
-Create the administrator only once and choose its password at the prompt. In another terminal, start the [native frontend](#native-frontend-and-frontend-checks); its default proxy reaches this API on port `18083`. Keep the environment variables set for subsequent native API and migration commands. This local database and its accounts are independent of `alpha.pk-db.com`.
+Create the administrator only once and choose its password at the prompt. In another terminal, start the [native frontend](#native-frontend-and-frontend-checks); its default proxy reaches this API on port `18083`. Keep the environment variables set for subsequent native API and migration commands. This local database and its accounts are independent of `beta.pk-db.com`.
 
 ## Backend tests and checks
 

@@ -11,7 +11,7 @@ Existing `pkdb_data` study folders work directly:
 ```bash
 pkdb prepare studies/ExampleStudy
 pkdb validate studies/ExampleStudy --offline
-export PKDB_ENDPOINT=https://alpha.pk-db.com
+export PKDB_ENDPOINT=https://beta.pk-db.com
 pkdb upload studies/ExampleStudy
 ```
 
