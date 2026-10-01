@@ -37,6 +37,7 @@ function render() {
   const scopeValue = $('scope').value; $('scope').replaceChildren(); option($('scope'), '', 'All folders');
   for (const folder of [...new Set(state.studies.map(s => (s.path || '').split('/').slice(0, -1).join('/')).filter(Boolean))].sort()) option($('scope'), folder, folder);
   $('scope').value = [...$('scope').options].some(o => o.value === scopeValue) ? scopeValue : '';
+  renderRecent();
   renderStudies(); renderJobs(); if (current && !$('study-detail').contains(document.activeElement)) renderDetail(); else if (current) { const s = state.studies.find(s => s.id === current); if (s) $('detail-upload')?.replaceWith(uploadLine(s)); }
 }
 function selectStudy(id) { current = id; tab = 'problems'; renderDetail(); renderStudies(); }
@@ -57,7 +58,7 @@ function renderStudies() {
       }
     });
     const checkCell = el('td'), check = el('input'); check.type = 'checkbox'; check.name = `select-${s.id}`; check.checked = selected.has(s.id); check.setAttribute('aria-label', `Select ${s.name || s.sid || s.id}`); check.addEventListener('change', () => { check.checked ? selected.add(s.id) : selected.delete(s.id); if (check.checked) { current = s.id; tab = 'problems'; renderDetail(); } renderStudies(); }); checkCell.append(check); row.append(checkCell);
-    const identity = el('td'); identity.append(button(s.name || s.sid || s.id, () => selectStudy(s.id), 'study-link'), el('div', [s.sid, s.path].filter(Boolean).join(' · '), 'small muted'));
+    const identity = el('td'); identity.append(button(s.name || s.sid || s.id, () => selectStudy(s.id), 'study-link'), el('div', [s.sid, s.path === '.' ? '' : s.path].filter(Boolean).join(' · '), 'small muted'));
     row.append(identity);
     const status = el('td'); status.append(badge(s.stale ? 'Changed since validation' : (s.status === 'valid' && state.offline ? 'Locally valid' : human(s.status || 'discovered')), s.stale ? 'changed' : s.status)); if (s.progress?.stage) status.append(el('div', human(s.progress.stage), 'small muted')); row.append(status);
     row.append(el('td', human(s.mode || 'validate'))); const upload = el('td'); upload.append(badge(human(s.last_upload?.persistence || 'Not uploaded'), s.last_upload?.persistence)); const uploaded = studyLink(s.last_upload, s); if (uploaded) { const line = el('div', null, 'small'); line.append(uploaded); upload.append(line); } row.append(upload); tbody.append(row);
@@ -73,7 +74,7 @@ function locationText(problem) { const l = problem.location || problem.source ||
 async function openFile(study, file, reveal = false) { await mutate('/local/files/open', {study_id: study.id, ...(file ? {file: typeof file === 'string' ? file : file.id || file.path} : {}), reveal}, 'Opened with the default application.'); }
 function renderDetail() {
   const s = state.studies.find(s => s.id === current), container = $('study-detail'); container.hidden = false; if (!s) { container.replaceChildren(el('h2', 'Study problems'), el('p', 'Select a study to review its problems, validate, or upload.', 'empty')); return; }
-  container.replaceChildren(); const heading = el('div', null, 'detail-head'), name = el('div'); name.append(el('h2', s.name || s.sid || s.id), el('p', [s.sid, s.path].filter(Boolean).join(' · '), 'small muted')); name.append(uploadLine(s)); heading.append(name, button('Close details', () => { current = ''; renderDetail(); renderStudies(); })); container.append(heading);
+  container.replaceChildren(); const heading = el('div', null, 'detail-head'), name = el('div'); name.append(el('h2', s.name || s.sid || s.id), el('p', [s.sid, s.path === '.' ? '' : s.path].filter(Boolean).join(' · '), 'small muted')); name.append(uploadLine(s)); heading.append(name, button('Close details', () => { current = ''; renderDetail(); renderStudies(); })); container.append(heading);
   const controls = el('div', null, 'detail-controls'); controls.append(button('Validate', () => jobs([s.id], 'validate')), button('Validate and upload', () => reviewUpload([s.id]), 'primary'), button('Open folder', () => openFile(s, null, true))); if (state.offline) controls.children[1].disabled = true; const serverValidate = button('Validate on server', () => jobs([s.id], 'validate_remote')); serverValidate.disabled = state.offline || !state.endpoint; controls.append(serverValidate, button('Reference…', () => openReference(s)));
   const mode = el('select'); mode.id = 'study-mode'; mode.setAttribute('aria-label', 'Action on save for this study'); for (const value of ['validate','upload','off']) option(mode, value, human(value)); mode.value = s.mode || 'validate'; mode.addEventListener('change', () => run(() => setMode([s.id], mode.value))); const modeLabel = el('label', 'On save'); modeLabel.htmlFor = mode.id; controls.append(modeLabel, mode); container.append(controls);
   const tabs = el('nav', null, 'tabs'); tabs.setAttribute('aria-label', 'Study detail views'); for (const value of ['problems','overview','activity']) { const b = button(value === 'problems' ? `Problems (${(s.problems || []).length})` : human(value[0].toUpperCase() + value.slice(1)), () => { tab = value; renderDetail(); }); if (tab === value) b.className = 'active'; b.setAttribute('aria-current', tab === value ? 'page' : 'false'); tabs.append(b); } container.append(tabs);
@@ -105,7 +106,7 @@ function renderProblems(container, study) {
   severity.addEventListener('change',draw); search.addEventListener('input',draw); draw(); if (study.report_incomplete || study.truncated) container.append(el('p','This report is incomplete. Additional problems may remain.','notice')); if (study.report_id) container.append(reportLink(study.report_id));
 }
 function reportLink(id) { const link = el('a','Download JSON report'); link.href = `/local/reports/${encodeURIComponent(id)}`; link.download = `pkdb-report-${id}.json`; return link; }
-function jobNode(j) { const node = el('div', null, 'job'), text = el('div', null, 'grow'), study = state.studies.find(s => s.id === j.study_id); text.append(el('strong',`${human(j.action)} · ${study?.name || j.study_id || 'Workspace'}`), el('div', [j.stage, j.message, j.created_at ? new Date(j.created_at).toLocaleString() : ''].filter(Boolean).join(' · '), 'small muted')); node.append(text,badge(human(j.status),j.status)); const uploaded = studyLink(j.upload, study); if (uploaded) node.append(uploaded); if (j.report_id) node.append(reportLink(j.report_id)); if (j.status === 'queued') node.append(button('Cancel queued job', () => mutate('/local/jobs/cancel', {ids:[j.id]}, 'Queued job canceled.'))); if (j.status === 'unknown' || j.persistence === 'unknown') node.append(button('Review unknown outcome', () => reviewRetry(j))); return node; }
+function jobNode(j) { const node = el('div', null, 'job'), text = el('div', null, 'grow'), study = state.studies.find(s => s.id === j.study_id); text.append(el('strong',`${human(j.action)} · ${study?.name || j.study_name || j.study_id || 'Workspace'}`), el('div', [j.stage, j.message, j.created_at ? new Date(j.created_at).toLocaleString() : ''].filter(Boolean).join(' · '), 'small muted')); node.append(text,badge(human(j.status),j.status)); const uploaded = studyLink(j.upload, study); if (uploaded) node.append(uploaded); if (j.report_id) node.append(reportLink(j.report_id)); if (j.status === 'queued') node.append(button('Cancel queued job', () => mutate('/local/jobs/cancel', {ids:[j.id]}, 'Queued job canceled.'))); if (j.status === 'unknown' || j.persistence === 'unknown') node.append(button('Review unknown outcome', () => reviewRetry(j))); return node; }
 function reviewRetry(job) {
   const study = state.studies.find(s => s.id === job.study_id);
   if (!study) throw new Error('This study is outside the current workspace. Reopen its workspace to reconcile the upload.');
@@ -135,10 +136,10 @@ $('retry-form').addEventListener('submit', event => { event.preventDefault(); ru
 $('pause').addEventListener('click', () => run(() => mutate('/local/pause',{paused:!state.paused})));
 $('resume').addEventListener('click', () => run(() => mutate('/local/resume',selected.size ? {ids:[...selected]} : {},'Requested reconciliation and resume.')));
 $('refresh-files').addEventListener('click', () => run(() => mutate('/local/workspace',{path:state.workspace},'Source files refreshed.')));
-$('workspace-open').addEventListener('click', () => { $('workspace-path').value = state.workspace || ''; $('workspace-dialog').showModal(); });
+$('workspace-open').addEventListener('click', () => run(openWorkspaceDialog));
 $('settings-open').addEventListener('click', () => { $('settings-endpoint').value = state.endpoint || ''; $('settings-key').value = ''; $('settings-offline').checked = !!state.offline; $('settings-dialog').showModal(); });
 document.querySelectorAll('[data-close]').forEach(n => n.addEventListener('click', () => { $(n.dataset.close).close(); $('settings-key').value = ''; }));
-$('workspace-form').addEventListener('submit', event => { event.preventDefault(); run(async () => { await mutate('/local/workspace',{path:$('workspace-path').value},'Workspace opened.'); selected.clear(); current = ''; renderDetail(); $('workspace-dialog').close(); render(); }); });
+$('workspace-form').addEventListener('submit', event => { event.preventDefault(); run(() => switchWorkspace($('workspace-path').value.trim())); });
 $('settings-form').addEventListener('submit', event => { event.preventDefault(); run(async () => { const settings = {endpoint:$('settings-endpoint').value,offline:$('settings-offline').checked}; if ($('settings-key').value) settings.api_key = $('settings-key').value; $('settings-key').value = ''; await mutate('/local/settings',settings,'Connection settings updated.'); $('settings-dialog').close(); }); });
 $('settings-dialog').addEventListener('close', () => { $('settings-key').value = ''; });
 $('upload-form').addEventListener('submit', event => { event.preventDefault(); run(async () => { if (!pendingUpload) return; const {ids,mode} = pendingUpload; $('upload-dialog').close(); pendingUpload = null; if (mode) await mutate('/local/mode',{ids,mode:'upload'},'Upload on save enabled for the reviewed selection.'); else await jobs(ids,'upload'); }); });
@@ -229,3 +230,85 @@ $('reference-save').addEventListener('click', () => run(async () => {
     $('reference-dialog').close(); notify('Reference saved. The study’s selected on-save action applies.'); await refresh(true);
   } catch (error) { $('reference-result').append(el('p',error.message,'error')); $('reference-result').scrollIntoView({block:'nearest'}); }
 }));
+
+let recentSignature = '', browseRequest = 0, browsed = null;
+const folderName = (path) => path.split(/[\\/]/).filter(Boolean).pop() || path;
+const kindLabels = {repository: 'Repository', study: 'Study'};
+async function switchWorkspace(path) {
+  if (!path) throw new Error('Choose a folder first.');
+  await mutate('/local/workspace', {path}, `Workspace opened: ${path}`);
+  selected.clear(); current = ''; renderDetail();
+  if ($('workspace-dialog').open) $('workspace-dialog').close();
+  document.querySelectorAll('.header-dropdown[open]').forEach(menu => menu.open = false);
+  render();
+}
+function recentItems(list, items, withRemove) {
+  list.replaceChildren();
+  for (const item of items) {
+    const entry = el('li'), open = el('button', null, 'recent-open');
+    open.type = 'button'; open.title = item.path; open.disabled = !item.exists;
+    const text = el('span', null, 'recent-text'); text.append(el('span', folderName(item.path), 'recent-name'), el('span', item.path, 'recent-path small muted'));
+    open.append(text);
+    if (!item.exists) open.append(badge('Unavailable', 'unknown'));
+    open.addEventListener('click', () => run(() => switchWorkspace(item.path)));
+    entry.append(open);
+    if (withRemove) { const remove = button('×', () => mutate('/local/workspace/forget', {path: item.path}, 'Removed from recent workspaces.'), 'recent-remove'); remove.setAttribute('aria-label', `Remove ${item.path} from recent workspaces`); remove.title = 'Remove from recent workspaces'; entry.append(remove); }
+    list.append(entry);
+  }
+}
+function renderRecent() {
+  const signature = JSON.stringify([state.workspace, state.recent_workspaces]);
+  if (signature === recentSignature) return;
+  recentSignature = signature;
+  const others = (state.recent_workspaces || []).filter(item => item.path !== state.workspace);
+  $('recent-menu').hidden = !others.length; $('recent-dialog').hidden = !others.length;
+  recentItems($('recent-menu-list'), others, true); recentItems($('recent-dialog-list'), others, false);
+}
+function renderBrowser() {
+  const listing = browsed, list = $('workspace-folders');
+  $('workspace-path').value = listing.path;
+  $('workspace-up').disabled = !listing.parent;
+  const crumbs = $('workspace-crumbs'); crumbs.replaceChildren();
+  const separator = listing.path.includes('\\') && !listing.path.startsWith('/') ? '\\' : '/';
+  const root = listing.path.startsWith(separator) ? separator : '', segments = listing.path.split(separator).filter(Boolean);
+  if (root) crumbs.append(button(root, () => browse(root), 'crumb'));
+  segments.forEach((part, index) => {
+    if (index) crumbs.append(el('span', separator, 'crumb-separator'));
+    const path = root + segments.slice(0, index + 1).join(separator) + (!root && index === 0 ? separator : '');
+    const crumb = button(part, () => browse(path), 'crumb');
+    if (index === segments.length - 1) crumb.setAttribute('aria-current', 'location');
+    crumbs.append(crumb);
+  });
+  crumbs.scrollLeft = crumbs.scrollWidth;
+  $('workspace-kind').replaceChildren();
+  if (kindLabels[listing.kind]) $('workspace-kind').append(badge(kindLabels[listing.kind], 'valid'), ` This folder is a ${kindLabels[listing.kind].toLowerCase()}.`);
+  else $('workspace-kind').append(listing.entries.length ? `${listing.entries.length}${listing.truncated ? '+' : ''} subfolders` : 'No subfolders');
+  list.replaceChildren();
+  for (const entry of listing.entries) {
+    const item = el('li'), into = el('button', null, `folder ${entry.kind}`);
+    into.type = 'button'; into.title = entry.path; into.append(el('span', entry.name, 'folder-name'));
+    if (kindLabels[entry.kind]) into.append(badge(kindLabels[entry.kind], 'valid'));
+    into.addEventListener('click', () => run(() => browse(entry.path)));
+    const open = button('Open', () => switchWorkspace(entry.path), 'folder-open'); open.setAttribute('aria-label', `Open ${entry.name} as workspace`);
+    item.append(into, open); list.append(item);
+  }
+  if (!listing.entries.length) list.append(el('li', 'This folder has no subfolders.', 'small muted folder-note'));
+  if (listing.truncated) list.append(el('li', 'More folders are not shown. Type the path to go directly.', 'small muted folder-note'));
+}
+async function browse(path) {
+  const request = ++browseRequest;
+  const listing = await api('/local/directories', path ? {path} : {});
+  if (request !== browseRequest) return;
+  browsed = listing; renderBrowser();
+  $('workspace-folders').scrollTop = 0;
+}
+async function openWorkspaceDialog() {
+  browsed = null; $('workspace-path').value = state.workspace || ''; $('workspace-folders').replaceChildren(); $('workspace-crumbs').replaceChildren(); $('workspace-kind').textContent = 'Loading folders…';
+  document.querySelectorAll('.header-dropdown[open]').forEach(menu => menu.open = false);
+  $('workspace-dialog').showModal();
+  try { await browse(state.workspace || null); } catch (error) { await browse(null); throw error; }
+}
+$('workspace-go').addEventListener('click', () => run(() => browse($('workspace-path').value.trim())));
+$('workspace-path').addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); run(() => browse($('workspace-path').value.trim())); } });
+$('workspace-up').addEventListener('click', () => run(() => browsed?.parent && browse(browsed.parent)));
+$('workspace-home').addEventListener('click', () => run(() => browse(browsed?.home || '~')));

@@ -28,6 +28,24 @@ from pkdb.preparation import prepare, source_hashes
 from pkdb.schemas.validation import StudyValidationError
 from pkdb.source_files import ignored_source
 
+RECENT_LIMIT = 10
+DIRECTORY_LIMIT = 2000
+
+
+class WorkspaceError(ValueError):
+    """A workspace or folder request that the curator can correct."""
+
+
+def folder_kind(path):
+    try:
+        if (path / "studies").is_dir():
+            return "repository"
+        if (path / "study.json").is_file():
+            return "study"
+    except OSError:
+        pass
+    return "folder"
+
 
 def now():
     return datetime.now(UTC).isoformat()
@@ -101,6 +119,9 @@ class CurationEngine:
                 )
         self.modes = saved.get("modes", {})
         self.mappings = saved.get("mappings", {})
+        self.recent_workspaces = [
+            item for item in saved.get("recent_workspaces", []) if isinstance(item, str)
+        ][:RECENT_LIMIT]
         self.paused = False
         self.active = None
         self.queue = {}
@@ -114,7 +135,11 @@ class CurationEngine:
             ),
             Path.cwd(),
         )
-        self.select_workspace(path or saved.get("workspace") or default_workspace)
+        remembered = saved.get("workspace")
+        if path is None and remembered and not Path(remembered).is_dir():
+            # A removed or unmounted workspace must not prevent startup.
+            remembered = None
+        self.select_workspace(path or remembered or default_workspace)
         if start:
             for target in (self._watch, self._worker, self._connect):
                 thread = threading.Thread(target=target, daemon=True)
@@ -132,6 +157,7 @@ class CurationEngine:
                 "github": self.github.data,
                 "modes": self.modes,
                 "mappings": self.mappings,
+                "recent_workspaces": self.recent_workspaces,
                 "jobs": self.jobs,
             },
         )
@@ -140,6 +166,10 @@ class CurationEngine:
         return f"{self.root}|{self.endpoint}|{self.account or ''}"
 
     def snapshot(self):
+        with self.lock:
+            recent = list(self.recent_workspaces)
+        # Existence checks may touch slow mounts, so they run outside the lock.
+        recent = [{"path": path, "exists": Path(path).is_dir()} for path in recent]
         with self.lock:
             issues = []
             for raw in self.github.data.get("issues", []):
@@ -187,28 +217,95 @@ class CurationEngine:
                             for row in self.studies.values()
                         ],
                         "jobs": self.jobs,
+                        "recent_workspaces": recent,
                     }
                 )
             )
 
     def select_workspace(self, path):
-        root = Path(path).expanduser().resolve(strict=True)
-        if not root.is_dir():
-            raise ValueError("Choose a directory")
+        root = self._folder(path, absolute=False)
         if self.state_dir.is_relative_to(root):
-            raise ValueError(
+            raise WorkspaceError(
                 "Application state must be outside the selected source workspace"
             )
         with self.lock:
             if self.active:
-                raise ValueError("Wait for the current job before changing workspace")
+                raise WorkspaceError(
+                    "Wait for the current job before changing workspace"
+                )
             self._cancel_pending()
             self.root = root
             self.studies = {}
         self.scan(initial=True)
         with self.lock:
+            self.recent_workspaces = [
+                str(root),
+                *(item for item in self.recent_workspaces if item != str(root)),
+            ][:RECENT_LIMIT]
             self._save()
         return self.snapshot()
+
+    def forget_workspace(self, path):
+        with self.lock:
+            self.recent_workspaces = [
+                item for item in self.recent_workspaces if item != path
+            ]
+            self._save()
+        return self.snapshot()
+
+    @staticmethod
+    def _folder(path, *, absolute=True):
+        requested = Path(path).expanduser()
+        if absolute and not requested.is_absolute():
+            raise WorkspaceError(f"Enter an absolute folder path: {path}")
+        try:
+            folder = requested.resolve(strict=True)
+        except FileNotFoundError:
+            raise WorkspaceError(f"Folder does not exist: {requested}") from None
+        except OSError:
+            raise WorkspaceError(f"Folder cannot be read: {requested}") from None
+        if not folder.is_dir():
+            raise WorkspaceError(f"This path is not a folder: {requested}")
+        return folder
+
+    def list_directories(self, path=None):
+        if path is None:
+            path = self.root if self.root.is_dir() else Path.home()
+        folder = self._folder(path)
+        entries = []
+        try:
+            with os.scandir(folder) as iterator:
+                for entry in iterator:
+                    if entry.name.startswith("."):
+                        continue
+                    try:
+                        if not entry.is_dir():
+                            continue
+                    except OSError:
+                        continue
+                    entries.append(entry.name)
+        except PermissionError:
+            raise WorkspaceError(f"Permission denied: {folder}") from None
+        except OSError:
+            raise WorkspaceError(f"Folder cannot be read: {folder}") from None
+        entries.sort(key=lambda name: (name.casefold(), name))
+        truncated = len(entries) > DIRECTORY_LIMIT
+        entries = entries[:DIRECTORY_LIMIT]
+        return {
+            "path": str(folder),
+            "parent": None if folder.parent == folder else str(folder.parent),
+            "home": str(Path.home()),
+            "kind": folder_kind(folder),
+            "truncated": truncated,
+            "entries": [
+                {
+                    "name": name,
+                    "path": str(folder / name),
+                    "kind": folder_kind(folder / name),
+                }
+                for name in entries
+            ],
+        }
 
     def _row(self, folder):
         identifier = hashlib.sha256(str(folder).encode()).hexdigest()[:20]
@@ -393,6 +490,8 @@ class CurationEngine:
         job = {
             "id": uuid4().hex,
             "study_id": row["id"],
+            # Keeps activity readable after switching to another workspace.
+            "study_name": row["name"],
             "action": action,
             "status": "queued",
             "stage": "queued",

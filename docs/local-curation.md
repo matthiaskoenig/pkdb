@@ -16,6 +16,10 @@ pkdb curate /path/to/pkdb_data
 
 You can also choose a substance directory or a single study folder. The app displays the selected workspace, server endpoint, authenticated PK-DB account, and vocabulary status. No local PK-DB server or Docker setup is required when uploading to a remote server.
 
+To switch workspace without restarting, open **Workspace › Choose workspace**. The dialog browses folders on your computer through the local service: select a folder to move into it, use **Up**, **Home**, or the path breadcrumb to move back, or paste a path and press **Go**. Folders containing `studies/` are marked **Repository** and folders containing `study.json` are marked **Study**. Choose **Open** beside a folder, or **Open this folder** for the folder shown, to start watching it. Hidden folders are not listed, and the dialog never shows file contents.
+
+The app remembers the last ten opened workspaces in its state directory. Select one under **Recent workspaces** in the **Workspace** menu or the dialog to switch directly. Folders that no longer exist are marked **Unavailable**; remove entries with **×** in the **Workspace** menu. If the last workspace is missing when `pkdb curate` starts without a path, the app opens the nearest folder containing `studies/` above the current folder, or the current folder itself.
+
 ## Select local studies
 
 The **Overview** tab of a selected study summarizes its key metadata from `study.json` (SID, name, date, licence, access, reference, and counts of groups, individuals, interventions, outputs and files), the literature reference from `reference.json` (title, authors, journal, publication date, PubMed and DOI links, and the abstract), and the creator, curators and collaborators with their scores. Curator names, titles and avatars come from the public curator roster bundled with the `pkdb` package, so they are shown offline; curators missing from the roster are shown by username with their initials. Hidden TSV tables generated from the study workbook are marked **Generated from `<Study>.xlsx`** in the file list and can only be revealed, not opened for editing; edit the workbook instead.

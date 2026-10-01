@@ -15,6 +15,7 @@
     <nav class="header-menu" aria-label="Curation settings">
       <details class="header-dropdown" name="curation-menu"><summary>Workspace</summary><div class="menu-panel">
         <h2>Workspace</h2><p id="workspace-name" class="path small">No workspace selected</p><div class="actions"><button id="workspace-open">Choose workspace</button><button id="refresh-files">Refresh files</button></div>
+        <div id="recent-menu" class="recent-section" hidden><h3 class="label">Recent workspaces</h3><ul id="recent-menu-list" class="recent-list"></ul></div>
       </div></details>
       <details class="header-dropdown" name="curation-menu"><summary>File watching <span id="watch-indicator" class="badge">Active</span></summary><div class="menu-panel">
         <h2>File watching</h2><p id="watch-status">Observing source files</p><button id="pause">Pause automatic actions</button><p class="small muted">Saved files trigger the study’s on-save action while the local service runs.</p>
@@ -43,7 +44,16 @@
     </main>
   </div>
   <dialog id="settings-dialog"><form id="settings-form"><h2>Connection settings</h2><label for="settings-endpoint">PK-DB server</label><input id="settings-endpoint" type="url" placeholder="https://beta.pk-db.com"><label for="settings-key">Personal API key</label><input id="settings-key" type="password" autocomplete="new-password" placeholder="Leave blank to keep the current key"><p class="small muted">The key stays in the local service’s memory. It is never stored in the browser.</p><label class="check"><input id="settings-offline" type="checkbox"> Work offline (no network requests)</label><div class="actions"><button type="button" data-close="settings-dialog">Cancel</button><button class="primary" type="submit">Save settings</button></div></form></dialog>
-  <dialog id="workspace-dialog"><form id="workspace-form"><h2>Choose workspace</h2><label for="workspace-path">Folder on this computer</label><input id="workspace-path" required placeholder="/path/to/pkdb_data"><p class="muted small">Choose a repository, substance folder, or individual study. Source files stay unchanged.</p><div class="actions"><button type="button" data-close="workspace-dialog">Cancel</button><button type="submit" class="primary">Open workspace</button></div></form></dialog>
+  <dialog id="workspace-dialog" aria-labelledby="workspace-title"><form id="workspace-form">
+    <h2 id="workspace-title">Choose workspace</h2>
+    <p class="muted small">Browse to a repository, substance folder, or individual study. Source files stay unchanged.</p>
+    <label for="workspace-path">Folder on this computer</label>
+    <div class="path-row"><input id="workspace-path" required placeholder="/path/to/pkdb_data" autocomplete="off" spellcheck="false"><button type="button" id="workspace-go">Go</button></div>
+    <div class="browser-nav"><button type="button" id="workspace-up" aria-label="Parent folder">↑ Up</button><button type="button" id="workspace-home">Home</button><nav id="workspace-crumbs" class="crumbs" aria-label="Shown folder"></nav></div>
+    <div class="folder-browser" aria-live="polite"><p id="workspace-kind" class="small muted folder-kind"></p><ul id="workspace-folders" class="folder-list" aria-label="Subfolders"></ul></div>
+    <div id="recent-dialog" class="recent-section" hidden><h3 class="label">Recent workspaces</h3><ul id="recent-dialog-list" class="recent-list"></ul></div>
+    <div class="actions"><button type="button" data-close="workspace-dialog">Cancel</button><button type="submit" class="primary" id="workspace-submit">Open this folder</button></div>
+  </form></dialog>
   <dialog id="upload-dialog"><form id="upload-form"><h2 id="upload-title">Review upload</h2><p id="upload-context"></p><ul id="upload-list"></ul><p class="muted small">Existing studies may be replaced. Remote publication and permission are checked by the server. Every upload validates the source first.</p><div class="actions"><button type="button" data-close="upload-dialog">Cancel</button><button type="submit" class="primary" id="confirm-upload">Validate and upload</button></div></form></dialog>
   <dialog id="retry-dialog"><form id="retry-form"><h2>Review unknown upload outcome</h2><p id="retry-context"></p><p>The previous request may have saved successfully. Inspect the server before retrying; the retry can replace the study.</p><p id="retry-link"></p><label class="check"><input id="retry-acknowledge" type="checkbox" required> I inspected the server; retry this study.</label><div class="actions"><button type="button" data-close="retry-dialog">Cancel</button><button type="submit" class="primary">Validate and retry upload</button></div></form></dialog>
   <dialog id="reference-dialog" aria-labelledby="reference-title"><form id="reference-form">

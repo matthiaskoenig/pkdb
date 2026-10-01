@@ -1,5 +1,7 @@
 # Unreleased
 
+- Choose the local curation workspace by browsing folders instead of typing a path, and switch between the last ten workspaces from the **Workspace** menu (#857). Repository and study folders are marked while browsing, missing recent folders are shown as unavailable, and a removed last workspace no longer prevents `pkdb curate` from starting.
+
 - Link uploaded studies to their PK-DB web page in the local curation app overview, detail panel, and activity list, and in `pkdb upload` output (#843). Upload responses include the study page `url` on the configured public origin.
 
 - Search vocabulary terms by partial text across all their information, including labels, descriptions, synonyms, annotations, cross references, units and choices, so autocomplete suggestions appear while typing (#844). Exact and prefix matches of identifiers, names, labels and synonyms rank first. Migration `p005vocabsearch` adds the searchable vocabulary document.

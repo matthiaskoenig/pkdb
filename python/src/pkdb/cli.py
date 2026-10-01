@@ -99,12 +99,16 @@ def main(argv=None, *, client=None) -> int:
     if args.command == "reference":
         return reference_cli.run(args, client=client)
     if args.command == "curate":
+        from pkdb.curation.engine import WorkspaceError
         from pkdb.curation.launch import run
 
         try:
             return run(
                 **{key: value for key, value in vars(args).items() if key != "command"}
             )
+        except WorkspaceError as error:
+            print(f"Unable to start curation. {error}", file=sys.stderr)
+            return 1
         except ValueError, OSError:
             print(
                 "Unable to start curation. Check the workspace, state directory, and port.",

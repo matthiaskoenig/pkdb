@@ -9,6 +9,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
+from pkdb.curation.engine import WorkspaceError
 from pkdb.references import ReferenceError
 
 MAX_BODY = 64 * 1024
@@ -187,7 +188,7 @@ class Handler(BaseHTTPRequestHandler):
                 return
             result = self._action(path, payload)
             self._reply(200, result if isinstance(result, dict) else {"ok": True})
-        except ReferenceError as error:
+        except (ReferenceError, WorkspaceError) as error:
             self._reply(400, {"error": str(error)})
         except LookupError:
             self._reply(404, {"error": "Unknown resource or study"})
@@ -217,6 +218,15 @@ class Handler(BaseHTTPRequestHandler):
             return engine.reference_action(path.rsplit("/", 1)[-1], body)
         if path == "/local/workspace":
             return engine.select_workspace(body["path"])
+        if path == "/local/workspace/forget":
+            if not isinstance(body["path"], str):
+                raise ValueError("Expected a folder path")
+            return engine.forget_workspace(body["path"])
+        if path == "/local/directories":
+            folder = body.get("path")
+            if folder is not None and not isinstance(folder, str):
+                raise ValueError("Expected a folder path")
+            return engine.list_directories(folder)
         if path == "/local/settings":
             if set(body) - {
                 "endpoint",
