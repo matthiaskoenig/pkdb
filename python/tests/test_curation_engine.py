@@ -621,3 +621,127 @@ def test_validation_exports_workbook_tables_and_marks_them_generated(
     assert "generated_from" not in files["Example2020.xlsx"]
     settle(engine)
     assert not engine.queue
+
+
+def test_recent_workspaces_are_ordered_limited_and_persisted(workspace, tmp_path):
+    engine, folder = workspace
+    root = engine.root
+    folders = []
+    for index in range(module.RECENT_LIMIT + 2):
+        candidate = tmp_path / f"workspace{index}"
+        candidate.mkdir()
+        folders.append(candidate)
+        engine.select_workspace(candidate)
+    engine.select_workspace(folders[-3])
+    recent = [item["path"] for item in engine.snapshot()["recent_workspaces"]]
+    assert len(recent) == module.RECENT_LIMIT
+    assert recent[:3] == [str(folders[-3]), str(folders[-1]), str(folders[-2])]
+    assert len(set(recent)) == len(recent)
+    assert str(root) not in recent
+    folders[-1].rmdir()
+    restarted = module.CurationEngine(
+        folders[-3], state_dir=tmp_path / "state", offline=True, start=False
+    )
+    try:
+        entries = restarted.snapshot()["recent_workspaces"]
+        assert [item["path"] for item in entries] == recent
+        assert entries[1] == {"path": str(folders[-1]), "exists": False}
+        assert entries[0]["exists"] is True
+        restarted.forget_workspace(str(folders[-1]))
+        remaining = [item["path"] for item in restarted.snapshot()["recent_workspaces"]]
+        assert str(folders[-1]) not in remaining
+        assert len(remaining) == module.RECENT_LIMIT - 1
+    finally:
+        restarted.close()
+
+
+def test_select_workspace_explains_unusable_paths(workspace, tmp_path):
+    engine, folder = workspace
+    with pytest.raises(module.WorkspaceError, match="does not exist"):
+        engine.select_workspace(tmp_path / "missing")
+    with pytest.raises(module.WorkspaceError, match="not a folder"):
+        engine.select_workspace(folder / "study.json")
+    with pytest.raises(module.WorkspaceError, match="outside"):
+        engine.select_workspace(tmp_path)
+    engine.active = "job"
+    with pytest.raises(module.WorkspaceError, match="Wait for the current job"):
+        engine.select_workspace(folder)
+
+
+def test_list_directories_classifies_and_filters_folders(workspace, tmp_path):
+    engine, folder = workspace
+    repository = tmp_path / "browse" / "pkdb_data"
+    (repository / "studies").mkdir(parents=True)
+    (tmp_path / "browse" / "Zeta").mkdir()
+    (tmp_path / "browse" / "alpha").mkdir()
+    (tmp_path / "browse" / ".git").mkdir()
+    (tmp_path / "browse" / "notes.txt").write_text("")
+    (tmp_path / "browse" / "linked").symlink_to(repository)
+    listing = engine.list_directories(str(tmp_path / "browse"))
+    assert listing["path"] == str(tmp_path / "browse")
+    assert listing["parent"] == str(tmp_path)
+    assert listing["kind"] == "folder"
+    assert listing["truncated"] is False
+    assert [(e["name"], e["kind"]) for e in listing["entries"]] == [
+        ("alpha", "folder"),
+        ("linked", "repository"),
+        ("pkdb_data", "repository"),
+        ("Zeta", "folder"),
+    ]
+    assert listing["entries"][2]["path"] == str(repository)
+    study = engine.list_directories(str(folder))
+    assert study["kind"] == "study"
+    assert engine.list_directories(str(folder.parent))["entries"][0]["kind"] == "study"
+
+
+def test_list_directories_defaults_limits_and_rejects(workspace, tmp_path, monkeypatch):
+    engine, folder = workspace
+    assert engine.list_directories()["path"] == str(engine.root)
+    assert engine.list_directories("~")["path"] == str(module.Path.home())
+    root = engine.list_directories(module.Path(engine.root).anchor)
+    assert root["parent"] is None
+    many = tmp_path / "many"
+    for index in range(5):
+        (many / f"d{index}").mkdir(parents=True)
+    monkeypatch.setattr(module, "DIRECTORY_LIMIT", 3)
+    limited = engine.list_directories(str(many))
+    assert [e["name"] for e in limited["entries"]] == ["d0", "d1", "d2"]
+    assert limited["truncated"] is True
+    with pytest.raises(module.WorkspaceError, match="absolute"):
+        engine.list_directories("relative/path")
+    with pytest.raises(module.WorkspaceError, match="does not exist"):
+        engine.list_directories(str(tmp_path / "missing"))
+    with pytest.raises(module.WorkspaceError, match="not a folder"):
+        engine.list_directories(str(folder / "study.json"))
+    engine.root = tmp_path / "removed"
+    assert engine.list_directories()["path"] == str(module.Path.home())
+
+
+def test_missing_remembered_workspace_falls_back_at_startup(
+    workspace, tmp_path, monkeypatch
+):
+    engine, folder = workspace
+    removed = tmp_path / "removed"
+    removed.mkdir()
+    engine.select_workspace(removed)
+    engine.close()
+    removed.rmdir()
+    monkeypatch.chdir(folder)
+    restarted = module.CurationEngine(
+        state_dir=tmp_path / "state", offline=True, start=False
+    )
+    try:
+        assert restarted.root == folder
+        recent = restarted.snapshot()["recent_workspaces"]
+        assert {"path": str(removed), "exists": False} in recent
+    finally:
+        restarted.close()
+
+
+def test_jobs_keep_study_name_after_workspace_switch(workspace, tmp_path):
+    engine, folder = workspace
+    engine.enqueue([row(engine)["id"]], "validate")
+    other = tmp_path / "other"
+    other.mkdir()
+    engine.select_workspace(other)
+    assert engine.snapshot()["jobs"][-1]["study_name"] == "Example"

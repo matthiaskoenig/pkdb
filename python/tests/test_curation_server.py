@@ -266,3 +266,58 @@ def test_bundled_curator_avatars_are_served_as_images():
         server.shutdown()
         server.server_close()
         thread.join(timeout=3)
+
+
+def test_folder_browsing_and_recent_workspace_actions(local_server):
+    from pkdb.curation.engine import WorkspaceError
+
+    server, engine = local_server
+    engine.list_directories.return_value = {"path": "/data", "entries": []}
+    engine.forget_workspace.return_value = {"recent_workspaces": []}
+    assert request(server, "POST", "/local/directories", {})[0] == 401
+    headers = authenticate(server)
+    assert (
+        request(
+            server, "POST", "/local/directories", {}, headers | {"X-CSRF-Token": "bad"}
+        )[0]
+        == 403
+    )
+    engine.list_directories.assert_not_called()
+    status, _, body = request(server, "POST", "/local/directories", {}, headers)
+    assert status == 200
+    assert json.loads(body)["path"] == "/data"
+    engine.list_directories.assert_called_with(None)
+    request(server, "POST", "/local/directories", {"path": "/data/studies"}, headers)
+    engine.list_directories.assert_called_with("/data/studies")
+    assert (
+        request(server, "POST", "/local/workspace/forget", {"path": "/old"}, headers)[0]
+        == 200
+    )
+    engine.forget_workspace.assert_called_once_with("/old")
+    engine.list_directories.side_effect = WorkspaceError("Folder does not exist: /x")
+    status, _, body = request(
+        server, "POST", "/local/directories", {"path": "/x"}, headers
+    )
+    assert status == 400
+    assert json.loads(body)["error"] == "Folder does not exist: /x"
+    assert request(server, "POST", "/local/directories", {"path": 3}, headers)[0] == 400
+
+
+def test_curate_cli_explains_missing_workspace(tmp_path, capsys):
+    from pkdb.cli import main
+
+    missing = tmp_path / "missing"
+    assert (
+        main(
+            [
+                "curate",
+                str(missing),
+                "--offline",
+                "--no-browser",
+                "--state-dir",
+                str(tmp_path / "state"),
+            ]
+        )
+        == 1
+    )
+    assert f"Folder does not exist: {missing}" in capsys.readouterr().err
