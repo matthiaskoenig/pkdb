@@ -14,6 +14,23 @@ python -m pip install pkdb
 
 In a uv project, use `uv add pkdb`. For just the command-line tools, use `uv tool install pkdb` and run `pkdb --help`. No source checkout is needed.
 
+### Automatic updates
+
+The client and the server share one release version. Before a command runs, `pkdb` checks PyPI at most every six hours, and immediately after it has seen a server running a newer release. When a newer release exists, `pkdb` upgrades itself with the installer that owns it (`uv tool upgrade pkdb`, `pipx upgrade pkdb`, or `pip`/`uv pip` in a virtual environment) and reruns the command with the new release. A failed or offline check continues with the installed release. Source checkouts, VCS installations, and interpreters outside a virtual environment are never modified; `pkdb` prints the manual update command instead.
+
+Run `pkdb update` to update immediately or `pkdb update --check` to only report whether an update exists. Disable automatic updates with `--no-update` or `PKDB_NO_UPDATE=1`, for example in pinned continuous-integration environments.
+
+### Environment variables
+
+| Variable | Default for |
+| --- | --- |
+| `PKDB_ENDPOINT` | Server address (`--endpoint`, `Client(endpoint=...)`, curation connection settings) |
+| `PKDB_API_KEY` | Personal API key for authenticated reads and uploads |
+| `PKDB_USER` | Expected PK-DB username (`--user`, `Client(user=...)`); uploads and the curation app stop when the API key belongs to another account |
+| `PKDB_NO_UPDATE` | Set to `1` to disable automatic updates |
+
+Explicit options and arguments always take precedence over the environment.
+
 ## Query studies and measurements
 
 All user data access and curation examples use [beta.pk-db.com](https://beta.pk-db.com). Set it as the endpoint in your environment; the client reads `PKDB_ENDPOINT` when no endpoint is passed. Public browsing works without a key:
@@ -70,7 +87,7 @@ pkdb validate /path/to/pkdb_data/studies/ExampleStudy --offline
 
 Both commands run on your machine, using a bundled vocabulary snapshot by default, and leave source files unchanged, with two exceptions that keep derived files current. A missing or mismatched PubMed `reference.json` is recreated in the study folder (see [automatic repair](reference-metadata.md#automatic-repair-during-validation-and-upload)). Hidden TSV tables are regenerated from the study workbook (see below). Store generated reports outside the study directory so they do not become source attachments. Errors identify the source file, sheet, row, and column where available. The command returns a nonzero exit code on failure. Interactive terminals show readable progress and diagnostics; redirected output defaults to JSON Lines for scripts and continuous integration.
 
-For curation, your account needs upload permission and a key with `studies:write`. To upload, set `PKDB_API_KEY` in your environment using an API key from your profile. `PKDB_ENDPOINT` supplies the default API endpoint; `--endpoint` overrides it.
+For curation, your account needs upload permission and a key with `studies:write`. To upload, set `PKDB_API_KEY` in your environment using an API key from your profile. `PKDB_ENDPOINT` supplies the default API endpoint; `--endpoint` overrides it. Set `PKDB_USER` (or pass `--user`) to confirm the key's account before any study is sent.
 
 ```bash
 export PKDB_ENDPOINT=https://beta.pk-db.com

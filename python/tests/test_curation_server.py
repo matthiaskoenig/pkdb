@@ -127,6 +127,12 @@ def test_payload_limits_paths_and_errors(local_server):
         request(server, "POST", "/local/settings", {"unexpected": True}, headers)[0]
         == 400
     )
+    engine.configure.return_value = {"ok": True}
+    assert (
+        request(server, "POST", "/local/settings", {"user": "curator"}, headers)[0]
+        == 200
+    )
+    engine.configure.assert_called_with(user="curator")
     engine.enqueue.side_effect = RuntimeError("secret-api-key")
     status, _, body = request(
         server, "POST", "/local/jobs", {"ids": [], "action": "upload"}, headers

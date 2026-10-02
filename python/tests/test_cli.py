@@ -187,9 +187,9 @@ def test_help_and_version_do_not_load_runtime_dependencies(arguments):
             "-c",
             """
 import sys
-from pkdb.cli import main
+from pkdb.cli import entry
 try:
-    main(sys.argv[1:])
+    entry()
 except SystemExit as error:
     assert error.code == 0
 else:
@@ -214,9 +214,69 @@ def test_help_describes_every_command_with_curate_first(capsys):
         main(["--help"])
     assert error.value.code == 0
     output = capsys.readouterr().out
-    assert "{curate,prepare,validate,upload,vocabulary,reference,import}" in output
-    for command in ("curate", "prepare", "validate", "upload", "vocabulary"):
+    assert (
+        "{curate,prepare,validate,upload,vocabulary,reference,import,update}" in output
+    )
+    for command in ("curate", "prepare", "validate", "upload", "vocabulary", "update"):
         line = next(
             line for line in output.splitlines() if line.startswith(f"    {command} ")
         )
         assert len(line.split()) > 2
+
+
+def test_upload_stops_when_api_key_belongs_to_another_user(
+    study_folder, vocabulary, tmp_path, capsys, monkeypatch
+):
+    from pkdb import prepare
+    from pkdb.domain.validation import PROCESSING_VERSION
+
+    lock = tmp_path / "vocabulary.lock.json"
+    vocabulary.save(lock)
+    prepared = prepare(study_folder, vocabulary=vocabulary)
+    monkeypatch.setenv("PKDB_API_KEY", "pkdb_live_secret")
+    monkeypatch.setenv("PKDB_ENDPOINT", "https://example.test")
+    monkeypatch.setenv("PKDB_USER", "expected")
+    paths = []
+
+    def handler(request):
+        paths.append((request.method, request.url.path))
+        if request.url.path == "/api/v2/curation-context":
+            return httpx2.Response(200, json={"username": "other", "can_upload": True})
+        return httpx2.Response(
+            200,
+            json={
+                "schema_version": 1,
+                "server_version": "0.10.2",
+                "processing_version": PROCESSING_VERSION,
+                "vocabulary_version": vocabulary.version,
+                "vocabulary_hash": prepared.vocabulary_hash,
+                "upload_limits": {
+                    "max_rows": 1_000_000,
+                    "max_files": 256,
+                    "max_upload_bytes": 100_000_000,
+                    "max_attachment_bytes": 100_000_000,
+                },
+            },
+        )
+
+    arguments = ["upload", str(study_folder), "--vocabulary", str(lock)]
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+        assert main([*arguments, "--format", "json"], client=transport) == 1
+    assert "'other', not the expected user 'expected'" in capsys.readouterr().out
+    assert ("PUT", f"/api/v2/studies/{prepared.study.sid}") not in paths
+    assert all(method == "GET" for method, _ in paths)
+    paths.clear()
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+        main([*arguments, "--user", "other", "--format", "json"], client=transport)
+    assert any(method == "PUT" for method, _ in paths)
+
+
+def test_update_check_reports_newer_release(monkeypatch, capsys):
+    from pkdb import update
+
+    monkeypatch.setattr(update, "target_version", lambda state, force: "99.0.0")
+    assert main(["update", "--check"]) == 0
+    assert "pkdb 99.0.0 is available" in capsys.readouterr().out
+    monkeypatch.setattr(update, "target_version", lambda state, force: None)
+    assert main(["update"]) == 0
+    assert "is the newest release" in capsys.readouterr().out

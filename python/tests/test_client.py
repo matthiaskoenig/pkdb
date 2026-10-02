@@ -7,7 +7,7 @@ import pytest
 
 from pkdb import Client, Vocabulary, prepare
 from pkdb.domain.validation import PROCESSING_VERSION
-from pkdb.errors import CompatibilityError, SourceChangedError
+from pkdb.errors import ClientError, CompatibilityError, SourceChangedError
 from pkdb.schemas.validation import StudyValidationError
 
 
@@ -402,3 +402,64 @@ def test_query_keywords_preserve_scientific_types_and_aliases():
         query_from_filters("outputs", {"value__gte": "NaN"})
     with pytest.raises(ValueError):
         export_from_filters({"substance": "apixaban"})
+
+
+def identity_transport(username, requests=None):
+    def handler(request):
+        if requests is not None:
+            requests.append(request)
+        return httpx2.Response(
+            200, json={"username": username, "can_upload": True, "studies": []}
+        )
+
+    return httpx2.Client(transport=httpx2.MockTransport(handler))
+
+
+def test_identity_uses_environment_user_and_rejects_mismatch(monkeypatch):
+    monkeypatch.setenv("PKDB_USER", "expected")
+    requests = []
+    with identity_transport("expected", requests) as transport:
+        client = Client(
+            "https://example.test", api_key="pkdb_live_key", transport=transport
+        )
+        assert client.user == "expected"
+        assert client.identity().username == "expected"
+    assert requests[0].url.params["page_size"] == "1"
+    with identity_transport("someone-else") as transport:
+        client = Client(
+            "https://example.test", api_key="pkdb_live_key", transport=transport
+        )
+        with pytest.raises(ClientError, match="someone-else") as error:
+            client.identity()
+    assert error.value.code == "user_mismatch"
+
+
+def test_explicit_user_overrides_environment(monkeypatch):
+    monkeypatch.setenv("PKDB_USER", "environment")
+    with identity_transport("explicit") as transport:
+        client = Client(
+            "https://example.test",
+            api_key="pkdb_live_key",
+            user="explicit",
+            transport=transport,
+        )
+        assert client.identity().username == "explicit"
+
+
+def test_identity_requires_api_key(monkeypatch):
+    monkeypatch.delenv("PKDB_API_KEY", raising=False)
+    with identity_transport("anyone") as transport:
+        client = Client("https://example.test", transport=transport)
+        with pytest.raises(ClientError, match="PKDB_API_KEY"):
+            client.identity()
+
+
+def test_unreachable_server_has_stable_code():
+    def handler(request):
+        raise httpx2.ConnectError("refused", request=request)
+
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+        client = Client("https://example.test", transport=transport)
+        with pytest.raises(ClientError) as error:
+            client.capabilities()
+    assert error.value.code == "unreachable"

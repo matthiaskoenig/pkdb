@@ -21,9 +21,39 @@ def _redact(value, token):
     return value
 
 
+def _update(*, check=False) -> int:
+    from pkdb.update import UpdateState, installation, target_version, upgrade
+
+    target = target_version(UpdateState(), force=True)
+    if target is None:
+        print(f"pkdb {__version__} is the newest release.")
+        return 0
+    if check:
+        print(
+            f"pkdb {target} is available (installed {__version__}). "
+            f"Run `pkdb update` or `{installation().manual}`."
+        )
+        return 0
+    return 0 if upgrade(target) else 1
+
+
+def entry() -> int:
+    """Console entry point: update outdated installations before running."""
+    from pkdb.update import automatic_update
+
+    argv = sys.argv[1:]
+    code = automatic_update(argv)
+    return main(argv) if code is None else code
+
+
 def main(argv=None, *, client=None) -> int:
     parser = argparse.ArgumentParser(prog="pkdb", description=__doc__)
     parser.add_argument("--version", action="version", version=f"pkdb {__version__}")
+    parser.add_argument(
+        "--no-update",
+        action="store_true",
+        help="Skip the automatic client update (or set PKDB_NO_UPDATE=1)",
+    )
     commands = parser.add_subparsers(
         dest="command",
         required=True,
@@ -35,6 +65,11 @@ def main(argv=None, *, client=None) -> int:
     )
     curate.add_argument("path", nargs="?", type=Path)
     curate.add_argument("--endpoint", default=os.environ.get("PKDB_ENDPOINT"))
+    curate.add_argument(
+        "--user",
+        default=os.environ.get("PKDB_USER"),
+        help="Expected PK-DB account of the API key (default: PKDB_USER)",
+    )
     curate.add_argument("--github-user")
     curate.add_argument("--repository")
     curate.add_argument("--offline", action="store_true")
@@ -63,6 +98,11 @@ def main(argv=None, *, client=None) -> int:
         command.add_argument("--overwrite-report", action="store_true")
         command.add_argument("--fail-fast", action="store_true")
         if name == "upload":
+            command.add_argument(
+                "--user",
+                default=os.environ.get("PKDB_USER"),
+                help="Expected PK-DB account of PKDB_API_KEY (default: PKDB_USER)",
+            )
             command.add_argument("--jobs", type=int, default=1)
             command.add_argument("--resume", type=Path)
         command.add_argument(
@@ -93,7 +133,18 @@ def main(argv=None, *, client=None) -> int:
 
     reference_cli.register(commands)
     import_cli.register(commands)
+    update = commands.add_parser(
+        "update",
+        help="Update pkdb to the newest release",
+        description="Update pkdb to the newest release published on PyPI.",
+    )
+    update.add_argument(
+        "--check", action="store_true", help="Only report whether an update exists"
+    )
     args = parser.parse_args(argv)
+    del args.no_update
+    if args.command == "update":
+        return _update(check=args.check)
     if args.command == "import":
         return import_cli.run(args)
     if args.command == "reference":
@@ -223,6 +274,7 @@ def main(argv=None, *, client=None) -> int:
                 folders,
                 endpoint=args.endpoint,
                 api_key=token,
+                user=args.user,
                 vocabulary=snapshot,
                 options=BatchOptions(
                     jobs=args.jobs,
@@ -427,4 +479,4 @@ def main(argv=None, *, client=None) -> int:
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    raise SystemExit(entry())

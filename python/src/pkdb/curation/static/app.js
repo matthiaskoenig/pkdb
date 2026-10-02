@@ -28,8 +28,9 @@ function option(select, value, text) { const item = el('option', text); item.val
 function render() {
   const workspace = typeof state.workspace === 'string' ? state.workspace : state.workspace?.path || '';
   $('workspace-name').textContent = workspace || 'No workspace selected';
-  $('endpoint').textContent = state.endpoint || 'Not configured'; $('account').textContent = state.account || (state.authenticated ? 'API key configured; identity unverified' : 'Not authenticated');
-  $('connection').textContent = state.offline ? 'Offline' : 'Local service connected';
+  $('endpoint').textContent = state.endpoint || 'Not configured';
+  $('account').textContent = state.account ? state.account + (state.can_upload ? '' : ' · no upload permission') : !state.authenticated ? 'Not authenticated' + (state.user ? ` (expected ${state.user})` : '') : state.user ? `Expected ${state.user}; identity unverified` : 'API key configured; identity unverified';
+  renderConnection();
   $('vocabulary').textContent = human(state.vocabulary?.status || 'Not checked') + (state.offline ? ' · server unchecked' : '');
   $('watch-indicator').textContent = state.paused ? 'Paused' : workspace ? 'Active' : 'No workspace';
   $('pause').textContent = state.paused ? 'Resume automatic actions' : 'Pause automatic actions';
@@ -39,6 +40,26 @@ function render() {
   $('scope').value = [...$('scope').options].some(o => o.value === scopeValue) ? scopeValue : '';
   renderRecent();
   renderStudies(); renderJobs(); if (current && !$('study-detail').contains(document.activeElement)) renderDetail(); else if (current) { const s = state.studies.find(s => s.id === current); if (s) $('detail-upload')?.replaceWith(uploadLine(s)); }
+}
+const connectionStates = {
+  connected: ['Connected', 'ok', 'Server and database reachable'],
+  connecting: ['Checking…', 'busy', 'Checking server and database…'],
+  error: ['Not connected', 'warn', 'Server check failed'],
+  unauthorized: ['Not signed in', 'warn', 'Server and database reachable'],
+  incompatible: ['Update required', 'warn', 'Server and database reachable'],
+  offline: ['Offline', '', 'Offline mode: no network requests'],
+  not_configured: ['Not configured', 'warn', 'No PK-DB server configured. Open Connection settings or set PKDB_ENDPOINT.'],
+  stopped: ['Service stopped', 'warn', 'The local curation service is not responding. Restart pkdb curate.'],
+};
+function renderConnection(status = state.connection || (state.offline ? 'offline' : 'connecting')) {
+  const [label, tone, detail] = connectionStates[status] || connectionStates.connecting;
+  $('connection').textContent = label; $('connection').className = `badge status ${tone}`;
+  const failed = ['error','unauthorized','incompatible'].includes(status);
+  $('connection-detail').textContent = failed && state.connection_error ? (status === 'error' ? state.connection_error : `${detail}. ${state.connection_error}`) : detail;
+  $('connection-checked').textContent = state.checked_at && (failed || status === 'connected') ? `Last checked ${new Date(state.checked_at).toLocaleTimeString()}` : '';
+  $('versions').textContent = `Client ${state.client_version || 'unknown'}` + (state.server_version ? ` · server ${state.server_version}` : '');
+  $('update-hint').hidden = !state.update_required;
+  $('update-hint').textContent = state.update_required ? `The server runs pkdb ${state.server_version}. Stop this service, run “pkdb update”, and start pkdb curate again.` : '';
 }
 function selectStudy(id) { current = id; tab = 'problems'; renderDetail(); renderStudies(); }
 function renderStudies() {
@@ -125,7 +146,7 @@ function renderJobs() { $('jobs').replaceChildren(); if (!state.jobs.length) $('
 async function jobs(ids, action) { await mutate('/local/jobs', {ids,action}, `${ids.length} ${action === 'validate' ? 'validation' : 'upload'} job(s) queued.`); }
 function reviewUpload(ids, mode = false) { if (state.offline) throw new Error('Turn off offline mode before enabling uploads.'); pendingUpload = {ids:[...ids],mode}; $('upload-title').textContent = mode ? 'Enable upload on save' : 'Review upload'; $('upload-context').textContent = `Target: ${state.endpoint || 'not configured'} · PK-DB: ${state.account || 'identity not verified'}. ${ids.length} selected ${ids.length === 1 ? 'study' : 'studies'}.`; $('upload-list').replaceChildren(); for (const id of ids) { const s = state.studies.find(s => s.id === id); $('upload-list').append(el('li', `${s?.name || id} · remote state ${s?.publication?.state || 'unknown'}`)); } $('confirm-upload').textContent = mode ? 'Enable for these studies' : 'Validate and upload'; if (mode) $('upload-context').append(document.createTextNode(' Future saved changes will validate and upload automatically to this target.')); $('upload-dialog').showModal(); }
 async function setMode(ids, mode) { if (mode === 'upload') return reviewUpload(ids, true); await mutate('/local/mode',{ids,mode},`On save: ${mode} for ${ids.length} study/studies.`); }
-async function refresh(force = false) { if (busy) return; busy = true; try { const data = await api('/local/state'); const next = JSON.stringify(data); state = {...data,studies:data.studies || [],jobs:data.jobs || []}; if (force || next !== signature) { signature = next; render(); } } finally { busy = false; } }
+async function refresh(force = false) { if (busy) return; busy = true; try { let data; try { data = await api('/local/state'); } catch (error) { if (error instanceof TypeError) { renderConnection('stopped'); signature = ''; return; } throw error; } const next = JSON.stringify(data); state = {...data,studies:data.studies || [],jobs:data.jobs || []}; if (force || next !== signature) { signature = next; render(); } } finally { busy = false; } }
 for (const id of ['study-search','scope']) $(id).addEventListener(id === 'scope' ? 'change' : 'input',renderStudies);
 $('select-all').addEventListener('change', () => { selected = $('select-all').checked ? new Set(visibleStudies().map(s => s.id)) : new Set(); if (selected.size) { current = [...selected][0]; tab = 'problems'; renderDetail(); } renderStudies(); });
 $('validate').addEventListener('click', () => run(() => jobs([...selected],'validate')));
@@ -137,10 +158,10 @@ $('pause').addEventListener('click', () => run(() => mutate('/local/pause',{paus
 $('resume').addEventListener('click', () => run(() => mutate('/local/resume',selected.size ? {ids:[...selected]} : {},'Requested reconciliation and resume.')));
 $('refresh-files').addEventListener('click', () => run(() => mutate('/local/workspace',{path:state.workspace},'Source files refreshed.')));
 $('workspace-open').addEventListener('click', () => run(openWorkspaceDialog));
-$('settings-open').addEventListener('click', () => { $('settings-endpoint').value = state.endpoint || ''; $('settings-key').value = ''; $('settings-offline').checked = !!state.offline; $('settings-dialog').showModal(); });
+$('settings-open').addEventListener('click', () => { $('settings-endpoint').value = state.endpoint || ''; $('settings-user').value = state.user || ''; $('settings-key').value = ''; $('settings-offline').checked = !!state.offline; $('settings-dialog').showModal(); });
 document.querySelectorAll('[data-close]').forEach(n => n.addEventListener('click', () => { $(n.dataset.close).close(); $('settings-key').value = ''; }));
 $('workspace-form').addEventListener('submit', event => { event.preventDefault(); run(() => switchWorkspace($('workspace-path').value.trim())); });
-$('settings-form').addEventListener('submit', event => { event.preventDefault(); run(async () => { const settings = {endpoint:$('settings-endpoint').value,offline:$('settings-offline').checked}; if ($('settings-key').value) settings.api_key = $('settings-key').value; $('settings-key').value = ''; await mutate('/local/settings',settings,'Connection settings updated.'); $('settings-dialog').close(); }); });
+$('settings-form').addEventListener('submit', event => { event.preventDefault(); run(async () => { const settings = {endpoint:$('settings-endpoint').value,user:$('settings-user').value.trim(),offline:$('settings-offline').checked}; if ($('settings-key').value) settings.api_key = $('settings-key').value; $('settings-key').value = ''; await mutate('/local/settings',settings,'Connection settings updated.'); $('settings-dialog').close(); }); });
 $('settings-dialog').addEventListener('close', () => { $('settings-key').value = ''; });
 $('upload-form').addEventListener('submit', event => { event.preventDefault(); run(async () => { if (!pendingUpload) return; const {ids,mode} = pendingUpload; $('upload-dialog').close(); pendingUpload = null; if (mode) await mutate('/local/mode',{ids,mode:'upload'},'Upload on save enabled for the reviewed selection.'); else await jobs(ids,'upload'); }); });
 document.addEventListener('keydown', event => { if (event.key === 'Escape') document.querySelectorAll('.header-dropdown[open]').forEach(menu => { menu.open = false; menu.querySelector('summary').focus(); }); });

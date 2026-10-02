@@ -24,6 +24,7 @@ def run(
     path=None,
     *,
     endpoint=None,
+    user=None,
     github_user=None,
     repository=None,
     offline=False,
@@ -39,6 +40,7 @@ def run(
     engine = CurationEngine(
         path=path,
         endpoint=endpoint,
+        user=user,
         github_user=github_user,
         repository=repository,
         offline=offline,

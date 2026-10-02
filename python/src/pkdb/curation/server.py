@@ -231,6 +231,7 @@ class Handler(BaseHTTPRequestHandler):
             if set(body) - {
                 "endpoint",
                 "api_key",
+                "user",
                 "github_user",
                 "offline",
                 "repository",

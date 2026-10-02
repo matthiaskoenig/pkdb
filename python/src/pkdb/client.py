@@ -107,6 +107,12 @@ class Capabilities(BaseModel):
     upload_report_versions: list[int] = Field(default_factory=lambda: [1])
 
 
+class Identity(BaseModel):
+    model_config = ConfigDict(extra="ignore")
+    username: str
+    can_upload: bool
+
+
 class Studies:
     def __init__(self, client: Client):
         self.client = client
@@ -133,6 +139,7 @@ class Client:
         endpoint: str | None = None,
         api_key: str | None = None,
         *,
+        user: str | None = None,
         transport=None,
         cache: VocabularyCache | None = None,
         progress: ProgressCallback | None = None,
@@ -146,6 +153,7 @@ class Client:
         self._api_key = (
             api_key if api_key is not None else os.environ.get("PKDB_API_KEY")
         )
+        self.user = (user if user is not None else os.environ.get("PKDB_USER")) or None
         self._owns_transport = transport is None
         self._transport = (
             transport
@@ -305,6 +313,7 @@ class Client:
                 )
             raise ClientError(
                 message,
+                code="unreachable",
                 persistence="unknown" if not read_only else "not_attempted",
                 stage="transfer" if not read_only else "compatibility",
             ) from None
@@ -327,7 +336,30 @@ class Client:
         value = self._model(Capabilities, self._request("GET", "/api/v2/capabilities"))
         if value.schema_version != 1:
             raise CompatibilityError(
-                "Unsupported server client-protocol version; update pkdb"
+                "Unsupported server client-protocol version; update pkdb",
+                code="unsupported_protocol",
+            )
+        from pkdb.update import UpdateState
+
+        UpdateState().note_server_version(value.server_version)
+        return value
+
+    def identity(self) -> Identity:
+        """Return the account of the API key, checked against the expected user."""
+        value = self._model(
+            Identity,
+            self._request(
+                "GET",
+                "/api/v2/curation-context",
+                headers=self._headers(required=True),
+                params={"page_size": 1},
+            ),
+        )
+        if self.user and value.username != self.user:
+            raise ClientError(
+                f"The API key belongs to PK-DB user {value.username!r}, "
+                f"not the expected user {self.user!r} (PKDB_USER)",
+                code="user_mismatch",
             )
         return value
 

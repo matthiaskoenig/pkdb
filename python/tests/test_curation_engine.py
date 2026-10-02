@@ -360,10 +360,9 @@ def test_old_connection_cannot_restore_account_after_endpoint_change(
         value.endpoint = endpoint
         value.__enter__ = Mock(return_value=value)
         value.__exit__ = Mock(return_value=False)
-        value._request.return_value.json.return_value = {
-            "username": endpoint,
-            "can_upload": True,
-        }
+        value.identity.return_value = SimpleNamespace(
+            username=endpoint, can_upload=True
+        )
         return value
 
     def vocabulary(client, **kwargs):
@@ -478,10 +477,11 @@ def test_vocabulary_retry_is_bounded_and_never_replays_unknown(
 def test_environment_connection_defaults(tmp_path, monkeypatch, explicit):
     monkeypatch.setenv("PKDB_ENDPOINT", "https://environment.example/")
     monkeypatch.setenv("PKDB_API_KEY", "environment-secret")
+    monkeypatch.setenv("PKDB_USER", "environment-user")
     state_dir = tmp_path / "state"
     state_dir.mkdir()
     (state_dir / "state.json").write_text(
-        json.dumps({"endpoint": "https://saved.example"})
+        json.dumps({"endpoint": "https://saved.example", "user": "saved-user"})
     )
     sources = tmp_path / "sources"
     sources.mkdir()
@@ -492,8 +492,12 @@ def test_environment_connection_defaults(tmp_path, monkeypatch, explicit):
         start=False,
         endpoint="https://explicit.example" if explicit else None,
         api_key="explicit-secret" if explicit else None,
+        user="explicit-user" if explicit else None,
     )
     try:
+        assert engine.user == ("explicit-user" if explicit else "environment-user")
+        assert engine.snapshot()["user"] == engine.user
+        assert engine.snapshot()["authenticated"] is True
         assert engine.endpoint == (
             "https://explicit.example" if explicit else "https://environment.example"
         )
@@ -506,6 +510,138 @@ def test_environment_connection_defaults(tmp_path, monkeypatch, explicit):
             assert secret not in (state_dir / "state.json").read_text()
     finally:
         engine.close()
+
+
+def test_saved_user_is_used_without_environment(tmp_path, monkeypatch):
+    monkeypatch.delenv("PKDB_USER", raising=False)
+    state_dir = tmp_path / "state"
+    state_dir.mkdir()
+    (state_dir / "state.json").write_text(json.dumps({"user": "saved-user"}))
+    sources = tmp_path / "sources"
+    sources.mkdir()
+    engine = module.CurationEngine(
+        sources, state_dir=state_dir, offline=True, start=False
+    )
+    try:
+        assert engine.user == "saved-user"
+    finally:
+        engine.close()
+
+
+def connection_engine(engine, monkeypatch, *, identity=None, failure=None):
+    """Point the engine at a fake server whose checks succeed or fail."""
+    engine.offline = False
+    engine.endpoint = "https://example.test"
+    engine.api_key = "key"
+    client = Mock()
+    client.__enter__ = Mock(return_value=client)
+    client.__exit__ = Mock(return_value=False)
+    client.identity.return_value = identity or SimpleNamespace(
+        username="curator", can_upload=True
+    )
+    factory = Mock(return_value=client)
+    monkeypatch.setattr(module, "Client", factory)
+
+    def vocabulary(client, **kwargs):
+        engine.server_version = "99.0.0"
+        if failure:
+            raise failure
+
+    monkeypatch.setattr(engine, "_vocabulary", vocabulary)
+    return client, factory
+
+
+def test_connection_status_reports_reachable_server(workspace, monkeypatch):
+    engine, _ = workspace
+    assert engine.snapshot()["connection"] == "offline"
+    connection_engine(engine, monkeypatch)
+    engine.checked_at = None
+    assert engine.snapshot()["connection"] == "connecting"
+    engine.connect()
+    state = engine.snapshot()
+    assert state["connection"] == "connected"
+    assert state["account"] == "curator"
+    assert state["checked_at"]
+    assert state["server_version"] == "99.0.0"
+    assert state["update_required"] is True
+    assert state["client_version"] == module.__version__
+    engine.endpoint = ""
+    assert engine.snapshot()["connection"] == "not_configured"
+
+
+@pytest.mark.parametrize(
+    "failure,status,message",
+    [
+        (
+            ClientError("PK-DB request failed", code="unreachable"),
+            "error",
+            "Cannot reach https://example.test",
+        ),
+        (
+            ClientError("rejected", status_code=503),
+            "error",
+            "database is unavailable (HTTP 503)",
+        ),
+        (
+            ClientError("rejected", status_code=401),
+            "unauthorized",
+            "rejected the API key",
+        ),
+        (
+            module.CompatibilityError(
+                "Upgrade pkdb", code="processing_version_mismatch"
+            ),
+            "incompatible",
+            "Run `pkdb update`",
+        ),
+        (
+            module.CompatibilityError("Server vocabulary changed; validate again"),
+            "error",
+            "Server vocabulary changed",
+        ),
+        (
+            ClientError("belongs to someone else", code="user_mismatch"),
+            "unauthorized",
+            "belongs to someone else",
+        ),
+    ],
+)
+def test_connection_failures_are_classified(
+    workspace, monkeypatch, failure, status, message
+):
+    engine, _ = workspace
+    connection_engine(engine, monkeypatch, failure=failure)
+    engine.account, engine.can_upload = "previous", True
+    engine.connect()
+    state = engine.snapshot()
+    assert state["connection"] == status
+    assert message in state["connection_error"]
+    assert state["account"] is None
+    assert state["can_upload"] is False
+
+
+def test_connection_checks_expected_user(workspace, monkeypatch):
+    engine, _ = workspace
+    _, factory = connection_engine(engine, monkeypatch)
+    engine.user = "expected"
+    engine.connect()
+    assert factory.call_args.kwargs["user"] == "expected"
+
+
+def test_changing_user_reconnects_and_is_saved(workspace, monkeypatch):
+    engine, _ = workspace
+    connect = Mock()
+    monkeypatch.setattr(engine, "connect", connect)
+    engine.configure(user=" curator ")
+    assert engine.user == "curator"
+    assert json.loads((engine.state_dir / "state.json").read_text())["user"] == (
+        "curator"
+    )
+    connect.assert_called_once()
+    engine.configure(user="curator")
+    connect.assert_called_once()
+    with pytest.raises(ValueError):
+        engine.configure(user=1)
 
 
 def test_reference_preview_save_and_stale_review(workspace):

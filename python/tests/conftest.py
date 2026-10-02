@@ -8,6 +8,13 @@ import pytest
 from pkdb.domain.vocabulary import MeasurementRule, SubstanceDefinition, Vocabulary
 
 
+@pytest.fixture(autouse=True)
+def isolated_environment(tmp_path_factory, monkeypatch):
+    """Keep the user's cache and PK-DB identity out of every test."""
+    monkeypatch.setenv("PKDB_CACHE_DIR", str(tmp_path_factory.mktemp("cache")))
+    monkeypatch.delenv("PKDB_USER", raising=False)
+
+
 @pytest.fixture
 def vocabulary():
     return Vocabulary(
