@@ -20,10 +20,13 @@
       <details class="header-dropdown" name="curation-menu"><summary>File watching <span id="watch-indicator" class="badge">Active</span></summary><div class="menu-panel">
         <h2>File watching</h2><p id="watch-status">Observing source files</p><button id="pause">Pause automatic actions</button><p class="small muted">Saved files trigger the study’s on-save action while the local service runs.</p>
       </div></details>
-      <details class="header-dropdown" name="curation-menu"><summary>Connection <span id="connection" class="badge">Connecting…</span></summary><div class="menu-panel connection-menu">
+      <details class="header-dropdown" name="curation-menu"><summary>Connection <span id="connection" class="badge status busy" role="status">Checking…</span></summary><div class="menu-panel connection-menu">
+        <div><span class="label">Server and database</span><strong id="connection-detail">Checking…</strong><span id="connection-checked" class="small muted"></span></div>
         <div><span class="label">Upload target</span><strong id="endpoint">Not configured</strong></div>
         <div><span class="label">PK-DB identity</span><strong id="account">Not authenticated</strong></div>
         <div><span class="label">Vocabulary</span><strong id="vocabulary">Not checked</strong></div>
+        <div><span class="label">pkdb version</span><strong id="versions"></strong></div>
+        <p id="update-hint" class="notice small" hidden></p>
         <button id="settings-open">Connection settings</button>
       </div></details>
     </nav>
@@ -43,7 +46,7 @@
       <p class="foot">Editing happens in your own applications. Validation describes the current inputs; upload results describe the snapshot sent to the displayed server.</p>
     </main>
   </div>
-  <dialog id="settings-dialog"><form id="settings-form"><h2>Connection settings</h2><label for="settings-endpoint">PK-DB server</label><input id="settings-endpoint" type="url" placeholder="https://beta.pk-db.com"><label for="settings-key">Personal API key</label><input id="settings-key" type="password" autocomplete="new-password" placeholder="Leave blank to keep the current key"><p class="small muted">The key stays in the local service’s memory. It is never stored in the browser.</p><label class="check"><input id="settings-offline" type="checkbox"> Work offline (no network requests)</label><div class="actions"><button type="button" data-close="settings-dialog">Cancel</button><button class="primary" type="submit">Save settings</button></div></form></dialog>
+  <dialog id="settings-dialog"><form id="settings-form"><h2>Connection settings</h2><label for="settings-endpoint">PK-DB server</label><input id="settings-endpoint" type="url" placeholder="https://beta.pk-db.com"><label for="settings-key">Personal API key</label><input id="settings-key" type="password" autocomplete="new-password" placeholder="Leave blank to keep the current key"><p class="small muted">The key stays in the local service’s memory. It is never stored in the browser.</p><label for="settings-user">PK-DB username (optional)</label><input id="settings-user" autocomplete="username" spellcheck="false" placeholder="Checked against the API key’s account"><p class="small muted">Defaults come from PKDB_ENDPOINT, PKDB_USER, and PKDB_API_KEY.</p><label class="check"><input id="settings-offline" type="checkbox"> Work offline (no network requests)</label><div class="actions"><button type="button" data-close="settings-dialog">Cancel</button><button class="primary" type="submit">Save settings</button></div></form></dialog>
   <dialog id="workspace-dialog" aria-labelledby="workspace-title"><form id="workspace-form">
     <h2 id="workspace-title">Choose workspace</h2>
     <p class="muted small">Browse to a repository, substance folder, or individual study. Source files stay unchanged.</p>

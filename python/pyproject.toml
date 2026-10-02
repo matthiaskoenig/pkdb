@@ -42,7 +42,7 @@ Repository = "https://github.com/matthiaskoenig/pkdb"
 Issues = "https://github.com/matthiaskoenig/pkdb/issues"
 
 [project.scripts]
-pkdb = "pkdb.cli:main"
+pkdb = "pkdb.cli:entry"
 
 [project.optional-dependencies]
 imports = [

@@ -90,7 +90,21 @@ pkdb curate /path/to/pkdb_data
 pkdb curate /path/to/pkdb_data --github-user matthiaskoenig
 ```
 
-Startup loads the endpoint from `PKDB_ENDPOINT` and the API key from `PKDB_API_KEY`. An explicit endpoint overrides the environment; a saved endpoint is the fallback when neither is provided. The key stays in service memory and is never returned to the browser. Open **Connection → Connection settings** to override the endpoint, enter an API key, or switch offline mode. Keys entered here stay in service memory; they are not saved in browser storage.
+Startup loads the endpoint from `PKDB_ENDPOINT`, the expected PK-DB username from `PKDB_USER`, and the API key from `PKDB_API_KEY`. Explicit `--endpoint` and `--user` options override the environment; saved settings are the fallback when neither is provided. The key stays in service memory and is never returned to the browser. Open **Connection → Connection settings** to override the endpoint or username, enter an API key, or switch offline mode. Keys entered here stay in service memory; they are not saved in browser storage.
+
+The **Connection** badge in the header always shows whether the PK-DB server and its database are reachable. The service checks the server every 30 seconds while it runs:
+
+| Badge | Meaning |
+| --- | --- |
+| Connected | Server and database answered; the vocabulary and API-key account were verified |
+| Checking… | The first check after startup or a settings change is running |
+| Not connected | The server cannot be reached or reports that it or its database is unavailable |
+| Not signed in | The server is reachable but rejected the API key, or the key belongs to a different account than the expected username |
+| Update required | The server's processing rules differ from this `pkdb` release; run `pkdb update` |
+| Offline / Not configured | Offline mode is on, or no server address is set |
+| Service stopped | The local `pkdb curate` process no longer responds |
+
+The menu explains the last failure, when the server was last checked, and the client and server versions. It recommends `pkdb update` when the server runs a newer release.
 
 The app requires no Node installation, Docker, or hosted frontend. It binds to loopback and opens a protected launch URL in your default browser. With `--no-browser`, open the printed URL manually. Keep the local process running while you work; press **Ctrl+C** in its terminal to stop it. Use `--state-dir /path/to/app-state` for an isolated configuration and history directory outside your study workspace.
 

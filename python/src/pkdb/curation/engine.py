@@ -11,6 +11,7 @@ from datetime import UTC, datetime
 from pathlib import Path
 from uuid import uuid4
 
+from pkdb import __version__
 from pkdb.cache import (
     VocabularyCache,
     atomic_json,
@@ -27,9 +28,13 @@ from pkdb.errors import ClientError, CompatibilityError, SourceChangedError
 from pkdb.preparation import prepare, source_hashes
 from pkdb.schemas.validation import StudyValidationError
 from pkdb.source_files import ignored_source
+from pkdb.update import newer
 
 RECENT_LIMIT = 10
 DIRECTORY_LIMIT = 2000
+HEARTBEAT_SECONDS = 30
+INCOMPATIBLE = {"processing_version_mismatch", "unsupported_protocol"}
+CONNECTION_FAILED = "Could not verify the server account or vocabulary. Check endpoint, key, and server version."
 
 
 class WorkspaceError(ValueError):
@@ -51,6 +56,35 @@ def now():
     return datetime.now(UTC).isoformat()
 
 
+def _connection_problem(error, endpoint):
+    """Classify a failed server check and explain it in actionable terms."""
+    if error.code == "user_mismatch":
+        return "unauthorized", str(error)
+    if error.code in INCOMPATIBLE:
+        return (
+            "incompatible",
+            f"{error}. Run `pkdb update` and restart the curation service.",
+        )
+    if error.status_code in {401, 403}:
+        return (
+            "unauthorized",
+            "The server rejected the API key. Check the key in Connection settings.",
+        )
+    if isinstance(error, CompatibilityError):
+        return "error", f"{error}."
+    if error.code == "unreachable":
+        return (
+            "error",
+            f"Cannot reach {endpoint}. Check the server address and your network.",
+        )
+    if error.status_code is not None and error.status_code >= 500:
+        return (
+            "error",
+            f"The PK-DB server or its database is unavailable (HTTP {error.status_code}).",
+        )
+    return "error", CONNECTION_FAILED
+
+
 def fingerprint(hashes):
     return hashlib.sha256(json.dumps(hashes, sort_keys=True).encode()).hexdigest()
 
@@ -65,6 +99,7 @@ class CurationEngine:
         offline=False,
         state_dir=None,
         api_key=None,
+        user=None,
         start=True,
     ):
         self.lock = threading.RLock()
@@ -80,6 +115,7 @@ class CurationEngine:
         except OSError, ValueError:
             saved = {}
         self.api_key = api_key or os.environ.get("PKDB_API_KEY")
+        self.user = user or os.environ.get("PKDB_USER") or saved.get("user") or ""
         configured_endpoint = (
             endpoint or os.environ.get("PKDB_ENDPOINT") or saved.get("endpoint")
         )
@@ -99,6 +135,10 @@ class CurationEngine:
         self.account = None
         self.can_upload = False
         self.connection_error = None
+        self.connection_problem = None
+        self.connecting = False
+        self.checked_at = None
+        self.server_version = None
         self.vocabulary = {"status": "offline" if offline else "not_checked"}
         self.cache = VocabularyCache(self.state_dir / "vocabulary")
         self.studies = {}
@@ -152,6 +192,7 @@ class CurationEngine:
             {
                 "workspace": str(self.root),
                 "endpoint": self.endpoint,
+                "user": self.user,
                 "github_user": self.github_user,
                 "repository": self.repository,
                 "github": self.github.data,
@@ -161,6 +202,17 @@ class CurationEngine:
                 "jobs": self.jobs,
             },
         )
+
+    def _connection_status(self):
+        if self.offline:
+            return "offline"
+        if not self.endpoint:
+            return "not_configured"
+        if self.connection_error:
+            return self.connection_problem or "error"
+        if self.connecting or self.checked_at is None:
+            return "connecting"
+        return "connected"
 
     def _context(self):
         return f"{self.root}|{self.endpoint}|{self.account or ''}"
@@ -200,9 +252,16 @@ class CurationEngine:
                     {
                         "workspace": str(self.root),
                         "endpoint": self.endpoint,
+                        "user": self.user,
+                        "authenticated": bool(self.api_key),
                         "account": self.account,
                         "can_upload": self.can_upload,
+                        "connection": self._connection_status(),
                         "connection_error": self.connection_error,
+                        "checked_at": self.checked_at,
+                        "client_version": __version__,
+                        "server_version": self.server_version,
+                        "update_required": newer(self.server_version),
                         "offline": self.offline,
                         "paused": self.paused,
                         "vocabulary": self.vocabulary,
@@ -582,18 +641,26 @@ class CurationEngine:
         self,
         endpoint=None,
         api_key=None,
+        user=None,
         github_user=None,
         offline=None,
         repository=None,
     ):
         with self.lock:
-            changed = endpoint is not None or api_key is not None or offline is not None
+            changed = (
+                endpoint is not None
+                or api_key is not None
+                or offline is not None
+                or (user is not None and user != self.user)
+            )
             if self.active and changed:
                 raise ValueError("Wait for the running job before changing connection")
             if offline is not None and not isinstance(offline, bool):
                 raise ValueError("Offline must be true or false")
             if api_key is not None and not isinstance(api_key, str):
                 raise ValueError("API key must be text")
+            if user is not None and not isinstance(user, str):
+                raise ValueError("PK-DB user must be text")
             resolved_endpoint = (
                 self.endpoint
                 if endpoint is None
@@ -615,8 +682,13 @@ class CurationEngine:
                 self.account = None
                 self.can_upload = False
                 self.connection_error = None
+                self.connection_problem = None
+                self.checked_at = None
+                self.server_version = None
                 self.vocabulary = {"status": "not_checked"}
             self.endpoint = resolved_endpoint
+            if user is not None:
+                self.user = user.strip()
             if api_key is not None:
                 self.api_key = api_key or None
             if offline is not None:
@@ -638,33 +710,49 @@ class CurationEngine:
         self.connect()
         if not self.offline and not self.stop.is_set():
             self.refresh_assignments()
+        # Keep the displayed server and database state current while the service runs.
+        while not self.stop.wait(HEARTBEAT_SECONDS):
+            with self.lock:
+                idle = not self.connecting
+            if idle:
+                self.connect()
 
     def connect(self):
         with self.lock:
             self._connection_generation += 1
             generation = self._connection_generation
-            endpoint, api_key = self.endpoint, self.api_key
+            endpoint, api_key, user = self.endpoint, self.api_key, self.user
             if self.offline or not endpoint:
                 self.vocabulary = {"status": "offline"}
+                self.connecting = False
                 return
-        account, can_upload, error = None, False, None
+            self.connecting = True
+        account, can_upload, problem = None, False, None
         try:
-            with Client(endpoint, api_key=api_key, cache=self.cache) as client:
+            with Client(
+                endpoint, api_key=api_key, user=user, cache=self.cache
+            ) as client:
                 self._vocabulary(client, generation=generation)
                 with self.lock:
                     if generation != self._connection_generation:
                         return
                 if api_key:
-                    value = client._request("GET", "/api/v2/curation-context").json()
-                    account = value["username"]
-                    can_upload = bool(value["can_upload"])
-        except ClientError, ValueError, KeyError, OSError:
-            error = "Could not verify the server account or vocabulary. Check endpoint, key, and server version."
+                    identity = client.identity()
+                    account, can_upload = identity.username, identity.can_upload
+        except ClientError as failure:
+            problem = _connection_problem(failure, endpoint)
+        except ValueError, KeyError, OSError:
+            problem = ("error", CONNECTION_FAILED)
+        finally:
+            with self.lock:
+                if generation == self._connection_generation:
+                    self.connecting = False
         with self.lock:
             if generation != self._connection_generation:
                 return
             self.account, self.can_upload = account, can_upload
-            self.connection_error = error
+            self.connection_problem, self.connection_error = problem or (None, None)
+            self.checked_at = now()
             for row in self.studies.values():
                 row["mode"] = self.modes.get(self._context(), {}).get(
                     row["id"], "validate"
@@ -672,9 +760,13 @@ class CurationEngine:
 
     def _vocabulary(self, client, *, generation=None):
         capabilities = client.capabilities()
+        with self.lock:
+            if generation is None or generation == self._connection_generation:
+                self.server_version = capabilities.server_version
         if capabilities.processing_version != PROCESSING_VERSION:
             raise CompatibilityError(
-                "Upgrade pkdb to match the server processing version"
+                "Upgrade pkdb to match the server processing version",
+                code="processing_version_mismatch",
             )
         try:
             vocabulary = self.cache.load(client.endpoint)

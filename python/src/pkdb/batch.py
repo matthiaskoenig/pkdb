@@ -195,6 +195,7 @@ def upload_many(
     endpoint: str,
     api_key: str,
     vocabulary: Vocabulary,
+    user: str | None = None,
     options: BatchOptions | None = None,
     progress: Callable[[BatchEvent], None] | None = None,
     on_result: Callable[[StudyResult], None] | None = None,
@@ -267,8 +268,10 @@ def upload_many(
         results=rows,
     )
     target = options.report or options.resume
-    with Client(endpoint, api_key=api_key, transport=transport) as api:
+    with Client(endpoint, api_key=api_key, user=user, transport=transport) as api:
         capabilities = api.capabilities()
+        if api.user:
+            api.identity()
         if (
             capabilities.processing_version != PROCESSING_VERSION
             or capabilities.vocabulary_hash != batch["vocabulary_hash"]

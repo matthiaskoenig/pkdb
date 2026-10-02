@@ -66,7 +66,7 @@ main{padding:20px 24px}
 .files .generated{display:block;font-size:11px;color:var(--muted)}
 
 /* Workspace folder browser and recent workspaces. */
-#workspace-dialog{width:min(720px,calc(100vw - 32px));max-height:calc(100vh - 32px);display:flex;flex-direction:column;padding:24px}#workspace-dialog[open]{display:flex}#workspace-form{display:flex;flex-direction:column;min-height:0}
+#workspace-dialog{width:min(720px,calc(100vw - 32px));max-height:calc(100vh - 32px);flex-direction:column;padding:24px}#workspace-dialog[open]{display:flex}#workspace-form{display:flex;flex-direction:column;min-height:0}
 #workspace-dialog h2{margin-bottom:4px}#workspace-dialog>form>p{margin:0 0 14px}
 .path-row{display:flex;gap:8px;align-items:center;margin:6px 0 10px}#workspace-dialog .path-row input{margin:0;flex:1;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
 .browser-nav{display:flex;gap:6px;align-items:center;min-width:0}.browser-nav>button{flex:none;padding:5px 10px;font-size:12px}
@@ -91,3 +91,4 @@ main{padding:20px 24px}
 @media(max-width:600px){#workspace-dialog{padding:16px}.browser-nav{flex-wrap:wrap}.crumbs{flex-basis:100%}}
 @media(min-width:601px){.study-layout td:nth-child(5) .badge{white-space:nowrap}}
 @media(max-width:600px){.study-layout td:nth-child(2){overflow-wrap:break-word;min-width:120px}}
+.badge.status::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:currentColor;margin-right:6px;vertical-align:1px}.connection-menu .small{display:block}#update-hint{margin:0}

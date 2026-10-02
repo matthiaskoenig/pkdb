@@ -15,7 +15,7 @@ export PKDB_ENDPOINT=https://beta.pk-db.com
 pkdb upload studies/ExampleStudy
 ```
 
-Preparation and validation work offline using the bundled vocabulary. Upload validates locally first and then the server validates the original files again. Set `PKDB_API_KEY` for authenticated operations and `PKDB_ENDPOINT` for the default endpoint; `--endpoint` overrides it.
+Preparation and validation work offline using the bundled vocabulary. Upload validates locally first and then the server validates the original files again. Set `PKDB_API_KEY` for authenticated operations, `PKDB_ENDPOINT` for the default endpoint, and optionally `PKDB_USER` for the expected account of the key; `--endpoint` and `--user` override them. `pkdb` updates itself from PyPI when a newer release exists; run `pkdb update` manually or disable it with `PKDB_NO_UPDATE=1`.
 
 ```python
 from pkdb import prepare

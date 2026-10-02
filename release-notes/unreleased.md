@@ -1,5 +1,11 @@
 # Unreleased
 
+- Show whether the local curation app is connected to the PK-DB server and its database in the **Connection** header badge, rechecked every 30 seconds (#860). Distinguish unreachable servers, rejected API keys, incompatible client releases, offline mode, and a stopped local service, and show the last check time and client and server versions.
+
+- Read `PKDB_ENDPOINT`, `PKDB_USER`, and `PKDB_API_KEY` as defaults in the `pkdb` command-line tools, Python client, and local curation app (#859). `PKDB_USER` or `--user` names the expected PK-DB account; uploads stop and the curation app reports a mismatch when the API key belongs to another account.
+
+- Update `pkdb` automatically when PyPI has a newer release, checked at most every six hours and immediately after seeing a newer server (#858). The installer that owns the package performs the upgrade and the command reruns with the new release. Add `pkdb update` and `pkdb update --check`; disable automatic updates with `--no-update` or `PKDB_NO_UPDATE=1`.
+
 - Choose the local curation workspace by browsing folders instead of typing a path, and switch between the last ten workspaces from the **Workspace** menu (#857). Repository and study folders are marked while browsing, missing recent folders are shown as unavailable, and a removed last workspace no longer prevents `pkdb curate` from starting.
 
 - Link uploaded studies to their PK-DB web page in the local curation app overview, detail panel, and activity list, and in `pkdb upload` output (#843). Upload responses include the study page `url` on the configured public origin.
