@@ -111,8 +111,8 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           enable-cache: true
-      - run: uv sync --python ${{ matrix.python }} --locked
-      - run: uv run --python ${{ matrix.python }} --locked pytest -q
+      - run: uv sync --python ${{ matrix.python }} --locked --all-extras
+      - run: uv run --python ${{ matrix.python }} --locked --all-extras pytest -q
       - run: uv run --python ${{ matrix.python }} --locked ruff check .
       - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
       - run: uv run --python ${{ matrix.python }} --locked ty check --python-version ${{ matrix.python }}

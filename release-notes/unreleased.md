@@ -1,5 +1,7 @@
 # Unreleased
 
+- Replace pandas with polars in the `pkdb` client (#864). Hidden TSV tables are read from study workbooks with calamine and tabulated with polars, about three times faster, and remain byte-identical to the earlier tables (8346 of 8347 tables in `pkdb_data`; one cell with a corrupted `_x005F_` escape decodes differently). R datasets are decoded into polars frames and record the polars version. A table line with more cells than its header now names the sheet and row. pandas is still installed indirectly through `pkpdutils` and the optional `rdata` reader.
+
 - Show whether the local curation app is connected to the PK-DB server and its database in the **Connection** header badge, rechecked every 30 seconds (#860). Distinguish unreachable servers, rejected API keys, incompatible client releases, offline mode, and a stopped local service, and show the last check time and client and server versions.
 
 - Read `PKDB_ENDPOINT`, `PKDB_USER`, and `PKDB_API_KEY` as defaults in the `pkdb` command-line tools, Python client, and local curation app (#859). `PKDB_USER` or `--user` names the expected PK-DB account; uploads stop and the curation app reports a mismatch when the API key belongs to another account.

@@ -194,7 +194,7 @@ except SystemExit as error:
     assert error.code == 0
 else:
     raise AssertionError("Expected help/version to exit")
-heavy = {"pandas", "numpy", "scipy", "pint", "pydantic", "httpx2", "rich"}
+heavy = {"pandas", "polars", "fastexcel", "numpy", "scipy", "pint", "pydantic", "httpx2", "rich"}
 assert not heavy.intersection(sys.modules), heavy.intersection(sys.modules)
 assert "pkdb.preparation" not in sys.modules
 assert "pkdb.curation.launch" not in sys.modules

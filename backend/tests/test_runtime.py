@@ -14,7 +14,8 @@ def test_supported_runtime_and_scientific_imports():
         "pydantic",
         "numpy",
         "scipy",
-        "pandas",
+        "polars",
+        "fastexcel",
         "pint",
         "pkpdutils.nca",
     ):

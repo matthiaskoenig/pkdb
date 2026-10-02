@@ -1,4 +1,0 @@
-# Optional environment for the API notebook, separate from the backend.
-requests
-pandas
-jupyterlab
