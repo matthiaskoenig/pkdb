@@ -1,5 +1,7 @@
 """Hidden TSV tables generated from a study's Excel workbook."""
 
+from datetime import datetime, time
+
 import openpyxl
 import pytest
 
@@ -117,3 +119,89 @@ def test_validate_creates_tsv_tables_before_validation(
     )
     assert main([*args, "--format", "json"]) == 0
     assert "tables_updated" not in json.loads(capsys.readouterr().out)
+
+
+N = None
+# Expected tables were written by the earlier pandas implementation; the polars
+# implementation must reproduce them so existing TSV files stay unchanged.
+CONVERSIONS = {
+    "integers": (
+        [["n", "t"], [1, " 7 "], [2, "+5"], [3, "007"]],
+        "n\tt\n1\t7\n2\t5\n3\t7\n",
+    ),
+    "floats": (
+        [["a", "b", "c"], [1, "1.", 1e-05], [2, ".5", 2.5], [N, "Infinity", 1e16]],
+        "a\tb\tc\n1.0\t1.0\t1e-05\n2.0\t0.5\t2.5\nNA\tinf\t1e+16\n",
+    ),
+    "negative zero": ([["a", "b"], [-0.0, -0.0], [1, 2.5]], "a\tb\n0\t0.0\n1\t2.5\n"),
+    "missing text": (
+        [["a", "b"], ["NA", "x"], ["nan", "None"], ["#N/A", "null"], [1, "N/A"]],
+        "a\tb\nNA\tx\n1.0\tNA\n",
+    ),
+    "no-break space": ([["a"], [1], ["11.4\xa0"]], "a\n1\n11.4\xa0\n"),
+    "booleans": (
+        [
+            ["a", "b", "c", "d"],
+            [True, True, "true", True],
+            [False, N, N, "true"],
+            [True, False, "FALSE", False],
+        ],
+        "a\tb\tc\td\nTrue\t1.0\tTrue\tTrue\nFalse\tNA\tNA\ttrue\nTrue\t0.0\tFalse\tFalse\n",
+    ),
+    "first equal value": (
+        [["a", "b"], [False, 0], [0, False], ["x", "x"], [True, 1]],
+        "a\tb\nFalse\t0\nFalse\t0\nx\tx\nTrue\t1\n",
+    ),
+    "dates": (
+        [
+            ["a", "b", "c", "d"],
+            [
+                datetime(2020, 1, 2),
+                datetime(2020, 1, 2, 3, 4, 5),
+                datetime(2020, 1, 2),
+                time(12, 30),
+            ],
+            [datetime(2020, 1, 3), datetime(2020, 1, 3), "x", time(1, 2, 3)],
+        ],
+        "a\tb\tc\td\n2020-01-02\t2020-01-02 03:04:05\t2020-01-02 00:00:00\t12:30:00\n"
+        "2020-01-03\t2020-01-03 00:00:00\tx\t01:02:03\n",
+    ),
+    "comments": (
+        [
+            ["# skipped line"],
+            ["a", "b#ignored", "dropped"],
+            ["# skipped as well"],
+            [1, 2, 3],
+            ["x # note", 5, 6],
+            ["# kept as an empty line"],
+            [3, 4],
+        ],
+        "a\tb\n2.0\t3.0\n4.0\tNA\n",
+    ),
+    "quoting": (
+        [["a", "b"], ["with\ttab", 'say "hi"'], ["line\nbreak", "plain"]],
+        'a\tb\n"with\ttab"\t"say ""hi"""\n"line\nbreak"\tplain\n',
+    ),
+    "names": ([["a", N, "a", 5, "a"], [1, 2, 3, 4, 5]], "a\ta.1\t5\ta.2\n1\t3\t4\t5\n"),
+}
+
+
+@pytest.mark.parametrize("rows,expected", CONVERSIONS.values(), ids=CONVERSIONS)
+def test_cells_are_converted_like_the_pandas_tables(tmp_path, rows, expected):
+    folder = tmp_path / "Case2020"
+    folder.mkdir()
+    workbook(folder, {"Tab1": [["description"], *rows]})
+    sync_tsvs(folder)
+    assert (folder / ".Case2020_Tab1.tsv").read_text(encoding="utf-8") == expected
+
+
+def test_lines_longer_than_the_header_are_reported(tmp_path):
+    folder = tmp_path / "Long2020"
+    folder.mkdir()
+    # Comments shorten the header and the first data line, as pandas read them.
+    rows = [["a", "b#c"], [1, 2, "#x"], [1, 2, 3, "#y"], [5, 6, 7, 8]]
+    workbook(folder, {"Tab1": [["description"], *rows]})
+    with pytest.raises(
+        ValueError, match="Sheet Tab1 row 4 has 3 fields, but its header has 2"
+    ):
+        sync_tsvs(folder)

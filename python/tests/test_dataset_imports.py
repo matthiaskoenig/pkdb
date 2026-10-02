@@ -26,6 +26,18 @@ def test_missing_optional_reader_has_install_instructions(monkeypatch):
         convert.rda_rows(b"", "warfarin")
 
 
+def test_r_data_frames_are_read_without_missing_values(request):
+    pytest.importorskip("rdata")
+    from pkdb.importers.datasets.convert import rda_rows
+
+    payload = (request.path.parent / "data" / "example.rda").read_bytes()
+    assert rda_rows(payload, "example") == [
+        {"id": 1, "dose": 0.5, "sex": "F", "healthy": True, "name": "a"},
+        {"id": None, "dose": None, "sex": None, "healthy": None, "name": None},
+        {"id": 3, "dose": 2.0, "sex": "M", "healthy": False, "name": "c"},
+    ]
+
+
 def finish(builder, tmp_path):
     report = builder.write(tmp_path)
     folder = next((tmp_path / "studies").iterdir())

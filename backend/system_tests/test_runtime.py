@@ -178,7 +178,7 @@ def test_container_nonroot_upload_and_graceful_shutdown(
                 name,
                 "python",
                 "-c",
-                "import os,sys,importlib.util; import numpy,scipy,pandas,pint; "
+                "import os,sys,importlib.util; import numpy,scipy,polars,fastexcel,pint; "
                 "from pkpdutils import Timecourse, nca_single; "
                 "assert os.getuid() == 10001 and sys._is_gil_enabled(); "
                 "import math; "
