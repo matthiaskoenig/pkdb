@@ -30,10 +30,12 @@ _GROUPS = {
     ),
     "format": (
         "invalid_encoding",
+        "merge_conflict",
         "missing_header",
         "unknown_column",
         "duplicate_column",
         "extra_cells",
+        "stray_text",
         "invalid_json",
         "duplicate_key",
         "not_formatted",

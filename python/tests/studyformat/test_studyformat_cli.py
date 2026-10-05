@@ -253,3 +253,45 @@ def test_validate_reports_format_1_and_format_2_studies_together(
     assert new["sid"] == "caffeine/Example" and new["study_format"] == 2
     assert new["ok"] and new["relative_path"] == "caffeine/Example"
     assert new["vocabulary_hash"] == old["vocabulary_hash"]
+
+
+def validate_json(folder, vocabulary, tmp_path):
+    lock = tmp_path / "vocabulary.json"
+    vocabulary.save(lock)
+    return main(
+        [
+            "validate",
+            str(folder),
+            "--offline",
+            "--vocabulary",
+            str(lock),
+            "--format",
+            "json",
+        ]
+    )
+
+
+def test_merge_conflict_stops_format_and_validate(
+    valid_study, sf_vocabulary, tmp_path, capsys
+):
+    path = valid_study / "outputs_Tab2.tsv"
+    header, row = path.read_text(encoding="utf-8").splitlines(keepends=True)
+    data = (
+        header
+        + "<<<<<<< HEAD\n"
+        + row
+        + "=======\n"
+        + row.replace("\t2.5\t", "\t2.6\t")
+        + ">>>>>>> feature\n"
+    ).encode()
+    path.write_bytes(data)
+    assert main(["format", str(valid_study), "--format", "json"]) == 1
+    entry = lines(capsys)[0]
+    assert [issue["code"] for issue in entry["issues"]] == ["merge_conflict"]
+    assert "resolve the git conflict" in entry["issues"][0]["message"]
+    assert entry["changes"] == []
+    assert path.read_bytes() == data
+    assert validate_json(valid_study, sf_vocabulary, tmp_path) == 1
+    result = lines(capsys)[-1]
+    assert not result["ok"]
+    assert "merge_conflict" in {issue["code"] for issue in result["report"]["issues"]}

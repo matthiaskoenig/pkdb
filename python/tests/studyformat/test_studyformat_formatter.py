@@ -47,6 +47,31 @@ def test_messy_spreadsheet_export_is_normalized(make_study, valid_files):
     assert format_folder(folder).changes == []
 
 
+def test_broken_multi_line_cell_is_left_unchanged(valid_study):
+    # A spreadsheet cell with a line break continues on a line of its own,
+    # which has no tabs and lands in the owned study column.
+    path = valid_study / "outputs_Tab2.tsv"
+    header, row = path.read_text(encoding="utf-8").splitlines(keepends=True)
+    data = (header + row[:-1] + '"Values from the text\nsee page 3"\n').encode()
+    path.write_bytes(data)
+    result = format_folder(valid_study)
+    assert not result.ok
+    assert [(i.code, i.source.row) for i in result.issues if i.source] == [
+        ("stray_text", 3)
+    ]
+    assert result.changes == []
+    assert path.read_bytes() == data
+
+
+def test_rows_with_only_the_owned_values_are_dropped(valid_study):
+    path = valid_study / "outputs_Tab2.tsv"
+    text = path.read_text(encoding="utf-8")
+    path.write_text(text + "Example\tTab2\n\t\t\tNA\n", encoding="utf-8")
+    result = format_folder(valid_study)
+    assert result.ok and result.issues == []
+    assert path.read_text(encoding="utf-8") == text
+
+
 def test_check_mode_writes_nothing(make_study, valid_files):
     # The valid study.json is already canonical; a compact copy needs rewriting.
     compact = json.dumps(json.loads(valid_files["study.json"]))
@@ -120,7 +145,9 @@ def test_subject_order_is_depth_first_with_all_first():
         b"name\tparent\n"
         b"b2\tb\nS10\ta\nb\tall\na\tall\nS2\ta\nall\t\norphan\tmissing\nx\ty\ny\tx\n"
     )
-    table, _ = load_table("subjects.tsv", data, TABLES["subjects"], None)
+    table, _ = load_table(
+        "subjects.tsv", data, TABLES["subjects"], None, study="Example"
+    )
     order = subject_order(table)
     assert sorted(order, key=order.__getitem__) == [
         "all",

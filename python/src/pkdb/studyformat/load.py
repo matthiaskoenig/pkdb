@@ -40,10 +40,12 @@ LEGACY_COLUMNS = {
 STRUCTURAL = frozenset(
     {
         "invalid_encoding",
+        "merge_conflict",
         "missing_header",
         "unknown_column",
         "duplicate_column",
         "extra_cells",
+        "stray_text",
         "invalid_json",
         "duplicate_key",
         "invalid_study_json",
@@ -114,12 +116,22 @@ def _candidates(name: str, spec: TableSpec) -> list[str]:
 
 
 def load_table(
-    file: str, data: bytes, spec: TableSpec, source: str | None
+    file: str, data: bytes, spec: TableSpec, source: str | None, *, study: str
 ) -> tuple[LoadedTable | None, list[ValidationIssue]]:
+    """Read one table; `study` and `source` are the values of the owned columns."""
     try:
         parsed = parse_tsv(data)
     except TsvError as error:
         return None, [make_issue("invalid_encoding", str(error), file=file)]
+    if parsed.conflicts:
+        return None, [
+            make_issue(
+                "merge_conflict",
+                f"Line {parsed.conflicts[0]} is a git conflict marker; resolve the git conflict and remove the markers",
+                file=file,
+                line=parsed.conflicts[0],
+            )
+        ]
     if not any(parsed.header):
         return None, [
             make_issue(
@@ -177,7 +189,8 @@ def load_table(
             )
     if issues:
         return None, issues
-    rows = []
+    owned = {"study": study, "source": source or ""}
+    rows, stray = [], []
     for line in parsed.lines:
         cells, values = {}, {}
         for column in spec.columns:
@@ -205,6 +218,29 @@ def load_table(
                 )
         if any(cells[column.name] for column in spec.columns if not column.owned):
             rows.append(Row(line.number, cells, values))
+            continue
+        # A row with the values `pkdb format` writes and nothing else is empty;
+        # other text only in owned columns would be lost when formatting.
+        unexpected = [
+            column.name
+            for column in spec.columns
+            if column.owned and cells[column.name] not in ("", owned[column.name])
+        ]
+        if unexpected:
+            name = unexpected[0]
+            stray.append(
+                make_issue(
+                    "stray_text",
+                    f"Line {line.number} has text only in the {name} column, which pkdb format writes; this is often a broken multi-line cell or a leftover of a merge",
+                    file=file,
+                    line=line.number,
+                    column=positions[name],
+                    header=name,
+                    actual=cells[name],
+                )
+            )
+    if stray:
+        return None, stray
     return LoadedTable(file, spec, source, parsed.header, rows), issues
 
 
@@ -254,6 +290,7 @@ def load_study(folder: Path) -> LoadedStudy:
             (layout.folder / table_file.name).read_bytes(),
             table_file.spec,
             table_file.source,
+            study=layout.study,
         )
         study.issues.extend(issues)
         if table is None:

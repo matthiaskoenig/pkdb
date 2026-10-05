@@ -6,6 +6,8 @@ from dataclasses import dataclass
 
 NUMBER_PATTERN = re.compile(r"[+-]?(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?")
 _DIGITS = re.compile(r"(\d+)")
+# Lines git writes around the two sides of a merge conflict.
+CONFLICT_MARKERS = ("<<<<<<<", "|||||||", "=======", ">>>>>>>")
 
 
 def parse_number(text: str) -> float | None:
@@ -66,6 +68,8 @@ class TsvLine:
 class ParsedTsv:
     header: tuple[str, ...]
     lines: tuple[TsvLine, ...]
+    # Numbers of the lines that are git conflict markers.
+    conflicts: tuple[int, ...] = ()
 
 
 def _cells(line: str) -> tuple[str, ...]:
@@ -89,6 +93,11 @@ def parse_tsv(data: bytes) -> ParsedTsv:
             TsvLine(number, _cells(line))
             for number, line in enumerate(lines[1:], start=2)
             if line.strip()
+        ),
+        tuple(
+            number
+            for number, line in enumerate(lines, start=1)
+            if line.startswith(CONFLICT_MARKERS)
         ),
     )
 
