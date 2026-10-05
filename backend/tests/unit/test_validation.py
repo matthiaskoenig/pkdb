@@ -27,6 +27,22 @@ def test_unknown_group_is_rejected(valid_study, vocabulary):
     assert "unknown_group" in codes(error)
 
 
+def test_unknown_intervention_subject_is_rejected(valid_study, vocabulary):
+    valid_study.interventions[0].subject = "missing"
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(valid_study, vocabulary)
+    issue = next(
+        issue for issue in error.value.report.issues if issue.code == "unknown_subject"
+    )
+    assert (issue.field, issue.actual) == ("subject", "missing")
+    assert issue.expected == {"defined_identifiers": ["all"]}
+
+
+def test_intervention_subject_may_name_a_group(valid_study, vocabulary):
+    valid_study.interventions[0].subject = "all"
+    assert prepare_study(valid_study, vocabulary).report.valid
+
+
 def test_cycles_are_rejected(valid_study, vocabulary):
     valid_study.groups[0].parent = "all"
     with pytest.raises(StudyValidationError) as error:
@@ -100,7 +116,7 @@ def test_individual_output_rejects_population_statistics(
     output = valid_study.measurements[0]
     output.group = None
     output.individual = "person"
-    output.statistics = Statistics(value=2, **{field: 1})
+    output.statistics = Statistics.model_validate({"value": 2, field: 1})
     with pytest.raises(StudyValidationError) as error:
         prepare_study(valid_study, vocabulary)
     assert "individual_statistics" in codes(error)

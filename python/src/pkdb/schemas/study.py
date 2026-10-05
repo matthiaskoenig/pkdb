@@ -15,6 +15,7 @@ from pydantic import (
 )
 
 from pkdb.schemas.provenance import ManualCuration, StudyProvenance
+from pkdb.schemas.review import Release, Review
 from pkdb.schemas.source import SourceLocation
 
 Number = Annotated[float, Field(strict=True, allow_inf_nan=False)]
@@ -55,6 +56,9 @@ class Metadata(Notes):
     collaborators: list[str] = Field(default_factory=list)
     licence: Literal["open", "closed"] = "closed"
     access: Literal["public", "private"] = "private"
+    issue: Annotated[int, Field(strict=True, gt=0)] | None = None
+    release: Release | None = None
+    review: Review | None = None
 
 
 class Author(Record):
@@ -114,7 +118,12 @@ class Statistics(Record):
     sd: Number | None = None
     se: Number | None = None
     cv: Number | None = None
+    gmean: Number | None = None
+    gsd: Number | None = None
+    gcv: Number | None = None
     count: Annotated[int, Field(strict=True, ge=0)] | None = None
+    error_bar: Number | None = None
+    error_type: Literal["sd", "se", "gsd"] | None = None
 
 
 class Observation(Notes):
@@ -159,9 +168,12 @@ class Individual(Subject):
 class Intervention(ScientificRecord):
     image: str | None = None
     name: Identifier
-    time: Number | str | None = None
+    time: Number | Annotated[list[Number], Field(min_length=2)] | str | None = None
     time_end: Number | None = None
+    interval: Number | None = None
+    doses: Annotated[int, Field(strict=True, ge=1)] | None = None
     time_unit: str | None = None
+    subject: Identifier | None = None
     route: str | None = None
     application: str | None = None
     form: str | None = None

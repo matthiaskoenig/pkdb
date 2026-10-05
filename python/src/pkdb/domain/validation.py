@@ -61,6 +61,7 @@ def prepare_study(
             "unknown_group": "group",
             "unknown_individual": "individual",
             "unknown_intervention": "interventions",
+            "unknown_subject": "subject",
         }
         if code in reference_fields:
             field = reference_fields[code]
@@ -69,6 +70,7 @@ def prepare_study(
                 "group": groups,
                 "individual": individuals,
                 "interventions": interventions,
+                "subject": groups.keys() | individuals.keys(),
             }[field]
             details.setdefault("category", "reference")
             details.setdefault("stage", "validate")
@@ -460,6 +462,14 @@ def prepare_study(
                     ),
                 )
     for intervention in study.interventions:
+        if intervention.subject and not (
+            intervention.subject in groups or intervention.subject in individuals
+        ):
+            issue(
+                "unknown_subject",
+                f"Unknown subject: {intervention.subject}",
+                intervention,
+            )
         if intervention.measurement_type in {"dosing", "medication"}:
             for field in ("substance", "route", "unit"):
                 if not getattr(intervention, field):

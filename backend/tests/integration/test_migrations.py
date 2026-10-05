@@ -18,7 +18,7 @@ def test_initial_schema_round_trip(session_factory):
     )
     scripts = ScriptDirectory.from_config(config)
     assert scripts.get_heads() == [SCHEMA_REVISION]
-    assert len(list(scripts.walk_revisions())) == 5
+    assert len(list(scripts.walk_revisions())) == 6
     command.check(config)
     with engine.connect() as connection:
         assert (
@@ -152,3 +152,51 @@ def test_retirement_preserves_publication_files_and_attribution(
         )
     with ingestion.file_store.open_authorized(principal, staged.id) as source:
         assert source.read() == b"preserved"
+
+
+STUDY_FORMAT_COLUMNS = {
+    "studies": {"pkdb_id", "release_date", "issue", "review_status", "review"},
+    "interventions": {
+        "gmean",
+        "gsd",
+        "gcv",
+        "error_bar",
+        "error_type",
+        "interval",
+        "doses",
+        "time_list",
+        "subject_id",
+    },
+    "observation_values": {"gmean", "gsd", "gcv", "error_bar", "error_type"},
+}
+
+
+def test_study_format_revision_round_trip_keeps_published_studies(
+    ingestion_context, valid_bundle, session_factory
+):
+    from pkdb_server.db.read import read_study
+
+    ingestion, principal = ingestion_context
+    published = ingestion.replace(valid_bundle, principal)
+    before = read_study(published.sid, principal, session_factory)
+    config = Config(str(Path(__file__).parents[2] / "alembic.ini"))
+    config.set_main_option(
+        "sqlalchemy.url",
+        session_factory.kw["bind"]
+        .url.render_as_string(hide_password=False)
+        .replace("%", "%%"),
+    )
+    command.downgrade(config, "p005vocabsearch")
+    with session_factory() as session:
+        inspector = inspect(session.connection())
+        for table, columns in STUDY_FORMAT_COLUMNS.items():
+            names = {column["name"] for column in inspector.get_columns(table)}
+            assert not columns & names
+    command.upgrade(config, "head")
+    command.check(config)
+    with session_factory() as session:
+        inspector = inspect(session.connection())
+        for table, columns in STUDY_FORMAT_COLUMNS.items():
+            names = {column["name"] for column in inspector.get_columns(table)}
+            assert columns <= names
+    assert read_study(published.sid, principal, session_factory) == before

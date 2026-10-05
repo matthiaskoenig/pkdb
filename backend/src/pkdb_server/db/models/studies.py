@@ -77,11 +77,24 @@ class Study(Identity, Timestamped, Base):
     processing_version: Mapped[str | None]
     validation_report: Mapped[dict] = mapped_column(JSONB, default=dict)
     source_manifest: Mapped[dict] = mapped_column(JSONB, default=dict)
+    pkdb_id: Mapped[str | None] = mapped_column(String(16), unique=True)
+    release_date: Mapped[Date | None]
+    issue: Mapped[int | None]
+    review_status: Mapped[str | None] = mapped_column(String(16))
+    # Reviewers and review items of `review.json`; the status has its own column.
+    review: Mapped[dict | None] = mapped_column(JSONB(none_as_null=True))
     __table_args__ = (
         UniqueConstraint("publication_id", "source_key"),
         CheckConstraint("access IN ('public', 'private')", name="access"),
         CheckConstraint("licence IN ('open', 'closed')", name="licence"),
         CheckConstraint("length(sid) > 0", name="sid"),
+        CheckConstraint("pkdb_id ~ '^PKDB[0-9]{5}$'", name="pkdb_id"),
+        CheckConstraint("(pkdb_id IS NULL) = (release_date IS NULL)", name="release"),
+        CheckConstraint("issue IS NULL OR issue > 0", name="issue"),
+        CheckConstraint(
+            "review_status IN ('draft', 'in_review', 'approved')", name="review_status"
+        ),
+        CheckConstraint("(review_status IS NULL) = (review IS NULL)", name="review"),
     )
 
 

@@ -158,7 +158,9 @@ def _scientific(data: dict, key: str, source: SourceLocation) -> dict:
         )
     result = _notes(data)
     stats = {
-        name: _numeric(result.pop(name), integer=name == "count")
+        name: clean(result.pop(name))
+        if name == "error_type"
+        else _numeric(result.pop(name), integer=name == "count")
         for name in Statistics.model_fields
         if name in result
     }

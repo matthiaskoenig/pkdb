@@ -9,6 +9,7 @@ from sqlalchemy import (
     ForeignKeyConstraint,
     Index,
     Sequence,
+    String,
     UniqueConstraint,
     case,
     func,
@@ -147,7 +148,12 @@ class ObservationValue(Owned, Base):
     sd: Mapped[float | None]
     se: Mapped[float | None]
     cv: Mapped[float | None]
+    gmean: Mapped[float | None]
+    gsd: Mapped[float | None]
+    gcv: Mapped[float | None]
     count: Mapped[int | None]
+    error_bar: Mapped[float | None]
+    error_type: Mapped[str | None] = mapped_column(String(16))
     derived_from_id: Mapped[int | None]
     derived_from_course_id: Mapped[int | None]
     __table_args__ = (
@@ -173,6 +179,7 @@ class ObservationValue(Owned, Base):
             name="representation",
         ),
         CheckConstraint("count IS NULL OR count >= 0", name="count"),
+        CheckConstraint("error_type IN ('sd', 'se', 'gsd')", name="error_type"),
     )
 
 
@@ -226,7 +233,12 @@ class Observation(Base):
         sd: Mapped[float | None]
         se: Mapped[float | None]
         cv: Mapped[float | None]
+        gmean: Mapped[float | None]
+        gsd: Mapped[float | None]
+        gcv: Mapped[float | None]
         count: Mapped[int | None]
+        error_bar: Mapped[float | None]
+        error_type: Mapped[str | None]
         derived_from_id: Mapped[int | None]
         derived_from_course_id: Mapped[int | None]
 

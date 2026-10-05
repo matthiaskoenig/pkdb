@@ -30,6 +30,13 @@ def read_study(
         return assemble_study(root, session)
 
 
+def intervention_time(row: i.Intervention) -> float | list[float] | str | None:
+    """Canonical intervention time: schedule text, a list of times or one time."""
+    if row.time_text is not None:
+        return row.time_text
+    return row.time_list if row.time_list is not None else row.time
+
+
 def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
     def rows(model):
         return list(
@@ -99,6 +106,7 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
         )
     }
     group_names = {row.id: row.name for row in groups}
+    subject_names = {row.id: row.name for row in subjects}
     individual_names = {row.id: row.name for row in individuals}
     intervention_names = {row.id: row.name for row in interventions}
     characteristic_keys = {row.id: row.key for row in characteristics}
@@ -122,7 +130,20 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
             statistics={
                 **{
                     name: getattr(row, name)
-                    for name in ("value", "mean", "median", "sd", "se", "cv", "count")
+                    for name in (
+                        "value",
+                        "mean",
+                        "median",
+                        "sd",
+                        "se",
+                        "cv",
+                        "gmean",
+                        "gsd",
+                        "gcv",
+                        "count",
+                        "error_bar",
+                        "error_type",
+                    )
                 },
                 "min": row.minimum,
                 "max": row.maximum,
@@ -227,6 +248,13 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                 name=root.name,
                 provenance=root.acquisition,
                 date=root.date,
+                issue=root.issue,
+                release=dict(pkdb_id=root.pkdb_id, date=root.release_date)
+                if root.pkdb_id is not None
+                else None,
+                review=dict(root.review, status=root.review_status)
+                if root.review is not None
+                else None,
                 creator=users[root.creator_id],
                 access=root.access,
                 licence=root.licence,
@@ -294,10 +322,13 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                 dict(
                     **science(row, intervention_keys),
                     name=row.name,
-                    time=row.time_text if row.time_text is not None else row.time,
+                    time=intervention_time(row),
                     image=row.image,
                     time_end=row.time_end,
+                    interval=row.interval,
+                    doses=row.doses,
                     time_unit=row.time_unit,
+                    subject=subject_names.get(row.subject_id),
                     route=vocab.get(row.route),
                     form=vocab.get(row.form),
                     application=vocab.get(row.application),

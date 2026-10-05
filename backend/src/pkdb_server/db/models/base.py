@@ -51,7 +51,12 @@ class Scientific:
     sd: Mapped[float | None] = mapped_column(Float)
     se: Mapped[float | None] = mapped_column(Float)
     cv: Mapped[float | None] = mapped_column(Float)
+    gmean: Mapped[float | None] = mapped_column(Float)
+    gsd: Mapped[float | None] = mapped_column(Float)
+    gcv: Mapped[float | None] = mapped_column(Float)
     count: Mapped[int | None]
+    error_bar: Mapped[float | None] = mapped_column(Float)
+    error_type: Mapped[str | None] = mapped_column(String(16))
     calculated: Mapped[bool] = mapped_column(default=False, server_default="false")
     origin: Mapped[str] = mapped_column(String(16), default="reported")
 

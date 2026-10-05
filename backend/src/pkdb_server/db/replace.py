@@ -104,6 +104,16 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
         for index, author in enumerate(study.reference.authors)
     )
     root.reference_id = reference.id
+    release, review = study.metadata.release, study.metadata.review
+    root.pkdb_id = release.pkdb_id if release else None
+    root.release_date = release.date if release else None
+    root.issue = study.metadata.issue
+    root.review_status = review.status if review else None
+    root.review = (
+        review.model_dump(mode="json", include={"reviewers", "items"})
+        if review
+        else None
+    )
     session.add_all(
         s.StudyUser(
             study_id=sid,
@@ -150,6 +160,8 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
     individual_names = {
         individual.name: individuals[individual.key] for individual in study.individuals
     }
+    # Canonical validation guarantees subject names resolve; groups win name clashes.
+    subject_names = individual_names | group_names
     observation_records = []
     for kind, subjects, identifiers in (
         ("group", study.groups, groups),
@@ -167,9 +179,13 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
             name=record.name,
             image=record.image,
             time=record.time if isinstance(record.time, (int, float)) else None,
+            time_list=record.time if isinstance(record.time, list) else None,
             time_text=record.time if isinstance(record.time, str) else None,
             time_end=record.time_end,
+            interval=record.interval,
+            doses=record.doses,
             time_unit=record.time_unit,
+            subject_id=subject_names[record.subject] if record.subject else None,
             route=node("route", record.route),
             form=node("form", record.form),
             application=node("application", record.application),
@@ -224,7 +240,12 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
         "sd",
         "se",
         "cv",
+        "gmean",
+        "gsd",
+        "gcv",
         "count",
+        "error_bar",
+        "error_type",
         "origin",
     }
     for kind, record, subject_id in observation_records:
