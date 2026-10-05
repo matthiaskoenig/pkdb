@@ -298,6 +298,17 @@ def test_many_acknowledged_warnings_are_fast(valid_study, tsv, sf_vocabulary):
     assert report.issues == []
 
 
+def test_missing_subjects_table_does_not_flood_the_report(
+    make_study, valid_files, tsv, sf_vocabulary
+):
+    files = {name: data for name, data in valid_files.items() if name != "subjects.tsv"}
+    files["timecourses_Fig1.tsv"] = tsv("timecourses", *timecourse_rows(1500))
+    report = validate_folder(make_study(files), sf_vocabulary)
+    assert not report.truncated
+    assert "missing_file" in codes(report)
+    assert "unknown_reference" not in codes(report)
+
+
 def test_max_issues(make_study, valid_files, tsv, sf_vocabulary):
     rows = [{**CMAX, "mean": "bad", "comment": str(i)} for i in range(30)]
     folder = make_study({**valid_files, "outputs_Tab2.tsv": tsv("outputs", *rows)})

@@ -14,7 +14,13 @@ from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.jsonio import JsonFileError, load_json
 from pkdb.studyformat.layout import Layout, scan_folder
 from pkdb.studyformat.models import Review, StudyMetadata
-from pkdb.studyformat.tables import REFERENCE_JSON, REVIEW_JSON, STUDY_JSON, TableSpec
+from pkdb.studyformat.tables import (
+    REFERENCE_JSON,
+    REVIEW_JSON,
+    STUDY_JSON,
+    TABLES,
+    TableSpec,
+)
 from pkdb.studyformat.text import TsvError, parse_tsv
 
 # Column names of study format 1 sheets and their format 2 replacement.
@@ -90,6 +96,8 @@ class LoadedTable:
 class LoadedStudy:
     layout: Layout
     tables: list[LoadedTable] = field(default_factory=list)
+    # Table kinds that cannot be used: the file failed to load, or a required
+    # table is missing. Nothing refers into them.
     broken: set[str] = field(default_factory=set)
     metadata: StudyMetadata | None = None
     review: Review | None = None
@@ -305,6 +313,12 @@ def load_study(folder: Path) -> LoadedStudy:
             study.broken.add(table_file.spec.kind)
         else:
             study.tables.append(table)
+    present = {table_file.spec.kind for table_file in layout.tables}
+    study.broken.update(
+        spec.kind
+        for spec in TABLES.values()
+        if spec.required and spec.kind not in present
+    )
     study.metadata = _validate(study, STUDY_JSON, StudyMetadata, "invalid_study_json")
     study.review = _validate(study, REVIEW_JSON, Review, "invalid_review_json")
     if (

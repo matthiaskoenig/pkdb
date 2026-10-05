@@ -102,6 +102,15 @@ def test_broken_subjects_table_suppresses_reference_noise(run):
     assert not any(code == "unknown_reference" for code, _, _ in found)
 
 
+def test_missing_subjects_table_suppresses_reference_noise(make_study, valid_files):
+    files = {name: data for name, data in valid_files.items() if name != "subjects.tsv"}
+    study = load_study(make_study(files))
+    assert "subjects" in study.broken
+    assert not any(
+        issue.code == "unknown_reference" for issue in check_relations(study)
+    )
+
+
 def test_subject_tree(run, tsv):
     found = run(
         **{
