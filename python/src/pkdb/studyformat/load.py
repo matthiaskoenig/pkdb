@@ -1,6 +1,6 @@
 """Read a study format 2 folder into typed tables without judging the content."""
 
-from collections.abc import Iterator
+from collections.abc import Iterator, Mapping
 from dataclasses import dataclass, field
 from difflib import get_close_matches
 from pathlib import Path
@@ -76,6 +76,14 @@ class LoadedTable:
 
     def column_index(self, name: str) -> int | None:
         return self.header.index(name) if name in self.header else None
+
+    def matching_lines(self, filters: Mapping[str, str]) -> frozenset[int]:
+        """Lines of the rows that have every cell value of a review target's `rows`."""
+        return frozenset(
+            row.line
+            for row in self.rows
+            if all(row.cells.get(key) == value for key, value in filters.items())
+        )
 
 
 @dataclass

@@ -5,6 +5,7 @@ import shlex
 from collections import defaultdict
 from collections.abc import Iterator
 from difflib import get_close_matches
+from functools import cache
 from pathlib import Path
 
 from pkdb.schemas.validation import ValidationIssue
@@ -117,6 +118,12 @@ def _references(study: LoadedStudy) -> Issues:
         )
         for kind in ("subjects", "interventions")
     }
+
+    @cache
+    def suggest(name: str, target: str) -> tuple[str, ...]:
+        # A misspelled name often repeats in many rows; match it once.
+        return tuple(get_close_matches(name, known[target], n=5, cutoff=0.6))
+
     for table in study.tables:
         for column in table.spec.columns:
             target = column.references
@@ -143,9 +150,7 @@ def _references(study: LoadedStudy) -> Issues:
                             f"{target}.tsv has no row named {name!r}",
                             column.name,
                             actual=name,
-                            candidates=get_close_matches(
-                                name, known[target], n=5, cutoff=0.6
-                            ),
+                            candidates=suggest(name, target),
                         )
 
 
@@ -422,10 +427,7 @@ def _review_rules(study: LoadedStudy) -> Issues:
                 file=REVIEW_JSON,
             )
             continue
-        if target.rows and not any(
-            all(row.cells[key] == value for key, value in target.rows.items())
-            for row in table.rows
-        ):
+        if target.rows and not table.matching_lines(target.rows):
             yield make_issue(
                 "review_target_unmatched",
                 f"Review item {item.id} no longer matches a row of {target.file}",

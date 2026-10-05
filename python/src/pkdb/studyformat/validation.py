@@ -1,6 +1,8 @@
 """Validate a study format 2 folder: layout, format, rows, relationships, vocabulary."""
 
 import re
+from collections import defaultdict
+from dataclasses import dataclass
 from pathlib import Path
 
 from pkdb.domain.vocabulary import Vocabulary
@@ -76,32 +78,55 @@ def format_issues(study: LoadedStudy) -> list[ValidationIssue]:
     return issues
 
 
-def acknowledged(issue: ValidationIssue, study: LoadedStudy) -> bool:
-    """Whether a review item acknowledges this warning; errors never are."""
-    if issue.severity != "warning" or study.review is None:
-        return False
-    for item in study.review.items:
-        if item.acknowledges != issue.code:
+@dataclass(frozen=True)
+class Acknowledgement:
+    """Where a review item acknowledges a warning; None reaches every file or line."""
+
+    file: str | None = None
+    column: str | None = None
+    lines: frozenset[int] | None = None
+
+
+def acknowledgements(study: LoadedStudy) -> dict[str, list[Acknowledgement]]:
+    """The acknowledgements of the review items by issue code.
+
+    The lines that a row filter selects are computed once per review item, not
+    once per issue, so that many acknowledged warnings stay fast.
+    """
+    result: dict[str, list[Acknowledgement]] = defaultdict(list)
+    for item in study.review.items if study.review else ():
+        if item.acknowledges is None:
             continue
         target = item.target
         if target is None or target.file is None:
+            result[item.acknowledges].append(Acknowledgement())
+            continue
+        lines = None
+        if target.rows:
+            table = study.table(target.file)
+            lines = table.matching_lines(target.rows) if table else frozenset()
+        result[item.acknowledges].append(
+            Acknowledgement(target.file, target.column, lines)
+        )
+    return result
+
+
+def acknowledged(
+    issue: ValidationIssue, acknowledgements: dict[str, list[Acknowledgement]]
+) -> bool:
+    """Whether a review item acknowledges this warning; errors never are."""
+    if issue.severity != "warning":
+        return False
+    source = issue.source
+    for target in acknowledgements.get(issue.code, ()):
+        if target.file is None:
             return True
-        source = issue.source
         if source is None or source.file != target.file:
             continue
         if target.column and source.header != target.column:
             continue
-        if target.rows:
-            table = study.table(target.file)
-            lines = {
-                row.line
-                for row in (table.rows if table else [])
-                if all(
-                    row.cells.get(key) == value for key, value in target.rows.items()
-                )
-            }
-            if source.row not in lines:
-                continue
+        if target.lines is not None and source.row not in target.lines:
+            continue
         return True
     return False
 
@@ -118,5 +143,6 @@ def validate_folder(
         *check_relations(study),
         *check_terms(study, vocabulary),
     ]
-    kept = [issue for issue in issues if not acknowledged(issue, study)]
+    known = acknowledgements(study)
+    kept = [issue for issue in issues if not acknowledged(issue, known)]
     return ValidationReport(issues=kept).finalize(max_issues)

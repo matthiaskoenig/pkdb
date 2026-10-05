@@ -2,6 +2,7 @@ import time
 
 import pytest
 
+from pkdb.domain.vocabulary import SubstanceDefinition
 from pkdb.studyformat import is_v2_folder, validate_folder
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.jsonio import dump_json
@@ -230,6 +231,71 @@ def test_decimal_comma_is_only_an_invalid_number(
     assert [issue.code for issue in validate_folder(folder, sf_vocabulary).issues] == [
         "invalid_number"
     ]
+
+
+def timecourse_rows(count, **change):
+    base = {
+        "subjects": "all",
+        "interventions": "D1",
+        "measurement": "concentration",
+        "substance": "drug",
+        "tissue": "plasma",
+        "time_unit": "h",
+        "unit": "mg/l",
+        **change,
+    }
+    return [
+        {
+            **base,
+            "label": f"series{index // 100}",
+            "time": str(index % 100),
+            "mean": "1",
+        }
+        for index in range(count)
+    ]
+
+
+def test_misspelled_substance_in_a_large_study_is_fast(valid_study, tsv, sf_vocabulary):
+    # Close matches are computed once per misspelled value, not once per row.
+    substances = tuple(
+        SubstanceDefinition(name=f"substance {index}", sid=f"s{index}")
+        for index in range(2000)
+    )
+    vocabulary = sf_vocabulary.model_copy(
+        update={"substances": (*sf_vocabulary.substances, *substances)}
+    )
+    (valid_study / "timecourses_Fig1.tsv").write_text(
+        tsv("timecourses", *timecourse_rows(20_000, substance="drugg")),
+        encoding="utf-8",
+    )
+    start = time.monotonic()
+    report = validate_folder(valid_study, vocabulary)
+    assert time.monotonic() - start < 10
+    assert "unknown_substance" in codes(report)
+
+
+def test_many_acknowledged_warnings_are_fast(valid_study, tsv, sf_vocabulary):
+    # 20,000 duplicate observations, acknowledged by one review item with a row filter.
+    rows = [{**CMAX, "mean": str(index + 1)} for index in range(20_001)]
+    (valid_study / "outputs_Tab2.tsv").write_text(
+        tsv("outputs", *rows), encoding="utf-8"
+    )
+    item = {
+        **ITEM,
+        "acknowledges": "duplicate_observation",
+        "target": {
+            "file": "outputs_Tab2.tsv",
+            "rows": {"subjects": "all", "measurement": "cmax"},
+        },
+    }
+    (valid_study / "review.json").write_text(
+        dump_json({"status": "draft", "items": [item]}), encoding="utf-8"
+    )
+    assert format_folder(valid_study).ok
+    start = time.monotonic()
+    report = validate_folder(valid_study, sf_vocabulary)
+    assert time.monotonic() - start < 10
+    assert report.issues == []
 
 
 def test_max_issues(make_study, valid_files, tsv, sf_vocabulary):

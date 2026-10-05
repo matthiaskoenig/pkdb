@@ -1,8 +1,8 @@
 """Layer 5: vocabulary terms, choices, signs, required times and units."""
 
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from difflib import get_close_matches
-from functools import lru_cache
+from functools import cache, lru_cache
 
 from pkdb.domain.normalization import UnitDimensionError, conversion
 from pkdb.domain.vocabulary import MeasurementRule, Vocabulary
@@ -83,6 +83,13 @@ def check_terms(study: LoadedStudy, vocabulary: Vocabulary) -> list[ValidationIs
     terms = vocabulary_terms(vocabulary)
     rules = vocabulary.measurement_map()
     masses = {substance.name: substance.mass for substance in vocabulary.substances}
+    ordered = {kind: sorted(values) for kind, values in terms.items()}
+
+    @cache
+    def suggest(value: str, kind: str) -> tuple[str, ...]:
+        # A misspelled term often repeats in many rows; match it once.
+        return tuple(get_close_matches(value, ordered[kind], n=10, cutoff=0.6))
+
     issues: list[ValidationIssue] = []
     for table in study.tables:
         columns = [column for column in table.spec.columns if column.vocabulary]
@@ -96,7 +103,7 @@ def check_terms(study: LoadedStudy, vocabulary: Vocabulary) -> list[ValidationIs
         for row in table.rows:
             found: list[ValidationIssue] = []
             for column in columns:
-                found.extend(_term(table, row, column, terms))
+                found.extend(_term(table, row, column, terms, suggest))
             for prefix in prefixes:
                 rule = rules.get(row.cells[f"{prefix}measurement"])
                 if rule is not None:
@@ -207,7 +214,11 @@ def _value(table: LoadedTable, row: Row, rules: dict[str, MeasurementRule]) -> I
 
 
 def _term(
-    table: LoadedTable, row: Row, column: Column, terms: dict[str, frozenset[str]]
+    table: LoadedTable,
+    row: Row,
+    column: Column,
+    terms: dict[str, frozenset[str]],
+    suggest: Callable[[str, str], tuple[str, ...]],
 ) -> Issues:
     value = row.cells[column.name]
     if not value or column.vocabulary is None:
@@ -229,9 +240,7 @@ def _term(
             column.name,
             actual=value,
             hint="Candidates are spelling suggestions, not equivalent terms.",
-            candidates=get_close_matches(
-                value, sorted(terms[column.vocabulary]), n=10, cutoff=0.6
-            ),
+            candidates=suggest(value, column.vocabulary),
         )
 
 
