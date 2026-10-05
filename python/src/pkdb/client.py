@@ -1,13 +1,10 @@
 """Synchronous, typed HTTP API with explicit offline preparation."""
 
-import json
 import math
 import os
 from contextlib import ExitStack
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-from typing import BinaryIO
-from urllib.parse import quote
 
 import httpx2
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -19,14 +16,14 @@ from pkdb.cache import (
     endpoint_root,
     parse_vocabulary,
 )
-from pkdb.domain.validation import PROCESSING_VERSION, prepare_study
+from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.errors import ClientError, CompatibilityError
-from pkdb.importers.folder import load_folder, parse_bundle
 from pkdb.preparation import (
     PreparedBundle,
+    UploadSource,
     prepare,
-    refuse_format_2_upload,
+    read_upload,
     source_snapshot,
 )
 from pkdb.progress import ProgressCallback, emit
@@ -43,7 +40,7 @@ from pkdb.schemas.responses import (
 )
 from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import ValidationReport, fail
-from pkdb.studyformat.validation import is_v2_folder
+from pkdb.studyformat.validation import is_v2_folder, study_path
 
 
 def _known_report(value: dict) -> dict:
@@ -126,7 +123,7 @@ class Studies:
     def get(self, sid: str) -> CanonicalStudy:
         return self.client._model(
             CanonicalStudy,
-            self.client._request("GET", f"/api/v2/studies/{quote(str(sid), safe='')}"),
+            self.client._request("GET", f"/api/v2/studies/{study_path(str(sid))}"),
         )
 
     def list(self, **filters) -> ResultPage[StudyResponse]:
@@ -395,8 +392,6 @@ class Client:
 
     def upload(self, study: PreparedBundle | str | Path) -> ReplacementResult:
         self.last_upload_report = None
-        if not isinstance(study, PreparedBundle) and is_v2_folder(Path(study)):
-            refuse_format_2_upload()
         emit(self.progress, "validate")
         prepared = (
             study
@@ -409,10 +404,8 @@ class Client:
         # Detect file changes and validate again against the captured vocabulary
         # before contacting the server. Never trust mutated Pydantic objects.
         with prepared.source() as source:
-            canonical = parse_bundle(source, max_rows=prepared.max_rows)
-            checked = prepare_study(canonical, prepared.vocabulary)
             return self._upload_source(
-                source, checked, prepared.vocabulary_hash, prepared.max_rows, headers
+                source, prepared.vocabulary_hash, prepared.max_rows, headers
             )
 
     def _upload_folder(self, folder, vocabulary, capabilities, before_submit):
@@ -420,20 +413,17 @@ class Client:
         from pkdb.domain.vocabulary import vocabulary_hash
 
         self.last_upload_report = None
-        if is_v2_folder(Path(folder)):
-            refuse_format_2_upload()
         emit(self.progress, "read")
         with source_snapshot(Path(folder)) as (root, hashes):
-            source = load_folder(root)
-            emit(self.progress, "parse")
-            canonical = parse_bundle(
-                source, max_rows=capabilities.upload_limits.max_rows
+            source = read_upload(
+                root,
+                vocabulary,
+                study_format=2 if is_v2_folder(root) else 1,
+                max_rows=capabilities.upload_limits.max_rows,
+                progress=self.progress,
             )
-            emit(self.progress, "validate")
-            checked = prepare_study(canonical, vocabulary)
             return self._upload_source(
                 source,
-                checked,
                 vocabulary_hash(vocabulary),
                 capabilities.upload_limits.max_rows,
                 self._headers(required=True),
@@ -446,13 +436,12 @@ class Client:
 
         return self._model(
             PublicationState,
-            self._request("GET", f"/api/v2/studies/{quote(sid, safe='')}/publication"),
+            self._request("GET", f"/api/v2/studies/{study_path(sid)}/publication"),
         )
 
     def _upload_source(
         self,
-        source,
-        checked,
+        source: UploadSource,
         vocabulary_digest,
         max_rows,
         headers,
@@ -476,16 +465,12 @@ class Client:
         if len(source.files) > limits.max_files:
             fail("file_limit", "Too many source files for this server")
         if limits.max_rows < max_rows:
-            parse_bundle(source, max_rows=limits.max_rows)
+            source.check_rows(limits.max_rows)
         sizes = [path.stat().st_size for path in source.files.values()]
         if any(size > limits.max_attachment_bytes for size in sizes):
             fail("file_limit", "Attachment exceeds the server's byte limit")
-        payloads = {
-            "study": json.dumps(source.study),
-            "reference": json.dumps(source.reference),
-        }
         if (
-            sum(sizes) + sum(len(value.encode()) for value in payloads.values())
+            sum(sizes) + len(source.study.encode()) + len(source.reference.encode())
             > limits.max_upload_bytes
         ):
             fail("file_limit", "Study bundle exceeds the server's upload byte limit")
@@ -496,27 +481,11 @@ class Client:
             }
         )
         with ExitStack() as stack:
-            parts: list[tuple[str, tuple[None, str] | tuple[str, BinaryIO, str]]] = [
-                (name, (None, value)) for name, value in payloads.items()
-            ]
-            parts.extend(
-                (
-                    "files",
-                    (
-                        name,
-                        stack.enter_context(path.open("rb")),
-                        "application/octet-stream",
-                    ),
-                )
-                for name, path in source.files.items()
-            )
+            parts = source.parts(stack)
             if before_submit:
-                before_submit(checked)
+                before_submit(source.prepared)
             response = self._request(
-                "PUT",
-                f"/api/v2/studies/{quote(checked.study.sid, safe='')}",
-                headers=headers,
-                files=parts,
+                "PUT", source.upload_path, headers=headers, files=parts
             )
         try:
             body = response.json()
@@ -542,7 +511,7 @@ class Client:
                 persistence="unknown",
                 stage="save",
             ) from None
-        if result.sid != checked.study.sid:
+        if result.sid != source.prepared.study.sid:
             raise ClientError(
                 "Server did not confirm the uploaded study identifier",
                 persistence="unknown",

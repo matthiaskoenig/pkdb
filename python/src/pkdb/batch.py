@@ -12,7 +12,6 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any, TypedDict
-from urllib.parse import quote
 
 from pkdb.cache import atomic_json, endpoint_root
 from pkdb.client import Client
@@ -20,8 +19,15 @@ from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import Vocabulary, vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError
 from pkdb.preparation import source_hashes
-from pkdb.references import ReferenceResolver, sync_reference
+from pkdb.references import (
+    ReferenceError,
+    ReferenceResolver,
+    normalize_doi,
+    normalize_pmid,
+    sync_reference,
+)
 from pkdb.schemas.validation import StudyValidationError
+from pkdb.studyformat.validation import is_v2_folder, study_label, study_path
 from pkdb.tsv import sync_tsvs
 
 
@@ -146,7 +152,7 @@ def _worker(
                     ok=True,
                     persistence="created" if uploaded.created else "replaced",
                     url=uploaded.url
-                    or f"{endpoint}/api/v1/studies/{quote(uploaded.sid, safe='')}/",
+                    or f"{endpoint}/api/v1/studies/{study_path(uploaded.sid)}/",
                 )
                 if api.last_upload_report:
                     result.update(
@@ -189,6 +195,39 @@ def _worker(
             events.put((slot, index, "result", redact(result, token)))
 
 
+def _identity(folder: Path) -> tuple[str | None, str | None]:
+    """The study sid and publication key of a folder, read leniently.
+
+    A study format 2 study is identified by its location `<substance>/<name>`
+    and its publication by the PubMed ID or the normalized DOI in study.json;
+    a format 1 study by the sid and reference in study.json. Unreadable values
+    are None; the upload reports them in full.
+    """
+    try:
+        data = json.loads((folder / "study.json").read_text())
+    except ValueError, OSError:
+        data = None
+    if not isinstance(data, dict):
+        data = {}
+    reference = data.get("reference")
+    if is_v2_folder(folder):
+        key = None
+        if isinstance(reference, dict):
+            try:
+                if reference.get("pmid") is not None:
+                    key = normalize_pmid(reference["pmid"])
+                elif reference.get("doi") is not None:
+                    key = normalize_doi(reference["doi"])
+            except ReferenceError:
+                key = None
+        return study_label(folder), key
+    sid = data.get("sid")
+    return (
+        None if sid is None else str(sid),
+        None if reference is None else str(reference),
+    )
+
+
 def upload_many(
     folders: list[Path],
     *,
@@ -229,18 +268,11 @@ def upload_many(
     sids = set()
     references = set()
     for index, path in enumerate(paths):
-        try:
-            data = json.loads((Path(path) / "study.json").read_text())
-            sid = str(data["sid"])
-        except ValueError, OSError, KeyError, TypeError:
-            # The runner produces the full source validation diagnostic.
-            data, sid = {}, None
+        sid, key = _identity(Path(path))
         if sid is not None and sid in sids:
             raise ValueError(f"Duplicate study SID: {sid}")
         sids.add(sid)
-        reference = data.get("reference")
-        if reference is not None:
-            key = str(reference)
+        if key is not None:
             if key in references:
                 raise ValueError(f"Multiple studies claim reference {key}")
             references.add(key)

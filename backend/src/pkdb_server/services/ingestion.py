@@ -3,8 +3,9 @@
 import hashlib
 import time
 from datetime import UTC, datetime
+from pathlib import Path
 
-from sqlalchemy import select, text
+from sqlalchemy import or_, select, text
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -15,8 +16,10 @@ from pkdb.importers.folder import parse_bundle
 from pkdb.schemas.prepared import PreparedStudy
 from pkdb.schemas.replacement import ReplacementResult
 from pkdb.schemas.security import Principal
-from pkdb.schemas.source import SourceBundle
+from pkdb.schemas.source import SourceBundle, SourceLocation
+from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import fail
+from pkdb.studyformat.validation import prepare_folder
 from pkdb_server.config import Settings
 from pkdb_server.db import replace
 from pkdb_server.db.bootstrap import VOCABULARY_LOCK, load_vocabulary
@@ -38,6 +41,64 @@ class PublicationConflict(ValueError):
 
 def sid_lock(sid: str) -> int:
     return int.from_bytes(hashlib.sha256(sid.encode()).digest()[:8], "big", signed=True)
+
+
+def stored_study(
+    session: Session, study: CanonicalStudy, *, lock: bool = False
+) -> Study | None:
+    """The stored study that an upload replaces, or None for a new study.
+
+    That is the study with the same sid. A released study not yet stored under
+    its sid takes over the study stored under its PKDB identifier, as sid
+    (study format 1) or as `pkdb_id` (a renamed folder); the caller renames it.
+    A PKDB identifier names at most one study.
+    """
+
+    def rows(*conditions):
+        statement = select(Study).where(*conditions).order_by(Study.sid)
+        return session.scalars(statement.with_for_update() if lock else statement).all()
+
+    release = study.metadata.release
+    pkdb_id = release.pkdb_id if release is not None else None
+    root = next(iter(rows(Study.sid == study.sid)), None)
+    if root is None and pkdb_id is not None:
+        claimed = rows(or_(Study.sid == pkdb_id, Study.pkdb_id == pkdb_id))
+        if len(claimed) > 1:
+            fail(
+                "duplicate_pkdb_id",
+                f"{pkdb_id} identifies more than one stored study "
+                f"({', '.join(row.sid for row in claimed)}); "
+                "an administrator must remove one of them",
+                SourceLocation(file="study.json", path=("release", "pkdb_id")),
+                field="release.pkdb_id",
+            )
+        root = next(iter(claimed), None)
+    others = [] if root is None else [Study.id != root.id]
+    if pkdb_id is not None:
+        other = session.scalar(
+            select(Study.sid).where(
+                or_(Study.sid == pkdb_id, Study.pkdb_id == pkdb_id), *others
+            )
+        )
+        if other is not None:
+            fail(
+                "duplicate_pkdb_id",
+                f"{pkdb_id} already identifies the study {other}; "
+                "each release has its own PKDB identifier",
+                SourceLocation(file="study.json", path=("release", "pkdb_id")),
+                field="release.pkdb_id",
+            )
+    renamed = session.scalar(
+        select(Study.sid).where(Study.pkdb_id == study.sid, *others)
+    )
+    if renamed is not None:
+        fail(
+            "duplicate_pkdb_id",
+            f"{study.sid} is now the study {renamed}; upload its study format 2 folder",
+            SourceLocation(file="study.json", path=("sid",)),
+            field="sid",
+        )
+    return root
 
 
 class IngestionService:
@@ -100,23 +161,58 @@ class IngestionService:
             if vocabulary_hash(load_vocabulary(session)) != expected_vocabulary_hash:
                 raise PublicationConflict("vocabulary_mismatch")
 
-    def validate(self, bundle: SourceBundle, principal: Principal) -> PreparedStudy:
-        if len(bundle.files) > self.settings.upload_max_files:
-            fail("file_limit", "Too many source files")
-        study = parse_bundle(bundle, max_rows=self.settings.upload_max_rows)
+    def validate(
+        self, source: SourceBundle | Path, principal: Principal
+    ) -> PreparedStudy:
+        """Prepare a bundle or a study format 2 folder that the principal may write.
+
+        A study format 2 folder is prepared as the client prepares it, with
+        every validation layer. All its files except study.json and
+        reference.json must be files of the study.
+        """
+        if isinstance(source, Path):
+            with self.session_factory() as session:
+                vocabulary = load_vocabulary(session)
+            prepared = prepare_folder(
+                source,
+                vocabulary,
+                max_rows=self.settings.upload_max_rows,
+                max_files=self.settings.upload_max_files,
+            )
+            study = prepared.study
+            # Files that the layout ignores, such as the generated workbook.
+            unexpected = {path.name for path in source.iterdir()} - {
+                "study.json",
+                "reference.json",
+                *(item.name for item in study.attachments),
+            }
+            if unexpected:
+                name = min(unexpected)
+                fail(
+                    "invalid_filename",
+                    f"{name} is not a file of the study; send the files that "
+                    "pkdb validate reads",
+                    SourceLocation(file=name),
+                )
+        else:
+            if len(source.files) > self.settings.upload_max_files:
+                fail("file_limit", "Too many source files")
+            study = parse_bundle(source, max_rows=self.settings.upload_max_rows)
+            prepared = None
         with self.session_factory() as session:
             current = self._principal(session, principal)
-            root = session.scalar(select(Study).where(Study.sid == study.sid))
+            root = stored_study(session, study)
             if root is None:
                 authorize_creation(current)
             else:
                 authorize(current, "write", study_access(root, session))
-            vocabulary = load_vocabulary(session)
-        return prepare_study(study, vocabulary)
+            if prepared is None:
+                prepared = prepare_study(study, load_vocabulary(session))
+        return prepared
 
     def replace(
         self,
-        bundle: SourceBundle,
+        source: SourceBundle | Path,
         principal: Principal,
         *,
         expected_vocabulary_hash: str | None = None,
@@ -126,16 +222,21 @@ class IngestionService:
         timings = timings if timings is not None else {}
         started = time.monotonic()
         self.check_compatibility(expected_vocabulary_hash, expected_processing_version)
-        prepared = self.validate(bundle, principal)
+        prepared = self.validate(source, principal)
         timings["validation"] = time.monotonic() - started
         started = time.monotonic()
         staged = []
         expected = {
             attachment.name: attachment for attachment in prepared.study.attachments
         }
-        for name, path in bundle.files.items():
-            with path.open("rb") as source:
-                file = self.file_store.stage(principal, name, source)
+        files = (
+            source.files
+            if isinstance(source, SourceBundle)
+            else {name: source / name for name in expected}
+        )
+        for name, path in files.items():
+            with path.open("rb") as stream:
+                file = self.file_store.stage(principal, name, stream)
             attachment = expected[name]
             if file.digest != attachment.sha256 or file.size != attachment.size:
                 fail("source_changed", "Source file changed after validation")
@@ -168,10 +269,15 @@ class IngestionService:
                     text("SELECT pg_advisory_xact_lock_shared(:key)"),
                     {"key": VOCABULARY_LOCK},
                 )
-                session.execute(
-                    text("SELECT pg_advisory_xact_lock(:key)"),
-                    {"key": sid_lock(study.sid)},
-                )
+                # A release locks its PKDB identifier too: a format 1 upload
+                # under that sid and a rename of the released study serialize.
+                # A fixed order avoids deadlocks.
+                release = study.metadata.release
+                names = {study.sid, *([release.pkdb_id] if release else [])}
+                for key in sorted(sid_lock(name) for name in names):
+                    session.execute(
+                        text("SELECT pg_advisory_xact_lock(:key)"), {"key": key}
+                    )
                 self.check_compatibility(
                     expected_vocabulary_hash,
                     expected_processing_version,
@@ -187,10 +293,9 @@ class IngestionService:
                 version = session.get(VocabularyVersion, 1)
                 if version is None or version.version != prepared.vocabulary_version:
                     raise PublicationConflict("vocabulary_changed")
-                root = session.scalar(
-                    select(Study).where(Study.sid == study.sid).with_for_update()
-                )
+                root = stored_study(session, study, lock=True)
                 created = root is None
+                renamed_from = None
                 if root is None:
                     authorize_creation(current)
                     root = Study(
@@ -207,6 +312,10 @@ class IngestionService:
                             "Only administrators change licence",
                             code="licence_change_forbidden",
                         )
+                    if root.sid != study.sid:
+                        # Rename on re-upload: the study keeps its row and data.
+                        renamed_from, root.sid = root.sid, study.sid
+                        session.flush()
                 from pkdb_server.db.publications import assign_publication
 
                 assign_publication(session, root, study)
@@ -291,6 +400,7 @@ class IngestionService:
             return ReplacementResult(
                 sid=study.sid,
                 created=created,
+                renamed_from=renamed_from,
                 digest=study.source_digest,
                 counts={
                     name: len(getattr(study, name))

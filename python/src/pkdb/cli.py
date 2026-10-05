@@ -212,15 +212,6 @@ def main(argv=None, *, client=None) -> int:
                 )
             return 0
         folders = study_folders(args.folder)
-        if args.command == "upload":
-            if format2 := [folder for folder in folders if is_v2_folder(folder)]:
-                labels = [study_label(folder) for folder in format2]
-                listed = ", ".join(labels[:10])
-                if len(labels) > 10:
-                    listed += f" and {len(labels) - 10} more"
-                raise ValueError(
-                    f"pkdb {args.command} does not support study format 2 yet: {listed}. Run pkdb validate instead."
-                )
         if args.report:
             if args.output and args.report.resolve() == args.output.resolve():
                 raise ValueError("Use different paths for --output and --report")

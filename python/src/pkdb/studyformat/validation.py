@@ -10,6 +10,7 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import quote
 
 from pkdb.domain.validation import prepare_study
 from pkdb.domain.vocabulary import Vocabulary
@@ -40,6 +41,15 @@ def study_label(folder: Path) -> str:
     """The `<substance>/<name>` label of a study folder, independent of how the path was spelled."""
     folder = Path(folder).resolve()
     return f"{folder.parent.name}/{folder.name}"
+
+
+def study_path(sid: str) -> str:
+    """The URL path of a study: its sid with each segment percent-encoded.
+
+    A study format 2 sid `<substance>/<name>` takes two path segments, a
+    study format 1 sid one.
+    """
+    return "/".join(quote(part, safe="") for part in sid.split("/"))
 
 
 def is_v2_folder(folder: Path) -> bool:
@@ -210,6 +220,21 @@ def validate_folder(
     return _check(load_study(Path(folder)), vocabulary, max_issues)[1]
 
 
+def check_limits(
+    study: LoadedStudy, *, max_rows: int | None = None, max_files: int | None = None
+) -> None:
+    """Fail with `file_limit` or `row_limit` when a study exceeds upload limits.
+
+    `max_rows` limits the table rows and `max_files` the files besides
+    study.json and reference.json.
+    """
+    files = study.layout.files - {STUDY_JSON, REFERENCE_JSON}
+    if max_files is not None and len(files) > max_files:
+        fail("file_limit", f"The study has more than {max_files} files")
+    if max_rows is not None and sum(len(t.rows) for t in study.tables) > max_rows:
+        fail("row_limit", f"The study tables have more than {max_rows} rows")
+
+
 def prepare_folder(
     folder: Path,
     vocabulary: Vocabulary,
@@ -226,11 +251,7 @@ def prepare_folder(
     study.json and reference.json.
     """
     study = load_study(Path(folder))
-    files = study.layout.files - {STUDY_JSON, REFERENCE_JSON}
-    if max_files is not None and len(files) > max_files:
-        fail("file_limit", f"The study has more than {max_files} files")
-    if max_rows is not None and sum(len(t.rows) for t in study.tables) > max_rows:
-        fail("row_limit", f"The study tables have more than {max_rows} rows")
+    check_limits(study, max_rows=max_rows, max_files=max_files)
     prepared, report = _check(study, vocabulary, max_issues)
     if prepared is None:
         raise StudyValidationError(report)

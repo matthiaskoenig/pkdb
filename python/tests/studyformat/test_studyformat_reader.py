@@ -152,6 +152,20 @@ def test_reference_sid_is_the_doi_without_a_pmid(valid_study):
     assert read(valid_study).reference.sid == "10.1234/abc"
 
 
+def test_reference_sid_is_the_normalized_doi(valid_study):
+    # DOIs are case-insensitive; the server matches publications by the lowercase form.
+    data = study_json(valid_study)
+    data["reference"] = {"doi": "10.1234/ABC.Def"}
+    (valid_study / "study.json").write_text(dump_json(data), encoding="utf-8")
+    reference = {"sid": "x", "name": "Example", "doi": "10.1234/ABC.Def"}
+    (valid_study / "reference.json").write_text(dump_json(reference), encoding="utf-8")
+    study = read(valid_study)
+    assert (study.reference.sid, study.reference.doi) == (
+        "10.1234/abc.def",
+        "10.1234/ABC.Def",
+    )
+
+
 def test_reference_sid_follows_study_json_not_the_enriched_snapshot(valid_study):
     # study.json names the publication; a PubMed ID found later in the snapshot
     # does not change the identifier of a study that names its DOI.

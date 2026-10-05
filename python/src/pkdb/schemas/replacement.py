@@ -11,6 +11,8 @@ class ReplacementResult(BaseModel):
     warnings: list[ValidationIssue] = Field(default_factory=list)
     # Web page of the study on the server's public origin; absent for older servers.
     url: str | None = None
+    # The former sid of a released study that the upload renamed.
+    renamed_from: str | None = None
 
 
 class PublicationState(BaseModel):

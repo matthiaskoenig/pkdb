@@ -7,6 +7,7 @@ from pkdb.studyformat.validation import (
     is_v2_folder,
     prepare_folder,
     study_label,
+    study_path,
     validate_folder,
 )
 
@@ -17,5 +18,6 @@ __all__ = [
     "prepare_folder",
     "read_study",
     "study_label",
+    "study_path",
     "validate_folder",
 ]

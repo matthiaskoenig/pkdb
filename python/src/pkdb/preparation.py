@@ -1,14 +1,15 @@
 """Prepare unchanged study folders using the same engine as the server."""
 
 import hashlib
+import json
 import shutil
-from collections.abc import Mapping
-from contextlib import contextmanager
+from collections.abc import Iterator, Mapping
+from contextlib import ExitStack, contextmanager
 from dataclasses import dataclass
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import MappingProxyType
-from typing import NoReturn
+from typing import BinaryIO
 
 from pkdb.cache import bundled_vocabulary
 from pkdb.domain.validation import prepare_study
@@ -21,16 +22,15 @@ from pkdb.schemas.source import SourceBundle, SourceLocation
 from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import ValidationReport, fail
 from pkdb.source_files import ignored_source
-from pkdb.studyformat.validation import is_v2_folder, prepare_folder
+from pkdb.studyformat.load import load_study
+from pkdb.studyformat.validation import (
+    check_limits,
+    is_v2_folder,
+    prepare_folder,
+    study_path,
+)
 
-
-def refuse_format_2_upload() -> NoReturn:
-    """Uploads of study format 2 folders follow in a later release."""
-    fail(
-        "unsupported_study_format",
-        "Uploading study format 2 is not supported yet; check the folder with pkdb validate or pkdb prepare",
-        SourceLocation(file="study.json"),
-    )
+type Part = tuple[str, tuple[None, str] | tuple[str, BinaryIO, str]]
 
 
 def study_folders(path: str | Path) -> list[Path]:
@@ -88,6 +88,107 @@ def source_snapshot(folder: Path):
 
 
 @dataclass(frozen=True)
+class UploadSource:
+    """The parts of a study upload, read from a private snapshot of its folder.
+
+    `study` and `reference` are the texts of the study and reference parts:
+    study format 2 sends the exact file text, study format 1 the parsed objects
+    as JSON. `files` maps the attachment names to their files in the snapshot
+    at `root`. `prepared` is the snapshot prepared again, so the upload sends
+    what was checked.
+    """
+
+    root: Path
+    prepared: PreparedStudy
+    study: str
+    reference: str
+    files: Mapping[str, Path]
+    study_format: int = 1
+
+    @property
+    def upload_path(self) -> str:
+        """The API path that creates or replaces the study."""
+        return f"/api/v2/studies/{study_path(self.prepared.study.sid)}"
+
+    @property
+    def validation_path(self) -> str:
+        """The API path that validates the study without saving it.
+
+        Study format 2 names the study in the path, format 1 in study.json.
+        """
+        if self.study_format == 2:
+            return f"{self.upload_path}/validate"
+        return "/api/v2/studies/validate"
+
+    def check_rows(self, max_rows: int) -> None:
+        """Fail with `row_limit` when the tables have more rows than `max_rows`."""
+        if self.study_format == 2:
+            check_limits(load_study(self.root), max_rows=max_rows)
+        else:
+            parse_bundle(load_folder(self.root), max_rows=max_rows)
+
+    def parts(self, stack: ExitStack) -> list[Part]:
+        """The multipart parts: study, reference and a `files` part per file.
+
+        The files stay open until `stack` closes.
+        """
+        parts: list[Part] = [
+            ("study", (None, self.study)),
+            ("reference", (None, self.reference)),
+        ]
+        parts.extend(
+            (
+                "files",
+                (
+                    name,
+                    stack.enter_context(path.open("rb")),
+                    "application/octet-stream",
+                ),
+            )
+            for name, path in self.files.items()
+        )
+        return parts
+
+
+def read_upload(
+    root: Path,
+    vocabulary: Vocabulary,
+    *,
+    study_format: int,
+    max_rows: int,
+    progress: ProgressCallback | None = None,
+) -> UploadSource:
+    """Prepare a snapshot of a study folder and read the parts of its upload.
+
+    Study format 2 sends the exact text of study.json and reference.json and
+    every other file of the study; the server reads them as the client does.
+    """
+    if study_format == 2:
+        emit(progress, "validate")
+        prepared = prepare_folder(root, vocabulary, max_rows=max_rows)
+        files = {item.name: root / item.name for item in prepared.study.attachments}
+        return UploadSource(
+            root,
+            prepared,
+            (root / "study.json").read_bytes().decode("utf-8"),
+            (root / "reference.json").read_bytes().decode("utf-8"),
+            MappingProxyType(files),
+            study_format=2,
+        )
+    bundle = load_folder(root)
+    emit(progress, "parse")
+    canonical = parse_bundle(bundle, max_rows=max_rows)
+    emit(progress, "validate")
+    return UploadSource(
+        root,
+        prepare_study(canonical, vocabulary),
+        json.dumps(bundle.study),
+        json.dumps(bundle.reference),
+        MappingProxyType(dict(bundle.files)),
+    )
+
+
+@dataclass(frozen=True)
 class PreparedBundle:
     path: Path
     prepared: PreparedStudy
@@ -121,15 +222,23 @@ class PreparedBundle:
         }
 
     @contextmanager
-    def source(self):
-        if self.study_format != 1:
-            refuse_format_2_upload()
+    def source(self) -> Iterator[UploadSource]:
+        """The upload of a private snapshot equal to the prepared folder.
+
+        The snapshot is prepared again with the vocabulary of the preparation,
+        so a changed folder or a changed prepared study never reaches a server.
+        """
         with source_snapshot(self.path) as (root, hashes):
             if hashes != self.file_hashes:
                 raise SourceChangedError(
                     "Study files changed after validation; prepare the folder again"
                 )
-            yield load_folder(root)
+            yield read_upload(
+                root,
+                self.vocabulary,
+                study_format=self.study_format,
+                max_rows=self.max_rows,
+            )
 
 
 def prepare(
