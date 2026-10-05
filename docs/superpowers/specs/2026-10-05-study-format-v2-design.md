@@ -421,6 +421,16 @@ GitHub issues in matthiaskoenig/pkdb_data:
 - A pkdb_data workflow on pushes to `develop` and nightly runs `pkdb issues sync`. It aligns titles, labels, assignees and open or closed state with the repository. It only changes GitHub and never commits. Users without a GitHub login in the roster produce a warning.
 - During migration, `pkdb issues sync --adopt` matches existing issues by exact title or the known prefixes ("Curate ", "Check ", "Check and curate "), renames them to the canonical title, records the number in `study.json`, and closes duplicates with a link to the kept issue. Issues that do not belong to a study are left alone.
 
+### 12.1 Identity in URLs, storage and upload
+
+Decided on 2026-10-05 while planning sub-project 2:
+
+- URLs use two path segments: `/api/v2/studies/{substance}/{name}` (with `/publication` and `/validate` below it) and the web page `/data/{substance}/{name}`. Released studies stay reachable by their PKDB identifier: `/data/PKDB01237` and the single-segment API routes answer with a permanent redirect (308) to the canonical URL, so existing links keep working. Single-segment routes keep serving and accepting format 1 studies until the cutover.
+- Study folder names `publication` and `validate` are reserved and rejected by layout validation, because they collide with route segments.
+- The database keeps one `sid` column holding `<substance>/<name>` for format 2 studies, plus `pkdb_id` (unique, nullable), `release_date`, `issue`, `review_status` and the review items. Study `name` is the folder name and `date` is the release date.
+- Rename on re-upload: an upload of `caffeine/Harder1988` whose `release.pkdb_id` is `PKDB00198` takes over an existing row whose `sid` or `pkdb_id` is `PKDB00198`; its `sid` becomes `caffeine/Harder1988`. Uploads stay idempotent and no data reset is needed.
+- Upload transport for format 2: the client sends the exact text of `study.json` and `reference.json` and every other file of the folder; the server writes them into a temporary `<substance>/<name>` folder and runs the same loader, validator and reader as the client, including the format check.
+
 ## 13. AI curation workflow
 
 The contract for AI agents is the `pkdb` CLI (every command supports `--json`), the exported JSON Schema, the generated column reference, the vocabulary lock and a `pkdb-curation` agent skill in pkdb_data with an `AGENTS.md` for other agents. The skill describes the workflow and points to `pkdb schema export` instead of repeating the schema. No MCP write tools are needed.
