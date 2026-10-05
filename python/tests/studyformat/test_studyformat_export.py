@@ -68,5 +68,14 @@ def test_column_reference_lists_every_column():
     assert chr(0x2014) not in text
 
 
+def test_column_reference_says_that_format_2_is_being_introduced():
+    lines = column_reference().splitlines()
+    heading = lines.index("# Study format")
+    assert lines[heading + 2] == '!!! note "Study format 2 is being introduced"'
+    note = lines[heading + 4]
+    assert "pkdb_data" in note and "study format 1 until the migration" in note
+    assert lines.index("## Tables") > heading + 4
+
+
 def test_committed_column_reference_is_current():
     assert DOCS.read_text(encoding="utf-8") == column_reference()
