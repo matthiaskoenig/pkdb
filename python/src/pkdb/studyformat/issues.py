@@ -142,6 +142,11 @@ def make_issue(
     candidates: Iterable[str] = (),
     **details,
 ) -> ValidationIssue:
+    """Create a validation issue at an optional file, line and column.
+
+    A hint or candidates add a suggestion. The severity defaults to warning for
+    warning codes and to error otherwise.
+    """
     source = None
     if file is not None:
         letter = column_letter(column) if column is not None else None

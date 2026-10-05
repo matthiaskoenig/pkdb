@@ -6,6 +6,7 @@ from pathlib import Path
 
 
 def register(commands) -> None:
+    """Add the `format` and `schema` commands to the command line parser."""
     command = commands.add_parser(
         "format",
         help="Write study format 2 folders in canonical form",
@@ -43,6 +44,7 @@ def register(commands) -> None:
 
 
 def run(args) -> int:
+    """Run the `format` or `schema` command and return the exit code."""
     return _schema(args) if args.command == "schema" else _format(args)
 
 

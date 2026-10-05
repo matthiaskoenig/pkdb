@@ -50,6 +50,7 @@ Issues = Iterator[ValidationIssue]
 
 
 def check_relations(study: LoadedStudy) -> list[ValidationIssue]:
+    """Check the relationships between rows, tables and files, such as references."""
     issues: list[ValidationIssue] = []
     for check in (
         _unique_names,

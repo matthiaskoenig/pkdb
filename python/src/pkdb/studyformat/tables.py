@@ -16,6 +16,8 @@ JSON_FILES = (STUDY_JSON, REFERENCE_JSON, REVIEW_JSON)
 
 @dataclass(frozen=True)
 class TableSpec:
+    """Declaration of one table kind: columns, sort order and split by source."""
+
     kind: str
     description: str
     columns: tuple[c.Column, ...]
@@ -173,6 +175,7 @@ KIND_ORDER = {kind: index for index, kind in enumerate(TABLES)}
 
 
 def table_file(kind: str, source: str | None = None) -> str:
+    """File name of a table of a kind and, for tables split by source, its source."""
     return f"{kind}_{source}.tsv" if source else f"{kind}.tsv"
 
 
@@ -192,4 +195,5 @@ def parse_table_file(name: str) -> tuple[TableSpec, str | None] | None:
 
 
 def image_file(study: str, source: str) -> str:
+    """File name `<study>_<source>.png` of the image of a paper table or figure."""
     return f"{study}_{source}.png"

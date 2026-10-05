@@ -28,6 +28,7 @@ def format_number(value: float) -> str:
 
 
 def canonical_number(text: str) -> str | None:
+    """Canonical text of a number written with a decimal point; None for any other text."""
     value = parse_number(text)
     return None if value is None else format_number(value)
 
@@ -73,12 +74,16 @@ class TsvError(ValueError):
 
 @dataclass(frozen=True)
 class TsvLine:
+    """A data line of a TSV file: its 1-based line number and its cell texts."""
+
     number: int
     cells: tuple[str, ...]
 
 
 @dataclass(frozen=True)
 class ParsedTsv:
+    """Header, data lines and git conflict marker lines of a TSV file."""
+
     header: tuple[str, ...]
     lines: tuple[TsvLine, ...]
     # Numbers of the lines that are git conflict markers.
@@ -116,4 +121,5 @@ def parse_tsv(data: bytes) -> ParsedTsv:
 
 
 def render_tsv(header: tuple[str, ...], rows: list[tuple[str, ...]]) -> str:
+    """Canonical TSV text: tab-separated cells, LF line endings and a final newline."""
     return "".join("\t".join(cells) + "\n" for cells in (header, *rows))

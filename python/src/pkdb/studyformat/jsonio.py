@@ -5,6 +5,8 @@ import math
 
 
 class JsonFileError(ValueError):
+    """A JSON file that cannot be read; `code` is the issue code."""
+
     def __init__(self, code: str, message: str):
         super().__init__(message)
         self.code = code
@@ -58,4 +60,8 @@ def load_json(data: bytes) -> object:
 
 
 def dump_json(value: object) -> str:
+    """Canonical JSON text: indented by two spaces, non-ASCII kept, with a final newline.
+
+    NaN and infinity raise `ValueError`.
+    """
     return json.dumps(value, ensure_ascii=False, allow_nan=False, indent=2) + "\n"

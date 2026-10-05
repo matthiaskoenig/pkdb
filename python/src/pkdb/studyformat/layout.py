@@ -28,6 +28,8 @@ TABLE_NAMES = (
 
 @dataclass(frozen=True)
 class TableFile:
+    """A table file of a study folder; `source` is None for tables not split by source."""
+
     name: str
     spec: TableSpec
     source: str | None
@@ -35,6 +37,8 @@ class TableFile:
 
 @dataclass
 class Layout:
+    """Files of a study folder by role: tables, attachments and structural issues."""
+
     folder: Path
     study: str
     substance: str
@@ -45,6 +49,7 @@ class Layout:
 
 
 def scan_folder(folder: Path) -> Layout:
+    """Classify the files of a study folder without reading their content."""
     # The study and substance names come from the path, so make it absolute first.
     folder = Path(folder).resolve()
     study = folder.name

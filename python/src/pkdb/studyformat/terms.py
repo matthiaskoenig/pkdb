@@ -51,6 +51,10 @@ Issues = Iterator[ValidationIssue]
 
 
 def vocabulary_terms(vocabulary: Vocabulary) -> dict[str, frozenset[str]]:
+    """Names of the allowed terms of every vocabulary kind.
+
+    The retired calculation type is not allowed and `unspecified summary` is.
+    """
     return {
         "measurements": frozenset(rule.name for rule in vocabulary.measurements),
         "substances": frozenset(substance.name for substance in vocabulary.substances),
@@ -80,6 +84,7 @@ def converts(unit: str, units: tuple[str, ...], molar_mass: float | None) -> boo
 
 
 def check_terms(study: LoadedStudy, vocabulary: Vocabulary) -> list[ValidationIssue]:
+    """Check the vocabulary terms, measurement rules, units and values of every row."""
     terms = vocabulary_terms(vocabulary)
     rules = vocabulary.measurement_map()
     masses = {substance.name: substance.mass for substance in vocabulary.substances}

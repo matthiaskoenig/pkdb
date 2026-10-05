@@ -10,6 +10,8 @@ from enum import StrEnum
 
 
 class ColumnType(StrEnum):
+    """How the text of a column is parsed and written in canonical form."""
+
     TEXT = "text"
     NAME = "name"
     NAMES = "names"
@@ -25,6 +27,8 @@ class ColumnType(StrEnum):
 
 @dataclass(frozen=True)
 class Column:
+    """Declaration of one table column: name, type, description and its constraints."""
+
     name: str
     type: ColumnType
     description: str

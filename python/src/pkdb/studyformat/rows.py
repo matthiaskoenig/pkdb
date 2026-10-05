@@ -105,6 +105,7 @@ def time_unit_status(unit: str) -> str:
 
 @lru_cache(maxsize=4096)
 def unit_known(unit: str) -> bool:
+    """Whether a unit text is a known unit; cached for large tables."""
     return _parse_unit(unit) is not None
 
 
@@ -114,6 +115,7 @@ def valid_unit(unit: str) -> bool:
 
 
 def subject_counts(study: LoadedStudy) -> dict[str, int | None]:
+    """Subject counts by name; None where the count of a subject is empty."""
     return {
         row.cells["name"]: cast(int | None, row.values["count"])
         for _, row in study.rows("subjects")
@@ -122,6 +124,7 @@ def subject_counts(study: LoadedStudy) -> dict[str, int | None]:
 
 
 def check_rows(study: LoadedStudy) -> list[ValidationIssue]:
+    """Check every row alone: required cells, statistics, times, schedules and units."""
     counts = subject_counts(study)
     issues: list[ValidationIssue] = []
     for table in study.tables:

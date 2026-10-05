@@ -32,6 +32,8 @@ Ulid = Annotated[str, Field(pattern=r"^[0-9A-HJKMNP-TV-Z]{26}$")]
 
 
 class Model(BaseModel):
+    """Base of the study format 2 JSON models; unknown fields are refused."""
+
     model_config = ConfigDict(extra="forbid")
 
 
@@ -55,6 +57,8 @@ def _whole_as_int(value: float) -> float | int:
 
 
 class Curator(Model):
+    """A user who curated the study, with a rating from 0 to 5."""
+
     user: User
     rating: Annotated[
         float,
@@ -64,21 +68,29 @@ class Curator(Model):
 
 
 class Comment(Model):
+    """A free-text comment of a user."""
+
     user: User
     text: Text
 
 
 class Notes(Model):
+    """Descriptions and comments about one table kind."""
+
     descriptions: list[Text] = Field(default_factory=list)
     comments: list[Comment] = Field(default_factory=list)
 
 
 class Release(Model):
+    """Release of the study in PK-DB: its `PKDB` identifier and date."""
+
     pkdb_id: Annotated[str, Field(pattern=r"^PKDB[0-9]{5}$")]
     date: Date
 
 
 class StudyMetadata(Model):
+    """Content of `study.json`: reference, people, access, provenance, release and notes."""
+
     format: Literal[2]
     reference: StudyReference | None = None
     creator: User
@@ -99,6 +111,7 @@ def _without_empty(data: dict, keys: tuple[str, ...]) -> dict:
 
 
 def canonical_study_json(study: StudyMetadata) -> str:
+    """Canonical `study.json` text without empty values or the default provenance."""
     data = study.model_dump(mode="json", exclude_none=True)
     if data["provenance"] == ManualCuration().model_dump(mode="json"):
         del data["provenance"]
@@ -117,6 +130,11 @@ def canonical_study_json(study: StudyMetadata) -> str:
 
 
 class ReviewTarget(Model):
+    """What a review item refers to: a file, optionally narrowed to rows and a column.
+
+    `rows` and `column` require `file`.
+    """
+
     file: str | None = None
     rows: dict[str, str] = Field(default_factory=dict)
     column: str | None = None
@@ -129,12 +147,19 @@ class ReviewTarget(Model):
 
 
 class ThreadEntry(Model):
+    """A reply in the discussion thread of a review item."""
+
     author: User
     created: AwareDatetime
     text: Text
 
 
 class ReviewItem(Model):
+    """A question, uncertainty or issue raised in a review, with its state and thread.
+
+    `resolved_by` and `resolved` are set exactly for resolved or dismissed items.
+    """
+
     id: Ulid
     kind: Literal["question", "uncertainty", "issue"]
     state: Literal["open", "resolved", "dismissed"] = "open"
@@ -161,12 +186,15 @@ class ReviewItem(Model):
 
 
 class Review(Model):
+    """Content of `review.json`: review status, reviewers and items."""
+
     status: Literal["draft", "in_review", "approved"]
     reviewers: list[User] = Field(default_factory=list)
     items: list[ReviewItem] = Field(default_factory=list)
 
 
 def canonical_review_json(review: Review) -> str:
+    """Canonical `review.json` text with items sorted by id and no empty optional values."""
     data = review.model_dump(mode="json", exclude_none=True)
     items = []
     for item in sorted(data["items"], key=lambda entry: entry["id"]):

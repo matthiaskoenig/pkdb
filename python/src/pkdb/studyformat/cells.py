@@ -15,6 +15,8 @@ DECIMAL_COMMA = re.compile(r"[+-]?[0-9]+,[0-9]+")
 
 @dataclass(frozen=True)
 class CellProblem:
+    """Why a cell cannot be parsed: an issue code, a message and an optional hint."""
+
     code: str
     message: str
     hint: str | None = None

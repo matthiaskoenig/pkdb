@@ -23,12 +23,16 @@ from pkdb.studyformat.text import natural_key, parse_number, render_tsv
 
 @dataclass(frozen=True)
 class FileChange:
+    """A file that formatting writes or deletes, or would when only checking."""
+
     file: str
     action: Literal["write", "delete"]
 
 
 @dataclass
 class FormatResult:
+    """Outcome of formatting a folder: file changes and issues; `ok` means no errors."""
+
     folder: Path
     changes: list[FileChange] = field(default_factory=list)
     issues: list[ValidationIssue] = field(default_factory=list)
@@ -100,6 +104,10 @@ def _row_key(spec: TableSpec, cells: tuple[str, ...], order: dict[str, int]) -> 
 def render_table(
     table: LoadedTable, study_name: str, order: dict[str, int]
 ) -> str | None:
+    """Canonical TSV text of a table with the owned columns filled and the rows sorted.
+
+    None means the optional table has no rows and is removed.
+    """
     spec = table.spec
     rows = []
     for row in table.rows:
@@ -131,6 +139,10 @@ def planned_files(study: LoadedStudy) -> dict[str, str | None]:
 
 
 def format_folder(folder: Path, *, check: bool = False) -> FormatResult:
+    """Write the files of a folder in canonical form, or only list changes with `check`.
+
+    Only structural issues are reported; the content is judged by validation.
+    """
     folder = Path(folder).resolve()
     study = load_study(folder)
     result = FormatResult(

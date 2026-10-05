@@ -63,6 +63,8 @@ STRUCTURAL = frozenset(
 
 @dataclass(frozen=True)
 class Row:
+    """One data line of a table: its line number and the cell texts and typed values."""
+
     line: int
     cells: dict[str, str]
     values: dict[str, object]
@@ -70,6 +72,8 @@ class Row:
 
 @dataclass
 class LoadedTable:
+    """A table file read into rows, with its header and source."""
+
     file: str
     spec: TableSpec
     source: str | None
@@ -94,6 +98,8 @@ class LoadedTable:
 
 @dataclass
 class LoadedStudy:
+    """A study folder read into typed tables, JSON files and the issues found."""
+
     layout: Layout
     tables: list[LoadedTable] = field(default_factory=list)
     # Table kinds that cannot be used: the file failed to load, or a required
@@ -298,6 +304,7 @@ def _validate[M: BaseModel](
 
 
 def load_study(folder: Path) -> LoadedStudy:
+    """Read a study folder into typed tables and JSON files; problems become issues."""
     study = LoadedStudy(layout=(layout := scan_folder(Path(folder))))
     study.issues.extend(layout.issues)
     for table_file in layout.tables:
