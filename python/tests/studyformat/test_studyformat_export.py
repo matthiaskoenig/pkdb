@@ -22,7 +22,10 @@ def test_row_schema_mirrors_the_table():
     assert schema["x-pkdb-columns"] == list(TABLES["outputs"].names)
     assert schema["x-pkdb-file"] == "outputs_<source>.tsv"
     assert sorted(schema["required"]) == ["measurement", "subjects"]
-    assert schema["properties"]["error_type"]["enum"] == ["sd", "se", "gsd"]
+    error_type = schema["properties"]["error_type"]
+    assert "enum" not in error_type
+    assert {"enum": ["sd", "se", "gsd"], "type": "string"} in error_type["anyOf"]
+    assert {"type": "null"} in error_type["anyOf"]
     assert schema["properties"]["mean"]["examples"] == [2.9]
     time = schema["properties"]["time"]
     assert {"type": "number"} in time["anyOf"] and {
@@ -30,6 +33,30 @@ def test_row_schema_mirrors_the_table():
         "type": "string",
     } in time["anyOf"]
     assert schema["properties"]["interventions"]["anyOf"][0]["type"] == "array"
+
+
+def test_optional_properties_accept_null():
+    for kind, spec in TABLES.items():
+        schema = json_schemas()[f"{kind}.row.schema.json"]
+        for name, prop in schema["properties"].items():
+            assert "enum" not in prop and "const" not in prop, (kind, name)
+            if name not in schema["required"]:
+                assert {"type": "null"} in prop["anyOf"], (kind, name)
+        assert sorted(schema.get("required", [])) == sorted(spec.required_columns)
+
+
+def test_scatter_axis_descriptions_name_their_own_columns():
+    scatters = TABLES["scatters"]
+    for prefix in ("x", "y"):
+        time = scatters.column(f"{prefix}_time").description
+        unit = scatters.column(f"{prefix}_time_unit").description
+        assert f"`{prefix}_time_unit`" in time and "`time_unit`" not in time
+        assert f"`{prefix}_time`" in unit and "`time`" not in unit
+        for column in scatters.columns:
+            if column.name.startswith(f"{prefix}_"):
+                label, _, text = column.description.partition(": ")
+                assert label == f"{prefix.upper()} axis"
+                assert text[0].islower(), column.name
 
 
 def test_column_reference_lists_every_column():

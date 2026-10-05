@@ -23,18 +23,18 @@ _TYPES: dict[ColumnType, Any] = {
     T.ENUM: str,
     T.SOURCE: str,
 }
-_LABELS = {
-    T.TEXT: "text",
-    T.NAME: "name",
-    T.NAMES: "comma-separated names",
-    T.NUMBER: "number",
-    T.INTEGER: "whole number",
-    T.TIME: "number",
-    T.TIMES: "number or `;`-separated numbers",
-    T.UNIT: "unit",
-    T.TERM: "vocabulary term",
-    T.ENUM: "choice",
-    T.SOURCE: "source",
+_LABELS: dict[ColumnType, tuple[str, ...]] = {
+    T.TEXT: ("text",),
+    T.NAME: ("name",),
+    T.NAMES: ("comma-separated names",),
+    T.NUMBER: ("number",),
+    T.INTEGER: ("whole number",),
+    T.TIME: ("number",),
+    T.TIMES: ("number", "`;`-separated numbers"),
+    T.UNIT: ("unit",),
+    T.TERM: ("vocabulary term",),
+    T.ENUM: ("choice",),
+    T.SOURCE: ("source",),
 }
 
 
@@ -43,7 +43,10 @@ def _file(spec: TableSpec) -> str:
 
 
 def _annotation(column: Column) -> Any:
-    annotation = _TYPES[column.type]
+    # Choices sit inside the string branch so that an optional column stays nullable.
+    annotation = (
+        Literal.__getitem__(column.choices) if column.choices else _TYPES[column.type]
+    )
     return annotation | Literal["NR"] if column.allows_nr else annotation
 
 
@@ -60,9 +63,6 @@ def row_model(spec: TableSpec) -> type[BaseModel]:
         options: dict[str, Any] = {
             "description": column.description,
             "examples": _example(column),
-            "json_schema_extra": {"enum": list(column.choices)}
-            if column.choices
-            else None,
         }
         if column.name in spec.required_columns:
             fields[column.name] = (_annotation(column), Field(**options))
@@ -86,7 +86,8 @@ def json_schemas() -> dict[str, dict]:
     for spec in TABLES.values():
         schema = row_model(spec).model_json_schema()
         schema["description"] = (
-            f"{spec.description} Each line of the TSV file is one row; an empty cell is null."
+            f"{spec.description} Each line of the TSV file is one row; an empty cell is null. "
+            "Values are the parsed cells: comma-separated names and `;`-separated times are arrays."
         )
         schema["x-pkdb-file"] = _file(spec)
         schema["x-pkdb-columns"] = list(spec.names)
@@ -96,18 +97,24 @@ def json_schemas() -> dict[str, dict]:
 
 def type_label(column: Column) -> str:
     if column.vocabulary:
-        label = f"vocabulary: {column.vocabulary.replace('_', ' ')}"
+        alternatives = [f"vocabulary: {column.vocabulary.replace('_', ' ')}"]
     elif column.choices:
-        label = "one of " + ", ".join(f"`{choice}`" for choice in column.choices)
+        alternatives = [
+            "one of " + ", ".join(f"`{choice}`" for choice in column.choices)
+        ]
     else:
-        label = _LABELS[column.type]
-    return f"{label} or `NR`" if column.allows_nr else label
+        alternatives = list(_LABELS[column.type])
+    if column.allows_nr:
+        alternatives.append("`NR`")
+    if len(alternatives) == 1:
+        return alternatives[0]
+    return f"{', '.join(alternatives[:-1])} or {alternatives[-1]}"
 
 
 def _required(spec: TableSpec, column: Column) -> str:
     if column.owned:
-        return "written by `pkdb format`"
-    return "yes" if column.name in spec.required_columns else ""
+        return "no, written by `pkdb format`"
+    return "yes" if column.name in spec.required_columns else "no"
 
 
 def column_reference() -> str:
@@ -125,7 +132,7 @@ def column_reference() -> str:
     ]
     for spec in TABLES.values():
         lines.append(
-            f"| `{_file(spec)}` | {spec.description} | {'yes' if spec.required else ''} |"
+            f"| `{_file(spec)}` | {spec.description} | {'yes' if spec.required else 'no'} |"
         )
     lines += [
         "",
@@ -134,7 +141,7 @@ def column_reference() -> str:
         "- UTF-8 without byte order mark, LF line endings and a final newline.",
         "- Tab separated without quoting. Cells contain no tabs or line breaks.",
         "- One header row with every template column in template order.",
-        "- An empty cell means missing. `NR` (not reported) is allowed only in time columns.",
+        "- An empty cell means missing. `NR` (not reported) is allowed only in `time` and `time_unit` and their scatter variants `x_time`, `x_time_unit`, `y_time` and `y_time_unit`.",
         "- Numbers use a decimal point and are written in their shortest form.",
         "- `pkdb format` sorts the rows and writes the `study` column and, in files named after a source, the `source` column.",
     ]

@@ -35,7 +35,15 @@ class TableSpec:
         raise KeyError(name)
 
 
-OBSERVATION = (*c.OBSERVATION_HEAD, c.TIME, c.TIME_UNIT, *c.STATISTICS)
+def _observation(measurement: c.Column) -> tuple[c.Column, ...]:
+    return (
+        measurement,
+        *c.OBSERVATION_DETAILS,
+        c.TIME,
+        c.TIME_UNIT,
+        *c.STATISTICS,
+    )
+
 
 SUBJECTS = TableSpec(
     kind="subjects",
@@ -66,8 +74,8 @@ INTERVENTIONS = TableSpec(
         c.TIME_END,
         c.INTERVAL,
         c.DOSES,
-        c.TIME_UNIT,
-        c.COUNT,
+        c.INTERVENTION_TIME_UNIT,
+        c.INTERVENTION_COUNT,
         c.DOSE,
         *c.STATISTICS[2:],
         c.COMMENT,
@@ -78,7 +86,13 @@ INTERVENTIONS = TableSpec(
 CHARACTERISTICA = TableSpec(
     kind="characteristica",
     description="Baseline values of subjects, such as age, weight, sex or creatinine clearance.",
-    columns=(c.STUDY, c.SOURCE, c.SUBJECTS, *OBSERVATION, c.COMMENT),
+    columns=(
+        c.STUDY,
+        c.SOURCE,
+        c.SUBJECTS,
+        *_observation(c.CHARACTERISTICA_MEASUREMENT),
+        c.COMMENT,
+    ),
     required_columns=frozenset({"source", "subjects", "measurement"}),
     sort_columns=("subjects", "source", "measurement", "substance", "choice"),
 )
@@ -90,7 +104,7 @@ OUTPUTS = TableSpec(
         c.OWNED_SOURCE,
         c.SUBJECTS,
         c.INTERVENTIONS,
-        *OBSERVATION,
+        *_observation(c.OUTPUT_MEASUREMENT),
         c.COMMENT,
     ),
     required_columns=frozenset({"subjects", "measurement"}),
@@ -116,7 +130,7 @@ TIMECOURSES = TableSpec(
         c.LABEL,
         c.SUBJECTS,
         c.INTERVENTIONS,
-        *OBSERVATION,
+        *_observation(c.TIMECOURSE_MEASUREMENT),
         c.COMMENT,
     ),
     required_columns=frozenset(

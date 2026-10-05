@@ -9,18 +9,18 @@ A study folder in study format 2 contains `study.json`, `reference.json`, `revie
 | File | Content | Required |
 |---|---|---|
 | `subjects.tsv` | Groups and individuals. A subject with count 1 is an individual; every subject except `all` has a parent group. | yes |
-| `interventions.tsv` | Interventions such as doses, fasting or smoking, referenced by name from the other tables. |  |
-| `characteristica.tsv` | Baseline values of subjects, such as age, weight, sex or creatinine clearance. |  |
-| `outputs_<source>.tsv` | Single values after interventions, such as pharmacokinetic parameters, from one paper table or figure. |  |
-| `timecourses_<source>.tsv` | Timecourse points from one paper figure or table. Rows with the same label form one series. |  |
-| `scatters_<source>.tsv` | Points of scatter plots, one row per point with an x and a y value. |  |
+| `interventions.tsv` | Interventions such as doses, fasting or smoking, referenced by name from the other tables. | no |
+| `characteristica.tsv` | Baseline values of subjects, such as age, weight, sex or creatinine clearance. | no |
+| `outputs_<source>.tsv` | Single values after interventions, such as pharmacokinetic parameters, from one paper table or figure. | no |
+| `timecourses_<source>.tsv` | Timecourse points from one paper figure or table. Rows with the same label form one series. | no |
+| `scatters_<source>.tsv` | Points of scatter plots, one row per point with an x and a y value. | no |
 
 ## TSV encoding
 
 - UTF-8 without byte order mark, LF line endings and a final newline.
 - Tab separated without quoting. Cells contain no tabs or line breaks.
 - One header row with every template column in template order.
-- An empty cell means missing. `NR` (not reported) is allowed only in time columns.
+- An empty cell means missing. `NR` (not reported) is allowed only in `time` and `time_unit` and their scatter variants `x_time`, `x_time_unit`, `y_time` and `y_time_unit`.
 - Numbers use a decimal point and are written in their shortest form.
 - `pkdb format` sorts the rows and writes the `study` column and, in files named after a source, the `source` column.
 
@@ -30,12 +30,12 @@ Groups and individuals. A subject with count 1 is an individual; every subject e
 
 | Column | Type | Required | Description |
 |---|---|---|---|
-| `study` | text | written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
+| `study` | text | no, written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
 | `name` | name | yes | Unique subject name. The root group is `all`. |
-| `parent` | name |  | Name of the parent group. Empty only for `all`. |
-| `count` | whole number |  | Number of subjects. A count of 1 makes the row an individual; any other count, or an empty cell, makes it a group. |
-| `source` | source |  | Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist. |
-| `comment` | text |  | Free-text comment. |
+| `parent` | name | no | Name of the parent group. Empty only for `all`. |
+| `count` | whole number | no | Number of subjects. A count of 1 makes the row an individual; any other count, or an empty cell, makes it a group. |
+| `source` | source | no | Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist. |
+| `comment` | text | no | Free-text comment. |
 
 ## `interventions.tsv`
 
@@ -43,39 +43,39 @@ Interventions such as doses, fasting or smoking, referenced by name from the oth
 
 | Column | Type | Required | Description |
 |---|---|---|---|
-| `study` | text | written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
-| `source` | source |  | Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist. |
+| `study` | text | no, written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
+| `source` | source | no | Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist. |
 | `name` | name | yes | Unique intervention name, referenced from the `interventions` columns of other tables. |
-| `subjects` | name |  | Subject that the dose statistics describe, for body-weight-adjusted doses with `sd`, `min` or `max`. Usually empty. |
+| `subjects` | name | no | Subject that the dose statistics describe, for body-weight-adjusted doses with `sd`, `min` or `max`. Usually empty. |
 | `measurement` | vocabulary: measurements | yes | Kind of intervention from the vocabulary, such as `dosing`, `qualitative dosing` or `circadian status`. |
-| `calculation` | vocabulary: calculation types |  | How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`. |
-| `substance` | vocabulary: substances |  | Substance from the vocabulary. |
-| `tissue` | vocabulary: tissues |  | Tissue or matrix from the vocabulary. |
-| `method` | vocabulary: methods |  | Analytical method from the vocabulary. |
-| `choice` | text |  | Categorical value of a categorical measurement, such as `M` for `sex`. |
-| `route` | vocabulary: routes |  | Administration route from the vocabulary. |
-| `form` | vocabulary: forms |  | Administration form from the vocabulary. |
-| `application` | vocabulary: applications |  | Application from the vocabulary, such as `single dose`. |
-| `time` | number or `;`-separated numbers or `NR` |  | Time of the first administration in `time_unit`. An irregular schedule is a `;`-separated list such as `0;12;40`. |
-| `time_end` | number |  | End of a continuous administration in `time_unit`. |
-| `interval` | number |  | Dosing interval in `time_unit`. |
-| `doses` | whole number |  | Number of administrations. |
-| `time_unit` | unit or `NR` |  | Unit of the time columns, or `NR` when the publication does not report it. |
-| `count` | whole number |  | Number of subjects the row describes. Leave empty when it equals the count of the referenced subject. In a `choice` row, the number of subjects with that choice. |
-| `mean` | number |  | Dose. A fixed dose is entered as its value, such as `100` with unit `mg`. |
-| `sd` | number |  | Standard deviation. |
-| `se` | number |  | Standard error of the mean. |
-| `cv` | number |  | Coefficient of variation in percent. |
-| `gmean` | number |  | Geometric mean. |
-| `gsd` | number |  | Geometric standard deviation as a dimensionless factor of at least 1. |
-| `gcv` | number |  | Geometric coefficient of variation in percent. |
-| `median` | number |  | Median. |
-| `min` | number |  | Minimum. |
-| `max` | number |  | Maximum. |
-| `unit` | unit |  | Unit of `mean`, `sd`, `se`, `gmean`, `median`, `min`, `max` and `error_bar`. |
-| `error_bar` | number |  | Digitized end of an error bar on the value axis, in `unit`. The statistic named in `error_type` is derived from it. |
-| `error_type` | one of `sd`, `se`, `gsd` |  | Statistic the error bar shows: `sd`, `se` or `gsd`. |
-| `comment` | text |  | Free-text comment. |
+| `calculation` | vocabulary: calculation types | no | How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`. |
+| `substance` | vocabulary: substances | no | Substance from the vocabulary. |
+| `tissue` | vocabulary: tissues | no | Tissue or matrix from the vocabulary. |
+| `method` | vocabulary: methods | no | Analytical method from the vocabulary. |
+| `choice` | text | no | Categorical value of a categorical measurement, such as `M` for `sex`. |
+| `route` | vocabulary: routes | no | Administration route from the vocabulary. |
+| `form` | vocabulary: forms | no | Administration form from the vocabulary. |
+| `application` | vocabulary: applications | no | Application from the vocabulary, such as `single dose`. |
+| `time` | number, `;`-separated numbers or `NR` | no | Time of the first administration in `time_unit`. An irregular schedule is a `;`-separated list such as `0;12;40`. |
+| `time_end` | number | no | End of a continuous administration in `time_unit`. |
+| `interval` | number | no | Dosing interval in `time_unit`. |
+| `doses` | whole number | no | Number of administrations. |
+| `time_unit` | unit or `NR` | no | Unit of `time`, `time_end` and `interval`, or `NR` when the publication does not report it. |
+| `count` | whole number | no | Number of subjects the dose statistics describe. Usually empty. |
+| `mean` | number | no | Dose. A fixed dose is entered as its value, such as `100` with unit `mg`. |
+| `sd` | number | no | Standard deviation. |
+| `se` | number | no | Standard error of the mean. |
+| `cv` | number | no | Coefficient of variation in percent. |
+| `gmean` | number | no | Geometric mean. |
+| `gsd` | number | no | Geometric standard deviation as a dimensionless factor of at least 1. |
+| `gcv` | number | no | Geometric coefficient of variation in percent. |
+| `median` | number | no | Median. |
+| `min` | number | no | Minimum. |
+| `max` | number | no | Maximum. |
+| `unit` | unit | no | Unit of `mean`, `sd`, `se`, `gmean`, `median`, `min`, `max` and `error_bar`. |
+| `error_bar` | number | no | Digitized end of an error bar on the value axis, in `unit`. The statistic named in `error_type` is derived from it. |
+| `error_type` | one of `sd`, `se`, `gsd` | no | Statistic the error bar shows: `sd`, `se` or `gsd`. |
+| `comment` | text | no | Free-text comment. |
 
 ## `characteristica.tsv`
 
@@ -83,32 +83,32 @@ Baseline values of subjects, such as age, weight, sex or creatinine clearance.
 
 | Column | Type | Required | Description |
 |---|---|---|---|
-| `study` | text | written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
+| `study` | text | no, written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
 | `source` | source | yes | Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist. |
 | `subjects` | name | yes | Name of the subject in `subjects.tsv` that the row describes: a group, or an individual with count 1. |
-| `measurement` | vocabulary: measurements | yes | Measured quantity from the vocabulary, such as `cmax`, `age` or `sex`. |
-| `calculation` | vocabulary: calculation types |  | How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`. |
-| `substance` | vocabulary: substances |  | Substance from the vocabulary. |
-| `tissue` | vocabulary: tissues |  | Tissue or matrix from the vocabulary. |
-| `method` | vocabulary: methods |  | Analytical method from the vocabulary. |
-| `choice` | text |  | Categorical value of a categorical measurement, such as `M` for `sex`. |
-| `time` | number or `NR` |  | Time point in `time_unit`, or `NR` when the publication does not report it. |
-| `time_unit` | unit or `NR` |  | Unit of the time columns, or `NR` when the publication does not report it. |
-| `count` | whole number |  | Number of subjects the row describes. Leave empty when it equals the count of the referenced subject. In a `choice` row, the number of subjects with that choice. |
-| `mean` | number |  | Arithmetic mean. For a single subject (count 1) and for `unspecified summary`, the reported value. |
-| `sd` | number |  | Standard deviation. |
-| `se` | number |  | Standard error of the mean. |
-| `cv` | number |  | Coefficient of variation in percent. |
-| `gmean` | number |  | Geometric mean. |
-| `gsd` | number |  | Geometric standard deviation as a dimensionless factor of at least 1. |
-| `gcv` | number |  | Geometric coefficient of variation in percent. |
-| `median` | number |  | Median. |
-| `min` | number |  | Minimum. |
-| `max` | number |  | Maximum. |
-| `unit` | unit |  | Unit of `mean`, `sd`, `se`, `gmean`, `median`, `min`, `max` and `error_bar`. |
-| `error_bar` | number |  | Digitized end of an error bar on the value axis, in `unit`. The statistic named in `error_type` is derived from it. |
-| `error_type` | one of `sd`, `se`, `gsd` |  | Statistic the error bar shows: `sd`, `se` or `gsd`. |
-| `comment` | text |  | Free-text comment. |
+| `measurement` | vocabulary: measurements | yes | Baseline quantity from the vocabulary, such as `age`, `weight` or `sex`. |
+| `calculation` | vocabulary: calculation types | no | How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`. |
+| `substance` | vocabulary: substances | no | Substance from the vocabulary. |
+| `tissue` | vocabulary: tissues | no | Tissue or matrix from the vocabulary. |
+| `method` | vocabulary: methods | no | Analytical method from the vocabulary. |
+| `choice` | text | no | Categorical value of a categorical measurement, such as `M` for `sex`. |
+| `time` | number or `NR` | no | Time point in `time_unit`, or `NR` when the publication does not report it. |
+| `time_unit` | unit or `NR` | no | Unit of `time`, or `NR` when the publication does not report it. |
+| `count` | whole number | no | Number of subjects the row describes. Leave empty when it equals the count of the referenced subject. In a `choice` row, the number of subjects with that choice. |
+| `mean` | number | no | Arithmetic mean. For a single subject (count 1) and for `unspecified summary`, the reported value. |
+| `sd` | number | no | Standard deviation. |
+| `se` | number | no | Standard error of the mean. |
+| `cv` | number | no | Coefficient of variation in percent. |
+| `gmean` | number | no | Geometric mean. |
+| `gsd` | number | no | Geometric standard deviation as a dimensionless factor of at least 1. |
+| `gcv` | number | no | Geometric coefficient of variation in percent. |
+| `median` | number | no | Median. |
+| `min` | number | no | Minimum. |
+| `max` | number | no | Maximum. |
+| `unit` | unit | no | Unit of `mean`, `sd`, `se`, `gmean`, `median`, `min`, `max` and `error_bar`. |
+| `error_bar` | number | no | Digitized end of an error bar on the value axis, in `unit`. The statistic named in `error_type` is derived from it. |
+| `error_type` | one of `sd`, `se`, `gsd` | no | Statistic the error bar shows: `sd`, `se` or `gsd`. |
+| `comment` | text | no | Free-text comment. |
 
 ## `outputs_<source>.tsv`
 
@@ -116,33 +116,33 @@ Single values after interventions, such as pharmacokinetic parameters, from one 
 
 | Column | Type | Required | Description |
 |---|---|---|---|
-| `study` | text | written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
-| `source` | source | written by `pkdb format` | Paper table or figure of the row, written by `pkdb format` from the file name. Do not edit. |
+| `study` | text | no, written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
+| `source` | source | no, written by `pkdb format` | Paper table or figure of the row, written by `pkdb format` from the file name. Do not edit. |
 | `subjects` | name | yes | Name of the subject in `subjects.tsv` that the row describes: a group, or an individual with count 1. |
-| `interventions` | comma-separated names |  | Comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none. |
-| `measurement` | vocabulary: measurements | yes | Measured quantity from the vocabulary, such as `cmax`, `age` or `sex`. |
-| `calculation` | vocabulary: calculation types |  | How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`. |
-| `substance` | vocabulary: substances |  | Substance from the vocabulary. |
-| `tissue` | vocabulary: tissues |  | Tissue or matrix from the vocabulary. |
-| `method` | vocabulary: methods |  | Analytical method from the vocabulary. |
-| `choice` | text |  | Categorical value of a categorical measurement, such as `M` for `sex`. |
-| `time` | number or `NR` |  | Time point in `time_unit`, or `NR` when the publication does not report it. |
-| `time_unit` | unit or `NR` |  | Unit of the time columns, or `NR` when the publication does not report it. |
-| `count` | whole number |  | Number of subjects the row describes. Leave empty when it equals the count of the referenced subject. In a `choice` row, the number of subjects with that choice. |
-| `mean` | number |  | Arithmetic mean. For a single subject (count 1) and for `unspecified summary`, the reported value. |
-| `sd` | number |  | Standard deviation. |
-| `se` | number |  | Standard error of the mean. |
-| `cv` | number |  | Coefficient of variation in percent. |
-| `gmean` | number |  | Geometric mean. |
-| `gsd` | number |  | Geometric standard deviation as a dimensionless factor of at least 1. |
-| `gcv` | number |  | Geometric coefficient of variation in percent. |
-| `median` | number |  | Median. |
-| `min` | number |  | Minimum. |
-| `max` | number |  | Maximum. |
-| `unit` | unit |  | Unit of `mean`, `sd`, `se`, `gmean`, `median`, `min`, `max` and `error_bar`. |
-| `error_bar` | number |  | Digitized end of an error bar on the value axis, in `unit`. The statistic named in `error_type` is derived from it. |
-| `error_type` | one of `sd`, `se`, `gsd` |  | Statistic the error bar shows: `sd`, `se` or `gsd`. |
-| `comment` | text |  | Free-text comment. |
+| `interventions` | comma-separated names | no | Comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none. |
+| `measurement` | vocabulary: measurements | yes | Measured quantity from the vocabulary, such as `cmax`, `auc_inf` or `thalf`. |
+| `calculation` | vocabulary: calculation types | no | How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`. |
+| `substance` | vocabulary: substances | no | Substance from the vocabulary. |
+| `tissue` | vocabulary: tissues | no | Tissue or matrix from the vocabulary. |
+| `method` | vocabulary: methods | no | Analytical method from the vocabulary. |
+| `choice` | text | no | Categorical value of a categorical measurement, such as `M` for `sex`. |
+| `time` | number or `NR` | no | Time point in `time_unit`, or `NR` when the publication does not report it. |
+| `time_unit` | unit or `NR` | no | Unit of `time`, or `NR` when the publication does not report it. |
+| `count` | whole number | no | Number of subjects the row describes. Leave empty when it equals the count of the referenced subject. In a `choice` row, the number of subjects with that choice. |
+| `mean` | number | no | Arithmetic mean. For a single subject (count 1) and for `unspecified summary`, the reported value. |
+| `sd` | number | no | Standard deviation. |
+| `se` | number | no | Standard error of the mean. |
+| `cv` | number | no | Coefficient of variation in percent. |
+| `gmean` | number | no | Geometric mean. |
+| `gsd` | number | no | Geometric standard deviation as a dimensionless factor of at least 1. |
+| `gcv` | number | no | Geometric coefficient of variation in percent. |
+| `median` | number | no | Median. |
+| `min` | number | no | Minimum. |
+| `max` | number | no | Maximum. |
+| `unit` | unit | no | Unit of `mean`, `sd`, `se`, `gmean`, `median`, `min`, `max` and `error_bar`. |
+| `error_bar` | number | no | Digitized end of an error bar on the value axis, in `unit`. The statistic named in `error_type` is derived from it. |
+| `error_type` | one of `sd`, `se`, `gsd` | no | Statistic the error bar shows: `sd`, `se` or `gsd`. |
+| `comment` | text | no | Free-text comment. |
 
 ## `timecourses_<source>.tsv`
 
@@ -150,34 +150,34 @@ Timecourse points from one paper figure or table. Rows with the same label form 
 
 | Column | Type | Required | Description |
 |---|---|---|---|
-| `study` | text | written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
-| `source` | source | written by `pkdb format` | Paper table or figure of the row, written by `pkdb format` from the file name. Do not edit. |
+| `study` | text | no, written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
+| `source` | source | no, written by `pkdb format` | Paper table or figure of the row, written by `pkdb format` from the file name. Do not edit. |
 | `label` | name | yes | Name of the timecourse. Rows with the same label form one series; labels are unique across the study. |
 | `subjects` | name | yes | Name of the subject in `subjects.tsv` that the row describes: a group, or an individual with count 1. |
-| `interventions` | comma-separated names |  | Comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none. |
-| `measurement` | vocabulary: measurements | yes | Measured quantity from the vocabulary, such as `cmax`, `age` or `sex`. |
-| `calculation` | vocabulary: calculation types |  | How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`. |
-| `substance` | vocabulary: substances |  | Substance from the vocabulary. |
-| `tissue` | vocabulary: tissues |  | Tissue or matrix from the vocabulary. |
-| `method` | vocabulary: methods |  | Analytical method from the vocabulary. |
-| `choice` | text |  | Categorical value of a categorical measurement, such as `M` for `sex`. |
+| `interventions` | comma-separated names | no | Comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none. |
+| `measurement` | vocabulary: measurements | yes | Measured quantity from the vocabulary, such as `concentration`. |
+| `calculation` | vocabulary: calculation types | no | How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`. |
+| `substance` | vocabulary: substances | no | Substance from the vocabulary. |
+| `tissue` | vocabulary: tissues | no | Tissue or matrix from the vocabulary. |
+| `method` | vocabulary: methods | no | Analytical method from the vocabulary. |
+| `choice` | text | no | Categorical value of a categorical measurement, such as `M` for `sex`. |
 | `time` | number or `NR` | yes | Time point in `time_unit`, or `NR` when the publication does not report it. |
-| `time_unit` | unit or `NR` | yes | Unit of the time columns, or `NR` when the publication does not report it. |
-| `count` | whole number |  | Number of subjects the row describes. Leave empty when it equals the count of the referenced subject. In a `choice` row, the number of subjects with that choice. |
-| `mean` | number |  | Arithmetic mean. For a single subject (count 1) and for `unspecified summary`, the reported value. |
-| `sd` | number |  | Standard deviation. |
-| `se` | number |  | Standard error of the mean. |
-| `cv` | number |  | Coefficient of variation in percent. |
-| `gmean` | number |  | Geometric mean. |
-| `gsd` | number |  | Geometric standard deviation as a dimensionless factor of at least 1. |
-| `gcv` | number |  | Geometric coefficient of variation in percent. |
-| `median` | number |  | Median. |
-| `min` | number |  | Minimum. |
-| `max` | number |  | Maximum. |
-| `unit` | unit |  | Unit of `mean`, `sd`, `se`, `gmean`, `median`, `min`, `max` and `error_bar`. |
-| `error_bar` | number |  | Digitized end of an error bar on the value axis, in `unit`. The statistic named in `error_type` is derived from it. |
-| `error_type` | one of `sd`, `se`, `gsd` |  | Statistic the error bar shows: `sd`, `se` or `gsd`. |
-| `comment` | text |  | Free-text comment. |
+| `time_unit` | unit or `NR` | yes | Unit of `time`, or `NR` when the publication does not report it. |
+| `count` | whole number | no | Number of subjects the row describes. Leave empty when it equals the count of the referenced subject. In a `choice` row, the number of subjects with that choice. |
+| `mean` | number | no | Arithmetic mean. For a single subject (count 1) and for `unspecified summary`, the reported value. |
+| `sd` | number | no | Standard deviation. |
+| `se` | number | no | Standard error of the mean. |
+| `cv` | number | no | Coefficient of variation in percent. |
+| `gmean` | number | no | Geometric mean. |
+| `gsd` | number | no | Geometric standard deviation as a dimensionless factor of at least 1. |
+| `gcv` | number | no | Geometric coefficient of variation in percent. |
+| `median` | number | no | Median. |
+| `min` | number | no | Minimum. |
+| `max` | number | no | Maximum. |
+| `unit` | unit | no | Unit of `mean`, `sd`, `se`, `gmean`, `median`, `min`, `max` and `error_bar`. |
+| `error_bar` | number | no | Digitized end of an error bar on the value axis, in `unit`. The statistic named in `error_type` is derived from it. |
+| `error_type` | one of `sd`, `se`, `gsd` | no | Statistic the error bar shows: `sd`, `se` or `gsd`. |
+| `comment` | text | no | Free-text comment. |
 
 ## `scatters_<source>.tsv`
 
@@ -185,26 +185,26 @@ Points of scatter plots, one row per point with an x and a y value.
 
 | Column | Type | Required | Description |
 |---|---|---|---|
-| `study` | text | written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
-| `source` | source | written by `pkdb format` | Paper table or figure of the row, written by `pkdb format` from the file name. Do not edit. |
+| `study` | text | no, written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
+| `source` | source | no, written by `pkdb format` | Paper table or figure of the row, written by `pkdb format` from the file name. Do not edit. |
 | `name` | name | yes | Name of the scatter dataset, unique across the study. |
 | `subjects` | name | yes | Subject of the point, usually an individual with count 1. |
-| `x_interventions` | comma-separated names |  | X axis: Comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none. |
-| `x_measurement` | vocabulary: measurements | yes | X axis: Measured quantity from the vocabulary, such as `cmax`, `age` or `sex`. |
-| `x_substance` | vocabulary: substances |  | X axis: Substance from the vocabulary. |
-| `x_tissue` | vocabulary: tissues |  | X axis: Tissue or matrix from the vocabulary. |
-| `x_method` | vocabulary: methods |  | X axis: Analytical method from the vocabulary. |
-| `x_time` | number or `NR` |  | X axis: time point in `x_time_unit`, or `NR` when the publication does not report it. |
-| `x_time_unit` | unit or `NR` |  | X axis: unit of `x_time`, or `NR` when the publication does not report it. |
-| `x_mean` | number | yes | X axis: Value of the point. |
-| `x_unit` | unit |  | X axis: Unit of the value. |
-| `y_interventions` | comma-separated names |  | Y axis: Comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none. |
-| `y_measurement` | vocabulary: measurements | yes | Y axis: Measured quantity from the vocabulary, such as `cmax`, `age` or `sex`. |
-| `y_substance` | vocabulary: substances |  | Y axis: Substance from the vocabulary. |
-| `y_tissue` | vocabulary: tissues |  | Y axis: Tissue or matrix from the vocabulary. |
-| `y_method` | vocabulary: methods |  | Y axis: Analytical method from the vocabulary. |
-| `y_time` | number or `NR` |  | Y axis: time point in `y_time_unit`, or `NR` when the publication does not report it. |
-| `y_time_unit` | unit or `NR` |  | Y axis: unit of `y_time`, or `NR` when the publication does not report it. |
-| `y_mean` | number | yes | Y axis: Value of the point. |
-| `y_unit` | unit |  | Y axis: Unit of the value. |
-| `comment` | text |  | Free-text comment. |
+| `x_interventions` | comma-separated names | no | X axis: comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none. |
+| `x_measurement` | vocabulary: measurements | yes | X axis: measured quantity from the vocabulary, such as `cmax`, `age` or `sex`. |
+| `x_substance` | vocabulary: substances | no | X axis: substance from the vocabulary. |
+| `x_tissue` | vocabulary: tissues | no | X axis: tissue or matrix from the vocabulary. |
+| `x_method` | vocabulary: methods | no | X axis: analytical method from the vocabulary. |
+| `x_time` | number or `NR` | no | X axis: time point in `x_time_unit`, or `NR` when the publication does not report it. |
+| `x_time_unit` | unit or `NR` | no | X axis: unit of `x_time`, or `NR` when the publication does not report it. |
+| `x_mean` | number | yes | X axis: value of the point. |
+| `x_unit` | unit | no | X axis: unit of the value. |
+| `y_interventions` | comma-separated names | no | Y axis: comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none. |
+| `y_measurement` | vocabulary: measurements | yes | Y axis: measured quantity from the vocabulary, such as `cmax`, `age` or `sex`. |
+| `y_substance` | vocabulary: substances | no | Y axis: substance from the vocabulary. |
+| `y_tissue` | vocabulary: tissues | no | Y axis: tissue or matrix from the vocabulary. |
+| `y_method` | vocabulary: methods | no | Y axis: analytical method from the vocabulary. |
+| `y_time` | number or `NR` | no | Y axis: time point in `y_time_unit`, or `NR` when the publication does not report it. |
+| `y_time_unit` | unit or `NR` | no | Y axis: unit of `y_time`, or `NR` when the publication does not report it. |
+| `y_mean` | number | yes | Y axis: value of the point. |
+| `y_unit` | unit | no | Y axis: unit of the value. |
+| `comment` | text | no | Free-text comment. |

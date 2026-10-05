@@ -126,7 +126,7 @@ TIME = Column(
 TIME_UNIT = Column(
     "time_unit",
     T.UNIT,
-    "Unit of the time columns, or `NR` when the publication does not report it.",
+    "Unit of `time`, or `NR` when the publication does not report it.",
     "h",
     allows_nr=True,
 )
@@ -193,7 +193,18 @@ STATISTICS = (
     ERROR_BAR,
     ERROR_TYPE,
 )
-OBSERVATION_HEAD = (MEASUREMENT, CALCULATION, SUBSTANCE, TISSUE, METHOD, CHOICE)
+OBSERVATION_DETAILS = (CALCULATION, SUBSTANCE, TISSUE, METHOD, CHOICE)
+CHARACTERISTICA_MEASUREMENT = MEASUREMENT.but(
+    description="Baseline quantity from the vocabulary, such as `age`, `weight` or `sex`.",
+    example="age",
+)
+OUTPUT_MEASUREMENT = MEASUREMENT.but(
+    description="Measured quantity from the vocabulary, such as `cmax`, `auc_inf` or `thalf`.",
+)
+TIMECOURSE_MEASUREMENT = MEASUREMENT.but(
+    description="Measured quantity from the vocabulary, such as `concentration`.",
+    example="concentration",
+)
 
 SUBJECT_NAME = Column(
     "name", T.NAME, "Unique subject name. The root group is `all`.", "all"
@@ -246,6 +257,12 @@ APPLICATION = Column(
     "single dose",
     vocabulary="applications",
 )
+INTERVENTION_COUNT = COUNT.but(
+    description="Number of subjects the dose statistics describe. Usually empty.",
+)
+INTERVENTION_TIME_UNIT = TIME_UNIT.but(
+    description="Unit of `time`, `time_end` and `interval`, or `NR` when the publication does not report it.",
+)
 INTERVENTION_TIME = Column(
     "time",
     T.TIMES,
@@ -297,13 +314,16 @@ def axis(prefix: str) -> tuple[Column, ...]:
     )
     label = f"{prefix.upper()} axis"
     descriptions = {
-        TIME.name: f"{label}: time point in `{prefix}_{TIME_UNIT.name}`, or `NR` when the publication does not report it.",
-        TIME_UNIT.name: f"{label}: unit of `{prefix}_{TIME.name}`, or `NR` when the publication does not report it.",
+        TIME.name: f"time point in `{prefix}_{TIME_UNIT.name}`, or `NR` when the publication does not report it.",
+        TIME_UNIT.name: f"unit of `{prefix}_{TIME.name}`, or `NR` when the publication does not report it.",
     }
     return tuple(
         column.but(
             name=f"{prefix}_{column.name}",
-            description=descriptions.get(column.name, f"{label}: {column.description}"),
+            description=f"{label}: "
+            + descriptions.get(
+                column.name, column.description[0].lower() + column.description[1:]
+            ),
         )
         for column in columns
     )
