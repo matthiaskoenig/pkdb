@@ -20,10 +20,13 @@ depends_on = None
 
 STATISTICS = ("gmean", "gsd", "gcv", "error_bar")
 SCIENTIFIC_TABLES = ("observation_values", "interventions")
-# Row triggers on observation_values that a statistics-only UPDATE cannot violate:
-# the identity check compares observation_id, the deferred checks return early for
-# unchanged ids or rows without a course. Disabling them keeps the set-based update
-# from queueing one deferred event per row on large tables.
+# Row triggers on observation_values, disabled around the statistics UPDATE. This is
+# required: the two deferred constraint triggers would queue one event per updated
+# row, and PostgreSQL refuses the following DROP COLUMN while trigger events are
+# pending in the transaction. It is also safe and keeps large tables fast: the
+# identity check compares observation_id and the deferred checks return early for
+# unchanged ids or rows without a course, so a statistics-only UPDATE cannot
+# violate them.
 OBSERVATION_TRIGGERS = (
     "observation_context_immutable",
     "observation_course_kind_valid",
@@ -51,6 +54,9 @@ DECLARE
     repeat numeric;
     times double precision[] := '{{}}';
 BEGIN
+    IF cardinality(parts) = 0 THEN
+        RETURN;
+    END IF;
     FOREACH part IN ARRAY parts LOOP
         part := btrim(part, E' \t\n\r\f\v');
         series := regexp_match(part, '^S([-+]?{UNSIGNED})T({UNSIGNED})R([0-9]+)$');
@@ -85,7 +91,7 @@ BEGIN
             ORDER BY k
         );
     END LOOP;
-    IF cardinality(times) > {MAX_SCHEDULE_TIMES} THEN
+    IF cardinality(times) < 2 OR cardinality(times) > {MAX_SCHEDULE_TIMES} THEN
         RETURN;
     END IF;
     out_time_list := times;
@@ -102,7 +108,14 @@ FROM interventions AS source
 CROSS JOIN LATERAL p006_schedule(source.time_text) AS parsed
 WHERE source.time_text IS NOT NULL
 """
+LISTED_IDS = 100
 log = logging.getLogger("alembic.runtime.migration")
+
+
+def listed(ids, total):
+    """At most LISTED_IDS ids, then how many more there are."""
+    text = ", ".join(map(str, ids[:LISTED_IDS]))
+    return f"{text} and {total - LISTED_IDS} more" if total > LISTED_IDS else text
 
 
 def set_observation_triggers(state):
@@ -114,17 +127,19 @@ def move_values_into_mean():
     """Format 1 value (one subject or an unspecified summary) is now mean."""
     bind = op.get_bind()
     for table in SCIENTIFIC_TABLES:
-        conflicts = bind.scalars(
+        conflicts = bind.execute(
             sa.text(
-                f"SELECT id FROM {table} WHERE value IS NOT NULL AND mean IS NOT NULL "
-                "AND value <> mean ORDER BY id LIMIT 100"
+                "SELECT id, count(*) OVER () FROM "
+                + table
+                + " WHERE value IS NOT NULL AND mean IS NOT NULL AND value <> mean"
+                f" ORDER BY id LIMIT {LISTED_IDS}"
             )
         ).all()
         if conflicts:
             log.warning(
                 "Keeping mean and discarding a different value in %s rows %s",
                 table,
-                ", ".join(map(str, conflicts)),
+                listed([row[0] for row in conflicts], conflicts[0][1]),
             )
     set_observation_triggers("DISABLE")
     for table in SCIENTIFIC_TABLES:
@@ -140,19 +155,19 @@ def structure_schedules():
     """Convert schedule strings, refusing to drop any that cannot be converted."""
     bind = op.get_bind()
     op.execute(SCHEDULE_FUNCTION)
-    invalid = bind.scalars(
+    invalid = bind.execute(
         sa.text(
-            "SELECT source.id"
+            "SELECT source.id, count(*) OVER ()"
             + SCHEDULES
             + "AND parsed.out_time IS NULL AND parsed.out_time_list IS NULL "
-            "ORDER BY source.id"
+            f"ORDER BY source.id LIMIT {LISTED_IDS}"
         )
     ).all()
     if invalid:
         raise RuntimeError(
             "Cannot convert the schedule (time_text) of interventions "
-            f"{', '.join(map(str, invalid))}; correct them to a|b|c or "
-            "S<start>T<interval>R<doses> and upgrade again"
+            f"{listed([row[0] for row in invalid], invalid[0][1])}; correct them "
+            "to a|b|c or S<start>T<interval>R<doses> and upgrade again"
         )
     op.execute(
         """

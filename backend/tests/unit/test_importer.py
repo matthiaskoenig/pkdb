@@ -265,19 +265,25 @@ def test_numeric_characteristic_choices_use_legacy_text_conversion(
     assert study.individuals[0].characteristica[0].choice == str(choice)
 
 
-def test_format_1_value_becomes_mean_located_at_its_cell(study_folder, vocabulary):
-    from pkdb.domain.validation import prepare_study
-
+def write_value_output(study_folder, **fields):
     book = openpyxl.load_workbook(study_folder / "Example.xlsx")
     book["Results"]["B2"] = "concentration"
     book["Results"]["B3"] = -1
     book.save(study_folder / "Example.xlsx")
     path = study_folder / "study.json"
     data = json.loads(path.read_text())
+    data["individualset"] = {"individuals": [{"name": "person", "group": "all"}]}
     output = data["outputset"]["outputs"][0]
     del output["mean"]
     output["value"] = "col==concentration"
+    output.update(fields)
     path.write_text(json.dumps(data))
+
+
+def test_format_1_value_becomes_mean_located_at_its_cell(study_folder, vocabulary):
+    from pkdb.domain.validation import prepare_study
+
+    write_value_output(study_folder, group=None, individual="person")
     study = parse_bundle(load_folder(study_folder))
     assert [m.statistics.mean for m in study.measurements] == [-1.0, None]
     source = study.measurements[0].source
@@ -297,10 +303,70 @@ def test_format_1_value_becomes_mean_located_at_its_cell(study_folder, vocabular
     assert negative.source is not None and negative.source.cell == "B3"
 
 
+def test_format_1_group_value_is_rejected_at_its_cell(study_folder):
+    write_value_output(study_folder)
+    with pytest.raises(StudyValidationError) as error:
+        parse_bundle(load_folder(study_folder))
+    issue = error.value.report.issues[0]
+    assert (issue.code, issue.field) == ("group_value", "value")
+    assert issue.source is not None
+    assert (issue.source.sheet, issue.source.cell) == ("Results", "B3")
+
+
+def test_format_1_group_value_of_an_unspecified_summary_becomes_mean(study_folder):
+    write_value_output(study_folder, calculation_type="unspecified summary")
+    study = parse_bundle(load_folder(study_folder))
+    assert [(m.group, m.statistics.mean) for m in study.measurements] == [
+        ("all", -1.0),
+        ("all", None),
+    ]
+    assert all(m.calculation_type == "unspecified summary" for m in study.measurements)
+
+
+def write_characteristic(study_folder, section, **fields):
+    path = study_folder / "study.json"
+    data = json.loads(path.read_text())
+    characteristic = {"measurement_type": "weight", "unit": "kg", **fields}
+    if section == "groupset":
+        data["groupset"]["groups"][0]["characteristica"] = [characteristic]
+    else:
+        data["individualset"] = {
+            "individuals": [
+                {"name": "person", "group": "all", "characteristica": [characteristic]}
+            ]
+        }
+    path.write_text(json.dumps(data))
+
+
+def test_format_1_group_characteristic_value_is_rejected(study_folder):
+    write_characteristic(study_folder, "groupset", value=70)
+    with pytest.raises(StudyValidationError) as error:
+        parse_bundle(load_folder(study_folder))
+    assert error.value.report.issues[0].code == "group_value"
+    write_characteristic(
+        study_folder, "groupset", value=70, calculation_type="unspecified summary"
+    )
+    characteristic = (
+        parse_bundle(load_folder(study_folder)).groups[0].characteristica[0]
+    )
+    assert characteristic.statistics.mean == 70
+    assert characteristic.calculation_type == "unspecified summary"
+
+
+def test_format_1_individual_characteristic_value_becomes_mean(study_folder):
+    write_characteristic(study_folder, "individualset", value=70)
+    study = parse_bundle(load_folder(study_folder))
+    characteristic = study.individuals[0].characteristica[0]
+    assert characteristic.statistics.mean == 70
+    assert characteristic.calculation_type is None
+
+
 def test_format_1_value_and_mean_together_are_rejected(study_folder):
     path = study_folder / "study.json"
     data = json.loads(path.read_text())
-    data["outputset"]["outputs"][0]["value"] = 1
+    data["outputset"]["outputs"][0].update(
+        value=1, calculation_type="unspecified summary"
+    )
     path.write_text(json.dumps(data))
     with pytest.raises(StudyValidationError) as error:
         parse_bundle(load_folder(study_folder))

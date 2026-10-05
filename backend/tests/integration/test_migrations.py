@@ -351,6 +351,8 @@ CORPUS_SCHEDULES = [
     "\tS0T1R2\n",
 ]
 INVALID_SCHEDULES = [
+    "",
+    " ",
     "S0T12",
     "0|",
     "a|1",
@@ -406,6 +408,18 @@ def test_schedule_migration_matches_the_format_1_importer(
             text("UPDATE interventions SET time_text = NULL WHERE id = :id"),
             {"id": probe},
         )
+        session.execute(
+            text(
+                f"INSERT INTO interventions (key, name, time_text, {columns}) "
+                f"SELECT 'many-' || n, 'many-' || n, 'S0T24', {columns} "
+                "FROM interventions, generate_series(1, 101) AS n "
+                "WHERE name = 'dose' AND origin = 'reported'"
+            )
+        )
+    with pytest.raises(RuntimeError, match=r", \d+ and 1 more; correct"):
+        command.upgrade(config, "head")
+    with session_factory.begin() as session:
+        session.execute(text("DELETE FROM interventions WHERE key LIKE 'many-%'"))
     command.upgrade(config, "head")
     with session_factory() as session:
         converted = {

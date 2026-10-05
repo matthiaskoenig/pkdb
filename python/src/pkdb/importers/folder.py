@@ -42,6 +42,7 @@ SERIES = re.compile(rf"S([-+]?{UNSIGNED})T({UNSIGNED})R([0-9]+)")
 WHITESPACE = " \t\n\r\f\v"
 MAX_SCHEDULE_TIMES = 10_000
 MAX_DOSES = 2**31 - 1
+UNSPECIFIED_SUMMARY = "unspecified summary"
 META_KEYS = {
     "provenance",
     "name",
@@ -148,7 +149,9 @@ def _numeric(value, *, integer=False):
     return number
 
 
-def _scientific(data: dict, key: str, source: SourceLocation) -> dict:
+def _scientific(
+    data: dict, key: str, source: SourceLocation, *, group: bool = False
+) -> dict:
     reserved = data.keys() & {
         "origin",
         "derived_from",
@@ -170,6 +173,18 @@ def _scientific(data: dict, key: str, source: SourceLocation) -> dict:
         # Format 1 `value` (a single subject or an unspecified summary) is `mean`.
         value = result.pop("value")
         if clean(value) is not None:
+            calculation = clean(result.get("calculation_type"))
+            if group and calculation != UNSPECIFIED_SUMMARY:
+                fail(
+                    "group_value",
+                    "Group records cannot carry an individual value; use mean, or "
+                    f"calculation_type '{UNSPECIFIED_SUMMARY}'",
+                    source.for_field("value"),
+                    category="schema",
+                    stage="parse",
+                    field="value",
+                    actual={"value": value, "calculation_type": calculation},
+                )
             if clean(result.get("mean")) is not None:
                 fail(
                     "conflicting_statistics",
@@ -575,7 +590,12 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
                         if "count" in entry:
                             entry["count"] = _numeric(entry["count"], integer=True)
                         entry["characteristica"] = [
-                            _scientific(c, f"{key}:characteristic:{i}", location)
+                            _scientific(
+                                c,
+                                f"{key}:characteristic:{i}",
+                                location,
+                                group=entity == "groups",
+                            )
                             for i, c in enumerate(
                                 [
                                     part
@@ -586,7 +606,11 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
                         ]
                     elif entity in {"interventions", "outputs"}:
                         entry = _scientific(
-                            entry, str(entry.get("name", key)), location
+                            entry,
+                            str(entry.get("name", key)),
+                            location,
+                            group=entity == "outputs"
+                            and clean(entry.get("group")) is not None,
                         )
                         if entity == "outputs":
                             for field in ("time", "time_unit"):
