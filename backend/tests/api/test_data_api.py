@@ -48,6 +48,85 @@ def test_simple_discovery_and_paging(client, valid_bundle, admin_headers):
     assert second["items"][0]["pk"] != data["items"][0]["pk"]
 
 
+STATISTICS = {"mean", "median", "sd", "se", "cv", "gmean", "gsd", "gcv"}
+
+
+def test_responses_carry_mean_and_geometric_statistics_without_value(
+    client, valid_bundle, admin_headers
+):
+    output = valid_bundle.study["outputset"]["outputs"][0]
+    output["gmean"] = 1.9
+    intervention = valid_bundle.study["interventionset"]["interventions"][0]
+    intervention.update(time="S0T12R3", subject="all")
+    upload(client, valid_bundle, admin_headers)
+
+    def items(entity):
+        response = client.post(
+            "/api/v2/query", json={"entity": entity, "page_size": 100}
+        )
+        assert response.status_code == 200, response.text
+        return response.json()["items"]
+
+    measurements = client.get("/api/v2/measurements").json()["items"]
+    assert measurements
+    for row in measurements:
+        assert "value" not in row
+        assert STATISTICS | {"error_bar", "error_type"} <= row.keys()
+    reported = next(row for row in measurements if not row["normed"])
+    assert (reported["mean"], reported["gmean"]) == (2.0, 1.9)
+    doses = items("interventions")
+    assert doses
+    for row in doses:
+        assert "value" not in row
+        assert row["mean"] == 10.0
+        assert (row["time"], row["interval"], row["doses"]) == (0.0, 12.0, 3)
+        assert row["subject"]["name"] == "all"
+    groups = items("groups")
+    for characteristic in groups[0]["characteristica"]:
+        assert "value" not in characteristic
+        assert STATISTICS <= characteristic.keys()
+
+
+def test_intervention_time_lists_are_numbers(client, valid_bundle, admin_headers):
+    intervention = valid_bundle.study["interventionset"]["interventions"][0]
+    intervention["time"] = "0|12|40"
+    upload(client, valid_bundle, admin_headers)
+    response = client.post("/api/v2/query", json={"entity": "interventions"})
+    assert response.status_code == 200, response.text
+    assert [row["time"] for row in response.json()["items"]] == [
+        [0.0, 12.0, 40.0],
+        [0.0, 12.0, 40.0],
+    ]
+
+
+@pytest.mark.parametrize(
+    "field,total", [("mean", 2), ("gmean", 2), ("gsd", 2), ("gcv", 1), ("se", 0)]
+)
+def test_statistic_filters_use_mean_and_geometric_fields(
+    client, valid_bundle, admin_headers, field, total
+):
+    valid_bundle.study["outputset"]["outputs"][0].update(gmean=1.9, gsd=1.2)
+    upload(client, valid_bundle, admin_headers)
+    response = client.post(
+        "/api/v2/query",
+        json={
+            "entity": "measurements",
+            "predicates": [{"field": field, "operator": "isnull", "value": False}],
+        },
+    )
+    assert response.status_code == 200, response.text
+    # The normalized representation derives gcv from the reported gsd.
+    assert response.json()["total"] == total
+    value_filter = client.post(
+        "/api/v2/query",
+        json={
+            "entity": "measurements",
+            "predicates": [{"field": "value", "operator": "gte", "value": 1}],
+        },
+    )
+    assert value_filter.status_code == 400
+
+
 def test_query_alias_and_same_measurement_scope(client, valid_bundle, admin_headers):
     upload(client, valid_bundle, admin_headers)
     query = {
@@ -119,7 +198,7 @@ def test_invalid_simple_parameters(client, params):
         {"entity": "measurements", "predicates": [{"field": "unknown", "value": "x"}]},
         {
             "entity": "measurements",
-            "predicates": [{"field": "value", "value": "not numeric"}],
+            "predicates": [{"field": "mean", "value": "not numeric"}],
         },
     ],
 )

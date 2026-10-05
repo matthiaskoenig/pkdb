@@ -371,16 +371,18 @@ def test_query_keywords_preserve_scientific_types_and_aliases():
         "measurements",
         {
             "substance_sid": "apixaban",
-            "value__gte": "2.5",
+            "mean__gte": "2.5",
+            "gmean__lt": "3",
             "normed": "false",
             "pk__in": [1, 2],
-            "ordering": "-value",
+            "ordering": "-mean",
         },
     )
-    assert query.entity == "outputs" and query.sort == "-value"
+    assert query.entity == "outputs" and query.sort == "-mean"
     assert [(p.field, p.operator, p.value) for p in query.predicates] == [
         ("substance", "eq", "apixaban"),
-        ("value", "gte", 2.5),
+        ("mean", "gte", 2.5),
+        ("gmean", "lt", 3.0),
         ("normed", "eq", False),
         ("id", "in", [1, 2]),
     ]
@@ -399,7 +401,7 @@ def test_query_keywords_preserve_scientific_types_and_aliases():
         and export.queries["outputs"].predicates[0].field == "substance"
     )
     with pytest.raises(ValueError):
-        query_from_filters("outputs", {"value__gte": "NaN"})
+        query_from_filters("outputs", {"mean__gte": "NaN"})
     with pytest.raises(ValueError):
         export_from_filters({"substance": "apixaban"})
 

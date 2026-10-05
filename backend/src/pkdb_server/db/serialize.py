@@ -90,7 +90,19 @@ class VocabularyResponses:
     def science(self, row):
         result = {
             name: getattr(row, name)
-            for name in ("value", "mean", "median", "sd", "se", "cv", "unit")
+            for name in (
+                "mean",
+                "median",
+                "sd",
+                "se",
+                "cv",
+                "gmean",
+                "gsd",
+                "gcv",
+                "error_bar",
+                "error_type",
+                "unit",
+            )
         }
         result.update(pk=row.id, min=row.minimum, max=row.maximum)
         result.update(
@@ -301,6 +313,17 @@ def intervention_responses(session, rows):
             select(Study).where(Study.id.in_({r.study_id for r in rows}))
         )
     }
+    subject_ids = {row.subject_id for row in rows if row.subject_id is not None}
+    subjects = (
+        {
+            row.id: {"pk": row.id, "name": row.name}
+            for row in session.scalars(
+                select(Subject).where(Subject.id.in_(subject_ids))
+            )
+        }
+        if subject_ids
+        else {}
+    )
     return [
         InterventionResponse.model_validate(
             {
@@ -310,11 +333,12 @@ def intervention_responses(session, rows):
                 "route": vocabulary.node(row.route),
                 "form": vocabulary.node(row.form),
                 "application": vocabulary.node(row.application),
-                "time": row.time_text
-                if row.time_text is not None
-                else (format(row.time, "g") if row.time is not None else None),
+                "time": row.time_list if row.time_list is not None else row.time,
                 "time_end": row.time_end,
+                "interval": row.interval,
+                "doses": row.doses,
                 "time_unit": row.time_unit,
+                "subject": subjects.get(row.subject_id),
                 "study": studies[row.study_id],
             }
         ).model_dump()

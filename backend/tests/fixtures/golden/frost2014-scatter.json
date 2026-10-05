@@ -31,7 +31,6 @@
   "x_choice_label": null,
   "x_substance": "apixaban",
   "x_substance_label": "apixaban",
-  "x_value": null,
   "x_mean": [
     1.1550000000000003e-05,
     4.636000000000001e-05
@@ -42,6 +41,11 @@
   "x_sd": null,
   "x_se": null,
   "x_cv": null,
+  "x_gmean": null,
+  "x_gsd": null,
+  "x_gcv": null,
+  "x_error_bar": null,
+  "x_error_type": null,
   "x_unit": "gram / liter",
   "x_dimension": 0,
   "x_data_point": [
@@ -76,7 +80,6 @@
   "y_choice_label": null,
   "y_substance": "apixaban",
   "y_substance_label": "apixaban",
-  "y_value": null,
   "y_mean": [
     2.515e-05,
     8.429000000000002e-05
@@ -87,6 +90,11 @@
   "y_sd": null,
   "y_se": null,
   "y_cv": null,
+  "y_gmean": null,
+  "y_gsd": null,
+  "y_gcv": null,
+  "y_error_bar": null,
+  "y_error_type": null,
   "y_unit": "gram / liter",
   "y_dimension": 1,
   "y_data_point": [

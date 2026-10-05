@@ -140,7 +140,6 @@ class ObservationValue(Owned, Base):
     observation_id: Mapped[int] = mapped_column(index=True)
     origin: Mapped[str] = mapped_column("representation", default="reported")
     unit: Mapped[str | None]
-    value: Mapped[float | None]
     mean: Mapped[float | None]
     median: Mapped[float | None]
     minimum: Mapped[float | None]
@@ -225,7 +224,6 @@ class Observation(Base):
         method: Mapped[str | None]
         image: Mapped[str | None]
         unit: Mapped[str | None]
-        value: Mapped[float | None]
         mean: Mapped[float | None]
         median: Mapped[float | None]
         minimum: Mapped[float | None]

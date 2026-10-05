@@ -43,7 +43,6 @@ class Scientific:
     )
     choice: Mapped[str | None]
     unit: Mapped[str | None]
-    value: Mapped[float | None] = mapped_column(Float)
     mean: Mapped[float | None] = mapped_column(Float)
     median: Mapped[float | None] = mapped_column(Float)
     minimum: Mapped[float | None] = mapped_column(Float)

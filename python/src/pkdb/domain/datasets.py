@@ -21,7 +21,6 @@ SHARED_FIELDS = {
     "output_type",
 }
 STATISTICS_FIELDS = {
-    "value",
     "mean",
     "median",
     "min",

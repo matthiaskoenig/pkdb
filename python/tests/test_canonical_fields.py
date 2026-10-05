@@ -88,10 +88,16 @@ def test_intervention_schedule_with_interval_and_doses():
     assert intervention.subject == "all"
 
 
-def test_intervention_keeps_accepting_schedule_text_for_now():
-    assert Intervention.model_validate({**INTERVENTION, "time": "S0T24R7"}).time == (
-        "S0T24R7"
-    )
+@pytest.mark.parametrize("time", ["S0T24R7", "0|12|40", "0"])
+def test_intervention_rejects_schedule_text(time):
+    with pytest.raises(ValidationError):
+        Intervention.model_validate({**INTERVENTION, "time": time})
+
+
+def test_statistics_have_no_value():
+    with pytest.raises(ValidationError):
+        Statistics.model_validate({"value": 1.0})
+    assert "value" not in Statistics.model_fields
 
 
 @pytest.mark.parametrize("time", [[], [0], [0, "12"], [0, float("nan")]])

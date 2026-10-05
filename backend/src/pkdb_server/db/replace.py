@@ -180,7 +180,6 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
             image=record.image,
             time=record.time if isinstance(record.time, (int, float)) else None,
             time_list=record.time if isinstance(record.time, list) else None,
-            time_text=record.time if isinstance(record.time, str) else None,
             time_end=record.time_end,
             interval=record.interval,
             doses=record.doses,
@@ -232,7 +231,6 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
     record_contexts = {}
     value_fields = {
         "unit",
-        "value",
         "mean",
         "median",
         "minimum",

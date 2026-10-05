@@ -110,7 +110,8 @@ class Reference(Record):
 
 
 class Statistics(Record):
-    value: Number | None = None
+    """Reported statistics; a single subject or unspecified summary uses mean."""
+
     mean: Number | None = None
     median: Number | None = None
     min: Number | None = None
@@ -168,7 +169,7 @@ class Individual(Subject):
 class Intervention(ScientificRecord):
     image: str | None = None
     name: Identifier
-    time: Number | Annotated[list[Number], Field(min_length=2)] | str | None = None
+    time: Number | Annotated[list[Number], Field(min_length=2)] | None = None
     time_end: Number | None = None
     interval: Number | None = None
     doses: Annotated[int, Field(strict=True, ge=1)] | None = None

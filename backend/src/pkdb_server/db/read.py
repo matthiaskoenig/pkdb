@@ -30,10 +30,8 @@ def read_study(
         return assemble_study(root, session)
 
 
-def intervention_time(row: i.Intervention) -> float | list[float] | str | None:
-    """Canonical intervention time: schedule text, a list of times or one time."""
-    if row.time_text is not None:
-        return row.time_text
+def intervention_time(row: i.Intervention) -> float | list[float] | None:
+    """Canonical intervention time: a list of times or one time."""
     return row.time_list if row.time_list is not None else row.time
 
 
@@ -131,7 +129,6 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                 **{
                     name: getattr(row, name)
                     for name in (
-                        "value",
                         "mean",
                         "median",
                         "sd",

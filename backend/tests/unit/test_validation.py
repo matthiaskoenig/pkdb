@@ -3,6 +3,7 @@
 import pytest
 
 from pkdb.domain.validation import prepare_study
+from pkdb.domain.vocabulary import MeasurementRule
 from pkdb.schemas.validation import StudyValidationError
 
 
@@ -99,27 +100,73 @@ def test_warning_cap_cannot_hide_a_later_error(valid_study, vocabulary):
     assert not error.value.report.valid
 
 
-def test_group_output_rejects_individual_value(valid_study, vocabulary):
-    valid_study.measurements[0].statistics.value = 2
-    with pytest.raises(StudyValidationError) as error:
-        prepare_study(valid_study, vocabulary)
-    assert "group_value" in codes(error)
+def test_processing_version_is_nine():
+    from pkdb.domain.validation import PROCESSING_VERSION
+
+    assert PROCESSING_VERSION == "9"
 
 
-@pytest.mark.parametrize("field", ["mean", "median", "min", "sd", "se", "cv"])
-def test_individual_output_rejects_population_statistics(
-    valid_study, vocabulary, field
-):
-    from pkdb.schemas.study import Individual, Statistics
+def individual_output(valid_study):
+    from pkdb.schemas.study import Individual
 
     valid_study.individuals.append(Individual(key="i1", name="person", group="all"))
     output = valid_study.measurements[0]
     output.group = None
     output.individual = "person"
-    output.statistics = Statistics.model_validate({"value": 2, field: 1})
+    return output
+
+
+def test_individual_output_carries_its_value_in_mean(valid_study, vocabulary):
+    from pkdb.schemas.study import Statistics
+
+    individual_output(valid_study).statistics = Statistics(mean=2)
+    prepared = prepare_study(valid_study, vocabulary)
+    assert prepared.report.valid
+    assert [m.statistics.mean for m in prepared.study.measurements] == [2, 2]
+
+
+@pytest.mark.parametrize(
+    "statistics",
+    [
+        {"median": 1},
+        {"min": 1},
+        {"sd": 1},
+        {"se": 1},
+        {"cv": 1},
+        {"gmean": 1},
+        {"gsd": 1.2},
+        {"gcv": 0.1},
+        {"error_bar": 3},
+        {"error_type": "sd"},
+    ],
+)
+def test_individual_output_rejects_population_statistics(
+    valid_study, vocabulary, statistics
+):
+    from pkdb.schemas.study import Statistics
+
+    output = individual_output(valid_study)
+    output.statistics = Statistics.model_validate({"mean": 2, **statistics})
     with pytest.raises(StudyValidationError) as error:
         prepare_study(valid_study, vocabulary)
     assert "individual_statistics" in codes(error)
+
+
+def test_individual_output_rejects_calculation_type(valid_study, vocabulary):
+    vocabulary = vocabulary.model_copy(update={"calculation_types": ("sample mean",)})
+    individual_output(valid_study).calculation_type = "sample mean"
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(valid_study, vocabulary)
+    assert "individual_statistics" in codes(error)
+
+
+def test_dose_is_required_in_mean(valid_study, vocabulary):
+    from pkdb.schemas.study import Statistics
+
+    valid_study.interventions[0].statistics = Statistics(median=10)
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(valid_study, vocabulary)
+    assert "missing_dose" in codes(error)
 
 
 def test_individual_detection_limit_is_allowed(valid_study, vocabulary):
@@ -175,18 +222,83 @@ def test_unspecified_summary_is_explicit_and_has_no_statistical_completion(
         update={"calculation_types": ("unspecified summary",)}
     )
     record = valid_study.measurements[0]
-    record.statistics = Statistics(value=2)
+    record.statistics = Statistics(mean=2, sd=1)
     record.calculation_type = "unspecified summary"
-    prepared = prepare_study(valid_study, vocabulary)
-    assert prepared.report.valid
-    assert all(
-        m.statistics.mean is None and m.statistics.sd is None
-        for m in prepared.study.measurements
-    )
-    record.statistics.mean = 2
     with pytest.raises(StudyValidationError) as error:
         prepare_study(valid_study, vocabulary)
     assert "unspecified_summary_statistics" in codes(error)
+    record.statistics = Statistics(mean=2)
+    prepared = prepare_study(valid_study, vocabulary)
+    assert prepared.report.valid
+    assert all(
+        m.statistics.mean == 2 and m.statistics.sd is None and m.statistics.se is None
+        for m in prepared.study.measurements
+    )
+
+
+@pytest.mark.parametrize(
+    "statistics",
+    [
+        {"median": 1},
+        {"min": 1},
+        {"max": 3},
+        {"se": 1},
+        {"cv": 1},
+        {"gmean": 1},
+        {"gsd": 1.2},
+        {"gcv": 0.1},
+        {"error_bar": 3},
+    ],
+)
+def test_unspecified_summary_has_only_a_mean(valid_study, vocabulary, statistics):
+    from pkdb.schemas.study import Statistics
+
+    record = valid_study.measurements[0]
+    record.statistics = Statistics.model_validate({"mean": 2, **statistics})
+    record.calculation_type = "unspecified summary"
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(valid_study, vocabulary)
+    assert "unspecified_summary_statistics" in codes(error)
+
+
+def test_unspecified_summary_characteristic_has_only_a_mean(valid_study, vocabulary):
+    from pkdb.schemas.study import Observation, Statistics
+
+    vocabulary = vocabulary.model_copy(
+        update={
+            "measurements": (
+                *vocabulary.measurements,
+                MeasurementRule(name="weight", units=("kg",)),
+            )
+        }
+    )
+    characteristic = Observation(
+        key="weight",
+        measurement_type="weight",
+        unit="kg",
+        calculation_type="unspecified summary",
+        statistics=Statistics(mean=70, sd=5),
+    )
+    valid_study.groups[0].characteristica.append(characteristic)
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(valid_study, vocabulary)
+    assert "unspecified_summary_statistics" in codes(error)
+    characteristic.statistics = Statistics(mean=70)
+    assert prepare_study(valid_study, vocabulary).report.valid
+
+
+def test_unspecified_summary_is_accepted_without_a_vocabulary_term(
+    valid_study, vocabulary
+):
+    from pkdb.schemas.study import Statistics
+
+    assert "unspecified summary" not in vocabulary.calculation_types
+    record = valid_study.measurements[0]
+    record.statistics = Statistics(mean=2)
+    record.calculation_type = "unspecified summary"
+    prepared = prepare_study(valid_study, vocabulary)
+    assert prepared.report.valid
+    assert prepared.study.measurements[0].calculation_type == "unspecified summary"
 
 
 def test_unspecified_summary_does_not_generate_pk(valid_study):
@@ -194,7 +306,7 @@ def test_unspecified_summary_does_not_generate_pk(valid_study):
     from pkdb.schemas.study import Statistics, Timecourse
 
     record = valid_study.measurements[0]
-    record.statistics = Statistics(value=2)
+    record.statistics = Statistics(mean=2)
     record.calculation_type = "unspecified summary"
     course = Timecourse(key="opaque", points=[record])
     assert derive_pk(course) == []

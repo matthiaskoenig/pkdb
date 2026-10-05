@@ -35,8 +35,23 @@ from pkdb.schemas.validation import (
     ValidationReport,
 )
 
-PROCESSING_VERSION = "8"
-NUMERIC_FIELDS = ("value", "mean", "median", "min", "max", "sd", "se", "cv")
+PROCESSING_VERSION = "9"
+NUMERIC_FIELDS = ("mean", "median", "min", "max", "sd", "se", "cv", "gmean")
+UNSPECIFIED_SUMMARY = "unspecified summary"
+# A single subject reports one value in mean; max stays allowed as a detection limit.
+INDIVIDUAL_PROHIBITED = (
+    "median",
+    "min",
+    "sd",
+    "se",
+    "cv",
+    "gmean",
+    "gsd",
+    "gcv",
+    "error_bar",
+    "error_type",
+)
+SUMMARY_PROHIBITED = (*INDIVIDUAL_PROHIBITED, "max")
 
 
 def prepare_study(
@@ -196,12 +211,6 @@ def prepare_study(
                     "Characteristic count exceeds group count",
                     characteristic,
                 )
-            if characteristic.statistics.value is not None:
-                issue(
-                    "group_value",
-                    "Group characteristics use mean/median, not individual value",
-                    characteristic,
-                )
     for individual in study.individuals:
         if individual.group and individual.group not in groups:
             issue(
@@ -213,41 +222,43 @@ def prepare_study(
     def validate_individual(record):
         prohibited = [
             field
-            for field in ("mean", "median", "min", "sd", "se", "cv")
+            for field in INDIVIDUAL_PROHIBITED
             if getattr(record.statistics, field) is not None
         ]
         if prohibited or record.calculation_type is not None:
             issue(
                 "individual_statistics",
-                "Individual records cannot contain population statistics or calculation_type",
+                "Individual records report their value in mean and cannot contain "
+                "population statistics or calculation_type",
                 record,
+                field=prohibited[0] if prohibited else "calculation_type",
+            )
+
+    def validate_summary(record):
+        if record.calculation_type == UNSPECIFIED_SUMMARY and (
+            prohibited := [
+                field
+                for field in SUMMARY_PROHIBITED
+                if getattr(record.statistics, field) is not None
+            ]
+        ):
+            issue(
+                "unspecified_summary_statistics",
+                "Unspecified summaries report only a mean and cannot claim other statistics",
+                record,
+                field=prohibited[0],
             )
 
     for individual in study.individuals:
         for characteristic in individual.characteristica:
             validate_individual(characteristic)
+    for group in study.groups:
+        for characteristic in group.characteristica:
+            validate_summary(characteristic)
     for measurement in study.measurements:
-        if measurement.calculation_type == "unspecified summary" and any(
-            getattr(measurement.statistics, field) is not None
-            for field in ("mean", "median", "min", "max", "sd", "se", "cv")
-        ):
-            issue(
-                "unspecified_summary_statistics",
-                "Unspecified summaries use value and cannot claim population statistics",
-                measurement,
-            )
+        validate_summary(measurement)
         if measurement.individual:
             validate_individual(measurement)
-        if (
-            measurement.group
-            and measurement.statistics.value is not None
-            and measurement.calculation_type != "unspecified summary"
-        ):
-            issue(
-                "group_value",
-                "Group outputs cannot contain individual value",
-                measurement,
-            )
         if bool(measurement.group) == bool(measurement.individual):
             issue(
                 "subject_reference",
@@ -328,7 +339,7 @@ def prepare_study(
             ("route", vocabulary.routes),
             ("form", vocabulary.forms),
             ("application", vocabulary.applications),
-            ("calculation_type", vocabulary.calculation_types),
+            ("calculation_type", (*vocabulary.calculation_types, UNSPECIFIED_SUMMARY)),
         ]:
             value = getattr(record, field, None)
             if value and value not in allowed:
@@ -444,7 +455,7 @@ def prepare_study(
             )
             normalized[record.key] = candidate
             if rule.name == "recovery":
-                for field in ("value", "mean", "median"):
+                for field in ("mean", "median", "gmean"):
                     value = getattr(record.statistics, field)
                     if (
                         value is not None
@@ -482,8 +493,13 @@ def prepare_study(
                         f"{field} required for dosing",
                         intervention,
                     )
-            if intervention.statistics.value is None:
-                issue("missing_dose", "Dose value is required", intervention)
+            if intervention.statistics.mean is None:
+                issue(
+                    "missing_dose",
+                    "The dose is required in mean",
+                    intervention,
+                    field="mean",
+                )
         if intervention.measurement_type == "dosing":
             for field in ("form", "application", "time", "time_unit"):
                 if getattr(intervention, field) is None:

@@ -17,7 +17,6 @@ class Intervention(Owned, Scientific, Base):
     name: Mapped[str]
     time: Mapped[float | None]
     time_list: Mapped[list[float] | None] = mapped_column(ARRAY(Float))
-    time_text: Mapped[str | None]
     time_end: Mapped[float | None]
     interval: Mapped[float | None]
     doses: Mapped[int | None]

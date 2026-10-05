@@ -36,8 +36,11 @@ def test_statistics_do_not_invent_arithmetic_errors_or_individual_means():
     warnings = []
     assert statistics(
         10, "geom. Mean", 20, "%", "geomCV", "mg/l", False, warnings, {}
-    ) == {"mean": 10.0, "calculation_type": "geometric mean"}
+    ) == {"gmean": 10.0, "calculation_type": "geometric mean"}
     assert warnings[-1]["code"] == "uncertainty_retained_in_source"
+    assert statistics(
+        7, "individual", None, None, None, "mg/l", True, warnings, {}
+    ) == {"mean": 7.0}
     assert statistics(10, "mean", None, None, None, "mg/l", True, warnings, {}) is None
     assert statistics(10, None, None, None, None, "mg/l", False, warnings, {}) is None
 

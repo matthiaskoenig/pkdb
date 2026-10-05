@@ -113,10 +113,12 @@ def statistics(
         return None
     geometric = kind in {"geomean", "geommean", "gmean"}
     if kind in {"individual"}:
-        field = "value" if individual else None
+        field = "mean" if individual else None
     elif kind == "median":
         field = "median"
-    elif geometric or kind in {
+    elif geometric:
+        field = "gmean"
+    elif kind in {
         "arithmean",
         "arithmmean",
         "arithmeticmean",
@@ -471,7 +473,7 @@ def import_workbook(path, output, *, creator, vocabulary=None, verify=True):
                     "name": name,
                     "measurement_type": "dosing",
                     "substance": substance(row[4]),
-                    "value": dose,
+                    "mean": dose,
                     "unit": unit(row[11]),
                     "time": at,
                     "time_unit": unit(row[14]),
@@ -547,7 +549,7 @@ def import_workbook(path, output, *, creator, vocabulary=None, verify=True):
                     return
                 if (
                     any(
-                        stats.get(field, 0) < 0 for field in ("mean", "value", "median")
+                        stats.get(field, 0) < 0 for field in ("mean", "gmean", "median")
                     )
                     and not rules[measurement].can_negative
                 ):

@@ -11,7 +11,6 @@ from pkdb.schemas.study import ScientificRecord
 from pkdb.schemas.validation import fail
 
 SCALED_FIELDS = (
-    "value",
     "mean",
     "median",
     "min",

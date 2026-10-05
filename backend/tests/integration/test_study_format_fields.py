@@ -65,7 +65,7 @@ def schedule(key, **fields):
         "name": key,
         "measurement_type": "dosing",
         "substance": "drug",
-        "statistics": {"value": 10.0},
+        "statistics": {"mean": 10.0},
         "unit": "mg",
         "time_unit": "h",
         "route": "oral",
@@ -88,12 +88,11 @@ def format2_study(valid_study):
         schedule(
             "dose",
             time=0.0,
-            statistics={"value": 10.0, "gmean": 9.0, "gsd": 1.1, "gcv": 0.1},
+            statistics={"mean": 10.0, "gmean": 9.0, "gsd": 1.1, "gcv": 0.1},
         ),
         schedule("list", time=[0.0, 12.0, 40.0]),
         schedule("repeat", time=0.0, interval=24.0, doses=7),
         schedule("subject", time=0.0, subject="all"),
-        schedule("text", time="S0T24R7"),
     ]
     data["measurements"][0]["statistics"].update(GEOMETRIC)
     data["groups"][0]["characteristica"].append(
@@ -158,7 +157,6 @@ def test_schedules_and_subjects_are_stored_in_their_columns(
         24.0,
         7,
     )
-    assert (rows["text"].time, rows["text"].time_text) == (None, "S0T24R7")
     assert rows["subject"].subject_id == group
     assert rows["dose"].subject_id is None
     assert (rows["dose"].gmean, rows["dose"].gsd, rows["dose"].gcv) == (9.0, 1.1, 0.1)
@@ -260,3 +258,32 @@ def test_pkdb_identifiers_are_unique(ingestion_context, session_factory, format2
     )
     with pytest.raises(IntegrityError):
         publish(session_factory, principal, other)
+
+
+def test_unspecified_summary_is_stored_in_mean(
+    ingestion_context, valid_bundle, session_factory
+):
+    from pkdb_server.db.models.vocabulary import VocabularyNode
+
+    ingestion, principal = ingestion_context
+    with session_factory.begin() as session:
+        session.add(
+            VocabularyNode(
+                sid="unspecified-summary",
+                name="unspecified summary",
+                kind="calculation_type",
+                definition={},
+            )
+        )
+    valid_bundle.study["outputset"]["outputs"][0].update(
+        calculation_type="unspecified summary"
+    )
+    published = ingestion.replace(valid_bundle, principal)
+    study = read_study(published.sid, principal, session_factory)
+    assert {
+        (record.origin, record.calculation_type, record.statistics.mean)
+        for record in study.measurements
+    } == {
+        ("reported", "unspecified summary", 2.0),
+        ("normalized", "unspecified summary", 2.0),
+    }

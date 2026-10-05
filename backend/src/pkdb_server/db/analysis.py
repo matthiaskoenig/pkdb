@@ -39,7 +39,22 @@ ENTITIES = {
     "timecourses": "subsets",
     "data": "subsets",
 }
-VALUES = ("value", "mean", "median", "min", "max", "sd", "se", "cv", "unit")
+# Statistics in analysis column order; the timecourse rows rely on unit being last.
+VALUES = (
+    "mean",
+    "median",
+    "min",
+    "max",
+    "sd",
+    "se",
+    "cv",
+    "gmean",
+    "gsd",
+    "gcv",
+    "error_bar",
+    "error_type",
+    "unit",
+)
 NODES = ("measurement_type", "calculation_type", "choice", "substance")
 
 
@@ -93,7 +108,6 @@ def statement(entity, query, principal):
             {
                 name: getattr(Characteristic, name)
                 for name in (
-                    "value",
                     "mean",
                     "median",
                     "minimum",
@@ -101,6 +115,9 @@ def statement(entity, query, principal):
                     "sd",
                     "se",
                     "cv",
+                    "gmean",
+                    "gsd",
+                    "gcv",
                     "unit",
                     "choice",
                     "count",
@@ -284,7 +301,10 @@ def _serialize(session, entity, rows, principal):
                     ),
                     "time": row["time"],
                     "time_end": row["time_end"],
+                    "interval": row["interval"],
+                    "doses": row["doses"],
                     "time_unit": row["time_unit"],
+                    "subject_pk": model.subject_id,
                     **science(row, labels=True),
                 }
             )

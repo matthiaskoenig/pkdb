@@ -35,7 +35,6 @@ class ScientificResponse(ResponseModel):
     calculation_type: NodeResponse | None
     choice: NodeResponse | None
     substance: NodeResponse | None
-    value: float | None
     mean: float | None
     median: float | None
     min: float | None
@@ -43,6 +42,11 @@ class ScientificResponse(ResponseModel):
     sd: float | None
     se: float | None
     cv: float | None
+    gmean: float | None
+    gsd: float | None
+    gcv: float | None
+    error_bar: float | None
+    error_type: str | None
     unit: str | None
 
 
@@ -84,9 +88,12 @@ class InterventionResponse(ScientificResponse):
     route: NodeResponse | None
     form: NodeResponse | None
     application: NodeResponse | None
-    time: str | None
+    time: float | list[float] | None
     time_end: float | None
+    interval: float | None
+    doses: int | None
     time_unit: str | None
+    subject: SubjectSummary | None
     study: StudySummary
 
 
@@ -128,7 +135,6 @@ class ArrayOutput(ResponseModel):
     interventions: list[SubjectSummary]
     ex: SourceReference | EmptyResponse
     normed: bool
-    value: float | None
     mean: float | None
     median: float | None
     min: float | None
@@ -136,6 +142,11 @@ class ArrayOutput(ResponseModel):
     se: float | None
     sd: float | None
     cv: float | None
+    gmean: float | None
+    gsd: float | None
+    gcv: float | None
+    error_bar: float | None
+    error_type: str | None
     unit: str | None
     time_unit: str | None
     time: float | None

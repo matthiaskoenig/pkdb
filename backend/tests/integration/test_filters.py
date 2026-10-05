@@ -50,7 +50,7 @@ def crossed_measurements(session_factory):
                         group_id=group.id,
                         measurement_type="concentration",
                         substance=substance,
-                        value=value,
+                        mean=value,
                         origin="normalized",
                     )
                 )
@@ -63,7 +63,7 @@ def test_predicates_bind_to_same_measurement(crossed_measurements):
         entity="studies",
         predicates=[
             Predicate(field="outputs.substance", operator="eq", value="A"),
-            Predicate(field="outputs.value", operator="gte", value=10),
+            Predicate(field="outputs.mean", operator="gte", value=10),
         ],
     )
     page = queries.search(query, Principal())
@@ -118,7 +118,7 @@ def test_multiple_matching_children_do_not_duplicate_study(crossed_measurements)
     page = queries.search(
         QuerySpec(
             entity="studies",
-            predicates=[Predicate(field="outputs.value", operator="gte", value=1)],
+            predicates=[Predicate(field="outputs.mean", operator="gte", value=1)],
         ),
         Principal(),
     )
@@ -154,7 +154,6 @@ def test_public_output_contains_complete_scientific_fields(crossed_measurements)
         "calculation_type",
         "choice",
         "substance",
-        "value",
         "mean",
         "median",
         "min",
@@ -162,6 +161,11 @@ def test_public_output_contains_complete_scientific_fields(crossed_measurements)
         "sd",
         "se",
         "cv",
+        "gmean",
+        "gsd",
+        "gcv",
+        "error_bar",
+        "error_type",
         "unit",
         "time",
         "time_unit",
@@ -171,8 +175,10 @@ def test_public_output_contains_complete_scientific_fields(crossed_measurements)
 @pytest.mark.parametrize(
     "field,value",
     [
-        ("outputs.value", "invalid"),
-        ("outputs.value", float("nan")),
+        ("outputs.mean", "invalid"),
+        ("outputs.mean", float("nan")),
+        ("outputs.gmean", "invalid"),
+        ("outputs.value", 1.0),
         ("outputs.count", True),
     ],
 )
@@ -196,7 +202,7 @@ def test_analysis_predicates_bind_to_same_measurement(crossed_measurements):
         entity="studies",
         predicates=[
             Predicate(field="outputs.substance", value="A"),
-            Predicate(field="outputs.value", operator="gte", value=10),
+            Predicate(field="outputs.mean", operator="gte", value=10),
         ],
     )
     for principal, expected in [(Principal(), ["Y"]), (creator, ["Y", "Z"])]:

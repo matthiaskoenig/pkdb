@@ -1,4 +1,12 @@
-"""Study format 2: geometric and error-bar statistics, schedules, release and review."""
+"""Study format 2: geometric and error-bar statistics, schedules, release and review.
+
+The `value` statistic moves into `mean` and schedule strings (`time_text`) become
+`time`, `time_list`, `interval` and `doses`. Every study is re-uploaded with
+processing version 9 afterwards, so the downgrade restores the version 8 columns
+only as far as they are derivable.
+"""
+
+import logging
 
 import sqlalchemy as sa
 from sqlalchemy.dialects import postgresql
@@ -12,6 +20,192 @@ depends_on = None
 
 STATISTICS = ("gmean", "gsd", "gcv", "error_bar")
 SCIENTIFIC_TABLES = ("observation_values", "interventions")
+# Row triggers on observation_values that a statistics-only UPDATE cannot violate:
+# the identity check compares observation_id, the deferred checks return early for
+# unchanged ids or rows without a course. Disabling them keeps the set-based update
+# from queueing one deferred event per row on large tables.
+OBSERVATION_TRIGGERS = (
+    "observation_context_immutable",
+    "observation_course_kind_valid",
+    "dataset_member_delete_valid",
+)
+MAX_SCHEDULE_TIMES = 10_000
+UNSIGNED = r"(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][-+]?[0-9]+)?"
+# The format 1 schedule grammar of pkdb.importers.folder.parse_schedule in SQL:
+# a|b|c, S<start>T<interval>R<doses> and |-lists mixing both (expanded). A lone
+# number is a single time. Invalid input returns no time and no time list.
+SCHEDULE_FUNCTION = rf"""
+CREATE FUNCTION p006_schedule(
+    schedule text,
+    OUT out_time double precision,
+    OUT out_time_list double precision[],
+    OUT out_interval double precision,
+    OUT out_doses integer
+) LANGUAGE plpgsql IMMUTABLE AS $$
+DECLARE
+    parts text[] := string_to_array(schedule, '|');
+    part text;
+    series text[];
+    start double precision;
+    step double precision;
+    repeat numeric;
+    times double precision[] := '{{}}';
+BEGIN
+    FOREACH part IN ARRAY parts LOOP
+        part := btrim(part, E' \t\n\r\f\v');
+        series := regexp_match(part, '^S([-+]?{UNSIGNED})T({UNSIGNED})R([0-9]+)$');
+        IF series IS NULL THEN
+            IF part !~ '^[-+]?{UNSIGNED}$' THEN
+                RETURN;
+            END IF;
+            IF cardinality(parts) = 1 THEN
+                out_time := part::double precision;
+                RETURN;
+            END IF;
+            times := times || part::double precision;
+            CONTINUE;
+        END IF;
+        start := series[1]::double precision;
+        step := series[2]::double precision;
+        repeat := series[3]::numeric;
+        IF repeat < 1 OR repeat > 2147483647 THEN
+            RETURN;
+        END IF;
+        IF cardinality(parts) = 1 THEN
+            out_time := start;
+            out_interval := step;
+            out_doses := repeat::integer;
+            RETURN;
+        END IF;
+        IF cardinality(times) + repeat > {MAX_SCHEDULE_TIMES} THEN
+            RETURN;
+        END IF;
+        times := times || ARRAY(
+            SELECT start + step * k FROM generate_series(0, repeat::integer - 1) AS k
+            ORDER BY k
+        );
+    END LOOP;
+    IF cardinality(times) > {MAX_SCHEDULE_TIMES} THEN
+        RETURN;
+    END IF;
+    out_time_list := times;
+EXCEPTION
+    WHEN numeric_value_out_of_range OR invalid_text_representation THEN
+        out_time := NULL;
+        out_time_list := NULL;
+        out_interval := NULL;
+        out_doses := NULL;
+END $$;
+"""
+SCHEDULES = """
+FROM interventions AS source
+CROSS JOIN LATERAL p006_schedule(source.time_text) AS parsed
+WHERE source.time_text IS NOT NULL
+"""
+log = logging.getLogger("alembic.runtime.migration")
+
+
+def set_observation_triggers(state):
+    for trigger in OBSERVATION_TRIGGERS:
+        op.execute(f"ALTER TABLE observation_values {state} TRIGGER {trigger}")
+
+
+def move_values_into_mean():
+    """Format 1 value (one subject or an unspecified summary) is now mean."""
+    bind = op.get_bind()
+    for table in SCIENTIFIC_TABLES:
+        conflicts = bind.scalars(
+            sa.text(
+                f"SELECT id FROM {table} WHERE value IS NOT NULL AND mean IS NOT NULL "
+                "AND value <> mean ORDER BY id LIMIT 100"
+            )
+        ).all()
+        if conflicts:
+            log.warning(
+                "Keeping mean and discarding a different value in %s rows %s",
+                table,
+                ", ".join(map(str, conflicts)),
+            )
+    set_observation_triggers("DISABLE")
+    for table in SCIENTIFIC_TABLES:
+        op.execute(
+            f"UPDATE {table} SET mean = value WHERE mean IS NULL AND value IS NOT NULL"
+        )
+    set_observation_triggers("ENABLE")
+    for table in SCIENTIFIC_TABLES:
+        op.drop_column(table, "value")
+
+
+def structure_schedules():
+    """Convert schedule strings, refusing to drop any that cannot be converted."""
+    bind = op.get_bind()
+    op.execute(SCHEDULE_FUNCTION)
+    invalid = bind.scalars(
+        sa.text(
+            "SELECT source.id"
+            + SCHEDULES
+            + "AND parsed.out_time IS NULL AND parsed.out_time_list IS NULL "
+            "ORDER BY source.id"
+        )
+    ).all()
+    if invalid:
+        raise RuntimeError(
+            "Cannot convert the schedule (time_text) of interventions "
+            f"{', '.join(map(str, invalid))}; correct them to a|b|c or "
+            "S<start>T<interval>R<doses> and upgrade again"
+        )
+    op.execute(
+        """
+        UPDATE interventions AS target
+        SET "time" = parsed.out_time,
+            time_list = parsed.out_time_list,
+            "interval" = parsed.out_interval,
+            doses = parsed.out_doses
+        """
+        + SCHEDULES
+        + "AND target.id = source.id"
+    )
+    op.execute("DROP FUNCTION p006_schedule(text)")
+    op.drop_column("interventions", "time_text")
+
+
+def restore_values_and_schedule_text():
+    """Version 8 kept one subject, unspecified summaries and doses in value."""
+    op.add_column("observation_values", sa.Column("value", sa.Float(), nullable=True))
+    op.add_column("interventions", sa.Column("value", sa.Float(), nullable=True))
+    op.add_column("interventions", sa.Column("time_text", sa.String(), nullable=True))
+    set_observation_triggers("DISABLE")
+    op.execute(
+        """
+        UPDATE observation_values AS v
+        SET value = v.mean, mean = NULL
+        FROM observations AS o
+        JOIN subjects AS s ON s.id = o.subject_id
+        LEFT JOIN vocabulary_nodes AS c
+            ON c.sid = o.calculation_type AND c.kind = 'calculation_type'
+        WHERE o.id = v.observation_id
+          AND v.mean IS NOT NULL
+          AND (s.kind = 'individual' OR c.name = 'unspecified summary')
+        """
+    )
+    set_observation_triggers("ENABLE")
+    op.execute(
+        "UPDATE interventions SET value = mean, mean = NULL WHERE mean IS NOT NULL"
+    )
+    # Shortest exact float text, so that the upgrade reads the same numbers back.
+    op.execute("SET LOCAL extra_float_digits = 1")
+    op.execute(
+        "UPDATE interventions SET time_text = array_to_string(time_list, '|') "
+        "WHERE time_list IS NOT NULL"
+    )
+    op.execute(
+        """
+        UPDATE interventions
+        SET time_text = 'S' || "time" || 'T' || "interval" || 'R' || doses,
+            "time" = NULL
+        WHERE "time" IS NOT NULL AND "interval" IS NOT NULL AND doses IS NOT NULL
+        """
+    )
 
 
 def upgrade():
@@ -48,6 +242,8 @@ def upgrade():
         "interventions",
         "time_list IS NULL OR (time IS NULL AND cardinality(time_list) >= 2)",
     )
+    move_values_into_mean()
+    structure_schedules()
     op.add_column("studies", sa.Column("pkdb_id", sa.String(16), nullable=True))
     op.add_column("studies", sa.Column("release_date", sa.Date(), nullable=True))
     op.add_column("studies", sa.Column("issue", sa.Integer(), nullable=True))
@@ -65,6 +261,7 @@ def upgrade():
 
 
 def downgrade():
+    restore_values_and_schedule_text()
     for name in ("review", "review_status", "issue", "release", "pkdb_id"):
         op.drop_constraint(op.f(f"ck_studies_{name}"), "studies", type_="check")
     op.drop_constraint(op.f("uq_studies_pkdb_id"), "studies", type_="unique")

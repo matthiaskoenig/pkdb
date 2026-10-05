@@ -18,10 +18,24 @@ ALIASES = {
     "route_sid": "route",
     "application_sid": "application",
 }
-NUMBERS = {"value", "mean", "median", "sd", "se", "cv", "minimum", "maximum", "time"}
+NUMBERS = {
+    "mean",
+    "median",
+    "sd",
+    "se",
+    "cv",
+    "gmean",
+    "gsd",
+    "gcv",
+    "minimum",
+    "maximum",
+    "time",
+    "interval",
+}
 INTEGERS = {
     "id",
     "count",
+    "doses",
     "group_pk",
     "individual_pk",
     "intervention_pk",
