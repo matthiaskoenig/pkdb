@@ -21,6 +21,14 @@ class Intervention(Owned, Scientific, Base):
     interval: Mapped[float | None]
     doses: Mapped[int | None]
     time_unit: Mapped[str | None]
+    time_not_reported: Mapped[bool] = mapped_column(
+        default=False, server_default="false"
+    )
+    time_unit_not_reported: Mapped[bool] = mapped_column(
+        default=False, server_default="false"
+    )
+    tissue: Mapped[str | None] = mapped_column(ForeignKey("vocabulary_nodes.sid"))
+    method: Mapped[str | None] = mapped_column(ForeignKey("vocabulary_nodes.sid"))
     subject_id: Mapped[int | None] = mapped_column(index=True)
     route: Mapped[str | None] = mapped_column(ForeignKey("vocabulary_nodes.sid"))
     application: Mapped[str | None] = mapped_column(ForeignKey("vocabulary_nodes.sid"))

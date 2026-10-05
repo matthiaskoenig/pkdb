@@ -66,6 +66,10 @@ class OutputResponse(ScientificResponse):
 
 
 class CharacteristicResponse(ScientificResponse):
+    tissue: NodeResponse | None
+    method: NodeResponse | None
+    time: float | None
+    time_unit: str | None
     count: int | None
     group_count: int | None
 
@@ -88,6 +92,8 @@ class InterventionResponse(ScientificResponse):
     route: NodeResponse | None
     form: NodeResponse | None
     application: NodeResponse | None
+    tissue: NodeResponse | None
+    method: NodeResponse | None
     time: float | list[float] | None
     time_end: float | None
     interval: float | None

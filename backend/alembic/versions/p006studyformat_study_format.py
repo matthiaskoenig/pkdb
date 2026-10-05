@@ -1,7 +1,8 @@
 """Study format 2: geometric and error-bar statistics, schedules, release and review.
 
 The `value` statistic moves into `mean` and schedule strings (`time_text`) become
-`time`, `time_list`, `interval` and `doses`. Every study is re-uploaded with
+`time`, `time_list`, `interval` and `doses`. Interventions gain the observation
+context of outputs and characteristics: tissue, method and not-reported times. Every study is re-uploaded with
 processing version 9 afterwards, so the downgrade restores the version 8 columns
 only as far as they are derivable.
 """
@@ -20,6 +21,9 @@ depends_on = None
 
 STATISTICS = ("gmean", "gsd", "gcv", "error_bar")
 SCIENTIFIC_TABLES = ("observation_values", "interventions")
+# Observation context that interventions share with outputs and characteristics.
+CONTEXT_FLAGS = ("time_not_reported", "time_unit_not_reported")
+CONTEXT_TERMS = ("tissue", "method")
 # Row triggers on observation_values, disabled around the statistics UPDATE. This is
 # required: the two deferred constraint triggers would queue one event per updated
 # row, and PostgreSQL refuses the following DROP COLUMN while trigger events are
@@ -239,6 +243,20 @@ def upgrade():
         "interventions",
         sa.Column("time_list", postgresql.ARRAY(sa.Float()), nullable=True),
     )
+    for name in CONTEXT_FLAGS:
+        op.add_column(
+            "interventions",
+            sa.Column(name, sa.Boolean(), server_default="false", nullable=False),
+        )
+    for name in CONTEXT_TERMS:
+        op.add_column("interventions", sa.Column(name, sa.String(255), nullable=True))
+        op.create_foreign_key(
+            op.f(f"fk_interventions_{name}_vocabulary_nodes"),
+            "interventions",
+            "vocabulary_nodes",
+            [name],
+            ["sid"],
+        )
     op.add_column("interventions", sa.Column("subject_id", sa.Integer(), nullable=True))
     op.create_index("ix_interventions_subject_id", "interventions", ["subject_id"])
     op.create_foreign_key(
@@ -293,6 +311,15 @@ def downgrade():
     )
     op.drop_index("ix_interventions_subject_id", table_name="interventions")
     for name in ("subject_id", "time_list", "doses", "interval"):
+        op.drop_column("interventions", name)
+    for name in reversed(CONTEXT_TERMS):
+        op.drop_constraint(
+            op.f(f"fk_interventions_{name}_vocabulary_nodes"),
+            "interventions",
+            type_="foreignkey",
+        )
+        op.drop_column("interventions", name)
+    for name in reversed(CONTEXT_FLAGS):
         op.drop_column("interventions", name)
     for table in reversed(SCIENTIFIC_TABLES):
         op.drop_constraint(op.f(f"ck_{table}_error_type"), table, type_="check")

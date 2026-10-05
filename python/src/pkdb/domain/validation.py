@@ -409,6 +409,8 @@ def prepare_study(
                 record,
                 severity="warning",
             )
+        # Only outputs require a time. Format 1 characteristica have no time, and
+        # study format 2 requires the times of characteristica in layer 5.
         if isinstance(record, Measurement):
             if (
                 rule.time_required
@@ -501,8 +503,12 @@ def prepare_study(
                     field="mean",
                 )
         if intervention.measurement_type == "dosing":
+            unreported = {
+                "time": intervention.time_not_reported,
+                "time_unit": intervention.time_unit_not_reported,
+            }
             for field in ("form", "application", "time", "time_unit"):
-                if getattr(intervention, field) is None:
+                if getattr(intervention, field) is None and not unreported.get(field):
                     issue(
                         "missing_dosing_field",
                         f"{field} required for dosing",

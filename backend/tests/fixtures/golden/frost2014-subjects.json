@@ -22957,6 +22957,8 @@
         "name": "multiple dose",
         "label": "multiple dose"
       },
+      "tissue": null,
+      "method": null,
       "time": 0.0,
       "time_end": null,
       "interval": null,
@@ -23011,6 +23013,8 @@
         "name": "multiple dose",
         "label": "multiple dose"
       },
+      "tissue": null,
+      "method": null,
       "time": 0.0,
       "time_end": null,
       "interval": null,
@@ -23065,6 +23069,8 @@
         "name": "multiple dose",
         "label": "multiple dose"
       },
+      "tissue": null,
+      "method": null,
       "time": 0.0,
       "time_end": null,
       "interval": null,
@@ -23119,6 +23125,8 @@
         "name": "multiple dose",
         "label": "multiple dose"
       },
+      "tissue": null,
+      "method": null,
       "time": 0.0,
       "time_end": null,
       "interval": null,

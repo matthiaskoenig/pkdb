@@ -128,13 +128,25 @@ class Statistics(Record):
 
 
 class Observation(Notes):
-    """Scientific values and provenance shared by characteristics and outputs."""
+    """Scientific values, context and provenance shared by every scientific record.
+
+    Characteristics, interventions and outputs share one row model: what is
+    measured, where (tissue, method), when (time or not reported) and the
+    image of the paper table or figure.
+    """
 
     key: RecordKey
     measurement_type: Identifier
     calculation_type: str | None = None
     choice: str | None = None
     substance: str | None = None
+    tissue: str | None = None
+    method: str | None = None
+    time: Number | None = None
+    time_unit: str | None = None
+    time_not_reported: bool = False
+    time_unit_not_reported: bool = False
+    image: str | None = None
     statistics: Statistics = Field(default_factory=Statistics)
     unit: str | None = None
     source: SourceLocation | None = None
@@ -167,13 +179,12 @@ class Individual(Subject):
 
 
 class Intervention(ScientificRecord):
-    image: str | None = None
     name: Identifier
+    # The first administration, or every administration of an irregular schedule.
     time: Number | Annotated[list[Number], Field(min_length=2)] | None = None
     time_end: Number | None = None
     interval: Number | None = None
     doses: Annotated[int, Field(strict=True, ge=1)] | None = None
-    time_unit: str | None = None
     subject: Identifier | None = None
     route: str | None = None
     application: str | None = None
@@ -182,18 +193,11 @@ class Intervention(ScientificRecord):
 
 class Measurement(ScientificRecord):
     series_key: str | None = None
-    time_not_reported: bool = False
-    time_unit_not_reported: bool = False
     group: str | None = None
     individual: str | None = None
     interventions: list[str] = Field(default_factory=list)
-    tissue: str | None = None
-    method: str | None = None
     label: str | None = None
     output_type: Literal["output", "timecourse", "array"] = "output"
-    time: Number | None = None
-    time_unit: str | None = None
-    image: str | None = None
 
 
 class Dimension(Notes):

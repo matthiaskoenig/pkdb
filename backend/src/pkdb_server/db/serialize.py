@@ -270,6 +270,10 @@ def subject_responses(session, rows, individual=False):
         serialized = [
             {
                 **vocabulary.science(record),
+                "tissue": vocabulary.node(record.tissue),
+                "method": vocabulary.node(record.method),
+                "time": record.time,
+                "time_unit": record.time_unit,
                 "count": record.count,
                 "group_count": groups[record.subject_id].count
                 if record.subject_id in groups
@@ -333,6 +337,8 @@ def intervention_responses(session, rows):
                 "route": vocabulary.node(row.route),
                 "form": vocabulary.node(row.form),
                 "application": vocabulary.node(row.application),
+                "tissue": vocabulary.node(row.tissue),
+                "method": vocabulary.node(row.method),
                 "time": row.time_list if row.time_list is not None else row.time,
                 "time_end": row.time_end,
                 "interval": row.interval,

@@ -154,6 +154,8 @@ def fields_for(entity):
                     "route",
                     "form",
                     "application",
+                    "tissue",
+                    "method",
                     "unit",
                 )
             },
@@ -166,6 +168,8 @@ def fields_for(entity):
                     "route",
                     "form",
                     "application",
+                    "tissue",
+                    "method",
                 )
             },
             **{

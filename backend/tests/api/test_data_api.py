@@ -87,6 +87,68 @@ def test_responses_carry_mean_and_geometric_statistics_without_value(
         assert STATISTICS <= characteristic.keys()
 
 
+def test_responses_carry_the_context_of_characteristics_and_interventions(
+    client, valid_bundle, admin_headers
+):
+    intervention = valid_bundle.study["interventionset"]["interventions"][0]
+    intervention.update(tissue="plasma", method="LC-MS")
+    valid_bundle.study["groupset"]["groups"][0]["characteristica"].append(
+        {
+            "measurement_type": "concentration",
+            "substance": "drug",
+            "tissue": "plasma",
+            "method": "LC-MS",
+            "time": 1.5,
+            "time_unit": "h",
+            "mean": 2.0,
+            "unit": "mg/l",
+        }
+    )
+    upload(client, valid_bundle, admin_headers)
+
+    def items(entity):
+        response = client.post(
+            "/api/v2/query", json={"entity": entity, "page_size": 100}
+        )
+        assert response.status_code == 200, response.text
+        return response.json()["items"]
+
+    doses = items("interventions")
+    assert doses
+    for row in doses:
+        assert (row["tissue"]["name"], row["method"]["name"]) == ("plasma", "LC-MS")
+    [group] = items("groups")
+    contexts = {
+        (
+            row["measurement_type"]["name"],
+            row["tissue"] and row["tissue"]["name"],
+            row["method"] and row["method"]["name"],
+            row["time"],
+            row["time_unit"],
+        )
+        for row in group["characteristica"]
+    }
+    assert ("concentration", "plasma", "LC-MS", 1.5, "h") in contexts
+    assert ("species", None, None, None, None) in contexts
+    rows = client.get("/api/v1/pkdata/interventions/").json()["data"]["data"]
+    assert rows
+    for row in rows:
+        assert (row["tissue"], row["tissue_label"]) == ("plasma", "plasma")
+        assert (row["method"], row["method_label"]) == ("LC-MS", "LC-MS")
+    rows = client.get("/api/v1/pkdata/groups/").json()["data"]["data"]
+    assert {
+        (
+            row["measurement_type"],
+            row["tissue"],
+            row["method"],
+            row["time"],
+            row["time_unit"],
+        )
+        for row in rows
+        if row["measurement_type"] == "concentration"
+    } == {("concentration", "plasma", "LC-MS", 1.5, "h")}
+
+
 def test_intervention_time_lists_are_numbers(client, valid_bundle, admin_headers):
     intervention = valid_bundle.study["interventionset"]["interventions"][0]
     intervention["time"] = "0|12|40"

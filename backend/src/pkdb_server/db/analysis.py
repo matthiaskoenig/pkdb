@@ -101,7 +101,13 @@ def statement(entity, query, principal):
         fields.update(
             {
                 name: node_name(getattr(Characteristic, name))
-                for name in ("measurement_type", "calculation_type", "substance")
+                for name in (
+                    "measurement_type",
+                    "calculation_type",
+                    "substance",
+                    "tissue",
+                    "method",
+                )
             }
         )
         fields.update(
@@ -121,6 +127,8 @@ def statement(entity, query, principal):
                     "unit",
                     "choice",
                     "count",
+                    "time",
+                    "time_unit",
                 )
             }
         )
@@ -297,7 +305,9 @@ def _serialize(session, entity, rows, principal):
                     "normed": row["normed"],
                     "name": row["name"],
                     **science(
-                        row, labels=True, fields=("route", "form", "application")
+                        row,
+                        labels=True,
+                        fields=("route", "form", "application", "tissue", "method"),
                     ),
                     "time": row["time"],
                     "time_end": row["time_end"],
@@ -327,13 +337,21 @@ def _serialize(session, entity, rows, principal):
                     "individual_group_pk": model.group_id,
                 }
             )
-            record = vocab.science(characteristic)
+            record = vocab.science(characteristic) | {
+                name: vocab.node(getattr(characteristic, name))
+                for name in ("tissue", "method")
+            }
             result.append(
                 {
                     **study(model),
                     **prefix,
                     "characteristica_pk": characteristic.id,
                     "count": characteristic.count,
+                    **science(
+                        record, labels=False, names=True, fields=("tissue", "method")
+                    ),
+                    "time": characteristic.time,
+                    "time_unit": characteristic.time_unit,
                     **science(record, labels=False, names=True),
                 }
             )

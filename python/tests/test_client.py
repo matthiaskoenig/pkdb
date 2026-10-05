@@ -387,6 +387,14 @@ def test_query_keywords_preserve_scientific_types_and_aliases():
         ("id", "in", [1, 2]),
     ]
     query = query_from_filters(
+        "interventions", {"route": "oral", "tissue": "plasma", "method_sid": "hplc"}
+    )
+    assert [(p.field, p.value) for p in query.predicates] == [
+        ("route_name", "oral"),
+        ("tissue_name", "plasma"),
+        ("method", "hplc"),
+    ]
+    query = query_from_filters(
         "groups", {"measurement_type_sid": "sex", "choice_sid": "male"}
     )
     assert [p.field for p in query.predicates] == [

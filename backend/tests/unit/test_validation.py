@@ -310,3 +310,108 @@ def test_unspecified_summary_does_not_generate_pk(valid_study):
     record.calculation_type = "unspecified summary"
     course = Timecourse(key="opaque", points=[record])
     assert derive_pk(course) == []
+
+
+def issue_for(error, code):
+    return next(issue for issue in error.value.report.issues if issue.code == code)
+
+
+def test_unknown_tissue_and_method_of_an_intervention_are_rejected(
+    valid_study, vocabulary
+):
+    valid_study.interventions[0].tissue = "liver"
+    valid_study.interventions[0].method = "guess"
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(valid_study, vocabulary)
+    tissue = issue_for(error, "unknown_tissue")
+    assert (tissue.field, tissue.actual) == ("tissue", "liver")
+    assert issue_for(error, "unknown_method").field == "method"
+
+
+def test_known_tissue_and_method_of_an_intervention_are_accepted(
+    valid_study, vocabulary
+):
+    valid_study.interventions[0].tissue = "plasma"
+    valid_study.interventions[0].method = "LC-MS"
+    prepared = prepare_study(valid_study, vocabulary)
+    assert {(i.tissue, i.method) for i in prepared.study.interventions} == {
+        ("plasma", "LC-MS")
+    }
+
+
+def timed_characteristic(valid_study, **fields):
+    from pkdb.schemas.study import Observation
+
+    characteristic = Observation.model_validate(
+        {
+            "key": "c4",
+            "measurement_type": "concentration",
+            "substance": "drug",
+            "statistics": {"mean": 2.0},
+            "unit": "mg/l",
+            **fields,
+        }
+    )
+    valid_study.groups[0].characteristica.append(characteristic)
+    return characteristic
+
+
+def test_characteristic_context_is_validated_against_the_vocabulary(
+    valid_study, vocabulary
+):
+    timed_characteristic(
+        valid_study, time=0.0, time_unit="h", tissue="liver", method="guess"
+    )
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(valid_study, vocabulary)
+    assert {"unknown_tissue", "unknown_method"} <= codes(error)
+
+
+def test_characteristic_time_is_optional_and_kept(valid_study, vocabulary):
+    # Format 1 characteristica of timed measurements, such as baseline
+    # concentrations, have no time; study format 2 checks times in layer 5.
+    characteristic = timed_characteristic(valid_study, tissue="plasma")
+    assert prepare_study(valid_study, vocabulary).report.valid
+    characteristic.time_not_reported = True
+    assert prepare_study(valid_study, vocabulary).report.valid
+    characteristic.time_not_reported = False
+    characteristic.time, characteristic.time_unit = 1.0, "h"
+    prepared = prepare_study(valid_study, vocabulary)
+    stored = {
+        (c.origin, c.time, c.time_unit, c.tissue)
+        for c in prepared.study.groups[0].characteristica
+        if c.measurement_type == "concentration"
+    }
+    assert stored == {
+        ("reported", 1.0, "h", "plasma"),
+        ("normalized", 1.0, "h", "plasma"),
+    }
+
+
+@pytest.mark.parametrize(
+    ("unit", "code"), [("kg", "time_dimension"), ("blorbs", "invalid_time_unit")]
+)
+def test_characteristic_time_unit_is_a_unit_of_time(
+    valid_study, vocabulary, unit, code
+):
+    timed_characteristic(valid_study, time=1.0, time_unit=unit)
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(valid_study, vocabulary)
+    assert code in codes(error)
+
+
+def test_dose_time_may_be_not_reported(valid_study, vocabulary):
+    dose = valid_study.interventions[0]
+    dose.time = None
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(valid_study, vocabulary)
+    assert (
+        issue_for(error, "missing_dosing_field").message == "time required for dosing"
+    )
+    dose.time_not_reported = True
+    assert prepare_study(valid_study, vocabulary).report.valid
+    dose.time_unit = None
+    with pytest.raises(StudyValidationError):
+        prepare_study(valid_study, vocabulary)
+    dose.time_unit_not_reported = True
+    assert prepare_study(valid_study, vocabulary).report.valid

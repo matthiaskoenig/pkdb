@@ -59,6 +59,21 @@ GEOMETRIC = {
 }
 
 
+CHARACTERISTIC = {
+    "measurement_type": "concentration",
+    "substance": "drug",
+    "unit": "mg/l",
+    "statistics": {"mean": 2.0},
+}
+CONTEXT = {
+    "tissue": "plasma",
+    "method": "LC-MS",
+    "time": 1.5,
+    "time_unit": "h",
+    "image": "Example_Tab1.png",
+}
+
+
 def schedule(key, **fields):
     return {
         "key": key,
@@ -93,6 +108,13 @@ def format2_study(valid_study):
         schedule("list", time=[0.0, 12.0, 40.0]),
         schedule("repeat", time=0.0, interval=24.0, doses=7),
         schedule("subject", time=0.0, subject="all"),
+        schedule("context", tissue="plasma", method="LC-MS"),
+        schedule(
+            "unreported",
+            time_unit=None,
+            time_not_reported=True,
+            time_unit_not_reported=True,
+        ),
     ]
     data["measurements"][0]["statistics"].update(GEOMETRIC)
     data["groups"][0]["characteristica"].append(
@@ -103,6 +125,17 @@ def format2_study(valid_study):
             "unit": "mg/l",
             "statistics": {"gmean": 3.0, "error_bar": 1.5, "error_type": "gsd"},
         }
+    )
+    data["groups"][0]["characteristica"].extend(
+        [
+            {**CHARACTERISTIC, "key": "c5", **CONTEXT},
+            {
+                **CHARACTERISTIC,
+                "key": "c6",
+                "time_not_reported": True,
+                "time_unit_not_reported": True,
+            },
+        ]
     )
     return CanonicalStudy.model_validate(data)
 
@@ -170,6 +203,38 @@ def test_schedules_and_subjects_are_stored_in_their_columns(
     assert root.review == Review.model_validate(REVIEW).model_dump(
         mode="json", include={"reviewers", "items"}
     )
+
+
+def test_observation_context_is_stored_in_its_columns(
+    ingestion_context, session_factory, format2_study
+):
+    from pkdb_server.db.models.subjects import Characteristic
+
+    _, principal = ingestion_context
+    study_id = publish(session_factory, principal, format2_study)
+    with session_factory() as session:
+        interventions = {
+            row.key: row
+            for row in session.scalars(
+                select(Intervention).where(Intervention.study_id == study_id)
+            )
+        }
+        characteristics = {
+            row.key: row
+            for row in session.scalars(
+                select(Characteristic).where(Characteristic.study_id == study_id)
+            )
+        }
+    context = interventions["context"]
+    assert (context.tissue, context.method) == ("plasma", "LC-MS")
+    assert not (context.time_not_reported or context.time_unit_not_reported)
+    unreported = interventions["unreported"]
+    assert (unreported.time, unreported.time_unit) == (None, None)
+    assert unreported.time_not_reported and unreported.time_unit_not_reported
+    timed = characteristics["c5"]
+    assert {name: getattr(timed, name) for name in CONTEXT} == CONTEXT
+    assert characteristics["c6"].time_not_reported
+    assert characteristics["c6"].time_unit_not_reported
 
 
 def test_studies_without_release_or_review_store_nothing(

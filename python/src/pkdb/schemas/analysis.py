@@ -26,6 +26,10 @@ class AnalysisGroup(ResponseModel):
     group_parent_pk: int | None
     characteristica_pk: int | None
     count: int | None
+    tissue: str | None
+    method: str | None
+    time: float | None
+    time_unit: str | None
     measurement_type: str | None
     calculation_type: str | None
     choice: str | None
@@ -53,6 +57,10 @@ class AnalysisIndividual(ResponseModel):
     individual_group_pk: int | None
     characteristica_pk: int | None
     count: int | None
+    tissue: str | None
+    method: str | None
+    time: float | None
+    time_unit: str | None
     measurement_type: str | None
     calculation_type: str | None
     choice: str | None
@@ -85,6 +93,10 @@ class AnalysisIntervention(ResponseModel):
     form_label: str | None
     application: str | None
     application_label: str | None
+    tissue: str | None
+    tissue_label: str | None
+    method: str | None
+    method_label: str | None
     time: float | list[float] | None
     time_end: float | None
     interval: float | None

@@ -7,7 +7,13 @@ import pytest
 from pydantic import ValidationError
 
 from pkdb.schemas import review
-from pkdb.schemas.study import Intervention, Metadata, Statistics
+from pkdb.schemas.study import (
+    Intervention,
+    Measurement,
+    Metadata,
+    Observation,
+    Statistics,
+)
 from pkdb.studyformat import models
 
 INTERVENTION = {
@@ -121,6 +127,62 @@ def test_intervention_interval_is_a_finite_number():
 def test_intervention_subject_is_a_name():
     with pytest.raises(ValidationError):
         Intervention.model_validate({**INTERVENTION, "subject": ""})
+
+
+CONTEXT = {
+    "tissue": "plasma",
+    "method": "HPLC",
+    "time": 2.0,
+    "time_unit": "h",
+    "time_not_reported": False,
+    "time_unit_not_reported": False,
+    "image": "Example_Tab1.png",
+}
+
+
+def test_characteristics_have_the_observation_context_of_outputs():
+    characteristic = Observation.model_validate(
+        {"key": "c1", "measurement_type": "creatinine", **CONTEXT}
+    )
+    assert characteristic.model_dump(include=set(CONTEXT)) == CONTEXT
+    unreported = Observation.model_validate(
+        {
+            "key": "c2",
+            "measurement_type": "creatinine",
+            "time_not_reported": True,
+            "time_unit_not_reported": True,
+        }
+    )
+    assert (unreported.time, unreported.time_unit) == (None, None)
+    assert unreported.time_not_reported and unreported.time_unit_not_reported
+
+
+def test_outputs_and_interventions_share_the_observation_context():
+    for name in CONTEXT:
+        shared = Observation.model_fields[name]
+        output = Measurement.model_fields[name]
+        assert (output.annotation, output.default) == (
+            shared.annotation,
+            shared.default,
+        )
+    intervention = Intervention.model_validate(
+        {
+            **INTERVENTION,
+            "tissue": "plasma",
+            "method": "HPLC",
+            "time_not_reported": True,
+        }
+    )
+    assert (intervention.tissue, intervention.method) == ("plasma", "HPLC")
+    assert intervention.time_not_reported
+
+
+@pytest.mark.parametrize(
+    "change", [{"time": [0.0, 1.0]}, {"time": "2"}, {"time": float("nan")}]
+)
+def test_characteristic_time_is_one_finite_number(change):
+    with pytest.raises(ValidationError):
+        Observation.model_validate({"key": "c1", "measurement_type": "age", **change})
 
 
 def test_metadata_carries_issue_release_and_review():

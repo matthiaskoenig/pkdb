@@ -71,6 +71,8 @@ def query_from_filters(entity: str, filters: dict) -> DataQuery:
             "form",
             "route",
             "application",
+            "tissue",
+            "method",
         },
     }.get(entity, set())
     predicates = []

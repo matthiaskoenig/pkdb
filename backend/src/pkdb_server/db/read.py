@@ -147,6 +147,18 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
             },
         )
 
+    def context(row):
+        """Where and when an observation was made, shared by characteristics and outputs."""
+        return dict(
+            tissue=vocab.get(row.tissue),
+            method=vocab.get(row.method),
+            time=row.time,
+            time_unit=row.time_unit,
+            time_not_reported=row.time_not_reported,
+            time_unit_not_reported=row.time_unit_not_reported,
+            image=row.image,
+        )
+
     group_characteristics = defaultdict(list)
     individual_characteristics = defaultdict(list)
     for row in characteristics:
@@ -155,7 +167,7 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
             if row.group_id
             else individual_characteristics[row.individual_id]
         )
-        target.append(science(row, characteristic_keys))
+        target.append(science(row, characteristic_keys) | context(row))
     measurement_interventions = defaultdict(list)
     for row in session.scalars(
         select(m.MeasurementIntervention)
@@ -171,24 +183,13 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
         if row.derived_from_course_id:
             record["derived_from"] = course_keys[row.derived_from_course_id]
         record.update(
+            context(row),
             group=group_names.get(row.group_id),
             individual=individual_names.get(row.individual_id),
             interventions=measurement_interventions[row.id],
-            tissue=vocab.get(row.tissue),
-            method=vocab.get(row.method),
-            **{
-                name: getattr(row, name)
-                for name in (
-                    "series_key",
-                    "label",
-                    "output_type",
-                    "time",
-                    "time_unit",
-                    "time_not_reported",
-                    "time_unit_not_reported",
-                    "image",
-                )
-            },
+            series_key=row.series_key,
+            label=row.label,
+            output_type=row.output_type,
         )
         outputs.append(record)
     by_key = {output["key"]: output for output in outputs}
@@ -325,6 +326,10 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                     interval=row.interval,
                     doses=row.doses,
                     time_unit=row.time_unit,
+                    time_not_reported=row.time_not_reported,
+                    time_unit_not_reported=row.time_unit_not_reported,
+                    tissue=vocab.get(row.tissue),
+                    method=vocab.get(row.method),
                     subject=subject_names.get(row.subject_id),
                     route=vocab.get(row.route),
                     form=vocab.get(row.form),
