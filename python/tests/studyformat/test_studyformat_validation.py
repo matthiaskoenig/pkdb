@@ -240,6 +240,37 @@ def test_is_v2_folder(valid_study, tmp_path):
     assert not is_v2_folder(tmp_path / "missing")
 
 
+@pytest.mark.parametrize(
+    "text",
+    [
+        '{\n<<<<<<< HEAD\n  "format": 2,\n=======\n  "format": 2,\n>>>>>>> b\n}\n',
+        '{"format": 2, "format": 2}',
+        '{"format":2,',
+    ],
+    ids=["conflict", "duplicate_key", "truncated"],
+)
+def test_broken_study_json_still_declares_format_2(tmp_path, text):
+    folder = tmp_path / "Broken"
+    folder.mkdir()
+    (folder / "study.json").write_text(text, encoding="utf-8")
+    assert is_v2_folder(folder)
+
+
+def test_format_2_files_declare_format_2(tmp_path):
+    folder = tmp_path / "Broken"
+    folder.mkdir()
+    (folder / "study.json").write_text('{"sid": "X"}', encoding="utf-8")
+    assert not is_v2_folder(folder)
+    for name in ("subjects.tsv", "review.json"):
+        (folder / name).write_text("", encoding="utf-8")
+        assert is_v2_folder(folder)
+        (folder / name).unlink()
+    (folder / "study.json").write_text('["format", 2]', encoding="utf-8")
+    assert not is_v2_folder(folder)
+    (folder / "study.json").write_text('[{"format": 2}]', encoding="utf-8")
+    assert is_v2_folder(folder)
+
+
 def test_empty_optional_table_is_not_formatted(valid_study, tsv, sf_vocabulary):
     (valid_study / "outputs_Tab9.tsv").write_text(tsv("outputs"), encoding="utf-8")
     (valid_study / "Example_Tab9.png").write_bytes(b"png")

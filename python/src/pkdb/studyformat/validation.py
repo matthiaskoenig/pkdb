@@ -1,5 +1,6 @@
 """Validate a study format 2 folder: layout, format, rows, relationships, vocabulary."""
 
+import re
 from pathlib import Path
 
 from pkdb.domain.vocabulary import Vocabulary
@@ -14,6 +15,9 @@ from pkdb.studyformat.tables import STUDY_JSON
 from pkdb.studyformat.terms import check_terms
 
 FORMAT_VERSION = 2
+_DECLARES_FORMAT_2 = re.compile(rb'"format"\s*:\s*2\b')
+# Files that only study format 2 folders have.
+_FORMAT_2_FILES = ("subjects.tsv", "review.json")
 
 
 def study_label(folder: Path) -> str:
@@ -23,12 +27,30 @@ def study_label(folder: Path) -> str:
 
 
 def is_v2_folder(folder: Path) -> bool:
-    """Whether study.json declares study format 2."""
+    """Whether a folder is in study format 2, decided leniently.
+
+    A broken study.json (a merge conflict, a duplicate key) must not turn a
+    format 2 folder into a format 1 folder, so its raw text and the files only
+    format 2 has decide when it cannot be read as an object.
+    """
+    folder = Path(folder)
     try:
-        data = load_json((Path(folder) / STUDY_JSON).read_bytes())
-    except OSError, JsonFileError:
-        return False
-    return isinstance(data, dict) and data.get("format") == FORMAT_VERSION
+        raw = (folder / STUDY_JSON).read_bytes()
+    except OSError:
+        raw = None
+    if raw is not None:
+        try:
+            data = load_json(raw)
+        except JsonFileError:
+            data = None
+        if isinstance(data, dict):
+            if data.get("format") == FORMAT_VERSION:
+                return True
+        elif _DECLARES_FORMAT_2.search(raw):
+            return True
+    return any(
+        (folder / name).exists(follow_symlinks=False) for name in _FORMAT_2_FILES
+    )
 
 
 def format_issues(study: LoadedStudy) -> list[ValidationIssue]:

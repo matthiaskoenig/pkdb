@@ -1,5 +1,7 @@
 import json
 
+import pytest
+
 from pkdb.cli import main
 
 
@@ -295,3 +297,30 @@ def test_merge_conflict_stops_format_and_validate(
     result = lines(capsys)[-1]
     assert not result["ok"]
     assert "merge_conflict" in {issue["code"] for issue in result["report"]["issues"]}
+
+
+@pytest.mark.parametrize(
+    ("text", "code"),
+    [
+        (
+            '{\n<<<<<<< HEAD\n  "format": 2,\n=======\n  "format": 2,\n>>>>>>> b\n}\n',
+            "invalid_json",
+        ),
+        ('{"format": 2, "format": 2}', "duplicate_key"),
+    ],
+    ids=["conflict", "duplicate_key"],
+)
+def test_broken_study_json_is_reported_as_format_2(
+    valid_study, sf_vocabulary, tmp_path, capsys, text, code
+):
+    path = valid_study / "study.json"
+    path.write_text(text, encoding="utf-8")
+    assert main(["format", str(valid_study), "--format", "json"]) == 1
+    entry = lines(capsys)[0]
+    assert "skipped" not in entry
+    assert [issue["code"] for issue in entry["issues"]] == [code]
+    assert path.read_text(encoding="utf-8") == text
+    assert validate_json(valid_study, sf_vocabulary, tmp_path) == 1
+    result = lines(capsys)[-1]
+    assert result["study_format"] == 2
+    assert code in {issue["code"] for issue in result["report"]["issues"]}
