@@ -57,6 +57,9 @@ def make_study(tmp_path):
 def tsv():
     def render(kind, *rows):
         spec = TABLES[kind]
+        for row in rows:
+            unknown = set(row) - set(spec.names)
+            assert not unknown, f"unknown columns {sorted(unknown)} for {kind}"
         return render_tsv(
             spec.names,
             [tuple(row.get(name, "") for name in spec.names) for row in rows],
