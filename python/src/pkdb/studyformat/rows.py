@@ -74,6 +74,11 @@ def unit_known(unit: str) -> bool:
     return _parse_unit(unit) is not None
 
 
+def valid_unit(unit: str) -> bool:
+    """Whether a unit text has supported characters and is a known unit."""
+    return bool(UNIT_PATTERN.fullmatch(unit)) and unit_known(unit)
+
+
 def subject_counts(study: LoadedStudy) -> dict[str, int | None]:
     return {
         row.cells["name"]: cast(int | None, row.values["count"])

@@ -98,6 +98,10 @@ def test_interventions(run):
     assert run("interventions", dose) == {
         ("unknown_route", "route"),
         ("missing_dosing_field", "substance"),
+        ("missing_dosing_field", "form"),
+        ("missing_dosing_field", "application"),
+        ("missing_dosing_field", "time"),
+        ("missing_dosing_field", "time_unit"),
     }
 
 
@@ -150,6 +154,129 @@ DOSE = {
 )
 def test_intervention_values(run, row, expected):
     assert run("interventions", DOSE, row) == expected
+
+
+@pytest.mark.parametrize(
+    ("row", "expected"),
+    [
+        ({"substance": ""}, {("missing_dosing_field", "substance")}),
+        ({"route": ""}, {("missing_dosing_field", "route")}),
+        ({"form": ""}, {("missing_dosing_field", "form")}),
+        ({"application": ""}, {("missing_dosing_field", "application")}),
+        ({"time": ""}, {("missing_dosing_field", "time")}),
+        ({"time_unit": ""}, {("missing_dosing_field", "time_unit")}),
+        ({"time": "NR", "time_unit": "NR"}, set()),
+        # A dose without unit is reported once.
+        ({"unit": ""}, {("missing_unit", "unit")}),
+        (
+            {"mean": "", "unit": ""},
+            {("missing_value", "mean"), ("missing_dosing_field", "unit")},
+        ),
+        ({"application": "multiple dose"}, set()),
+        ({"application": "constant infusion"}, set()),
+        (
+            {"application": "variable infusion"},
+            {("invalid_application", "application")},
+        ),
+        ({"application": "single doze"}, {("unknown_application", "application")}),
+        ({"form": "pill"}, {("unknown_form", "form")}),
+    ],
+)
+def test_dosing_rules(run, row, expected):
+    assert run("interventions", {**DOSE, **row}) == expected
+
+
+def test_medication_rules(run):
+    medication = {"name": "M1", "measurement": "medication", "choice": "Y"}
+    assert run("interventions", DOSE, medication) == {
+        ("missing_dosing_field", "substance"),
+        ("missing_dosing_field", "route"),
+        ("missing_dosing_field", "unit"),
+        ("missing_value", "mean"),
+    }
+
+
+def test_invalid_application_is_a_vocabulary_error(
+    make_study, valid_files, tsv, sf_vocabulary
+):
+    row = {**DOSE, "application": "variable infusion"}
+    files = {**valid_files, "interventions.tsv": tsv("interventions", row)}
+    [issue] = check_terms(load_study(make_study(files)), sf_vocabulary)
+    assert (issue.code, issue.severity, issue.category) == (
+        "invalid_application",
+        "error",
+        "vocabulary",
+    )
+
+
+@pytest.mark.parametrize(
+    ("kind", "row", "expected"),
+    [
+        ("outputs", {**CMAX, "unit": "h"}, {("unit_dimension", "unit")}),
+        ("outputs", {**CMAX, "unit": "µg/ml"}, set()),
+        ("outputs", {**CMAX, "unit": "mmol/l"}, set()),
+        (
+            "outputs",
+            {**CMAX, "substance": "", "unit": "mmol/l"},
+            {("unit_dimension", "unit")},
+        ),
+        ("outputs", {**CMAX, "unit": "foo"}, set()),
+        (
+            "outputs",
+            {**CMAX, "measurement": "change", "unit": "kg"},
+            {("unit_dimension", "unit")},
+        ),
+        ("interventions", {**DOSE, "unit": "mmol"}, set()),
+        ("interventions", {**DOSE, "unit": "ml"}, {("unit_dimension", "unit")}),
+        (
+            "interventions",
+            {**DOSE, "measurement": "qualitative dosing", "unit": "h"},
+            set(),
+        ),
+        (
+            "characteristica",
+            {
+                "source": "Tab1",
+                "subjects": "all",
+                "measurement": "age",
+                "mean": "30",
+                "unit": "kg",
+            },
+            {("unit_dimension", "unit")},
+        ),
+    ],
+)
+def test_units_fit_the_measurement(run, kind, row, expected):
+    file = "outputs_Tab2.tsv" if kind == "outputs" else None
+    assert run(kind, row, file=file) == expected
+
+
+def test_unit_dimension_names_the_allowed_units(
+    make_study, valid_files, tsv, sf_vocabulary
+):
+    files = {**valid_files, "outputs_Tab2.tsv": tsv("outputs", {**CMAX, "unit": "h"})}
+    [issue] = check_terms(load_study(make_study(files)), sf_vocabulary)
+    assert (issue.severity, issue.category) == ("error", "vocabulary")
+    assert issue.source is not None and issue.source.cell == "X2"
+    assert issue.suggestions[0].candidates == ["mg/l"]
+
+
+def test_scatter_axis_units_fit_the_measurement(run):
+    row = {
+        "name": "s",
+        "subjects": "S1",
+        "x_measurement": "age",
+        "x_mean": "30",
+        "x_unit": "mg",
+        "y_measurement": "cmax",
+        "y_substance": "drug",
+        "y_mean": "2",
+        "y_unit": "h",
+    }
+    assert run("scatters", row, file="scatters_Fig2.tsv") == {
+        ("unit_dimension", "x_unit"),
+        ("unit_dimension", "y_unit"),
+    }
 
 
 def test_scatter_axes(run):

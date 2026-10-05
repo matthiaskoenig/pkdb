@@ -111,6 +111,8 @@ _GROUPS = {
         "missing_time",
         "missing_unit",
         "missing_dosing_field",
+        "invalid_application",
+        "unit_dimension",
     ),
 }
 CATEGORIES = {code: category for category, codes in _GROUPS.items() for code in codes}

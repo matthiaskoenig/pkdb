@@ -2,16 +2,34 @@
 
 from collections.abc import Iterator
 from difflib import get_close_matches
+from functools import lru_cache
 
+from pkdb.domain.normalization import UnitDimensionError, conversion
 from pkdb.domain.vocabulary import MeasurementRule, Vocabulary
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.columns import Column
 from pkdb.studyformat.issues import row_issue
 from pkdb.studyformat.load import LoadedStudy, LoadedTable, Row
+from pkdb.studyformat.rows import valid_unit
 
 RETIRED_CALCULATION = "geometric mean"
 UNSPECIFIED = "unspecified summary"
+NO_UNIT = "NO_UNIT"
 DOSING = frozenset({"dosing", "medication"})
+DOSING_APPLICATIONS = ("single dose", "multiple dose", "constant infusion")
+# Columns a dose needs, in template order; dosing needs all, medication some.
+DOSING_FIELDS = {
+    "dosing": (
+        "substance",
+        "route",
+        "form",
+        "application",
+        "time",
+        "time_unit",
+        "unit",
+    ),
+    "medication": ("substance", "route", "unit"),
+}
 CHOICE_TYPES = frozenset({"categorical", "boolean", "numeric_categorical"})
 REQUIRED_CHOICE_TYPES = frozenset({"categorical", "boolean"})
 TIMED_KINDS = frozenset({"characteristica", "outputs", "timecourses", "scatters"})
@@ -48,9 +66,23 @@ def vocabulary_terms(vocabulary: Vocabulary) -> dict[str, frozenset[str]]:
     }
 
 
+@lru_cache(maxsize=4096)
+def converts(unit: str, units: tuple[str, ...], molar_mass: float | None) -> bool:
+    """Whether a unit converts to one of a rule's units; cached for large tables."""
+    try:
+        conversion(unit, units, molar_mass)
+    except UnitDimensionError:
+        return False
+    except Exception:
+        # Not a readable unit; layer 3 reports it as invalid_unit.
+        return True
+    return True
+
+
 def check_terms(study: LoadedStudy, vocabulary: Vocabulary) -> list[ValidationIssue]:
     terms = vocabulary_terms(vocabulary)
     rules = vocabulary.measurement_map()
+    masses = {substance.name: substance.mass for substance in vocabulary.substances}
     issues: list[ValidationIssue] = []
     for table in study.tables:
         columns = [column for column in table.spec.columns if column.vocabulary]
@@ -62,26 +94,82 @@ def check_terms(study: LoadedStudy, vocabulary: Vocabulary) -> list[ValidationIs
             else ("",)
         )
         for row in table.rows:
+            found: list[ValidationIssue] = []
             for column in columns:
-                issues.extend(_term(table, row, column, terms))
+                found.extend(_term(table, row, column, terms))
             for prefix in prefixes:
                 rule = rules.get(row.cells[f"{prefix}measurement"])
                 if rule is not None:
-                    issues.extend(_measurement(table, row, rule, prefix))
-            issues.extend(_value(table, row, rules))
-            if table.kind == "interventions" and row.cells["measurement"] in DOSING:
-                for name in ("substance", "route"):
-                    if not row.cells[name]:
-                        issues.append(
-                            row_issue(
-                                table,
-                                row,
-                                "missing_dosing_field",
-                                f"{name} is required for dosing",
-                                name,
-                            )
-                        )
+                    found.extend(_measurement(table, row, rule, prefix))
+                    found.extend(_unit_dimension(table, row, rule, prefix, masses))
+            found.extend(_value(table, row, rules))
+            if table.kind == "interventions":
+                found.extend(_dosing(table, row, terms, found))
+            issues.extend(found)
     return issues
+
+
+def _unit_dimension(
+    table: LoadedTable,
+    row: Row,
+    rule: MeasurementRule,
+    prefix: str,
+    masses: dict[str, float | None],
+) -> Issues:
+    column = f"{prefix}unit"
+    unit = row.cells[column]
+    if not unit or not rule.units or NO_UNIT in rule.units or not valid_unit(unit):
+        return
+    if not converts(unit, rule.units, masses.get(row.cells[f"{prefix}substance"])):
+        yield row_issue(
+            table,
+            row,
+            "unit_dimension",
+            f"{unit} cannot be converted to a unit of {rule.name}",
+            column,
+            actual=unit,
+            hint=f"Units of {rule.name}; amounts of a substance convert with its molar mass.",
+            candidates=list(rule.units),
+        )
+
+
+def _dosing(
+    table: LoadedTable,
+    row: Row,
+    terms: dict[str, frozenset[str]],
+    found: list[ValidationIssue],
+) -> Issues:
+    """The fields of doses and medications, as in study format 1."""
+    measurement = row.cells["measurement"]
+    if measurement not in DOSING:
+        return
+    for name in DOSING_FIELDS[measurement]:
+        if row.cells[name]:
+            continue
+        if name == "unit" and any(issue.code == "missing_unit" for issue in found):
+            continue
+        yield row_issue(
+            table,
+            row,
+            "missing_dosing_field",
+            f"{name} is required for {measurement}",
+            name,
+        )
+    application = row.cells["application"]
+    if (
+        measurement == "dosing"
+        and application in terms["applications"]
+        and application not in DOSING_APPLICATIONS
+    ):
+        yield row_issue(
+            table,
+            row,
+            "invalid_application",
+            f"Dosing supports application {', '.join(DOSING_APPLICATIONS)}, not {application}",
+            "application",
+            actual=application,
+            candidates=DOSING_APPLICATIONS,
+        )
 
 
 def _value(table: LoadedTable, row: Row, rules: dict[str, MeasurementRule]) -> Issues:

@@ -28,6 +28,9 @@ def sf_vocabulary():
             MeasurementRule(name="qualitative dosing", units=("mg", "NO_UNIT")),
             MeasurementRule(name="fasting", dtype="boolean", choices=("Y", "N")),
             MeasurementRule(name="kinetics", dtype="abstract"),
+            MeasurementRule(
+                name="medication", dtype="boolean", choices=("Y", "N", "NR")
+            ),
             MeasurementRule(name="change", units=("mg/l",), can_negative=True),
             MeasurementRule(name="old_measure", units=("mg/l",), deprecated=True),
         ),
@@ -36,7 +39,12 @@ def sf_vocabulary():
         methods=("HPLC",),
         routes=("oral",),
         forms=("tablet",),
-        applications=("single dose", "multiple dose"),
+        applications=(
+            "single dose",
+            "multiple dose",
+            "constant infusion",
+            "variable infusion",
+        ),
         calculation_types=("calculation", "geometric mean", "sample mean"),
     )
 
