@@ -13,6 +13,10 @@ from pkdb.studyformat.issues import row_issue
 from pkdb.studyformat.load import LoadedStudy, LoadedTable, Row
 
 UNIT_PATTERN = re.compile(r"[\/^_*.() µα-ωΑ-Ωa-zA-Z0-9]*")
+_POWER = re.compile(r"\^|\*\*")
+# A signed exponent with at most two digits before an optional fraction.
+_EXPONENT = re.compile(r"\s*[+-]?[0-9]{1,2}(?:\.[0-9]+)?(?![0-9.])")
+_NEXT_POWER = re.compile(r"\s*(?:\^|\*\*)")
 UNSPECIFIED = "unspecified summary"
 SPREAD = ("sd", "se", "cv", "gmean", "gsd", "gcv", "median", "min", "max")
 NUMERIC = (
@@ -40,6 +44,36 @@ def _is_plain_number(text: str) -> bool:
     return not any(isinstance(node, ast.Name) for node in ast.walk(tree))
 
 
+def _group(text: str, end: int) -> str | None:
+    """The parenthesized group that closes at `end`, or None when unbalanced."""
+    depth = 0
+    for index in range(end, -1, -1):
+        depth += {")": 1, "(": -1}.get(text[index], 0)
+        if depth == 0:
+            return text[index : end + 1]
+    return None
+
+
+def _bounded_powers(text: str) -> bool:
+    """Whether every power in a unit text has a small exponent and is not chained.
+
+    pint evaluates powers exactly, so `9^9^9 g`, `(10^10)^10 g` or `10^999 g`
+    would keep the validator busy for minutes; such text names no unit.
+    """
+    for match in _POWER.finditer(text):
+        exponent = _EXPONENT.match(text, match.end())
+        if exponent is None or _NEXT_POWER.match(text, exponent.end()):
+            return False
+        base = match.start() - 1
+        while base >= 0 and text[base].isspace():
+            base -= 1
+        if base >= 0 and text[base] == ")":
+            group = _group(text, base)
+            if group is None or _POWER.search(group):
+                return False
+    return True
+
+
 @lru_cache(maxsize=4096)
 def _parse_unit(unit: str):
     """The pint quantity of a unit text, or None when the text is no unit.
@@ -51,7 +85,7 @@ def _parse_unit(unit: str):
     of its tokenizer and arithmetic (unbalanced parentheses, `1/0`, `*)`), so any
     exception means that the text is no unit.
     """
-    if _is_plain_number(unit):
+    if not _bounded_powers(unit) or _is_plain_number(unit):
         return None
     try:
         quantity = ureg(unit)
@@ -260,8 +294,16 @@ def _times(table: LoadedTable, row: Row, time: str, unit_column: str) -> Issues:
             unit_column,
         )
     if unit and unit != NOT_REPORTED:
-        status = time_unit_status(unit)
-        if status == "invalid":
+        status = time_unit_status(unit) if UNIT_PATTERN.fullmatch(unit) else "chars"
+        if status == "chars":
+            yield row_issue(
+                table,
+                row,
+                "invalid_time_unit",
+                f"Time unit {unit!r} contains unsupported characters",
+                unit_column,
+            )
+        elif status == "invalid":
             yield row_issue(
                 table,
                 row,

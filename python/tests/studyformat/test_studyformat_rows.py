@@ -1,3 +1,7 @@
+import json
+import subprocess
+import sys
+
 import pytest
 
 from pkdb.studyformat.load import load_study
@@ -168,10 +172,64 @@ def test_outside_range_is_a_warning(make_study, valid_files, tsv):
         ),
         ({"mean": "2", "time": "1", "time_unit": "2 h"}, set()),
         ({"mean": "2", "time": "1", "time_unit": "min"}, set()),
+        (
+            {"mean": "2", "time": "1", "time_unit": "h%"},
+            {("invalid_time_unit", "time_unit")},
+        ),
+        ({"mean": "2", "unit": "mg*hr^2/l"}, set()),
+        ({"mean": "2", "unit": "kg^0.75"}, set()),
+        ({"mean": "2", "unit": "m**2"}, set()),
+        ({"mean": "2", "unit": "10^12/l"}, set()),
     ],
 )
 def test_times_and_units(run, extra, expected):
     assert run("outputs", {**CMAX, **extra}, file="outputs_Tab2.tsv") == expected
+
+
+def test_time_unit_characters_are_checked(make_study, valid_files, tsv):
+    row = {**CMAX, "mean": "2", "time": "1", "time_unit": "h%"}
+    files = {**valid_files, "outputs_Tab2.tsv": tsv("outputs", row)}
+    [issue] = check_rows(load_study(make_study(files)))
+    assert issue.code == "invalid_time_unit"
+    assert "unsupported characters" in issue.message
+
+
+# pint evaluates powers exactly: before the guard, each of these took minutes.
+POWER_UNITS = [
+    "9^9^9 g",
+    "10**10**10 g",
+    "10^(10^10) g",
+    "(10^10)^10 g",
+    "((9^9)^9)^9 g",
+    "10^999 g",
+    "g^-999",
+    "9 ^ 9 ^ 9 g",
+]
+POWER_TIME_UNITS = ["10^10^10 hr", "10**10**10 hr", "hr^999", "(hr^99)^99"]
+CHECK = """
+import json, sys, time
+from pkdb.studyformat.rows import time_unit_status, unit_known
+result = {}
+for unit in json.loads(sys.argv[1]):
+    start = time.monotonic()
+    result[unit] = [unit_known(unit), time_unit_status(unit), time.monotonic() - start]
+print(json.dumps(result))
+"""
+
+
+def test_power_bombs_are_rejected_quickly():
+    # A child process with a timeout fails the test instead of hanging the suite.
+    units = [*POWER_UNITS, *POWER_TIME_UNITS]
+    output = subprocess.run(
+        [sys.executable, "-c", CHECK, json.dumps(units)],
+        capture_output=True,
+        text=True,
+        timeout=60,
+        check=True,
+    ).stdout
+    for unit, (known, status, seconds) in json.loads(output).items():
+        assert (unit, known, status) == (unit, False, "invalid")
+        assert seconds < 1, unit
 
 
 def test_timecourse_needs_numeric_time(run):
