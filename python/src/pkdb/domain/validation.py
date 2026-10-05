@@ -13,7 +13,11 @@ from pkdb.domain.pharmacokinetics import (
     build_timecourses,
     derive_pk,
 )
-from pkdb.domain.statistics import complete_statistics
+from pkdb.domain.statistics import (
+    RELATIVE_TOLERANCE,
+    complete_statistics,
+    inconsistent_statistics,
+)
 from pkdb.domain.units import ureg
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.schemas.prepared import PreparedStudy
@@ -498,17 +502,29 @@ def prepare_study(
                     "Unsupported dosing application",
                     intervention,
                 )
-    if not report.valid:
-        raise StudyValidationError(report)
     for key, candidate in normalized.items():
         subject = observation_subjects.get(key)
         if isinstance(subject, Group) and candidate.calculation_type in {
             None,
             "sample mean",
         }:
+            if disagreeing := inconsistent_statistics(
+                candidate.statistics, subject.count
+            ):
+                fields = [field for family in disagreeing.values() for field in family]
+                issue(
+                    "inconsistent_statistics",
+                    f"Reported {', '.join(fields)} contradict each other by more than {RELATIVE_TOLERANCE:.0%}",
+                    candidate,
+                    severity="warning",
+                    expected={"relative_tolerance": RELATIVE_TOLERANCE},
+                    context=disagreeing,
+                )
             candidate.statistics = complete_statistics(
                 candidate.statistics, subject.count
             )
+    if not report.valid:
+        raise StudyValidationError(report)
     prepared = study.model_copy(deep=True)
     prepared.measurements.extend(
         item

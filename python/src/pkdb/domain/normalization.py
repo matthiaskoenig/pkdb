@@ -10,7 +10,17 @@ from pkdb.domain.vocabulary import MeasurementRule
 from pkdb.schemas.study import ScientificRecord
 from pkdb.schemas.validation import fail
 
-SCALED_FIELDS = ("value", "mean", "median", "min", "max", "sd", "se")
+SCALED_FIELDS = (
+    "value",
+    "mean",
+    "median",
+    "min",
+    "max",
+    "sd",
+    "se",
+    "gmean",
+    "error_bar",
+)
 
 
 class UnitDimensionError(ValueError):
