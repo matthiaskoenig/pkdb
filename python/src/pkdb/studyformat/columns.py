@@ -295,10 +295,15 @@ def axis(prefix: str) -> tuple[Column, ...]:
         POINT_VALUE,
         POINT_UNIT,
     )
+    label = f"{prefix.upper()} axis"
+    descriptions = {
+        TIME.name: f"{label}: time point in `{prefix}_{TIME_UNIT.name}`, or `NR` when the publication does not report it.",
+        TIME_UNIT.name: f"{label}: unit of `{prefix}_{TIME.name}`, or `NR` when the publication does not report it.",
+    }
     return tuple(
         column.but(
             name=f"{prefix}_{column.name}",
-            description=f"{prefix.upper()} axis: {column.description}",
+            description=descriptions.get(column.name, f"{label}: {column.description}"),
         )
         for column in columns
     )
