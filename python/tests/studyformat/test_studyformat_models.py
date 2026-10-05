@@ -146,3 +146,21 @@ def test_resolved_item():
         Review.model_validate({"status": "approved", "items": [item]}).items[0].state
         == "resolved"
     )
+
+
+def test_canonical_study_json_writes_whole_ratings_as_integers():
+    study = StudyMetadata.model_validate(
+        {
+            **STUDY,
+            "curators": [
+                {"user": "a", "rating": 1},
+                {"user": "b", "rating": 2.5},
+                {"user": "c"},
+                {"user": "d", "rating": 3.0},
+            ],
+        }
+    )
+    text = canonical_study_json(study)
+    ratings = [line.strip() for line in text.splitlines() if '"rating"' in line]
+    assert ratings == ['"rating": 1', '"rating": 2.5', '"rating": 0', '"rating": 3']
+    assert canonical_study_json(StudyMetadata.model_validate_json(text)) == text

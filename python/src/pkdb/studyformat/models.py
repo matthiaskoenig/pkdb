@@ -3,7 +3,14 @@
 from datetime import date as Date
 from typing import Annotated, Literal
 
-from pydantic import AwareDatetime, BaseModel, ConfigDict, Field, model_validator
+from pydantic import (
+    AwareDatetime,
+    BaseModel,
+    ConfigDict,
+    Field,
+    PlainSerializer,
+    model_validator,
+)
 
 from pkdb.schemas.provenance import ManualCuration, StudyProvenance
 from pkdb.studyformat.jsonio import dump_json
@@ -43,9 +50,17 @@ class StudyReference(Model):
         return self
 
 
+def _whole_as_int(value: float) -> float | int:
+    return int(value) if value.is_integer() else value
+
+
 class Curator(Model):
     user: User
-    rating: Annotated[float, Field(ge=0, le=5)] = 0
+    rating: Annotated[
+        float,
+        Field(ge=0, le=5),
+        PlainSerializer(_whole_as_int, return_type=float | int, when_used="json"),
+    ] = 0
 
 
 class Comment(Model):
