@@ -324,3 +324,38 @@ def test_broken_study_json_is_reported_as_format_2(
     result = lines(capsys)[-1]
     assert result["study_format"] == 2
     assert code in {issue["code"] for issue in result["report"]["issues"]}
+
+
+def test_prepare_refuses_format_2(valid_study, sf_vocabulary):
+    # The curation app and Client.upload call prepare() directly.
+    from pkdb.preparation import prepare
+    from pkdb.schemas.validation import StudyValidationError
+
+    before = snapshot(valid_study)
+    with pytest.raises(StudyValidationError) as error:
+        prepare(valid_study, vocabulary=sf_vocabulary)
+    [issue] = error.value.report.issues
+    assert issue.code == "unsupported_study_format"
+    assert issue.message.startswith("Study format 2 is not supported yet")
+    assert snapshot(valid_study) == before
+
+
+def test_client_upload_refuses_format_2(valid_study, tmp_path):
+    import httpx2
+
+    from pkdb.cache import VocabularyCache
+    from pkdb.client import Client
+    from pkdb.schemas.validation import StudyValidationError
+
+    def no_network(request):
+        pytest.fail(f"Unexpected request: {request.url}")
+
+    transport = httpx2.Client(transport=httpx2.MockTransport(no_network))
+    client = Client(
+        "http://127.0.0.1:9",
+        api_key="key",
+        transport=transport,
+        cache=VocabularyCache(tmp_path / "cache"),
+    )
+    with pytest.raises(StudyValidationError, match="not supported"):
+        client.upload(valid_study)

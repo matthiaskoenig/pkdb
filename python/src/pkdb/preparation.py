@@ -20,6 +20,7 @@ from pkdb.schemas.source import SourceBundle, SourceLocation
 from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import ValidationReport, fail
 from pkdb.source_files import ignored_source
+from pkdb.studyformat.validation import is_v2_folder
 
 
 def study_folders(path: str | Path) -> list[Path]:
@@ -127,6 +128,12 @@ def prepare(
 ) -> PreparedBundle:
     emit(progress, "read")
     path = Path(folder).resolve(strict=True)
+    if is_v2_folder(path):
+        fail(
+            "unsupported_study_format",
+            "Study format 2 is not supported yet; check the folder with pkdb validate",
+            SourceLocation(file="study.json"),
+        )
     vocabulary = vocabulary if vocabulary is not None else bundled_vocabulary()
     with source_snapshot(path) as (root, hashes):
         bundle: SourceBundle = load_folder(root)
