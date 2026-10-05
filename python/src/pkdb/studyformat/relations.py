@@ -396,7 +396,7 @@ def _review_rules(study: LoadedStudy) -> Issues:
     if review.status == "approved" and open_items:
         yield make_issue(
             "approved_with_open_items",
-            f"An approved study has no open review items; {open_items} are open",
+            f"A study can only be approved when no review item is open; {open_items} are open",
             file=REVIEW_JSON,
             field="status",
         )
@@ -407,16 +407,21 @@ def _review_rules(study: LoadedStudy) -> Issues:
             continue
         table: LoadedTable | None = study.table(target.file)
         if table is None:
-            plain = target.file in study.layout.files and target.file not in table_names
-            if (plain and not target.rows and not target.column) or (
-                target.file in table_names
-            ):
+            if target.file in table_names:
+                # A table that cannot be loaded is reported where it is read.
                 continue
-            yield make_issue(
-                "unknown_review_target",
-                f"Review item {item.id} targets {target.file}, which is not a file of this study",
-                file=REVIEW_JSON,
-            )
+            if target.file not in study.layout.files:
+                yield make_issue(
+                    "unknown_review_target",
+                    f"Review item {item.id} targets {target.file}, which is not a file of this study",
+                    file=REVIEW_JSON,
+                )
+            elif target.rows or target.column:
+                yield make_issue(
+                    "unknown_review_target",
+                    f"Review item {item.id} targets rows or a column of {target.file}; rows and column apply only to table files",
+                    file=REVIEW_JSON,
+                )
             continue
         columns = [*target.rows, *([target.column] if target.column else [])]
         unknown = [name for name in columns if name not in table.spec.names]

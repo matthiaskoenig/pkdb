@@ -242,3 +242,37 @@ def test_review_rules(run):
         ("review_target_unmatched", "review.json", None),
         ("unknown_review_target", "review.json", None),
     }
+
+
+def review_messages(make_study, valid_files, *targets, status="draft"):
+    items = [
+        {**ITEM, "id": f"01JA2XK7Q8M3R5T6V9W0Y1Z2A{index}", "target": target}
+        for index, target in enumerate(targets)
+    ]
+    review = dump_json({"status": status, "items": items})
+    study = load_study(make_study({**valid_files, "review.json": review}))
+    return [issue.message for issue in check_relations(study)]
+
+
+def test_rows_and_columns_of_plain_files_are_explained(make_study, valid_files):
+    messages = review_messages(
+        make_study,
+        valid_files,
+        {"file": "Example.pdf", "column": "page"},
+        {"file": "study.json", "rows": {"name": "x"}},
+        {"file": "notes.txt"},
+    )
+    assert messages == [
+        "Review item 01JA2XK7Q8M3R5T6V9W0Y1Z2A0 targets rows or a column of Example.pdf; rows and column apply only to table files",
+        "Review item 01JA2XK7Q8M3R5T6V9W0Y1Z2A1 targets rows or a column of study.json; rows and column apply only to table files",
+        "Review item 01JA2XK7Q8M3R5T6V9W0Y1Z2A2 targets notes.txt, which is not a file of this study",
+    ]
+
+
+def test_approval_with_open_items_names_the_rule(make_study, valid_files):
+    messages = review_messages(
+        make_study, valid_files, {"file": "Example.pdf"}, {}, status="approved"
+    )
+    assert messages == [
+        "A study can only be approved when no review item is open; 2 are open"
+    ]
