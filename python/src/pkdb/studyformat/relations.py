@@ -1,8 +1,11 @@
 """Layer 4: relationships between rows, tables and files."""
 
+import os
+import shlex
 from collections import defaultdict
 from collections.abc import Iterator
 from difflib import get_close_matches
+from pathlib import Path
 
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.issues import make_issue, row_issue
@@ -339,6 +342,15 @@ def _images(study: LoadedStudy) -> Issues:
                 )
 
 
+def _shell_path(folder: Path) -> str:
+    """The folder as a shell argument, relative to the working directory when possible."""
+    try:
+        path = os.path.relpath(folder)
+    except ValueError:
+        path = str(folder)
+    return shlex.quote(path)
+
+
 def _study_rules(study: LoadedStudy) -> Issues:
     metadata = study.metadata
     if metadata is None:
@@ -352,6 +364,7 @@ def _study_rules(study: LoadedStudy) -> Issues:
         )
     if study.reference is None or metadata.reference is None:
         return
+    command = f"pkdb reference resolve {_shell_path(study.folder)} --write"
     for name, expected in (
         ("pmid", metadata.reference.pmid),
         ("doi", metadata.reference.doi),
@@ -364,7 +377,7 @@ def _study_rules(study: LoadedStudy) -> Issues:
         if not same:
             yield make_issue(
                 "reference_mismatch",
-                f"study.json names {name} {expected} but reference.json has {found or 'none'}; run pkdb reference resolve with --write to refresh reference.json",
+                f"study.json names {name} {expected} but reference.json has {found or 'none'}; run {command} to refresh reference.json",
                 file=REFERENCE_JSON,
                 field=name,
             )

@@ -8,6 +8,8 @@ When a study's `reference` identifier is a PubMed ID, `pkdb prepare`, `pkdb vali
 
 A matching `reference.json` is never changed. Offline commands use cached PubMed responses only and fail with an explanation when the record has not been retrieved before. Studies whose reference is not a PubMed ID need an explicitly resolved `reference.json`, as described below.
 
+In study format 2, `study.json` names the publication with `reference.pmid` and/or `reference.doi`, `pkdb validate` reports a `reference.json` that does not match them as `reference_mismatch` instead of rewriting it, and `pkdb reference resolve <folder> --write` refreshes `reference.json` from these identifiers without changing `study.json`.
+
 ## Resolve a PubMed ID or DOI
 
 The study directory must contain `study.json`, including its stable `reference` identifier. The resolver preserves that identifier and the reference name. It can create a missing `reference.json`.

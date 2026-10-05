@@ -550,27 +550,115 @@ def _file_digest(folder):
     return digest.hexdigest()
 
 
+def _format_2_publication(study):
+    """Normalized PubMed ID and DOI of a study format 2 study.json; None for format 1.
+
+    In study format 2, study.json names the publication as a `reference` object
+    with `pmid` and/or `doi`, and reference.json is a snapshot of its metadata.
+    An empty result marks a manual reference.
+    """
+    if not isinstance(study, dict) or study.get("format") != 2:
+        return None
+    reference = study.get("reference")
+    if reference is None:
+        return {}
+    if not isinstance(reference, dict):
+        raise ReferenceError("study.json reference must be an object with pmid or doi")
+    return {
+        field: normalizer(reference[field])
+        for field, normalizer in (("pmid", normalize_pmid), ("doi", normalize_doi))
+        if reference.get(field) is not None
+    }
+
+
+def _same_identifier(field, left, right):
+    normalizer = normalize_pmid if field == "pmid" else normalize_doi
+    try:
+        return normalizer(left) == normalizer(right)
+    except ReferenceError:
+        return False
+
+
+def _same_sid(existing, publication):
+    """Whether a snapshot has the sid of a format 2 study: its PubMed ID, else its DOI."""
+    field = "pmid" if "pmid" in publication else "doi"
+    return _same_identifier(field, existing.get("sid"), publication[field])
+
+
+def _describes(existing, publication):
+    """Whether a saved snapshot describes the publication named by study.json."""
+    return _same_sid(existing, publication) and all(
+        existing.get(field) is not None
+        and _same_identifier(field, existing[field], value)
+        for field, value in publication.items()
+    )
+
+
+def _format_2_input(folder, publication, seed, existing, reset_overrides):
+    """Reference identifier, lookup seed and usable snapshot of a format 2 study.
+
+    The identifiers come from study.json; others on the command line are
+    rejected because study.json is the single source for the publication. A
+    snapshot with another identifier describes another publication, so none
+    of it is kept.
+    """
+    for field in ("pmid", "doi"):
+        if seed.get(field) and not (
+            field in publication
+            and _same_identifier(field, seed[field], publication[field])
+        ):
+            raise ReferenceError(
+                f"study.json names the publication; set {field} {seed[field]} in its reference instead of passing it"
+            )
+    if not publication:
+        sid = existing.get("sid") or folder.resolve().name
+        if not seed and not existing.get("provenance") and not reset_overrides:
+            seed = {
+                k: v
+                for k, v in existing.items()
+                if k in FIELDS and v not in (None, "", [])
+            }
+        return str(sid), seed, existing
+    if existing and not _same_sid(existing, publication):
+        existing = {}
+    sid = publication.get("pmid") or publication["doi"]
+    return sid, {**publication, **seed}, existing
+
+
 def preview_reference(folder, seed, resolver, *, reset_overrides=False):
     folder = Path(folder)
     revision = _file_digest(folder)
     study = json.loads((folder / "study.json").read_text())
     path = folder / "reference.json"
     existing = json.loads(path.read_text()) if path.exists() else {}
-    sid = study.get("reference")
-    if not isinstance(sid, (str, int)) or isinstance(sid, bool) or not str(sid):
-        raise ReferenceError("study.json must define a stable reference identifier")
-    if existing and str(existing.get("sid")) != str(sid):
-        raise ReferenceError("Existing reference SID does not match study.json")
-    if seed and not ({"pmid", "doi"} & seed.keys()):
-        seed = {**{k: existing[k] for k in ("pmid", "doi") if existing.get(k)}, **seed}
-    if not seed and not existing.get("provenance") and not reset_overrides:
-        seed = {
-            k: v for k, v in existing.items() if k in FIELDS and v not in (None, "", [])
-        }
+    publication = _format_2_publication(study)
+    if publication is not None:
+        sid, seed, existing = _format_2_input(
+            folder, publication, seed, existing, reset_overrides
+        )
+        name = existing.get("name") or folder.resolve().name
+    else:
+        sid = study.get("reference")
+        if not isinstance(sid, (str, int)) or isinstance(sid, bool) or not str(sid):
+            raise ReferenceError("study.json must define a stable reference identifier")
+        if existing and str(existing.get("sid")) != str(sid):
+            raise ReferenceError("Existing reference SID does not match study.json")
+        if seed and not ({"pmid", "doi"} & seed.keys()):
+            seed = {
+                **{k: existing[k] for k in ("pmid", "doi") if existing.get(k)},
+                **seed,
+            }
+        if not seed and not existing.get("provenance") and not reset_overrides:
+            seed = {
+                k: v
+                for k, v in existing.items()
+                if k in FIELDS and v not in (None, "", [])
+            }
+        name = existing.get("name") or study.get("name") or folder.name
     result = resolver.resolve(
         seed,
         sid=sid,
-        name=existing.get("name") or study.get("name") or folder.name,
+        name=name,
         existing=existing,
         reset_overrides=reset_overrides,
     )
@@ -605,9 +693,12 @@ def sync_reference(folder, resolver):
     revision = _file_digest(folder)
     try:
         study = json.loads((folder / "study.json").read_text(encoding="utf-8"))
-        sid = study["reference"]
+        publication = _format_2_publication(study)
+        sid = study["reference"] if publication is None else None
     except OSError, ValueError, KeyError, TypeError:
         return None
+    if publication is not None:
+        return _sync_format_2(folder, publication, resolver, revision)
     if type(sid) not in (str, int) or not str(sid):
         return None
     sid = str(sid)
@@ -645,6 +736,43 @@ def sync_reference(folder, resolver):
     except ReferenceError as error:
         raise ReferenceError(
             f"Cannot create reference.json from PubMed {pmid}: {error}"
+        ) from error
+    save_reference(folder, {"reference": reference, "revision": revision})
+    return change
+
+
+def _sync_format_2(folder, publication, resolver, revision):
+    """sync_reference for study format 2, whose study.json names pmid and/or doi."""
+    if not publication:
+        # A manual reference: reference.json is its only record.
+        return None
+    source = (
+        f"PubMed {publication['pmid']}"
+        if "pmid" in publication
+        else f"DOI {publication['doi']}"
+    )
+    path = folder / "reference.json"
+    if path.exists():
+        try:
+            existing = json.loads(path.read_text(encoding="utf-8"))
+        except OSError, ValueError:
+            return None
+        if not isinstance(existing, dict) or _describes(existing, publication):
+            return None
+        change = f"Replaced reference.json (SID {existing.get('sid')}) with {source}"
+    else:
+        existing = {}
+        change = f"Created reference.json from {source}"
+    name = (_same_sid(existing, publication) and existing.get("name")) or (
+        folder.resolve().name
+    )
+    sid = publication.get("pmid") or publication["doi"]
+    try:
+        # A mismatched snapshot describes another publication; keep none of it.
+        reference = resolver.resolve(dict(publication), sid=sid, name=name)
+    except ReferenceError as error:
+        raise ReferenceError(
+            f"Cannot create reference.json from {source}: {error}"
         ) from error
     save_reference(folder, {"reference": reference, "revision": revision})
     return change
