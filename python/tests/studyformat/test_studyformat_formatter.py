@@ -41,10 +41,33 @@ def test_messy_spreadsheet_export_is_normalized(make_study, valid_files):
     names = TABLES["outputs"].names
     assert [row[names.index("subjects")] for row in rows] == ["all", "S1", "S2"]
     assert [row[names.index("mean")] for row in rows] == ["3", "", "2.5"]
+    assert {row[names.index("interventions")] for row in rows} == {"D1"}
     assert {row[names.index("study")] for row in rows} == {"Example"}
     assert {row[names.index("source")] for row in rows} == {"Tab2"}
     assert b"\r" not in (folder / "outputs_Tab2.tsv").read_bytes()
     assert format_folder(folder).changes == []
+
+
+def test_cells_in_literal_quotes_format_once(make_study, valid_files):
+    # Spreadsheets export a cell holding "approx." as """approx."""; the
+    # formatter must not peel one layer of quotes per run.
+    messy = (
+        "subjects\tinterventions\tmeasurement\tmean\tunit\tcomment\r\n"
+        '"all"\t"D1"\tcmax\t2.5\tmg/l\t"""approx."""\r\n'
+        'S1\tD1\tcmax\t2\tmg/l\t"say ""hi"""\r\n'
+    )
+    folder = make_study({**valid_files, "outputs_Tab2.tsv": messy})
+    assert format_folder(folder).ok
+    first = read(folder, "outputs_Tab2.tsv")
+    assert format_folder(folder).changes == []
+    assert read(folder, "outputs_Tab2.tsv") == first
+    names = TABLES["outputs"].names
+    rows = [line.split("\t") for line in first.splitlines()[1:]]
+    assert [row[names.index("comment")] for row in rows] == [
+        '"""approx."""',
+        'say "hi"',
+    ]
+    assert [row[names.index("subjects")] for row in rows] == ["all", "S1"]
 
 
 def test_broken_multi_line_cell_is_left_unchanged(valid_study):

@@ -66,6 +66,17 @@ def test_unquote():
     assert unquote('"') == '"'
 
 
+@pytest.mark.parametrize(
+    "cell",
+    ['"""approx."""', '""""', '" ""x"" "', '"""a"" and ""b"""', '""""""'],
+)
+def test_unquote_is_idempotent(cell):
+    # A cell that would still be quoted after one unquote keeps its text.
+    once = unquote(cell)
+    assert unquote(once) == once
+    assert once == cell
+
+
 def test_parse_tsv_normalizes_line_endings_bom_and_whitespace():
     text = f"{BOM}name\tcount \r\n all\t{NBSP}4\r\n\r\n\t\t\r\nS1\t1\n"
     parsed = parse_tsv(text.encode())

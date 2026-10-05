@@ -46,11 +46,17 @@ def natural_key(text: str) -> tuple:
 
 
 def unquote(cell: str) -> str:
-    """Remove spreadsheet export quoting from a cell wrapped in double quotes."""
+    """Remove spreadsheet export quoting from a cell wrapped in double quotes.
+
+    A cell whose unquoted text would again be wrapped in quotes keeps its text,
+    so that reading a formatted file a second time changes nothing.
+    """
     if len(cell) >= 2 and cell[0] == cell[-1] == '"':
         inner = cell[1:-1]
         if '"' not in inner.replace('""', ""):
-            return inner.replace('""', '"').strip()
+            text = inner.replace('""', '"').strip()
+            if not (text.startswith('"') and text.endswith('"')):
+                return text
     return cell
 
 
