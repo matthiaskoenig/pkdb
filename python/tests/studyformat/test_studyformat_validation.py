@@ -376,10 +376,35 @@ def break_first_line(folder):
     path.write_text("\n" + path.read_text(encoding="utf-8"), encoding="utf-8")
 
 
+def break_json_depth(folder):
+    (folder / "review.json").write_bytes(b"[" * 100_000 + b"]" * 100_000)
+
+
+def break_json_number(folder):
+    text = (folder / "study.json").read_text(encoding="utf-8")
+    (folder / "study.json").write_text(
+        text.replace('"rating": 3', '"rating": 1e999'), encoding="utf-8"
+    )
+
+
 @pytest.mark.parametrize(
     "break_folder",
-    [break_nothing, break_study_json, break_encoding, break_first_line],
-    ids=["empty", "invalid_json", "invalid_utf8", "empty_first_line"],
+    [
+        break_nothing,
+        break_study_json,
+        break_encoding,
+        break_first_line,
+        break_json_depth,
+        break_json_number,
+    ],
+    ids=[
+        "empty",
+        "invalid_json",
+        "invalid_utf8",
+        "empty_first_line",
+        "deep_json",
+        "infinite_number",
+    ],
 )
 def test_broken_folders_are_reported(break_folder, valid_study, sf_vocabulary):
     break_folder(valid_study)

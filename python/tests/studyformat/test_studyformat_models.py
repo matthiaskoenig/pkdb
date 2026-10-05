@@ -41,6 +41,32 @@ def test_load_json_rejects_duplicates_and_nan():
     assert "line 1" in str(syntax.value)
 
 
+@pytest.mark.parametrize(
+    "data",
+    [
+        b"[" * 100_000 + b"]" * 100_000,
+        b'{"a": ' + b"[" * 100_000 + b"]" * 100_000 + b"}",
+        b'{"issue": ' + b"9" * 5000 + b"}",
+        b'{"rating": 1e999}',
+        b'{"rating": -1e999}',
+        b"1e400",
+    ],
+    ids=["deep", "deep_value", "long_integer", "inf", "minus_inf", "top_level_inf"],
+)
+def test_load_json_rejects_hostile_input(data):
+    with pytest.raises(JsonFileError) as error:
+        load_json(data)
+    assert error.value.code == "invalid_json"
+
+
+def test_load_json_keeps_ordinary_numbers():
+    assert load_json(b'{"a": 1e300, "b": 2.5, "c": -3}') == {
+        "a": 1e300,
+        "b": 2.5,
+        "c": -3,
+    }
+
+
 def test_dump_json_keeps_unicode_and_ends_with_newline():
     assert dump_json({"name": "Dahlström"}) == '{\n  "name": "Dahlström"\n}\n'
 
