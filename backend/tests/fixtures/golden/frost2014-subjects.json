@@ -20295,6 +20295,7 @@
       "sid": "25419161",
       "name": "Frost2014",
       "doi": null,
+      "url": null,
       "title": "A randomized direct comparison of the pharmacokinetics and pharmacodynamics of apixaban and rivaroxaban.",
       "abstract": "Currently, there are no direct comparisons of apixaban and rivaroxaban, two new oral direct factor Xa inhibitors approved for management of thromboembolic disorders.",
       "journal": "Clinical pharmacology : advances and applications",
@@ -20303,39 +20304,48 @@
         {
           "pk": 8,
           "first_name": "Charles",
-          "last_name": "Frost"
+          "last_name": "Frost",
+          "organization": null
         },
         {
           "pk": 9,
           "first_name": "Yan",
-          "last_name": "Song"
+          "last_name": "Song",
+          "organization": null
         },
         {
           "pk": 10,
           "first_name": "Yu Chen",
-          "last_name": "Barrett"
+          "last_name": "Barrett",
+          "organization": null
         },
         {
           "pk": 11,
           "first_name": "Jessie",
-          "last_name": "Wang"
+          "last_name": "Wang",
+          "organization": null
         },
         {
           "pk": 12,
           "first_name": "Janice",
-          "last_name": "Pursley"
+          "last_name": "Pursley",
+          "organization": null
         },
         {
           "pk": 13,
           "first_name": "Rebecca A",
-          "last_name": "Boyd"
+          "last_name": "Boyd",
+          "organization": null
         },
         {
           "pk": 14,
           "first_name": "Frank",
-          "last_name": "LaCreta"
+          "last_name": "LaCreta",
+          "organization": null
         }
-      ]
+      ],
+      "publication_date": null,
+      "provenance": {}
     }
   ],
   "subsets": [
@@ -24621,6 +24631,7 @@
       "sid": "25419161",
       "name": "Frost2014",
       "doi": null,
+      "url": null,
       "title": "A randomized direct comparison of the pharmacokinetics and pharmacodynamics of apixaban and rivaroxaban.",
       "abstract": "Currently, there are no direct comparisons of apixaban and rivaroxaban, two new oral direct factor Xa inhibitors approved for management of thromboembolic disorders.",
       "journal": "Clinical pharmacology : advances and applications",
@@ -24629,58 +24640,70 @@
         {
           "pk": 8,
           "first_name": "Charles",
-          "last_name": "Frost"
+          "last_name": "Frost",
+          "organization": null
         },
         {
           "pk": 9,
           "first_name": "Yan",
-          "last_name": "Song"
+          "last_name": "Song",
+          "organization": null
         },
         {
           "pk": 10,
           "first_name": "Yu Chen",
-          "last_name": "Barrett"
+          "last_name": "Barrett",
+          "organization": null
         },
         {
           "pk": 11,
           "first_name": "Jessie",
-          "last_name": "Wang"
+          "last_name": "Wang",
+          "organization": null
         },
         {
           "pk": 12,
           "first_name": "Janice",
-          "last_name": "Pursley"
+          "last_name": "Pursley",
+          "organization": null
         },
         {
           "pk": 13,
           "first_name": "Rebecca A",
-          "last_name": "Boyd"
+          "last_name": "Boyd",
+          "organization": null
         },
         {
           "pk": 14,
           "first_name": "Frank",
-          "last_name": "LaCreta"
+          "last_name": "LaCreta",
+          "organization": null
         }
-      ]
+      ],
+      "publication_date": null,
+      "provenance": {}
     },
     "reference_date": "2014-11-24",
     "creator": {
       "username": "icalledmyselfmoon",
       "first_name": "",
-      "last_name": ""
+      "last_name": "",
+      "organization": null
     },
     "curators": [
       {
         "rating": 0.0,
         "username": "icalledmyselfmoon",
         "first_name": "",
-        "last_name": ""
+        "last_name": "",
+        "organization": null
       },
       {
         "rating": 2.0,
         "username": "mkoenig",
         "first_name": "",
-        "last_name": ""
+        "last_name": "",
+        "organization": null
       }
     ],
     "collaborators": [],
@@ -25305,6 +25328,11 @@
         3,
         4
       ]
-    }
+    },
+    "provenance": {
+      "source_key": "pkdb.manual",
+      "kind": "manual_curation"
+    },
+    "publication_id": null
   }
 }
