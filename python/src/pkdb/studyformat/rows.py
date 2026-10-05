@@ -1,5 +1,6 @@
 """Layer 3: required cells, statistics, times, schedules and units of single rows."""
 
+import ast
 import re
 from collections.abc import Iterator
 from functools import lru_cache
@@ -31,19 +32,33 @@ NUMERIC = (
 Issues = Iterator[ValidationIssue]
 
 
+def _is_plain_number(text: str) -> bool:
+    """True for text that is arithmetic on numbers only, such as `5`, `1.73` or `10^9`."""
+    try:
+        tree = ast.parse(text.replace("^", "**"), mode="eval")
+    except Exception:
+        return False
+    return not any(isinstance(node, ast.Name) for node in ast.walk(tree))
+
+
 @lru_cache(maxsize=4096)
 def _parse_unit(unit: str):
-    """The unit as a pint quantity of magnitude 1, or None when pint rejects the text.
+    """The pint quantity of a unit text, or None when the text is no unit.
 
-    Cell text is untrusted. Besides its own errors, pint leaks those of its
-    tokenizer and arithmetic (unbalanced parentheses, `1/0`, `*)`), so any
-    exception means that the text is no unit. A leading magnitude (`2 h`) is
-    rejected as well, because a unit has none.
+    Like the rest of the codebase this parses with `ureg(unit)`, so a numeric
+    factor is part of a unit (`ml/min/(1.73*m^2)`, `10^9/l`, `1/h`). Pint also
+    parses a bare number such as `5` as a dimensionless quantity, but that names
+    no unit. Cell text is untrusted, and besides its own errors pint leaks those
+    of its tokenizer and arithmetic (unbalanced parentheses, `1/0`, `*)`), so any
+    exception means that the text is no unit.
     """
+    if _is_plain_number(unit):
+        return None
     try:
-        return ureg.Quantity(1, unit)
+        quantity = ureg(unit)
     except Exception:
         return None
+    return quantity if isinstance(quantity, ureg.Quantity) else None
 
 
 @lru_cache(maxsize=1024)
