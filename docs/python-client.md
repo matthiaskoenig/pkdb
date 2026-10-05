@@ -178,3 +178,7 @@ Offline validation cannot check destination account records or study-editing per
 Use `pkdb import osp --creator USER --output NEW_DIRECTORY` to convert the pinned OSP observed-data release into source-qualified study folders. See the [OSP import guide](osp-import.md) for provenance, scientific mappings, offline conversion, and server loading.
 
 `pkdb import frdb`, `pkdb import cvtdb`, and `pkdb import warfarin` use the same creator/output options. Install `pkdb[imports]` for the R-format sources. See [public dataset imports](public-dataset-imports.md) for exact coverage, source terms, row-level provenance and weekly checks.
+
+## Study format 2 folders
+
+Study folders whose `study.json` contains `"format": 2` keep their data in fixed tab-separated tables; see [Study format](study-format.md). `pkdb format FOLDER` writes every file of such folders in canonical form, and `pkdb format FOLDER --check` only reports the files that would change. `pkdb validate FOLDER` checks layout, format, rows, relationships between tables and vocabulary terms, and reports every issue with file, row and column. `pkdb schema export --output DIR` writes JSON Schema files for `study.json`, `review.json` and every table, and `pkdb schema docs --output FILE` writes the column reference. `pkdb prepare` and `pkdb upload` do not accept study format 2 folders yet.

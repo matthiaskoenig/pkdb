@@ -215,9 +215,19 @@ def test_help_describes_every_command_with_curate_first(capsys):
     assert error.value.code == 0
     output = capsys.readouterr().out
     assert (
-        "{curate,prepare,validate,upload,vocabulary,reference,import,update}" in output
+        "{curate,prepare,validate,upload,vocabulary,reference,import,format,schema,update}"
+        in output
     )
-    for command in ("curate", "prepare", "validate", "upload", "vocabulary", "update"):
+    for command in (
+        "curate",
+        "prepare",
+        "validate",
+        "upload",
+        "vocabulary",
+        "format",
+        "schema",
+        "update",
+    ):
         line = next(
             line for line in output.splitlines() if line.startswith(f"    {command} ")
         )
