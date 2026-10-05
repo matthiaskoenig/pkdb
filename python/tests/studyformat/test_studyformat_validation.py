@@ -45,6 +45,28 @@ def test_unformatted_study_is_invalid(make_study, valid_files, sf_vocabulary):
     assert not report.valid
 
 
+@pytest.mark.parametrize(
+    ("change", "line"),
+    [
+        (lambda text: text.replace("\t2.5\t", "\t2.50\t"), 2),
+        (lambda text: text + "Example\tTab2\n", 3),
+        (lambda text: text.replace("\n", "\r\n"), 1),
+        (lambda text: text.rstrip("\n"), 2),
+    ],
+    ids=["number", "extra_line", "crlf", "final_newline"],
+)
+def test_not_formatted_names_the_first_difference(
+    valid_study, sf_vocabulary, change, line
+):
+    path = valid_study / "outputs_Tab2.tsv"
+    path.write_bytes(change(path.read_text(encoding="utf-8")).encode())
+    [issue] = validate_folder(valid_study, sf_vocabulary).issues
+    assert issue.message == (
+        f"outputs_Tab2.tsv is not in canonical form (first difference in line {line}); run pkdb format"
+    )
+    assert issue.source is not None and issue.source.row == line
+
+
 def test_all_layers_are_collected(make_study, valid_files, tsv, sf_vocabulary):
     files = {
         **valid_files,

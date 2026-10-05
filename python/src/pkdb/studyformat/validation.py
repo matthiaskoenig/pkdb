@@ -67,15 +67,27 @@ def format_issues(study: LoadedStudy) -> list[ValidationIssue]:
                     file=name,
                 )
             )
-        elif (study.folder / name).read_bytes() != text.encode("utf-8"):
+        elif (data := (study.folder / name).read_bytes()) != text.encode("utf-8"):
+            line = first_difference(data, text.encode("utf-8"))
             issues.append(
                 make_issue(
                     "not_formatted",
-                    f"{name} is not in canonical form; run pkdb format",
+                    f"{name} is not in canonical form (first difference in line {line}); run pkdb format",
                     file=name,
+                    line=line,
                 )
             )
     return issues
+
+
+def first_difference(current: bytes, canonical: bytes) -> int:
+    """Number of the first line that differs, counting line endings as part of a line."""
+    lines = current.splitlines(keepends=True)
+    expected = canonical.splitlines(keepends=True)
+    for number, (line, wanted) in enumerate(zip(lines, expected, strict=False), 1):
+        if line != wanted:
+            return number
+    return min(len(lines), len(expected)) + 1
 
 
 @dataclass(frozen=True)
