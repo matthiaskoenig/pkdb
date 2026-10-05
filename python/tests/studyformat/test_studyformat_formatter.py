@@ -70,6 +70,23 @@ def test_cells_in_literal_quotes_format_once(make_study, valid_files):
     assert [row[names.index("subjects")] for row in rows] == ["all", "S1"]
 
 
+def test_long_digit_runs_sort(make_study, valid_files, tsv):
+    base = {"subjects": "all", "measurement": "concentration", "time_unit": "h"}
+    labels = ["a" + "9" * 5000, "a10", "a2"]
+    rows = [{**base, "label": label, "time": "1"} for label in labels]
+    folder = make_study(
+        {**valid_files, "timecourses_Fig1.tsv": tsv("timecourses", *rows)}
+    )
+    assert format_folder(folder).ok
+    names = TABLES["timecourses"].names
+    body = read(folder, "timecourses_Fig1.tsv").splitlines()[1:]
+    assert [line.split("\t")[names.index("label")] for line in body] == [
+        "a2",
+        "a10",
+        "a" + "9" * 5000,
+    ]
+
+
 def test_broken_multi_line_cell_is_left_unchanged(valid_study):
     # A spreadsheet cell with a line break continues on a line of its own,
     # which has no tabs and lands in the owned study column.

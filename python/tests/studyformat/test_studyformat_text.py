@@ -54,6 +54,19 @@ def test_natural_key_orders_numbers_by_value():
     assert sorted(names, key=natural_key) == ["Fig1", "Tab2", "Tab2a", "tab3", "Tab10"]
 
 
+def test_natural_key_handles_long_digit_runs():
+    # Python refuses to convert more than 4300 digits to int.
+    long = "Tab1" + "0" * 5000
+    names = [long, "Tab10", "Tab2", "Tab0" + "9" * 5000, "Tab02"]
+    assert sorted(names, key=natural_key) == [
+        "Tab02",
+        "Tab2",
+        "Tab10",
+        "Tab0" + "9" * 5000,
+        long,
+    ]
+
+
 def test_natural_key_handles_non_ascii():
     assert sorted(["Ä2", "A10", "A2"], key=natural_key) == ["A2", "A10", "Ä2"]
 

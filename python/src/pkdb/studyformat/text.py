@@ -5,7 +5,7 @@ import re
 from dataclasses import dataclass
 
 NUMBER_PATTERN = re.compile(r"[+-]?(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?")
-_DIGITS = re.compile(r"(\d+)")
+_DIGITS = re.compile(r"([0-9]+)")
 # Lines git writes around the two sides of a merge conflict.
 CONFLICT_MARKERS = ("<<<<<<<", "|||||||", "=======", ">>>>>>>")
 
@@ -32,13 +32,20 @@ def canonical_number(text: str) -> str | None:
     return None if value is None else format_number(value)
 
 
+def _number_key(digits: str) -> tuple:
+    # Compares like int(digits) without converting, which Python refuses
+    # for more than 4300 digits.
+    significant = digits.lstrip("0")
+    return 0, len(significant), significant
+
+
 def natural_key(text: str) -> tuple:
     """Sort key that orders embedded numbers by value: Tab2 before Tab10.
 
     Text parts compare case-insensitively; the original text only breaks ties.
     """
     parts = tuple(
-        (0, int(part)) if index % 2 else (1, part.casefold())
+        _number_key(part) if index % 2 else (1, part.casefold())
         for index, part in enumerate(_DIGITS.split(text))
         if part
     )
