@@ -186,6 +186,26 @@ def test_dosing_rules(run, row, expected):
     assert run("interventions", {**DOSE, **row}) == expected
 
 
+@pytest.mark.parametrize(
+    ("column", "value", "code", "candidate"),
+    [
+        ("form", "tablets", "unknown_form", "tablet"),
+        ("application", "single doses", "unknown_application", "single dose"),
+    ],
+)
+def test_unknown_form_and_application(
+    make_study, valid_files, tsv, sf_vocabulary, column, value, code, candidate
+):
+    files = {
+        **valid_files,
+        "interventions.tsv": tsv("interventions", {**DOSE, column: value}),
+    }
+    [issue] = check_terms(load_study(make_study(files)), sf_vocabulary)
+    assert (issue.code, issue.severity, issue.category) == (code, "error", "vocabulary")
+    assert issue.source is not None and issue.source.header == column
+    assert candidate in issue.suggestions[0].candidates
+
+
 def test_medication_rules(run):
     medication = {"name": "M1", "measurement": "medication", "choice": "Y"}
     assert run("interventions", DOSE, medication) == {
