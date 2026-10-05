@@ -66,7 +66,7 @@ INTERVENTIONS = TableSpec(
         c.SUBSTANCE,
         c.TISSUE,
         c.METHOD,
-        c.CHOICE,
+        c.INTERVENTION_CHOICE,
         c.ROUTE,
         c.FORM,
         c.APPLICATION,

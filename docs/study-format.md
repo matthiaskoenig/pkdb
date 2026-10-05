@@ -47,12 +47,12 @@ Interventions such as doses, fasting or smoking, referenced by name from the oth
 | `source` | source | no | Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist. |
 | `name` | name | yes | Unique intervention name, referenced from the `interventions` columns of other tables. |
 | `subjects` | name | no | Subject that the dose statistics describe, for body-weight-adjusted doses with `sd`, `min` or `max`. Usually empty. |
-| `measurement` | vocabulary: measurements | yes | Kind of intervention from the vocabulary, such as `dosing`, `qualitative dosing` or `circadian status`. |
+| `measurement` | vocabulary: measurements | yes | Kind of intervention from the vocabulary, such as `dosing`, `qualitative dosing` or `fasting`. |
 | `calculation` | vocabulary: calculation types | no | How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`. |
 | `substance` | vocabulary: substances | no | Substance from the vocabulary. |
 | `tissue` | vocabulary: tissues | no | Tissue or matrix from the vocabulary. |
 | `method` | vocabulary: methods | no | Analytical method from the vocabulary. |
-| `choice` | text | no | Categorical value of a categorical measurement, such as `M` for `sex`. |
+| `choice` | text | no | Categorical value of a categorical intervention, such as `Y` for `fasting`. |
 | `route` | vocabulary: routes | no | Administration route from the vocabulary. |
 | `form` | vocabulary: forms | no | Administration form from the vocabulary. |
 | `application` | vocabulary: applications | no | Application from the vocabulary, such as `single dose`. |
@@ -190,7 +190,7 @@ Points of scatter plots, one row per point with an x and a y value.
 | `name` | name | yes | Name of the scatter dataset, unique across the study. |
 | `subjects` | name | yes | Subject of the point, usually an individual with count 1. |
 | `x_interventions` | comma-separated names | no | X axis: comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none. |
-| `x_measurement` | vocabulary: measurements | yes | X axis: measured quantity from the vocabulary, such as `cmax`, `age` or `sex`. |
+| `x_measurement` | vocabulary: measurements | yes | X axis: measured quantity from the vocabulary, such as `cmax`, `age` or `weight`. |
 | `x_substance` | vocabulary: substances | no | X axis: substance from the vocabulary. |
 | `x_tissue` | vocabulary: tissues | no | X axis: tissue or matrix from the vocabulary. |
 | `x_method` | vocabulary: methods | no | X axis: analytical method from the vocabulary. |
@@ -199,7 +199,7 @@ Points of scatter plots, one row per point with an x and a y value.
 | `x_mean` | number | yes | X axis: value of the point. |
 | `x_unit` | unit | no | X axis: unit of the value. |
 | `y_interventions` | comma-separated names | no | Y axis: comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none. |
-| `y_measurement` | vocabulary: measurements | yes | Y axis: measured quantity from the vocabulary, such as `cmax`, `age` or `sex`. |
+| `y_measurement` | vocabulary: measurements | yes | Y axis: measured quantity from the vocabulary, such as `cmax`, `age` or `weight`. |
 | `y_substance` | vocabulary: substances | no | Y axis: substance from the vocabulary. |
 | `y_tissue` | vocabulary: tissues | no | Y axis: tissue or matrix from the vocabulary. |
 | `y_method` | vocabulary: methods | no | Y axis: analytical method from the vocabulary. |

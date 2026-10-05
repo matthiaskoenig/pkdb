@@ -1,3 +1,6 @@
+import re
+
+from pkdb.cache import bundled_vocabulary
 from pkdb.studyformat.columns import ColumnType
 from pkdb.studyformat.tables import (
     TABLES,
@@ -5,6 +8,7 @@ from pkdb.studyformat.tables import (
     parse_table_file,
     table_file,
 )
+from pkdb.studyformat.terms import vocabulary_terms
 
 STATS = (
     "count mean sd se cv gmean gsd gcv median min max unit error_bar error_type"
@@ -146,6 +150,37 @@ def test_every_column_is_documented():
         for column in spec.columns:
             assert column.description.endswith(".")
             assert EM_DASH not in column.description
+
+
+def test_examples_are_vocabulary_terms():
+    # The descriptions are the contract for AI agents: every term they name exists.
+    vocabulary = bundled_vocabulary()
+    rules = vocabulary.measurement_map()
+    terms = vocabulary_terms(vocabulary)
+    for spec in TABLES.values():
+        for column in spec.columns:
+            where = (spec.kind, column.name)
+            if column.vocabulary:
+                assert column.example in terms[column.vocabulary], where
+            if column.vocabulary == "measurements":
+                named = re.findall(r"`([^`]+)`", column.description)
+                assert named and set(named) <= terms["measurements"], where
+                if spec.kind == "scatters":
+                    # A scatter axis has a numeric value and no choice.
+                    assert {rules[term].dtype for term in named} == {"numeric"}, where
+            if column.name == "choice":
+                match = re.search(r"`([^`]+)` for `([^`]+)`", column.description)
+                assert match is not None, where
+                choice, measurement = match.groups()
+                assert choice == column.example, where
+                assert choice in rules[measurement].choices, where
+
+
+def test_intervention_examples_are_interventions():
+    choice = TABLES["interventions"].column("choice")
+    assert "`fasting`" in choice.description
+    measurement = TABLES["interventions"].column("measurement")
+    assert "`fasting`" in measurement.description
 
 
 def test_file_names():

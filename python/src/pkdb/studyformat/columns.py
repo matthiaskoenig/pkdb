@@ -78,7 +78,7 @@ INTERVENTIONS = Column(
 MEASUREMENT = Column(
     "measurement",
     T.TERM,
-    "Measured quantity from the vocabulary, such as `cmax`, `age` or `sex`.",
+    "Measured quantity from the vocabulary, such as `cmax`, `age` or `weight`.",
     "cmax",
     vocabulary="measurements",
 )
@@ -233,8 +233,12 @@ INTERVENTION_SUBJECTS = SUBJECTS.but(
     description="Subject that the dose statistics describe, for body-weight-adjusted doses with `sd`, `min` or `max`. Usually empty.",
 )
 INTERVENTION_MEASUREMENT = MEASUREMENT.but(
-    description="Kind of intervention from the vocabulary, such as `dosing`, `qualitative dosing` or `circadian status`.",
+    description="Kind of intervention from the vocabulary, such as `dosing`, `qualitative dosing` or `fasting`.",
     example="dosing",
+)
+INTERVENTION_CHOICE = CHOICE.but(
+    description="Categorical value of a categorical intervention, such as `Y` for `fasting`.",
+    example="Y",
 )
 ROUTE = Column(
     "route",
