@@ -47,13 +47,20 @@ def canonical_cell(column: Column, text: str) -> str:
             return text
 
 
+def _decimal_comma_hint(text: str, *, listed: bool = False) -> str | None:
+    """A hint for a number written with a decimal comma, or a `;` list with one."""
+    parts = text.split(";") if listed else [text]
+    if any(DECIMAL_COMMA.fullmatch(part.strip()) for part in parts):
+        return f"Use a decimal point: {text.replace(',', '.')} instead of {text}."
+    return None
+
+
 def _number_problem(text: str) -> CellProblem:
-    hint = (
-        f"Use a decimal point: {text.replace(',', '.')} instead of {text}."
-        if DECIMAL_COMMA.fullmatch(text)
-        else None
+    return CellProblem(
+        "invalid_number",
+        f"Expected a number, found {text!r}",
+        _decimal_comma_hint(text),
     )
-    return CellProblem("invalid_number", f"Expected a number, found {text!r}", hint)
 
 
 def parse_cell(column: Column, text: str) -> tuple[object, CellProblem | None]:
@@ -72,13 +79,16 @@ def parse_cell(column: Column, text: str) -> tuple[object, CellProblem | None]:
                 return None, CellProblem(
                     "invalid_integer",
                     f"Expected a whole number of at least 0, found {text!r}",
+                    _decimal_comma_hint(text),
                 )
             return int(value), None
         case ColumnType.TIME:
             value = parse_number(text)
             if value is None:
                 return None, CellProblem(
-                    "invalid_time", f"Expected a number or NR, found {text!r}"
+                    "invalid_time",
+                    f"Expected a number or NR, found {text!r}",
+                    _decimal_comma_hint(text),
                 )
             return value, None
         case ColumnType.TIMES:
@@ -87,6 +97,7 @@ def parse_cell(column: Column, text: str) -> tuple[object, CellProblem | None]:
                 return None, CellProblem(
                     "invalid_time",
                     f"Expected a number, a ;-separated list of numbers or NR, found {text!r}",
+                    _decimal_comma_hint(text, listed=True),
                 )
             return tuple(value for value in values if value is not None), None
         case ColumnType.NAME:

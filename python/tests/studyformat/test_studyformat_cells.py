@@ -79,3 +79,34 @@ def test_decimal_comma_hint():
     assert problem.code == "invalid_number"
     assert problem.hint is not None
     assert "decimal point" in problem.hint
+
+
+@pytest.mark.parametrize(
+    ("column", "text", "code", "hint"),
+    [
+        (
+            OUT.column("count"),
+            "2,5",
+            "invalid_integer",
+            "Use a decimal point: 2.5 instead of 2,5.",
+        ),
+        (
+            OUT.column("time"),
+            "1,5",
+            "invalid_time",
+            "Use a decimal point: 1.5 instead of 1,5.",
+        ),
+        (
+            IV.column("time"),
+            "0;1,5;3",
+            "invalid_time",
+            "Use a decimal point: 0;1.5;3 instead of 0;1,5;3.",
+        ),
+        (OUT.column("time"), "early", "invalid_time", None),
+        (IV.column("time"), "0;x", "invalid_time", None),
+    ],
+)
+def test_decimal_comma_hint_for_all_numbers(column, text, code, hint):
+    _, problem = parse_cell(column, text)
+    assert problem is not None
+    assert (problem.code, problem.hint) == (code, hint)
