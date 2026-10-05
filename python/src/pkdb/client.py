@@ -23,7 +23,12 @@ from pkdb.domain.validation import PROCESSING_VERSION, prepare_study
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.errors import ClientError, CompatibilityError
 from pkdb.importers.folder import load_folder, parse_bundle
-from pkdb.preparation import PreparedBundle, prepare, source_snapshot
+from pkdb.preparation import (
+    PreparedBundle,
+    prepare,
+    refuse_format_2_upload,
+    source_snapshot,
+)
 from pkdb.progress import ProgressCallback, emit
 from pkdb.querying import export_from_filters, query_from_filters
 from pkdb.schemas.data import DataPage
@@ -38,6 +43,7 @@ from pkdb.schemas.responses import (
 )
 from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import ValidationReport, fail
+from pkdb.studyformat.validation import is_v2_folder
 
 
 def _known_report(value: dict) -> dict:
@@ -389,6 +395,8 @@ class Client:
 
     def upload(self, study: PreparedBundle | str | Path) -> ReplacementResult:
         self.last_upload_report = None
+        if not isinstance(study, PreparedBundle) and is_v2_folder(Path(study)):
+            refuse_format_2_upload()
         emit(self.progress, "validate")
         prepared = (
             study
@@ -412,6 +420,8 @@ class Client:
         from pkdb.domain.vocabulary import vocabulary_hash
 
         self.last_upload_report = None
+        if is_v2_folder(Path(folder)):
+            refuse_format_2_upload()
         emit(self.progress, "read")
         with source_snapshot(Path(folder)) as (root, hashes):
             source = load_folder(root)

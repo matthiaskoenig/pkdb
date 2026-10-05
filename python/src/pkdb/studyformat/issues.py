@@ -21,6 +21,7 @@ WARNINGS = frozenset(
 )
 _GROUPS = {
     "layout": (
+        "reserved_name",
         "unknown_directory",
         "symlink",
         "unknown_file",

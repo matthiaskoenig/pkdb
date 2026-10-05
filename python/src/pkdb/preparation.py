@@ -8,6 +8,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from types import MappingProxyType
+from typing import NoReturn
 
 from pkdb.cache import bundled_vocabulary
 from pkdb.domain.validation import prepare_study
@@ -20,7 +21,16 @@ from pkdb.schemas.source import SourceBundle, SourceLocation
 from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import ValidationReport, fail
 from pkdb.source_files import ignored_source
-from pkdb.studyformat.validation import is_v2_folder
+from pkdb.studyformat.validation import is_v2_folder, prepare_folder
+
+
+def refuse_format_2_upload() -> NoReturn:
+    """Uploads of study format 2 folders follow in a later release."""
+    fail(
+        "unsupported_study_format",
+        "Uploading study format 2 is not supported yet; check the folder with pkdb validate or pkdb prepare",
+        SourceLocation(file="study.json"),
+    )
 
 
 def study_folders(path: str | Path) -> list[Path]:
@@ -60,8 +70,9 @@ def source_snapshot(folder: Path):
     folder = folder.resolve(strict=True)
     before = source_hashes(folder)
     with TemporaryDirectory(prefix="pkdb-prepare-") as temporary:
-        root = Path(temporary) / folder.name
-        root.mkdir()
+        # Study format 2 identifies a study by its substance folder and its name.
+        root = Path(temporary) / folder.parent.name / folder.name
+        root.mkdir(parents=True)
         for name in before:
             source = folder / name
             if source.is_symlink():
@@ -83,6 +94,7 @@ class PreparedBundle:
     vocabulary: Vocabulary
     file_hashes: Mapping[str, str]
     max_rows: int
+    study_format: int = 1
 
     def __post_init__(self):
         object.__setattr__(
@@ -110,6 +122,8 @@ class PreparedBundle:
 
     @contextmanager
     def source(self):
+        if self.study_format != 1:
+            refuse_format_2_upload()
         with source_snapshot(self.path) as (root, hashes):
             if hashes != self.file_hashes:
                 raise SourceChangedError(
@@ -128,13 +142,16 @@ def prepare(
 ) -> PreparedBundle:
     emit(progress, "read")
     path = Path(folder).resolve(strict=True)
-    if is_v2_folder(path):
-        fail(
-            "unsupported_study_format",
-            "Study format 2 is not supported yet; check the folder with pkdb validate",
-            SourceLocation(file="study.json"),
-        )
     vocabulary = vocabulary if vocabulary is not None else bundled_vocabulary()
+    if is_v2_folder(path):
+        with source_snapshot(path) as (root, hashes):
+            emit(progress, "validate")
+            prepared = prepare_folder(
+                root, vocabulary, max_rows=max_rows, max_files=max_files
+            )
+        return PreparedBundle(
+            path, prepared, vocabulary, hashes, max_rows, study_format=2
+        )
     with source_snapshot(path) as (root, hashes):
         bundle: SourceBundle = load_folder(root)
         if len(bundle.files) > max_files:

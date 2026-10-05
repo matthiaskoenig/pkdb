@@ -444,3 +444,96 @@ def test_broken_folders_are_reported(break_folder, valid_study, sf_vocabulary):
     report = validate_folder(valid_study, sf_vocabulary)
     assert report.issues
     assert not report.valid
+
+
+def inconsistent_study(folder, tsv, *items):
+    """Make the study report sd and se that contradict each other (layer 6)."""
+    (folder / "outputs_Tab2.tsv").write_text(
+        tsv("outputs", {**CMAX, "se": "1"}), encoding="utf-8"
+    )
+    review = {"status": "draft", "items": [{**ITEM, **item} for item in items]}
+    (folder / "review.json").write_text(dump_json(review), encoding="utf-8")
+    assert format_folder(folder).ok
+    return folder
+
+
+def test_postprocessing_issues_are_located_in_the_table(
+    valid_study, tsv, sf_vocabulary
+):
+    report = validate_folder(inconsistent_study(valid_study, tsv), sf_vocabulary)
+    assert report.valid
+    [issue] = report.issues
+    assert (issue.code, issue.severity, issue.category) == (
+        "inconsistent_statistics",
+        "warning",
+        "scientific",
+    )
+    assert issue.source is not None
+    assert (issue.source.file, issue.source.sheet, issue.source.row) == (
+        "outputs_Tab2.tsv",
+        "outputs_Tab2",
+        2,
+    )
+
+
+def test_postprocessing_warnings_can_be_acknowledged(valid_study, tsv, sf_vocabulary):
+    target = {"file": OUTPUTS, "rows": {"subjects": "all", "measurement": "cmax"}}
+    item = {"acknowledges": "inconsistent_statistics", "target": target}
+    folder = inconsistent_study(valid_study, tsv, item)
+    assert validate_folder(folder, sf_vocabulary).issues == []
+
+
+def test_postprocessing_errors_are_reported_at_their_cell(
+    valid_study, tsv, sf_vocabulary
+):
+    # Layers 1 to 5 accept an error bar on an individual; postprocessing does not.
+    row = {**CMAX, "subjects": "S1", "sd": "", "error_bar": "3", "error_type": "sd"}
+    (valid_study / OUTPUTS).write_text(tsv("outputs", row), encoding="utf-8")
+    assert format_folder(valid_study).ok
+    report = validate_folder(valid_study, sf_vocabulary)
+    assert not report.valid
+    [issue] = report.issues
+    assert issue.code == "individual_statistics"
+    assert issue.source is not None
+    assert (issue.source.file, issue.source.cell, issue.source.header) == (
+        OUTPUTS,
+        "Y2",
+        "error_bar",
+    )
+
+
+def test_postprocessing_runs_only_without_earlier_errors(
+    valid_study, tsv, sf_vocabulary
+):
+    (valid_study / OUTPUTS).write_text(
+        tsv("outputs", {**CMAX, "se": "1", "measurement": "cmaxx"}), encoding="utf-8"
+    )
+    assert format_folder(valid_study).ok
+    assert codes(validate_folder(valid_study, sf_vocabulary)) == {"unknown_measurement"}
+
+
+def test_postprocessing_failure_of_a_dataset_is_reported(
+    valid_study, tsv, sf_vocabulary
+):
+    # Two points of one subject cannot be paired into a scatter.
+    point = {
+        "name": "age_vs_cmax",
+        "subjects": "S1",
+        "x_measurement": "age",
+        "x_unit": "yr",
+        "y_interventions": "D1",
+        "y_measurement": "cmax",
+        "y_unit": "mg/l",
+    }
+    (valid_study / "scatters_Fig2.tsv").write_text(
+        tsv(
+            "scatters",
+            {**point, "x_mean": "30", "y_mean": "2"},
+            {**point, "x_mean": "31", "y_mean": "3"},
+        ),
+        encoding="utf-8",
+    )
+    assert format_folder(valid_study).ok
+    report = validate_folder(valid_study, sf_vocabulary)
+    assert not report.valid and not report.complete
+    assert codes(report) == {"duplicate_observation", "scatter_pairing"}

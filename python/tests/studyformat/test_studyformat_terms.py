@@ -66,7 +66,7 @@ def test_unknown_term_candidates(make_study, valid_files, tsv, sf_vocabulary):
         "outputs_Tab2.tsv": tsv("outputs", {**CMAX, "measurement": "cmaxx"}),
     }
     issue = check_terms(load_study(make_study(files)), sf_vocabulary)[0]
-    assert issue.suggestions[0].candidates == ["cmax"]
+    assert issue.suggestions[0].candidates == ["cmax", "tmax"]
 
 
 @pytest.mark.parametrize(

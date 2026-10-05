@@ -1,5 +1,7 @@
 from pathlib import Path
 
+import pytest
+
 from pkdb.studyformat.issues import column_letter, make_issue
 from pkdb.studyformat.layout import scan_folder
 
@@ -122,3 +124,16 @@ def test_scan_relative_folder_resolves_study_and_substance(
     layout = scan_folder(Path("."))
     assert (layout.study, layout.substance) == ("Example", "caffeine")
     assert layout.folder == folder.resolve()
+
+
+@pytest.mark.parametrize("name", ["publication", "validate"])
+def test_reserved_study_names(make_study, valid_files, name):
+    layout = scan_folder(make_study(valid_files, name=name))
+    [issue] = [issue for issue in layout.issues if issue.code == "reserved_name"]
+    assert (issue.severity, issue.category) == ("error", "layout")
+    assert repr(name) in issue.message
+
+
+def test_names_containing_reserved_words_are_allowed(make_study, valid_files):
+    layout = scan_folder(make_study(valid_files, name="Publication2020"))
+    assert "reserved_name" not in {issue.code for issue in layout.issues}

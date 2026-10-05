@@ -1,6 +1,5 @@
 """Expand an unchanged PK-DB study bundle into canonical scientific records."""
 
-import hashlib
 import json
 import math
 import re
@@ -25,7 +24,7 @@ from pkdb.schemas.validation import (
     ValidationReport,
     fail,
 )
-from pkdb.source_files import ignored_source
+from pkdb.source_files import attachments_and_digest, ignored_source
 
 SECTIONS = {
     "groupset": "groups",
@@ -377,32 +376,14 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
     result.update(records)
     tables = {}
     expanded = 0
-    digest = hashlib.sha256(
-        json.dumps(
-            {"study": bundle.study, "reference": reference},
-            sort_keys=True,
-            allow_nan=False,
-        ).encode()
-    )
     for name, file in sorted(bundle.files.items()):
         if file.is_symlink():
             fail("symlink", "Symlink attachments are not accepted")
         if Path(name).name != name or name in {".", ".."}:
             fail("invalid_filename", "Attachment names must be basenames")
-        file_digest = hashlib.sha256()
-        with file.open("rb") as stream:
-            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-                file_digest.update(chunk)
-        result["attachments"].append(
-            {
-                "name": name,
-                "size": file.stat().st_size,
-                "sha256": file_digest.hexdigest(),
-            }
-        )
-        digest.update(name.encode())
-        digest.update(file_digest.digest())
-    result["source_digest"] = digest.hexdigest()
+    result["attachments"], result["source_digest"] = attachments_and_digest(
+        bundle.study, reference, bundle.files
+    )
 
     def table(source):
         if not isinstance(source, str):

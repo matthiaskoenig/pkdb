@@ -26,6 +26,10 @@ class SourceLocation(BaseModel):
     # signature for every source coordinate created during table expansion.
     _columns: dict[str, str] = PrivateAttr(default={})
     _fields: dict[str, SourceLocation] = PrivateAttr(default={})
+    # Headers of the columns that hold record fields, for rows that map fields to
+    # cells. for_field resolves them on demand, so a large table does not create
+    # a location for every cell up front.
+    _headers: dict[str, str] = PrivateAttr(default={})
 
     def __deepcopy__(self, memo=None):
         # Public coordinates contain only immutable scalars and a tuple of
@@ -39,6 +43,7 @@ class SourceLocation(BaseModel):
         memo[id(self)] = location
         location._columns = deepcopy(self._columns, memo)
         location._fields = deepcopy(self._fields, memo)
+        location._headers = deepcopy(self._headers, memo)
         return location
 
     def __eq__(self, other):
@@ -47,7 +52,11 @@ class SourceLocation(BaseModel):
         return self.model_dump() == other.model_dump()
 
     def for_field(self, field: str) -> SourceLocation:
-        return self._fields.get(field, self)
+        location = self._fields.get(field)
+        if location is not None:
+            return location
+        header = self._headers.get(field)
+        return self if header is None else self.for_header(header)
 
     def for_header(self, header: str) -> SourceLocation:
         column = self._columns.get(header)
@@ -65,6 +74,7 @@ class SourceLocation(BaseModel):
         location.model_fields_set.update(type(self).model_fields)
         location._columns = {}
         location._fields = {}
+        location._headers = {}
         return location
 
     @model_serializer(mode="wrap")

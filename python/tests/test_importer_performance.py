@@ -31,13 +31,33 @@ def test_header_location_preserves_serialized_contract_and_isolates_maps():
         assert actual.model_dump(exclude_unset=True) == expected.model_dump(
             exclude_unset=True
         )
-        assert actual._columns == actual._fields == {}
+        assert actual._columns == actual._fields == actual._headers == {}
         actual._columns["new"] = "D"
         actual._fields["new"] = actual
         assert "new" not in source._columns
         assert "new" not in source._fields
     other = SourceLocation(file="other.xlsx")
-    assert other._columns == other._fields == {}
+    assert other._columns == other._fields == other._headers == {}
+
+
+def test_field_locations_resolve_headers_on_demand_and_copy_independently():
+    source = SourceLocation(file="outputs_Tab1.tsv", sheet="outputs_Tab1", row=4)
+    source._columns.update(measurement="E", mean="N")
+    source._headers.update(measurement_type="measurement", mean="mean")
+    source._fields["mean"] = SourceLocation(file="study.json", path=("mean",))
+    assert source.for_field("measurement_type").model_dump() == {
+        **source.model_dump(),
+        "column": "E",
+        "cell": "E4",
+        "header": "measurement",
+    }
+    # An explicit field location wins; an unknown field stays at the row.
+    assert source.for_field("mean").file == "study.json"
+    assert source.for_field("unit") is source
+    copy = deepcopy(source)
+    copy._headers["unit"] = "unit"
+    assert "unit" not in source._headers
+    assert copy.for_field("measurement_type") == source.for_field("measurement_type")
 
 
 def test_sparse_iterator_matches_openpyxl_values_and_physical_rows(tmp_path):

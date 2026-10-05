@@ -80,9 +80,21 @@ def test_validate_format_2_failure(valid_study, sf_vocabulary, tmp_path, capsys)
     assert [issue["code"] for issue in result["report"]["issues"]] == ["unknown_file"]
 
 
-def test_prepare_and_upload_refuse_format_2(valid_study, capsys, monkeypatch):
-    assert main(["prepare", str(valid_study), "--offline", "--format", "json"]) == 1
-    assert "study format 2" in capsys.readouterr().err
+def test_prepare_accepts_and_upload_refuses_format_2(
+    valid_study, sf_vocabulary, tmp_path, capsys, monkeypatch
+):
+    before = snapshot(valid_study)
+    lock = tmp_path / "vocabulary.json"
+    sf_vocabulary.save(lock)
+    args = ["prepare", str(valid_study), "--offline", "--vocabulary", str(lock)]
+    assert main([*args, "--format", "json"]) == 0
+    result = lines(capsys)[-1]
+    assert result["ok"] and result["study_format"] == 2
+    assert result["sid"] == result["study"]["sid"] == "caffeine/Example"
+    assert result["report"]["issues"] == []
+    assert result["processing_version"] == "9"
+    assert set(result["file_hashes"]) == set(before)
+    assert snapshot(valid_study) == before
     monkeypatch.setenv("PKDB_API_KEY", "test-key")
     args = [
         "upload",
@@ -96,6 +108,19 @@ def test_prepare_and_upload_refuse_format_2(valid_study, capsys, monkeypatch):
     assert "study format 2" in capsys.readouterr().err
 
 
+def test_prepare_reports_format_2_problems(
+    valid_study, sf_vocabulary, tmp_path, capsys
+):
+    (valid_study / "notes.csv").write_text("x\n")
+    lock = tmp_path / "vocabulary.json"
+    sf_vocabulary.save(lock)
+    args = ["prepare", str(valid_study), "--offline", "--vocabulary", str(lock)]
+    assert main([*args, "--format", "json"]) == 1
+    result = lines(capsys)[-1]
+    assert not result["ok"] and result["study_format"] == 2
+    assert [issue["code"] for issue in result["report"]["issues"]] == ["unknown_file"]
+
+
 def test_schema_commands(tmp_path, capsys):
     assert main(["schema", "export", "--output", str(tmp_path / "schemas")]) == 0
     assert (tmp_path / "schemas" / "outputs.row.schema.json").is_file()
@@ -107,27 +132,35 @@ def snapshot(folder):
     return {path.name: path.read_bytes() for path in folder.iterdir()}
 
 
-def test_prepare_refuses_format_2_before_touching_files(
-    make_study, valid_files, tmp_path, capsys
+def upload_args(path):
+    return ["upload", str(path), "--endpoint", "http://127.0.0.1:9", "--format", "json"]
+
+
+def test_upload_refuses_format_2_before_touching_files(
+    make_study, valid_files, tmp_path, capsys, monkeypatch
 ):
+    monkeypatch.setenv("PKDB_API_KEY", "test-key")
     folder = make_study(valid_files)
     before = snapshot(folder)
     old = tmp_path / "caffeine" / "Old"
     old.mkdir()
     (old / "study.json").write_text('{"sid": "X"}')
-    assert main(["prepare", str(tmp_path / "caffeine"), "--offline"]) == 1
+    assert main(upload_args(tmp_path / "caffeine")) == 1
     error = json.loads(capsys.readouterr().err)["error"]
     assert error == (
-        "pkdb prepare does not support study format 2 yet: caffeine/Example. "
+        "pkdb upload does not support study format 2 yet: caffeine/Example. "
         "Run pkdb validate instead."
     )
     assert snapshot(folder) == before
 
 
-def test_refusal_lists_at_most_ten_folders(make_study, valid_files, tmp_path, capsys):
+def test_refusal_lists_at_most_ten_folders(
+    make_study, valid_files, tmp_path, capsys, monkeypatch
+):
+    monkeypatch.setenv("PKDB_API_KEY", "test-key")
     for index in range(12):
         make_study(valid_files, name=f"S{index:02}")
-    assert main(["prepare", str(tmp_path / "caffeine"), "--format", "json"]) == 1
+    assert main(upload_args(tmp_path / "caffeine")) == 1
     error = json.loads(capsys.readouterr().err)["error"]
     assert (
         "caffeine/S00, caffeine/S01," in error and "caffeine/S09 and 2 more." in error
@@ -326,18 +359,22 @@ def test_broken_study_json_is_reported_as_format_2(
     assert code in {issue["code"] for issue in result["report"]["issues"]}
 
 
-def test_prepare_refuses_format_2(valid_study, sf_vocabulary):
-    # The curation app and Client.upload call prepare() directly.
+def test_prepared_format_2_folder_cannot_be_uploaded_yet(valid_study, sf_vocabulary):
+    # The curation app and Client.upload call prepare() and then read the source.
     from pkdb.preparation import prepare
     from pkdb.schemas.validation import StudyValidationError
 
     before = snapshot(valid_study)
-    with pytest.raises(StudyValidationError) as error:
-        prepare(valid_study, vocabulary=sf_vocabulary)
+    prepared = prepare(valid_study, vocabulary=sf_vocabulary)
+    assert prepared.study.sid == "caffeine/Example"
+    assert prepared.study_format == 2
+    assert prepared.report.valid
+    assert snapshot(valid_study) == before
+    with pytest.raises(StudyValidationError) as error, prepared.source():
+        pass
     [issue] = error.value.report.issues
     assert issue.code == "unsupported_study_format"
-    assert issue.message.startswith("Study format 2 is not supported yet")
-    assert snapshot(valid_study) == before
+    assert issue.message.startswith("Uploading study format 2 is not supported yet")
 
 
 def test_client_upload_refuses_format_2(valid_study, tmp_path):
