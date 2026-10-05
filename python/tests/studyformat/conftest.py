@@ -190,3 +190,12 @@ def valid_files(tsv):
         "Example_Fig1.png": b"png",
         "Example_Fig2.png": b"png",
     }
+
+
+@pytest.fixture
+def valid_study(make_study, valid_files):
+    from pkdb.studyformat.formatter import format_folder
+
+    folder = make_study(valid_files)
+    assert format_folder(folder).ok
+    return folder

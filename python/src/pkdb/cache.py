@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import stat
 import sys
 from importlib.resources import files
 from pathlib import Path
@@ -50,18 +51,21 @@ def parse_vocabulary(value: dict) -> Vocabulary:
     return vocabulary
 
 
-def atomic_json(path: Path, value: dict) -> None:
+def atomic_text(path: Path, text: str) -> None:
+    """Replace a file atomically; line endings are written as LF on every platform."""
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = None
     try:
         with NamedTemporaryFile(
-            mode="w", encoding="utf-8", dir=path.parent, delete=False
+            mode="w", encoding="utf-8", newline="\n", dir=path.parent, delete=False
         ) as handle:
             temporary = Path(handle.name)
-            json.dump(value, handle, ensure_ascii=False, allow_nan=False, indent=2)
-            handle.write("\n")
+            handle.write(text)
             handle.flush()
             os.fsync(handle.fileno())
+        if path.exists():
+            # Keep the permissions of the file that is replaced.
+            temporary.chmod(stat.S_IMODE(path.stat().st_mode))
         temporary.replace(path)
         if os.name == "posix":
             directory_fd = os.open(path.parent, os.O_RDONLY | os.O_DIRECTORY)
@@ -72,6 +76,12 @@ def atomic_json(path: Path, value: dict) -> None:
     finally:
         if temporary is not None:
             temporary.unlink(missing_ok=True)
+
+
+def atomic_json(path: Path, value: dict) -> None:
+    atomic_text(
+        path, json.dumps(value, ensure_ascii=False, allow_nan=False, indent=2) + "\n"
+    )
 
 
 def load_vocabulary(path: str | Path) -> Vocabulary:
