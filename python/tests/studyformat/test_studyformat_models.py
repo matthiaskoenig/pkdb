@@ -3,7 +3,7 @@ import json
 import pytest
 from pydantic import ValidationError
 
-from pkdb.studyformat.jsonio import JsonFileError, dump_json, load_json
+from pkdb.studyformat.jsonio import MAX_DEPTH, JsonFileError, dump_json, load_json
 from pkdb.studyformat.models import (
     Review,
     StudyMetadata,
@@ -57,6 +57,38 @@ def test_load_json_rejects_hostile_input(data):
     with pytest.raises(JsonFileError) as error:
         load_json(data)
     assert error.value.code == "invalid_json"
+
+
+def test_load_json_accepts_exactly_the_maximum_depth():
+    data = b"[" * MAX_DEPTH + b"]" * MAX_DEPTH
+    value = load_json(data)
+    for _ in range(MAX_DEPTH - 1):
+        assert isinstance(value, list) and len(value) == 1
+        value = value[0]
+    assert value == []
+
+
+def test_load_json_rejects_one_level_beyond_the_maximum_depth():
+    data = b"[" * (MAX_DEPTH + 1) + b"]" * (MAX_DEPTH + 1)
+    with pytest.raises(JsonFileError) as error:
+        load_json(data)
+    assert error.value.code == "invalid_json"
+    assert f"nested deeper than {MAX_DEPTH} levels" in str(error.value)
+
+
+def test_load_json_does_not_count_brackets_inside_strings():
+    brackets = "[" * 1000
+    escaped = '\\"' + "{" * 1000
+    text = '{"a": "' + brackets + ']]", "b": "' + escaped + '"}'
+    assert load_json(text.encode()) == {"a": brackets + "]]", "b": '"' + "{" * 1000}
+
+
+def test_load_json_counts_depth_after_a_string_ending_in_an_escaped_backslash():
+    deep = "[" * (MAX_DEPTH + 1) + "]" * (MAX_DEPTH + 1)
+    with pytest.raises(JsonFileError) as error:
+        load_json(('{"a": "x\\\\", "b": ' + deep + "}").encode())
+    assert error.value.code == "invalid_json"
+    assert "nested deeper" in str(error.value)
 
 
 def test_load_json_keeps_ordinary_numbers():
