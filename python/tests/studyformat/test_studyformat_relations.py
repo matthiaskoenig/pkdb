@@ -160,6 +160,55 @@ def test_labels_and_scatter_names_are_unique_across_files(run, tsv, valid_files)
     assert found == {("duplicate_label", "timecourses_Fig3.tsv", "label")}
 
 
+def test_timecourse_labels_differ_from_scatter_axis_labels(run, tsv):
+    # Scatter axes are labelled <name>_x and <name>_y in the canonical study.
+    rows = [
+        {**POINT, "label": "age_vs_cmax_y", "time": "0", "mean": "1"},
+        {**POINT, "label": "age_vs_cmax_y", "time": "1", "mean": "2"},
+        {**POINT, "label": "age_vs_cmax_z", "time": "0", "mean": "1"},
+        {**POINT, "label": "age_vs_cmax_z", "time": "1", "mean": "2"},
+    ]
+    study = {"timecourses_Fig1.tsv": tsv("timecourses", *rows)}
+    assert run(**study) == {("duplicate_label", "timecourses_Fig1.tsv", "label")}
+
+
+def test_timecourse_label_conflicts_are_reported_once_per_label(
+    make_study, valid_files, tsv
+):
+    rows = [
+        {**POINT, "label": "age_vs_cmax_x", "time": str(time), "mean": "1"}
+        for time in range(3)
+    ]
+    files = {**valid_files, "timecourses_Fig1.tsv": tsv("timecourses", *rows)}
+    issues = check_relations(load_study(make_study(files)))
+    [issue] = [issue for issue in issues if issue.code == "duplicate_label"]
+    assert issue.source is not None
+    assert (issue.source.row, issue.source.cell) == (2, "C2")
+    assert "age_vs_cmax" in issue.message and "scatters_Fig2.tsv" in issue.message
+
+
+def test_parent_must_be_a_group(make_study, valid_files, tsv):
+    subjects = tsv(
+        "subjects",
+        {"name": "all", "count": "2", "source": "Tab1"},
+        {"name": "S1", "parent": "all", "count": "1", "source": "TabA"},
+        {"name": "S2", "parent": "S1", "count": "1", "source": "TabA"},
+        {"name": "unknown", "parent": "all"},
+        {"name": "S3", "parent": "unknown", "count": "1"},
+    )
+    files = {**valid_files, "subjects.tsv": subjects}
+    issues = check_relations(load_study(make_study(files)))
+    [issue] = [issue for issue in issues if issue.code == "parent_not_group"]
+    assert (issue.severity, issue.category) == ("error", "reference")
+    assert issue.source is not None
+    assert (issue.source.row, issue.source.header, issue.source.cell) == (
+        4,
+        "parent",
+        "C4",
+    )
+    assert "'S1'" in issue.message
+
+
 def test_duplicates(run, tsv):
     rows = [CMAX, CMAX, {**CMAX, "mean": "3"}]
     found = run(**{"outputs_Tab2.tsv": tsv("outputs", *rows)})

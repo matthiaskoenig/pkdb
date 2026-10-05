@@ -534,11 +534,14 @@ def prepare_study(
                 candidate.statistics, subject.count
             ):
                 fields = [field for family in disagreeing.values() for field in family]
+                # Located at the first statistic that disagrees, so a review item
+                # can acknowledge it at that column.
                 issue(
                     "inconsistent_statistics",
                     f"Reported {', '.join(fields)} contradict each other by more than {RELATIVE_TOLERANCE:.0%}",
                     candidate,
                     severity="warning",
+                    field=fields[0],
                     expected={"relative_tolerance": RELATIVE_TOLERANCE},
                     context=disagreeing,
                 )

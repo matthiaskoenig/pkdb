@@ -90,6 +90,27 @@ def _unique_names(study: LoadedStudy) -> Issues:
                 )
             else:
                 seen[name] = row.line
+    # The canonical study labels scatter axes <name>_x and <name>_y, so a
+    # timecourse label must not take one of these labels.
+    axes = {
+        f"{row.cells['name']}_{axis}": (row.cells["name"], table.file)
+        for table, row in study.rows("scatters")
+        if row.cells["name"]
+        for axis in ("x", "y")
+    }
+    conflicts: set[tuple[str, str]] = set()
+    for table, row in study.rows("timecourses"):
+        label = row.cells["label"]
+        if label in axes and (table.file, label) not in conflicts:
+            conflicts.add((table.file, label))
+            name, file = axes[label]
+            yield row_issue(
+                table,
+                row,
+                "duplicate_label",
+                f"{label!r} is the label of an axis of scatter {name!r} in {file}; choose another label",
+                "label",
+            )
     for kind, column, code in (
         ("timecourses", "label", "duplicate_label"),
         ("scatters", "name", "duplicate_name"),
@@ -206,6 +227,14 @@ def _subject_tree(study: LoadedStudy) -> Issues:
         done.update(path)
     for name, row in rows.items():
         parent = rows.get(parents[name])
+        if parent is not None and parent.values["count"] == 1:
+            yield row_issue(
+                table,
+                row,
+                "parent_not_group",
+                f"{parents[name]!r} has count 1 and is an individual; a parent must be a group",
+                "parent",
+            )
         child_count = row.values["count"]
         parent_count = parent.values["count"] if parent else None
         if (

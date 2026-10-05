@@ -79,6 +79,7 @@ _GROUPS = {
         "missing_root",
         "root_parent",
         "missing_parent",
+        "parent_not_group",
         "subject_cycle",
         "subject_count_exceeds_parent",
         "inconsistent_series",

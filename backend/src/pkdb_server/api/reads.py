@@ -83,6 +83,8 @@ def query_spec(request: Request, entity: str, *, analysis=False) -> QuerySpec:
                     "form",
                     "route",
                     "application",
+                    "tissue",
+                    "method",
                 },
             }.get(entity, set())
             if analysis:

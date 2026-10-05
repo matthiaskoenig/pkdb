@@ -124,6 +124,20 @@ def test_warning_points_to_the_source_record(valid_study, vocabulary):
     assert issue.source.row == 7
 
 
+def test_warning_points_to_the_first_disagreeing_statistic(valid_study, vocabulary):
+    from pkdb.schemas.source import SourceLocation
+
+    study = with_statistics(valid_study, mean=10.0, sd=1.0, se=1.0)
+    source = SourceLocation(file="outputs.tsv", sheet="outputs", row=7)
+    source._columns.update(sd="O", se="P")
+    source._headers.update(sd="sd", se="se")
+    study.measurements[0].source = source
+    (issue,) = warnings(prepare_study(study, vocabulary))
+    assert issue.field == "sd"
+    assert issue.source is not None
+    assert (issue.source.row, issue.source.cell, issue.source.header) == (7, "O7", "sd")
+
+
 def test_warning_survives_a_failed_preparation(valid_study, vocabulary):
     study = with_statistics(valid_study, mean=10.0, sd=1.0, se=1.0)
     study.measurements.append(

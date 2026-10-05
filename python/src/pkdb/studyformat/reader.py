@@ -15,7 +15,6 @@ from pkdb.schemas.source import SourceLocation
 from pkdb.schemas.study import (
     CanonicalStudy,
     Comment,
-    Curator,
     DataRecord,
     Description,
     Dimension,
@@ -190,11 +189,15 @@ class _Reader:
         self.individuals = {name for name, count in subjects.items() if count == 1}
 
     def build[M: BaseModel](
-        self, model: type[M], source: SourceLocation | None, **data
+        self, model: type[M], source: SourceLocation, **data
     ) -> M | None:
-        """The record, or None after reporting why the canonical model refuses it."""
-        if source is not None:
-            data["source"] = source
+        """A record at its source location, or None after reporting why it is refused."""
+        return self.validate(model, source, {**data, "source": source})
+
+    def validate[M: BaseModel](
+        self, model: type[M], location: SourceLocation, data: dict
+    ) -> M | None:
+        """The model, or None after reporting each refused field at its location."""
         try:
             return model.model_validate(data)
         except ValidationError as error:
@@ -205,7 +208,7 @@ class _Reader:
                     ValidationIssue(
                         code=detail["type"],
                         message=f"{field or model.__name__}: {detail['msg']}",
-                        source=source.for_field(head) if source else None,
+                        source=location.for_field(head),
                         category="schema",
                         stage="parse",
                         field=field or None,
@@ -413,15 +416,16 @@ def _locator(table: LoadedTable) -> Callable[[Row, dict], SourceLocation]:
     return locate
 
 
-def _metadata(study: LoadedStudy) -> Metadata:
+def _metadata(study: LoadedStudy) -> dict:
+    """Fields of the canonical metadata from study.json and review.json."""
     metadata = study.metadata
     assert metadata is not None
     release = metadata.release
-    return Metadata(
+    return dict(
         name=study.name,
         date=release.date if release else None,
         creator=metadata.creator,
-        curators=[Curator(user=c.user, rating=c.rating) for c in metadata.curators],
+        curators=[dict(user=c.user, rating=c.rating) for c in metadata.curators],
         collaborators=list(metadata.collaborators),
         licence=metadata.licence,
         access=metadata.access,
@@ -429,15 +433,24 @@ def _metadata(study: LoadedStudy) -> Metadata:
         issue=metadata.issue,
         release=release,
         review=study.review,
-        descriptions=[Description(text=text) for text in metadata.descriptions],
-        comments=[Comment(user=c.user, text=c.text) for c in metadata.comments],
+        descriptions=[dict(text=text) for text in metadata.descriptions],
+        comments=[dict(user=c.user, text=c.text) for c in metadata.comments],
     )
 
 
-def _reference(data: Mapping) -> Reference:
-    """The reference snapshot; its sid is the PubMed ID, else the DOI."""
-    sid = data.get("pmid") or data.get("doi") or data["sid"]
-    return Reference.model_validate({**data, "sid": str(sid)})
+def _reference(study: LoadedStudy) -> dict:
+    """The reference snapshot with the sid of the publication that study.json names.
+
+    study.json is the single source for the publication: its PubMed ID, else
+    its DOI, identifies the reference even when the snapshot was enriched with
+    other identifiers. A manual reference keeps the sid of its snapshot.
+    """
+    assert study.metadata is not None and study.reference is not None
+    named = study.metadata.reference
+    data = dict(study.reference)
+    if named is not None:
+        data["sid"] = named.pmid or named.doi
+    return data
 
 
 def read_study(study: LoadedStudy) -> CanonicalStudy:
@@ -452,6 +465,11 @@ def read_study(study: LoadedStudy) -> CanonicalStudy:
     interventions = reader.interventions()
     measurements = reader.measurements()
     points, scatters = reader.scatters()
+    study_json = SourceLocation(file=STUDY_JSON)
+    metadata = reader.validate(Metadata, study_json, _metadata(study))
+    reference = reader.validate(
+        Reference, SourceLocation(file=REFERENCE_JSON), _reference(study)
+    )
     files = {
         name: study.folder / name
         for name in sorted(study.layout.files)
@@ -461,22 +479,24 @@ def read_study(study: LoadedStudy) -> CanonicalStudy:
         load_json((study.folder / STUDY_JSON).read_bytes()), study.reference, files
     )
     if not reader.issues:
-        canonical = reader.build(
+        canonical = reader.validate(
             CanonicalStudy,
-            None,
-            sid=f"{study.layout.substance}/{study.name}",
-            metadata=_metadata(study),
-            reference=_reference(study.reference),
-            groups=groups,
-            individuals=individuals,
-            interventions=interventions,
-            measurements=[*measurements, *points],
-            scatters=scatters,
-            attachments=attachments,
-            section_notes={
-                kind: _notes(notes) for kind, notes in study.metadata.notes.items()
-            },
-            source_digest=digest,
+            study_json,
+            dict(
+                sid=f"{study.layout.substance}/{study.name}",
+                metadata=metadata,
+                reference=reference,
+                groups=groups,
+                individuals=individuals,
+                interventions=interventions,
+                measurements=[*measurements, *points],
+                scatters=scatters,
+                attachments=attachments,
+                section_notes={
+                    kind: _notes(notes) for kind, notes in study.metadata.notes.items()
+                },
+                source_digest=digest,
+            ),
         )
         if canonical is not None:
             return canonical

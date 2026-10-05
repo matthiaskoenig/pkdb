@@ -152,6 +152,42 @@ def test_reference_sid_is_the_doi_without_a_pmid(valid_study):
     assert read(valid_study).reference.sid == "10.1234/abc"
 
 
+def test_reference_sid_follows_study_json_not_the_enriched_snapshot(valid_study):
+    # study.json names the publication; a PubMed ID found later in the snapshot
+    # does not change the identifier of a study that names its DOI.
+    data = study_json(valid_study)
+    data["reference"] = {"doi": "10.1234/abc"}
+    (valid_study / "study.json").write_text(dump_json(data), encoding="utf-8")
+    reference = {"sid": "10.1234/abc", "name": "Example", "doi": "10.1234/abc"}
+    reference["pmid"] = "123"
+    (valid_study / "reference.json").write_text(dump_json(reference), encoding="utf-8")
+    study = read(valid_study)
+    assert (study.reference.sid, study.reference.pmid) == ("10.1234/abc", "123")
+
+
+def test_manual_reference_keeps_its_sid(valid_study):
+    data = study_json(valid_study)
+    del data["reference"]
+    (valid_study / "study.json").write_text(dump_json(data), encoding="utf-8")
+    reference = {"sid": "Smith2020", "name": "Example", "pmid": "123"}
+    (valid_study / "reference.json").write_text(dump_json(reference), encoding="utf-8")
+    assert read(valid_study).reference.sid == "Smith2020"
+
+
+def test_refused_reference_is_reported_at_its_file(valid_study, sf_vocabulary):
+    doi = "10.1234/" + "a" * 300
+    data = study_json(valid_study)
+    data["reference"] = {"doi": doi}
+    (valid_study / "study.json").write_text(dump_json(data), encoding="utf-8")
+    reference = {"sid": "x", "name": "Example", "doi": doi}
+    (valid_study / "reference.json").write_text(dump_json(reference), encoding="utf-8")
+    with pytest.raises(StudyValidationError) as error:
+        prepare_folder(valid_study, sf_vocabulary)
+    [issue] = error.value.report.issues
+    assert (issue.code, issue.field) == ("string_too_long", "sid")
+    assert issue.source == SourceLocation(file="reference.json")
+
+
 def test_subjects_become_groups_and_individuals(valid_study):
     study = read(valid_study)
     [group] = study.groups

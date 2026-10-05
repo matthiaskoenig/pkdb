@@ -469,11 +469,25 @@ def test_postprocessing_issues_are_located_in_the_table(
         "scientific",
     )
     assert issue.source is not None
-    assert (issue.source.file, issue.source.sheet, issue.source.row) == (
-        "outputs_Tab2.tsv",
-        "outputs_Tab2",
-        2,
-    )
+    # The warning points to the first statistic that disagrees.
+    assert (
+        issue.source.file,
+        issue.source.sheet,
+        issue.source.row,
+        issue.source.cell,
+        issue.source.header,
+    ) == ("outputs_Tab2.tsv", "outputs_Tab2", 2, "O2", "sd")
+
+
+@pytest.mark.parametrize(("column", "kept"), [("sd", False), ("se", True)])
+def test_postprocessing_warnings_can_be_acknowledged_at_their_column(
+    valid_study, tsv, sf_vocabulary, column, kept
+):
+    # The target form of a review item that acknowledges an sd/se mismatch.
+    target = {"file": OUTPUTS, "rows": {"measurement": "cmax"}, "column": column}
+    item = {"acknowledges": "inconsistent_statistics", "target": target}
+    folder = inconsistent_study(valid_study, tsv, item)
+    assert bool(validate_folder(folder, sf_vocabulary).issues) is kept
 
 
 def test_postprocessing_warnings_can_be_acknowledged(valid_study, tsv, sf_vocabulary):
