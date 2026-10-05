@@ -155,7 +155,7 @@ def load_table(
             issues.append(
                 make_issue(
                     "unknown_column",
-                    f"{file} has an unknown column {name!r}",
+                    f"Unknown column {name!r}",
                     file=file,
                     line=1,
                     column=index,

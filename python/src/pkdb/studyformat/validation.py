@@ -16,6 +16,12 @@ from pkdb.studyformat.terms import check_terms
 FORMAT_VERSION = 2
 
 
+def study_label(folder: Path) -> str:
+    """The `<substance>/<name>` label of a study folder, independent of how the path was spelled."""
+    folder = Path(folder).resolve()
+    return f"{folder.parent.name}/{folder.name}"
+
+
 def is_v2_folder(folder: Path) -> bool:
     """Whether study.json declares study format 2."""
     try:

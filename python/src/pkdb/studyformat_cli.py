@@ -65,13 +65,24 @@ def _schema(args) -> int:
     return 0
 
 
-def _label(folder: Path) -> str:
-    return f"{folder.parent.name}/{folder.name}"
-
-
-def _print_human(folder: Path, result, check: bool) -> None:
+def _say(text: str, *, file=None) -> None:
+    """Print one human line; folder names and messages come from untrusted files."""
     from pkdb.terminal import safe_text
 
+    print(safe_text(text), file=file)
+
+
+def _location(source) -> str:
+    if source is None:
+        return ""
+    if source.cell:
+        return f"{source.file} {source.cell}"
+    if source.row:
+        return f"{source.file} line {source.row}"
+    return source.file
+
+
+def _print_human(label: str, result, check: bool) -> None:
     written = [change.file for change in result.changes if change.action == "write"]
     removed = [change.file for change in result.changes if change.action == "delete"]
     parts = []
@@ -79,27 +90,25 @@ def _print_human(folder: Path, result, check: bool) -> None:
         parts.append(("would rewrite " if check else "rewrote ") + ", ".join(written))
     if removed:
         parts.append(("would remove " if check else "removed ") + ", ".join(removed))
-    print(
-        safe_text(
-            f"{_label(folder)}: {'; '.join(parts) if parts else 'already formatted'}"
-        )
-    )
+    if parts:
+        summary = "; ".join(parts)
+    elif result.ok:
+        summary = "already formatted"
+    else:
+        summary = "not formatted, fix the problems below"
+    _say(f"{label}: {summary}")
     for issue in result.issues:
-        source = issue.source
-        where = source.file if source else ""
-        if source and source.row:
-            where += f" line {source.row}"
-        prefix = f"{where}: " if where else ""
-        print(safe_text(f"  {prefix}{issue.message} [{issue.code}]"))
+        where = _location(issue.source)
+        _say(f"  {where + ': ' if where else ''}{issue.message} [{issue.code}]")
         for suggestion in issue.suggestions:
             if suggestion.candidates:
                 candidates = ", ".join(map(str, suggestion.candidates))
-                print(safe_text(f"    Did you mean: {candidates}"))
+                _say(f"    Did you mean: {candidates}")
 
 
 def _format(args) -> int:
     from pkdb.preparation import study_folders
-    from pkdb.studyformat import format_folder, is_v2_folder
+    from pkdb.studyformat import format_folder, is_v2_folder, study_label
 
     human = args.output == "human" or (args.output is None and sys.stdout.isatty())
     try:
@@ -112,7 +121,7 @@ def _format(args) -> int:
         if not is_v2_folder(folder):
             message = "study format 1, left unchanged"
             if human:
-                print(f"{_label(folder)}: skipped, {message}")
+                _say(f"{study_label(folder)}: skipped, {message}")
             else:
                 print(json.dumps({"path": str(folder), "skipped": message}), flush=True)
             continue
@@ -120,9 +129,11 @@ def _format(args) -> int:
             result = format_folder(folder, check=args.check)
         except OSError as error:
             failed = True
-            message = f"cannot format {folder}: {error.strerror or error}"
+            message = f"cannot format: {error.strerror or error}"
+            if error.filename:
+                message += f" ({error.filename})"
             if human:
-                print(f"{_label(folder)}: {message}", file=sys.stderr)
+                _say(f"{study_label(folder)}: {message}", file=sys.stderr)
             else:
                 print(
                     json.dumps({"path": str(folder), "ok": False, "error": message}),
@@ -131,7 +142,7 @@ def _format(args) -> int:
             continue
         failed |= not result.ok or (args.check and bool(result.changes))
         if human:
-            _print_human(folder, result, args.check)
+            _print_human(study_label(folder), result, args.check)
         else:
             entry = {
                 "path": str(folder),

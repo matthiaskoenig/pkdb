@@ -181,7 +181,7 @@ def main(argv=None, *, client=None) -> int:
     from pkdb.preparation import prepare, study_folders
     from pkdb.references import ReferenceResolver, sync_reference
     from pkdb.schemas.validation import StudyValidationError
-    from pkdb.studyformat import is_v2_folder, validate_folder
+    from pkdb.studyformat import is_v2_folder, study_label, validate_folder
     from pkdb.terminal import Terminal, safe_text
     from pkdb.tsv import sync_tsvs
 
@@ -214,8 +214,12 @@ def main(argv=None, *, client=None) -> int:
         folders = study_folders(args.folder)
         if args.command in {"prepare", "upload"}:
             if format2 := [folder for folder in folders if is_v2_folder(folder)]:
+                labels = [study_label(folder) for folder in format2]
+                listed = ", ".join(labels[:10])
+                if len(labels) > 10:
+                    listed += f" and {len(labels) - 10} more"
                 raise ValueError(
-                    f"{len(format2)} folder(s) use study format 2, which pkdb {args.command} does not support yet; run pkdb validate instead"
+                    f"pkdb {args.command} does not support study format 2 yet: {listed}. Run pkdb validate instead."
                 )
         if args.report:
             if args.output and args.report.resolve() == args.output.resolve():
@@ -376,7 +380,7 @@ def main(argv=None, *, client=None) -> int:
         result = {
             "path": str(folder),
             "relative_path": relative_path,
-            "name": folder.name,
+            "name": folder.resolve().name,
             "ok": False,
             "persistence": "not_attempted",
         }
@@ -388,7 +392,7 @@ def main(argv=None, *, client=None) -> int:
                 batch["vocabulary_hash"] = vocabulary_hash(snapshot)
                 result.update(
                     study_format=2,
-                    sid=f"{folder.parent.name}/{folder.name}",
+                    sid=study_label(folder),
                     report=report.model_dump(mode="json"),
                     vocabulary_version=snapshot.version,
                     vocabulary_hash=vocabulary_hash(snapshot),
