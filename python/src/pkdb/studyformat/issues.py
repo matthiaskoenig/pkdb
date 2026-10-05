@@ -1,10 +1,13 @@
 """Validation issues of study format 2, located by file, sheet, row and column."""
 
 from collections.abc import Iterable
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 from pkdb.schemas.source import SourceLocation
 from pkdb.schemas.validation import Suggestion, ValidationIssue
+
+if TYPE_CHECKING:
+    from pkdb.studyformat.load import LoadedTable, Row
 
 WARNINGS = frozenset(
     {
@@ -167,5 +170,25 @@ def make_issue(
         category=category,
         stage="parse" if category in _PARSE else "validate",
         suggestions=suggestions,
+        **details,
+    )
+
+
+def row_issue(
+    table: LoadedTable,
+    row: Row,
+    code: str,
+    message: str,
+    column: str | None = None,
+    **details,
+) -> ValidationIssue:
+    """Issue at a row of a loaded table, optionally at one of its columns."""
+    return make_issue(
+        code,
+        message,
+        file=table.file,
+        line=row.line,
+        column=table.column_index(column) if column else None,
+        header=column,
         **details,
     )
