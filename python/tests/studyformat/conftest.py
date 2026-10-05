@@ -24,6 +24,10 @@ def sf_vocabulary():
             MeasurementRule(name="concentration", units=("mg/l",), time_required=True),
             MeasurementRule(name="cmax", units=("mg/l",)),
             MeasurementRule(name="dosing", units=("mg",)),
+            # Numeric in the bundled vocabulary, but used without a dose.
+            MeasurementRule(name="qualitative dosing", units=("mg", "NO_UNIT")),
+            MeasurementRule(name="fasting", dtype="boolean", choices=("Y", "N")),
+            MeasurementRule(name="kinetics", dtype="abstract"),
             MeasurementRule(name="change", units=("mg/l",), can_negative=True),
             MeasurementRule(name="old_measure", units=("mg/l",), deprecated=True),
         ),

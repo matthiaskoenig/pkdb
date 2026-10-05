@@ -15,7 +15,10 @@ DOSING = frozenset({"dosing", "medication"})
 CHOICE_TYPES = frozenset({"categorical", "boolean", "numeric_categorical"})
 REQUIRED_CHOICE_TYPES = frozenset({"categorical", "boolean"})
 TIMED_KINDS = frozenset({"characteristica", "outputs", "timecourses", "scatters"})
-VALUES = ("mean", "gmean", "median", "min", "max", "error_bar")
+OBSERVATION_KINDS = frozenset({"characteristica", "outputs", "timecourses"})
+VALUE_TYPES = frozenset({"numeric", "numeric_categorical"})
+CENTRAL = ("mean", "gmean", "median", "min", "max")
+VALUES = (*CENTRAL, "error_bar")
 CODES = {
     "measurements": "unknown_measurement",
     "substances": "unknown_substance",
@@ -65,6 +68,7 @@ def check_terms(study: LoadedStudy, vocabulary: Vocabulary) -> list[ValidationIs
                 rule = rules.get(row.cells[f"{prefix}measurement"])
                 if rule is not None:
                     issues.extend(_measurement(table, row, rule, prefix))
+            issues.extend(_value(table, row, rules))
             if table.kind == "interventions" and row.cells["measurement"] in DOSING:
                 for name in ("substance", "route"):
                     if not row.cells[name]:
@@ -78,6 +82,40 @@ def check_terms(study: LoadedStudy, vocabulary: Vocabulary) -> list[ValidationIs
                             )
                         )
     return issues
+
+
+def _value(table: LoadedTable, row: Row, rules: dict[str, MeasurementRule]) -> Issues:
+    """A value where the measurement has one: numeric observations and doses."""
+    if table.kind not in OBSERVATION_KINDS and table.kind != "interventions":
+        return
+    if any(row.cells[name] and row.values[name] is None for name in CENTRAL):
+        return  # The value cell that cannot be read is already reported.
+    measurement = row.cells["measurement"]
+    if table.kind == "interventions":
+        # As in study format 1, only doses need a value; other interventions,
+        # such as qualitative dosing or fasting, are described by their terms.
+        if measurement in DOSING and row.values["mean"] is None:
+            yield row_issue(
+                table,
+                row,
+                "missing_value",
+                f"Enter the dose of {measurement} in mean",
+                "mean",
+            )
+        return
+    rule = rules.get(measurement)
+    if (
+        rule is not None
+        and rule.dtype in VALUE_TYPES
+        and not row.cells["choice"]
+        and all(row.values[name] is None for name in CENTRAL)
+    ):
+        yield row_issue(
+            table,
+            row,
+            "missing_value",
+            f"{rule.name} needs a value: mean, gmean, median, min or max",
+        )
 
 
 def _term(

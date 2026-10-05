@@ -32,9 +32,10 @@ def test_valid_study_passes(run):
     assert run() == set()
 
 
-def test_required_and_missing_value(run):
+def test_required(run):
+    # Whether a row needs a value depends on its measurement (layer 5).
     found = run("outputs", {"subjects": "all", "comment": "x"}, file="outputs_Tab2.tsv")
-    assert found == {("missing_required", "measurement"), ("missing_value", None)}
+    assert found == {("missing_required", "measurement")}
 
 
 def test_subject_count(run):

@@ -101,6 +101,57 @@ def test_interventions(run):
     }
 
 
+@pytest.mark.parametrize(
+    ("row", "expected"),
+    [
+        ({"measurement": "age", "unit": "yr"}, {("missing_value", None)}),
+        ({"measurement": "age", "median": "30", "unit": "yr"}, set()),
+        ({"measurement": "age", "max": "30", "unit": "yr"}, set()),
+        ({"measurement": "age", "mean": "2,5", "unit": "yr"}, set()),
+        ({"measurement": "kinetics"}, set()),
+        ({"measurement": "fasting"}, {("missing_choice", "choice")}),
+        ({"measurement": "agee"}, {("unknown_measurement", "measurement")}),
+    ],
+)
+def test_values_follow_the_measurement(run, row, expected):
+    row = {"source": "Tab1", "subjects": "all", **row}
+    assert run("characteristica", row) == expected
+
+
+DOSE = {
+    "name": "D1",
+    "measurement": "dosing",
+    "substance": "drug",
+    "route": "oral",
+    "form": "tablet",
+    "application": "single dose",
+    "time": "0",
+    "time_unit": "h",
+    "mean": "100",
+    "unit": "mg",
+}
+
+
+@pytest.mark.parametrize(
+    ("row", "expected"),
+    [
+        (
+            {"name": "Q1", "measurement": "qualitative dosing", "substance": "drug"},
+            set(),
+        ),
+        ({"name": "F1", "measurement": "fasting", "choice": "Y"}, set()),
+        ({**DOSE, "name": "D2", "mean": ""}, {("missing_value", "mean")}),
+        (
+            {**DOSE, "name": "D2", "mean": "", "median": "100"},
+            {("missing_value", "mean")},
+        ),
+        ({**DOSE, "name": "D2", "mean": "2,5"}, set()),
+    ],
+)
+def test_intervention_values(run, row, expected):
+    assert run("interventions", DOSE, row) == expected
+
+
 def test_scatter_axes(run):
     row = {
         "name": "s",

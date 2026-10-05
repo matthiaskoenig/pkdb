@@ -14,7 +14,6 @@ from pkdb.studyformat.load import LoadedStudy, LoadedTable, Row
 
 UNIT_PATTERN = re.compile(r"[\/^_*.() µα-ωΑ-Ωa-zA-Z0-9]*")
 UNSPECIFIED = "unspecified summary"
-CENTRAL = ("choice", "mean", "gmean", "median", "min", "max")
 SPREAD = ("sd", "se", "cv", "gmean", "gsd", "gcv", "median", "min", "max")
 NUMERIC = (
     "mean",
@@ -133,13 +132,6 @@ def _statistics(table: LoadedTable, row: Row, counts: dict[str, int | None]) -> 
     count = values["count"]
     if count is None and isinstance(values["subjects"], str):
         count = counts.get(values["subjects"])
-    if all(values[name] is None for name in CENTRAL):
-        yield row_issue(
-            table,
-            row,
-            "missing_value",
-            "Enter a value: mean, gmean, median, min, max or choice",
-        )
     if values["choice"] is not None:
         for name in NUMERIC:
             if values[name] is not None:

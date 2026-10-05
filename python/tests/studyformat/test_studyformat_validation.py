@@ -221,6 +221,17 @@ def test_large_study_is_fast(valid_study, tsv, sf_vocabulary):
     assert codes(report) <= {"not_formatted"}
 
 
+def test_decimal_comma_is_only_an_invalid_number(
+    make_study, valid_files, tsv, sf_vocabulary
+):
+    rows = [{**CMAX, "mean": "2,5"}]
+    folder = make_study({**valid_files, "outputs_Tab2.tsv": tsv("outputs", *rows)})
+    assert format_folder(folder).ok
+    assert [issue.code for issue in validate_folder(folder, sf_vocabulary).issues] == [
+        "invalid_number"
+    ]
+
+
 def test_max_issues(make_study, valid_files, tsv, sf_vocabulary):
     rows = [{**CMAX, "mean": "bad", "comment": str(i)} for i in range(30)]
     folder = make_study({**valid_files, "outputs_Tab2.tsv": tsv("outputs", *rows)})
