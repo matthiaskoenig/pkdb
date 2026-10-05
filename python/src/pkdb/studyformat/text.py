@@ -4,7 +4,7 @@ import math
 import re
 from dataclasses import dataclass
 
-NUMBER_PATTERN = re.compile(r"[+-]?(?:\d+\.?\d*|\.\d+)(?:[eE][+-]?\d+)?")
+NUMBER_PATTERN = re.compile(r"[+-]?(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?")
 _DIGITS = re.compile(r"(\d+)")
 
 

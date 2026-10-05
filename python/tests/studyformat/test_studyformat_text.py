@@ -35,6 +35,9 @@ NBSP = chr(0xA0)
         ("1e999", None),
         ("abc", None),
         ("", None),
+        ("1" + chr(0xFF11) + ".5", None),
+        (chr(0xFF11) + ".5", None),
+        (chr(0x0663), None),
     ],
 )
 def test_canonical_number(text, expected):
