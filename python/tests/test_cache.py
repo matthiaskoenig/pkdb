@@ -73,3 +73,31 @@ def test_atomic_text_keeps_the_permissions_of_the_replaced_file(tmp_path):
     atomic_text(target, "new")
     assert target.read_text() == "new"
     assert target.stat().st_mode & 0o777 == 0o640
+
+
+@pytest.mark.skipif(os.name != "posix", reason="POSIX permissions")
+@pytest.mark.parametrize(
+    ("umask", "mode"), [(0o022, 0o644), (0o027, 0o640)], ids=["022", "027"]
+)
+def test_atomic_text_creates_files_by_the_umask(tmp_path, umask, mode):
+    from pkdb.cache import atomic_text
+
+    previous = os.umask(umask)
+    try:
+        atomic_text(tmp_path / "table.tsv", "new")
+    finally:
+        os.umask(previous)
+    assert (tmp_path / "table.tsv").stat().st_mode & 0o777 == mode
+    assert [path.name for path in tmp_path.iterdir()] == ["table.tsv"]
+
+
+def test_atomic_text_removes_its_temporary_file_on_failure(tmp_path, monkeypatch):
+    from pkdb.cache import atomic_text
+
+    def fail(fd):
+        raise OSError("disk full")
+
+    monkeypatch.setattr("pkdb.cache.os.fsync", fail)
+    with pytest.raises(OSError, match="disk full"):
+        atomic_text(tmp_path / "table.tsv", "new")
+    assert list(tmp_path.iterdir()) == []

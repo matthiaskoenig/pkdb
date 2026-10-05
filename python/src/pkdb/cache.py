@@ -3,11 +3,11 @@
 import hashlib
 import json
 import os
+import secrets
 import stat
 import sys
 from importlib.resources import files
 from pathlib import Path
-from tempfile import NamedTemporaryFile
 from urllib.parse import urlsplit, urlunsplit
 
 from pkdb.domain.vocabulary import Vocabulary, vocabulary_hash
@@ -51,15 +51,29 @@ def parse_vocabulary(value: dict) -> Vocabulary:
     return vocabulary
 
 
+def _create_temporary(folder: Path) -> tuple[int, Path]:
+    """Create a new file next to the target.
+
+    Unlike NamedTemporaryFile, which creates files with mode 0600, the mode 0666
+    lets the process umask decide the permissions, as for any new file.
+    """
+    flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | getattr(os, "O_BINARY", 0)
+    for _ in range(100):
+        temporary = folder / f".tmp{secrets.token_hex(8)}"
+        try:
+            return os.open(temporary, flags, 0o666), temporary
+        except FileExistsError:
+            continue
+    raise FileExistsError(f"Cannot create a temporary file in {folder}")
+
+
 def atomic_text(path: Path, text: str) -> None:
     """Replace a file atomically; line endings are written as LF on every platform."""
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = None
     try:
-        with NamedTemporaryFile(
-            mode="w", encoding="utf-8", newline="\n", dir=path.parent, delete=False
-        ) as handle:
-            temporary = Path(handle.name)
+        descriptor, temporary = _create_temporary(path.parent)
+        with open(descriptor, "w", encoding="utf-8", newline="\n") as handle:
             handle.write(text)
             handle.flush()
             os.fsync(handle.fileno())
