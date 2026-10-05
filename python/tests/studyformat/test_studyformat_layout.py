@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pkdb.studyformat.issues import column_letter, make_issue
 from pkdb.studyformat.layout import scan_folder
 
@@ -110,3 +112,13 @@ def test_scan_rejects_symlinks(make_study, valid_files, tmp_path):
     (tmp_path / "outside.png").write_bytes(b"png")
     (folder / "Example_Fig9.png").symlink_to(tmp_path / "outside.png")
     assert ("symlink", "Example_Fig9.png") in codes(scan_folder(folder).issues)
+
+
+def test_scan_relative_folder_resolves_study_and_substance(
+    make_study, valid_files, monkeypatch
+):
+    folder = make_study(valid_files)
+    monkeypatch.chdir(folder)
+    layout = scan_folder(Path("."))
+    assert (layout.study, layout.substance) == ("Example", "caffeine")
+    assert layout.folder == folder.resolve()

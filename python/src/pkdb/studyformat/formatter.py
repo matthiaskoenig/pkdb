@@ -131,7 +131,7 @@ def planned_files(study: LoadedStudy) -> dict[str, str | None]:
 
 
 def format_folder(folder: Path, *, check: bool = False) -> FormatResult:
-    folder = Path(folder)
+    folder = Path(folder).resolve()
     study = load_study(folder)
     result = FormatResult(
         folder, issues=[issue for issue in study.issues if issue.code in STRUCTURAL]

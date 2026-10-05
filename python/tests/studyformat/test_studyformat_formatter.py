@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 from pkdb.studyformat.formatter import format_folder, subject_order
 from pkdb.studyformat.load import load_table
@@ -174,3 +175,11 @@ def test_duplicate_subject_names_do_not_make_formatting_unstable(
     folder = make_study({**valid_files, "subjects.tsv": tsv("subjects", *rows)})
     format_folder(folder)
     assert format_folder(folder).changes == []
+
+
+def test_formatting_the_current_folder_keeps_the_study_name(valid_study, monkeypatch):
+    monkeypatch.chdir(valid_study)
+    assert format_folder(Path(".")).changes == []
+    names = TABLES["outputs"].names
+    row = read(valid_study, "outputs_Tab2.tsv").splitlines()[1].split("\t")
+    assert row[names.index("study")] == "Example"

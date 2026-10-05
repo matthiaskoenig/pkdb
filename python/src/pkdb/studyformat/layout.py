@@ -45,7 +45,8 @@ class Layout:
 
 
 def scan_folder(folder: Path) -> Layout:
-    folder = Path(folder)
+    # The study and substance names come from the path, so make it absolute first.
+    folder = Path(folder).resolve()
     study = folder.name
     files, tables, attachments, issues = set(), [], [], []
     for path in sorted(folder.iterdir(), key=lambda item: natural_key(item.name)):
