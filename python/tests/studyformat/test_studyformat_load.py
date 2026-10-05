@@ -136,3 +136,40 @@ def test_broken_files_are_reported(make_study, valid_files):
     ]
     study_issue = next(i for i in study.issues if i.code == "invalid_study_json")
     assert study_issue.field == "access"
+
+
+def test_null_json_files_are_reported(make_study, valid_files):
+    folder = make_study(
+        {
+            **valid_files,
+            "study.json": "null",
+            "review.json": "null",
+            "reference.json": "null",
+        }
+    )
+    study = load_study(folder)
+    assert study.metadata is None and study.review is None
+    assert study.reference is None
+    found = sorted(
+        {(issue.code, issue.source.file) for issue in study.issues if issue.source}
+    )
+    assert found == [
+        ("invalid_reference_json", "reference.json"),
+        ("invalid_review_json", "review.json"),
+        ("invalid_study_json", "study.json"),
+    ]
+
+
+def test_symlinked_json_is_not_read(make_study, valid_files, tmp_path):
+    outside = tmp_path / "outside.json"
+    outside.write_text(valid_files["study.json"], encoding="utf-8")
+    files = {name: data for name, data in valid_files.items() if name != "study.json"}
+    folder = make_study(files)
+    (folder / "study.json").symlink_to(outside)
+    study = load_study(folder)
+    assert study.metadata is None
+    assert sorted(
+        issue.code
+        for issue in study.issues
+        if issue.source and issue.source.file == "study.json"
+    ) == ["missing_file", "symlink"]

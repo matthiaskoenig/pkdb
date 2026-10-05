@@ -208,22 +208,26 @@ def load_table(
     return LoadedTable(file, spec, source, parsed.header, rows), issues
 
 
-def _read_json(study: LoadedStudy, name: str) -> object | None:
-    path = study.folder / name
-    if not path.is_file():
-        return None
+# Marks a JSON file that cannot be used: missing, or already reported.
+_UNUSABLE = object()
+
+
+def _read_json(study: LoadedStudy, name: str) -> object:
+    # Symbolic links are reported by the layout and never followed.
+    if name not in study.layout.files:
+        return _UNUSABLE
     try:
-        return load_json(path.read_bytes())
+        return load_json((study.folder / name).read_bytes())
     except JsonFileError as error:
         study.issues.append(make_issue(error.code, str(error), file=name))
-        return None
+        return _UNUSABLE
 
 
 def _validate[M: BaseModel](
     study: LoadedStudy, name: str, model: type[M], code: str
 ) -> M | None:
     data = _read_json(study, name)
-    if data is None:
+    if data is _UNUSABLE:
         return None
     try:
         return model.model_validate(data)
