@@ -1,5 +1,5 @@
 {
-  "version": "bc4c1515335988ecc31e8f043498b2d636ab4ed36da6b093c048eb8a4c6fc6da",
+  "version": "f0fdebf75b1514808ad298c50ac00519f59c020c5e8e6ef8d9fad79d84509a45",
   "nodes": [
     {
       "sid": "root",
@@ -130572,6 +130572,35 @@
       }
     },
     {
+      "sid": "unspecified-summary",
+      "name": "unspecified summary",
+      "kind": "calculation_type",
+      "definition": {},
+      "parents": [
+        "calculation"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"unspecified summary\""
+        ],
+        "description": [
+          "\"A reported central value whose summary statistic the publication does not state. It is stored in mean and never completed with derived statistics.\""
+        ],
+        "dtype": [
+          "\"categorical\""
+        ],
+        "ntype": [
+          "\"calculation_type\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
       "sid": "sample-mean",
       "name": "sample mean",
       "kind": "calculation_type",
@@ -134014,6 +134043,35 @@
         ],
         "description": [
           "\"geometric mean: not reported.\""
+        ],
+        "dtype": [
+          "\"undefined\""
+        ],
+        "ntype": [
+          "\"choice\""
+        ],
+        "deprecated": [
+          "false"
+        ]
+      }
+    },
+    {
+      "sid": "unspecified-summary-not-reported",
+      "name": "NR",
+      "kind": "choice",
+      "definition": {},
+      "parents": [
+        "unspecified-summary"
+      ],
+      "terms": {
+        "synonyms": [],
+        "annotations": [],
+        "xrefs": [],
+        "label": [
+          "\"Not reported unspecified summary\""
+        ],
+        "description": [
+          "\"unspecified summary: not reported.\""
         ],
         "dtype": [
           "\"undefined\""
