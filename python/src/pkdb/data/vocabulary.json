@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "vocabulary": {
-    "version": "c26c14c0b0f4ab6d52964ebde3dcfe27fd422dac5740fb190f134ee95d487ce5",
+    "version": "d8aeb28705838a5ada96f206f23d35f4c28f877b381ea7e7ba3ee70a73d3be81",
     "measurements": [
       {
         "name": "ABCB1 genotype",
@@ -11664,8 +11664,9 @@
     "calculation_types": [
       "calculation",
       "geometric mean",
-      "sample mean"
+      "sample mean",
+      "unspecified summary"
     ]
   },
-  "vocabulary_hash": "a52d70bebede9095617a618dbaaa09050a79050ef35e771a824ddde272fba5f5"
+  "vocabulary_hash": "0edcee474a17b490b9a6c93d40dea3daa8fa7fd5f9bd1d1a433de759338016e4"
 }

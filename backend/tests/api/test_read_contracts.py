@@ -103,6 +103,54 @@ def test_intervention_routes(client, valid_bundle, admin_headers):
     assert client.get(f"/api/v1/interventions/{row['pk']}/").json() == row
 
 
+def test_intervention_filters_name_tissue_and_method(
+    client, valid_bundle, admin_headers
+):
+    import json
+
+    valid_bundle.study["access"] = "public"
+    intervention = valid_bundle.study["interventionset"]["interventions"][0]
+    intervention.update(tissue="plasma", method="LC-MS")
+    response = client.put(
+        f"/api/v2/studies/{valid_bundle.study['sid']}",
+        headers=admin_headers,
+        data={
+            "study": json.dumps(valid_bundle.study),
+            "reference": json.dumps(valid_bundle.reference),
+        },
+    )
+    assert response.status_code == 201
+    from sqlalchemy import select, update
+
+    from pkdb_server.db.models.vocabulary import VocabularyNode
+
+    # Distinct names and SIDs show which one each filter compares.
+    with client.app.state.session_factory.begin() as session:
+        sids = {
+            node.name: node.sid
+            for node in session.scalars(
+                select(VocabularyNode).where(
+                    VocabularyNode.name.in_(["plasma", "LC-MS"])
+                )
+            )
+        }
+        for name in sids:
+            session.execute(
+                update(VocabularyNode)
+                .where(VocabularyNode.sid == sids[name])
+                .values(name=f"{name} display")
+            )
+
+    def count(**params):
+        response = client.get("/api/v1/interventions/", params=params)
+        assert response.status_code == 200, response.text
+        return response.json()["data"]["count"]
+
+    assert count(tissue="plasma display") == count(method="LC-MS display") == 2
+    assert count(tissue_sid=sids["plasma"], method_sid=sids["LC-MS"]) == 2
+    assert count(tissue=sids["plasma"]) == count(method=sids["LC-MS"]) == 0
+
+
 def test_reference_read_preserves_authors_and_visibility(
     client, valid_bundle, admin_headers
 ):

@@ -7,6 +7,7 @@ import {
   text,
   type DetailRecord,
 } from "../types";
+import { statisticText } from "../../results/format";
 const props = withDefaults(
   defineProps<{ data: DetailRecord; omit?: string[]; depth?: number }>(),
   { omit: () => [], depth: 0 },
@@ -14,6 +15,11 @@ const props = withDefaults(
 const entries = computed(() =>
   Object.entries(props.data).filter(([key]) => !props.omit.includes(key)),
 );
+// Statistics are rounded for reading and coefficients of variation shown as
+// percent; the record itself is unchanged.
+function shown(key: string, value: unknown): string {
+  return statisticText(key, value) ?? text(value);
+}
 function items(value: unknown): unknown[] {
   return Array.isArray(value) ? value : [];
 }
@@ -47,11 +53,11 @@ function items(value: unknown): unknown[] {
           </ul>
         </template>
         <RecordFields
-          v-else-if="isRecord(value) && depth < 8"
+          v-else-if="isRecord(value) && Object.keys(value).length && depth < 8"
           :data="value"
           :depth="depth + 1"
         />
-        <span v-else>{{ text(value) }}</span>
+        <span v-else>{{ shown(key, value) }}</span>
       </dd>
     </template>
   </dl>
@@ -82,6 +88,13 @@ li {
   }
   dd {
     margin-bottom: 0.75rem;
+  }
+  /* In one column, the fields of a nested record are indented under its label. */
+  dd > .record-fields {
+    margin-block: 0.25rem 0;
+    padding-inline-start: 0.75rem;
+    border-inline-start: 2px solid
+      rgba(var(--v-border-color), var(--v-border-opacity));
   }
 }
 </style>

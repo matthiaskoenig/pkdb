@@ -2,7 +2,7 @@ import pytest
 
 from pkdb.domain.validation import prepare_study
 from pkdb.importers.folder import parse_bundle
-from pkdb.schemas.study import DataRecord, Dimension, Subset
+from pkdb.schemas.study import DataRecord, Dimension, Statistics, Subset
 from pkdb.schemas.validation import StudyValidationError
 
 
@@ -54,6 +54,20 @@ def test_scatter_labels_expand_to_paired_normalized_measurements(
         assert x.label == "x" and y.label == "y"
         assert x.time == y.time
         assert x.origin == y.origin == "normalized"
+
+
+@pytest.mark.parametrize("field", ["gmean", "gsd", "gcv"])
+def test_scatter_pairs_on_shared_geometric_statistics(valid_study, vocabulary, field):
+    study = scatter_study(valid_study)
+    for record in study.measurements:
+        record.statistics = Statistics(mean=1.0, **{field: 1.5 + record.time})
+    study.scatters[0].subsets[0].shared = [field]
+    prepared = prepare_study(study, vocabulary)
+    subset = prepared.study.scatters[0].subsets[0]
+    assert len(subset.points) == 2
+    records = {r.key: r for r in prepared.study.measurements}
+    for x_key, y_key in subset.points:
+        assert records[x_key].time == records[y_key].time
 
 
 @pytest.mark.parametrize("mode", ["ambiguous", "missing", "unknown_shared"])

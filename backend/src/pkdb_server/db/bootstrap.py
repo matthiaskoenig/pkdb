@@ -192,7 +192,7 @@ def bootstrap(directory: Path, session: Session) -> BootstrapReport:
             select(VocabularyEdge.child, VocabularyEdge.parent).order_by(
                 VocabularyEdge.child, VocabularyEdge.parent
             )
-        ).tuples()
+        )
     )
     terms = list(
         session.execute(
@@ -201,7 +201,7 @@ def bootstrap(directory: Path, session: Session) -> BootstrapReport:
             ).order_by(
                 VocabularyTerm.node_sid, VocabularyTerm.kind, VocabularyTerm.value
             )
-        ).tuples()
+        )
     )
     digest = vocabulary_version(effective, edges, terms)
     version = session.get(VocabularyVersion, 1)

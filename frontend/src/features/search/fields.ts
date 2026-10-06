@@ -6,7 +6,7 @@ export interface FilterField {
   group: FilterGroup;
   endpoint: string;
   kind?: string;
-  idKey: "sid" | "username" | "name";
+  idKey: "sid" | "pkdb_id" | "username" | "name";
   help: string;
 }
 export const fields: readonly FilterField[] = [
@@ -16,7 +16,15 @@ export const fields: readonly FilterField[] = [
     group: "Studies",
     endpoint: "studies",
     idKey: "sid",
-    help: "Choose studies by their stable identifiers.",
+    help: "Choose studies by their identifier: the substance and name of a study, such as caffeine/Harder1988, or the identifier of a study in the previous format.",
+  },
+  {
+    key: "studies__pkdb_id__in",
+    label: "PKDB identifiers",
+    group: "Studies",
+    endpoint: "studies",
+    idKey: "pkdb_id",
+    help: "Choose studies by their PKDB identifier, which a released study keeps when it is renamed. Studies in the previous format are identified by their own identifier. Suggestions are found by study name or identifier.",
   },
   {
     key: "studies__reference_name__in",

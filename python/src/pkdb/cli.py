@@ -129,10 +129,11 @@ def main(argv=None, *, client=None) -> int:
     sync.add_argument(
         "--output", type=Path, help="Portable project vocabulary lock file"
     )
-    from pkdb import import_cli, reference_cli
+    from pkdb import import_cli, reference_cli, studyformat_cli
 
     reference_cli.register(commands)
     import_cli.register(commands)
+    studyformat_cli.register(commands)
     update = commands.add_parser(
         "update",
         help="Update pkdb to the newest release",
@@ -149,6 +150,8 @@ def main(argv=None, *, client=None) -> int:
         return import_cli.run(args)
     if args.command == "reference":
         return reference_cli.run(args, client=client)
+    if args.command in {"format", "schema"}:
+        return studyformat_cli.run(args)
     if args.command == "curate":
         from pkdb.curation.engine import WorkspaceError
         from pkdb.curation.launch import run
@@ -178,6 +181,7 @@ def main(argv=None, *, client=None) -> int:
     from pkdb.preparation import prepare, study_folders
     from pkdb.references import ReferenceResolver, sync_reference
     from pkdb.schemas.validation import StudyValidationError
+    from pkdb.studyformat import is_v2_folder, study_label, validate_folder
     from pkdb.terminal import Terminal, safe_text
     from pkdb.tsv import sync_tsvs
 
@@ -367,33 +371,65 @@ def main(argv=None, *, client=None) -> int:
         result = {
             "path": str(folder),
             "relative_path": relative_path,
-            "name": folder.name,
+            "name": folder.resolve().name,
             "ok": False,
             "persistence": "not_attempted",
         }
         try:
-            if tables := sync_tsvs(folder):
-                result["tables_updated"] = tables
-            change = sync_reference(
-                folder,
-                ReferenceResolver(args.cache_dir, client=client, offline=args.offline),
-            )
-            if change:
-                result["reference_updated"] = change
-            prepared = prepare(folder, vocabulary=snapshot, progress=terminal.progress)
-            batch["vocabulary_hash"] = prepared.vocabulary_hash
-            batch["processing_version"] = prepared.prepared.processing_version
-            result.update(sid=prepared.study.sid)
-            if args.command == "prepare":
-                result.update(prepared.model_dump())
-            else:
-                result.update(
-                    report=prepared.report.model_dump(mode="json"),
-                    vocabulary_version=prepared.prepared.vocabulary_version,
-                    vocabulary_hash=prepared.vocabulary_hash,
-                    processing_version=prepared.prepared.processing_version,
+            if is_v2_folder(folder) and args.command == "prepare":
+                result.update(study_format=2, sid=study_label(folder))
+                prepared = prepare(
+                    folder, vocabulary=snapshot, progress=terminal.progress
                 )
-            result["ok"] = True
+                batch["vocabulary_hash"] = prepared.vocabulary_hash
+                batch["processing_version"] = prepared.prepared.processing_version
+                result.update(prepared.model_dump())
+                result["ok"] = True
+            elif is_v2_folder(folder):
+                from pkdb.domain.validation import PROCESSING_VERSION
+                from pkdb.domain.vocabulary import vocabulary_hash
+
+                report = validate_folder(folder, snapshot)
+                batch["vocabulary_hash"] = vocabulary_hash(snapshot)
+                batch["processing_version"] = PROCESSING_VERSION
+                result.update(
+                    study_format=2,
+                    sid=study_label(folder),
+                    report=report.model_dump(mode="json"),
+                    vocabulary_version=snapshot.version,
+                    vocabulary_hash=vocabulary_hash(snapshot),
+                    processing_version=PROCESSING_VERSION,
+                )
+                result["ok"] = report.valid
+                if not report.valid:
+                    result["error"] = "Study validation failed"
+            else:
+                if tables := sync_tsvs(folder):
+                    result["tables_updated"] = tables
+                change = sync_reference(
+                    folder,
+                    ReferenceResolver(
+                        args.cache_dir, client=client, offline=args.offline
+                    ),
+                )
+                if change:
+                    result["reference_updated"] = change
+                prepared = prepare(
+                    folder, vocabulary=snapshot, progress=terminal.progress
+                )
+                batch["vocabulary_hash"] = prepared.vocabulary_hash
+                batch["processing_version"] = prepared.prepared.processing_version
+                result.update(sid=prepared.study.sid)
+                if args.command == "prepare":
+                    result.update(prepared.model_dump())
+                else:
+                    result.update(
+                        report=prepared.report.model_dump(mode="json"),
+                        vocabulary_version=prepared.prepared.vocabulary_version,
+                        vocabulary_hash=prepared.vocabulary_hash,
+                        processing_version=prepared.prepared.processing_version,
+                    )
+                result["ok"] = True
         except StudyValidationError as error:
             result.update(
                 error="Study validation failed",

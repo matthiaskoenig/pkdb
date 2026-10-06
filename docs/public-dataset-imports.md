@@ -36,7 +36,7 @@ Each run writes:
 - `import-report.json`: study/row/measurement totals and warning counts. Warnings may overlap and are not a count of excluded rows.
 - `artifacts/`: the exact verified upstream distribution, including its metadata and notices. Keep this directory with the run; it is not automatically uploaded with individual studies.
 
-The attribution account must exist on the target server. With a processing-version-8 client/server, reviewed vocabulary additions, and `PKDB_API_TOKEN` configured:
+The attribution account must exist on the target server. With a processing-version-9 client/server, reviewed vocabulary additions, and `PKDB_API_TOKEN` configured:
 
 ```bash
 pkdb-server validate /path/to/new-frdb/studies --api-url "$PKDB_API_URL"
@@ -47,7 +47,7 @@ The same commands apply to the other output directories. Normal ingestion valida
 
 ## Scientific provenance and limits
 
-**Unknown summary statistics stay unknown.** FRDB and CvTdb do not consistently identify a mean, median or individual measurement. Their numeric group outputs use `value` with the explicit `calculation_type="unspecified summary"`, even when N=1. Processing version 8 allows this combination, prohibits attaching mean/SD claims to it, and disables automatic PK derivation for it. Counts that are absent, ranged or qualified remain null. Source SD is preserved without guessing its relationship to a central statistic.
+**Unknown summary statistics stay unknown.** FRDB and CvTdb do not consistently identify a mean, median or individual measurement. Their numeric group outputs report the central value in `mean` with the explicit `calculation_type="unspecified summary"`, even when N=1. Processing version 9 (which removed the separate `value` statistic) allows only a `mean` for this calculation type, prohibits attaching other statistics to it, and disables automatic PK derivation for it. Counts that are absent, ranged or qualified remain null. Source SD is preserved without guessing its relationship to a central statistic.
 
 **No censoring or dose-time invention.** ND, NQ, NA, bounds, ranges and incompatible units remain in the original rows with exclusion reasons. They are never replaced by zero or an imputed LOQ. Original CvTdb values and units are used instead of upstream normalized values. Unit spelling changes preserve numerical magnitude; normal PK-DB preparation records subsequent normalization separately. FRDB AUC with unknown integration interval is retained only in the attachment. Untimed or ambiguous dosing context stays in the attachment rather than becoming a dose at time zero.
 

@@ -36,6 +36,8 @@ from tempfile import NamedTemporaryFile
 import fastexcel
 import polars as pl
 
+from pkdb.studyformat.validation import is_v2_folder
+
 SHEET_PREFIXES = ("Tab", "Fig")
 COMMENT = "#"
 # Text read as a missing value, as in the earlier pandas tables.
@@ -536,10 +538,14 @@ def _write(path: Path, text: str) -> None:
 
 
 def sync_tsvs(folder: str | Path) -> str | None:
-    """Write changed TSV tables and remove orphaned ones; describe the change."""
+    """Write changed TSV tables and remove orphaned ones; describe the change.
+
+    Study format 2 folders are left alone: their tables are the TSV files, and
+    their workbook is a generated working copy.
+    """
     folder = Path(folder)
     workbook = folder / f"{folder.name}.xlsx"
-    if not workbook.is_file() or workbook.is_symlink():
+    if not workbook.is_file() or workbook.is_symlink() or is_v2_folder(folder):
         return None
     tables = _tables(workbook)
     study = folder / "study.json"

@@ -16,7 +16,7 @@ export const searchExamples: readonly SearchExample[] = [
     criteria: () => ({
       ...defaultCriteria(),
       scope: "studies",
-      filters: { studies__sid__in: ["PKDB00198"] },
+      filters: { studies__pkdb_id__in: ["PKDB00198"] },
     }),
   },
   {

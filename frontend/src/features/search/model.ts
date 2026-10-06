@@ -36,6 +36,19 @@ export const tabLabels: Record<ResultTab, string> = {
   timecourses: "Timecourses",
   scatters: "Scatter data",
 };
+const nouns: Record<ResultTab, [string, string]> = {
+  studies: ["study", "studies"],
+  groups: ["group", "groups"],
+  individuals: ["individual", "individuals"],
+  interventions: ["intervention", "interventions"],
+  measurements: ["measurement", "measurements"],
+  timecourses: ["timecourse", "timecourses"],
+  scatters: ["scatter data", "scatter data"],
+};
+// "1 study", "2 studies", "5 scatter data".
+export function countLabel(tab: ResultTab, count: number): string {
+  return `${count.toLocaleString()} ${nouns[tab][count === 1 ? 0 : 1]}`;
+}
 export const scopeLabels: Record<Scope, string> = {
   matching: "Matching measurements and related records",
   studies: "All data from qualifying studies",

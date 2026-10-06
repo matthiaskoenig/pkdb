@@ -48,6 +48,257 @@ def test_simple_discovery_and_paging(client, valid_bundle, admin_headers):
     assert second["items"][0]["pk"] != data["items"][0]["pk"]
 
 
+STATISTICS = {"mean", "median", "sd", "se", "cv", "gmean", "gsd", "gcv"}
+
+
+def test_responses_carry_mean_and_geometric_statistics_without_value(
+    client, valid_bundle, admin_headers
+):
+    output = valid_bundle.study["outputset"]["outputs"][0]
+    output["gmean"] = 1.9
+    intervention = valid_bundle.study["interventionset"]["interventions"][0]
+    intervention.update(time="S0T12R3", subject="all")
+    upload(client, valid_bundle, admin_headers)
+
+    def items(entity):
+        response = client.post(
+            "/api/v2/query", json={"entity": entity, "page_size": 100}
+        )
+        assert response.status_code == 200, response.text
+        return response.json()["items"]
+
+    measurements = client.get("/api/v2/measurements").json()["items"]
+    assert measurements
+    for row in measurements:
+        assert "value" not in row
+        assert STATISTICS | {"error_bar", "error_type"} <= row.keys()
+    reported = next(row for row in measurements if not row["normed"])
+    assert (reported["mean"], reported["gmean"]) == (2.0, 1.9)
+    doses = items("interventions")
+    assert doses
+    for row in doses:
+        assert "value" not in row
+        assert row["mean"] == 10.0
+        assert (row["time"], row["interval"], row["doses"]) == (0.0, 12.0, 3)
+        assert row["subject"]["name"] == "all"
+    groups = items("groups")
+    for characteristic in groups[0]["characteristica"]:
+        assert "value" not in characteristic
+        assert STATISTICS <= characteristic.keys()
+
+
+def count_rows(client, entity, **params):
+    response = client.get(f"/api/v1/pkdata/{entity}/", params=params)
+    assert response.status_code == 200, response.text
+    return response.json()["data"]["data"]
+
+
+def test_measurements_report_the_count_of_their_subject_by_default(
+    client, valid_bundle, admin_headers
+):
+    upload(client, valid_bundle, admin_headers)
+    measurements = client.get("/api/v2/measurements").json()["items"]
+    # The group has 4 subjects and the measurement does not state its own count:
+    # the reported and the normalized row both carry the inherited one.
+    assert {row["normed"] for row in measurements} == {False, True}
+    assert [row["count"] for row in measurements] == [4] * len(measurements)
+    rows = count_rows(client, "outputs")
+    assert [row["count"] for row in rows] == [4] * len(rows)
+    assert len(count_rows(client, "outputs", count=4)) == len(rows)
+    assert count_rows(client, "outputs", count=3) == []
+    # The dose does not state a count either; it is not taken from the subject.
+    doses = client.post(
+        "/api/v2/query", json={"entity": "interventions", "page_size": 100}
+    ).json()["items"]
+    assert doses and all(row["count"] is None for row in doses)
+    assert all(row["count"] is None for row in count_rows(client, "interventions"))
+
+
+def test_measurements_and_interventions_report_the_count_they_state(
+    client, valid_bundle, admin_headers
+):
+    valid_bundle.study["outputset"]["outputs"][0]["count"] = 3
+    valid_bundle.study["interventionset"]["interventions"][0]["count"] = 2
+    upload(client, valid_bundle, admin_headers)
+    measurements = client.get("/api/v2/measurements").json()["items"]
+    assert {row["normed"] for row in measurements} == {False, True}
+    assert [row["count"] for row in measurements] == [3] * len(measurements)
+    doses = client.post(
+        "/api/v2/query", json={"entity": "interventions", "page_size": 100}
+    ).json()["items"]
+    assert doses and [row["count"] for row in doses] == [2] * len(doses)
+    # The analysis rows and the filters see the same counts.
+    assert {row["count"] for row in count_rows(client, "outputs")} == {3}
+    assert {row["count"] for row in count_rows(client, "interventions")} == {2}
+    assert len(count_rows(client, "outputs", count=3)) == len(measurements)
+    assert count_rows(client, "outputs", count=4) == []
+    assert len(count_rows(client, "interventions", count=2)) == len(doses)
+    assert count_rows(client, "interventions", count=3) == []
+
+
+def test_responses_carry_the_context_of_characteristics_and_interventions(
+    client, valid_bundle, admin_headers
+):
+    intervention = valid_bundle.study["interventionset"]["interventions"][0]
+    intervention.update(tissue="plasma", method="LC-MS")
+    valid_bundle.study["groupset"]["groups"][0]["characteristica"].append(
+        {
+            "measurement_type": "concentration",
+            "substance": "drug",
+            "tissue": "plasma",
+            "method": "LC-MS",
+            "time": 1.5,
+            "time_unit": "h",
+            "mean": 2.0,
+            "unit": "mg/l",
+        }
+    )
+    upload(client, valid_bundle, admin_headers)
+
+    def items(entity):
+        response = client.post(
+            "/api/v2/query", json={"entity": entity, "page_size": 100}
+        )
+        assert response.status_code == 200, response.text
+        return response.json()["items"]
+
+    doses = items("interventions")
+    assert doses
+    for row in doses:
+        assert (row["tissue"]["name"], row["method"]["name"]) == ("plasma", "LC-MS")
+    [group] = items("groups")
+    contexts = {
+        (
+            row["measurement_type"]["name"],
+            row["tissue"] and row["tissue"]["name"],
+            row["method"] and row["method"]["name"],
+            row["time"],
+            row["time_unit"],
+        )
+        for row in group["characteristica"]
+    }
+    assert ("concentration", "plasma", "LC-MS", 1.5, "h") in contexts
+    assert ("species", None, None, None, None) in contexts
+    rows = client.get("/api/v1/pkdata/interventions/").json()["data"]["data"]
+    assert rows
+    for row in rows:
+        assert (row["tissue"], row["tissue_label"]) == ("plasma", "plasma")
+        assert (row["method"], row["method_label"]) == ("LC-MS", "LC-MS")
+    rows = client.get("/api/v1/pkdata/groups/").json()["data"]["data"]
+    assert {
+        (
+            row["measurement_type"],
+            row["tissue"],
+            row["method"],
+            row["time"],
+            row["time_unit"],
+        )
+        for row in rows
+        if row["measurement_type"] == "concentration"
+    } == {("concentration", "plasma", "LC-MS", 1.5, "h")}
+
+
+def test_intervention_time_lists_are_numbers(client, valid_bundle, admin_headers):
+    intervention = valid_bundle.study["interventionset"]["interventions"][0]
+    intervention["time"] = "0|12|40"
+    upload(client, valid_bundle, admin_headers)
+    response = client.post("/api/v2/query", json={"entity": "interventions"})
+    assert response.status_code == 200, response.text
+    assert [row["time"] for row in response.json()["items"]] == [
+        [0.0, 12.0, 40.0],
+        [0.0, 12.0, 40.0],
+    ]
+
+
+def test_intervention_time_filters_match_every_listed_time(
+    client, valid_bundle, admin_headers
+):
+    [dose] = valid_bundle.study["interventionset"]["interventions"]
+    dose["time"] = "0|12|40"
+    valid_bundle.study["interventionset"]["interventions"].append(
+        {**dose, "name": "later", "time": 6}
+    )
+    upload(client, valid_bundle, admin_headers)
+
+    def names(*predicates, sort=None):
+        query = {
+            "entity": "interventions",
+            "page_size": 100,
+            "predicates": list(predicates),
+        }
+        if sort:
+            query["sort"] = sort
+        response = client.post("/api/v2/query", json=query)
+        assert response.status_code == 200, response.text
+        return [row["name"] for row in response.json()["items"] if row["normed"]]
+
+    def time(operator, value):
+        return {"field": "time", "operator": operator, "value": value}
+
+    for predicate, expected in (
+        (time("eq", 12), ["dose"]),
+        (time("eq", 6), ["later"]),
+        (time("gte", 20), ["dose"]),
+        (time("lt", 1), ["dose"]),
+        (time("gt", 5), ["dose", "later"]),
+        (time("in", [40, 6]), ["dose", "later"]),
+        (time("ne", 12), ["later"]),
+        (time("ne", 6), ["dose"]),
+        (time("exclude", [0]), ["later"]),
+        (time("isnull", False), ["dose", "later"]),
+        (time("isnull", True), []),
+        (time("eq", None), []),
+        (time("ne", None), ["dose", "later"]),
+    ):
+        assert sorted(names(predicate)) == expected, predicate
+    # Ordering uses the scalar time or the first listed time.
+    assert names(sort="time") == ["dose", "later"]
+    assert names(sort="-time") == ["later", "dose"]
+    legacy = client.get(
+        "/api/v1/pkdata/interventions/", params={"time__gte": 20, "normed": "true"}
+    )
+    assert legacy.status_code == 200, legacy.text
+    assert {row["name"] for row in legacy.json()["data"]["data"]} == {"dose"}
+    for ordering, expected in (
+        ("time", ["dose", "later"]),
+        ("-time", ["later", "dose"]),
+    ):
+        legacy = client.get(
+            "/api/v1/pkdata/interventions/",
+            params={"ordering": ordering, "normed": "true"},
+        )
+        assert legacy.status_code == 200, legacy.text
+        assert [row["name"] for row in legacy.json()["data"]["data"]] == expected
+
+
+@pytest.mark.parametrize(
+    "field,total", [("mean", 2), ("gmean", 2), ("gsd", 2), ("gcv", 1), ("se", 0)]
+)
+def test_statistic_filters_use_mean_and_geometric_fields(
+    client, valid_bundle, admin_headers, field, total
+):
+    valid_bundle.study["outputset"]["outputs"][0].update(gmean=1.9, gsd=1.2)
+    upload(client, valid_bundle, admin_headers)
+    response = client.post(
+        "/api/v2/query",
+        json={
+            "entity": "measurements",
+            "predicates": [{"field": field, "operator": "isnull", "value": False}],
+        },
+    )
+    assert response.status_code == 200, response.text
+    # The normalized representation derives gcv from the reported gsd.
+    assert response.json()["total"] == total
+    value_filter = client.post(
+        "/api/v2/query",
+        json={
+            "entity": "measurements",
+            "predicates": [{"field": "value", "operator": "gte", "value": 1}],
+        },
+    )
+    assert value_filter.status_code == 400
+
+
 def test_query_alias_and_same_measurement_scope(client, valid_bundle, admin_headers):
     upload(client, valid_bundle, admin_headers)
     query = {
@@ -119,7 +370,7 @@ def test_invalid_simple_parameters(client, params):
         {"entity": "measurements", "predicates": [{"field": "unknown", "value": "x"}]},
         {
             "entity": "measurements",
-            "predicates": [{"field": "value", "value": "not numeric"}],
+            "predicates": [{"field": "mean", "value": "not numeric"}],
         },
     ],
 )

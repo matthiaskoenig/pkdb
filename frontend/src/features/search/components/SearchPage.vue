@@ -3,7 +3,7 @@ import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { useSearchController } from "../useSearchController";
-import { tabs, tabLabels } from "../model";
+import { countLabel, tabs, tabLabels } from "../model";
 import { encodeLocation } from "../codec";
 import { endpoints } from "../../../api/results";
 import SearchPanel from "./SearchPanel.vue";
@@ -11,6 +11,7 @@ import QuerySummary from "./QuerySummary.vue";
 import ResultsTable from "../../results/components/ResultsTable.vue";
 import DetailPanel from "../../details/components/DetailPanel.vue";
 import SearchExamples from "./SearchExamples.vue";
+import { studyLocation } from "../../details/studyPath";
 import { useSessionStore } from "../../../stores/session";
 import type { Criteria, ResultTab } from "../model";
 import {
@@ -63,7 +64,7 @@ async function openDetail(identifier: string | number) {
   if (search.view.tab === "studies") {
     const origin = rememberResultPosition(route.fullPath, session.epoch);
     await router.push({
-      path: `/data/${encodeURIComponent(String(identifier))}`,
+      path: studyLocation(String(identifier)),
       query: encodeLocation({ criteria: search.applied, view: search.view }),
       state: { [studyOriginKey]: { ...origin } },
     });
@@ -258,8 +259,7 @@ async function copyLink() {
           </div>
           <template v-else-if="result">
             <p class="row-count" role="status">
-              {{ result.count.toLocaleString() }}
-              {{ tabLabels[search.view.tab].toLowerCase()
+              {{ countLabel(search.view.tab, result.count)
               }}{{
                 search.view.tableSearch
                   ? " in this table refinement"

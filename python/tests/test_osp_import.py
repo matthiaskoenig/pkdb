@@ -35,11 +35,56 @@ def test_acquisition_discriminator():
 def test_statistics_do_not_invent_arithmetic_errors_or_individual_means():
     warnings = []
     assert statistics(
-        10, "geom. Mean", 20, "%", "geomCV", "mg/l", False, warnings, {}
-    ) == {"mean": 10.0, "calculation_type": "geometric mean"}
+        10, "geom. Mean", 2, "mg/l", "arith. SD", "mg/l", False, warnings, {}
+    ) == {"gmean": 10.0, "calculation_type": "geometric mean"}
     assert warnings[-1]["code"] == "uncertainty_retained_in_source"
+    assert statistics(
+        7, "individual", None, None, None, "mg/l", True, warnings, {}
+    ) == {"mean": 7.0}
     assert statistics(10, "mean", None, None, None, "mg/l", True, warnings, {}) is None
     assert statistics(10, None, None, None, None, "mg/l", False, warnings, {}) is None
+
+
+@pytest.mark.parametrize(
+    ("var", "var_unit", "var_type", "expected"),
+    [
+        (20, "%", "geomCV", {"gcv": 0.2}),
+        (20, None, "geom. CV %", {"gcv": 0.2}),
+        (1.5, None, "geom. SD", {"gsd": 1.5}),
+        (1.5, "-", "GeometricStdDev", {"gsd": 1.5}),
+    ],
+)
+def test_geometric_uncertainty_is_stored(var, var_unit, var_type, expected):
+    warnings = []
+    assert statistics(
+        10, "geom. Mean", var, var_unit, var_type, "mg/l", False, warnings, {}
+    ) == {"gmean": 10.0, "calculation_type": "geometric mean", **expected}
+    assert warnings == []
+
+
+@pytest.mark.parametrize(
+    ("avg_type", "var", "var_unit", "var_type"),
+    [
+        # A geometric SD is a factor of at least 1, without a unit.
+        ("geom. Mean", 0.5, None, "geom. SD"),
+        ("geom. Mean", 1.5, "mg/l", "geom. SD"),
+        # A geometric CV needs its percent sign.
+        ("geom. Mean", 20, None, "geomCV"),
+        # Geometric uncertainty of an arithmetic mean stays in the source.
+        ("mean", 1.5, None, "geom. SD"),
+    ],
+)
+def test_ambiguous_geometric_uncertainty_is_retained_in_source(
+    avg_type, var, var_unit, var_type
+):
+    warnings = []
+    result = statistics(
+        10, avg_type, var, var_unit, var_type, "mg/l", False, warnings, {}
+    )
+    assert result is not None and not {"gsd", "gcv"} & set(result)
+    assert [warning["code"] for warning in warnings] == [
+        "uncertainty_retained_in_source"
+    ]
 
 
 def test_release_checksum_is_mandatory(tmp_path):
@@ -137,3 +182,25 @@ def test_geometric_uncertainty_is_not_completed_as_arithmetic(study_folder, voca
     normalized = [m for m in result.study.measurements if m.origin == "normalized"]
     assert normalized
     assert all(m.statistics.sd is None and m.statistics.cv is None for m in normalized)
+
+
+def test_geometric_uncertainty_of_imported_sources_reaches_the_prepared_study(
+    study_folder, vocabulary
+):
+    path = study_folder / "study.json"
+    data = json.loads(path.read_text())
+    output = data["outputset"]["outputs"][0]
+    output.pop("value", None)
+    output.update(calculation_type="geometric mean", gmean=2.0, gsd=1.3)
+    path.write_text(json.dumps(data))
+    vocabulary = vocabulary.model_copy(
+        update={"calculation_types": ("geometric mean",)}
+    )
+    result = prepare(study_folder, vocabulary=vocabulary)
+    geometric = [
+        m.statistics
+        for m in result.study.measurements
+        if m.origin == "normalized" and m.statistics.gmean is not None
+    ]
+    assert geometric
+    assert {statistics.gsd for statistics in geometric} == {1.3}

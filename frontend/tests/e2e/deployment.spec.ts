@@ -4,6 +4,8 @@ const routes = [
   "/",
   "/data",
   "/data/FRONTEND_SCOPE",
+  "/data/drug/Format2Fixture",
+  "/data/PKDB09901",
   "/curation",
   "/invitation",
   "/account",

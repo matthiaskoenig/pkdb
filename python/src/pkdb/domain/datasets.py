@@ -20,7 +20,19 @@ SHARED_FIELDS = {
     "unit",
     "output_type",
 }
-STATISTICS_FIELDS = {"value", "mean", "median", "min", "max", "sd", "se", "cv", "count"}
+STATISTICS_FIELDS = {
+    "mean",
+    "median",
+    "min",
+    "max",
+    "sd",
+    "se",
+    "cv",
+    "gmean",
+    "gsd",
+    "gcv",
+    "count",
+}
 
 
 def compile_datasets(study: CanonicalStudy) -> None:

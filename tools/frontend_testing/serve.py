@@ -2,6 +2,7 @@
 
 import os
 import subprocess
+import tempfile
 from pathlib import Path
 
 import uvicorn
@@ -34,6 +35,7 @@ def main():
         add_frontend_vocabulary,
         frontend_search_bundle,
         publish_frontend_fixture,
+        write_frontend_format2_study,
     )
 
     from pkdb_server.app import create_app
@@ -99,10 +101,6 @@ def main():
                     user_id=creator.id, username=creator.username, role=creator.role
                 )
                 add_frontend_vocabulary(session)
-                from pkdb_server.db.models.vocabulary import VocabularyNode
-
-                species = session.get(VocabularyNode, "species")
-                species.definition = {**species.definition, "choices": ["Homo sapiens"]}
             ingestion = IngestionService(
                 factory,
                 FileStore(Path(settings.file_root), factory, settings.upload_max_bytes),
@@ -119,6 +117,12 @@ def main():
                     .values(access="private")
                 )
             ingestion.replace(frontend_search_bundle(), principal)
+            # A study format 2 study, released and under review, which only its
+            # curators read; the anonymous search keeps seeing one study.
+            with tempfile.TemporaryDirectory() as sources:
+                ingestion.replace(
+                    write_frontend_format2_study(Path(sources)), principal
+                )
             with factory.begin() as session:
                 publish_frontend_fixture(session)
                 add_frontend_plot_context(session)

@@ -5,33 +5,60 @@ export interface ScientificPoint {
   time: number | null;
   time_unit: string | null;
   unit: string | null;
-  value: number | null;
   mean: number | null;
   median: number | null;
+  gmean: number | null;
   sd: number | null;
   se: number | null;
   cv: number | null;
+  gsd: number | null;
+  gcv: number | null;
+  label: string | null;
 }
 export interface ErrorBars {
   type: "data";
   array: (number | null)[];
+  // A multiplicative band is asymmetric: the lower end is not the mirrored upper.
+  arrayminus?: (number | null)[];
+  symmetric?: false;
   visible: boolean;
 }
 export interface Trace {
   type: "scatter";
   mode: "markers" | "lines+markers";
   name: string;
+  showlegend: boolean;
   x: (number | null)[];
   y: (number | null)[];
   error_x?: ErrorBars;
   error_y?: ErrorBars;
   connectgaps: false;
 }
+export interface PlotAxis {
+  title: { text: string };
+  type: "linear" | "log";
+  // Hover labels show at most four significant digits.
+  hoverformat: string;
+  gridcolor: string;
+  linecolor: string;
+  zerolinecolor: string;
+}
 export interface PlotLayout {
   autosize: boolean;
   height: number;
-  xaxis: { title: { text: string }; type: "linear" | "log" };
-  yaxis: { title: { text: string }; type: "linear" | "log" };
+  xaxis: PlotAxis;
+  yaxis: PlotAxis;
+  paper_bgcolor: string;
+  plot_bgcolor: string;
+  font: { color: string };
+  modebar: { bgcolor: string; color: string; activecolor: string };
+  legend: {
+    orientation: "h";
+    x: number;
+    xanchor: "left";
+    y: number;
+    yanchor: "bottom";
+  };
   margin: { l: number; r: number; t: number; b: number };
   uirevision: string;
 }
@@ -57,6 +84,12 @@ function unit(value: unknown): string | null {
     throw new Error("Plot contains an invalid unit.");
   return value;
 }
+function seriesLabel(value: unknown): string | null {
+  if (value === null || value === undefined) return null;
+  if (typeof value !== "string")
+    throw new Error("Plot contains an invalid label.");
+  return value;
+}
 export function parsePoints(value: unknown): ScientificPoint[][] {
   if (!Array.isArray(value)) throw new Error("Plot points are unavailable.");
   return value.map((pair: unknown) => {
@@ -72,24 +105,82 @@ export function parsePoints(value: unknown): ScientificPoint[][] {
         time: number(point.time),
         time_unit: unit(point.time_unit),
         unit: unit(point.unit),
-        value: number(point.value),
         mean: number(point.mean),
         median: number(point.median),
+        gmean: number(point.gmean),
         sd: number(point.sd),
         se: number(point.se),
         cv: number(point.cv),
+        gsd: number(point.gsd),
+        gcv: number(point.gcv),
+        label: seriesLabel(point.label),
       };
     });
   });
 }
 
+const statisticNames = {
+  mean: "mean",
+  median: "median",
+  gmean: "geometric mean",
+} as const;
+type Statistic = keyof typeof statisticNames;
+type ErrorName = "sd" | "se" | "gsd";
+const errorNotes: Record<ErrorName, string> = {
+  sd: "SD",
+  se: "SE",
+  gsd: "geometric mean divided and multiplied by the geometric SD",
+};
+
+// The error of a series follows its central statistic: the geometric SD
+// belongs to the geometric mean and spreads multiplicatively, the arithmetic
+// SD or SE to the mean or median and spread symmetrically.
+function errors(
+  points: ScientificPoint[],
+  statistic: Statistic | undefined,
+): { name: ErrorName; bars: ErrorBars } | undefined {
+  const candidates: ErrorName[] =
+    statistic === "gmean" ? ["gsd"] : ["sd", "se"];
+  const name = candidates.find((key) =>
+    points.some((point) => point[key] !== null),
+  );
+  if (!name) return undefined;
+  if (name !== "gsd")
+    return {
+      name,
+      bars: {
+        type: "data",
+        array: points.map((point) => point[name]),
+        visible: true,
+      },
+    };
+  const factor = (point: ScientificPoint) =>
+    point.gmean !== null && point.gsd !== null && point.gsd >= 1
+      ? { mean: point.gmean, gsd: point.gsd }
+      : undefined;
+  return {
+    name,
+    bars: {
+      type: "data",
+      symmetric: false,
+      array: points.map((point) => {
+        const f = factor(point);
+        return f ? f.mean * (f.gsd - 1) : null;
+      }),
+      arrayminus: points.map((point) => {
+        const f = factor(point);
+        return f ? f.mean * (1 - 1 / f.gsd) : null;
+      }),
+      visible: true,
+    },
+  };
+}
+
 function axis(points: ScientificPoint[]) {
-  const statistic = (["value", "mean", "median"] as const).find((key) =>
+  const statistic = (Object.keys(statisticNames) as Statistic[]).find((key) =>
     points.some((point) => point[key] !== null),
   );
-  const error = (["sd", "se"] as const).find((key) =>
-    points.some((point) => point[key] !== null),
-  );
+  const error = errors(points, statistic);
   const units = new Set(points.map((point) => point.unit));
   if (units.size > 1)
     throw new Error(
@@ -97,16 +188,15 @@ function axis(points: ScientificPoint[]) {
     );
   return {
     values: points.map((point) => (statistic ? point[statistic] : null)),
-    label: `${statistic ?? "Not reported"} [${points[0]?.unit ?? "unit not reported"}]`,
-    error: error
-      ? {
-          type: "data" as const,
-          array: points.map((point) => point[error]),
-          visible: true,
-        }
-      : undefined,
-    errorName: error,
+    label: `${statistic ? statisticNames[statistic] : "Not reported"} [${points[0]?.unit ?? "unit not reported"}]`,
+    error: error?.bars,
+    errorName: error?.name,
   };
+}
+
+function seriesName(points: ScientificPoint[]): string | undefined {
+  const labels = new Set(points.flatMap((point) => point.label ?? []));
+  return labels.size ? [...labels].join(", ") : undefined;
 }
 
 export function plotModel(
@@ -137,10 +227,13 @@ export function plotModel(
     new Set(first.map((point) => point.time_unit)).size > 1
   )
     throw new Error("This timecourse contains mixed time units.");
+  // A timecourse is named by its label; the legend shows it only then.
+  const label = kind === "timecourse" ? seriesName(first) : undefined;
   const trace: Trace = {
     type: "scatter",
     mode: kind === "scatter" ? "markers" : "lines+markers",
-    name: y.label,
+    name: label ?? y.label,
+    showlegend: label !== undefined,
     x: x?.values ?? first.map((point) => point.time),
     y: y.values,
     connectgaps: false,
@@ -150,12 +243,16 @@ export function plotModel(
   const notes = [
     "The complete subset is shown as context; not every point necessarily matches the applied search.",
   ];
-  if (y.errorName) notes.push(`Y error bars: ${y.errorName.toUpperCase()}.`);
-  if (x?.errorName) notes.push(`X error bars: ${x.errorName.toUpperCase()}.`);
-  if (points.flat().some((point) => point.cv !== null))
-    notes.push(
-      "Coefficient of variation is retained in the data table; it is not plotted as an absolute error.",
-    );
+  if (y.errorName) notes.push(`Y error bars: ${errorNotes[y.errorName]}.`);
+  if (x?.errorName) notes.push(`X error bars: ${errorNotes[x.errorName]}.`);
+  for (const [key, name] of [
+    ["cv", "Coefficient of variation"],
+    ["gcv", "Geometric coefficient of variation"],
+  ] as const)
+    if (points.flat().some((point) => point[key] !== null))
+      notes.push(
+        `${name} is retained in the data table; it is not plotted as an absolute error.`,
+      );
   return {
     traces: [trace],
     xLabel: x?.label ?? `Time [${first[0]?.time_unit ?? "unit not reported"}]`,

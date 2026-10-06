@@ -42,6 +42,10 @@ def copies(source, root, count):
             data["sid"] = f"TEST{index}" if name == "study" else 100 + index
             if name == "study":
                 data["reference"] = 100 + index
+            else:
+                # reference.json describes the PMID of the study, so the upload
+                # never asks PubMed for it.
+                data["pmid"] = str(100 + index)
             path.write_text(json.dumps(data))
         folders.append(target)
     return folders
@@ -56,7 +60,9 @@ def test_spawn_workers_overlap_and_checkpoint_before_put(
     maximum = 0
     writes = []
     lock = threading.Lock()
-    barrier = threading.Barrier(2)
+    # Set when two uploads are active at once. The timeout only bounds a hung
+    # run: preparing a workbook in a spawned worker can take long under load.
+    overlapped = threading.Event()
 
     class Handler(BaseHTTPRequestHandler):
         def log_message(self, format, *args):
@@ -85,7 +91,11 @@ def test_spawn_workers_overlap_and_checkpoint_before_put(
                 active += 1
                 maximum = max(maximum, active)
                 writes.append(sid)
-            barrier.wait(timeout=10)
+                if active == 2:
+                    overlapped.set()
+            # The first upload waits for the other worker's upload, so the two
+            # workers overlap however long either one prepares its study.
+            assert overlapped.wait(timeout=300), "the workers never overlapped"
             time.sleep(0.05 if sid.endswith("0") else 0.01)
             page = (
                 {"url": f"https://pk-db.example/data/{sid}"} if sid[-1] in "02" else {}
@@ -112,6 +122,7 @@ def test_spawn_workers_overlap_and_checkpoint_before_put(
     assert maximum == 2
     assert len(writes) == 4
     assert all(row["ok"] for row in result["results"])
+    assert not any("reference_updated" in row for row in result["results"])
     assert [r["index"] for r in result["results"]] == list(range(4))
     # Prefer the server's study page; older servers only offer the API record.
     for row in result["results"]:

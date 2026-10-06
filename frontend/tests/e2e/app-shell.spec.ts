@@ -90,3 +90,19 @@ test("release and copyright footer is shared by all page types", async ({ page }
     await expect(commit).toHaveText(/^[a-f0-9]{8}$/i);
   }
 });
+
+test("the skip link is hidden, also from full-page screenshots, until it has focus", async ({ page }) => {
+  await page.goto("/data");
+  const skip = page.getByRole("link", { name: "Skip to main content", exact: true });
+  const unfocused = await skip.boundingBox();
+  expect(unfocused!.width).toBeLessThanOrEqual(1);
+  await expect(skip).toHaveCSS("clip-path", /inset\(50%\)/);
+  await page.keyboard.press("Tab");
+  await expect(skip).toBeFocused();
+  const focused = await skip.boundingBox();
+  expect(focused!.width).toBeGreaterThan(100);
+  expect(focused!.y).toBeGreaterThanOrEqual(0);
+  await expect(skip).not.toHaveCSS("clip-path", /inset\(50%\)/);
+  await page.keyboard.press("Tab");
+  await expect(skip).toHaveCSS("clip-path", /inset\(50%\)/);
+});

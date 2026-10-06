@@ -237,7 +237,7 @@ class Builder:
         record = {
             "measurement_type": measurement,
             "substance": substance,
-            "value": parsed,
+            "mean": parsed,
             "unit": unit,
             "individual" if individual else "group": subject,
             "interventions": list(interventions),

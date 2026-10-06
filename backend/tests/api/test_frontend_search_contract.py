@@ -14,6 +14,32 @@ from tests.fixtures.frontend_search import (
 
 
 @pytest.fixture
+def vocabulary(vocabulary):
+    """The controlled vocabulary plus the parameters derived from timecourses."""
+    from pkdb.domain.vocabulary import MeasurementRule
+
+    derived = tuple(
+        MeasurementRule(name=name, units=(unit,))
+        for name, unit in [
+            ("auc_end", "mg*h/l"),
+            ("auc_inf", "mg*h/l"),
+            ("cmax", "mg/l"),
+            ("kel", "1/h"),
+            ("thalf", "h"),
+            ("tmax", "h"),
+        ]
+    )
+    # The vocabulary spells the choice of the species as the complete one does.
+    measurements = tuple(
+        rule.model_copy(update={"choices": ("homo sapiens",)})
+        if rule.name == "species"
+        else rule
+        for rule in vocabulary.measurements
+    )
+    return vocabulary.model_copy(update={"measurements": measurements + derived})
+
+
+@pytest.fixture
 def scientific_fixture(ingestion_context, session_factory):
     ingestion, creator = ingestion_context
     with session_factory.begin() as session:
@@ -320,3 +346,157 @@ def test_compound_scope_zip_parity(
         rows = list(csv.DictReader(StringIO(archive.read("outputs.csv").decode())))
         assert {float(row["mean"]) for row in rows} == expected
         assert all(row["study_sid"] == "FRONTEND_SCOPE" for row in rows)
+
+
+@pytest.fixture
+def format2_study(ingestion_context, session_factory, tmp_path):
+    from tests.fixtures.frontend_search import (
+        add_frontend_vocabulary,
+        write_frontend_format2_study,
+    )
+
+    ingestion, creator = ingestion_context
+    with session_factory.begin() as session:
+        add_frontend_vocabulary(session)
+    folder = write_frontend_format2_study(tmp_path / "sources")
+    ingestion.replace(folder, creator)
+    return folder
+
+
+def test_format2_fixture_carries_the_fields_the_study_page_shows(
+    client, creator_headers, format2_study
+):
+    from tests.fixtures.frontend_search import (
+        FORMAT2_ISSUE,
+        FORMAT2_PKDB_ID,
+        FORMAT2_SID,
+    )
+
+    study = client.get(f"/api/v1/studies/{FORMAT2_SID}/", headers=creator_headers)
+    assert study.status_code == 200, study.text
+    assert {
+        key: study.json()[key]
+        for key in (
+            "sid",
+            "pkdb_id",
+            "release_date",
+            "issue",
+            "review_status",
+            "open_review_items",
+        )
+    } == {
+        "sid": FORMAT2_SID,
+        "pkdb_id": FORMAT2_PKDB_ID,
+        "release_date": "2026-09-28",
+        "issue": FORMAT2_ISSUE,
+        "review_status": "in_review",
+        "open_review_items": 1,
+    }
+    # A private study is neither served nor revealed by its PKDB identifier.
+    assert client.get(f"/api/v1/studies/{FORMAT2_SID}/").status_code == 404
+    assert client.get(f"/api/v1/studies/{FORMAT2_PKDB_ID}/").status_code == 404
+    moved = client.get(
+        f"/api/v1/studies/{FORMAT2_PKDB_ID}/",
+        headers=creator_headers,
+        follow_redirects=False,
+    )
+    assert moved.status_code == 308
+    assert moved.headers["location"] == f"/api/v1/studies/{FORMAT2_SID}/"
+
+
+def test_format2_fixture_has_schedules_geometric_statistics_and_labels(
+    client, creator_headers, format2_study
+):
+    from tests.fixtures.frontend_search import FORMAT2_SID
+
+    def rows(entity, **params):
+        response = client.get(
+            f"/api/v1/{entity}/",
+            headers=creator_headers,
+            params={"study_sid": FORMAT2_SID, **params},
+        )
+        assert response.status_code == 200, response.text
+        return response.json()["data"]["data"]
+
+    schedules = {
+        row["name"]: {
+            key: row[key] for key in ("time", "interval", "doses", "time_unit")
+        }
+        for row in rows("interventions", normed="true")
+    }
+    assert schedules == {
+        "D1": {"time": 0.0, "interval": 24.0, "doses": 7, "time_unit": "h"},
+        "D2": {
+            "time": [0.0, 12.0, 40.0],
+            "interval": None,
+            "doses": None,
+            "time_unit": "h",
+        },
+    }
+    outputs = rows("outputs", normed="true")
+    geometric = {
+        (row["gmean"], row["time"]): row for row in outputs if row["gmean"] is not None
+    }
+    # The reported geometric statistics are kept and the other one is derived.
+    assert geometric[4.0, 2.0]["gsd"] == 1.5
+    assert geometric[4.0, 2.0]["gcv"] == pytest.approx(0.4227, abs=1e-4)
+    assert geometric[3.0, 4.0]["gcv"] == pytest.approx(0.5)
+    assert geometric[3.0, 4.0]["gsd"] == pytest.approx(1.6038, abs=1e-4)
+    assert not any("value" in row for row in outputs)
+    series = {
+        point["label"]
+        for subset in rows("subsets", data_type="timecourse")
+        for pair in subset["array"]
+        for point in pair
+    }
+    assert series == {
+        "Plasma after 10 mg daily (geometric)",
+        "Plasma after 10 mg daily (arithmetic)",
+    }
+
+
+def test_value_ordering_uses_the_mean_else_the_median_else_the_geometric_mean(
+    client, creator_headers, format2_study
+):
+    from tests.fixtures.frontend_search import FORMAT2_SID
+
+    def values(entity, ordering):
+        response = client.get(
+            f"/api/v1/{entity}/",
+            headers=creator_headers,
+            params={
+                "study_sid": FORMAT2_SID,
+                "normed": "true",
+                "ordering": ordering,
+                "page_size": 100,
+            },
+        )
+        assert response.status_code == 200, response.text
+        return [
+            next(
+                (
+                    row[key]
+                    for key in ("mean", "median", "gmean")
+                    if row[key] is not None
+                ),
+                None,
+            )
+            for row in response.json()["data"]["data"]
+        ]
+
+    outputs = values("outputs", "central_value")
+    reported = [value for value in outputs if value is not None]
+    # Rows with a mean and rows with a geometric mean take part in one order.
+    assert len(set(reported)) > 3
+    assert reported == sorted(reported)
+    assert outputs[: len(reported)] == reported
+    descending = values("outputs", "-central_value")
+    assert [value for value in descending if value is not None] == sorted(
+        reported, reverse=True
+    )
+    assert values("interventions", "central_value") == sorted(
+        values("interventions", "central_value")
+    )
+    assert values("interventions", "-central_value") == sorted(
+        values("interventions", "central_value"), reverse=True
+    )

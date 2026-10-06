@@ -263,3 +263,204 @@ def test_numeric_characteristic_choices_use_legacy_text_conversion(
     path.write_text(json.dumps(data))
     study = parse_bundle(load_folder(study_folder))
     assert study.individuals[0].characteristica[0].choice == str(choice)
+
+
+def write_value_output(study_folder, **fields):
+    book = openpyxl.load_workbook(study_folder / "Example.xlsx")
+    book["Results"]["B2"] = "concentration"
+    book["Results"]["B3"] = -1
+    book.save(study_folder / "Example.xlsx")
+    path = study_folder / "study.json"
+    data = json.loads(path.read_text())
+    data["individualset"] = {"individuals": [{"name": "person", "group": "all"}]}
+    output = data["outputset"]["outputs"][0]
+    del output["mean"]
+    output["value"] = "col==concentration"
+    output.update(fields)
+    path.write_text(json.dumps(data))
+
+
+def test_format_1_value_becomes_mean_located_at_its_cell(study_folder, vocabulary):
+    from pkdb.domain.validation import prepare_study
+
+    write_value_output(study_folder, group=None, individual="person")
+    study = parse_bundle(load_folder(study_folder))
+    assert [m.statistics.mean for m in study.measurements] == [-1.0, None]
+    source = study.measurements[0].source
+    assert source is not None
+    located = source.for_field("mean")
+    assert (located.sheet, located.cell, located.header) == (
+        "Results",
+        "B3",
+        "concentration",
+    )
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(study, vocabulary)
+    negative = next(
+        issue for issue in error.value.report.issues if issue.code == "negative_value"
+    )
+    assert negative.field == "mean"
+    assert negative.source is not None and negative.source.cell == "B3"
+
+
+def test_format_1_group_value_is_rejected_at_its_cell(study_folder):
+    write_value_output(study_folder)
+    with pytest.raises(StudyValidationError) as error:
+        parse_bundle(load_folder(study_folder))
+    issue = error.value.report.issues[0]
+    assert (issue.code, issue.field) == ("group_value", "value")
+    assert issue.source is not None
+    assert (issue.source.sheet, issue.source.cell) == ("Results", "B3")
+
+
+def test_format_1_group_value_of_an_unspecified_summary_becomes_mean(study_folder):
+    write_value_output(study_folder, calculation_type="unspecified summary")
+    study = parse_bundle(load_folder(study_folder))
+    assert [(m.group, m.statistics.mean) for m in study.measurements] == [
+        ("all", -1.0),
+        ("all", None),
+    ]
+    assert all(m.calculation_type == "unspecified summary" for m in study.measurements)
+
+
+def write_characteristic(study_folder, section, **fields):
+    path = study_folder / "study.json"
+    data = json.loads(path.read_text())
+    characteristic = {"measurement_type": "weight", "unit": "kg", **fields}
+    if section == "groupset":
+        data["groupset"]["groups"][0]["characteristica"] = [characteristic]
+    else:
+        data["individualset"] = {
+            "individuals": [
+                {"name": "person", "group": "all", "characteristica": [characteristic]}
+            ]
+        }
+    path.write_text(json.dumps(data))
+
+
+def test_format_1_group_characteristic_value_is_rejected(study_folder):
+    write_characteristic(study_folder, "groupset", value=70)
+    with pytest.raises(StudyValidationError) as error:
+        parse_bundle(load_folder(study_folder))
+    assert error.value.report.issues[0].code == "group_value"
+    write_characteristic(
+        study_folder, "groupset", value=70, calculation_type="unspecified summary"
+    )
+    characteristic = (
+        parse_bundle(load_folder(study_folder)).groups[0].characteristica[0]
+    )
+    assert characteristic.statistics.mean == 70
+    assert characteristic.calculation_type == "unspecified summary"
+
+
+def test_format_1_individual_characteristic_value_becomes_mean(study_folder):
+    write_characteristic(study_folder, "individualset", value=70)
+    study = parse_bundle(load_folder(study_folder))
+    characteristic = study.individuals[0].characteristica[0]
+    assert characteristic.statistics.mean == 70
+    assert characteristic.calculation_type is None
+
+
+def test_format_1_value_and_mean_together_are_rejected(study_folder):
+    path = study_folder / "study.json"
+    data = json.loads(path.read_text())
+    data["outputset"]["outputs"][0].update(
+        value=1, calculation_type="unspecified summary"
+    )
+    path.write_text(json.dumps(data))
+    with pytest.raises(StudyValidationError) as error:
+        parse_bundle(load_folder(study_folder))
+    assert error.value.report.issues[0].code == "conflicting_statistics"
+
+
+def write_intervention(study_folder, **fields):
+    path = study_folder / "study.json"
+    data = json.loads(path.read_text())
+    data["interventionset"] = {
+        "interventions": [
+            {
+                "name": "dose",
+                "measurement_type": "dosing",
+                "substance": "apixaban",
+                "value": 2.5,
+                "unit": "mg",
+                "time_unit": "h",
+                "route": "oral",
+                "form": "tablet",
+                "application": "multiple dose",
+                **fields,
+            }
+        ]
+    }
+    path.write_text(json.dumps(data))
+
+
+@pytest.mark.parametrize(
+    "text,expected",
+    [
+        ("0|12|40", {"time": [0.0, 12.0, 40.0]}),
+        (" -6 | -5.5 | 1e1 ", {"time": [-6.0, -5.5, 10.0]}),
+        ("S0T12R3", {"time": 0.0, "interval": 12.0, "doses": 3}),
+        ("S-6T0.5R12", {"time": -6.0, "interval": 0.5, "doses": 12}),
+        ("S0T6R2 | S24T6R2 | 144", {"time": [0.0, 6.0, 24.0, 30.0, 144.0]}),
+        ("12", {"time": 12.0}),
+        (12, {"time": 12.0}),
+    ],
+)
+def test_format_1_schedule_strings_become_structured(study_folder, text, expected):
+    write_intervention(study_folder, time=text)
+    intervention = parse_bundle(load_folder(study_folder)).interventions[0]
+    assert intervention.statistics.mean == 2.5
+    assert {
+        "time": intervention.time,
+        "interval": intervention.interval,
+        "doses": intervention.doses,
+    } == {"time": None, "interval": None, "doses": None} | expected
+
+
+@pytest.mark.parametrize(
+    "fields",
+    [
+        {"time": "S0T12"},
+        {"time": "0|"},
+        {"time": "a|1"},
+        {"time": "S0T12R0"},
+        {"time": "S0T-12R3"},
+        {"time": "0;12"},
+        {"time": "s0t12r3"},
+        {"time": "S0T12R3x"},
+        {"time": "1e400|1"},
+        {"time": "S0T1R10001|1"},
+        {"time": "S0T12R3", "doses": 3},
+        {"time": "S0T12R3", "interval": 12},
+    ],
+)
+def test_invalid_format_1_schedule_is_located(study_folder, fields):
+    write_intervention(study_folder, **fields)
+    with pytest.raises(StudyValidationError) as error:
+        parse_bundle(load_folder(study_folder))
+    issue = error.value.report.issues[0]
+    assert issue.code == "invalid_schedule"
+    assert issue.source is not None
+    assert issue.source.path == ("interventionset", "interventions", 0, "time")
+
+
+def test_format_1_schedule_cell_is_parsed_with_its_location(study_folder):
+    book = openpyxl.load_workbook(study_folder / "Example.xlsx")
+    sheet = book.create_sheet("Doses")
+    sheet.append(["comment"])
+    sheet.append(["name", "schedule"])
+    sheet.append(["first", "S0T24R7"])
+    sheet.append(["second", "0 | 24 | x"])
+    book.save(study_folder / "Example.xlsx")
+    write_intervention(study_folder, source="Doses", name="col==name")
+    path = study_folder / "study.json"
+    data = json.loads(path.read_text())
+    data["interventionset"]["interventions"][0]["time"] = "col==schedule"
+    path.write_text(json.dumps(data))
+    with pytest.raises(StudyValidationError) as error:
+        parse_bundle(load_folder(study_folder))
+    issue = error.value.report.issues[0]
+    assert issue.code == "invalid_schedule"
+    assert issue.source is not None
+    assert (issue.source.sheet, issue.source.cell) == ("Doses", "B4")

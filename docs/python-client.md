@@ -55,6 +55,10 @@ with Client() as client:
             print(measurement.model_dump())
 ```
 
+A study in study format 2 is identified by `<substance>/<name>`; `client.studies.get("caffeine/Harder1988")` reads it. The PKDB identifier of a released study works as well, `client.studies.get("PKDB00198")`, because the client follows the permanent redirect (308) of a read to the canonical route, at most five times and only within the origin of its endpoint. The returned study has the canonical `sid`, `metadata.release`, `metadata.issue` and `metadata.review`; list results (`client.studies.list()`) carry `pkdb_id`, `release_date`, `issue`, `review_status` and `open_review_items`. Writes and POST queries never follow redirects. See [study identifiers](api.md#study-identifiers-and-redirects).
+
+Measurement, characteristic and intervention rows have no `value`: the value of one subject and of an `unspecified summary` is in `mean`, `cv` and `gcv` are fractions, and interventions have structured schedules. See [statistics in responses](api.md#statistics-in-responses) for the statistics of a row.
+
 The client uses the v2 data API. `measurements` is the public name for measurement rows; `outputs` remains an accepted alias. `client.query()` also accepts `groups`, `individuals`, `interventions`, `references`, and `studies`. Results are paginated: use `page` and `page_size`, and inspect `count` and `pages`. The client preserves its `count` and `pages` convenience attributes while REST responses use `total`, `page`, and `page_size`. See the [REST API guide](api.md) and [executable HTTP examples](api-examples.md).
 
 ## Download data
@@ -78,7 +82,7 @@ Create and enrich `reference.json` from a PMID, DOI, or manual citation with `pk
 
 The development version includes a [local curation app](local-curation.md) with file watching, external file opening, and validation/upload on save. Launch it with `pkdb curate /path/to/pkdb_data`; the illustrated guide covers setup and offline work. This command is not yet available in a published release.
 
-Pass the existing study directory from `pkdb_data` directly. Keep its original `study.json`, `reference.json`, workbooks, tables, and attachments together. The directory name must match the study's name. The parser understands existing spreadsheet sheet names, second-row workbook headers, `col==...` expressions, and TSV sources; no intermediate conversion is needed.
+Pass the existing study directory from `pkdb_data` directly. Keep its original `study.json`, `reference.json`, workbooks, tables, and attachments together. The directory name must match the study's name. The parser understands existing spreadsheet sheet names, second-row workbook headers, `col==...` expressions, and TSV sources; no intermediate conversion is needed. A folder whose `study.json` contains `"format": 2` is a [study format 2](study-format.md) folder; `prepare`, `validate`, and `upload` accept both formats, and for study format 2 the folder is located as `<substance>/<name>` (for example `studies/caffeine/Harder1988`).
 
 ```bash
 pkdb prepare /path/to/pkdb_data/studies/ExampleStudy --output prepared.json
@@ -94,7 +98,7 @@ export PKDB_ENDPOINT=https://beta.pk-db.com
 pkdb upload /path/to/pkdb_data/studies/ExampleStudy
 ```
 
-Upload automatically prepares and validates the folder, checks compatibility with the processing engine used by the service and vocabulary, then sends the original source bundle. Uploading an existing SID replaces that study, subject to your study permissions. The service validates the bundle again and checks authorization. An offline validation result does not grant upload permission. A valid key with `studies:write` can upload either a public or a private study. The study's `access` field determines visibility: public data is visible to everyone; private data is visible only to its assigned curators and the administrator. An authorized uploader can also change visibility when replacing a study. The uploader receives a curator assignment on creation; source contributor attribution alone does not grant access. Writes are not retried automatically.
+Upload automatically prepares and validates the folder, checks compatibility with the processing engine used by the service and vocabulary, then sends the original source bundle. Uploading an existing study identifier replaces that study, subject to your study permissions. A study format 2 folder is uploaded to `PUT /api/v2/studies/{substance}/{name}`: the client sends the exact text of `study.json` and `reference.json` and every other file of the study, and the server reads them with the same loader, validator and reader, so it reports the issues that `pkdb validate` reports. A released study whose `study.json` has a `release.pkdb_id` takes over and renames the study stored under that PKDB identifier; a study format 2 folder without a `release.pkdb_id`, or whose PKDB identifier no stored study has, takes over the study format 1 study of the same publication and source if you may edit it. The upload result and `--format json` output name the former identifier in `renamed_from`, and reads by the former identifier redirect to the study. The service validates the bundle again and checks authorization. An offline validation result does not grant upload permission. A valid key with `studies:write` can upload either a public or a private study. The study's `access` field determines visibility: public data is visible to everyone; private data is visible only to its assigned curators and the administrator. An authorized uploader can also change visibility when replacing a study. The uploader receives a curator assignment on creation; source contributor attribution alone does not grant access. Writes are not retried automatically.
 
 The public commands also accept a parent directory containing multiple study folders. In JSON mode they emit one record per attempted study. `--output` requires a single study folder.
 
@@ -138,7 +142,7 @@ pkdb upload /path/to/pkdb_data/studies/ExampleStudy --endpoint "$PKDB_ENDPOINT" 
 
 Keep the lock file with your project, outside the study folder. Snapshots include a content hash checked on loading. The client also caches snapshots by endpoint. Set `PKDB_CACHE_DIR` or pass `--cache-dir` to choose the cache location. Passing `--endpoint` to local commands selects an existing cached snapshot without network access; `--vocabulary` pins an explicit snapshot. Preparation records the vocabulary hash, processing version, and source-file hashes, allowing you to identify the inputs used. A prepared result becomes unusable for upload when its source files change: prepare the folder again after editing it.
 
-If the API rejects a vocabulary or processing version mismatch, explicitly synchronize the vocabulary or install the matching client release, then prepare and validate again. Local validation never silently downloads new rules.
+If the API rejects a vocabulary or processing version mismatch, explicitly synchronize the vocabulary or install the matching client release, then prepare and validate again. Processing version 9 introduced study format 2; clients of version 8 or older are refused by a version 9 server, and every study stored by an older server must be uploaded again. Local validation never silently downloads new rules.
 
 ## Prepare and upload from Python
 
@@ -150,7 +154,7 @@ prepared = prepare("/path/to/pkdb_data/studies/ExampleStudy", vocabulary=vocabul
 
 study = prepared.study       # CanonicalStudy Pydantic model
 report = prepared.report     # source-aware validation report
-print(study.sid, report.valid)
+print(study.sid, report.valid)  # study.sid is <substance>/<name> for study format 2
 
 # Client reads PKDB_ENDPOINT and PKDB_API_KEY when they are not passed.
 with Client() as client:
@@ -178,3 +182,9 @@ Offline validation cannot check destination account records or study-editing per
 Use `pkdb import osp --creator USER --output NEW_DIRECTORY` to convert the pinned OSP observed-data release into source-qualified study folders. See the [OSP import guide](osp-import.md) for provenance, scientific mappings, offline conversion, and server loading.
 
 `pkdb import frdb`, `pkdb import cvtdb`, and `pkdb import warfarin` use the same creator/output options. Install `pkdb[imports]` for the R-format sources. See [public dataset imports](public-dataset-imports.md) for exact coverage, source terms, row-level provenance and weekly checks.
+
+## Study format 2 folders
+
+Study folders whose `study.json` contains `"format": 2` keep their data in fixed tab-separated tables; see [Study format](study-format.md). `pkdb format FOLDER` writes every file of such folders in canonical form, and `pkdb format FOLDER --check` only reports the files that would change. `pkdb validate FOLDER` checks layout, format, rows, relationships between tables and vocabulary terms, then reads the folder into the canonical study and runs the postprocessing of the server (derived statistics, unit normalization, datasets and pharmacokinetics), and reports every issue with file, row and column. `pkdb schema export --output DIR` writes JSON Schema files for `study.json`, `review.json` and every table, and `pkdb schema docs --output FILE` writes the column reference. `pkdb prepare FOLDER` writes the prepared canonical study of such a folder, and `pkdb upload FOLDER` uploads it as described above; `pkdb upload` also accepts a parent folder with study format 2 folders, and a batch refuses two folders with the same `<substance>/<name>` or the same publication (the PubMed ID or normalized DOI of `study.json`). Study folders cannot be named `publication` or `validate`, because PK-DB uses these names in study URLs.
+
+In study format 2, `mean` is the arithmetic mean, the value of one subject, or the central value of an `unspecified summary`; `cv` and `gcv` are entered in percent and are fractions in the prepared study and the API; geometric summaries have their own columns (`gmean`, `gsd`, `gcv`); and a digitized `error_bar` with `error_type` completes `sd`, `se` or `gsd`. Interventions give `time` as a number, or as a `;`-separated list for an irregular schedule (`0;12;40`); a regular schedule uses `interval` and `doses` instead. The prepared study derives the missing statistics, reports contradicting ones as the warning `inconsistent_statistics` at the cell of the statistic that disagrees with the most others, and uses processing version 9. Study format 1 sources keep working: their `value` is read as `mean`, and schedule strings `0|12|40` and `S<start>T<interval>R<n>` (`R` counts administrations) become a time list or `time`, `interval` and `doses`; any other schedule text is `invalid_schedule`.

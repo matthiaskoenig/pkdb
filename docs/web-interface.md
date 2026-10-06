@@ -39,13 +39,13 @@ Switch between **Studies**, **Groups**, **Individuals**, **Interventions**, **Me
 
 [![Measurements tab showing values, units, and related study information](images/web/browse-measurements.png)](images/web/browse-measurements.png)
 
-Read the measurement type, substance, value or summary statistic, and unit together. Open a record to inspect its subject and intervention context before comparing values across studies.
+Read the measurement type, substance, unit and **Value** together. The Value column shows one value per row: the arithmetic mean, else the median, else the geometric mean, followed by its spread (`± SD`, `± SE` or the coefficient of variation in percent, and for a geometric mean `×/÷ GSD` or the geometric coefficient of variation) and the range when minimum and maximum are reported. A dash marks every empty cell. Statistics and times are shown with four significant digits and the stored values are unchanged, and the value of a single subject or of a summary whose statistic the publication does not state appears as a plain number. Interventions show their dosing schedule as a list of times (`0, 12, 40 h`) or as a regular schedule (`every 24 h, 7 doses from 0 h`). Open a record to inspect its subject and intervention context before comparing values across studies.
 
-**Search table** refines only the current table; choose **Apply table search** to apply it. It does not replace the research filters. Use column sorting and **Previous** / **Next** to navigate longer result sets.
+**Search table** refines only the current table; choose **Apply table search** to apply it. It does not replace the research filters. Use column sorting and **Previous** / **Next** to navigate longer result sets. The Value column sorts by the same mean, median or geometric mean that it shows, and rows without a value come last.
 
 ## Open a study
 
-Select a study in the results to view its publication, metadata, and associated data. Under **Explore all data from this study**, choose a **Study data category** to browse its groups, individuals, interventions, measurements, or series.
+Select a study in the results to view its publication, metadata, and associated data. A study opens at `/data/<substance>/<name>`, for example `/data/caffeine/Harder1988`. Links by the PKDB identifier of a released study, such as `/data/PKDB00198`, or by the former study format 1 identifier of a migrated study, such as `/data/Vilsboll2008`, keep working and lead to the same page, also after the study is renamed. A status strip at the top of the study shows its **Identifier**, **PKDB identifier**, **Released** date, **Curation issue** (a link to the issue on GitHub), and **Review** status (draft, in review or approved) with the number of open review items; entries that a study does not have are left out. To find a study by its PKDB identifier, search for it or use the **PKDB identifiers** filter. Under **Explore all data from this study**, choose a **Study data category** to browse its groups, individuals, interventions, measurements, or series.
 
 [![Study details showing publication context and the study data category selector](images/web/study-details.png)](images/web/study-details.png)
 

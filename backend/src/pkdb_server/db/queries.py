@@ -3,7 +3,7 @@
 import math
 from collections import defaultdict
 
-from sqlalchemy import String, and_, case, exists, func, or_, select, true
+from sqlalchemy import Float, String, and_, case, exists, func, or_, select, true
 
 from pkdb.schemas.queries import Predicate, QuerySpec
 from pkdb.schemas.security import Principal
@@ -27,8 +27,19 @@ from pkdb_server.db.textsearch import text_match
 from pkdb_server.db.vocabulary_search import relevance
 from pkdb_server.services.authorization import AuthorizationDenied
 
+# The PKDB identifier of a study: the one it was released as, or for a study
+# format 1 study (not renamed yet) its own sid, which is a PKDB identifier.
+PKDB_IDENTIFIER = case(
+    (Study.pkdb_id.is_not(None), Study.pkdb_id),
+    (Study.sid.op("~")("^PKDB[0-9]{5}$"), Study.sid),
+)
+# The time of an intervention: the scalar time, or the first time of an
+# irregular schedule (`time_list`). Rows are ordered by it; filters on it match
+# the scalar time or any listed time (intervention_time_condition).
+INTERVENTION_TIME = func.coalesce(Intervention.time, Intervention.time_list[1])
 STUDY_FIELDS = {
-    name: getattr(Study, name) for name in ("sid", "name", "access", "licence")
+    **{name: getattr(Study, name) for name in ("sid", "name", "access", "licence")},
+    "pkdb_id": PKDB_IDENTIFIER,
 }
 OUTPUT_FIELDS = {
     name: getattr(Measurement, name)
@@ -36,12 +47,14 @@ OUTPUT_FIELDS = {
         "id",
         "substance",
         "measurement_type",
-        "value",
         "mean",
         "median",
         "sd",
         "se",
         "cv",
+        "gmean",
+        "gsd",
+        "gcv",
         "count",
         "unit",
         "choice",
@@ -54,6 +67,11 @@ OUTPUT_FIELDS = {
     )
 }
 OUTPUT_FIELDS.update(
+    # The value a row stands for, as tables show it: mean, else median, else
+    # geometric mean. Rows without any of them sort last.
+    central_value=func.coalesce(
+        Measurement.mean, Measurement.median, Measurement.gmean
+    ),
     normed=Measurement.origin == "normalized",
     minimum=Measurement.minimum,
     maximum=Measurement.maximum,
@@ -152,8 +170,9 @@ def fields_for(entity):
                     "route",
                     "form",
                     "application",
+                    "tissue",
+                    "method",
                     "unit",
-                    "value",
                 )
             },
             "normed": Intervention.origin == "normalized",
@@ -165,6 +184,8 @@ def fields_for(entity):
                     "route",
                     "form",
                     "application",
+                    "tissue",
+                    "method",
                 )
             },
             **{
@@ -175,12 +196,21 @@ def fields_for(entity):
                     "sd",
                     "se",
                     "cv",
-                    "time",
+                    "gmean",
+                    "gsd",
+                    "gcv",
+                    "count",
+                    "interval",
+                    "doses",
                     "time_unit",
                     "choice",
                     "calculated",
                 )
             },
+            "time": INTERVENTION_TIME,
+            "central_value": func.coalesce(
+                Intervention.mean, Intervention.median, Intervention.gmean
+            ),
             "minimum": Intervention.minimum,
             "maximum": Intervention.maximum,
         }
@@ -216,7 +246,36 @@ def visibility(principal: Principal):
     return or_(Study.access == "public", membership)
 
 
+def intervention_time_condition(predicate: Predicate):
+    """A time filter that matches the scalar time or any listed time.
+
+    `ne` and `exclude` match the interventions with a time of which none
+    matches `eq` or `in`; a null value compares the presence of any time.
+    """
+    value, op = predicate.value, predicate.operator
+    # Checks the operator and the type of the value.
+    comparison(Intervention.time, predicate)
+    timed = or_(Intervention.time.is_not(None), Intervention.time_list.is_not(None))
+    if op == "isnull":
+        return ~timed if value else timed
+    if value is None:
+        return ~timed if op == "eq" else timed
+    if op in {"ne", "exclude"}:
+        positive = predicate.model_copy(
+            update={"operator": "in" if op == "exclude" else "eq"}
+        )
+        return and_(timed, ~intervention_time_condition(positive))
+    listed = func.unnest(Intervention.time_list, type_=Float).column_valued("time")
+    # Never null, so that the negation above holds for every row.
+    return or_(
+        and_(Intervention.time.is_not(None), comparison(Intervention.time, predicate)),
+        exists(select(listed).where(comparison(listed, predicate))),
+    )
+
+
 def comparison(column, predicate: Predicate):
+    if column is INTERVENTION_TIME:
+        return intervention_time_condition(predicate)
     value, op = predicate.value, predicate.operator
     if op != "isnull":
         expected = column.type.python_type

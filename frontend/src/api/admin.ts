@@ -10,6 +10,7 @@ import {
   type Role,
 } from "./session";
 import { parseEvent, type SecurityEvent } from "./account";
+import { studyPath } from "../features/details/studyPath";
 export type EditableRole = Exclude<Role, "admin">;
 export interface AdminUser {
   id: number;
@@ -109,7 +110,7 @@ export const adminApi = {
     const row = record(
       (
         await api.get<unknown>(
-          `/api/v1/admin/studies/${encodeURIComponent(sid)}/access`,
+          `/api/v1/admin/studies/${studyPath(sid)}/access`,
           { signal },
         )
       ).data,
@@ -122,10 +123,7 @@ export const adminApi = {
     };
   },
   async saveAccess(sid: string, values: StudyAccess) {
-    await api.put(
-      `/api/v1/admin/studies/${encodeURIComponent(sid)}/access`,
-      values,
-    );
+    await api.put(`/api/v1/admin/studies/${studyPath(sid)}/access`, values);
   },
   async audit(offset: number, signal: AbortSignal): Promise<AuditEvent[]> {
     return array(

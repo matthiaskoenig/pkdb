@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { useTheme } from "vuetify";
 import { loadPlotly } from "../plotly";
-import { plotModel, type PlotLayout } from "../types";
+import { plotColors } from "../theme";
+import { plotModel, type PlotAxis, type PlotLayout } from "../types";
+import { formatNumber, statisticText } from "../../results/format";
 
 const props = defineProps<{
   points: unknown;
   kind: "timecourse" | "scatter";
 }>();
+const theme = useTheme();
 const host = ref<HTMLElement>();
 const logX = ref(false);
 const logY = ref(false);
@@ -17,6 +21,14 @@ let engine: Awaited<ReturnType<typeof loadPlotly>> | undefined;
 let observer: ResizeObserver | undefined;
 let disposed = false;
 let rendering = Promise.resolve();
+const caption =
+  "Point values and their uncertainty; missing values are shown as -";
+// Statistics are rounded for reading; coefficients of variation show as percent.
+function cell(key: string, value: number | null): string {
+  return value === null
+    ? "-"
+    : (statisticText(key, value) ?? formatNumber(value));
+}
 const model = computed(() => {
   try {
     return { value: plotModel(props.points, props.kind), error: "" };
@@ -29,7 +41,7 @@ const model = computed(() => {
   }
 });
 watch(
-  [host, model, logX, logY],
+  [host, model, logX, logY, () => theme.current.value.dark],
   () => {
     const current = ++generation;
     const element = host.value;
@@ -44,21 +56,50 @@ watch(
         const loaded = await loadPlotly();
         if (disposed || generation !== current) return;
         engine = loaded;
+        const colors = plotColors(theme.current.value.colors);
+        const axis = (label: string, log: boolean): PlotAxis => ({
+          title: { text: label },
+          type: log ? "log" : "linear",
+          hoverformat: ".4~g",
+          gridcolor: colors.grid,
+          linecolor: colors.grid,
+          zerolinecolor: colors.grid,
+        });
         const layout: PlotLayout = {
           autosize: true,
           height: 380,
-          xaxis: {
-            title: { text: data.xLabel },
-            type: logX.value ? "log" : "linear",
+          xaxis: axis(data.xLabel, logX.value),
+          yaxis: axis(data.yLabel, logY.value),
+          paper_bgcolor: colors.surface,
+          plot_bgcolor: colors.surface,
+          font: { color: colors.text },
+          modebar: {
+            bgcolor: "rgba(0, 0, 0, 0)",
+            color: colors.muted,
+            activecolor: colors.text,
           },
-          yaxis: {
-            title: { text: data.yLabel },
-            type: logY.value ? "log" : "linear",
+          // The timecourse label is the legend entry, above the plot area.
+          legend: {
+            orientation: "h",
+            x: 0,
+            xanchor: "left",
+            y: 1.02,
+            yanchor: "bottom",
           },
-          margin: { l: 75, r: 25, t: 30, b: 65 },
+          margin: {
+            l: 75,
+            r: 25,
+            t: data.traces.some((trace) => trace.showlegend) ? 60 : 30,
+            b: 65,
+          },
           uirevision: JSON.stringify(data.points),
         };
-        await loaded.react(element, data.traces, layout, {
+        const traces = data.traces.map((trace) => ({
+          ...trace,
+          line: { color: colors.primary },
+          marker: { color: colors.primary },
+        }));
+        await loaded.react(element, traces, layout, {
           responsive: true,
           displaylogo: false,
           displayModeBar: true,
@@ -124,23 +165,30 @@ onBeforeUnmount(() => {
       <p v-for="note in model.value.notes" :key="note">{{ note }}</p>
       <details>
         <summary>Accessible plot data and uncertainty</summary>
+        <!-- The caption names the table for assistive technology; the visible
+             copy wraps within the screen while the table scrolls. -->
+        <p aria-hidden="true">{{ caption }}</p>
         <div class="plot-data">
           <table>
-            <caption>
-              Reported point values; missing values are shown as -
+            <caption class="sr-only">
+              {{
+                caption
+              }}
             </caption>
             <thead>
               <tr>
                 <th>Point</th>
-                <th>Axis</th>
+                <th v-if="kind === 'scatter'">Axis</th>
                 <th>Time</th>
                 <th>Time unit</th>
-                <th>Value</th>
                 <th>Mean</th>
                 <th>Median</th>
                 <th>SD</th>
                 <th>SE</th>
                 <th>CV</th>
+                <th>Geometric mean</th>
+                <th>Geometric SD</th>
+                <th>Geometric CV</th>
                 <th>Unit</th>
               </tr>
             </thead>
@@ -150,18 +198,18 @@ onBeforeUnmount(() => {
                 :key="index"
               >
                 <tr v-for="(point, axis) in pair" :key="point.pk">
-                  <th>{{ point.pk }}</th>
-                  <td>
-                    {{ kind === "timecourse" ? "Y" : axis === 0 ? "X" : "Y" }}
-                  </td>
-                  <td>{{ point.time ?? "-" }}</td>
+                  <th>{{ index + 1 }}</th>
+                  <td v-if="kind === 'scatter'">{{ axis === 0 ? "X" : "Y" }}</td>
+                  <td>{{ cell("time", point.time) }}</td>
                   <td>{{ point.time_unit ?? "-" }}</td>
-                  <td>{{ point.value ?? "-" }}</td>
-                  <td>{{ point.mean ?? "-" }}</td>
-                  <td>{{ point.median ?? "-" }}</td>
-                  <td>{{ point.sd ?? "-" }}</td>
-                  <td>{{ point.se ?? "-" }}</td>
-                  <td>{{ point.cv ?? "-" }}</td>
+                  <td>{{ cell("mean", point.mean) }}</td>
+                  <td>{{ cell("median", point.median) }}</td>
+                  <td>{{ cell("sd", point.sd) }}</td>
+                  <td>{{ cell("se", point.se) }}</td>
+                  <td>{{ cell("cv", point.cv) }}</td>
+                  <td>{{ cell("gmean", point.gmean) }}</td>
+                  <td>{{ cell("gsd", point.gsd) }}</td>
+                  <td>{{ cell("gcv", point.gcv) }}</td>
                   <td>{{ point.unit ?? "-" }}</td>
                 </tr>
               </template>
@@ -185,10 +233,17 @@ onBeforeUnmount(() => {
 .plot-data {
   overflow-x: auto;
 }
+.plot-data table {
+  border-collapse: collapse;
+}
 th,
 td {
   padding: 0.4rem;
   text-align: left;
   white-space: nowrap;
+}
+/* The point numbers line up with the text above the table. */
+tr > :first-child {
+  padding-inline-start: 0;
 }
 </style>

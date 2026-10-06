@@ -16,7 +16,7 @@ Keep the key in the client's secret store or environment configuration. Do not i
 | Tool | Purpose | Arguments |
 | --- | --- | --- |
 | `search_studies` | Find authorized studies | `query`: study query with predicates and pagination |
-| `get_study` | Retrieve a complete canonical study | `sid`: study identifier |
+| `get_study` | Retrieve a complete canonical study | `sid`: `<substance>/<name>`, a study format 1 identifier, or a PKDB identifier |
 | `query_data` | Query measurements and related entities | `query`: data query with predicates and pagination |
 
 All tools advertise `readOnlyHint: true` and `destructiveHint: false`. `validate_study` and `replace_study` are not available, even to administrators or API keys that also have write scopes.
@@ -42,10 +42,12 @@ This compatibility tool returns `items` and `count`. For the common data paginat
 Call `get_study` with:
 
 ```json
-{"sid": "PKDB01110"}
+{"sid": "caffeine/Harder1988"}
 ```
 
-The result is the complete canonical study definition, including its reference, groups, individuals, interventions, measurements, and attachment metadata.
+`sid` is the identifier of a study in study format 2 (`<substance>/<name>`), the identifier of a study in study format 1 (such as `PKDB01110`), the PKDB identifier of a released study (such as `PKDB00198`), or the former study format 1 identifier of a study that a study format 2 upload took over (such as `Vilsboll2008`). The tool reads the study of a PKDB identifier or former identifier directly, without the redirect of the REST API. A PKDB identifier or former identifier names a private study only for its readers: anyone else gets `Not found`, like REST, so the identifier does not reveal that the study exists.
+
+The result is the complete canonical study definition, including its reference, groups, individuals, interventions, measurements, and attachment metadata. Statistics have no `value` and interventions have structured schedules, as described under [statistics in responses](api.md#statistics-in-responses); `metadata` carries the release (`pkdb_id` and date), the curation issue number and the review status and items of a study in study format 2.
 
 ### Query measurements
 

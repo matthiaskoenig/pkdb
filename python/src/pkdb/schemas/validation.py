@@ -40,6 +40,11 @@ ISSUE_REGISTRY = {
         "validate",
         "Check the source unit and supported dimensions.",
     ),
+    "inconsistent_statistics": (
+        "scientific",
+        "validate",
+        "Check the reported error statistics against the publication. Reported values are kept and not recalculated.",
+    ),
     "unknown_image": (
         "reference",
         "parse",

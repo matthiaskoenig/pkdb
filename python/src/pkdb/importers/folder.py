@@ -1,8 +1,8 @@
 """Expand an unchanged PK-DB study bundle into canonical scientific records."""
 
-import hashlib
 import json
 import math
+import re
 from copy import deepcopy
 from pathlib import Path
 
@@ -24,7 +24,7 @@ from pkdb.schemas.validation import (
     ValidationReport,
     fail,
 )
-from pkdb.source_files import ignored_source
+from pkdb.source_files import attachments_and_digest, ignored_source
 
 SECTIONS = {
     "groupset": "groups",
@@ -33,6 +33,15 @@ SECTIONS = {
     "outputset": "outputs",
     "dataset": "data",
 }
+# Format 1 dosing schedules. Digits and whitespace are ASCII only, matching the
+# p006studyformat migration that converts stored schedule strings in SQL.
+UNSIGNED = r"(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][-+]?[0-9]+)?"
+PLAIN_NUMBER = re.compile(rf"[-+]?{UNSIGNED}")
+SERIES = re.compile(rf"S([-+]?{UNSIGNED})T({UNSIGNED})R([0-9]+)")
+WHITESPACE = " \t\n\r\f\v"
+MAX_SCHEDULE_TIMES = 10_000
+MAX_DOSES = 2**31 - 1
+UNSPECIFIED_SUMMARY = "unspecified summary"
 META_KEYS = {
     "provenance",
     "name",
@@ -139,7 +148,9 @@ def _numeric(value, *, integer=False):
     return number
 
 
-def _scientific(data: dict, key: str, source: SourceLocation) -> dict:
+def _scientific(
+    data: dict, key: str, source: SourceLocation, *, group: bool = False
+) -> dict:
     reserved = data.keys() & {
         "origin",
         "derived_from",
@@ -157,13 +168,135 @@ def _scientific(data: dict, key: str, source: SourceLocation) -> dict:
             source,
         )
     result = _notes(data)
+    if "value" in result:
+        # Format 1 `value` (a single subject or an unspecified summary) is `mean`.
+        value = result.pop("value")
+        if clean(value) is not None:
+            calculation = clean(result.get("calculation_type"))
+            if group and calculation != UNSPECIFIED_SUMMARY:
+                fail(
+                    "group_value",
+                    "Group records cannot carry an individual value; use mean, or "
+                    f"calculation_type '{UNSPECIFIED_SUMMARY}'",
+                    source.for_field("value"),
+                    category="schema",
+                    stage="parse",
+                    field="value",
+                    actual={"value": value, "calculation_type": calculation},
+                )
+            if clean(result.get("mean")) is not None:
+                fail(
+                    "conflicting_statistics",
+                    "A record reports both value and mean; format 1 value is the mean",
+                    source.for_field("value"),
+                    category="schema",
+                    stage="parse",
+                    field="value",
+                    actual={"value": value, "mean": result["mean"]},
+                )
+            result["mean"] = value
+            if "value" in source._fields:
+                # Locate mean at the original value cell without changing the
+                # row location that other records of this row share.
+                source = deepcopy(source)
+                source._fields["mean"] = source._fields["value"]
     stats = {
-        name: _numeric(result.pop(name), integer=name == "count")
+        name: clean(result.pop(name))
+        if name == "error_type"
+        else _numeric(result.pop(name), integer=name == "count")
         for name in Statistics.model_fields
         if name in result
     }
     result.update(key=key, statistics=stats, source=source)
     return result
+
+
+def _finite(text: str) -> float:
+    number = float(text)
+    if not math.isfinite(number):
+        raise ValueError(f"{text} is not a finite number")
+    return number
+
+
+def _series(part: str) -> tuple[float, float, int] | None:
+    match = SERIES.fullmatch(part)
+    if match is None:
+        return None
+    doses = int(match[3])
+    if not 1 <= doses <= MAX_DOSES:
+        raise ValueError(f"R must count between 1 and {MAX_DOSES} administrations")
+    return _finite(match[1]), _finite(match[2]), doses
+
+
+def parse_schedule(text: str) -> dict:
+    """Structure a format 1 dosing schedule string.
+
+    `a|b|c` lists the times, `S<start>T<interval>R<doses>` gives doses
+    administrations every interval from start, and a `|` list mixing both expands
+    every part into explicit times. Anything else raises ValueError.
+    """
+    parts = [part.strip(WHITESPACE) for part in text.split("|")]
+    if len(parts) == 1:
+        series = _series(parts[0])
+        if series is None:
+            raise ValueError("expected a|b|c or S<start>T<interval>R<doses>")
+        start, interval, doses = series
+        return {"time": start, "interval": interval, "doses": doses}
+    times: list[float] = []
+    for part in parts:
+        if PLAIN_NUMBER.fullmatch(part):
+            times.append(_finite(part))
+        elif (series := _series(part)) is not None:
+            start, interval, doses = series
+            if len(times) + doses > MAX_SCHEDULE_TIMES:
+                raise ValueError(f"more than {MAX_SCHEDULE_TIMES} administration times")
+            times.extend(start + interval * index for index in range(doses))
+        else:
+            raise ValueError(
+                f"{part!r} is neither a time nor S<start>T<interval>R<doses>"
+            )
+    if len(times) > MAX_SCHEDULE_TIMES:
+        raise ValueError(f"more than {MAX_SCHEDULE_TIMES} administration times")
+    if not all(math.isfinite(time) for time in times):
+        raise ValueError("expanded times must be finite")
+    return {"time": times}
+
+
+def _intervention_time(entry: dict, location: SourceLocation) -> None:
+    """Type a format 1 intervention time in place: a number or a schedule string."""
+    if "time" not in entry:
+        return
+    value = clean(entry["time"])
+    if not isinstance(value, str) or PLAIN_NUMBER.fullmatch(value):
+        entry["time"] = _numeric(value)
+        return
+    details = dict(
+        category="schema",
+        stage="parse",
+        field="time",
+        actual=value,
+        expected={"formats": ["a|b|c", "S<start>T<interval>R<doses>"]},
+    )
+    try:
+        schedule = parse_schedule(value)
+    except ValueError as error:
+        fail(
+            "invalid_schedule",
+            f"Invalid dosing schedule {value!r}: {error}",
+            location.for_field("time"),
+            **details,
+        )
+    conflicting = sorted(
+        field for field in schedule.keys() - {"time"} if entry.get(field) is not None
+    )
+    if conflicting:
+        fail(
+            "invalid_schedule",
+            f"Dosing schedule {value!r} conflicts with {', '.join(conflicting)}",
+            location.for_field("time"),
+            **details,
+        )
+    entry.update(schedule)
 
 
 def parse_bundle(bundle: SourceBundle, *, max_rows: int = 1_000_000) -> CanonicalStudy:
@@ -243,32 +376,14 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
     result.update(records)
     tables = {}
     expanded = 0
-    digest = hashlib.sha256(
-        json.dumps(
-            {"study": bundle.study, "reference": reference},
-            sort_keys=True,
-            allow_nan=False,
-        ).encode()
-    )
     for name, file in sorted(bundle.files.items()):
         if file.is_symlink():
             fail("symlink", "Symlink attachments are not accepted")
         if Path(name).name != name or name in {".", ".."}:
             fail("invalid_filename", "Attachment names must be basenames")
-        file_digest = hashlib.sha256()
-        with file.open("rb") as stream:
-            for chunk in iter(lambda: stream.read(1024 * 1024), b""):
-                file_digest.update(chunk)
-        result["attachments"].append(
-            {
-                "name": name,
-                "size": file.stat().st_size,
-                "sha256": file_digest.hexdigest(),
-            }
-        )
-        digest.update(name.encode())
-        digest.update(file_digest.digest())
-    result["source_digest"] = digest.hexdigest()
+    result["attachments"], result["source_digest"] = attachments_and_digest(
+        bundle.study, reference, bundle.files
+    )
 
     def table(source):
         if not isinstance(source, str):
@@ -456,7 +571,12 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
                         if "count" in entry:
                             entry["count"] = _numeric(entry["count"], integer=True)
                         entry["characteristica"] = [
-                            _scientific(c, f"{key}:characteristic:{i}", location)
+                            _scientific(
+                                c,
+                                f"{key}:characteristic:{i}",
+                                location,
+                                group=entity == "groups",
+                            )
                             for i, c in enumerate(
                                 [
                                     part
@@ -467,20 +587,30 @@ def _parse_bundle(bundle: SourceBundle, *, max_rows: int, read_table) -> Canonic
                         ]
                     elif entity in {"interventions", "outputs"}:
                         entry = _scientific(
-                            entry, str(entry.get("name", key)), location
+                            entry,
+                            str(entry.get("name", key)),
+                            location,
+                            group=entity == "outputs"
+                            and clean(entry.get("group")) is not None,
                         )
                         if entity == "outputs":
                             for field in ("time", "time_unit"):
                                 if entry.get(field) == "NR":
                                     entry[field] = None
                                     entry[f"{field}_not_reported"] = True
-                        for field in ("time", "time_end"):
-                            if field in entry and (
-                                entity == "outputs"
-                                or not isinstance(entry[field], str)
-                                or "|" not in entry[field]
-                                and not entry[field].startswith("S")
-                            ):
+                        if entity == "interventions":
+                            for field in ("interval", "doses"):
+                                if field in entry:
+                                    entry[field] = _numeric(
+                                        entry[field], integer=field == "doses"
+                                    )
+                            _intervention_time(entry, location)
+                        for field in (
+                            ("time", "time_end")
+                            if entity == "outputs"
+                            else ("time_end",)
+                        ):
+                            if field in entry:
                                 entry[field] = _numeric(entry[field])
                         if entity == "outputs":
                             entry["series_key"] = (

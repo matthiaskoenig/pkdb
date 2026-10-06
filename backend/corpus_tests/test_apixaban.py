@@ -69,7 +69,20 @@ def test_frost2014_matches_all_legacy_measurements(full_vocabulary):
         data.update(
             {
                 name: getattr(record.statistics, name)
-                for name in ["value", "mean", "median", "min", "max", "sd", "se", "cv"]
+                for name in [
+                    "mean",
+                    "median",
+                    "min",
+                    "max",
+                    "sd",
+                    "se",
+                    "cv",
+                    "gmean",
+                    "gsd",
+                    "gcv",
+                    "error_bar",
+                    "error_type",
+                ]
             }
         )
         data.update(
@@ -181,7 +194,6 @@ def test_frost2014_postgresql_outputs_match_legacy(
                 "time",
                 "time_unit",
                 "unit",
-                "value",
                 "mean",
                 "median",
                 "min",
@@ -189,6 +201,11 @@ def test_frost2014_postgresql_outputs_match_legacy(
                 "sd",
                 "se",
                 "cv",
+                "gmean",
+                "gsd",
+                "gcv",
+                "error_bar",
+                "error_type",
             )
         }
         if row["calculated"]:

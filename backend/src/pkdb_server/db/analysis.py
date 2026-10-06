@@ -39,7 +39,23 @@ ENTITIES = {
     "timecourses": "subsets",
     "data": "subsets",
 }
-VALUES = ("value", "mean", "median", "min", "max", "sd", "se", "cv", "unit")
+# Statistics in analysis column order; the timecourse rows rely on unit being last.
+VALUES = (
+    "mean",
+    "median",
+    "min",
+    "max",
+    "sd",
+    "se",
+    "cv",
+    "gmean",
+    "gsd",
+    "gcv",
+    "count",
+    "error_bar",
+    "error_type",
+    "unit",
+)
 NODES = ("measurement_type", "calculation_type", "choice", "substance")
 
 
@@ -86,14 +102,19 @@ def statement(entity, query, principal):
         fields.update(
             {
                 name: node_name(getattr(Characteristic, name))
-                for name in ("measurement_type", "calculation_type", "substance")
+                for name in (
+                    "measurement_type",
+                    "calculation_type",
+                    "substance",
+                    "tissue",
+                    "method",
+                )
             }
         )
         fields.update(
             {
                 name: getattr(Characteristic, name)
                 for name in (
-                    "value",
                     "mean",
                     "median",
                     "minimum",
@@ -101,9 +122,14 @@ def statement(entity, query, principal):
                     "sd",
                     "se",
                     "cv",
+                    "gmean",
+                    "gsd",
+                    "gcv",
                     "unit",
                     "choice",
                     "count",
+                    "time",
+                    "time_unit",
                 )
             }
         )
@@ -280,12 +306,23 @@ def _serialize(session, entity, rows, principal):
                     "normed": row["normed"],
                     "name": row["name"],
                     **science(
-                        row, labels=True, fields=("route", "form", "application")
+                        row,
+                        labels=True,
+                        fields=(
+                            *NODES,
+                            "route",
+                            "form",
+                            "application",
+                            "tissue",
+                            "method",
+                        ),
                     ),
                     "time": row["time"],
                     "time_end": row["time_end"],
+                    "interval": row["interval"],
+                    "doses": row["doses"],
                     "time_unit": row["time_unit"],
-                    **science(row, labels=True),
+                    "subject_pk": model.subject_id,
                 }
             )
         return result
@@ -307,14 +344,23 @@ def _serialize(session, entity, rows, principal):
                     "individual_group_pk": model.group_id,
                 }
             )
-            record = vocab.science(characteristic)
+            record = vocab.science(characteristic) | {
+                name: vocab.node(getattr(characteristic, name))
+                for name in ("tissue", "method")
+            }
             result.append(
                 {
                     **study(model),
                     **prefix,
                     "characteristica_pk": characteristic.id,
-                    "count": characteristic.count,
-                    **science(record, labels=False, names=True),
+                    **science(
+                        record,
+                        labels=False,
+                        names=True,
+                        fields=(*NODES, "tissue", "method"),
+                    ),
+                    "time": characteristic.time,
+                    "time_unit": characteristic.time_unit,
                 }
             )
         return result

@@ -96,7 +96,11 @@ def test_frdb_unknown_summary_auc_and_raw_context(tmp_path):
     }
     assert all(x["calculation_type"] == SUMMARY for x in study["outputset"]["outputs"])
     assert prepared.study.metadata.provenance.evidence_kind == "unknown"
-    assert not any(x.statistics.mean is not None for x in prepared.study.measurements)
+    assert all(
+        x.statistics.mean is not None
+        and x.statistics.model_dump(exclude_none=True).keys() <= {"mean", "count"}
+        for x in prepared.study.measurements
+    )
     assert not any(x.origin == "calculated" for x in prepared.study.measurements)
     assert report["warning_counts"]["missing_censored_or_non_numeric"] == 1
 
@@ -136,7 +140,8 @@ def test_cvt_censoring_precision_and_aliases(tmp_path):
     assert report["study_count"] == 1
     assert report["mapped_measurements"] == 1
     output = study["outputset"]["outputs"][0]
-    assert output["value"] == 5.123456789012
+    assert output["mean"] == 5.123456789012
+    assert "value" not in output
     assert output["time"] == 1.123456789012
     assert source["records"][1]["values"]["conc_original"] == "NQ"
     assert report["warning_counts"]["missing_censored_or_non_numeric"] == 2
@@ -159,7 +164,8 @@ def test_warfarin_compilation_preserves_duplicate_times_and_placeholders(tmp_pat
     report, study, source, prepared = finish(builder, tmp_path)
     assert report["mapped_measurements"] == 3
     assert len(study["interventionset"]["interventions"]) == 1
-    assert [x["value"] for x in study["outputset"]["outputs"]] == [6, 7, 44]
+    assert [x["mean"] for x in study["outputset"]["outputs"]] == [6, 7, 44]
+    assert [x["mean"] for x in study["interventionset"]["interventions"]] == [100]
     assert prepared.study.reference.pmid is None
     assert prepared.study.reference.doi is None
     assert (

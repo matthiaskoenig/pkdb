@@ -35,7 +35,9 @@ def create_mcp(queries, session_factory):
         return DataPage[ScientificRecord].from_page(page, query).model_dump(mode="json")
 
     def get(principal, sid):
-        return read_study(sid, principal, session_factory).model_dump(mode="json")
+        return read_study(sid, principal, session_factory, by_pkdb_id=True).model_dump(
+            mode="json"
+        )
 
     @server.tool(annotations={"readOnlyHint": True, "destructiveHint": False})
     async def search_studies(query: QuerySpec) -> dict:
@@ -44,7 +46,12 @@ def create_mcp(queries, session_factory):
 
     @server.tool(annotations={"readOnlyHint": True, "destructiveHint": False})
     async def get_study(sid: str) -> dict:
-        """Read the complete canonical definition of an authorized study."""
+        """Read the complete canonical definition of an authorized study.
+
+        `sid` is the study identifier `<substance>/<name>` (such as
+        `caffeine/Harder1988`), a study format 1 sid, or the PKDB identifier of
+        a released study (such as `PKDB00198`).
+        """
         return await run_in_threadpool(execute, get, sid)
 
     @server.tool(annotations={"readOnlyHint": True, "destructiveHint": False})

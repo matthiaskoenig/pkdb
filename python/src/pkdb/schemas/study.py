@@ -15,6 +15,7 @@ from pydantic import (
 )
 
 from pkdb.schemas.provenance import ManualCuration, StudyProvenance
+from pkdb.schemas.review import Release, Review
 from pkdb.schemas.source import SourceLocation
 
 Number = Annotated[float, Field(strict=True, allow_inf_nan=False)]
@@ -55,6 +56,9 @@ class Metadata(Notes):
     collaborators: list[str] = Field(default_factory=list)
     licence: Literal["open", "closed"] = "closed"
     access: Literal["public", "private"] = "private"
+    issue: Annotated[int, Field(strict=True, gt=0)] | None = None
+    release: Release | None = None
+    review: Review | None = None
 
 
 class Author(Record):
@@ -106,7 +110,8 @@ class Reference(Record):
 
 
 class Statistics(Record):
-    value: Number | None = None
+    """Reported statistics; a single subject or unspecified summary uses mean."""
+
     mean: Number | None = None
     median: Number | None = None
     min: Number | None = None
@@ -114,17 +119,34 @@ class Statistics(Record):
     sd: Number | None = None
     se: Number | None = None
     cv: Number | None = None
+    gmean: Number | None = None
+    gsd: Number | None = None
+    gcv: Number | None = None
     count: Annotated[int, Field(strict=True, ge=0)] | None = None
+    error_bar: Number | None = None
+    error_type: Literal["sd", "se", "gsd"] | None = None
 
 
 class Observation(Notes):
-    """Scientific values and provenance shared by characteristics and outputs."""
+    """Scientific values, context and provenance shared by every scientific record.
+
+    Characteristics, interventions and outputs share one row model: what is
+    measured, where (tissue, method), when (time or not reported) and the
+    image of the paper table or figure.
+    """
 
     key: RecordKey
     measurement_type: Identifier
     calculation_type: str | None = None
     choice: str | None = None
     substance: str | None = None
+    tissue: str | None = None
+    method: str | None = None
+    time: Number | None = None
+    time_unit: str | None = None
+    time_not_reported: bool = False
+    time_unit_not_reported: bool = False
+    image: str | None = None
     statistics: Statistics = Field(default_factory=Statistics)
     unit: str | None = None
     source: SourceLocation | None = None
@@ -157,11 +179,13 @@ class Individual(Subject):
 
 
 class Intervention(ScientificRecord):
-    image: str | None = None
     name: Identifier
-    time: Number | str | None = None
+    # The first administration, or every administration of an irregular schedule.
+    time: Number | Annotated[list[Number], Field(min_length=2)] | None = None
     time_end: Number | None = None
-    time_unit: str | None = None
+    interval: Number | None = None
+    doses: Annotated[int, Field(strict=True, ge=1)] | None = None
+    subject: Identifier | None = None
     route: str | None = None
     application: str | None = None
     form: str | None = None
@@ -169,18 +193,11 @@ class Intervention(ScientificRecord):
 
 class Measurement(ScientificRecord):
     series_key: str | None = None
-    time_not_reported: bool = False
-    time_unit_not_reported: bool = False
     group: str | None = None
     individual: str | None = None
     interventions: list[str] = Field(default_factory=list)
-    tissue: str | None = None
-    method: str | None = None
     label: str | None = None
     output_type: Literal["output", "timecourse", "array"] = "output"
-    time: Number | None = None
-    time_unit: str | None = None
-    image: str | None = None
 
 
 class Dimension(Notes):

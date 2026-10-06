@@ -28,6 +28,15 @@ summary {
   outline: 3px solid rgb(var(--v-theme-primary));
   outline-offset: 3px;
 }
+/* A text field shows the focus ring around the whole field: around its input
+   the ring would cross the floating label. */
+.v-field input:focus-visible {
+  outline: none;
+}
+.v-field:has(input:focus-visible) {
+  outline: 3px solid rgb(var(--v-theme-primary));
+  outline-offset: 2px;
+}
 h1 {
   font-size: clamp(1.8rem, 3vw, 2.7rem);
   line-height: 1.18;
@@ -44,16 +53,22 @@ p {
   line-height: 1.65;
   margin: 0.5rem 0 1rem;
 }
+/* Hidden until it has keyboard focus, so it is in no screenshot or print. */
 .skip-link {
   position: fixed;
-  top: -100px;
+  top: 12px;
   left: 16px;
   z-index: 9999;
   padding: 12px;
   background: rgb(var(--v-theme-surface));
 }
-.skip-link:focus {
-  top: 12px;
+.skip-link:not(:focus) {
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
 }
 .app-header {
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
@@ -365,14 +380,19 @@ table {
 .science-table th {
   background: rgba(var(--v-theme-primary), 0.05);
   font-size: 0.75rem;
-  white-space: nowrap;
 }
 .science-table th,
 .science-table td {
-  padding: 14px 16px;
+  padding: 14px 12px;
   border-bottom: 1px solid rgba(var(--v-border-color), 0.08);
   max-width: 300px;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+}
+.science-table td.nowrap {
+  white-space: nowrap;
+}
+.science-table td.identifier {
+  white-space: nowrap;
 }
 .science-table tbody tr:last-child td {
   border: 0;
@@ -380,9 +400,12 @@ table {
 .science-table tbody tr:hover {
   background: rgba(var(--v-theme-primary), 0.035);
 }
+/* A sortable title keeps its arrow; other titles wrap between words when the
+   table needs the room. */
 .sort-button {
   text-align: left;
   font-weight: 700;
+  white-space: nowrap;
 }
 .detail-button {
   color: rgb(var(--v-theme-primary));
@@ -483,18 +506,21 @@ table {
   border-bottom-color: rgb(var(--v-theme-primary));
   background: rgba(var(--v-theme-primary), 0.05);
 }
+/* Header and button texts start where the other texts of their column start. */
 .sort-button {
   font-size: inherit;
   font-weight: 700;
+  padding: 0;
 }
 .detail-button {
   font-weight: 650;
+  padding: 0;
 }
 .science-table {
   min-width: 720px;
 }
 .science-table td {
-  min-width: 100px;
+  min-width: 72px;
 }
 .v-combobox {
   --v-input-control-height: 40px;

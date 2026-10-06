@@ -1,5 +1,6 @@
 import { beforeEach, expect, it, vi } from "vitest";
 import { flushPromises, mount } from "@vue/test-utils";
+import { makeVuetify } from "../../src/plugins/vuetify";
 import ScientificPlot from "../../src/features/plots/components/ScientificPlot.vue";
 const engine = vi.hoisted(() => ({
   react: vi.fn(),
@@ -8,7 +9,7 @@ const engine = vi.hoisted(() => ({
 }));
 const loader = vi.hoisted(() => ({ load: vi.fn() }));
 vi.mock("../../src/features/plots/plotly", () => ({ loadPlotly: loader.load }));
-const points = [[{ pk: 1, time: 0, time_unit: "h", unit: "mg/l", value: 0 }]];
+const points = [[{ pk: 1, time: 0, time_unit: "h", unit: "mg/l", mean: 0 }]];
 beforeEach(() => {
   engine.react.mockReset().mockResolvedValue(undefined);
   engine.purge.mockReset();
@@ -66,7 +67,7 @@ it("serializes replacement renders and cleans up a render finishing after unmoun
   });
   await flushPromises();
   await wrapper.setProps({
-    points: [[{ pk: 2, time: 2, time_unit: "h", unit: "mg/l", value: 10 }]],
+    points: [[{ pk: 2, time: 2, time_unit: "h", unit: "mg/l", mean: 10 }]],
   });
   await flushPromises();
   expect(engine.react).toHaveBeenCalledTimes(1);
@@ -75,4 +76,182 @@ it("serializes replacement renders and cleans up a render finishing after unmoun
   await flushPromises();
   expect(engine.react).toHaveBeenCalledTimes(1);
   expect(engine.purge).toHaveBeenCalledTimes(2);
+});
+it("names the trace by the timecourse label and tabulates geometric statistics", async () => {
+  const wrapper = mount(ScientificPlot, {
+    props: {
+      kind: "timecourse",
+      points: [
+        [
+          {
+            pk: 7,
+            time: 1,
+            time_unit: "h",
+            unit: "mg/l",
+            gmean: 8,
+            gsd: 2,
+            gcv: 0.22595033203145737,
+            label: "Plasma after 10 mg",
+          },
+        ],
+      ],
+    },
+  });
+  await flushPromises();
+  expect(engine.react).toHaveBeenCalledWith(
+    expect.any(HTMLElement),
+    [
+      expect.objectContaining({
+        name: "Plasma after 10 mg",
+        showlegend: true,
+        y: [8],
+        error_y: expect.objectContaining({
+          symmetric: false,
+          array: [8],
+          arrayminus: [4],
+        }),
+      }),
+    ],
+    expect.objectContaining({
+      yaxis: expect.objectContaining({
+        title: { text: "geometric mean [mg/l]" },
+      }),
+    }),
+    expect.any(Object),
+  );
+  const headers = wrapper.findAll("th").map((header) => header.text());
+  expect(headers).toEqual(
+    expect.arrayContaining([
+      "Mean",
+      "Median",
+      "Geometric mean",
+      "Geometric SD",
+      "Geometric CV",
+    ]),
+  );
+  expect(headers).not.toContain("Value");
+  expect(wrapper.get("caption").text()).toBe(
+    "Point values and their uncertainty; missing values are shown as -",
+  );
+  const cells = wrapper.findAll("tbody td").map((cell) => cell.text());
+  expect(cells).toEqual(expect.arrayContaining(["8", "2", "22.6\u00a0%"]));
+  wrapper.unmount();
+});
+it("rounds the table and the hover to four significant digits", async () => {
+  const wrapper = mount(ScientificPlot, {
+    props: {
+      kind: "timecourse",
+      points: [
+        [
+          {
+            pk: 7,
+            time: 0.30000000000000004,
+            time_unit: "h",
+            unit: "mg/l",
+            mean: 0.009000000000000001,
+            sd: 0.1111111111111111,
+            cv: 0.07,
+          },
+        ],
+      ],
+    },
+  });
+  await flushPromises();
+  const cells = wrapper.findAll("tbody td").map((cell) => cell.text());
+  expect(cells).toEqual(
+    expect.arrayContaining(["0.3", "0.009", "0.1111", "7\u00a0%"]),
+  );
+  expect(engine.react).toHaveBeenCalledWith(
+    expect.any(HTMLElement),
+    expect.any(Array),
+    expect.objectContaining({
+      xaxis: expect.objectContaining({ hoverformat: ".4~g" }),
+      yaxis: expect.objectContaining({ hoverformat: ".4~g" }),
+    }),
+    expect.any(Object),
+  );
+  wrapper.unmount();
+});
+it("draws the chart on the surface of the light and the dark theme", async () => {
+  const vuetify = makeVuetify();
+  const wrapper = mount(ScientificPlot, {
+    props: { points, kind: "timecourse" },
+    global: { plugins: [vuetify] },
+  });
+  await flushPromises();
+  expect(engine.react).toHaveBeenLastCalledWith(
+    expect.any(HTMLElement),
+    [
+      expect.objectContaining({
+        line: { color: "#176b70" },
+        marker: { color: "#176b70" },
+      }),
+    ],
+    expect.objectContaining({
+      paper_bgcolor: "#ffffff",
+      plot_bgcolor: "#ffffff",
+      font: { color: "#000" },
+    }),
+    expect.any(Object),
+  );
+  vuetify.theme.change("dark");
+  await flushPromises();
+  const layout = engine.react.mock.lastCall?.[2];
+  expect(layout).toMatchObject({
+    paper_bgcolor: "#192b31",
+    plot_bgcolor: "#192b31",
+  });
+  expect(layout.font.color).not.toBe("#000");
+  expect(layout.yaxis.gridcolor).toMatch(/^rgba\(/);
+  expect(engine.react.mock.lastCall?.[1][0].line.color).toBe("#79d5d6");
+  wrapper.unmount();
+});
+
+it("numbers the points of a scatter and pairs their axes", async () => {
+  const wrapper = mount(ScientificPlot, {
+    props: {
+      kind: "scatter",
+      points: [
+        [
+          { pk: 9, unit: "kg", mean: 70 },
+          { pk: 10, unit: "mg/l", mean: 2 },
+        ],
+        [
+          { pk: 11, unit: "kg", mean: 80 },
+          { pk: 12, unit: "mg/l", mean: 3 },
+        ],
+      ],
+    },
+  });
+  await flushPromises();
+  const rows = wrapper
+    .findAll("tbody tr")
+    .map((row) => row.findAll("th, td").slice(0, 2).map((cell) => cell.text()));
+  expect(rows).toEqual([
+    ["1", "X"],
+    ["1", "Y"],
+    ["2", "X"],
+    ["2", "Y"],
+  ]);
+  wrapper.unmount();
+});
+it("numbers the points of a timecourse without an axis column", async () => {
+  const wrapper = mount(ScientificPlot, {
+    props: {
+      kind: "timecourse",
+      points: [
+        [{ pk: 32, time: 1, time_unit: "h", unit: "mg/l", mean: 8 }],
+        [{ pk: 33, time: 2, time_unit: "h", unit: "mg/l", mean: 4 }],
+      ],
+    },
+  });
+  await flushPromises();
+  const headers = wrapper.findAll("thead th").map((header) => header.text());
+  expect(headers.slice(0, 2)).toEqual(["Point", "Time"]);
+  expect(headers).not.toContain("Axis");
+  expect(wrapper.findAll("tbody th").map((cell) => cell.text())).toEqual([
+    "1",
+    "2",
+  ]);
+  wrapper.unmount();
 });
