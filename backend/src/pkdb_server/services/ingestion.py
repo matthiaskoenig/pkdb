@@ -4,6 +4,7 @@ import hashlib
 import time
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import NoReturn
 
 from sqlalchemy import or_, select, text
 from sqlalchemy.exc import IntegrityError
@@ -13,12 +14,14 @@ from pkdb.domain.provenance import comment_authors
 from pkdb.domain.validation import PROCESSING_VERSION, prepare_study
 from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.importers.folder import parse_bundle
+from pkdb.references import ReferenceError, normalize_doi, normalize_pmid
 from pkdb.schemas.prepared import PreparedStudy
 from pkdb.schemas.replacement import ReplacementResult
 from pkdb.schemas.security import Principal
 from pkdb.schemas.source import SourceBundle, SourceLocation
 from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import fail
+from pkdb.studyformat.tables import REFERENCE_JSON, STUDY_JSON
 from pkdb.studyformat.validation import prepare_folder
 from pkdb_server.config import Settings
 from pkdb_server.db import replace
@@ -44,19 +47,39 @@ def sid_lock(sid: str) -> int:
 
 
 def stored_study(
-    session: Session, study: CanonicalStudy, *, lock: bool = False
+    session: Session,
+    study: CanonicalStudy,
+    principal: Principal,
+    *,
+    lock: bool = False,
 ) -> Study | None:
     """The stored study that an upload replaces, or None for a new study.
 
     That is the study with the same sid. A released study not yet stored under
     its sid takes over the study stored under its PKDB identifier, as sid
     (study format 1) or as `pkdb_id` (a renamed folder); the caller renames it.
-    A PKDB identifier names at most one study.
+    A PKDB identifier names at most one study. Refusals name other studies
+    only when the principal may read them.
     """
 
     def rows(*conditions):
         statement = select(Study).where(*conditions).order_by(Study.sid)
         return session.scalars(statement.with_for_update() if lock else statement).all()
+
+    def readable(row: Study) -> bool:
+        try:
+            authorize(principal, "read", study_access(row, session))
+        except AuthorizationDenied:
+            return False
+        return True
+
+    def refuse(message: str, field: str) -> NoReturn:
+        fail(
+            "duplicate_pkdb_id",
+            message,
+            SourceLocation(file=STUDY_JSON, path=tuple(field.split("."))),
+            field=field,
+        )
 
     release = study.metadata.release
     pkdb_id = release.pkdb_id if release is not None else None
@@ -64,41 +87,63 @@ def stored_study(
     if root is None and pkdb_id is not None:
         claimed = rows(or_(Study.sid == pkdb_id, Study.pkdb_id == pkdb_id))
         if len(claimed) > 1:
-            fail(
-                "duplicate_pkdb_id",
-                f"{pkdb_id} identifies more than one stored study "
-                f"({', '.join(row.sid for row in claimed)}); "
+            named = (
+                f" ({', '.join(row.sid for row in claimed)})"
+                if all(readable(row) for row in claimed)
+                else ""
+            )
+            refuse(
+                f"{pkdb_id} identifies more than one stored study{named}; "
                 "an administrator must remove one of them",
-                SourceLocation(file="study.json", path=("release", "pkdb_id")),
-                field="release.pkdb_id",
+                "release.pkdb_id",
             )
         root = next(iter(claimed), None)
     others = [] if root is None else [Study.id != root.id]
     if pkdb_id is not None:
         other = session.scalar(
-            select(Study.sid).where(
+            select(Study).where(
                 or_(Study.sid == pkdb_id, Study.pkdb_id == pkdb_id), *others
             )
         )
         if other is not None:
-            fail(
-                "duplicate_pkdb_id",
-                f"{pkdb_id} already identifies the study {other}; "
-                "each release has its own PKDB identifier",
-                SourceLocation(file="study.json", path=("release", "pkdb_id")),
-                field="release.pkdb_id",
+            refuse(
+                (
+                    f"{pkdb_id} already identifies the study {other.sid}"
+                    if readable(other)
+                    else f"Another study already uses {pkdb_id}"
+                )
+                + "; each release has its own PKDB identifier",
+                "release.pkdb_id",
             )
-    renamed = session.scalar(
-        select(Study.sid).where(Study.pkdb_id == study.sid, *others)
-    )
+    renamed = session.scalar(select(Study).where(Study.pkdb_id == study.sid, *others))
     if renamed is not None:
-        fail(
-            "duplicate_pkdb_id",
-            f"{study.sid} is now the study {renamed}; upload its study format 2 folder",
-            SourceLocation(file="study.json", path=("sid",)),
-            field="sid",
+        refuse(
+            f"{study.sid} is now the study {renamed.sid}; upload its study format 2 folder"
+            if readable(renamed)
+            else f"Another study already uses {study.sid} as its PKDB identifier",
+            "sid",
         )
     return root
+
+
+def check_publication_identifiers(study: CanonicalStudy) -> None:
+    """Refuse PubMed IDs and DOIs that have no normalized form.
+
+    Publications are matched by normalized identifiers. Study format 2 refuses
+    such identifiers while loading; this also covers study format 1.
+    """
+    for field, normalizer in (("pmid", normalize_pmid), ("doi", normalize_doi)):
+        value = getattr(study.reference, field)
+        if value:
+            try:
+                normalizer(value)
+            except ReferenceError as error:
+                fail(
+                    "invalid_publication_identifier",
+                    f"{field} {value!r}: {error}",
+                    SourceLocation(file=REFERENCE_JSON, path=(field,)),
+                    field=field,
+                )
 
 
 class IngestionService:
@@ -182,8 +227,8 @@ class IngestionService:
             study = prepared.study
             # Files that the layout ignores, such as the generated workbook.
             unexpected = {path.name for path in source.iterdir()} - {
-                "study.json",
-                "reference.json",
+                STUDY_JSON,
+                REFERENCE_JSON,
                 *(item.name for item in study.attachments),
             }
             if unexpected:
@@ -199,9 +244,10 @@ class IngestionService:
                 fail("file_limit", "Too many source files")
             study = parse_bundle(source, max_rows=self.settings.upload_max_rows)
             prepared = None
+        check_publication_identifiers(study)
         with self.session_factory() as session:
             current = self._principal(session, principal)
-            root = stored_study(session, study)
+            root = stored_study(session, study, current)
             if root is None:
                 authorize_creation(current)
             else:
@@ -293,7 +339,7 @@ class IngestionService:
                 version = session.get(VocabularyVersion, 1)
                 if version is None or version.version != prepared.vocabulary_version:
                     raise PublicationConflict("vocabulary_changed")
-                root = stored_study(session, study, lock=True)
+                root = stored_study(session, study, current, lock=True)
                 created = root is None
                 renamed_from = None
                 if root is None:

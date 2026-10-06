@@ -68,6 +68,20 @@ def normalize_doi(value):
     return value
 
 
+def publication_identifier(pmid, doi):
+    """The identifier of a publication: its normalized PubMed ID, else its DOI.
+
+    Study format 2 names references by it, and the server matches publications
+    by the same normalized identifiers. Raises ReferenceError when the
+    identifier cannot be normalized.
+    """
+    if pmid is not None:
+        return normalize_pmid(pmid)
+    if doi is not None:
+        return normalize_doi(doi)
+    raise ReferenceError("A PubMed ID or a DOI is required")
+
+
 def partial_date(value):
     if value is None or value == "":
         return None

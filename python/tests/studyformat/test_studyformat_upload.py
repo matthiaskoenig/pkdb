@@ -117,9 +117,10 @@ def test_upload_sends_the_exact_files_to_the_study_route(study, sf_vocabulary):
     assert put.headers["X-PKDB-Processing-Version"] == PROCESSING_VERSION
     assert put.headers["X-PKDB-Report-Version"] == "2"
     parts = form_parts(put)
+    # Files, not text fields: the server checks the exact bytes.
     assert parts[:2] == [
-        ("study", None, (study / "study.json").read_bytes()),
-        ("reference", None, (study / "reference.json").read_bytes()),
+        ("study", "study.json", (study / "study.json").read_bytes()),
+        ("reference", "reference.json", (study / "reference.json").read_bytes()),
     ]
     files = {filename: content for name, filename, content in parts[2:]}
     assert {name for name, _, _ in parts[2:]} == {"files"}
@@ -218,7 +219,7 @@ def test_curation_app_validates_on_the_study_route(study, sf_vocabulary, tmp_pat
     assert request.method == "POST"
     assert request.url.raw_path == b"/api/v2/studies/caffeine/Example/validate"
     parts = form_parts(request)
-    assert parts[0] == ("study", None, (study / "study.json").read_bytes())
+    assert parts[0] == ("study", "study.json", (study / "study.json").read_bytes())
     assert {filename for _, filename, _ in parts[2:]} == {
         item.name for item in prepared.study.attachments
     }

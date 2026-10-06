@@ -322,8 +322,8 @@ def test_prepared_format_2_folder_reads_its_upload(valid_study, sf_vocabulary):
     with prepared.source() as source:
         assert source.study_format == 2
         assert source.prepared.study == prepared.study
-        assert source.study == before["study.json"].decode()
-        assert source.reference == before["reference.json"].decode()
+        assert source.study == before["study.json"]
+        assert source.reference == before["reference.json"]
         assert {name: path.read_bytes() for name, path in source.files.items()} == {
             name: content
             for name, content in before.items()

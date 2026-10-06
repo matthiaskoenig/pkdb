@@ -227,3 +227,54 @@ def test_symlinked_json_is_not_read(make_study, valid_files, tmp_path):
         for issue in study.issues
         if issue.source and issue.source.file == "study.json"
     ) == ["missing_file", "symlink"]
+
+
+@pytest.mark.parametrize("doi", ["10.1234/a%20b", "10.1234/a%0Ab"])
+def test_identifiers_without_normalized_form_are_refused(make_study, valid_files, doi):
+    # The server matches publications by normalized identifiers.
+    import json
+
+    study_json = json.loads(valid_files["study.json"])
+    study_json["reference"] = {"doi": doi}
+    reference = {"sid": "x", "name": "Example", "doi": doi}
+    study = load_study(
+        make_study(
+            {
+                **valid_files,
+                "study.json": json.dumps(study_json),
+                "reference.json": json.dumps(reference),
+            }
+        )
+    )
+    assert study.metadata is None and study.reference is None
+    found = sorted(
+        (issue.code, issue.source.file, issue.field)
+        for issue in study.issues
+        if issue.source
+    )
+    assert found == [
+        ("invalid_reference_json", "reference.json", "doi"),
+        ("invalid_study_json", "study.json", "reference.doi"),
+    ]
+    assert all("not a valid DOI" in issue.message for issue in study.issues)
+
+
+def test_identifiers_keep_their_spelling(make_study, valid_files):
+    import json
+
+    study_json = json.loads(valid_files["study.json"])
+    study_json["reference"] = {"doi": "10.1234/ABC%2Fdef"}
+    reference = {"sid": "x", "name": "Example", "doi": "https://doi.org/10.1234/ABC"}
+    study = load_study(
+        make_study(
+            {
+                **valid_files,
+                "study.json": json.dumps(study_json),
+                "reference.json": json.dumps(reference),
+            }
+        )
+    )
+    assert study.metadata is not None and study.metadata.reference is not None
+    assert study.metadata.reference.doi == "10.1234/ABC%2Fdef"
+    assert study.reference is not None
+    assert study.reference["doi"] == "https://doi.org/10.1234/ABC"

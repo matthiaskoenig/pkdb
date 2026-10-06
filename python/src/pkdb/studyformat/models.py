@@ -1,15 +1,18 @@
-"""study.json and review.json of study format 2."""
+"""study.json, review.json and reference.json of study format 2."""
 
+from collections.abc import Callable
 from typing import Annotated, Literal
 
-from pydantic import Field, PlainSerializer, model_validator
+from pydantic import AfterValidator, Field, PlainSerializer, model_validator
 
+from pkdb.references import ReferenceError, normalize_doi, normalize_pmid
 from pkdb.schemas.provenance import ManualCuration, StudyProvenance
 from pkdb.schemas.review import Model, Release, Review, Text, User
 from pkdb.schemas.review import ReviewItem as ReviewItem
 from pkdb.schemas.review import ReviewTarget as ReviewTarget
 from pkdb.schemas.review import ThreadEntry as ThreadEntry
 from pkdb.schemas.review import Ulid as Ulid
+from pkdb.schemas.study import Reference
 from pkdb.studyformat.jsonio import dump_json
 
 TABLE_KINDS = (
@@ -25,11 +28,34 @@ TableKind = Literal[
 ]
 
 
+def _normalizable(normalizer: Callable[[str], str], kind: str) -> AfterValidator:
+    """Accept an identifier that PK-DB can normalize, unchanged.
+
+    The server matches publications by normalized identifiers, so one that has
+    no normalized form cannot be published.
+    """
+
+    def check(value: str) -> str:
+        try:
+            normalizer(value)
+        except ReferenceError:
+            raise ValueError(
+                f"{value!r} is not a valid {kind}, also after decoding percent escapes"
+            ) from None
+        return value
+
+    return AfterValidator(check)
+
+
+PubMedId = Annotated[str, _normalizable(normalize_pmid, "PubMed ID")]
+Doi = Annotated[str, _normalizable(normalize_doi, "DOI")]
+
+
 class StudyReference(Model):
     """Identifiers of the publication; the single source for which paper is curated."""
 
-    pmid: Annotated[str, Field(pattern=r"^[1-9][0-9]*$")] | None = None
-    doi: Annotated[str, Field(pattern=r"^10\.\d{4,9}/\S+$")] | None = None
+    pmid: Annotated[PubMedId, Field(pattern=r"^[1-9][0-9]*$")] | None = None
+    doi: Annotated[Doi, Field(pattern=r"^10\.\d{4,9}/\S+$")] | None = None
 
     @model_validator(mode="after")
     def identifier(self):
@@ -67,6 +93,17 @@ class Notes(Model):
 
     descriptions: list[Text] = Field(default_factory=list)
     comments: list[Comment] = Field(default_factory=list)
+
+
+class ReferenceSnapshot(Reference):
+    """Content of `reference.json`: the canonical reference of the publication.
+
+    Its PubMed ID and DOI must have the normalized form by which the server
+    matches publications.
+    """
+
+    pmid: PubMedId | None = None
+    doi: Doi | None = None
 
 
 class StudyMetadata(Model):

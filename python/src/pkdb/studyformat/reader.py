@@ -11,7 +11,7 @@ from collections.abc import Callable, Mapping
 
 from pydantic import BaseModel, ValidationError
 
-from pkdb.references import ReferenceError, normalize_doi, normalize_pmid
+from pkdb.references import publication_identifier
 from pkdb.schemas.source import SourceLocation
 from pkdb.schemas.study import (
     CanonicalStudy,
@@ -451,23 +451,9 @@ def _reference(study: LoadedStudy) -> dict:
     named = study.metadata.reference
     data = dict(study.reference)
     if named is not None:
-        data["sid"] = (
-            normalize_pmid(named.pmid) if named.pmid else _normalized_doi(named.doi)
-        )
+        # Validation accepts only identifiers that can be normalized.
+        data["sid"] = publication_identifier(named.pmid, named.doi)
     return data
-
-
-def _normalized_doi(doi: str | None) -> str:
-    """The lowercase DOI by which publications are matched.
-
-    A DOI whose percent escapes decode to white space has no normalized form;
-    it is compared without case, as validation does.
-    """
-    assert doi is not None
-    try:
-        return normalize_doi(doi)
-    except ReferenceError:
-        return doi.lower()
 
 
 def read_study(study: LoadedStudy) -> CanonicalStudy:

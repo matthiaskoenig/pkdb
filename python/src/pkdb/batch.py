@@ -22,8 +22,7 @@ from pkdb.preparation import source_hashes
 from pkdb.references import (
     ReferenceError,
     ReferenceResolver,
-    normalize_doi,
-    normalize_pmid,
+    publication_identifier,
     sync_reference,
 )
 from pkdb.schemas.validation import StudyValidationError
@@ -214,10 +213,9 @@ def _identity(folder: Path) -> tuple[str | None, str | None]:
         key = None
         if isinstance(reference, dict):
             try:
-                if reference.get("pmid") is not None:
-                    key = normalize_pmid(reference["pmid"])
-                elif reference.get("doi") is not None:
-                    key = normalize_doi(reference["doi"])
+                key = publication_identifier(
+                    reference.get("pmid"), reference.get("doi")
+                )
             except ReferenceError:
                 key = None
         return study_label(folder), key

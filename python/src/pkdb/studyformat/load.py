@@ -7,13 +7,12 @@ from pathlib import Path
 
 from pydantic import BaseModel, ValidationError
 
-from pkdb.schemas.study import Reference
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.cells import canonical_cell, parse_cell
 from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.jsonio import JsonFileError, load_json
 from pkdb.studyformat.layout import Layout, scan_folder
-from pkdb.studyformat.models import Review, StudyMetadata
+from pkdb.studyformat.models import ReferenceSnapshot, Review, StudyMetadata
 from pkdb.studyformat.tables import (
     REFERENCE_JSON,
     REVIEW_JSON,
@@ -329,7 +328,7 @@ def load_study(folder: Path) -> LoadedStudy:
     study.metadata = _validate(study, STUDY_JSON, StudyMetadata, "invalid_study_json")
     study.review = _validate(study, REVIEW_JSON, Review, "invalid_review_json")
     if (
-        _validate(study, REFERENCE_JSON, Reference, "invalid_reference_json")
+        _validate(study, REFERENCE_JSON, ReferenceSnapshot, "invalid_reference_json")
         is not None
     ):
         reference = _read_json(study, REFERENCE_JSON)

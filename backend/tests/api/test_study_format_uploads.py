@@ -118,27 +118,26 @@ def write_study(root: Path, name="Example", *, pmid="123", release=None) -> Path
     return folder
 
 
-def multipart(folder: Path, files: dict[str, bytes] | None = None):
-    """The parts the client sends: exact JSON text and every other study file.
+def multipart(
+    folder: Path,
+    files: dict[str, bytes] | None = None,
+    *,
+    json_files: dict[str, bytes] | None = None,
+):
+    """The parts the client sends: study.json and reference.json as files with
+    their exact bytes, and every other study file.
 
-    `files` replaces or adds file parts.
+    `files` replaces or adds file parts, `json_files` replaces JSON files.
     """
+    contents = {path.name: path.read_bytes() for path in sorted(folder.iterdir())}
+    contents |= json_files or {}
     attachments = {
-        path.name: path.read_bytes()
-        for path in sorted(folder.iterdir())
-        if path.name not in JSON_FILES
+        name: content for name, content in contents.items() if name not in JSON_FILES
     } | (files or {})
     return {
         "files": [
             *(
-                (
-                    part,
-                    (
-                        None,
-                        (folder / file).read_text(encoding="utf-8"),
-                        "application/json",
-                    ),
-                )
+                (part, (file, contents[file], "application/json"))
                 for part, file in zip(("study", "reference"), JSON_FILES, strict=True)
             ),
             *(
@@ -277,7 +276,17 @@ def test_only_study_files_are_accepted(client, creator_headers, folder, name):
 
 
 @pytest.mark.parametrize(
-    "path", ["%2E%2E/Example", "caffeine/%2E", "back%5Cslash/Example"]
+    "path",
+    [
+        "%2E%2E/Example",
+        "caffeine/%2E",
+        "back%5Cslash/Example",
+        # Folder names of more than 255 bytes, and a sid of more than 255 characters.
+        "caffeine/" + "A" * 256,
+        "caffeine/" + "µ" * 128,
+        "c" * 100 + "/" + "E" * 160,
+    ],
+    ids=["dots", "dot", "backslash", "long", "long_bytes", "long_sid"],
 )
 def test_study_location_must_name_folders(client, creator_headers, folder, path):
     for method, url in (
@@ -311,6 +320,128 @@ def test_route_follows_the_study_format(client, creator_headers, folder, valid_b
         )
         assert response.status_code == 422
         assert response.json()["issues"][0]["code"] == "study_format_route"
+
+
+def test_study_files_are_sent_as_files(client, creator_headers, folder):
+    # Text fields lose the exact bytes: Starlette decodes them as Latin-1 when needed.
+    parts = multipart(folder)["files"]
+    for index, file in enumerate(JSON_FILES):
+        parts[index] = (
+            parts[index][0],
+            (None, (folder / file).read_text(encoding="utf-8")),
+        )
+    response = client.put(URL, headers=creator_headers, files=parts)
+    assert response.status_code == 422
+    assert response.json()["issues"][0]["code"] == "bundle_fields"
+
+
+def test_study_json_bytes_are_checked(client, creator_headers, folder):
+    content = (folder / "study.json").read_bytes()
+    latin_1 = content.replace("µ".encode(), b"\xb5")
+    assert latin_1 != content
+    for method, url in (("post", URL + "/validate"), ("put", URL)):
+        response = getattr(client, method)(
+            url,
+            headers=creator_headers,
+            **multipart(folder, json_files={"study.json": latin_1}),
+        )
+        assert response.status_code == 422
+        [issue] = response.json()["issues"]
+        assert (issue["code"], issue["source"]["file"]) == (
+            "invalid_encoding",
+            "study.json",
+        )
+
+
+def test_non_canonical_study_json_is_rejected(client, creator_headers, folder):
+    compact = json.dumps(json.loads((folder / "study.json").read_text())).encode()
+    response = client.put(
+        URL,
+        headers=creator_headers,
+        **multipart(folder, json_files={"study.json": compact}),
+    )
+    assert response.status_code == 422
+    [issue] = response.json()["issues"]
+    assert (issue["code"], issue["source"]["file"]) == ("not_formatted", "study.json")
+
+
+def test_doi_without_normalized_form_is_refused(client, creator_headers, folder):
+    # The pattern accepts the DOI, but it has no normalized form for the server.
+    doi = "10.1234/a%20b"
+    study = json.loads((folder / "study.json").read_text())
+    study["reference"] = {"doi": doi}
+    reference = json.loads((folder / "reference.json").read_text())
+    reference.update(sid=doi, doi=doi)
+    del reference["pmid"]
+    replaced = {
+        "study.json": dump_json(study).encode(),
+        "reference.json": dump_json(reference).encode(),
+    }
+    headers = {**creator_headers, "X-PKDB-Report-Version": "2"}
+    for method, url in (("post", URL + "/validate"), ("put", URL)):
+        response = getattr(client, method)(
+            url, headers=headers, **multipart(folder, json_files=replaced)
+        )
+        assert response.status_code == 422, response.text
+        found = {
+            (issue["code"], issue["source"]["file"], issue["field"])
+            for issue in response.json()["report"]["issues"]
+        }
+        assert found == {
+            ("invalid_study_json", "study.json", "reference.doi"),
+            ("invalid_reference_json", "reference.json", "doi"),
+        }
+
+
+def test_format_1_doi_without_normalized_form_is_refused(
+    client, creator_headers, valid_bundle
+):
+    valid_bundle.reference["doi"] = "10.1234/a%20b"
+    url = "/api/v2/studies/" + valid_bundle.study["sid"]
+    headers = {**creator_headers, "X-PKDB-Report-Version": "2"}
+    for method, path in (("post", "/api/v2/studies/validate"), ("put", url)):
+        response = getattr(client, method)(
+            path, headers=headers, **format_1(valid_bundle)
+        )
+        assert response.status_code == 422, response.text
+        [issue] = response.json()["report"]["issues"]
+        assert (issue["code"], issue["source"]["file"], issue["field"]) == (
+            "invalid_publication_identifier",
+            "reference.json",
+            "doi",
+        )
+
+
+def test_long_file_names_are_refused(client, creator_headers, folder, valid_bundle):
+    name = "A" * 252 + ".pdf"
+    parts = format_1(valid_bundle)["files"]
+    format_1_parts = [
+        *((part, value) for part, value in parts.items()),
+        ("files", (name, b"%PDF", "application/pdf")),
+    ]
+    for url, request in (
+        (URL, multipart(folder, {name: b"%PDF"})),
+        ("/api/v2/studies/" + valid_bundle.study["sid"], {"files": format_1_parts}),
+    ):
+        response = client.put(url, headers=creator_headers, **request)
+        assert response.status_code == 422, response.text
+        [issue] = response.json()["issues"]
+        assert issue["code"] == "invalid_filename"
+        assert "255 bytes" in issue["message"]
+
+
+@pytest.mark.parametrize("part", ["study", "reference"])
+def test_huge_json_integers_are_invalid_json(client, creator_headers, part):
+    parts = {
+        "study": (None, '{"sid": "TEST1"}', "application/json"),
+        "reference": (None, '{"sid": "REF1"}', "application/json"),
+    }
+    parts[part] = (None, '{"sid": ' + "1" * 5000 + "}", "application/json")
+    response = client.post(
+        "/api/v2/studies/validate", headers=creator_headers, files=parts
+    )
+    assert response.status_code == 422
+    assert response.json()["issues"][0]["code"] == "invalid_json"
 
 
 def upload_format_1(client, headers, valid_bundle, sid):
@@ -419,6 +550,34 @@ def test_pkdb_identifier_names_one_study(
         "caffeine/Example": "PKDB00198",
         "caffeine/Other": None,
     }
+
+
+def test_refusals_name_only_readable_studies(
+    client, creator_headers, tmp_path, session_factory
+):
+    from pkdb_server.db.models.users import User
+    from pkdb_server.services.authentication import issue_token
+
+    private = write_study(tmp_path / "a", release="PKDB00198")
+    assert (
+        client.put(URL, headers=creator_headers, **multipart(private)).status_code
+        == 201
+    )
+    with session_factory.begin() as session:
+        user = User(username="other", role="curator", active=True)
+        session.add(user)
+        session.flush()
+        other = {"Authorization": f"Token {issue_token(user, session)}"}
+    url = "/api/v2/studies/caffeine/Other"
+    own = write_study(tmp_path / "b", "Other", pmid="456")
+    assert client.put(url, headers=other, **multipart(own)).status_code == 201
+    claim = write_study(tmp_path / "c", "Other", pmid="456", release="PKDB00198")
+    response = client.put(url, headers=other, **multipart(claim))
+    assert response.status_code == 422, response.text
+    [issue] = response.json()["issues"]
+    assert issue["code"] == "duplicate_pkdb_id"
+    assert issue["message"].startswith("Another study already uses PKDB00198")
+    assert "caffeine/Example" not in response.text
 
 
 def test_ambiguous_pkdb_identifier_is_refused(

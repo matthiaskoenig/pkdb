@@ -23,6 +23,8 @@ from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.schemas.security import Principal
 from pkdb.schemas.source import SourceBundle
 from pkdb.schemas.validation import StudyValidationError, fail
+from pkdb.studyformat.jsonio import JsonFileError, load_json
+from pkdb.studyformat.tables import REFERENCE_JSON, STUDY_JSON
 from pkdb.studyformat.validation import FORMAT_VERSION, study_path
 from pkdb_server import __version__
 from pkdb_server.api import (
@@ -65,8 +67,28 @@ from pkdb_server.services.quotas import QuotaService
 
 log = logging.getLogger(__name__)
 SCHEMA_REVISION = "p006studyformat"
-# The JSON files of a study format 2 folder and the multipart parts that carry them.
-STUDY_PARTS = {"study.json": "study", "reference.json": "reference"}
+# File names and folder names are limited by common file systems.
+NAME_BYTES = 255
+SID_LENGTH = 255
+FORMAT_1_ROUTE = (
+    "Upload study format 1 bundles to /api/v2/studies/{sid} "
+    "and validate them at /api/v2/studies/validate"
+)
+FORMAT_2_ROUTE = (
+    "Upload study format 2 folders to /api/v2/studies/{substance}/{name} "
+    "and validate them at /api/v2/studies/{substance}/{name}/validate"
+)
+
+
+def valid_location(location: tuple[str, str]) -> bool:
+    """Whether a study format 2 location names a folder in a temporary folder."""
+    return len("/".join(location)) <= SID_LENGTH and all(
+        part not in {".", ".."}
+        and "\\" not in part
+        and part.isprintable()
+        and len(part.encode()) <= NAME_BYTES
+        for part in location
+    )
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -217,7 +239,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             return json.loads(
                 value, object_pairs_hook=unique_pairs, parse_constant=invalid_constant
             )
-        except json.JSONDecodeError, RecursionError:
+        except StudyValidationError:
+            raise
+        except ValueError, RecursionError:
+            # Malformed JSON, or an integer with more digits than Python converts.
             fail("invalid_json", "Malformed JSON form field")
 
     async def upload(
@@ -259,7 +284,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         request.state.upload_stage = "parse"
         try:
             async with request.form(
-                max_files=settings.upload_max_files,
+                # Study format 2 sends study.json and reference.json as files too.
+                max_files=settings.upload_max_files + 2,
                 max_fields=2,
                 max_part_size=settings.upload_max_bytes,
             ) as form:
@@ -272,49 +298,69 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                     )
                 if set(form) - {"study", "reference", "files"}:
                     fail("bundle_fields", "Unknown multipart field")
-                study_text, reference_text = form["study"], form["reference"]
-                if not isinstance(study_text, str) or not isinstance(
-                    reference_text, str
-                ):
-                    fail("invalid_json", "JSON form fields must contain text")
-                study = parse_json(study_text)
-                reference = parse_json(reference_text)
-                if not isinstance(study, dict) or not isinstance(reference, dict):
-                    fail("invalid_json", "Study and reference must be JSON objects")
-                study_format = 2 if study.get("format") == FORMAT_VERSION else 1
                 if location is not None:
                     request.state.upload_study = {
                         "sid": "/".join(location),
                         "name": location[1],
                     }
+                    if not valid_location(location):
+                        fail(
+                            "invalid_study_location",
+                            "The substance and the study name must be folder names "
+                            f"of at most {NAME_BYTES} bytes, and the study identifier "
+                            f"at most {SID_LENGTH} characters",
+                        )
+                study_part, reference_part = form["study"], form["reference"]
+                contents: dict[str, bytes] = {}
+                if isinstance(study_part, UploadFile) and isinstance(
+                    reference_part, UploadFile
+                ):
+                    # Study format 2 sends study.json and reference.json as files,
+                    # so validation sees the exact bytes of the curator's files.
+                    contents = {
+                        STUDY_JSON: await study_part.read(),
+                        REFERENCE_JSON: await reference_part.read(),
+                    }
+                    try:
+                        declared = load_json(contents[STUDY_JSON])
+                    except JsonFileError:
+                        # Validation reports a broken study.json at its file.
+                        declared = None
+                    version = (
+                        declared.get("format") if isinstance(declared, dict) else None
+                    )
+                    if location is None:
+                        if version == FORMAT_VERSION:
+                            fail("study_format_route", FORMAT_2_ROUTE)
+                        fail("invalid_json", "JSON form fields must contain text")
+                    if isinstance(declared, dict) and version != FORMAT_VERSION:
+                        fail("study_format_route", FORMAT_1_ROUTE)
                 else:
+                    if not isinstance(study_part, str) or not isinstance(
+                        reference_part, str
+                    ):
+                        fail("invalid_json", "JSON form fields must contain text")
+                    study = parse_json(study_part)
+                    reference = parse_json(reference_part)
+                    if not isinstance(study, dict) or not isinstance(reference, dict):
+                        fail("invalid_json", "Study and reference must be JSON objects")
+                    if study.get("format") == FORMAT_VERSION:
+                        if location is None:
+                            fail("study_format_route", FORMAT_2_ROUTE)
+                        fail(
+                            "bundle_fields",
+                            "Send study.json and reference.json of a study format 2 "
+                            "folder as files, so the server checks their exact bytes",
+                        )
+                    if location is not None:
+                        fail("study_format_route", FORMAT_1_ROUTE)
                     request.state.upload_study = {
                         key: study[key]
                         for key in ("sid", "name")
                         if isinstance(study.get(key), str)
                     }
-                if (study_format == 2) != (location is not None):
-                    fail(
-                        "study_format_route",
-                        "Upload study format 2 folders to "
-                        "/api/v2/studies/{substance}/{name} and validate them at "
-                        "/api/v2/studies/{substance}/{name}/validate"
-                        if study_format == 2
-                        else "Upload study format 1 bundles to /api/v2/studies/{sid} "
-                        "and validate them at /api/v2/studies/validate",
-                    )
-                if location is not None and any(
-                    part in {".", ".."}
-                    or any(c in part for c in "\\\0")
-                    or not part.isprintable()
-                    for part in location
-                ):
-                    fail(
-                        "invalid_study_location",
-                        "The substance and the study name must be folder names",
-                    )
-                if sid is not None and str(study.get("sid")) != sid:
-                    fail("sid_mismatch", "Path SID must match study SID")
+                    if sid is not None and str(study.get("sid")) != sid:
+                        fail("sid_mismatch", "Path SID must match study SID")
                 with TemporaryDirectory(prefix="pkdb-upload-") as directory:
                     folder = Path(directory)
                     if location is not None:
@@ -334,10 +380,15 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                                 "invalid_filename",
                                 "Invalid or duplicate attachment filename",
                             )
-                        if location is not None and name in STUDY_PARTS:
+                        if len(name.encode()) > NAME_BYTES:
                             fail(
                                 "invalid_filename",
-                                f"{name} is sent as the {STUDY_PARTS[name]} part, "
+                                f"File names must be at most {NAME_BYTES} bytes",
+                            )
+                        if location is not None and name in contents:
+                            fail(
+                                "invalid_filename",
+                                f"{name} is sent as a study or reference part, "
                                 "not as a file",
                             )
                         path = folder / name
@@ -345,14 +396,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                         files[name] = path
                     source: SourceBundle | Path
                     if location is not None:
-                        # The exact text, so the format check sees the curator's file.
-                        for name, text in (
-                            ("study.json", study_text),
-                            ("reference.json", reference_text),
-                        ):
-                            (folder / name).write_text(
-                                text, encoding="utf-8", newline=""
-                            )
+                        for name, content in contents.items():
+                            (folder / name).write_bytes(content)
                         source = folder
                     else:
                         source = SourceBundle(

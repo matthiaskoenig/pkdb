@@ -23,6 +23,7 @@ from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import ValidationReport, fail
 from pkdb.source_files import ignored_source
 from pkdb.studyformat.load import load_study
+from pkdb.studyformat.tables import REFERENCE_JSON, STUDY_JSON
 from pkdb.studyformat.validation import (
     check_limits,
     is_v2_folder,
@@ -30,7 +31,7 @@ from pkdb.studyformat.validation import (
     study_path,
 )
 
-type Part = tuple[str, tuple[None, str] | tuple[str, BinaryIO, str]]
+type Part = tuple[str, tuple[None, bytes] | tuple[str, bytes | BinaryIO, str]]
 
 
 def study_folders(path: str | Path) -> list[Path]:
@@ -91,17 +92,18 @@ def source_snapshot(folder: Path):
 class UploadSource:
     """The parts of a study upload, read from a private snapshot of its folder.
 
-    `study` and `reference` are the texts of the study and reference parts:
-    study format 2 sends the exact file text, study format 1 the parsed objects
-    as JSON. `files` maps the attachment names to their files in the snapshot
-    at `root`. `prepared` is the snapshot prepared again, so the upload sends
-    what was checked.
+    `study` and `reference` are the content of the study and reference parts:
+    the exact bytes of study.json and reference.json in study format 2, sent as
+    files so the server checks those bytes, and the parsed objects as JSON
+    text fields in study format 1. `files` maps the attachment names to their
+    files in the snapshot at `root`. `prepared` is the snapshot prepared again,
+    so the upload sends what was checked.
     """
 
     root: Path
     prepared: PreparedStudy
-    study: str
-    reference: str
+    study: bytes
+    reference: bytes
     files: Mapping[str, Path]
     study_format: int = 1
 
@@ -132,10 +134,14 @@ class UploadSource:
 
         The files stay open until `stack` closes.
         """
-        parts: list[Part] = [
-            ("study", (None, self.study)),
-            ("reference", (None, self.reference)),
-        ]
+        parts: list[Part] = (
+            [
+                ("study", (STUDY_JSON, self.study, "application/json")),
+                ("reference", (REFERENCE_JSON, self.reference, "application/json")),
+            ]
+            if self.study_format == 2
+            else [("study", (None, self.study)), ("reference", (None, self.reference))]
+        )
         parts.extend(
             (
                 "files",
@@ -160,7 +166,7 @@ def read_upload(
 ) -> UploadSource:
     """Prepare a snapshot of a study folder and read the parts of its upload.
 
-    Study format 2 sends the exact text of study.json and reference.json and
+    Study format 2 sends the exact bytes of study.json and reference.json and
     every other file of the study; the server reads them as the client does.
     """
     if study_format == 2:
@@ -170,8 +176,8 @@ def read_upload(
         return UploadSource(
             root,
             prepared,
-            (root / "study.json").read_bytes().decode("utf-8"),
-            (root / "reference.json").read_bytes().decode("utf-8"),
+            (root / STUDY_JSON).read_bytes(),
+            (root / REFERENCE_JSON).read_bytes(),
             MappingProxyType(files),
             study_format=2,
         )
@@ -182,8 +188,8 @@ def read_upload(
     return UploadSource(
         root,
         prepare_study(canonical, vocabulary),
-        json.dumps(bundle.study),
-        json.dumps(bundle.reference),
+        json.dumps(bundle.study).encode(),
+        json.dumps(bundle.reference).encode(),
         MappingProxyType(dict(bundle.files)),
     )
 

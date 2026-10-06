@@ -470,7 +470,7 @@ class Client:
         if any(size > limits.max_attachment_bytes for size in sizes):
             fail("file_limit", "Attachment exceeds the server's byte limit")
         if (
-            sum(sizes) + len(source.study.encode()) + len(source.reference.encode())
+            sum(sizes) + len(source.study) + len(source.reference)
             > limits.max_upload_bytes
         ):
             fail("file_limit", "Study bundle exceeds the server's upload byte limit")
