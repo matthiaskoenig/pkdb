@@ -3,7 +3,7 @@
 import math
 from collections import defaultdict
 
-from sqlalchemy import String, and_, case, exists, func, or_, select, true
+from sqlalchemy import Float, String, and_, case, exists, func, or_, select, true
 
 from pkdb.schemas.queries import Predicate, QuerySpec
 from pkdb.schemas.security import Principal
@@ -33,6 +33,10 @@ PKDB_IDENTIFIER = case(
     (Study.pkdb_id.is_not(None), Study.pkdb_id),
     (Study.sid.op("~")("^PKDB[0-9]{5}$"), Study.sid),
 )
+# The time of an intervention: the scalar time, or the first time of an
+# irregular schedule (`time_list`). Rows are ordered by it; filters on it match
+# the scalar time or any listed time (intervention_time_condition).
+INTERVENTION_TIME = func.coalesce(Intervention.time, Intervention.time_list[1])
 STUDY_FIELDS = {
     **{name: getattr(Study, name) for name in ("sid", "name", "access", "licence")},
     "pkdb_id": PKDB_IDENTIFIER,
@@ -196,7 +200,6 @@ def fields_for(entity):
                     "gsd",
                     "gcv",
                     "count",
-                    "time",
                     "interval",
                     "doses",
                     "time_unit",
@@ -204,6 +207,7 @@ def fields_for(entity):
                     "calculated",
                 )
             },
+            "time": INTERVENTION_TIME,
             "central_value": func.coalesce(
                 Intervention.mean, Intervention.median, Intervention.gmean
             ),
@@ -242,7 +246,36 @@ def visibility(principal: Principal):
     return or_(Study.access == "public", membership)
 
 
+def intervention_time_condition(predicate: Predicate):
+    """A time filter that matches the scalar time or any listed time.
+
+    `ne` and `exclude` match the interventions with a time of which none
+    matches `eq` or `in`; a null value compares the presence of any time.
+    """
+    value, op = predicate.value, predicate.operator
+    # Checks the operator and the type of the value.
+    comparison(Intervention.time, predicate)
+    timed = or_(Intervention.time.is_not(None), Intervention.time_list.is_not(None))
+    if op == "isnull":
+        return ~timed if value else timed
+    if value is None:
+        return ~timed if op == "eq" else timed
+    if op in {"ne", "exclude"}:
+        positive = predicate.model_copy(
+            update={"operator": "in" if op == "exclude" else "eq"}
+        )
+        return and_(timed, ~intervention_time_condition(positive))
+    listed = func.unnest(Intervention.time_list, type_=Float).column_valued("time")
+    # Never null, so that the negation above holds for every row.
+    return or_(
+        and_(Intervention.time.is_not(None), comparison(Intervention.time, predicate)),
+        exists(select(listed).where(comparison(listed, predicate))),
+    )
+
+
 def comparison(column, predicate: Predicate):
+    if column is INTERVENTION_TIME:
+        return intervention_time_condition(predicate)
     value, op = predicate.value, predicate.operator
     if op != "isnull":
         expected = column.type.python_type

@@ -210,6 +210,67 @@ def test_intervention_time_lists_are_numbers(client, valid_bundle, admin_headers
     ]
 
 
+def test_intervention_time_filters_match_every_listed_time(
+    client, valid_bundle, admin_headers
+):
+    [dose] = valid_bundle.study["interventionset"]["interventions"]
+    dose["time"] = "0|12|40"
+    valid_bundle.study["interventionset"]["interventions"].append(
+        {**dose, "name": "later", "time": 6}
+    )
+    upload(client, valid_bundle, admin_headers)
+
+    def names(*predicates, sort=None):
+        query = {
+            "entity": "interventions",
+            "page_size": 100,
+            "predicates": list(predicates),
+        }
+        if sort:
+            query["sort"] = sort
+        response = client.post("/api/v2/query", json=query)
+        assert response.status_code == 200, response.text
+        return [row["name"] for row in response.json()["items"] if row["normed"]]
+
+    def time(operator, value):
+        return {"field": "time", "operator": operator, "value": value}
+
+    for predicate, expected in (
+        (time("eq", 12), ["dose"]),
+        (time("eq", 6), ["later"]),
+        (time("gte", 20), ["dose"]),
+        (time("lt", 1), ["dose"]),
+        (time("gt", 5), ["dose", "later"]),
+        (time("in", [40, 6]), ["dose", "later"]),
+        (time("ne", 12), ["later"]),
+        (time("ne", 6), ["dose"]),
+        (time("exclude", [0]), ["later"]),
+        (time("isnull", False), ["dose", "later"]),
+        (time("isnull", True), []),
+        (time("eq", None), []),
+        (time("ne", None), ["dose", "later"]),
+    ):
+        assert sorted(names(predicate)) == expected, predicate
+    # Ordering uses the scalar time or the first listed time.
+    assert names(sort="time") == ["dose", "later"]
+    assert names(sort="-time") == ["later", "dose"]
+    legacy = client.get(
+        "/api/v1/pkdata/interventions/", params={"time__gte": 20, "normed": "true"}
+    )
+    assert legacy.status_code == 200, legacy.text
+    assert {row["name"] for row in legacy.json()["data"]["data"]} == {"dose"}
+    for ordering, expected in (
+        ("time", ["dose", "later"]),
+        ("-time", ["later", "dose"]),
+    ):
+        legacy = client.get(
+            "/api/v1/pkdata/interventions/",
+            params={"ordering": ordering, "normed": "true"},
+        )
+        assert legacy.status_code == 200, legacy.text
+        assert [row["name"] for row in legacy.json()["data"]["data"]] == expected
+
+
 @pytest.mark.parametrize(
     "field,total", [("mean", 2), ("gmean", 2), ("gsd", 2), ("gcv", 1), ("se", 0)]
 )
