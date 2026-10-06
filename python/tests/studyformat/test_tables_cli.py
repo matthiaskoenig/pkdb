@@ -156,12 +156,37 @@ def test_sync_names_the_workbook_action_in_plain_words(study, vocabulary, capsys
 
     assert tables("sync", study, "--format", "human", *vocabulary) == 0
     out = capsys.readouterr().out
+    assert out.startswith(
+        "caffeine/Example: tables synced, workbook not updated (close it and sync "
+        "again)\n"
+    )
     assert "  Example.xlsx: not updated because it is open" in out
     assert "close it and sync again" in out and "[workbook_open]" in out
 
     (study / LOCK).unlink()
     assert tables("sync", study, "--format", "human", *vocabulary) == 0
     assert "  Example.xlsx: updated with the tables" in capsys.readouterr().out
+
+
+def test_sync_names_a_save_during_the_sync(study, vocabulary, capsys, monkeypatch):
+    path = workbook_path(study)
+    edit_table(study, OUTPUTS, 2, mean="3.5")
+
+    def save_meanwhile(*args, **kwargs):
+        built = build_workbook(*args, **kwargs)
+        set_cells(path, "timecourses_Fig1", 3, mean=2.25)
+        return built
+
+    monkeypatch.setattr("pkdb.studyformat.sync.build_workbook", save_meanwhile)
+
+    assert tables("sync", study, "--format", "human", *vocabulary) == 0
+
+    out = capsys.readouterr().out.splitlines()
+    assert out[0] == (
+        "caffeine/Example: tables synced, the workbook was saved during the sync; "
+        "sync again"
+    )
+    assert "  Example.xlsx: not updated because it was saved during the sync" in out
 
 
 def test_check_writes_nothing_and_fails_on_planned_changes(study, vocabulary, capsys):

@@ -37,6 +37,12 @@ WORKBOOK_ACTIONS = {
     ),
 }
 
+# The summary of a sync that wrote the tables but not the workbook.
+SYNCED_WITHOUT_WORKBOOK = {
+    "close_to_update": "tables synced, workbook not updated (close it and sync again)",
+    "sync_again": "tables synced, the workbook was saved during the sync; sync again",
+}
+
 
 def _vocabulary_options(command) -> None:
     """The options of pkdb validate that choose the vocabulary of the dropdowns."""
@@ -282,8 +288,12 @@ def _print_result(label: str, result, issues) -> None:
         unresolved = any(conflict.kept is None for conflict in result.conflicts)
         problems = "the conflicts" if unresolved else "the problems"
         summary = f"cannot sync, resolve {problems} below"
+    elif result.checked and _planned(result):
+        summary = "out of sync"
+    elif result.workbook_action in SYNCED_WITHOUT_WORKBOOK:
+        summary = SYNCED_WITHOUT_WORKBOOK[result.workbook_action]
     elif _planned(result):
-        summary = "out of sync" if result.checked else "synced"
+        summary = "synced"
     else:
         summary = "in sync"
     say(f"{label}: {summary}")
