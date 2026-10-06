@@ -176,6 +176,8 @@ def _write(args, folder: Path, patch: dict, revision, resolver) -> int:
     line = f"{study_label(folder)}: wrote study.json"
     if written.reference:
         line += f"; {written.reference}"
+    if written.reference_error:
+        line += f"; could not refresh reference.json: {written.reference_error}"
     emit(
         args,
         {
@@ -183,10 +185,15 @@ def _write(args, folder: Path, patch: dict, revision, resolver) -> int:
             "ok": True,
             "revision": written.revision,
             "reference": written.reference,
+            **(
+                {"reference_error": written.reference_error}
+                if written.reference_error
+                else {}
+            ),
         },
         [line],
     )
-    return 0
+    return 1 if written.reference_error else 0
 
 
 def _invalid(args, folder: Path, error) -> int:

@@ -73,3 +73,22 @@ def test_changed_identifier_refreshes_reference(valid_study, monkeypatch):
     )
     assert result.reference == "replaced reference.json" and len(calls) == 1
     assert unchanged.reference is None
+
+
+def test_failed_reference_refresh_keeps_study_json_written(valid_study, monkeypatch):
+    def failing_sync(folder, resolver):
+        raise module.ReferenceError("PubMed is unreachable")
+
+    monkeypatch.setattr(module, "sync_reference", failing_sync)
+    document = read_metadata(valid_study)
+    result = patch_metadata(
+        valid_study,
+        {"reference": {"pmid": "456"}},
+        document.revision,
+        resolver=object(),
+    )
+    assert result.reference is None and "unreachable" in (result.reference_error or "")
+    current = read_metadata(valid_study)
+    assert current.metadata.reference is not None
+    assert current.metadata.reference.pmid == "456"
+    assert result.revision == current.revision

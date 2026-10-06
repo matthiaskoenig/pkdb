@@ -63,3 +63,19 @@ def test_study_reference_patches_given_identifiers(valid_study, capsys, monkeypa
 def test_study_rejects_a_non_study_folder(tmp_path, capsys):
     assert main(["study", "show", str(tmp_path)]) == 1
     assert "no study.json" in capsys.readouterr().err
+
+
+def test_study_reference_failed_refresh_exits_1_after_writing(
+    valid_study, capsys, monkeypatch
+):
+    def failing_sync(folder, resolver):
+        raise metadata.ReferenceError("PubMed is unreachable")
+
+    monkeypatch.setattr(metadata, "sync_reference", failing_sync)
+    args = ["study", "reference", str(valid_study), "--offline", "--format", "json"]
+    assert main([*args, "--pmid", "456"]) == 1
+    output = json.loads(capsys.readouterr().out)
+    assert output["ok"] is True and output["reference"] is None
+    assert "unreachable" in output["reference_error"]
+    reference = metadata.read_metadata(valid_study).metadata.reference
+    assert reference is not None and reference.pmid == "456"

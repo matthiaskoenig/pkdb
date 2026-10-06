@@ -5,7 +5,7 @@ from pathlib import Path
 
 from pydantic import ValidationError
 
-from pkdb.references import sync_reference
+from pkdb.references import ReferenceError, sync_reference
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.jsonio import JsonFileError, load_json
@@ -35,6 +35,7 @@ class MetadataDocument:
 class MetadataWrite:
     revision: str
     reference: str | None = None
+    reference_error: str | None = None
 
 
 def _validated(data: object) -> StudyMetadata:
@@ -79,7 +80,11 @@ def write_metadata(
         )
     reference = None
     if resolver is not None and metadata.reference != before:
-        reference = sync_reference(folder, resolver)
+        try:
+            reference = sync_reference(folder, resolver)
+        except (ReferenceError, OSError) as error:
+            # study.json is written; validation reports the reference mismatch.
+            return MetadataWrite(new_revision, None, reference_error=str(error))
     return MetadataWrite(new_revision, reference)
 
 
