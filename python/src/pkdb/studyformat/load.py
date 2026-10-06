@@ -387,6 +387,37 @@ def _read_json(study: LoadedStudy, name: str) -> object:
         return _UNUSABLE
 
 
+def validation_issues(
+    error: ValidationError, file: str, code: str
+) -> list[ValidationIssue]:
+    """Extract validation issues from a Pydantic ValidationError.
+
+    Returns a list of ValidationIssue objects from the error details,
+    respecting the issue cap as today.
+    """
+    issues = []
+    cap = IssueCap()
+    for detail in error.errors(include_url=False):
+        if not cap.admit(code):
+            continue
+        path = ".".join(str(part) for part in detail["loc"])
+        issues.append(
+            make_issue(
+                code,
+                f"{path or file}: {detail['msg']}",
+                file=file,
+                field=path or None,
+            )
+        )
+    issues.extend(
+        make_issue(
+            code, f"{total:,} entries of {file} are invalid; {LISTED}", file=file
+        )
+        for code, total in cap.beyond()
+    )
+    return issues
+
+
 def _validate[M: BaseModel](
     study: LoadedStudy, name: str, model: type[M], code: str
 ) -> M | None:
@@ -396,25 +427,7 @@ def _validate[M: BaseModel](
     try:
         return model.model_validate(data)
     except ValidationError as error:
-        cap = IssueCap()
-        for detail in error.errors(include_url=False):
-            if not cap.admit(code):
-                continue
-            path = ".".join(str(part) for part in detail["loc"])
-            study.issues.append(
-                make_issue(
-                    code,
-                    f"{path or name}: {detail['msg']}",
-                    file=name,
-                    field=path or None,
-                )
-            )
-        study.issues.extend(
-            make_issue(
-                code, f"{total:,} entries of {name} are invalid; {LISTED}", file=name
-            )
-            for code, total in cap.beyond()
-        )
+        study.issues.extend(validation_issues(error, name, code))
         return None
 
 
