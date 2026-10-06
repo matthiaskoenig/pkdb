@@ -1260,6 +1260,31 @@ def test_more_rows_than_the_limit_are_an_error(study, workbook, sf_vocabulary, g
     assert snapshot(study) == before
 
 
+@pytest.mark.parametrize(
+    "damage",
+    ["{", '{"format": 2, "reference": 1}'],
+    ids=["invalid_json", "invalid_study_json"],
+)
+def test_a_broken_study_json_does_not_stop_the_sync(
+    study, workbook, sf_vocabulary, damage
+):
+    (study / "study.json").write_text(damage, encoding="utf-8")
+    set_cells(workbook, "outputs_Tab2", 2, mean=3.25)
+
+    result = sync_study(study, sf_vocabulary)
+
+    # pkdb validate reports study.json; merging the tables does not need it.
+    assert result.ok, result.issues
+    assert result.issues == ()
+    assert result.changes == (FileChange(OUTPUTS, "write"),)
+    assert cell(study, OUTPUTS, 2, "mean") == "3.25"
+    # The study name comes from the folder.
+    assert cell(study, OUTPUTS, 2, "study") == STUDY
+    check = workbook_check(study, sf_vocabulary)
+    assert check is not None and check["ok"] is True
+    assert add_table(study, sf_vocabulary, "outputs_Tab3").ok
+
+
 def test_keep_must_name_a_side(study, sf_vocabulary):
     with pytest.raises(ValueError, match="keep"):
         sync_study(study, sf_vocabulary, keep="both")  # ty: ignore[invalid-argument-type]

@@ -167,6 +167,20 @@ def _load(file: str, text: str, study: str) -> LoadedTable:
     return table
 
 
+def _blocking(study: LoadedStudy) -> tuple[ValidationIssue, ...]:
+    """The issues that keep a table file from loading, so that it cannot be merged.
+
+    Merging the tables does not need the JSON files; pkdb validate reports them.
+    """
+    return tuple(
+        issue
+        for issue in study.issues
+        if issue.code in STRUCTURAL
+        and issue.source is not None
+        and parse_table_file(issue.source.file) is not None
+    )
+
+
 def _canonical(
     file: str, text: str, study: str, order: Mapping[str, int]
 ) -> str | None:
@@ -677,8 +691,7 @@ def sync_study(
     except StudyValidationError as error:
         return replace(outcome, issues=tuple(error.report.issues))
     # The tables must load to be merged.
-    blocking = tuple(issue for issue in study.issues if issue.code in STRUCTURAL)
-    if blocking:
+    if blocking := _blocking(study):
         return replace(outcome, issues=blocking)
     order = subject_order(study.table(SUBJECTS))
     tables = table_texts(study)
@@ -862,7 +875,7 @@ def add_table(
         content = read_workbook(path, study.name, max_rows=max_rows)
     except StudyValidationError as error:
         return AddTableResult(table, synced, tuple(error.report.issues))
-    blocking = [issue for issue in study.issues if issue.code in STRUCTURAL]
+    blocking = _blocking(study)
     if blocking or not content.ok:
         return AddTableResult(table, synced, (*blocking, *content.issues))
     tables = table_texts(study)
@@ -934,10 +947,8 @@ def workbook_check(folder: Path, vocabulary: Vocabulary) -> dict | None:
         return None
     result = sync_study(folder, vocabulary, check=True)
     ok: bool | None = result.ok
-    if not ok and not result.conflicts:
-        study = load_study(folder)
-        if any(issue.code in STRUCTURAL for issue in study.issues):
-            ok = None
+    if not ok and not result.conflicts and _blocking(load_study(folder)):
+        ok = None
     return {
         "action": result.workbook_action,
         "changes": [
