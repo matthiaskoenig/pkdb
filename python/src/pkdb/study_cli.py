@@ -107,7 +107,7 @@ def register_review(commands) -> None:
     for name, text_help in (
         ("reply", "Add a reply to the thread of an item"),
         ("resolve", "Resolve an open item"),
-        ("dismiss", "Dismiss an open item"),
+        ("dismiss", "Dismiss an open or resolved item"),
         ("reopen", "Reopen a resolved or dismissed item"),
     ):
         action = actions.add_parser(name, help=text_help)
@@ -367,10 +367,9 @@ def _review_show(args, folder: Path) -> int:
     label = study_label(folder)
     lines = [label, f"revision {document.revision}", f"status {document.review.status}"]
     for data in items:
-        where = (data.get("target") or {}).get("file")
         lines.append(
             f"{data['id']} {data['state']} {data['kind']}"
-            f"{' ' + where if where else ''}: {data['text']}"
+            f"{_target_text(data.get('target'), data['matches'])}: {data['text']}"
         )
     emit(
         args,
@@ -384,6 +383,21 @@ def _review_show(args, folder: Path) -> int:
         lines,
     )
     return 0
+
+
+def _target_text(target: dict | None, matches: int | None) -> str:
+    """The target of an item for people: file, row filter, column and matching rows."""
+    if not target or not target.get("file"):
+        return ""
+    text = f" {target['file']}"
+    rows = target.get("rows") or {}
+    if rows:
+        text += " " + " ".join(f"{key}={value}" for key, value in rows.items())
+    if target.get("column"):
+        text += f" column {target['column']}"
+    if matches is not None:
+        text += f" ({matches} matching row{'' if matches == 1 else 's'})"
+    return text
 
 
 def _written(args, folder: Path, revision: str, line: str, **extra) -> int:
@@ -444,9 +458,11 @@ def _review_status(args, folder: Path, author) -> int:
     from pkdb.studyformat.review_edit import set_status
     from pkdb.tables_cli import _vocabulary
 
-    vocabulary = _vocabulary(args)
-    if vocabulary is None:
-        return 1
+    vocabulary = None
+    if args.status == "approved":  # only approval validates the folder
+        vocabulary = _vocabulary(args)
+        if vocabulary is None:
+            return 1
     revision = set_status(
         folder, author, args.status, vocabulary=vocabulary, revision=args.revision
     )
@@ -471,10 +487,14 @@ def _review_acknowledge(args, folder: Path, author) -> int:
         and (args.line is None or issue.source.row == args.line)
         and (args.column is None or issue.source.header == args.column)
     ]
-    if len(matches) != 1:
+    # One item acknowledges the warnings of one location: same row and column.
+    locations = {
+        (source.row, source.header) for issue in matches if (source := issue.source)
+    }
+    if len(locations) != 1:
         message = (
             f"{len(matches)} warnings [{args.code}] match in {args.file}; "
-            "narrow them with --line and --column"
+            f"narrow them with {_narrowing(locations)}"
             if matches
             else f"No warning [{args.code}] in {args.file} matches"
         )
@@ -491,13 +511,32 @@ def _review_acknowledge(args, folder: Path, author) -> int:
     item, revision = acknowledge(
         folder, author, matches[0], args.text, revision=args.revision
     )
+    covers = f"; the item covers {len(matches)} warnings" if len(matches) > 1 else ""
     return _written(
         args,
         folder,
         revision,
-        f"acknowledged {args.code} with review item {item.id}",
+        f"acknowledged {args.code} with review item {item.id}{covers}",
         item=item.model_dump(mode="json", exclude_none=True),
+        warnings=len(matches),
     )
+
+
+def _narrowing(locations: set[tuple[int | None, str | None]]) -> str:
+    """The options that tell apart warnings at these rows and columns, with their values.
+
+    Called for two or more locations, so at least one option tells them apart.
+    """
+    options = []
+    lines = {line for line, _ in locations}
+    if len(lines) > 1:
+        given = sorted(line for line in lines if line is not None)
+        options.append(f"--line ({', '.join(map(str, given))})")
+    columns = {column for _, column in locations}
+    if len(columns) > 1:
+        given = sorted(column for column in columns if column is not None)
+        options.append(f"--column ({', '.join(given)})")
+    return " and ".join(options)
 
 
 _REVIEW_ACTIONS = {
