@@ -494,27 +494,26 @@ def _review_status(args, folder: Path, author) -> int:
 
 
 def _review_acknowledge(args, folder: Path, author) -> int:
-    from pkdb.studyformat.review_edit import acknowledge
+    from pkdb.studyformat.review_edit import (
+        acknowledge,
+        matching_warnings,
+        warning_locations,
+    )
     from pkdb.studyformat.validation import validate_folder
     from pkdb.tables_cli import _vocabulary
 
     vocabulary = _vocabulary(args)
     if vocabulary is None:
         return 1
-    matches = [
-        issue
-        for issue in validate_folder(folder, vocabulary).issues
-        if issue.severity == "warning"
-        and issue.code == args.code
-        and issue.source is not None
-        and issue.source.file == args.file
-        and (args.line is None or issue.source.row == args.line)
-        and (args.column is None or issue.source.header == args.column)
-    ]
+    matches = matching_warnings(
+        validate_folder(folder, vocabulary).issues,
+        args.code,
+        args.file,
+        args.line,
+        args.column,
+    )
     # One item acknowledges the warnings of one location: same row and column.
-    locations = {
-        (source.row, source.header) for issue in matches if (source := issue.source)
-    }
+    locations = warning_locations(matches)
     if len(locations) != 1:
         message = (
             f"{len(matches)} warnings [{args.code}] match in {args.file}; "

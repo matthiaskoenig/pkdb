@@ -1,9 +1,10 @@
 """Format 2 study folders for the curation engine: row summaries and the study page of the API.
 
 `study_summary` reads leniently: a file that does not parse gives None or empty values, never an
-exception. `StudiesMixin` reads engine attributes lock, root, studies and jobs, and uses engine
-method _issue_for. It serves only files that the study registers: no symlink, nothing outside the
-study folder.
+exception. `StudiesMixin` reads engine attributes lock, root, studies, jobs and offline, and uses
+engine methods _issue_for, _local_vocabulary, author and scan. It serves only files that the study
+registers: no symlink, nothing outside the study folder. Its writes go through the library, which
+takes `folder_lock`; anything that takes the engine lock runs before it.
 """
 
 import dataclasses
@@ -13,26 +14,38 @@ import os
 import stat
 from collections.abc import Callable
 from pathlib import Path
+from typing import Any
 from urllib.parse import quote
 
 from pydantic import ValidationError
 
+from pkdb.curation.launch import open_path
 from pkdb.curation.state import EngineState
+from pkdb.identity import Author
 from pkdb.preparation import MAX_FILES, MAX_ROWS
-from pkdb.schemas.review import Review
+from pkdb.references import ReferenceResolver
+from pkdb.schemas.review import Review, ReviewTarget
 from pkdb.schemas.validation import StudyValidationError, ValidationIssue
+from pkdb.studyformat import metadata as study_metadata
+from pkdb.studyformat import review_edit
 from pkdb.studyformat.jsonio import JsonFileError, load_json
 from pkdb.studyformat.layout import Layout, scan_folder
-from pkdb.studyformat.load import LoadedStudy, load_study
+from pkdb.studyformat.load import LoadedStudy, load_study, validation_issues
 from pkdb.studyformat.metadata import MetadataDocument, MetadataError, read_metadata
 from pkdb.studyformat.models import StudyMetadata
 from pkdb.studyformat.raw import raw_lines
-from pkdb.studyformat.review_edit import ReviewError, read_review
-from pkdb.studyformat.revision import read_revision, revision_of
+from pkdb.studyformat.review_edit import (
+    ReviewError,
+    matching_warnings,
+    read_review,
+    warning_locations,
+)
+from pkdb.studyformat.revision import folder_lock, read_revision, revision_of
 from pkdb.studyformat.sources import source_view, study_sources
-from pkdb.studyformat.sync import conflict_data, sync_study
+from pkdb.studyformat.sync import SyncResult, add_table, conflict_data, sync_study
 from pkdb.studyformat.tables import REVIEW_JSON, STUDY_JSON
 from pkdb.studyformat.text import natural_key
+from pkdb.studyformat.validation import validate_folder
 
 IMAGE_TYPES = {
     ".png": "image/png",
@@ -204,6 +217,67 @@ def _bounded(folder: Path) -> LoadedStudy:
     return load_study(folder, max_rows=MAX_ROWS, max_files=MAX_FILES)
 
 
+def _review_error(issues: list[ValidationIssue]) -> ReviewError:
+    return ReviewError("; ".join(issue.message for issue in issues), issues)
+
+
+def _writable(
+    folder: Path, name: str, error: Callable[[list[ValidationIssue]], Exception]
+) -> None:
+    """Refuse to write a document that the layout does not register, such as a symlink.
+
+    The write would read it to check the revision, and a conflict would return its content.
+    """
+    if not os.path.lexists(folder / name):
+        return
+    layout = scan_folder(folder)
+    if name not in layout.files:
+        raise error(
+            [
+                issue
+                for issue in layout.issues
+                if issue.source and issue.source.file == name
+            ]
+        )
+
+
+def _text(payload: dict, name: str) -> str:
+    value = payload.get(name)
+    if not isinstance(value, str):
+        raise ValueError(f"Expected text in {name}")
+    return value
+
+
+def _optional_text(payload: dict, name: str) -> str | None:
+    return None if payload.get(name) is None else _text(payload, name)
+
+
+def _line(payload: dict) -> int | None:
+    line = payload.get("line")
+    if line is not None and (not isinstance(line, int) or isinstance(line, bool)):
+        raise ValueError("Expected a line number")
+    return line
+
+
+def _located(line: int | None, column: str | None) -> str:
+    parts = [f"line {line}"] if line is not None else []
+    parts += [f"column {column}"] if column is not None else []
+    return " ".join(parts) or "the file"
+
+
+def _sync_result(result: SyncResult) -> dict:
+    """A sync as the app reports it, like `pkdb tables sync` without the paths."""
+    return {
+        "ok": result.ok,
+        "workbook_action": result.workbook_action,
+        "changes": [
+            {"file": change.file, "action": change.action} for change in result.changes
+        ],
+        "conflicts": [conflict_data(conflict) for conflict in result.conflicts],
+        "issues": _issues(list(result.issues)),
+    }
+
+
 class StudiesMixin(EngineState):
     def _study_row(self, identity: str) -> dict:
         matches = [row for row in self.studies.values() if row["id"] == identity]
@@ -362,3 +436,209 @@ class StudiesMixin(EngineState):
             if not stat.S_ISREG(os.fstat(stream.fileno()).st_mode):
                 raise LookupError(f"{file} is not a regular file")
             return stream.read(), media_type
+
+    def _rescan(self) -> None:
+        """Rescan after a write, so that the study ETag changes at once.
+
+        The write succeeded; a failed scan is left to the watcher, which retries every second.
+        """
+        try:
+            self.scan()
+        except OSError, ValueError:
+            pass
+
+    def write_metadata(self, identity: str, revision: str, metadata: dict) -> dict:
+        """Write `study.json`; a changed PubMed ID or DOI refreshes `reference.json`.
+
+        The app always writes over the revision it read, never blindly.
+        """
+        # study.json records no author, but writes need a user (spec 7.4).
+        self.author()
+        folder = self.study_folder(identity)
+        if not isinstance(revision, str):
+            raise ValueError("Expected the revision of study.json that was read")
+        try:
+            model = StudyMetadata.model_validate(metadata)
+        except ValidationError as error:
+            raise MetadataError(
+                validation_issues(error, STUDY_JSON, study_metadata.CODE)
+            ) from None
+        _writable(folder, STUDY_JSON, MetadataError)
+        written = study_metadata.write_metadata(
+            folder, model, revision, resolver=ReferenceResolver(offline=self.offline)
+        )
+        self._rescan()
+        return {
+            "revision": written.revision,
+            "reference": written.reference,
+            "reference_error": written.reference_error,
+        }
+
+    def review_action(self, identity: str, payload: dict) -> dict:
+        """Change `review.json` with `payload["action"]` as the current author.
+
+        The app always writes over the revision it read, never blindly.
+        """
+        author = self.author()
+        folder = self.study_folder(identity)
+        revision = _text(payload, "revision")
+        _writable(folder, REVIEW_JSON, _review_error)
+        try:
+            result = self._review_change(folder, author, revision, payload)
+        except ValidationError as error:
+            # A new item, target or reply that the review model refuses.
+            raise _review_error(
+                validation_issues(error, REVIEW_JSON, review_edit.CODE)
+            ) from None
+        self._rescan()
+        return result
+
+    def _review_change(
+        self, folder: Path, author: Author, revision: str, payload: dict
+    ) -> dict:
+        match payload.get("action"):
+            case "add":
+                # The review model validates the kind.
+                kind: Any = payload.get("kind")
+                target = payload.get("target")
+                item, revision = review_edit.add_item(
+                    folder,
+                    author,
+                    kind=kind,
+                    text=_text(payload, "text"),
+                    target=None
+                    if target is None
+                    else ReviewTarget.model_validate(target),
+                    acknowledges=_optional_text(payload, "acknowledges"),
+                    revision=revision,
+                )
+                return {
+                    "revision": revision,
+                    "item": item.model_dump(mode="json", exclude_none=True),
+                }
+            case "reply":
+                revision = review_edit.reply(
+                    folder,
+                    author,
+                    _text(payload, "item"),
+                    _text(payload, "text"),
+                    revision=revision,
+                )
+                return {"revision": revision}
+            case "resolve" | "dismiss" | "reopen" as action:
+                change = {
+                    "resolve": review_edit.resolve,
+                    "dismiss": review_edit.dismiss,
+                    "reopen": review_edit.reopen,
+                }[action]
+                revision = change(
+                    folder,
+                    author,
+                    _text(payload, "item"),
+                    _optional_text(payload, "text"),
+                    revision=revision,
+                )
+                return {"revision": revision}
+            case "status":
+                status = _text(payload, "status")
+                # Chosen before the folder lock that the write takes.
+                vocabulary = self._local_vocabulary() if status == "approved" else None
+                revision = review_edit.set_status(
+                    folder, author, status, vocabulary=vocabulary, revision=revision
+                )
+                return {"revision": revision}
+            case "acknowledge":
+                return self._acknowledge(folder, author, revision, payload)
+            case action:
+                raise ValueError(f"Unknown review action {action!r}")
+
+    def _acknowledge(
+        self, folder: Path, author: Author, revision: str, payload: dict
+    ) -> dict:
+        """Acknowledge the warnings of one location, as `pkdb review acknowledge` does."""
+        code, file, text = (_text(payload, name) for name in ("code", "file", "text"))
+        matches = matching_warnings(
+            validate_folder(folder, self._local_vocabulary()).issues,
+            code,
+            file,
+            _line(payload),
+            _optional_text(payload, "column"),
+        )
+        locations = warning_locations(matches)
+        if len(locations) != 1:
+            named = ", ".join(
+                _located(line, column)
+                for line, column in sorted(
+                    locations, key=lambda at: (at[0] or 0, at[1] or "")
+                )
+            )
+            raise ReviewError(
+                f"{len(matches)} warnings [{code}] match in {file} at {named}; give "
+                "the line and column of one"
+                if matches
+                else f"No warning [{code}] in {file} matches"
+            )
+        item, revision = review_edit.acknowledge(
+            folder, author, matches[0], text, revision=revision
+        )
+        return {
+            "revision": revision,
+            "item": item.model_dump(mode="json", exclude_none=True),
+        }
+
+    def _under_folder_lock[T](self, folder: Path, run: Callable[[Any], T]) -> T:
+        """`run(vocabulary)` under the folder lock, as the watcher job syncs; then a rescan."""
+        # Chosen before the folder lock, which is never held while waiting for self.lock.
+        vocabulary = self._local_vocabulary()
+        try:
+            with folder_lock(folder):
+                return run(vocabulary)
+        finally:
+            # A sync can have written some files before it failed.
+            self._rescan()
+
+    def tables_action(self, identity: str, payload: dict) -> dict:
+        """Open the workbook, sync it, resolve its conflicts with `keep`, or add a sheet."""
+        folder = self.study_folder(identity)
+        action = payload.get("action")
+        if action == "add":
+            table, raw = (
+                _optional_text(payload, "table"),
+                _optional_text(payload, "raw"),
+            )
+            if (table is None) == (raw is None):
+                raise ValueError(
+                    "Give the name of a table or the source of a raw table"
+                )
+            # A raw table is named after the study folder.
+            name = table if table is not None else f"{folder.name}_{raw}"
+            added = self._under_folder_lock(
+                folder, lambda vocabulary: add_table(folder, vocabulary, name)
+            )
+            synced = (
+                _sync_result(added.sync)
+                if added.sync is not None
+                else {"workbook_action": "unchanged", "changes": [], "conflicts": []}
+            )
+            issues = [*(added.sync.issues if added.sync else ()), *added.issues]
+            return {
+                **synced,
+                "table": added.table,
+                "ok": added.ok,
+                "issues": _issues(issues),
+            }
+        if action not in {"open", "sync", "resolve"}:
+            raise ValueError(f"Unknown tables action {action!r}")
+        keep = payload.get("keep") if action == "resolve" else None
+        if action == "resolve" and keep not in {"workbook", "tables"}:
+            raise ValueError("Keep the workbook or the tables")
+        sync = self._under_folder_lock(
+            folder, lambda vocabulary: sync_study(folder, vocabulary, keep=keep)
+        )
+        result = _sync_result(sync)
+        if action == "open":
+            # A sync that failed is reported; the curator fixes it in the workbook.
+            result["opened"] = sync.workbook.is_file()
+            if result["opened"]:
+                open_path(sync.workbook)
+        return result

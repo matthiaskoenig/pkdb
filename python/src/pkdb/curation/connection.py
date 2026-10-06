@@ -18,6 +18,7 @@ from pkdb.curation.state import EngineState
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError
+from pkdb.identity import USER_PATTERN, Author, IdentityError
 
 HEARTBEAT_SECONDS = 30
 INCOMPATIBLE = {"processing_version_mismatch", "unsupported_protocol"}
@@ -67,6 +68,28 @@ class ConnectionMixin(EngineState):
 
     def _context(self):
         return f"{self.root}|{self.endpoint}|{self.account or ''}"
+
+    def author(self, agent: str | None = None) -> Author:
+        """Who writes study files from the app (spec 7.4).
+
+        The authenticated account when an API key is configured and the last connection check
+        succeeded, otherwise the configured user. IdentityError without a usable user.
+        """
+        with self.lock:
+            checked = (
+                self.api_key
+                and self.account
+                and self.checked_at is not None
+                and not self.connection_error
+            )
+            user = self.account if checked else self.user
+        if not user:
+            raise IdentityError("Set your PK-DB user in Connection settings")
+        if not USER_PATTERN.fullmatch(user):
+            raise IdentityError(
+                f"{user!r} is not a PK-DB user name; change it in Connection settings"
+            )
+        return Author(user, agent)
 
     def configure(
         self,

@@ -85,6 +85,14 @@ def test_payload_limits_paths_and_errors(local_server):
     server, engine = local_server
     headers = authenticate(server)
     assert request(server, "GET", "/static/%2e%2e/secret")[0] == 404
+    assert transport.MAX_BODY == 1024 * 1024
+    engine.configure.return_value = {"ok": True}
+    large = "x" * (512 * 1024)
+    assert (
+        request(server, "POST", "/local/settings", {"api_key": large}, headers)[0]
+        == 200
+    )
+    engine.configure.assert_called_with(api_key=large)
     assert (
         request(
             server,
@@ -99,7 +107,6 @@ def test_payload_limits_paths_and_errors(local_server):
         request(server, "POST", "/local/settings", {"unexpected": True}, headers)[0]
         == 400
     )
-    engine.configure.return_value = {"ok": True}
     assert (
         request(server, "POST", "/local/settings", {"user": "curator"}, headers)[0]
         == 200

@@ -12,10 +12,16 @@ from urllib.parse import unquote, urlsplit
 
 from pkdb.curation.engine import WorkspaceError
 from pkdb.curation.studies import AmbiguousStudy
+from pkdb.identity import IdentityError
 from pkdb.references import ReferenceError
 from pkdb.schemas.validation import StudyValidationError
+from pkdb.studyformat.metadata import MetadataError
+from pkdb.studyformat.review_edit import ApprovalRefused, ReviewError
+from pkdb.studyformat.revision import RevisionConflict
 
-MAX_BODY = 64 * 1024
+MAX_BODY = 1024 * 1024
+# What a refused request may still send so that the client receives the refusal.
+DRAIN_LIMIT = 4 * MAX_BODY
 ASSETS = Path(__file__).parent / "static"
 
 
@@ -248,10 +254,10 @@ class Handler(BaseHTTPRequestHandler):
                 raise ValueError("Content length required")
             size = int(self.headers.get("Content-Length", "0"))
             if not 0 < size <= MAX_BODY:
-                self._reply(413, {"error": "Request body is too large or empty"})
+                self._refuse(413, "Request body is too large or empty", size)
                 return
             if self.headers.get_content_type() != "application/json":
-                self._reply(415, {"error": "Use application/json"})
+                self._refuse(415, "Use application/json", size)
                 return
             self.connection.settimeout(5)
             payload = json.loads(self.rfile.read(size))
@@ -276,6 +282,35 @@ class Handler(BaseHTTPRequestHandler):
                 return
             result = self._action(path, payload)
             self._reply(200, result if isinstance(result, dict) else {"ok": True})
+        except RevisionConflict as error:
+            # The file changed since the app read it: the current document to reload.
+            self._reply(
+                409,
+                {
+                    "error": str(error),
+                    "file": error.file,
+                    "revision": error.current,
+                    "content": error.content,
+                },
+            )
+        except (MetadataError, ReviewError) as error:
+            refused = (
+                {"code": "approval_refused"}
+                if isinstance(error, ApprovalRefused)
+                else {}
+            )
+            self._reply(
+                422,
+                {
+                    "error": str(error),
+                    "issues": [issue.model_dump(mode="json") for issue in error.issues],
+                    **refused,
+                },
+            )
+        except IdentityError as error:
+            self._reply(403, {"error": "no_user", "message": str(error)})
+        except AmbiguousStudy as error:
+            self._reply(409, {"error": str(error)})
         except (ReferenceError, WorkspaceError) as error:
             self._reply(400, {"error": str(error)})
         except LookupError:
@@ -295,8 +330,38 @@ class Handler(BaseHTTPRequestHandler):
                 },
             )
 
+    def _refuse(self, status, message, size):
+        """Reply without reading the body, then discard what the client sends, within bounds.
+
+        Closing the connection with unread data resets it, and the client would lose the reply.
+        """
+        self.close_connection = True
+        self._reply(status, {"error": message})
+        remaining = min(size, DRAIN_LIMIT)
+        try:
+            self.connection.settimeout(2)
+            while remaining > 0 and (chunk := self.rfile.read1(min(remaining, 65536))):
+                remaining -= len(chunk)
+        except OSError:
+            pass
+
     def _action(self, path, body):
         engine = self.server.engine
+        if path in {
+            "/local/studies/metadata",
+            "/local/studies/review",
+            "/local/studies/tables",
+        }:
+            study = body.get("study")
+            if not isinstance(study, str):
+                raise ValueError("Expected a study <substance>/<name>")
+            if path == "/local/studies/metadata":
+                return engine.write_metadata(
+                    study, body.get("revision"), body.get("metadata")
+                )
+            if path == "/local/studies/review":
+                return engine.review_action(study, body)
+            return engine.tables_action(study, body)
         if path in {
             "/local/reference/read",
             "/local/reference/search",
