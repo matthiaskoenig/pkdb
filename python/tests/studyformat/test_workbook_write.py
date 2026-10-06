@@ -8,6 +8,7 @@ After an intended change of the template, regenerate it from `python/` with:
 
 import json
 import re
+import warnings
 from datetime import UTC, datetime, timedelta
 from io import BytesIO
 from pathlib import Path
@@ -353,6 +354,27 @@ def test_regenerating_keeps_scratch_sheets(valid_study, sf_vocabulary, tmp_path)
         True,
         *[False] * 8,
     ]
+
+
+def test_regenerating_does_not_warn_about_the_existing_workbook(
+    valid_study, sf_vocabulary, tmp_path
+):
+    tables = canonical_tables(valid_study)
+    workbook = load(build(tables, sf_vocabulary))
+    # openpyxl warns when it loads a date beyond the calendar, as it warns
+    # about the parts of Excel files it does not support.
+    notes = workbook.create_sheet("_notes")
+    notes["A1"] = 1e10
+    notes["A1"].number_format = "yyyy-mm-dd"
+    existing = tmp_path / "Example.xlsx"
+    workbook.save(existing)
+
+    with warnings.catch_warnings(record=True) as caught:
+        warnings.simplefilter("always")
+        result = build(tables, sf_vocabulary, existing=existing)
+
+    assert [str(warning.message) for warning in caught] == []
+    assert "_notes" in load(result).sheetnames
 
 
 def test_an_unreadable_existing_workbook_raises(sf_vocabulary, tmp_path):

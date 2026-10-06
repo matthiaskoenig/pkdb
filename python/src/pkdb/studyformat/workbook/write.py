@@ -2,6 +2,7 @@
 
 import re
 import uuid
+import warnings
 from collections.abc import Iterable, Mapping
 from copy import copy
 from dataclasses import dataclass
@@ -244,8 +245,12 @@ def _open(existing: Path | None) -> Workbook:
         workbook.properties.creator = AUTHOR
         return workbook
     try:
-        # Full mode with formulas, so that the scratch sheets keep them.
-        workbook = openpyxl.load_workbook(existing)
+        with warnings.catch_warnings():
+            # openpyxl warns about parts of Excel files it does not support,
+            # which only the scratch sheets keep from the existing workbook.
+            warnings.filterwarnings("ignore", module="openpyxl")
+            # Full mode with formulas, so that the scratch sheets keep them.
+            workbook = openpyxl.load_workbook(existing)
     except Exception as error:
         # openpyxl raises many kinds of errors for a damaged or foreign file.
         raise WorkbookError(
