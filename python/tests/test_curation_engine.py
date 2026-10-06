@@ -1,6 +1,7 @@
 """Save generations, immutable inputs, and recovery in the local workspace."""
 
 import json
+import shutil
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
@@ -15,18 +16,14 @@ from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError
 from pkdb.preparation import source_hashes
 from pkdb.progress import ProgressEvent
+from pkdb.studyformat import format_folder
 
 
 @pytest.fixture
-def workspace(tmp_path):
-    root = tmp_path / "sources"
-    folder = root / "apixaban" / "Example2020"
-    folder.mkdir(parents=True)
-    (folder / "study.json").write_text(
-        json.dumps({"sid": "Example2020", "name": "Example"})
-    )
+def workspace(tmp_path, tmp_path_factory, make_study, valid_files):
+    folder = make_study(valid_files)
     engine = module.CurationEngine(
-        root, state_dir=tmp_path / "state", offline=True, start=False
+        tmp_path, state_dir=tmp_path_factory.mktemp("state"), offline=True, start=False
     )
     yield engine, folder
     engine.close()
@@ -252,7 +249,7 @@ def test_uploaded_study_link_survives_restart(workspace, tmp_path, monkeypatch):
     assert row(engine)["last_upload"]["url"] == url
     engine.close()
     restarted = module.CurationEngine(
-        engine.root, state_dir=tmp_path / "state", offline=True, start=False
+        engine.root, state_dir=engine.state_dir, offline=True, start=False
     )
     try:
         assert row(restarted)["last_upload"] == job["upload"]
@@ -288,31 +285,21 @@ def test_confirmed_upload_persistence_survives_later_source_error(
 
 
 def test_real_scientific_validation_and_external_edit(
-    study_folder, vocabulary, tmp_path, monkeypatch
+    workspace, sf_vocabulary, monkeypatch
 ):
-    monkeypatch.setattr(jobs, "bundled_vocabulary", lambda: vocabulary)
-    engine = module.CurationEngine(
-        study_folder, state_dir=tmp_path / "app-state", offline=True, start=False
-    )
-    before = {p.name: p.read_bytes() for p in study_folder.iterdir()}
-    try:
-        engine.enqueue([row(engine)["id"]], "validate")
-        assert run_next(engine)["status"] == "succeeded"
-        assert row(engine)["status"] == "valid"
-        assert before == {p.name: p.read_bytes() for p in study_folder.iterdir()}
-        metadata = json.loads((study_folder / "study.json").read_text())
-        metadata["outputset"]["outputs"][0]["mean"] = "col==missing"
-        (study_folder / "study.json").write_text(json.dumps(metadata))
-        engine.scan()
-        settle(engine)
-        assert run_next(engine)["status"] == "failed"
-        problem = next(
-            p for p in row(engine)["problems"] if p["code"] == "unknown_column"
-        )
-        assert problem["source"]["file"] in {"Example.xlsx", "Results.tsv"}
-        assert problem["source"]["row"] in {2, 3}
-    finally:
-        engine.close()
+    engine, folder = workspace
+    monkeypatch.setattr(jobs, "bundled_vocabulary", lambda: sf_vocabulary)
+    assert format_folder(folder).ok
+    engine.scan()
+    engine.enqueue([row(engine)["id"]], "validate")
+    assert run_next(engine)["status"] == "succeeded"
+    assert row(engine)["status"] == "valid"
+    path = folder / "interventions.tsv"
+    path.write_text(path.read_text().replace("oral", "rectal"))
+    engine.scan()
+    settle(engine)
+    assert run_next(engine)["status"] == "failed"
+    assert row(engine)["problems"]
 
 
 def test_pending_manual_job_cannot_bypass_new_unknown_outcome(workspace, monkeypatch):
@@ -414,15 +401,12 @@ def test_stale_connection_vocabulary_does_not_replace_current_status(
 
 def test_invalid_batch_is_not_partially_queued(workspace, monkeypatch):
     engine, folder = workspace
-    second = folder.parent / "Other"
-    second.mkdir()
-    (second / "study.json").write_text('{"sid":"Other"}')
+    shutil.copytree(folder, folder.parent / "Other")
+    shutil.copytree(folder, folder.parent.parent / "copies" / "caffeine" / "Example")
     engine.scan()
     enable_upload(engine, monkeypatch, None)
-    rows = list(engine.studies.values())
-    rows[1]["duplicate_sid"] = True
-    with pytest.raises(ValueError):
-        engine.enqueue([item["id"] for item in rows], "upload")
+    with pytest.raises(ValueError, match="identity of two folders"):
+        engine.enqueue(["caffeine/Other", "caffeine/Example"], "upload")
     assert not engine.jobs
     assert not engine.queue
 
@@ -652,10 +636,21 @@ def test_changing_user_reconnects_and_is_saved(workspace, monkeypatch):
 
 
 def test_reference_preview_save_and_stale_review(workspace):
+    import httpx2
+
+    from pkdb.references import ReferenceResolver
+
     engine, folder = workspace
+    xml = (
+        "<PubmedArticleSet><PubmedArticle><MedlineCitation><PMID>123</PMID>"
+        "<Article><ArticleTitle>Cached title</ArticleTitle></Article>"
+        "</MedlineCitation></PubmedArticle></PubmedArticleSet>"
+    )
+    with httpx2.Client(
+        transport=httpx2.MockTransport(lambda _: httpx2.Response(200, text=xml))
+    ) as client:
+        ReferenceResolver(client=client).pubmed("123")
     study = json.loads((folder / "study.json").read_text())
-    study["reference"] = "stable-reference"
-    (folder / "study.json").write_text(json.dumps(study))
     body = {
         "id": row(engine)["id"],
         "input": {
@@ -664,9 +659,10 @@ def test_reference_preview_save_and_stale_review(workspace):
             "publication_date": "2020",
         },
     }
+    original = (folder / "reference.json").read_bytes()
     preview = engine.reference_action("preview", body)
-    assert not (folder / "reference.json").exists()
-    assert preview["reference"]["sid"] == "stable-reference"
+    assert (folder / "reference.json").read_bytes() == original
+    assert preview["reference"]["sid"] == "123"
     engine.reference_action("save", {"id": body["id"], "token": preview["token"]})
     assert (
         engine.reference_action("read", body)["reference"]["publication_date"] == "2020"
@@ -697,8 +693,7 @@ def test_validation_creates_missing_reference_without_requeue(
         transport=httpx2.MockTransport(lambda _: httpx2.Response(200, text=xml))
     ) as client:
         ReferenceResolver(client=client).pubmed("123")
-    study = json.loads((folder / "study.json").read_text())
-    (folder / "study.json").write_text(json.dumps({**study, "reference": 123}))
+    (folder / "reference.json").unlink()
     prepare_mock(monkeypatch)
     engine.scan()
     settle(engine)
@@ -721,49 +716,17 @@ def test_validation_creates_missing_reference_without_requeue(
 
 def test_scan_summarizes_study_and_reference_metadata(workspace):
     engine, folder = workspace
-    study = json.loads((folder / "study.json").read_text())
-    study.update(creator="mkoenig", curators=[["mkoenig", 1.5]], reference=123)
-    (folder / "study.json").write_text(json.dumps(study))
-    engine.scan()
-    state = next(
+    summary = next(
         s for s in engine.snapshot()["studies"] if s["id"] == row(engine)["id"]
-    )
-    assert state["metadata"]["creator"]["display_name"] == "Matthias König"
-    assert state["metadata"]["curators"][0]["avatar_url"].endswith(".webp")
-    assert state["reference"] is None
+    )["summary"]
+    assert summary["creator"] == "curator"
+    assert summary["curators"] == ["curator"]
+    assert summary["review_status"] == "draft"
+    assert row(engine)["reference"]["title"] == "Example study"
     (folder / "reference.json").write_text(json.dumps({"sid": 123, "title": "Paper"}))
     engine.scan()
     assert row(engine)["reference"]["title"] == "Paper"
-
-
-def test_validation_exports_workbook_tables_and_marks_them_generated(
-    workspace, monkeypatch
-):
-    import openpyxl
-
-    engine, folder = workspace
-    book = openpyxl.Workbook()
-    book.active.title = "Tab1"
-    for values in (["notes"], ["study", "time"], ["Example2020", 1]):
-        book.active.append(values)
-    book.save(folder / "Example2020.xlsx")
-    prepare_mock(monkeypatch)
-    engine.scan()
-    settle(engine)
-    job = run_next(engine)
-    assert job["status"] == "succeeded"
-    assert (folder / ".Example2020_Tab1.tsv").read_text() == (
-        "study\ttime\nExample2020\t1\n"
-    )
-    report = json.loads(
-        (engine.state_dir / "reports" / f"{job['id']}.json").read_text()
-    )
-    assert report["tables_updated"] == "Created 1 TSV files from Example2020.xlsx"
-    files = {f["path"]: f for f in row(engine)["files"]}
-    assert files[".Example2020_Tab1.tsv"]["generated_from"] == "Example2020.xlsx"
-    assert "generated_from" not in files["Example2020.xlsx"]
-    settle(engine)
-    assert not engine.queue
+    assert row(engine)["summary"]["title"] == "Paper"
 
 
 def test_recent_workspaces_are_ordered_limited_and_persisted(workspace, tmp_path):
@@ -783,7 +746,7 @@ def test_recent_workspaces_are_ordered_limited_and_persisted(workspace, tmp_path
     assert str(root) not in recent
     folders[-1].rmdir()
     restarted = module.CurationEngine(
-        folders[-3], state_dir=tmp_path / "state", offline=True, start=False
+        folders[-3], state_dir=engine.state_dir, offline=True, start=False
     )
     try:
         entries = restarted.snapshot()["recent_workspaces"]
@@ -805,7 +768,7 @@ def test_select_workspace_explains_unusable_paths(workspace, tmp_path):
     with pytest.raises(module.WorkspaceError, match="not a folder"):
         engine.select_workspace(folder / "study.json")
     with pytest.raises(module.WorkspaceError, match="outside"):
-        engine.select_workspace(tmp_path)
+        engine.select_workspace(engine.state_dir.parent)
     engine.active = "job"
     with pytest.raises(module.WorkspaceError, match="Wait for the current job"):
         engine.select_workspace(folder)
@@ -871,7 +834,7 @@ def test_missing_remembered_workspace_falls_back_at_startup(
     removed.rmdir()
     monkeypatch.chdir(folder)
     restarted = module.CurationEngine(
-        state_dir=tmp_path / "state", offline=True, start=False
+        state_dir=engine.state_dir, offline=True, start=False
     )
     try:
         assert restarted.root == folder

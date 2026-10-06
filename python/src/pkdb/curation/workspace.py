@@ -5,7 +5,6 @@ reference_previews, paused, queue, stop, wakeup, state_dir. Uses engine methods 
 _enqueue_one and snapshot.
 """
 
-import hashlib
 import json
 import os
 import time
@@ -14,11 +13,13 @@ from pathlib import Path
 from uuid import uuid4
 
 from pkdb.curation.jobs import fingerprint
-from pkdb.curation.metadata import reference_summary, study_summary
+from pkdb.curation.metadata import reference_summary
 from pkdb.curation.state import EngineState
+from pkdb.curation.studies import study_summary
 from pkdb.preparation import source_hashes
 from pkdb.schemas.validation import StudyValidationError
 from pkdb.source_files import ignored_source
+from pkdb.studyformat import is_v2_folder
 
 RECENT_LIMIT = 10
 DIRECTORY_LIMIT = 2000
@@ -126,7 +127,7 @@ class WorkspaceMixin(EngineState):
         }
 
     def _row(self, folder):
-        identifier = hashlib.sha256(str(folder).encode()).hexdigest()[:20]
+        identifier = f"{folder.parent.name}/{folder.name}"
         path = folder.relative_to(self.root).as_posix()
         uploads = [
             job["upload"]
@@ -136,8 +137,8 @@ class WorkspaceMixin(EngineState):
         return {
             "id": identifier,
             "name": folder.name,
-            "sid": None,
             "path": path,
+            "duplicate": False,
             "substance": folder.parent.name,
             "mode": "validate",
             "status": "discovered",
@@ -147,7 +148,7 @@ class WorkspaceMixin(EngineState):
             "last_upload": uploads[-1] if uploads else None,
             "progress": None,
             "report_id": None,
-            "metadata": {},
+            "summary": {},
             "reference": None,
             "_folder": folder,
             "_fingerprint": None,
@@ -166,14 +167,20 @@ class WorkspaceMixin(EngineState):
         }
         with self.lock:
             folders.update(row["_folder"] for row in self.studies.values())
+        format1 = 0
         for folder in sorted(folders):
+            key = folder.relative_to(root).as_posix()
             try:
                 if folder.is_symlink() or not folder.resolve().is_relative_to(root):
                     continue
+                if not is_v2_folder(folder):
+                    with self.lock:
+                        self.studies.pop(key, None)
+                    if (folder / "study.json").is_file():
+                        format1 += 1
+                    continue
                 with self.lock:
-                    row = self.studies.setdefault(
-                        self._row(folder)["id"], self._row(folder)
-                    )
+                    row = self.studies.setdefault(key, self._row(folder))
                 paths = sorted(
                     p
                     for p in folder.rglob("*")
@@ -192,35 +199,12 @@ class WorkspaceMixin(EngineState):
                     continue
                 hashes = source_hashes(folder)
                 digest = fingerprint(hashes)
-                workbook = f"{folder.name}.xlsx"
-                try:
-                    metadata = json.loads((folder / "study.json").read_text())
-                    if not isinstance(metadata, dict):
-                        metadata = {}
-                except ValueError, OSError:
-                    metadata = {}
+                summary = study_summary(folder)
                 with self.lock:
                     old = row["_fingerprint"]
-                    if row["sid"] and row["sid"] != metadata.get("sid"):
-                        row["identity_changed"] = True
-                        row["message"] = (
-                            "Study identity changed; choose upload mode again after reviewing it"
-                        )
                     row.update(
-                        name=metadata.get("name") or folder.name,
-                        sid=metadata.get("sid"),
-                        files=[
-                            {"id": name, "path": name}
-                            | (
-                                {"generated_from": workbook}
-                                if workbook in hashes
-                                and name.startswith(f".{folder.name}_")
-                                and name.endswith(".tsv")
-                                else {}
-                            )
-                            for name in hashes
-                        ],
-                        metadata=study_summary(metadata),
+                        files=[{"id": name, "path": name} for name in hashes],
+                        summary=summary,
                         reference=reference_summary(folder),
                     )
                     row["_signature"] = signature
@@ -245,9 +229,7 @@ class WorkspaceMixin(EngineState):
                     )
             except (OSError, StudyValidationError) as error:
                 with self.lock:
-                    row = self.studies.setdefault(
-                        self._row(folder)["id"], self._row(folder)
-                    )
+                    row = self.studies.setdefault(key, self._row(folder))
                     row["status"] = "waiting"
                     row["stale"] = True
                     row["message"] = (
@@ -256,9 +238,10 @@ class WorkspaceMixin(EngineState):
                         else "Symlinked source files are not accepted"
                     )
         with self.lock:
-            counts = Counter(r["sid"] for r in self.studies.values() if r["sid"])
+            self.format1_folders = format1
+            counts = Counter(r["id"] for r in self.studies.values())
             for row in self.studies.values():
-                row["duplicate_sid"] = bool(row["sid"] and counts[row["sid"]] > 1)
+                row["duplicate"] = counts[row["id"]] > 1
 
     def _watch(self):
         while not self.stop.wait(1):
@@ -275,11 +258,9 @@ class WorkspaceMixin(EngineState):
             for row in self.studies.values():
                 if not row["_pending"] or time.monotonic() - row["_changed_at"] < 1:
                     continue
-                if row["_blocked"] or row["mode"] == "off" or row["duplicate_sid"]:
+                if row["_blocked"] or row["mode"] == "off" or row["duplicate"]:
                     continue
                 action = "validate" if row.get("_initial") else row["mode"]
-                if action == "upload" and row.get("identity_changed"):
-                    action = "validate"
                 if action == "upload" and (
                     self.offline or not self.account or not self.can_upload
                 ):

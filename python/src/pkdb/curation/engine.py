@@ -80,6 +80,7 @@ class CurationEngine(WorkspaceMixin, JobsMixin, ConnectionMixin, IssuesMixin):
         self.vocabulary = {"status": "offline" if offline else "not_checked"}
         self.cache = VocabularyCache(self.state_dir / "vocabulary")
         self.studies = {}
+        self.format1_folders = 0
         self.reference_previews = {}
         self.jobs = saved.get("jobs", [])
         for job in self.jobs:
@@ -193,6 +194,7 @@ class CurationEngine(WorkspaceMixin, JobsMixin, ConnectionMixin, IssuesMixin):
                             {k: v for k, v in row.items() if not k.startswith("_")}
                             for row in self.studies.values()
                         ],
+                        "format1_folders": self.format1_folders,
                         "jobs": self.jobs,
                         "recent_workspaces": recent,
                     }

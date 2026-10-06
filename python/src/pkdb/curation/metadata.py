@@ -9,14 +9,6 @@ from functools import cache
 from importlib.resources import files
 from pathlib import Path
 
-SECTIONS = {
-    "groups": ("groupset", "groups"),
-    "individuals": ("individualset", "individuals"),
-    "interventions": ("interventionset", "interventions"),
-    "outputs": ("outputset", "outputs"),
-    "data": ("dataset", "data"),
-}
-
 
 @cache
 def _curators() -> dict[str, dict]:
@@ -38,52 +30,10 @@ def profile(username: str) -> dict:
     }
 
 
-def _people(value) -> list[dict]:
-    """Profiles for a username, a [username, score] pair, or a list of either."""
-    if value is None:
-        return []
-    items = value if isinstance(value, list) else [value]
-    if (
-        len(items) == 2
-        and isinstance(items[0], str)
-        and isinstance(items[1], int | float)
-    ):
-        items = [items]
-    people = []
-    for item in items:
-        name, score = item, None
-        if isinstance(item, list) and len(item) == 2:
-            name, score = item
-        if not isinstance(name, str) or not name.strip():
-            continue
-        valid = isinstance(score, int | float) and not isinstance(score, bool)
-        people.append({**profile(name.strip()), "score": score if valid else None})
-    return people
-
-
 def _text(value) -> str | None:
     if isinstance(value, bool) or not isinstance(value, str | int | float):
         return None
     return str(value)
-
-
-def study_summary(metadata: dict) -> dict:
-    creator = _people(metadata.get("creator"))
-    counts = {}
-    for key, (section, entries) in SECTIONS.items():
-        value = metadata.get(section)
-        items = value.get(entries) if isinstance(value, dict) else None
-        counts[key] = len(items) if isinstance(items, list) else 0
-    return {
-        **{
-            key: _text(metadata.get(key))
-            for key in ("sid", "name", "date", "reference", "licence", "access")
-        },
-        "creator": creator[0] if creator else None,
-        "curators": _people(metadata.get("curators")),
-        "collaborators": _people(metadata.get("collaborators")),
-        "counts": counts,
-    }
 
 
 def _author(value) -> str | None:

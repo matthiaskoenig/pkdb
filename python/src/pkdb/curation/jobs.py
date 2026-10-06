@@ -30,6 +30,10 @@ def now():
     return datetime.now(UTC).isoformat()
 
 
+def duplicate_message(identifier):
+    return f"Rename one of the folders with identity {identifier} before uploading"
+
+
 def fingerprint(hashes):
     return hashlib.sha256(json.dumps(hashes, sort_keys=True).encode()).hexdigest()
 
@@ -38,8 +42,8 @@ class JobsMixin(EngineState):
     def _enqueue_one(self, row, action, automatic=False):
         if row["_blocked"]:
             raise ValueError("Reconcile the unknown upload before starting another job")
-        if row["duplicate_sid"] and action == "upload":
-            raise ValueError("Resolve duplicate study identifiers before uploading")
+        if row["duplicate"] and action == "upload":
+            raise ValueError(duplicate_message(row["id"]))
         if action == "upload" and (
             self.offline or not self.endpoint or not self.api_key
         ):
@@ -83,8 +87,9 @@ class JobsMixin(EngineState):
             rows = self._selected(ids)
             if any(row["_blocked"] for row in rows):
                 raise ValueError("Reconcile unknown uploads first")
-            if action == "upload" and any(row["duplicate_sid"] for row in rows):
-                raise ValueError("Resolve duplicate study identifiers before uploading")
+            for row in rows:
+                if action == "upload" and row["duplicate"]:
+                    raise ValueError(duplicate_message(row["id"]))
             if action in {"upload", "validate_remote"} and (
                 self.offline or not self.endpoint or not self.api_key
             ):
@@ -97,12 +102,25 @@ class JobsMixin(EngineState):
     def _selected(self, ids):
         if not isinstance(ids, list) or not ids or len(ids) > 1000:
             raise ValueError("Select between 1 and 1000 studies")
-        if any(
-            not isinstance(identifier, str) or identifier not in self.studies
-            for identifier in ids
-        ):
+        if any(not isinstance(identifier, str) for identifier in ids):
             raise ValueError("Study is not in this workspace")
-        return [self.studies[key] for key in dict.fromkeys(ids)]
+        rows = []
+        for identifier in dict.fromkeys(ids):
+            matches = [row for row in self.studies.values() if row["id"] == identifier]
+            if not matches:
+                raise ValueError("Study is not in this workspace")
+            if len(matches) > 1:
+                paths = ", ".join(row["path"] for row in matches)
+                raise ValueError(
+                    f"{identifier} is the identity of two folders: {paths}; rename one"
+                )
+            rows.append(matches[0])
+        return rows
+
+    def _row_of(self, identifier):
+        return next(
+            (row for row in self.studies.values() if row["id"] == identifier), None
+        )
 
     def set_mode(self, ids, mode):
         if mode not in {"validate", "upload", "off"}:
@@ -116,7 +134,6 @@ class JobsMixin(EngineState):
                 )
             for row in self._selected(ids):
                 row["mode"] = mode
-                row["identity_changed"] = False
                 row["_pending"] = False  # Mode changes are not saves.
                 self.modes.setdefault(self._context(), {})[row["id"]] = mode
             self._save()
@@ -132,7 +149,8 @@ class JobsMixin(EngineState):
             self.paused = bool(paused)
             if paused:
                 for identifier in self.queue:
-                    self.studies[identifier]["_pending"] = True
+                    if row := self._row_of(identifier):
+                        row["_pending"] = True
                 self._cancel_pending()
             self._save()
         self.wakeup.set()
@@ -181,8 +199,12 @@ class JobsMixin(EngineState):
         from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
         from pkdb.tsv import WorkbookError, sync_tsvs
 
-        row = self.studies[job["study_id"]]
         with self.lock:
+            row = self._row_of(job["study_id"])
+            if row is None:
+                job.update(status="canceled", message="Study is not in this workspace")
+                self._save()
+                return
             if row["_blocked"]:
                 job.update(
                     status="canceled",
@@ -466,8 +488,9 @@ class JobsMixin(EngineState):
                 if job["id"] in ids:
                     job.update(status="canceled", message="Canceled before starting")
                     self.queue.pop(identifier)
-                    self.studies[identifier]["_pending"] = False
-                    self.studies[identifier]["status"] = "changed"
+                    if row := self._row_of(identifier):
+                        row["_pending"] = False
+                        row["status"] = "changed"
             self._save()
         return self.snapshot()
 
@@ -504,9 +527,11 @@ class JobsMixin(EngineState):
             ]
             if not unknown or any(j["endpoint"] != self.endpoint for j in unknown):
                 raise ValueError("Retry must target the original server")
-            if row["duplicate_sid"] or not self.endpoint or not self.api_key:
+            if row["duplicate"] or not self.endpoint or not self.api_key:
                 raise ValueError(
-                    "Resolve duplicate identifiers and connect an API key first"
+                    duplicate_message(identifier)
+                    if row["duplicate"]
+                    else "Connect an API key first"
                 )
             # Preserve the historical unknown persistence rather than pretending it failed.
             for job in unknown:
