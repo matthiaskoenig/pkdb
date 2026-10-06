@@ -88,11 +88,20 @@ def redact(value, token):
 
 
 class _TablesNotReady(Exception):
-    """The workbook and the tables of a study could not be synced or formatted."""
+    """The workbook and the tables of a study could not be synced or formatted.
 
-    def __init__(self, message: str, issues: Iterable[ValidationIssue]):
+    `tables_updated` says what the sync changed in the folder before it stopped.
+    """
+
+    def __init__(
+        self,
+        message: str,
+        issues: Iterable[ValidationIssue],
+        tables_updated: str | None = None,
+    ):
         super().__init__(message)
         self.report = ValidationReport(issues=list(issues)).finalize()
+        self.tables_updated = tables_updated
 
 
 def _described(changes: Sequence[FileChange], wrote: str, removed: str) -> list[str]:
@@ -116,11 +125,26 @@ def _sync_tables(
     in the folder, or None, and the warnings of the sync. A workbook saved
     during the sync is synced once more. Raises _TablesNotReady when the sync or
     the formatting has errors, such as a conflict, or when the workbook was
-    saved during both syncs; then nothing is uploaded. A folder without
-    workbook has nothing to sync, and none is created.
+    saved during both syncs, which makes `workbook_changed` an error; then
+    nothing is uploaded, and the error says which tables the syncs wrote. A
+    folder without workbook has nothing to sync, and none is created.
     """
     changes: list[FileChange] = []
     warnings: tuple[ValidationIssue, ...] = ()
+    done: list[str] = []
+
+    def updated() -> str | None:
+        text = "; ".join(done)
+        return text[0].upper() + text[1:] if text else None
+
+    def described_sync() -> list[str]:
+        # A file written by both syncs is described once, by its last change.
+        return _described(
+            list({change.file: change for change in changes}.values()),
+            "wrote {} from the workbook",
+            "removed {}, which the workbook no longer holds",
+        )
+
     emit(progress, "sync")
     if workbook_path(folder).exists():
         synced = sync_study(folder, vocabulary, max_rows=max_rows)
@@ -129,35 +153,39 @@ def _sync_tables(
             # The save is not in the tables yet; this sync merges it.
             synced = sync_study(folder, vocabulary, max_rows=max_rows)
             changes += synced.changes
+        done = described_sync()
         if not synced.ok:
             raise _TablesNotReady(
                 "The workbook and the tables cannot be synced, so nothing was "
                 "uploaded; run pkdb tables sync",
                 synced.issues,
+                updated(),
             )
         if synced.workbook_action == "sync_again":
+            # The save that is not in the tables stops the upload.
+            issues = [
+                issue.model_copy(update={"severity": "error"})
+                if issue.code == "workbook_changed"
+                else issue
+                for issue in synced.issues
+            ]
             raise _TablesNotReady(
                 "The workbook was saved during the sync again, so its last save is "
                 "not in the tables and nothing was uploaded; upload again",
-                synced.issues,
+                issues,
+                updated(),
             )
         warnings = synced.issues
-    # A file written by both syncs is described once, by its last change.
-    done = _described(
-        list({change.file: change for change in changes}.values()),
-        "wrote {} from the workbook",
-        "removed {}, which the workbook no longer holds",
-    )
     emit(progress, "format")
     formatted = format_folder(folder)
     if not formatted.ok:
         raise _TablesNotReady(
             "The tables cannot be formatted, so nothing was uploaded; run pkdb format",
             formatted.issues,
+            updated(),
         )
     done += _described(formatted.changes, "formatted {}", "removed {} without rows")
-    text = "; ".join(done)
-    return (text[0].upper() + text[1:] if text else None), warnings
+    return updated(), warnings
 
 
 def _worker(
@@ -257,6 +285,8 @@ def _worker(
                 result.update(
                     error=str(error), report=error.report.model_dump(mode="json")
                 )
+                if error.tables_updated:
+                    result["tables_updated"] = error.tables_updated
             except StudyValidationError as error:
                 result.update(
                     error="Study validation failed",

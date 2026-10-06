@@ -575,8 +575,15 @@ def test_upload_syncs_a_workbook_saved_during_the_sync_again(
         assert not row["ok"]
         assert row["stage"] == "sync"
         assert "upload again" in row["error"]
-        assert "workbook_changed" in {
-            issue["code"] for issue in row["report"]["issues"]
-        }
+        [changed] = [
+            issue
+            for issue in row["report"]["issues"]
+            if issue["code"] == "workbook_changed"
+        ]
+        assert changed["severity"] == "error"
+        # The tables that the syncs wrote are reported, although nothing was uploaded.
+        assert row["tables_updated"] == (
+            "Wrote outputs_Tab2.tsv, timecourses_Fig1.tsv from the workbook"
+        )
         assert all(request.method == "GET" for request in requests)
     assert len(calls) == 2
