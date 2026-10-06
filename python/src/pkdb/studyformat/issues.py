@@ -21,7 +21,6 @@ WARNINGS = frozenset(
         "workbook_base_missing",
         "workbook_base_invalid",
         "formula_value",
-        "cell_escape_text",
         "workbook_open",
         "workbook_changed",
         "workbook_not_ignored",

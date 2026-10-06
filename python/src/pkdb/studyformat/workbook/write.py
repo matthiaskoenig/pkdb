@@ -75,7 +75,7 @@ BOLD.bold = True
 CELL_ISSUES = {
     "cell_too_long": "cells are longer than a spreadsheet cell",
     "illegal_character": "cells contain characters a workbook cannot hold",
-    "cell_escape_text": "cells contain text that LibreOffice changes when it saves",
+    "cell_escape_text": "cells contain text that LibreOffice does not save as written",
 }
 
 
@@ -355,7 +355,7 @@ def _write_table(
 def _write_cell(cell: Cell, column: Column, text: str) -> tuple[str, str, str] | None:
     """Write one cell; the code, message and hint of an issue, or None.
 
-    A cell with an error is not written; a cell with a warning is.
+    A cell with an issue is not written.
     """
     # A text has at most two UTF-16 code units per character.
     if len(text) * 2 > CELL_LIMIT:
@@ -376,15 +376,15 @@ def _write_cell(cell: Cell, column: Column, text: str) -> tuple[str, str, str] |
     if not _is_text(column) and (number := _number(text)) is not None:
         cell.value = number
         return None
-    _put_text(cell, text)
     if (match := OVERLAPPING_ESCAPES.search(text)) is not None:
+        # A workbook saved by LibreOffice would change the text without a trace.
         return (
             "cell_escape_text",
             f"The cell contains {match.group()}, two escapes of the form _xHHHH_ "
-            "that share an underscore; LibreOffice changes such text when it "
-            "saves the workbook",
-            "Edit this cell in the TSV file or in Excel, or change the text.",
+            "that share an underscore, which LibreOffice does not save as written",
+            "Replace the text, for example by removing the underscores.",
         )
+    _put_text(cell, text)
     return None
 
 

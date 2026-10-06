@@ -82,7 +82,6 @@ EDGE_ROWS = (
         "time": "2",
         "tissue": "_x0041_",
         "method": "a_x005F_b",
-        "comment": "_x005F_x0041_",
     },
     # Text that looks like an error value of a spreadsheet application.
     {
@@ -108,7 +107,8 @@ def build(tables, vocabulary, path, **options) -> Path:
     result = build_workbook(
         tables, vocabulary, generation=GENERATION, created=CREATED, **options
     )
-    assert result.data is not None, result.issues
+    assert result.issues == []
+    assert result.data is not None
     path.write_bytes(result.data)
     return path
 
@@ -186,7 +186,7 @@ def workbook(study_tables, sf_vocabulary, tmp_path):
     return build(study_tables, sf_vocabulary, tmp_path / "Example.xlsx")
 
 
-def check_round_trip(content, tables, base=None):
+def check_round_trip(content, tables):
     assert content.issues == []
     assert content.ok
     assert texts(content) == tables
@@ -207,7 +207,7 @@ def check_round_trip(content, tables, base=None):
     assert content.base is not None
     assert content.base.generation == GENERATION
     assert content.base.created == CREATED
-    assert dict(content.base.files) == (tables if base is None else base)
+    assert dict(content.base.files) == tables
 
 
 @pytest.fixture
@@ -223,7 +223,6 @@ def edge_tables(make_study, valid_files, tsv):
         "\tNR\tNR\t",
         "\t=x\t",
         "\t_x0041_\ta_x005F_b\t",
-        "\t_x005F_x0041_\n",
         "\t#N/A\t#DIV/0!\t",
         "\t#REF!\n",
     ):
@@ -241,18 +240,6 @@ def edge_workbook(edge_tables, sf_vocabulary, tmp_path):
     )
 
 
-def libreoffice_saved(tables):
-    """The edge tables as LibreOffice saves them.
-
-    It saves the escapes of _x005F_x0041_ wrongly, which reads back as _x0041_;
-    the generation warns about such text (cell_escape_text).
-    """
-    edge = "outputs_Tab1.tsv"
-    changed = tables[edge].replace("\t_x005F_x0041_\n", "\t_x0041_\n")
-    assert changed != tables[edge]
-    return {**tables, edge: changed}
-
-
 def test_round_trip_is_lossless(edge_workbook, edge_tables):
     check_round_trip(read_workbook(edge_workbook, STUDY), edge_tables)
 
@@ -261,18 +248,14 @@ def test_round_trip_is_lossless_after_a_libreoffice_save(
     edge_workbook, edge_tables, libreoffice_resave
 ):
     resaved = libreoffice_resave(edge_workbook)
-    check_round_trip(
-        read_workbook(resaved, STUDY), libreoffice_saved(edge_tables), edge_tables
-    )
+    check_round_trip(read_workbook(resaved, STUDY), edge_tables)
 
 
 def test_round_trip_is_lossless_after_two_libreoffice_saves(
     edge_workbook, edge_tables, libreoffice_resave
 ):
     resaved = libreoffice_resave(libreoffice_resave(edge_workbook))
-    check_round_trip(
-        read_workbook(resaved, STUDY), libreoffice_saved(edge_tables), edge_tables
-    )
+    check_round_trip(read_workbook(resaved, STUDY), edge_tables)
 
 
 def test_rows_map_canonical_lines_to_sheet_rows(sf_vocabulary, tmp_path):

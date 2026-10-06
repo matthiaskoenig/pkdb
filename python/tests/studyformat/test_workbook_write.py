@@ -497,7 +497,6 @@ def decoded(text):
 ESCAPE_LIKE = {
     "_x0041_": "_x005F_x0041_",
     "a_x005F_b": "a_x005F_x005F_b",
-    "_x005F_x0042_": "_x005F_x005F_x005F_x0042_",
 }
 
 
@@ -518,12 +517,17 @@ def test_text_like_an_escape_is_escaped(sf_vocabulary, tmp_path, libreoffice_res
     texts = [
         decoded(text) for text in stored_strings(libreoffice_resave(path).read_bytes())
     ]
-    # LibreOffice reads every text as written, and saves those whose escapes do
-    # not share an underscore so that they read back unchanged. It keeps one
-    # shared string of the cells of both sheets.
+    # LibreOffice reads the texts as written and saves them so that they read
+    # back unchanged. It keeps one shared string of the cells of both sheets.
     assert "_x0041_" in texts and "a_x005F_b" in texts
     assert "A" not in texts and "a_b" not in texts
-    assert "_x0042_" in texts and "_x005F_x0042_" not in texts
+
+
+def test_escapes_that_share_an_underscore_are_all_escaped():
+    from pkdb.studyformat.workbook.write import escape_text
+
+    assert escape_text("_x005F_x0041_") == "_x005F_x005F_x005F_x0041_"
+    assert decoded(escape_text("a_x0041_x0042_b")) == "a_x0041_x0042_b"
 
 
 def test_a_long_text_like_escapes_is_kept_whole(sf_vocabulary, tmp_path):
@@ -543,16 +547,19 @@ def test_a_long_text_like_escapes_is_kept_whole(sf_vocabulary, tmp_path):
     assert content.tables["outputs_Tab1.tsv"].text == tables["outputs_Tab1.tsv"]
 
 
-def test_text_whose_escapes_share_an_underscore_is_a_warning(sf_vocabulary):
+@pytest.mark.parametrize("column", ["comment", "mean"])
+def test_text_whose_escapes_share_an_underscore_is_an_error(sf_vocabulary, column):
+    # LibreOffice saves _x005F_x0041_ unescaped, so that it reads back as _x0041_.
     result = build(
-        {"outputs_Tab1.tsv": outputs({"comment": "a_x005F_x0041_b"})}, sf_vocabulary
+        {"outputs_Tab1.tsv": outputs({column: "a_x005F_x0041_b"})}, sf_vocabulary
     )
-    assert result.data is not None
+    assert result.data is None
     [issue] = result.issues
-    assert (issue.code, issue.severity) == ("cell_escape_text", "warning")
+    assert (issue.code, issue.severity) == ("cell_escape_text", "error")
     assert "_x005F_x0041_" in issue.message
+    assert "removing the underscores" in issue.suggestions[0].message
     assert issue.source.file == "outputs_Tab1.tsv"
-    assert issue.source.cell == f"{letter('outputs', 'comment')}2"
+    assert issue.source.cell == f"{letter('outputs', column)}2"
 
 
 def test_repeated_cell_issues_are_capped(sf_vocabulary):

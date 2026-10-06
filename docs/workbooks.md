@@ -113,7 +113,7 @@ Text that looks like an error value, such as `#N/A` in a text column, is text an
 
 Numbers with more than 15 significant digits appear as text cells, because LibreOffice saves at most 15 significant digits. They are written back to the tables unchanged. Every other number is a number cell, so the tables come back unchanged from a round trip through the workbook.
 
-The workbook file format stores some characters as escapes such as `_x0041_`, so a text that looks like one, such as `_x0041_` itself, is stored escaped and reads back unchanged. LibreOffice saves text in which two such escapes share an underscore, such as `_x005F_x0041_`, wrongly, and it reads back as `_x0041_`. The workbook generation warns about such a cell (`cell_escape_text`); edit it in the TSV file or in Excel. A control character in a cell, which Excel stores as such an escape, is an error (`illegal_character`).
+The workbook file format stores some characters as escapes such as `_x0041_`, so a text that looks like one, such as `_x0041_` itself, is stored escaped and reads back unchanged. LibreOffice saves text in which two such escapes share an underscore, such as `_x005F_x0041_`, wrongly, so that it reads back as `_x0041_`. Such a cell is an error at its TSV line (`cell_escape_text`), and no workbook is generated until you replace the text, for example by removing the underscores. A control character in a cell, which Excel stores as such an escape, is an error (`illegal_character`).
 
 ## Git
 

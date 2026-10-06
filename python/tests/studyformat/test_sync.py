@@ -1134,6 +1134,26 @@ def test_text_that_looks_like_an_error_value_syncs(
     assert cell(study, TIMECOURSES, 2, "comment") == text
 
 
+def test_text_that_libreoffice_cannot_save_is_never_generated(
+    study, workbook, sf_vocabulary
+):
+    edit_table(study, TIMECOURSES, 2, comment="_x005F_x0041_")
+    before = snapshot(study)
+
+    result = sync_study(study, sf_vocabulary)
+
+    assert not result.ok
+    [issue] = result.issues
+    assert (issue.code, issue.severity) == ("cell_escape_text", "error")
+    assert issue.source is not None
+    assert (issue.source.file, issue.source.cell) == (
+        TIMECOURSES,
+        f"{letter(TIMECOURSES, 'comment')}2",
+    )
+    assert result.workbook_action == "unchanged"
+    assert snapshot(study) == before
+
+
 def test_a_formula_is_synced_as_its_saved_value(
     study, workbook, sf_vocabulary, libreoffice_resave
 ):
