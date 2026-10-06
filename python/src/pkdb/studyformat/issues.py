@@ -22,6 +22,7 @@ WARNINGS = frozenset(
         "workbook_base_invalid",
         "formula_value",
         "workbook_open",
+        "workbook_changed",
     }
 )
 _GROUPS = {
@@ -117,6 +118,7 @@ _GROUPS = {
         "formula_without_value",
         "formula_value",
         "workbook_open",
+        "workbook_changed",
         "sync_conflict",
         "sync_write_failed",
     ),

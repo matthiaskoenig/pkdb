@@ -9,13 +9,19 @@ base B the workbook was generated from, the workbook content W and the tables T.
 - Both changed: a line-based three-way merge. Conflicts write nothing, unless
   `keep` resolves them to one side.
 
-The sync state file next to the workbook overrides `_base` for the tables written
-from the workbook since its generation, so a workbook saved twice while it stays
-open does not conflict with the first sync. The workbook is rewritten only when
-the tables hold content it lacks, and never while it is open.
+Without `_base`, the base is empty: a table on one side only is kept, the union
+of both sides, and a table that differs between the sides conflicts as a whole.
+
+After a sync, the workbook content is the common ancestor of its later saves and
+of the new tables. The sync state file next to the workbook records it as the
+base of every table it changed since its generation and overrides `_base`, so a
+workbook saved again while it stays open does not conflict with the first sync.
+The workbook is rewritten only when the tables hold content it lacks, never
+while it is open, and never when it was saved during the sync.
 """
 
 from collections.abc import Mapping, Sequence
+from contextlib import suppress
 from dataclasses import dataclass, field, replace
 from pathlib import Path
 from typing import Literal
@@ -41,7 +47,9 @@ from pkdb.studyformat.workbook.read import WorkbookContent, read_workbook
 from pkdb.studyformat.workbook.write import WorkbookError, build_workbook
 
 Side = Literal["workbook", "tables"]
-WorkbookAction = Literal["created", "regenerated", "unchanged", "close_to_update"]
+WorkbookAction = Literal[
+    "created", "regenerated", "unchanged", "close_to_update", "sync_again"
+]
 
 SUBJECTS = table_file("subjects")
 # merge_lines merges the workbook as ours and the tables as theirs.
@@ -81,7 +89,12 @@ class SyncResult:
     """Outcome of a sync, or of its plan in check mode.
 
     `changes` are the TSV writes and deletes, done or planned when `checked`.
-    `lock` is the lock file of the open workbook, if one was found.
+    `workbook_action` is `created` or `regenerated` when the workbook was
+    written, `unchanged` when it already held the tables or an issue stopped the
+    sync, `close_to_update` when it needs the tables but is open, and
+    `sync_again` when it needs the tables but was saved during the sync; the
+    next sync merges that save. `lock` is the lock file of the open workbook, if
+    one was found.
     """
 
     folder: Path
@@ -138,17 +151,13 @@ def _load(file: str, text: str, study: str) -> LoadedTable:
 
 
 def _canonical(
-    file: str, text: str, study: str, order: Mapping[str, int] | None
+    file: str, text: str, study: str, order: Mapping[str, int]
 ) -> str | None:
     """Canonical text of a table with its rows sorted by a subject order.
 
-    The subjects table sorts by its own order when `order` is None. None
-    removes an optional table without rows.
+    None removes an optional table without rows.
     """
-    table = _load(file, text, study)
-    return render_table(
-        table, study, subject_order(table) if order is None else dict(order)
-    )
+    return render_table(_load(file, text, study), study, dict(order))
 
 
 def _numbers(word: str, numbers: Sequence[int]) -> str:
@@ -259,6 +268,7 @@ def _plan(
     study: str,
     tables: Mapping[str, str],
     tables_order: Mapping[str, int],
+    workbook: Mapping[str, str],
     content: WorkbookContent,
     base: Mapping[str, str],
     keep: Side | None,
@@ -269,7 +279,6 @@ def _plan(
     rows differently, and a merged text is always made canonical.
     """
     plan = _Plan()
-    workbook = {file: sheet.text for file, sheet in content.tables.items()}
     subjects = workbook.get(SUBJECTS)
     workbook_order = subject_order(
         None if subjects is None else _load(SUBJECTS, subjects, study)
@@ -308,8 +317,6 @@ def _plan(
                 continue
             text, sorted_by = "\n".join(merged.lines) + "\n", None
         if file == SUBJECTS:
-            if text is not None and sorted_by is None:
-                text = _canonical(file, text, study, None)
             if text is None:
                 plan.issues.append(
                     make_issue(
@@ -320,17 +327,31 @@ def _plan(
                     )
                 )
                 continue
-            order = (
-                tables_order
-                if text == t
-                else workbook_order
-                if text == w
-                else subject_order(_load(SUBJECTS, text, study))
-            )
+            if sorted_by is None:
+                # Merged subjects sort by their own order, as on each side.
+                table = _load(SUBJECTS, text, study)
+                sorted_by = subject_order(table)
+                text = render_table(table, study, dict(sorted_by))
+            order = sorted_by
         elif text is not None and sorted_by != order:
             text = _canonical(file, text, study, order)
         plan.files[file] = text
     return plan
+
+
+def _remove_state(workbook: Path) -> None:
+    # Best effort: read_state ignores the state file of an old generation.
+    with suppress(OSError):
+        remove_state(workbook)
+
+
+def _signature(workbook: Path) -> tuple[int, int] | None:
+    """Modification time and size of the workbook, None when it is gone."""
+    try:
+        status = workbook.stat()
+    except OSError:
+        return None
+    return status.st_mtime_ns, status.st_size
 
 
 def _write_issue(file: str, error: OSError) -> ValidationIssue:
@@ -394,7 +415,7 @@ def _create(
     except OSError as error:
         return replace(outcome, issues=(*issues, _write_issue(path.name, error)))
     # A state file left by an earlier workbook belongs to another generation.
-    remove_state(path)
+    _remove_state(path)
     return replace(outcome, workbook_action="created", issues=issues)
 
 
@@ -402,9 +423,14 @@ def _regenerate(
     outcome: SyncResult,
     files: Mapping[str, str | None],
     content: WorkbookContent,
+    signature: tuple[int, int] | None,
     vocabulary: Vocabulary,
 ) -> SyncResult:
-    """Rewrite the workbook from the new tables, keeping its scratch sheets."""
+    """Rewrite the workbook from the new tables, keeping its scratch sheets.
+
+    `signature` is that of the workbook before it was read. A workbook opened or
+    saved since then is not replaced, so that the save is merged next time.
+    """
     path = outcome.workbook
     # Sheets added by pkdb tables add stay until they have rows; the sheet of a
     # table that the sync removes goes.
@@ -426,6 +452,21 @@ def _regenerate(
     issues = (*outcome.issues, *build.issues)
     if build.data is None:
         return replace(outcome, issues=issues)
+    if (lock := open_lock(path)) is not None:
+        return replace(
+            outcome,
+            workbook_action="close_to_update",
+            lock=lock,
+            issues=(*issues, _open_issue(path, lock)),
+        )
+    if _signature(path) != signature:
+        changed = make_issue(
+            "workbook_changed",
+            f"{path.name} was saved during the sync, so it was not updated with "
+            "the changes of the tables; sync again",
+            file=path.name,
+        )
+        return replace(outcome, workbook_action="sync_again", issues=(*issues, changed))
     try:
         atomic_bytes(path, build.data)
     except PermissionError:
@@ -437,7 +478,7 @@ def _regenerate(
         )
     except OSError as error:
         return replace(outcome, issues=(*issues, _write_issue(path.name, error)))
-    remove_state(path)
+    _remove_state(path)
     return replace(outcome, workbook_action="regenerated", issues=issues)
 
 
@@ -455,8 +496,10 @@ def sync_study(
     of the workbook are written to the TSV files in canonical form, and the
     workbook is regenerated when the tables hold content it lacks, unless it is
     open. Changes on both sides merge line by line, and `keep` resolves
-    conflicting rows to one side. An error, or a conflict left unresolved,
-    writes nothing; every file is replaced atomically. `check` only plans.
+    conflicting rows to one side. Without `_base`, a table on one side only is
+    kept, and a table that differs between the sides conflicts. An error, or a
+    conflict left unresolved, writes nothing; every file is replaced
+    atomically. `check` only plans.
     `max_rows` limits the data rows of the tables and of the workbook, as an
     upload does.
     """
@@ -482,6 +525,8 @@ def sync_study(
     if not path.exists():
         return _create(outcome, tables, vocabulary)
 
+    # A save during the sync must not be overwritten by the regeneration.
+    signature = _signature(path)
     try:
         content = read_workbook(path, study.name, max_rows=max_rows)
     except StudyValidationError as error:
@@ -499,7 +544,8 @@ def sync_study(
             else:
                 base[file] = text
 
-    plan = _plan(study.name, tables, order, content, base, keep)
+    workbook = {file: sheet.text for file, sheet in content.tables.items()}
+    plan = _plan(study.name, tables, order, workbook, content, base, keep)
     outcome = replace(
         outcome,
         conflicts=tuple(plan.conflicts),
@@ -512,18 +558,16 @@ def sync_study(
         for file, text in plan.files.items()
         if text != tables.get(file)
     ]
-    workbook = {file: sheet.text for file, sheet in content.tables.items()}
     if not check:
         done, failure = _write_tables(folder, plan.files, changes)
-        # The tables that now equal the workbook have it as their base, so that
-        # the next save of the open workbook does not conflict.
+        # The workbook content is the common ancestor of its later saves and of
+        # the new tables, whether they took it, merged it or kept the tables.
+        # A table whose write failed keeps its base, so the sync is retried.
         pending = {change.file for change in changes[len(done) :]}
         recorded = {
-            file: text
-            for file, text in plan.files.items()
-            if file not in pending
-            and text == workbook.get(file)
-            and text != base.get(file)
+            file: workbook.get(file)
+            for file in plan.files
+            if file not in pending and workbook.get(file) != base.get(file)
         }
         if content.base is not None and recorded:
             try:
@@ -546,4 +590,4 @@ def sync_study(
         )
     if check:
         return replace(outcome, workbook_action="regenerated")
-    return _regenerate(outcome, plan.files, content, vocabulary)
+    return _regenerate(outcome, plan.files, content, signature, vocabulary)

@@ -13,7 +13,7 @@ import openpyxl
 import pytest
 from openpyxl.utils import get_column_letter
 
-from pkdb.studyformat import SyncResult, sync_study
+from pkdb.studyformat import SyncResult, sync, sync_study
 from pkdb.studyformat.formatter import FileChange, format_folder
 from pkdb.studyformat.sync import SyncConflict
 from pkdb.studyformat.tables import parse_table_file
@@ -31,6 +31,7 @@ SUBJECTS = "subjects.tsv"
 OUTPUTS = "outputs_Tab2.tsv"
 TIMECOURSES = "timecourses_Fig1.tsv"
 SCATTERS = "scatters_Fig2.tsv"
+LOCK = ".~lock.Example.xlsx#"
 
 
 def names(file):
@@ -399,7 +400,7 @@ def test_an_open_workbook_is_regenerated_after_it_is_closed(
 
 def test_two_saves_while_the_workbook_stays_open(study, workbook, sf_vocabulary):
     """Plan Review Focus 1: the second save does not conflict with the first sync."""
-    (study / ".~lock.Example.xlsx#").write_text("curator", encoding="utf-8")
+    (study / LOCK).write_text("curator", encoding="utf-8")
     for mean in (2.25, 2.5):
         set_cells(workbook, "timecourses_Fig1", 3, mean=mean)
 
@@ -410,6 +411,64 @@ def test_two_saves_while_the_workbook_stays_open(study, workbook, sf_vocabulary)
         assert result.changes == (FileChange(TIMECOURSES, "write"),)
         assert result.workbook_action == "unchanged"
         assert cell(study, TIMECOURSES, 3, "mean") == str(mean)
+
+
+def test_a_save_after_a_merge_while_the_workbook_stays_open(
+    study, workbook, sf_vocabulary
+):
+    (study / LOCK).write_text("curator", encoding="utf-8")
+    set_cells(workbook, "timecourses_Fig1", 2, mean=0.25)
+    edit_table(study, TIMECOURSES, 4, mean="1.5")
+
+    merged = sync_study(study, sf_vocabulary)
+
+    assert merged.ok, merged.issues
+    assert merged.changes == (FileChange(TIMECOURSES, "write"),)
+    assert merged.workbook_action == "close_to_update"
+
+    # The open workbook still lacks the tables change of line 4.
+    set_cells(workbook, "timecourses_Fig1", 2, mean=0.3)
+
+    saved = sync_study(study, sf_vocabulary)
+
+    assert saved.ok, saved.issues
+    assert saved.conflicts == ()
+    assert saved.changes == (FileChange(TIMECOURSES, "write"),)
+    assert saved.workbook_action == "close_to_update"
+    assert [cell(study, TIMECOURSES, line, "mean") for line in (2, 3, 4)] == [
+        "0.3",
+        "2",
+        "1.5",
+    ]
+
+
+def test_keep_tables_while_the_workbook_stays_open(study, workbook, sf_vocabulary):
+    (study / LOCK).write_text("curator", encoding="utf-8")
+    set_cells(workbook, "timecourses_Fig1", 2, mean=0.25)
+    edit_table(study, TIMECOURSES, 2, mean="0.75")
+
+    kept = sync_study(study, sf_vocabulary, keep="tables")
+
+    assert kept.ok, kept.issues
+    assert [conflict.kept for conflict in kept.conflicts] == ["tables"]
+    assert kept.changes == ()
+    assert kept.workbook_action == "close_to_update"
+
+    again = sync_study(study, sf_vocabulary)
+
+    assert again.ok, again.issues
+    assert again.conflicts == ()
+    assert again.changes == ()
+    assert again.workbook_action == "close_to_update"
+
+    # Closed without saving: the workbook takes the kept tables.
+    (study / LOCK).unlink()
+
+    closed = sync_study(study, sf_vocabulary)
+
+    assert closed == SyncResult(study, workbook, workbook_action="regenerated")
+    assert cell(study, TIMECOURSES, 2, "mean") == "0.75"
+    assert_in_step(study, workbook)
 
 
 def test_a_state_file_of_another_generation_is_ignored(study, workbook, sf_vocabulary):
@@ -545,9 +604,11 @@ def test_a_table_deleted_while_its_sheet_changed_conflicts(
     base = table_lines(study, OUTPUTS)
     set_cells(workbook, "outputs_Tab2", 2, mean=3.5)
     (study / OUTPUTS).unlink()
+    before = snapshot(study)
 
     result = sync_study(study, sf_vocabulary)
 
+    assert not result.ok
     assert result.conflicts == (
         SyncConflict(
             OUTPUTS,
@@ -558,9 +619,12 @@ def test_a_table_deleted_while_its_sheet_changed_conflicts(
         ),
     )
     [issue] = result.issues
+    assert issue.code == "sync_conflict"
     assert issue.source is not None
     assert issue.source.row == 1
-    assert not (study / OUTPUTS).exists()
+    assert result.changes == ()
+    assert result.workbook_action == "unchanged"
+    assert snapshot(study) == before
 
 
 def test_the_subjects_table_is_never_deleted(study, workbook, sf_vocabulary):
@@ -664,6 +728,24 @@ def test_without_a_base_differences_conflict_unless_kept(
         assert_in_step(study, workbook)
 
 
+def test_without_a_base_a_table_on_one_side_is_kept(study, workbook, sf_vocabulary):
+    scatters = (study / SCATTERS).read_bytes()
+    edit(workbook, remove_sheet("_base"))
+    edit(workbook, remove_sheet("outputs_Tab2"))
+    (study / SCATTERS).unlink()
+
+    result = sync_study(study, sf_vocabulary)
+
+    # The union of both sides: nothing tells a removal from an addition.
+    assert result.ok, result.issues
+    assert codes(result) == ["workbook_base_missing"]
+    assert result.changes == (FileChange(SCATTERS, "write"),)
+    assert result.workbook_action == "regenerated"
+    assert (study / SCATTERS).read_bytes() == scatters
+    assert (study / OUTPUTS).exists()
+    assert_in_step(study, workbook)
+
+
 def test_a_failed_write_keeps_every_file_whole(
     study, workbook, sf_vocabulary, monkeypatch
 ):
@@ -733,6 +815,78 @@ def test_a_failed_state_write_stops_before_the_workbook(
     assert result.workbook_action == "unchanged"
     assert cell(study, TIMECOURSES, 3, "mean") == "2.25"
     assert workbook.read_bytes() == opened
+
+
+@pytest.mark.parametrize("meanwhile", ["save", "open"])
+def test_a_workbook_saved_or_opened_during_the_sync_is_not_replaced(
+    study, workbook, sf_vocabulary, monkeypatch, meanwhile
+):
+    edit_table(study, OUTPUTS, 2, mean="3.5")
+    generation = generation_of(workbook)
+    build = sync.build_workbook
+
+    def build_meanwhile(*arguments, **options):
+        built = build(*arguments, **options)
+        if meanwhile == "save":
+            # A save that leaves no lock file, such as of a synced folder.
+            set_cells(workbook, "timecourses_Fig1", 3, mean=2.25)
+        else:
+            (study / LOCK).write_text("curator", encoding="utf-8")
+        return built
+
+    monkeypatch.setattr(sync, "build_workbook", build_meanwhile)
+
+    result = sync_study(study, sf_vocabulary)
+    current = workbook.read_bytes()
+
+    assert result.ok, result.issues
+    assert result.changes == ()
+    [issue] = result.issues
+    assert issue.severity == "warning"
+    if meanwhile == "save":
+        assert result.workbook_action == "sync_again"
+        assert issue.code == "workbook_changed"
+        assert result.lock is None
+    else:
+        assert result.workbook_action == "close_to_update"
+        assert issue.code == "workbook_open"
+        assert result.lock == study / LOCK
+        (study / LOCK).unlink()
+    assert generation_of(workbook) == generation
+    assert workbook.read_bytes() == current
+
+    monkeypatch.undo()
+    result = sync_study(study, sf_vocabulary)
+
+    assert result.ok, result.issues
+    assert result.workbook_action == "regenerated"
+    assert cell(study, OUTPUTS, 2, "mean") == "3.5"
+    if meanwhile == "save":
+        assert result.changes == (FileChange(TIMECOURSES, "write"),)
+        assert cell(study, TIMECOURSES, 3, "mean") == "2.25"
+    assert_in_step(study, workbook)
+
+
+def test_a_state_file_that_cannot_be_removed_stays(
+    valid_study, sf_vocabulary, monkeypatch
+):
+    path = workbook_path(valid_study)
+    write_state(path, "0" * 32, {OUTPUTS: None})
+
+    def fail(workbook):
+        raise PermissionError("Permission denied")
+
+    monkeypatch.setattr(sync, "remove_state", fail)
+
+    created = sync_study(valid_study, sf_vocabulary)
+    edit_table(valid_study, OUTPUTS, 2, mean="3.5")
+    regenerated = sync_study(valid_study, sf_vocabulary)
+
+    assert created == SyncResult(valid_study, path, workbook_action="created")
+    assert regenerated == SyncResult(valid_study, path, workbook_action="regenerated")
+    # The state file of an old generation is ignored.
+    assert state_path(path).exists()
+    assert read_state(path, generation_of(path)) == {}
 
 
 def test_check_mode_reports_the_plan_without_writing(study, workbook, sf_vocabulary):
@@ -846,6 +1000,32 @@ def test_rows_follow_the_subject_order_of_the_merged_subjects(
     assert result.workbook_action == "regenerated"
     order = [cell(study, OUTPUTS, number, "subjects") for number in (2, 3, 4)]
     assert order.index("S2") < order.index("S1")
+    assert_canonical(study)
+    assert_in_step(study, workbook)
+
+
+def test_changes_to_different_subjects_merge(study, workbook, sf_vocabulary):
+    subjects = table_lines(study, SUBJECTS)
+    assert [
+        line.split("\t")[names(SUBJECTS).index("name")] for line in subjects[1:]
+    ] == [
+        "all",
+        "S1",
+        "S2",
+    ]
+    set_cells(workbook, "subjects", 2, count=3)
+    edit_table(study, SUBJECTS, 4, count="2")
+
+    result = sync_study(study, sf_vocabulary)
+
+    assert result.ok, result.issues
+    assert result.changes == (FileChange(SUBJECTS, "write"),)
+    assert result.workbook_action == "regenerated"
+    assert [cell(study, SUBJECTS, line, "count") for line in (2, 3, 4)] == [
+        "3",
+        "1",
+        "2",
+    ]
     assert_canonical(study)
     assert_in_step(study, workbook)
 
