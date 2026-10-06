@@ -84,6 +84,7 @@ _GROUPS = {
         "subject_count_exceeds_parent",
         "inconsistent_series",
         "duplicate_time",
+        "mixed_scatter_subjects",
         "duplicate_row",
         "duplicate_observation",
         "unused_intervention",

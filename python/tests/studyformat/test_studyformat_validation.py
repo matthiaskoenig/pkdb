@@ -579,3 +579,35 @@ def test_postprocessing_failure_of_a_dataset_is_reported(
     report = validate_folder(valid_study, sf_vocabulary)
     assert not report.valid and not report.complete
     assert codes(report) == {"duplicate_observation", "scatter_pairing"}
+
+
+def test_scatter_of_groups_and_individuals_is_reported_before_postprocessing(
+    valid_study, tsv, sf_vocabulary
+):
+    point = {
+        "name": "age_vs_cmax",
+        "x_measurement": "age",
+        "x_unit": "yr",
+        "y_interventions": "D1",
+        "y_measurement": "cmax",
+        "y_substance": "drug",
+        "y_tissue": "plasma",
+        "y_unit": "mg/l",
+    }
+    (valid_study / "scatters_Fig2.tsv").write_text(
+        tsv(
+            "scatters",
+            {**point, "subjects": "S1", "x_mean": "30", "y_mean": "2"},
+            {**point, "subjects": "S2", "x_mean": "40", "y_mean": "3"},
+            {**point, "subjects": "all", "x_mean": "35", "y_mean": "2.5"},
+        ),
+        encoding="utf-8",
+    )
+    assert format_folder(valid_study).ok
+    report = validate_folder(valid_study, sf_vocabulary)
+    [issue] = report.issues
+    assert issue.code == "mixed_scatter_subjects"
+    assert issue.source is not None
+    # pkdb format sorts the group first; the individuals are the usual kind.
+    assert (issue.source.row, issue.source.header) == (2, "subjects")
+    assert "'all' is a group, but 'S1' in line 3 is an individual" in issue.message

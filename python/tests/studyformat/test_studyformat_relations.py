@@ -325,3 +325,60 @@ def test_approval_with_open_items_names_the_rule(make_study, valid_files):
     assert messages == [
         "A study can only be approved when no review item is open; 2 are open"
     ]
+
+
+def test_scatter_mixing_groups_and_individuals_is_reported_at_the_other_rows(
+    make_study, valid_files, tsv
+):
+    point = {
+        "name": "age_vs_cmax",
+        "x_measurement": "age",
+        "x_unit": "yr",
+        "y_interventions": "D1",
+        "y_measurement": "cmax",
+        "y_substance": "drug",
+        "y_tissue": "plasma",
+        "y_unit": "mg/l",
+    }
+    scatter = tsv(
+        "scatters",
+        {**point, "subjects": "S1", "x_mean": "30", "y_mean": "2"},
+        {**point, "subjects": "all", "x_mean": "35", "y_mean": "2.5"},
+        {**point, "subjects": "S2", "x_mean": "40", "y_mean": "3"},
+        # Another scatter of groups only is fine.
+        {**point, "name": "groups", "subjects": "all", "x_mean": "35", "y_mean": "2"},
+    )
+    study = load_study(make_study({**valid_files, "scatters_Fig2.tsv": scatter}))
+    [issue] = check_relations(study)
+    assert issue.code == "mixed_scatter_subjects"
+    assert issue.severity == "error" and issue.category == "reference"
+    assert issue.source is not None
+    assert (issue.source.file, issue.source.row, issue.source.header) == (
+        "scatters_Fig2.tsv",
+        3,
+        "subjects",
+    )
+    assert issue.message == (
+        "Scatter 'age_vs_cmax' mixes groups and individuals: 'all' is a group, "
+        "but 'S1' in line 2 is an individual"
+    )
+
+
+def test_scatter_with_as_many_groups_as_individuals_follows_its_first_row(
+    make_study, valid_files, tsv
+):
+    point = {
+        "name": "age_vs_cmax",
+        "x_measurement": "age",
+        "x_unit": "yr",
+        "y_measurement": "cmax",
+        "y_unit": "mg/l",
+    }
+    scatter = tsv(
+        "scatters",
+        {**point, "subjects": "all", "x_mean": "35", "y_mean": "2.5"},
+        {**point, "subjects": "S1", "x_mean": "30", "y_mean": "2"},
+    )
+    study = load_study(make_study({**valid_files, "scatters_Fig2.tsv": scatter}))
+    [issue] = [i for i in check_relations(study) if i.code == "mixed_scatter_subjects"]
+    assert issue.source is not None and issue.source.row == 3

@@ -202,7 +202,7 @@ Points of scatter plots, one row per point with an x and a y value.
 | `study` | text | no, written by `pkdb format` | Study name, written by `pkdb format` from the folder name. Do not edit. |
 | `source` | source | no, written by `pkdb format` | Paper table or figure of the row, written by `pkdb format` from the file name. Do not edit. |
 | `name` | name | yes | Name of the scatter dataset, unique across the study. |
-| `subjects` | name | yes | Subject of the point, usually an individual with count 1. |
+| `subjects` | name | yes | Subject of the point, usually an individual with count 1. The points of one scatter are all individuals or all groups. |
 | `x_interventions` | comma-separated names | no | X axis: comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none. |
 | `x_measurement` | vocabulary: measurements | yes | X axis: measured quantity from the vocabulary, such as `cmax`, `age` or `weight`. |
 | `x_substance` | vocabulary: substances | no | X axis: substance from the vocabulary. |

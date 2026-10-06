@@ -301,7 +301,7 @@ SCATTER_NAME = Column(
     "clearance_vs_crcl",
 )
 SCATTER_SUBJECTS = SUBJECTS.but(
-    description="Subject of the point, usually an individual with count 1.",
+    description="Subject of the point, usually an individual with count 1. The points of one scatter are all individuals or all groups.",
 )
 POINT_VALUE = MEAN.but(description="Value of the point.", example="2.9")
 POINT_UNIT = UNIT.but(description="Unit of the value.")

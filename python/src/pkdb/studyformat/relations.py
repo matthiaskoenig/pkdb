@@ -57,6 +57,7 @@ def check_relations(study: LoadedStudy) -> list[ValidationIssue]:
         _references,
         _subject_tree,
         _series,
+        _scatter_subjects,
         _duplicates,
         _unused,
         _images,
@@ -284,6 +285,42 @@ def _series(study: LoadedStudy) -> Issues:
                         )
                     else:
                         times[key] = row.line
+
+
+def _scatter_subjects(study: LoadedStudy) -> Issues:
+    # The points of a scatter share a group or an individual field, so the
+    # subjects of a scatter are all groups or all individuals (count 1). The
+    # rows of the rarer kind are reported; on a tie, those that differ from the
+    # first row of the scatter.
+    counts = {
+        row.cells["name"]: row.values["count"] for _, row in study.rows("subjects")
+    }
+    scatters: dict[str, list[tuple[LoadedTable, Row, bool]]] = defaultdict(list)
+    for table, row in study.rows("scatters"):
+        name, subject = row.cells["name"], row.cells["subjects"]
+        if name and subject in counts:
+            scatters[name].append((table, row, counts[subject] == 1))
+    kinds = ("a group", "an individual")
+    for name, rows in scatters.items():
+        individuals = sum(individual for _, _, individual in rows)
+        if individuals in (0, len(rows)):
+            continue
+        usual = (
+            rows[0][2] if 2 * individuals == len(rows) else 2 * individuals > len(rows)
+        )
+        _, reference, _ = next(item for item in rows if item[2] == usual)
+        for table, row, individual in rows:
+            if individual != usual:
+                yield row_issue(
+                    table,
+                    row,
+                    "mixed_scatter_subjects",
+                    f"Scatter {name!r} mixes groups and individuals: "
+                    f"{row.cells['subjects']!r} is {kinds[individual]}, but "
+                    f"{reference.cells['subjects']!r} in line {reference.line} is "
+                    f"{kinds[usual]}",
+                    "subjects",
+                )
 
 
 def _duplicates(study: LoadedStudy) -> Issues:
