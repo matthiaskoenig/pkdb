@@ -405,18 +405,45 @@ def _open_issue(workbook: Path, lock: Path | None) -> ValidationIssue:
     return make_issue("workbook_open", message, file=workbook.name)
 
 
+def _changes(
+    files: Mapping[str, str | None], tables: Mapping[str, str]
+) -> list[FileChange]:
+    """The TSV deletes and writes of a sync, in the order they are applied.
+
+    The deletes come first. On a case-insensitive file system, as on macOS and
+    Windows, a sheet renamed only in case deletes `outputs_Tab2a.tsv` and writes
+    `outputs_Tab2A.tsv`, which name the same file there, so a later delete would
+    remove the new file. A crash between both leaves the table in the base and
+    in the workbook, and the next sync writes it.
+    """
+    changes = [
+        FileChange(file, "delete" if text is None else "write")
+        for file, text in files.items()
+        if text != tables.get(file)
+    ]
+    return sorted(changes, key=lambda change: change.action != "delete")
+
+
 def _write_tables(
     folder: Path, files: Mapping[str, str | None], changes: Sequence[FileChange]
 ) -> tuple[list[FileChange], ValidationIssue | None]:
-    """Apply the changes in order, each atomically, up to the first that fails."""
+    """Apply the changes in order, each atomically, up to the first that fails.
+
+    A file whose name equals a file written before, ignoring case, is never
+    deleted, because on a case-insensitive file system that is the new file.
+    """
     done: list[FileChange] = []
+    written: set[str] = set()
     for change in changes:
         text = files[change.file]
         try:
             if text is None:
+                if change.file.casefold() in written:
+                    raise ValueError(f"{change.file} is deleted after it was written")
                 (folder / change.file).unlink(missing_ok=True)
             else:
                 atomic_text(folder / change.file, text)
+                written.add(change.file.casefold())
         except OSError as error:
             return done, _write_issue(change.file, error)
         done.append(change)
@@ -625,11 +652,7 @@ def sync_study(
     )
     if not outcome.ok:
         return outcome
-    changes = [
-        FileChange(file, "delete" if text is None else "write")
-        for file, text in plan.files.items()
-        if text != tables.get(file)
-    ]
+    changes = _changes(plan.files, tables)
     if not check:
         done, failure = _write_tables(folder, plan.files, changes)
         # The workbook content is the common ancestor of its later saves and of

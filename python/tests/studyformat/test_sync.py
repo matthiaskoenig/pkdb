@@ -626,6 +626,79 @@ def test_a_table_removed_on_both_sides_can_be_restored(
     assert_in_step(study, workbook)
 
 
+@pytest.fixture
+def case_insensitive(monkeypatch):
+    """The table writes of the sync on a case-insensitive file system, as APFS or NTFS.
+
+    A name refers to the existing file whose name equals it ignoring case, and
+    replacing that file keeps its name.
+    """
+    write, unlink = sync.atomic_text, Path.unlink
+
+    def existing(path):
+        for entry in path.parent.iterdir():
+            if entry.name.casefold() == path.name.casefold():
+                return entry
+        return path
+
+    monkeypatch.setattr(
+        sync, "atomic_text", lambda path, text: write(existing(path), text)
+    )
+    monkeypatch.setattr(
+        Path,
+        "unlink",
+        lambda path, missing_ok=False: unlink(existing(path), missing_ok=missing_ok),
+    )
+
+
+def rename_sheet(old, new):
+    def change(workbook):
+        # openpyxl compares sheet names ignoring case, as Excel does.
+        workbook[old].title = "_renaming"
+        workbook["_renaming"].title = new
+
+    return change
+
+
+@pytest.mark.parametrize("file_system", ["case-sensitive", "case-insensitive"])
+@pytest.mark.parametrize(("old", "new"), [("Tab2a", "Tab2A"), ("Tab2A", "Tab2a")])
+def test_a_sheet_renamed_only_in_case_keeps_its_table(
+    valid_study, sf_vocabulary, request, file_system, old, new
+):
+    (valid_study / OUTPUTS).rename(valid_study / f"outputs_{old}.tsv")
+    assert format_folder(valid_study).ok
+    assert sync_study(valid_study, sf_vocabulary).workbook_action == "created"
+    path = workbook_path(valid_study)
+    rows = table_lines(valid_study, f"outputs_{old}.tsv")
+    edit(path, rename_sheet(f"outputs_{old}", f"outputs_{new}"))
+    if file_system == "case-insensitive":
+        request.getfixturevalue("case_insensitive")
+
+    result = sync_study(valid_study, sf_vocabulary)
+
+    assert result.ok, result.issues
+    assert table_lines(valid_study, f"outputs_{new}.tsv") == [
+        rows[0],
+        replaced(rows[1], OUTPUTS, source=new),
+    ]
+    # The delete comes first, so it never removes the file just written.
+    assert result.changes == (
+        FileChange(f"outputs_{old}.tsv", "delete"),
+        FileChange(f"outputs_{new}.tsv", "write"),
+    )
+    again = sync_study(valid_study, sf_vocabulary)
+    assert again.ok, again.issues
+    assert again.changes == ()
+    assert [name for name in tables_of(valid_study) if name.startswith("outputs")] == [
+        f"outputs_{new}.tsv"
+    ]
+    content = content_of(path)
+    assert f"outputs_{new}" in content.sheets
+    assert content.tables[f"outputs_{new}.tsv"].text == (
+        valid_study / f"outputs_{new}.tsv"
+    ).read_text(encoding="utf-8")
+
+
 def test_a_table_deleted_while_its_sheet_changed_conflicts(
     study, workbook, sf_vocabulary
 ):
