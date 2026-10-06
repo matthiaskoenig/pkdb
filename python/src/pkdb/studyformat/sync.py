@@ -231,13 +231,15 @@ def _region_conflict(
     rows: Sequence[int],
     conflict: Conflict,
     keep: Side | None,
+    raw: bool,
 ) -> tuple[SyncConflict, ValidationIssue | None]:
     """A conflicting region of a merge, and its issue unless `keep` resolved it.
 
     `rows` are the sheet rows of the canonical workbook lines. The issue is
     located at the first row of the region in the sheet of the workbook, and
     its message names the lines of the TSV file. A side without lines is
-    located at the line before the region, or at the header.
+    located at the line before the region, or at the header; a raw table has
+    no header, so lines removed at its start are before its first line.
     """
     sheet = file.removesuffix(".tsv")
     workbook_rows = tuple(
@@ -256,11 +258,16 @@ def _region_conflict(
     if workbook_rows:
         row = workbook_rows[0][0]
         in_workbook = _numbers("row", [number for number, _ in workbook_rows])
+    elif raw and not conflict.ours_start:
+        row = 1
+        in_workbook = "rows removed before row 1"
     else:
         row = rows[conflict.ours_start - 1] if conflict.ours_start else 1
         in_workbook = f"rows removed after row {row}"
     if table_lines:
         in_tables = _numbers("line", [number for number, _ in table_lines])
+    elif raw and not conflict.theirs_start:
+        in_tables = "lines removed before line 1"
     else:
         in_tables = f"lines removed after line {conflict.theirs_start or 1}"
     return found, make_issue(
@@ -384,7 +391,7 @@ def _plan(
             rows = content.tables[file].rows
             for region in merged.conflicts:
                 conflict, issue = _region_conflict(
-                    workbook_name, file, rows, region, keep
+                    workbook_name, file, rows, region, keep, raw
                 )
                 plan.conflicts.append(conflict)
                 if issue is not None:

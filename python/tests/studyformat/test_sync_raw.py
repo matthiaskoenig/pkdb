@@ -126,3 +126,37 @@ def test_raw_line_that_a_table_file_cannot_hold_is_an_issue(valid_study, sf_voca
         3,
     )
     assert (valid_study / "Example_Tab2.tsv").read_text() == RAW
+
+
+def _conflict_message(folder, vocabulary):
+    result = sync_study(folder, vocabulary)
+    [issue] = [issue for issue in result.issues if issue.code == "sync_conflict"]
+    assert issue.source is not None and issue.source.row == 1
+    return issue.message
+
+
+def test_raw_conflict_at_the_first_line_is_before_it(valid_study, sf_vocabulary):
+    raw = valid_study / "Example_Tab2.tsv"
+    raw.write_text(RAW)
+    assert sync_study(valid_study, sf_vocabulary).ok
+    path = workbook_path(valid_study)
+    book = openpyxl.load_workbook(path)
+    book["Example_Tab2"].delete_rows(1)
+    book.save(path)
+    raw.write_text(RAW.replace("Age (yr)", "Age (y)"))
+    assert _conflict_message(valid_study, sf_vocabulary).endswith(
+        "rows removed before row 1 of the sheet, line 1 of Example_Tab2.tsv"
+    )
+
+
+def test_raw_conflict_with_the_first_line_removed_from_the_table(
+    valid_study, sf_vocabulary
+):
+    raw = valid_study / "Example_Tab2.tsv"
+    raw.write_text(RAW)
+    assert sync_study(valid_study, sf_vocabulary).ok
+    _set_cell(valid_study, "Example_Tab2", "B1", "Age (y)")
+    raw.write_text(RAW.split("\n", 1)[1])
+    assert _conflict_message(valid_study, sf_vocabulary).endswith(
+        "row 1 of the sheet, lines removed before line 1 of Example_Tab2.tsv"
+    )
