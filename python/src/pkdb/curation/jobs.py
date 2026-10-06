@@ -2,7 +2,7 @@
 
 Reads and writes engine attributes: lock, jobs, queue, active, studies, modes, paused, stop,
 wakeup, api_key, account, can_upload, offline, endpoint, cache, vocabulary, root. Uses engine
-methods _save, snapshot, _context, _connection_status and connect.
+methods _save, snapshot, _context, _connection_status, connect and _sync_state.
 """
 
 import hashlib
@@ -23,8 +23,11 @@ from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError, SourceChangedError
 from pkdb.preparation import prepare, source_hashes
-from pkdb.schemas.validation import StudyValidationError
+from pkdb.schemas.validation import StudyValidationError, ValidationReport
 from pkdb.studyformat import is_v2_folder
+from pkdb.studyformat.pipeline import PipelineResult, sync_and_format
+from pkdb.studyformat.revision import folder_lock
+from pkdb.studyformat.sync import conflict_data
 
 
 def now():
@@ -37,6 +40,58 @@ def duplicate_message(identifier):
 
 def fingerprint(hashes):
     return hashlib.sha256(json.dumps(hashes, sort_keys=True).encode()).hexdigest()
+
+
+def describe(pipeline: PipelineResult) -> str | None:
+    """The table files that the pipeline wrote and removed, in words, as pkdb upload says it."""
+    from pkdb.batch import _described
+
+    synced = {change.file: change for sync in pipeline.syncs for change in sync.changes}
+    formatted = pipeline.formatted.changes if pipeline.formatted else []
+    parts = [
+        *_described(
+            list(synced.values()),
+            "wrote {} from the workbook",
+            "removed {}, which the workbook no longer holds",
+        ),
+        *_described(formatted, "formatted {}", "removed {} without rows"),
+    ]
+    text = "; ".join(parts)
+    return text[0].upper() + text[1:] if text else None
+
+
+def wrote_files(pipeline: PipelineResult) -> bool:
+    """Whether the pipeline changed a file of the folder: a table or the workbook."""
+    return bool(pipeline.changes) or any(
+        sync.workbook_action in {"created", "regenerated"} for sync in pipeline.syncs
+    )
+
+
+def issue_counts(report: dict) -> dict:
+    """The errors and warnings of a report, from its counts when it has them."""
+    issues = report.get("issues", [])
+    return {
+        "errors": report.get(
+            "error_count", sum(issue.get("severity") == "error" for issue in issues)
+        ),
+        "warnings": report.get(
+            "warning_count", sum(issue.get("severity") == "warning" for issue in issues)
+        ),
+    }
+
+
+def conflict_entries(pipeline: PipelineResult) -> list[dict]:
+    """The conflicts of the last sync, as pkdb tables sync lists them."""
+    return [conflict_data(conflict) for conflict in pipeline.syncs[-1].conflicts]
+
+
+def stop_message(pipeline: PipelineResult) -> str:
+    """Why a sync stopped the pipeline before validation."""
+    if pipeline.stopped == "saved_again":
+        return "The workbook was saved during the sync; its last save is not in the tables yet"
+    if pipeline.syncs[-1].conflicts:
+        return "Resolve the conflict between the workbook and the tables"
+    return "The workbook and the tables cannot be synced; see the report"
 
 
 class JobsMixin(EngineState):
@@ -183,6 +238,17 @@ class JobsMixin(EngineState):
                         self.active = None
                         self._save()
 
+    def _local_vocabulary(self):
+        """The vocabulary of local work: the cached one of the endpoint, else the bundled one."""
+        with self.lock:
+            endpoint = self.endpoint
+        if endpoint:
+            try:
+                return self.cache.load(endpoint)
+            except OSError, ValueError:
+                pass
+        return bundled_vocabulary()
+
     def _server_validate(self, client, prepared):
         with prepared.source() as source, ExitStack() as stack:
             parts = source.parts(stack)
@@ -198,7 +264,6 @@ class JobsMixin(EngineState):
 
     def run_job(self, job):
         from pkdb.references import ReferenceError, ReferenceResolver, sync_reference
-        from pkdb.tsv import WorkbookError, sync_tsvs
 
         with self.lock:
             row = self._row_of(job["study_id"])
@@ -245,21 +310,45 @@ class JobsMixin(EngineState):
                     self._save()
 
         try:
-            row["status"] = "validating"
-            tables = sync_tsvs(row["_folder"])
+            # Chosen before the folder lock, which is never held while waiting for self.lock.
+            local = self._local_vocabulary()
+            with self.lock:
+                row["status"] = "validating"
+                row["sync"] = {**row["sync"], "status": "syncing"}
+            try:
+                # App writes take the same lock, so the formatter never overwrites one.
+                with folder_lock(row["_folder"]):
+                    pipeline = sync_and_format(row["_folder"], local)
+            finally:
+                synced = self._sync_state(row["_folder"])
+                with self.lock:
+                    row["sync"] = synced
+            outcome["pipeline_issues"] = [
+                issue.model_dump(mode="json") for issue in pipeline.issues
+            ]
+            if tables := describe(pipeline):
+                outcome["tables_updated"] = tables
+            if pipeline.stopped in {"sync", "saved_again"}:
+                outcome["conflicts"] = conflict_entries(pipeline)
+                job.update(status="conflict", message=stop_message(pipeline))
+                row.update(status="conflict", stale=True)
+                return  # The finally block writes the report.
             change = sync_reference(
                 row["_folder"], ReferenceResolver(offline=self.offline)
             )
-            if tables or change:
+            if wrote_files(pipeline) or change:
                 with self.lock:
                     self.scan()
                     # This job validates the repaired source; do not queue it again.
                     expected = row["_fingerprint"]
                     row.update(status="validating", _pending=False)
-                if tables:
-                    outcome["tables_updated"] = tables
                 if change:
                     outcome["reference_updated"] = change
+            if pipeline.stopped == "format":
+                # Tables that cannot be formatted are reported like validation problems.
+                raise StudyValidationError(
+                    ValidationReport(issues=list(pipeline.issues))
+                )
             with Client(
                 job["endpoint"] or "http://localhost",
                 api_key=self.api_key,
@@ -267,14 +356,7 @@ class JobsMixin(EngineState):
                 progress=progress,
             ) as client:
                 if self.offline or not job["endpoint"]:
-                    try:
-                        vocabulary = (
-                            self.cache.load(job["endpoint"])
-                            if job["endpoint"]
-                            else bundled_vocabulary()
-                        )
-                    except OSError, ValueError:
-                        vocabulary = bundled_vocabulary()
+                    vocabulary = local
                 else:
                     vocabulary = self._vocabulary(client)
                 prepared = prepare(
@@ -388,7 +470,7 @@ class JobsMixin(EngineState):
             if not current:
                 row["_pending"] = True
                 row["_changed_at"] = time.monotonic()
-        except (ReferenceError, WorkbookError) as error:
+        except ReferenceError as error:
             job.update(status="failed", message=self._safe(str(error)))
             row.update(status="failed", stale=True)
         except ClientError as error:
@@ -444,6 +526,7 @@ class JobsMixin(EngineState):
                 row["problems"] = json.loads(
                     self._safe(json.dumps(outcome["report"].get("issues", [])))
                 )
+                row["counts"] = issue_counts(outcome["report"])
                 row["report_complete"] = outcome["report"].get("complete", True)
                 row["report_truncated"] = outcome["report"].get("truncated", False)
                 row["report_incomplete"] = (

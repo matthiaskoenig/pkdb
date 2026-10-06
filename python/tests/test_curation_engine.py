@@ -288,7 +288,7 @@ def test_real_scientific_validation_and_external_edit(
     workspace, sf_vocabulary, monkeypatch
 ):
     engine, folder = workspace
-    monkeypatch.setattr(jobs, "bundled_vocabulary", lambda: sf_vocabulary)
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
     assert format_folder(folder).ok
     engine.scan()
     engine.enqueue([row(engine)["id"]], "validate")

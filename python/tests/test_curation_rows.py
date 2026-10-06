@@ -3,7 +3,6 @@ import json
 import pytest
 
 from pkdb.curation import engine as module
-from pkdb.curation import jobs
 from pkdb.studyformat.jsonio import dump_json
 
 
@@ -61,7 +60,7 @@ def listing(folder):
 
 def test_format_1_folders_are_never_touched(workspace, sf_vocabulary, monkeypatch):
     engine, folder, legacy = workspace
-    monkeypatch.setattr(jobs, "bundled_vocabulary", lambda: sf_vocabulary)
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
     before = listing(legacy)
     engine.scan()
     for item in engine.studies.values():

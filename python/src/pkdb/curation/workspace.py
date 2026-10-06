@@ -2,7 +2,7 @@
 
 Reads and writes engine attributes: lock, root, studies, modes, mappings, recent_workspaces,
 reference_previews, paused, queue, stop, wakeup, state_dir. Uses engine methods _save,
-_enqueue_one and snapshot.
+_enqueue_one, snapshot and _local_vocabulary.
 """
 
 import json
@@ -20,6 +20,8 @@ from pkdb.preparation import source_hashes
 from pkdb.schemas.validation import StudyValidationError
 from pkdb.source_files import ignored_source
 from pkdb.studyformat import is_v2_folder
+from pkdb.studyformat.sync import workbook_check
+from pkdb.studyformat.workbook.base import workbook_path
 
 RECENT_LIMIT = 10
 DIRECTORY_LIMIT = 2000
@@ -150,6 +152,8 @@ class WorkspaceMixin(EngineState):
             "report_id": None,
             "summary": {},
             "reference": None,
+            "sync": {"status": "unknown", "changes": 0, "conflicts": 0},
+            "counts": {"errors": 0, "warnings": 0},
             "_folder": folder,
             "_fingerprint": None,
             "_signature": None,
@@ -200,6 +204,7 @@ class WorkspaceMixin(EngineState):
                 hashes = source_hashes(folder)
                 digest = fingerprint(hashes)
                 summary = study_summary(folder)
+                sync = self._sync_state(folder)
                 with self.lock:
                     old = row["_fingerprint"]
                     row.update(
@@ -207,6 +212,9 @@ class WorkspaceMixin(EngineState):
                         summary=summary,
                         reference=reference_summary(folder),
                     )
+                    # A running job records the state after its sync itself.
+                    if row["sync"]["status"] != "syncing":
+                        row["sync"] = sync
                     row["_signature"] = signature
                     row["_fingerprint"] = digest
                     if old != digest:
@@ -242,6 +250,31 @@ class WorkspaceMixin(EngineState):
             counts = Counter(r["id"] for r in self.studies.values())
             for row in self.studies.values():
                 row["duplicate"] = counts[row["id"]] > 1
+
+    def _sync_state(self, folder):
+        """Whether the workbook and the tables of a folder are in step, as the row shows it."""
+        state = {"status": "no_workbook", "changes": 0, "conflicts": 0}
+        if not workbook_path(folder).exists():
+            return state
+        try:
+            check = workbook_check(folder, self._local_vocabulary())
+        except OSError, ValueError:
+            return {**state, "status": "unknown"}
+        if check is None:
+            return state
+        changes, conflicts = len(check["changes"]), check["conflicts"]
+        if conflicts:
+            status = "conflict"
+        elif check["action"] == "close_to_update":
+            status = "workbook_open"
+        elif not check["ok"]:
+            # The tables do not load or the workbook cannot be read.
+            status = "unknown"
+        elif changes:
+            status = "changed"
+        else:
+            status = "in_sync"
+        return {"status": status, "changes": changes, "conflicts": conflicts}
 
     def _watch(self):
         while not self.stop.wait(1):

@@ -142,23 +142,6 @@ class CurationEngine(WorkspaceMixin, JobsMixin, ConnectionMixin, IssuesMixin):
             },
         )
 
-    def _save(self):
-        atomic_json(
-            self.state_dir / "state.json",
-            {
-                "workspace": str(self.root),
-                "endpoint": self.endpoint,
-                "user": self.user,
-                "github_user": self.github_user,
-                "repository": self.repository,
-                "github": self.github.data,
-                "modes": self.modes,
-                "mappings": self.mappings,
-                "recent_workspaces": self.recent_workspaces,
-                "jobs": self.jobs,
-            },
-        )
-
     def snapshot(self):
         with self.lock:
             recent = list(self.recent_workspaces)

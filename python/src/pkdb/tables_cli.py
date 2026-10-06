@@ -165,6 +165,8 @@ def _planned(result) -> bool:
 
 def _entry(folder: Path, result, issues) -> dict:
     """The JSON line of a synced study."""
+    from pkdb.studyformat.sync import conflict_data
+
     return {
         "path": str(folder),
         "ok": result.ok,
@@ -174,21 +176,7 @@ def _entry(folder: Path, result, issues) -> dict:
         "changes": [
             {"file": change.file, "action": change.action} for change in result.changes
         ],
-        "conflicts": [
-            {
-                "file": conflict.file,
-                "sheet": conflict.sheet,
-                "workbook_rows": [
-                    {"row": row, "text": text} for row, text in conflict.workbook_rows
-                ],
-                "table_lines": [
-                    {"line": line, "text": text} for line, text in conflict.table_lines
-                ],
-                "base_lines": list(conflict.base_lines),
-                "kept": conflict.kept,
-            }
-            for conflict in result.conflicts
-        ],
+        "conflicts": [conflict_data(conflict) for conflict in result.conflicts],
         "issues": [issue.model_dump(mode="json") for issue in issues],
     }
 
