@@ -166,6 +166,26 @@ def statistics(
             and ("%" in error_kind or text(var_unit) == "%")
         ):
             result["cv"] = variation / 100
+        elif (
+            variation is not None
+            and geometric
+            and error_kind.startswith("geo")
+            and "cv" in error_kind
+            and variation >= 0
+            and ("%" in error_kind or text(var_unit) == "%")
+        ):
+            # A geometric CV in percent; the model stores it as a fraction.
+            result["gcv"] = variation / 100
+        elif (
+            variation is not None
+            and geometric
+            and error_kind.startswith("geo")
+            and ("sd" in error_kind or "stddev" in error_kind)
+            and variation >= 1
+            and text(var_unit) in {"", "-"}
+        ):
+            # A geometric SD is a dimensionless factor of at least 1.
+            result["gsd"] = variation
         else:
             warnings.append(
                 {
