@@ -110,7 +110,11 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
     root.issue = study.metadata.issue
     root.review_status = review.status if review else None
     root.review = (
-        review.model_dump(mode="json", include={"reviewers", "items"})
+        review.model_dump(
+            mode="json",
+            include={"reviewers", "approved_by", "approved", "items"}
+            - ({"approved_by", "approved"} if review.approved is None else set()),
+        )
         if review
         else None
     )

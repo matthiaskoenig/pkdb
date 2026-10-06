@@ -167,6 +167,38 @@ def test_new_fields_round_trip_through_the_database(
     assert read_study(format2_study.sid, principal, session_factory) == format2_study
 
 
+APPROVED = {
+    **REVIEW,
+    "status": "approved",
+    "items": REVIEW["items"][:1],
+    "approved_by": "curator",
+    "approved": "2026-10-06T09:00:00Z",
+}
+
+
+@pytest.mark.parametrize("review", [REVIEW, APPROVED], ids=["in_review", "approved"])
+def test_review_approval_round_trips_through_the_database(
+    ingestion_context, session_factory, format2_study, review
+):
+    _, principal = ingestion_context
+    data = format2_study.model_dump(mode="json")
+    data["metadata"]["review"] = review
+    study = CanonicalStudy.model_validate(data)
+    study_id = publish(session_factory, principal, study)
+    with session_factory() as session:
+        root = session.get(Study, study_id)
+        stored = (root.review_status, root.review)
+    approval = {"approved_by", "approved"} if review is APPROVED else set()
+    assert stored == (
+        review["status"],
+        Review.model_validate(review).model_dump(
+            mode="json", include={"reviewers", "items"} | approval
+        ),
+    )
+    assert {"approved_by", "approved"} & set(stored[1]) == approval
+    assert read_study(study.sid, principal, session_factory) == study
+
+
 def test_schedules_and_subjects_are_stored_in_their_columns(
     ingestion_context, session_factory, format2_study
 ):

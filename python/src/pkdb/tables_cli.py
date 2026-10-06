@@ -2,8 +2,9 @@
 
 `sync` keeps the generated workbook `<name>.xlsx` and the TSV tables of a study
 in step, `open` syncs and opens the workbook, and `add` adds the empty sheet of
-a new `<kind>_<source>` table. The TSV tables are the files to commit; git
-should ignore the workbook and its sync state file.
+a new `<kind>_<source>` table or of the raw table `<name>_<source>` of a paper
+table. The TSV tables are the files to commit; git should ignore the workbook
+and its sync state file.
 """
 
 import json
@@ -12,7 +13,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from pkdb.studyformat_cli import print_issues, say
+from pkdb.studyformat_cli import print_issues, say, study_folder
 
 # Rows of each side of a conflict printed for people; JSON lists every row.
 LISTED_ROWS = 10
@@ -114,12 +115,22 @@ def register(commands) -> None:
         help="Add the empty sheet of a new table to the workbook",
         description=(
             "Add an empty sheet with the header of a <kind>_<source> table, such "
-            "as outputs_Tab3. Its TSV file is written when the sheet has a row "
+            "as outputs_Tab3, or the empty text sheet of the raw table of a paper "
+            "table with --raw. Its TSV file is written when the sheet has a row "
             "and the workbook is synced."
         ),
     )
     add.add_argument("study", type=Path, help="Study folder")
-    add.add_argument("table", help="Table name <kind>_<source>, such as outputs_Tab3")
+    # Exactly one of both; argparse reports a usage error otherwise.
+    target = add.add_mutually_exclusive_group(required=True)
+    target.add_argument(
+        "table", nargs="?", help="Table name <kind>_<source>, such as outputs_Tab3"
+    )
+    target.add_argument(
+        "--raw",
+        metavar="SOURCE",
+        help="Add the sheet of the raw table of a paper table, such as Tab2",
+    )
     _vocabulary_options(add)
 
 
@@ -140,22 +151,6 @@ def _vocabulary(args):
     except (ValueError, OSError) as error:
         say(f"Cannot load the vocabulary: {error}", file=sys.stderr)
         return None
-
-
-def _study(path: Path) -> Path | None:
-    """The folder of a study format 2 study, or None after an error."""
-    from pkdb.studyformat import is_v2_folder
-
-    if not (path / "study.json").is_file():
-        say(f"{path} is not a study folder: it has no study.json", file=sys.stderr)
-        return None
-    if not is_v2_folder(path):
-        say(
-            f"{path} is a study of study format 1; pkdb tables needs study format 2",
-            file=sys.stderr,
-        )
-        return None
-    return path
 
 
 def _reason(error: OSError) -> str:
@@ -201,23 +196,36 @@ def _entry(folder: Path, result, issues) -> dict:
 def _cells(file: str, text: str) -> str:
     """The filled cells of a canonical TSV line by column name.
 
-    The owned columns, which the formatter fills, are left out.
+    The owned columns, which the formatter fills, are left out. A raw table has
+    no header, so its cells are named by their column letter.
     """
+    from pkdb.studyformat.issues import column_letter
     from pkdb.studyformat.tables import parse_table_file
 
+    values = text.split("\t")
     parsed = parse_table_file(file)
-    columns = parsed[0].columns if parsed else ()
-    cells = [
-        f"{column.name}={value}"
-        for column, value in zip(columns, text.split("\t"), strict=False)
-        if value and not column.owned
-    ]
+    if parsed is None:
+        cells = [
+            f"{column_letter(index)}={value}"
+            for index, value in enumerate(values)
+            if value
+        ]
+    else:
+        cells = [
+            f"{column.name}={value}"
+            for column, value in zip(parsed[0].columns, values, strict=False)
+            if value and not column.owned
+        ]
     return ", ".join(cells) or "(empty row)"
 
 
 def _print_rows(file: str, label: str, rows, removed: str) -> None:
-    # The header is the first row and line on both sides; only data rows conflict.
-    rows = [(number, text) for number, text in rows if number != 1]
+    from pkdb.studyformat.tables import parse_table_file
+
+    # The header is the first row and line on both sides of a table; only data
+    # rows conflict. A raw table has no header.
+    if parse_table_file(file) is not None:
+        rows = [(number, text) for number, text in rows if number != 1]
     if not rows:
         say(f"    {removed}")
         return
@@ -329,7 +337,7 @@ def _open(args) -> int:
     from pkdb.studyformat import study_label, sync_study
     from pkdb.studyformat.workbook.git import git_issues
 
-    folder = _study(args.study)
+    folder = study_folder(args.study, "tables")
     if folder is None:
         return 1
     vocabulary = _vocabulary(args)
@@ -363,10 +371,11 @@ def _open(args) -> int:
 def _add(args) -> int:
     from pkdb.studyformat import add_table, study_label
 
-    table = args.table
-    folder = _study(args.study)
+    folder = study_folder(args.study, "tables")
     if folder is None:
         return 1
+    # The raw table is named after the study folder, also when it is given as `.`.
+    table = args.table if args.raw is None else f"{folder.resolve().name}_{args.raw}"
     vocabulary = _vocabulary(args)
     if vocabulary is None:
         return 1
@@ -379,9 +388,10 @@ def _add(args) -> int:
         _print_result(study_label(folder), result.sync, result.sync.issues)
     if result.ok:
         assert result.sync is not None
+        content = "a row" if args.raw is None else "a cell"
         say(
             f"Added the sheet {table} to {result.sync.workbook.name}; {table}.tsv is "
-            "written when the sheet has a row and the workbook is synced"
+            f"written when the sheet has {content} and the workbook is synced"
         )
         print_issues(result.issues)
         return 0

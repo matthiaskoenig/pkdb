@@ -593,6 +593,54 @@ def test_add_never_replaces_a_workbook_saved_meanwhile(
     assert "outputs_Tab3" not in read_workbook(path, "Example").sheets
 
 
+def test_add_raw_adds_the_sheet_of_a_raw_table(study, vocabulary, capsys, monkeypatch):
+    # A relative study folder still names the raw table after the study.
+    monkeypatch.chdir(study)
+
+    assert tables("add", ".", "--raw", "Tab2", *vocabulary) == 0
+
+    out = capsys.readouterr().out
+    assert (
+        "Added the sheet Example_Tab2 to Example.xlsx; Example_Tab2.tsv is written "
+        "when the sheet has a cell and the workbook is synced"
+    ) in out
+    assert "[missing_image]" not in out
+    assert "Example_Tab2" in read_workbook(workbook_path(study), "Example").sheets
+    assert not (study / "Example_Tab2.tsv").exists()
+
+
+@pytest.mark.parametrize("arguments", [[], ["outputs_Tab3", "--raw", "Tab3"]])
+def test_add_needs_a_table_or_a_raw_source(study, vocabulary, capsys, arguments):
+    before = snapshot(study)
+
+    with pytest.raises(SystemExit) as error:
+        tables("add", study, *arguments, *vocabulary)
+
+    assert error.value.code == 2
+    assert "--raw" in capsys.readouterr().err
+    assert snapshot(study) == before
+
+
+def test_a_raw_conflict_lists_the_cells_by_column(study, vocabulary, capsys):
+    (study / "Example_Tab2.tsv").write_text("Group\tAge\nmen\t30\n", encoding="utf-8")
+    assert tables("sync", study, "--format", "json", *vocabulary) == 0
+    path = workbook_path(study)
+    workbook = openpyxl.load_workbook(path)
+    workbook["Example_Tab2"]["A1"] = "Sex"
+    workbook.save(path)
+    (study / "Example_Tab2.tsv").write_text("Gender\tAge\nmen\t30\n", encoding="utf-8")
+    capsys.readouterr()
+
+    assert tables("sync", study, "--format", "human", *vocabulary) == 1
+
+    out = capsys.readouterr().out.splitlines()
+    start = out.index("  conflict in sheet Example_Tab2")
+    assert out[start + 1 : start + 3] == [
+        "    workbook row 1: A=Sex, B=Age",
+        "    Example_Tab2.tsv line 1: A=Gender, B=Age",
+    ]
+
+
 git = pytest.mark.skipif(shutil.which("git") is None, reason="git is not installed")
 
 

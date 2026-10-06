@@ -80,8 +80,28 @@ class ReviewItem(Model):
 
 
 class Review(Model):
-    """Content of `review.json`: review status, reviewers and items."""
+    """Content of `review.json`: review status, reviewers, approval and items.
+
+    `approved_by` and `approved` record the person who approved the study and
+    when; they are set exactly when the status is approved, and the approver is
+    one of the reviewers.
+    """
 
     status: Literal["draft", "in_review", "approved"]
     reviewers: list[User] = Field(default_factory=list)
+    approved_by: User | None = None
+    approved: AwareDatetime | None = None
     items: list[ReviewItem] = Field(default_factory=list)
+
+    @model_validator(mode="after")
+    def approval(self):
+        approved = self.status == "approved"
+        if approved != (self.approved_by is not None) or approved != (
+            self.approved is not None
+        ):
+            raise ValueError(
+                "approved_by and approved are set exactly when the status is approved"
+            )
+        if self.approved_by is not None and self.approved_by not in self.reviewers:
+            raise ValueError("approved_by must be one of the reviewers")
+        return self

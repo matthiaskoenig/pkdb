@@ -109,14 +109,14 @@ class ParsedTsv:
     conflicts: tuple[int, ...] = ()
 
 
-def _cells(line: str) -> tuple[str, ...]:
+def cells_of(line: str) -> tuple[str, ...]:
     return tuple(unquote(cell.strip()) for cell in line.split("\t"))
 
 
 _BOM = b"\xef\xbb\xbf"
 
 
-def _text_lines(chunks: Iterable[bytes]) -> Iterator[str]:
+def text_lines(chunks: Iterable[bytes]) -> Iterator[str]:
     # A binary file yields its bytes split after each LF. CRLF, CR and LF all
     # end a line, and the text after the last line break is a line if it is
     # not empty. CR and LF never occur inside a UTF-8 multibyte sequence.
@@ -149,11 +149,11 @@ def read_tsv(chunks: Iterable[bytes]) -> Iterator[TsvLine]:
     data lines are skipped. A line that is not UTF-8 raises TsvError, and a
     line of more than MAX_CELLS cells TooManyCells, when it is reached.
     """
-    for number, text in enumerate(_text_lines(chunks), start=1):
+    for number, text in enumerate(text_lines(chunks), start=1):
         if number == 1 or text.strip():
             if (width := text.count("\t") + 1) > MAX_CELLS:
                 raise TooManyCells(number, width)
-            yield TsvLine(number, _cells(text), text.startswith(CONFLICT_MARKERS))
+            yield TsvLine(number, cells_of(text), text.startswith(CONFLICT_MARKERS))
 
 
 def parse_tsv(data: bytes) -> ParsedTsv:

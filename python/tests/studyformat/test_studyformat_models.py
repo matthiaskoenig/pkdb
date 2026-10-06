@@ -201,7 +201,7 @@ def test_resolved_item():
         "resolved": "2026-10-06T08:00:00Z",
     }
     assert (
-        Review.model_validate({"status": "approved", "items": [item]}).items[0].state
+        Review.model_validate({"status": "in_review", "items": [item]}).items[0].state
         == "resolved"
     )
 
@@ -222,3 +222,43 @@ def test_canonical_study_json_writes_whole_ratings_as_integers():
     ratings = [line.strip() for line in text.splitlines() if '"rating"' in line]
     assert ratings == ['"rating": 1', '"rating": 2.5', '"rating": 0', '"rating": 3']
     assert canonical_study_json(StudyMetadata.model_validate_json(text)) == text
+
+
+def test_approved_review_records_who_and_when():
+    review = Review.model_validate(
+        {
+            "status": "approved",
+            "reviewers": ["mkoenig"],
+            "approved_by": "mkoenig",
+            "approved": "2026-10-06T12:00:00Z",
+        }
+    )
+    text = canonical_review_json(review)
+    assert (
+        text.index('"reviewers"')
+        < text.index('"approved_by"')
+        < text.index('"approved":')
+    )
+
+
+@pytest.mark.parametrize(
+    "data",
+    [
+        {"status": "approved", "reviewers": ["mkoenig"]},
+        {"status": "approved", "reviewers": ["mkoenig"], "approved_by": "mkoenig"},
+        {
+            "status": "in_review",
+            "approved_by": "mkoenig",
+            "approved": "2026-10-06T12:00:00Z",
+        },
+        {
+            "status": "approved",
+            "reviewers": ["other"],
+            "approved_by": "mkoenig",
+            "approved": "2026-10-06T12:00:00Z",
+        },
+    ],
+)
+def test_approval_fields_follow_the_status(data):
+    with pytest.raises(ValidationError):
+        Review.model_validate(data)

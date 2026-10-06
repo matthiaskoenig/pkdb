@@ -25,6 +25,7 @@ base back; never while it is open, and never when it was saved during the sync.
 from collections.abc import Iterable, Mapping, Sequence
 from contextlib import suppress
 from dataclasses import dataclass, field, replace
+from io import BytesIO
 from pathlib import Path
 from typing import Literal
 
@@ -41,6 +42,7 @@ from pkdb.studyformat.load import (
     load_table,
 )
 from pkdb.studyformat.merge import Conflict, Preference, merge_lines
+from pkdb.studyformat.raw import load_raw, parse_raw_file, render_raw
 from pkdb.studyformat.tables import (
     KIND_ORDER,
     TABLES,
@@ -152,10 +154,15 @@ def _parsed(file: str) -> tuple[TableSpec, str | None]:
     return parsed
 
 
-def _sheet_order(file: str) -> tuple:
-    # The order of the sheets: the tables not split by source come first.
-    spec, source = _parsed(file)
-    return KIND_ORDER[spec.kind], natural_key(source or "")
+def _sheet_order(file: str, study: str) -> tuple:
+    # The order of the sheets: the tables not split by source come first, the
+    # raw tables last.
+    if (parsed := parse_table_file(file)) is not None:
+        spec, source = parsed
+        return KIND_ORDER[spec.kind], natural_key(source or "")
+    if (source := parse_raw_file(file, study)) is not None:
+        return len(KIND_ORDER), natural_key(source)
+    raise ValueError(f"{file} is not a table file")
 
 
 def _load(file: str, text: str, study: str) -> LoadedTable:
@@ -170,14 +177,18 @@ def _load(file: str, text: str, study: str) -> LoadedTable:
 def _blocking(study: LoadedStudy) -> tuple[ValidationIssue, ...]:
     """The issues that keep a table file from loading, so that it cannot be merged.
 
-    Merging the tables does not need the JSON files; pkdb validate reports them.
+    Raw tables count as table files. Merging the tables does not need the JSON
+    files; pkdb validate reports them.
     """
     return tuple(
         issue
         for issue in study.issues
         if issue.code in STRUCTURAL
         and issue.source is not None
-        and parse_table_file(issue.source.file) is not None
+        and (
+            parse_table_file(issue.source.file) is not None
+            or parse_raw_file(issue.source.file, study.name) is not None
+        )
     )
 
 
@@ -186,8 +197,15 @@ def _canonical(
 ) -> str | None:
     """Canonical text of a table with its rows sorted by a subject order.
 
-    None removes an optional table without rows.
+    None removes an optional table without rows. A raw table keeps its row
+    order, and None removes it without cells.
     """
+    if (source := parse_raw_file(file, study)) is not None:
+        raw, _ = load_raw(file, BytesIO(text.encode("utf-8")), source)
+        if raw is None:
+            # Lines of canonical texts always load, also when merged.
+            raise ValueError(f"{file} cannot be read after merging")
+        return render_raw(raw)
     return render_table(_load(file, text, study), study, dict(order))
 
 
@@ -213,13 +231,15 @@ def _region_conflict(
     rows: Sequence[int],
     conflict: Conflict,
     keep: Side | None,
+    raw: bool,
 ) -> tuple[SyncConflict, ValidationIssue | None]:
     """A conflicting region of a merge, and its issue unless `keep` resolved it.
 
     `rows` are the sheet rows of the canonical workbook lines. The issue is
     located at the first row of the region in the sheet of the workbook, and
     its message names the lines of the TSV file. A side without lines is
-    located at the line before the region, or at the header.
+    located at the line before the region, or at the header; a raw table has
+    no header, so lines removed at its start are before its first line.
     """
     sheet = file.removesuffix(".tsv")
     workbook_rows = tuple(
@@ -238,11 +258,16 @@ def _region_conflict(
     if workbook_rows:
         row = workbook_rows[0][0]
         in_workbook = _numbers("row", [number for number, _ in workbook_rows])
+    elif raw and not conflict.ours_start:
+        row = 1
+        in_workbook = "rows removed before row 1"
     else:
         row = rows[conflict.ours_start - 1] if conflict.ours_start else 1
         in_workbook = f"rows removed after row {row}"
     if table_lines:
         in_tables = _numbers("line", [number for number, _ in table_lines])
+    elif raw and not conflict.theirs_start:
+        in_tables = "lines removed before line 1"
     else:
         in_tables = f"lines removed after line {conflict.theirs_start or 1}"
     return found, make_issue(
@@ -325,7 +350,8 @@ def _plan(
     """The new text of every table file, merged from base, workbook and tables.
 
     A text taken from one side is re-sorted when the new subjects order their
-    rows differently, and a merged text is always made canonical.
+    rows differently, and a merged text is always made canonical. A raw table
+    is never re-sorted.
     """
     plan = _Plan()
     subjects = workbook.get(SUBJECTS)
@@ -334,7 +360,11 @@ def _plan(
     )
     order = tables_order
     # The subjects come first: their order sorts the rows of every other table.
-    for file in sorted(workbook.keys() | tables.keys(), key=_sheet_order):
+    files = sorted(
+        workbook.keys() | tables.keys(), key=lambda file: _sheet_order(file, study)
+    )
+    for file in files:
+        raw = parse_raw_file(file, study) is not None
         w, t, b = workbook.get(file), tables.get(file), base.get(file)
         # The subject order of the text, None for a merged text.
         sorted_by: Mapping[str, int] | None
@@ -361,7 +391,7 @@ def _plan(
             rows = content.tables[file].rows
             for region in merged.conflicts:
                 conflict, issue = _region_conflict(
-                    workbook_name, file, rows, region, keep
+                    workbook_name, file, rows, region, keep, raw
                 )
                 plan.conflicts.append(conflict)
                 if issue is not None:
@@ -386,6 +416,9 @@ def _plan(
                 sorted_by = subject_order(table)
                 text = render_table(table, study, dict(sorted_by))
             order = sorted_by
+        elif raw:
+            if text is not None and sorted_by is None:
+                text = _canonical(file, text, study, order)
         elif text is not None and sorted_by != order:
             text = _canonical(file, text, study, order)
         plan.files[file] = text
@@ -393,15 +426,22 @@ def _plan(
 
 
 def table_texts(study: LoadedStudy) -> dict[str, str]:
-    """The canonical text of every table of a study; tables without rows are left out.
+    """The canonical text of every table and raw table of a study, if it has rows.
 
     These are the tables a generated workbook holds.
     """
     order = subject_order(study.table(SUBJECTS))
     return {
-        table.file: text
-        for table in study.tables
-        if (text := render_table(table, study.name, order)) is not None
+        **{
+            table.file: text
+            for table in study.tables
+            if (text := render_table(table, study.name, order)) is not None
+        },
+        **{
+            raw.file: text
+            for raw in study.raw_tables
+            if (text := render_raw(raw)) is not None
+        },
     }
 
 
@@ -525,7 +565,7 @@ def _create(
     if outcome.checked:
         return replace(outcome, workbook_action="created")
     try:
-        build = build_workbook(tables, vocabulary)
+        build = build_workbook(tables, vocabulary, study=outcome.folder.name)
     except WorkbookError as error:
         return replace(
             outcome, issues=(make_issue(error.code, error.message, file=path.name),)
@@ -558,7 +598,7 @@ class _Replacement:
 
 
 def _empty_sheets(
-    content: WorkbookContent, files: Mapping[str, str | None]
+    content: WorkbookContent, files: Mapping[str, str | None], study: str
 ) -> list[str]:
     """The sheets that pkdb tables add added and that have no rows yet.
 
@@ -567,7 +607,10 @@ def _empty_sheets(
     return [
         name
         for name in content.sheets
-        if _parsed(f"{name}.tsv")[0].per_source
+        if (
+            parse_raw_file(f"{name}.tsv", study) is not None
+            or _parsed(f"{name}.tsv")[0].per_source
+        )
         and f"{name}.tsv" not in content.tables
         and files.get(f"{name}.tsv") is None
     ]
@@ -578,6 +621,7 @@ def _replace_workbook(
     tables: Mapping[str, str],
     vocabulary: Vocabulary,
     *,
+    study: str,
     empty_sheets: Sequence[str],
     signature: tuple[int, int] | None,
 ) -> _Replacement:
@@ -589,7 +633,7 @@ def _replace_workbook(
     """
     try:
         build = build_workbook(
-            tables, vocabulary, existing=path, empty_sheets=empty_sheets
+            tables, vocabulary, study=study, existing=path, empty_sheets=empty_sheets
         )
     except WorkbookError as error:
         issue = make_issue(error.code, error.message, file=path.name)
@@ -627,11 +671,13 @@ def _regenerate(
     that the workbook holds the tables and only gets its base back.
     """
     path = outcome.workbook
+    study = outcome.folder.name
     replaced = _replace_workbook(
         path,
         {file: text for file, text in files.items() if text is not None},
         vocabulary,
-        empty_sheets=_empty_sheets(content, files),
+        study=study,
+        empty_sheets=_empty_sheets(content, files, study),
         signature=signature,
     )
     issues = (*outcome.issues, *replaced.issues)
@@ -794,15 +840,24 @@ class AddTableResult:
         )
 
 
-def _table_name_issue(table: str) -> ValidationIssue | None:
-    """Why a name cannot be the sheet of a new table, or None."""
+def _new_table_source(table: str, study: str) -> str | None:
+    """The source of the sheet of a new table or raw table of a study, or None."""
     parsed = parse_table_file(f"{table}.tsv")
-    if parsed is None or not parsed[0].per_source:
+    if parsed is not None:
+        return parsed[1] if parsed[0].per_source else None
+    return parse_raw_file(f"{table}.tsv", study)
+
+
+def _table_name_issue(table: str, study: str) -> ValidationIssue | None:
+    """Why a name cannot be the sheet of a new table or raw table, or None."""
+    if _new_table_source(table, study) is None:
         *kinds, last = [kind for kind, spec in TABLES.items() if spec.per_source]
         return make_issue(
             "invalid_table_name",
             f"{table!r} is not a table name <kind>_<source> with the kind "
-            f"{', '.join(kinds)} or {last} and a source such as Tab3, Fig2A or Text",
+            f"{', '.join(kinds)} or {last} and a source such as Tab3, Fig2A or "
+            f"Text, or the name {study}_<source> of a raw table with a source "
+            "such as Tab3",
         )
     if len(table) > SHEET_NAME_LIMIT:
         return make_issue(
@@ -839,7 +894,8 @@ def add_table(
 ) -> AddTableResult:
     """Add the empty sheet of a new `<kind>_<source>` table, such as outputs_Tab3.
 
-    The name must be a table split by source, at most 31 characters long, and
+    The name must be a table split by source, or a raw table
+    `<study>_<source>` such as Example_Tab3, at most 31 characters long, and
     new as a TSV file and as a sheet, ignoring case as Excel does. The workbook
     and the tables are synced first, creating the workbook if needed. The
     workbook is then rebuilt from the tables with the new sheet and the empty
@@ -848,7 +904,7 @@ def add_table(
     """
     folder = Path(folder).resolve()
     path = workbook_path(folder)
-    if (issue := _table_name_issue(table)) is not None:
+    if (issue := _table_name_issue(table, folder.name)) is not None:
         return AddTableResult(table, None, (issue,))
     try:
         names = [entry.name for entry in folder.iterdir()]
@@ -905,7 +961,8 @@ def add_table(
         path,
         tables,
         vocabulary,
-        empty_sheets=[*_empty_sheets(content, tables), table],
+        study=study.name,
+        empty_sheets=[*_empty_sheets(content, tables, study.name), table],
         signature=signature,
     )
     if replaced.status == "open":
@@ -920,8 +977,8 @@ def add_table(
             )
         )
     issues = replaced.issues
-    if replaced.status == "written":
-        source = table.partition("_")[2]
+    source = _new_table_source(table, study.name)
+    if replaced.status == "written" and source is not None:
         image = image_file(study.name, source)
         if source != TEXT_SOURCE and not (folder / image).exists():
             missing = make_issue(

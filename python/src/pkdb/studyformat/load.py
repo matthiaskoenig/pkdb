@@ -10,10 +10,12 @@ from pydantic import BaseModel, ValidationError
 
 from pkdb.schemas.validation import ValidationIssue, fail
 from pkdb.studyformat.cells import canonical_cell, parse_cell
+from pkdb.studyformat.digitize import LoadedDigitization, load_digitization
 from pkdb.studyformat.issues import LISTED, IssueCap, make_issue
 from pkdb.studyformat.jsonio import JsonFileError, load_json
 from pkdb.studyformat.layout import Layout, scan_folder
 from pkdb.studyformat.models import ReferenceSnapshot, Review, StudyMetadata
+from pkdb.studyformat.raw import LoadedRaw, load_raw
 from pkdb.studyformat.tables import (
     REFERENCE_JSON,
     REVIEW_JSON,
@@ -58,6 +60,8 @@ STRUCTURAL = frozenset(
         "invalid_study_json",
         "invalid_review_json",
         "invalid_reference_json",
+        "digitization_invalid",
+        "digitization_unsupported",
     }
 )
 
@@ -103,6 +107,8 @@ class LoadedStudy:
 
     layout: Layout
     tables: list[LoadedTable] = field(default_factory=list)
+    raw_tables: list[LoadedRaw] = field(default_factory=list)
+    digitizations: list[LoadedDigitization] = field(default_factory=list)
     # Table kinds that cannot be used: the file failed to load, or a required
     # table is missing. Nothing refers into them.
     broken: set[str] = field(default_factory=set)
@@ -121,6 +127,12 @@ class LoadedStudy:
 
     def table(self, file: str) -> LoadedTable | None:
         return next((table for table in self.tables if table.file == file), None)
+
+    def raw(self, file: str) -> LoadedRaw | None:
+        return next((raw for raw in self.raw_tables if raw.file == file), None)
+
+    def digitization(self, source: str) -> LoadedDigitization | None:
+        return next((d for d in self.digitizations if d.source == source), None)
 
     def of_kind(self, kind: str) -> list[LoadedTable]:
         return [table for table in self.tables if table.kind == kind]
@@ -375,6 +387,37 @@ def _read_json(study: LoadedStudy, name: str) -> object:
         return _UNUSABLE
 
 
+def validation_issues(
+    error: ValidationError, file: str, code: str
+) -> list[ValidationIssue]:
+    """Extract validation issues from a Pydantic ValidationError.
+
+    Returns a list of ValidationIssue objects from the error details,
+    respecting the issue cap as today.
+    """
+    issues = []
+    cap = IssueCap()
+    for detail in error.errors(include_url=False):
+        if not cap.admit(code):
+            continue
+        path = ".".join(str(part) for part in detail["loc"])
+        issues.append(
+            make_issue(
+                code,
+                f"{path or file}: {detail['msg']}",
+                file=file,
+                field=path or None,
+            )
+        )
+    issues.extend(
+        make_issue(
+            code, f"{total:,} entries of {file} are invalid; {LISTED}", file=file
+        )
+        for code, total in cap.beyond()
+    )
+    return issues
+
+
 def _validate[M: BaseModel](
     study: LoadedStudy, name: str, model: type[M], code: str
 ) -> M | None:
@@ -384,25 +427,7 @@ def _validate[M: BaseModel](
     try:
         return model.model_validate(data)
     except ValidationError as error:
-        cap = IssueCap()
-        for detail in error.errors(include_url=False):
-            if not cap.admit(code):
-                continue
-            path = ".".join(str(part) for part in detail["loc"])
-            study.issues.append(
-                make_issue(
-                    code,
-                    f"{path or name}: {detail['msg']}",
-                    file=name,
-                    field=path or None,
-                )
-            )
-        study.issues.extend(
-            make_issue(
-                code, f"{total:,} entries of {name} are invalid; {LISTED}", file=name
-            )
-            for code, total in cap.beyond()
-        )
+        study.issues.extend(validation_issues(error, name, code))
         return None
 
 
@@ -436,6 +461,21 @@ def load_study(
             study.broken.add(table_file.spec.kind)
         else:
             study.tables.append(table)
+    for raw_file in layout.raw_tables:
+        with (layout.folder / raw_file.name).open("rb") as stream:
+            raw, issues = load_raw(raw_file.name, stream, raw_file.source, limit=limit)
+        study.issues.extend(issues)
+        if raw is not None:
+            study.raw_tables.append(raw)
+    for digitization_file in layout.digitizations:
+        loaded, issues = load_digitization(
+            digitization_file.name,
+            (layout.folder / digitization_file.name).read_bytes(),
+            digitization_file.source,
+        )
+        study.issues.extend(issues)
+        if loaded is not None:
+            study.digitizations.append(loaded)
     present = {table_file.spec.kind for table_file in layout.tables}
     study.broken.update(
         spec.kind
