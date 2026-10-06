@@ -2,7 +2,9 @@
 
 The `value` statistic moves into `mean` and schedule strings (`time_text`) become
 `time`, `time_list`, `interval` and `doses`. Interventions gain the observation
-context of outputs and characteristics: tissue, method and not-reported times. Every study is re-uploaded with
+context of outputs and characteristics: tissue, method and not-reported times.
+Studies gain the release, issue and review columns and `legacy_sid`, the study
+format 1 sid of a study that a study format 2 upload took over. Every study is re-uploaded with
 processing version 9 afterwards, so the downgrade restores the version 8 columns
 only as far as they are derivable.
 """
@@ -291,11 +293,20 @@ def upgrade():
     op.add_column("studies", sa.Column("issue", sa.Integer(), nullable=True))
     op.add_column("studies", sa.Column("review_status", sa.String(16), nullable=True))
     op.add_column("studies", sa.Column("review", postgresql.JSONB(), nullable=True))
+    op.add_column("studies", sa.Column("legacy_sid", sa.String(255), nullable=True))
     op.create_unique_constraint(op.f("uq_studies_pkdb_id"), "studies", ["pkdb_id"])
+    op.create_unique_constraint(
+        op.f("uq_studies_legacy_sid"), "studies", ["legacy_sid"]
+    )
     op.execute("DROP INDEX ix_studies_search")
     op.execute(SEARCH_INDEX.format(SEARCH_AFTER))
     for name, condition in (
         ("pkdb_id", "pkdb_id ~ '^PKDB[0-9]{5}$'"),
+        (
+            "legacy_sid",
+            "legacy_sid IS NULL OR (length(legacy_sid) > 0 AND "
+            "strpos(legacy_sid, '/') = 0)",
+        ),
         ("release", "(pkdb_id IS NULL) = (release_date IS NULL)"),
         ("issue", "issue IS NULL OR issue > 0"),
         ("review_status", "review_status IN ('draft', 'in_review', 'approved')"),
@@ -308,10 +319,25 @@ def downgrade():
     restore_values_and_schedule_text()
     op.execute("DROP INDEX ix_studies_search")
     op.execute(SEARCH_INDEX.format(SEARCH_BEFORE))
-    for name in ("review", "review_status", "issue", "release", "pkdb_id"):
+    for name in (
+        "review",
+        "review_status",
+        "issue",
+        "release",
+        "legacy_sid",
+        "pkdb_id",
+    ):
         op.drop_constraint(op.f(f"ck_studies_{name}"), "studies", type_="check")
+    op.drop_constraint(op.f("uq_studies_legacy_sid"), "studies", type_="unique")
     op.drop_constraint(op.f("uq_studies_pkdb_id"), "studies", type_="unique")
-    for name in ("review", "review_status", "issue", "release_date", "pkdb_id"):
+    for name in (
+        "legacy_sid",
+        "review",
+        "review_status",
+        "issue",
+        "release_date",
+        "pkdb_id",
+    ):
         op.drop_column("studies", name)
     for name in ("time_list", "doses"):
         op.drop_constraint(

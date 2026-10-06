@@ -2,8 +2,9 @@
 
 A study format 2 study has the sid `<substance>/<name>` and is addressed by two
 path segments. Single-segment routes serve study format 1 sids and redirect
-the PKDB identifier of a released study stored under another sid (its former
-study format 1 sid) permanently to the same route for that sid.
+the PKDB identifier of a released study stored under another sid, and the
+former study format 1 sid of a study that a study format 2 upload took over
+(`legacy_sid`), permanently to the same route for that sid.
 """
 
 from typing import Any
@@ -19,8 +20,9 @@ from pkdb_server.db.read import moved_study
 # OpenAPI documentation of the redirect for single-segment routes.
 MOVED: dict[int | str, dict[str, Any]] = {
     308: {
-        "description": "The PKDB identifier of a study stored as "
-        "`<substance>/<name>`; `Location` is the same route for that sid"
+        "description": "The PKDB identifier or former study format 1 sid of a "
+        "study stored as `<substance>/<name>`; `Location` is the same route for "
+        "that sid"
     }
 }
 
@@ -32,7 +34,7 @@ def study_redirect(
     *,
     parameter: str = "sid",
 ) -> JSONResponse | None:
-    """A permanent redirect to the study released as `identifier`, if any.
+    """A permanent redirect to the study released or formerly stored as `identifier`.
 
     The location is the matched route with its path parameter `parameter`
     replaced by the sid of the study, so suffixes and query strings are kept.

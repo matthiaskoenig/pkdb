@@ -619,3 +619,216 @@ def test_public_client_and_cli_upload_format_2(
     result = api.upload(prepare(folder, vocabulary=api.vocabulary()))
     assert (result.sid, result.created) == ("caffeine/Example", False)
     assert json.loads((folder / "study.json").read_text())["format"] == 2
+
+
+# A study format 1 row whose sid is not a PKDB identifier, of the same
+# publication (PubMed ID 123) and source as the folder of write_study.
+LEGACY = "Vilsboll2008"
+
+
+@pytest.fixture
+def legacy_row(client, creator_headers, valid_bundle, session_factory):
+    valid_bundle.reference["pmid"] = "123"
+    response = upload_format_1(client, creator_headers, valid_bundle, LEGACY)
+    assert response.status_code == 201, response.text
+    [row] = stored(session_factory)
+    return row
+
+
+@pytest.fixture
+def other_headers(session_factory):
+    from pkdb_server.db.models.users import User
+    from pkdb_server.services.authentication import issue_token
+
+    with session_factory.begin() as session:
+        user = User(username="other", role="curator", active=True)
+        session.add(user)
+        session.flush()
+        return {"Authorization": f"Token {issue_token(user, session)}"}
+
+
+def grants(session_factory, study_id):
+    from pkdb_server.db.models.studies import StudyGrant
+
+    with session_factory() as session:
+        return sorted(
+            (grant.user_id, grant.role)
+            for grant in session.scalars(
+                select(StudyGrant).where(StudyGrant.study_id == study_id)
+            )
+        )
+
+
+def test_format_2_upload_takes_over_the_format_1_row_of_its_publication(
+    client, creator_headers, tmp_path, legacy_row, session_factory
+):
+    before = grants(session_factory, legacy_row.id)
+    folder = write_study(tmp_path / "sources")
+    for method, url in (("post", URL + "/validate"), ("put", URL)):
+        response = getattr(client, method)(
+            url, headers=creator_headers, **multipart(folder)
+        )
+        assert response.status_code == 200, response.text
+    body = response.json()
+    assert (body["sid"], body["created"], body["renamed_from"]) == (
+        "caffeine/Example",
+        False,
+        LEGACY,
+    )
+    [after] = stored(session_factory)
+    assert (after.id, after.sid, after.legacy_sid, after.pkdb_id) == (
+        legacy_row.id,
+        "caffeine/Example",
+        LEGACY,
+        None,
+    )
+    assert (after.creator_id, after.created_at, after.publication_id) == (
+        legacy_row.creator_id,
+        legacy_row.created_at,
+        legacy_row.publication_id,
+    )
+    assert grants(session_factory, after.id) == before
+    again = client.put(URL, headers=creator_headers, **multipart(folder))
+    assert again.status_code == 200 and again.json()["renamed_from"] is None
+    assert [row.legacy_sid for row in stored(session_factory)] == [LEGACY]
+
+
+def test_takeover_needs_edit_rights_and_names_only_readable_studies(
+    client, admin_headers, other_headers, tmp_path, legacy_row, session_factory
+):
+    folder = write_study(tmp_path / "sources")
+    # The private study is not named to someone who cannot read it.
+    response = client.put(URL, headers=other_headers, **multipart(folder))
+    assert response.status_code == 409, response.text
+    assert response.json()["detail"] == (
+        "A study already exists for this publication and source"
+    )
+    assert LEGACY not in response.text
+    negotiated = client.put(
+        URL,
+        headers={**other_headers, "X-PKDB-Report-Version": "2"},
+        **multipart(folder),
+    )
+    [issue] = negotiated.json()["report"]["issues"]
+    assert (issue["code"], issue["message"]) == (
+        "publication_conflict",
+        "A study already exists for this publication and source",
+    )
+    assert issue["suggestions"][0]["message"] == (
+        "Resolve the conflict that the message describes, then upload again."
+    )
+    # A reader who may not edit the study learns which study it is.
+    access = f"/api/v1/admin/studies/{LEGACY}/access"
+    state = client.get(access, headers=admin_headers).json()
+    changed = client.put(
+        access, headers=admin_headers, json={**state, "access": "public"}
+    )
+    assert changed.status_code == 200, changed.text
+    response = client.post(
+        URL + "/validate", headers=other_headers, **multipart(folder)
+    )
+    assert response.status_code == 409, response.text
+    assert LEGACY in response.json()["detail"]
+    [row] = stored(session_factory)
+    assert (row.sid, row.legacy_sid) == (LEGACY, None)
+
+
+def test_publication_of_a_two_segment_study_is_not_taken_over(
+    client, creator_headers, tmp_path, session_factory
+):
+    first = write_study(tmp_path / "a")
+    assert (
+        client.put(URL, headers=creator_headers, **multipart(first)).status_code == 201
+    )
+    second = write_study(tmp_path / "b", "Other")
+    response = client.put(
+        "/api/v2/studies/caffeine/Other", headers=creator_headers, **multipart(second)
+    )
+    assert response.status_code == 409, response.text
+    assert response.json()["detail"] == (
+        "A study already exists for this publication and source"
+    )
+    assert [row.sid for row in stored(session_factory)] == ["caffeine/Example"]
+
+
+def test_pkdb_identifier_rename_records_the_former_sid(
+    client, creator_headers, tmp_path, legacy_row, session_factory
+):
+    with session_factory.begin() as session:
+        row = session.get(Study, legacy_row.id)
+        row.pkdb_id, row.release_date = "PKDB00198", date(2026, 9, 28)
+    folder = write_study(tmp_path / "sources", release="PKDB00198")
+    response = client.put(URL, headers=creator_headers, **multipart(folder))
+    assert response.status_code == 200, response.text
+    assert response.json()["renamed_from"] == LEGACY
+    [after] = stored(session_factory)
+    assert (after.id, after.sid, after.pkdb_id, after.legacy_sid) == (
+        legacy_row.id,
+        "caffeine/Example",
+        "PKDB00198",
+        LEGACY,
+    )
+
+
+def test_released_format_1_sid_is_not_recorded_as_a_legacy_sid(
+    client, creator_headers, tmp_path, valid_bundle, session_factory
+):
+    valid_bundle.reference["pmid"] = "123"
+    response = upload_format_1(client, creator_headers, valid_bundle, "PKDB00198")
+    assert response.status_code == 201, response.text
+    folder = write_study(tmp_path / "sources", release="PKDB00198")
+    response = client.put(URL, headers=creator_headers, **multipart(folder))
+    assert response.status_code == 200, response.text
+    assert response.json()["renamed_from"] == "PKDB00198"
+    [after] = stored(session_factory)
+    # The PKDB identifier already redirects.
+    assert (after.pkdb_id, after.legacy_sid) == ("PKDB00198", None)
+
+
+def test_pkdb_identifier_and_publication_of_different_studies_conflict(
+    client, creator_headers, tmp_path, valid_bundle, legacy_row, session_factory
+):
+    # Another publication released as PKDB00198 under its format 1 sid.
+    valid_bundle.reference.update(sid="REF2", pmid="456")
+    valid_bundle.study["reference"] = "REF2"
+    response = upload_format_1(client, creator_headers, valid_bundle, "PKDB00198")
+    assert response.status_code == 201, response.text
+    folder = write_study(tmp_path / "sources", release="PKDB00198")
+    for method, url in (("post", URL + "/validate"), ("put", URL)):
+        response = getattr(client, method)(
+            url, headers=creator_headers, **multipart(folder)
+        )
+        assert response.status_code == 409, response.text
+        detail = response.json()["detail"]
+        assert "PKDB00198" in detail and LEGACY in detail
+    assert sorted(row.sid for row in stored(session_factory)) == [
+        "PKDB00198",
+        LEGACY,
+    ]
+
+
+def test_format_1_upload_of_a_legacy_sid_is_refused(
+    client,
+    creator_headers,
+    other_headers,
+    tmp_path,
+    valid_bundle,
+    legacy_row,
+    session_factory,
+):
+    folder = write_study(tmp_path / "sources")
+    assert (
+        client.put(URL, headers=creator_headers, **multipart(folder)).status_code == 200
+    )
+    response = upload_format_1(client, creator_headers, valid_bundle, LEGACY)
+    assert response.status_code == 409, response.text
+    assert response.json()["detail"] == (
+        f"{LEGACY} is now the study caffeine/Example; upload its study format 2 folder"
+    )
+    # Someone who cannot read the study does not learn where it is.
+    valid_bundle.reference.update(sid="REF2", pmid="456")
+    valid_bundle.study["reference"] = "REF2"
+    response = upload_format_1(client, other_headers, valid_bundle, LEGACY)
+    assert response.status_code == 409, response.text
+    assert "caffeine/Example" not in response.text
+    assert [row.sid for row in stored(session_factory)] == ["caffeine/Example"]

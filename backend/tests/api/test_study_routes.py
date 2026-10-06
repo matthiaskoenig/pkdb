@@ -202,6 +202,73 @@ def test_legacy_sid_of_a_renamed_study_redirects(
     assert response.headers["location"] == f"/api/v1/studies/{SID}/"
 
 
+def test_former_sid_of_a_taken_over_study_redirects(
+    client, creator_headers, admin_headers, tmp_path, valid_bundle, session_factory
+):
+    legacy = "Vilsboll2008"
+    valid_bundle.reference["pmid"] = "123"
+    response = client.put(
+        f"/api/v2/studies/{legacy}",
+        headers=creator_headers,
+        **format_1(valid_bundle, legacy),
+    )
+    assert response.status_code == 201, response.text
+    folder = write_study(tmp_path / "sources")
+    response = client.put(
+        f"/api/v2/studies/{SID}", headers=creator_headers, **multipart(folder)
+    )
+    assert response.json()["renamed_from"] == legacy
+    redirects = {
+        f"/api/v1/studies/{legacy}/": f"/api/v1/studies/{SID}/",
+        f"/api/v1/studies/{legacy}.json": f"/api/v1/studies/{SID}.json",
+        f"/api/v2/studies/{legacy}": f"/api/v2/studies/{SID}",
+        f"/api/v2/studies/{legacy}/publication": f"/api/v2/studies/{SID}/publication",
+        f"/api/v1/pkdata/studies/{legacy}/": f"/api/v1/pkdata/studies/{SID}/",
+    }
+    for url, location in redirects.items():
+        response = client.get(url, headers=creator_headers, follow_redirects=False)
+        assert response.status_code == 308, url
+        assert response.headers["location"] == location
+        assert client.get(url, headers=creator_headers).status_code == 200, url
+        # Only readers of the study learn where it is.
+        assert client.get(url, follow_redirects=False).status_code == 404, url
+    access = f"/api/v1/admin/studies/{legacy}/access"
+    response = client.get(access, headers=admin_headers, follow_redirects=False)
+    assert response.status_code == 308, response.text
+    assert response.headers["location"] == f"/api/v1/admin/studies/{SID}/access"
+    api = Client(
+        endpoint="http://testserver",
+        api_key=creator_headers["Authorization"].split(" ", 1)[1],
+        transport=client,
+    )
+    assert api.studies.get(legacy).sid == SID
+
+
+def test_live_sid_wins_over_a_legacy_sid(
+    client, creator_headers, tmp_path, valid_bundle, session_factory
+):
+    response = client.put(
+        "/api/v2/studies/TEST1",
+        headers=creator_headers,
+        **format_1(valid_bundle, "TEST1"),
+    )
+    assert response.status_code == 201, response.text
+    folder = write_study(tmp_path / "sources", pmid="456")
+    response = client.put(
+        f"/api/v2/studies/{SID}", headers=creator_headers, **multipart(folder)
+    )
+    assert response.status_code == 201, response.text
+    # Uploads never give a live sid as a legacy sid; the database could.
+    with session_factory.begin() as session:
+        session.execute(
+            update(Study).where(Study.sid == SID).values(legacy_sid="TEST1")
+        )
+    for url in ("/api/v1/studies/TEST1/", "/api/v2/studies/TEST1"):
+        response = client.get(url, headers=creator_headers, follow_redirects=False)
+        assert response.status_code == 200, url
+        assert response.json()["sid"] == "TEST1"
+
+
 def test_study_filters_accept_sids_with_slashes(
     client, creator_headers, released, valid_bundle
 ):
@@ -447,3 +514,85 @@ def test_pkdb_identifier_filter_matches_released_and_format_1_studies(
         )
         assert response.status_code == 200, response.text
         assert response.json()["studies"] == len(expected), identifier
+
+
+LEGACY = "Vilsboll2008"
+
+
+@pytest.fixture
+def legacy_study(client, creator_headers, valid_bundle):
+    """A study format 1 study of the publication of write_study."""
+    valid_bundle.reference["pmid"] = "123"
+    response = client.put(
+        f"/api/v2/studies/{LEGACY}",
+        headers=creator_headers,
+        **format_1(valid_bundle, LEGACY),
+    )
+    assert response.status_code == 201, response.text
+
+
+def test_takeover_waits_for_the_lock_of_the_former_sid(
+    client, creator_headers, tmp_path, legacy_study, session_factory
+):
+    folder = write_study(tmp_path / "sources")
+    responses = []
+    with lock_holder(session_factory) as other:
+        # A study format 1 upload or access update of the former sid holds it.
+        advisory(other, "lock", LEGACY)
+        worker = threading.Thread(
+            target=lambda: responses.append(
+                client.put(
+                    f"/api/v2/studies/{SID}",
+                    headers=creator_headers,
+                    **multipart(folder),
+                )
+            )
+        )
+        worker.start()
+        wait_for_waiter(other, LEGACY)
+        assert not responses
+        advisory(other, "unlock", LEGACY)
+    worker.join(timeout=30)
+    [response] = responses
+    assert response.status_code == 200, response.text
+    assert response.json()["renamed_from"] == LEGACY
+
+
+def test_takeover_starts_again_when_its_study_changed_before_the_locks(
+    client, creator_headers, tmp_path, legacy_study, monkeypatch
+):
+    from pkdb_server.services import ingestion
+
+    folder = write_study(tmp_path / "sources")
+    calls = []
+
+    def unlocked(session, study):
+        # As if the study format 1 study appeared after its sid was read.
+        calls.append(study.sid)
+        return set()
+
+    monkeypatch.setattr(ingestion, "former_sids", unlocked)
+    response = client.put(
+        f"/api/v2/studies/{SID}", headers=creator_headers, **multipart(folder)
+    )
+    assert response.status_code == 409, response.text
+    assert response.json()["detail"] == (
+        "The study changed during the upload; upload again"
+    )
+    assert calls == [SID] * ingestion.LOCK_ATTEMPTS
+    monkeypatch.undo()
+    real = ingestion.former_sids
+    first = []
+
+    def once(session, study):
+        # Only the first attempt misses the former sid.
+        first.append(study.sid)
+        return set() if len(first) == 1 else real(session, study)
+
+    monkeypatch.setattr(ingestion, "former_sids", once)
+    response = client.put(
+        f"/api/v2/studies/{SID}", headers=creator_headers, **multipart(folder)
+    )
+    assert response.status_code == 200, response.text
+    assert response.json()["renamed_from"] == LEGACY
+    assert first == [SID, SID]

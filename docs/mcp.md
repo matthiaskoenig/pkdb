@@ -45,7 +45,7 @@ Call `get_study` with:
 {"sid": "caffeine/Harder1988"}
 ```
 
-`sid` is the identifier of a study in study format 2 (`<substance>/<name>`), the identifier of a study in study format 1 (such as `PKDB01110`), or the PKDB identifier of a released study (such as `PKDB00198`). The tool reads the study of a PKDB identifier directly, without the redirect of the REST API. A PKDB identifier names a private study only for its readers: anyone else gets `Not found`, like REST, so the identifier does not reveal that the study exists.
+`sid` is the identifier of a study in study format 2 (`<substance>/<name>`), the identifier of a study in study format 1 (such as `PKDB01110`), the PKDB identifier of a released study (such as `PKDB00198`), or the former study format 1 identifier of a study that a study format 2 upload took over (such as `Vilsboll2008`). The tool reads the study of a PKDB identifier or former identifier directly, without the redirect of the REST API. A PKDB identifier or former identifier names a private study only for its readers: anyone else gets `Not found`, like REST, so the identifier does not reveal that the study exists.
 
 The result is the complete canonical study definition, including its reference, groups, individuals, interventions, measurements, and attachment metadata. Statistics have no `value` and interventions have structured schedules, as described under [statistics in responses](api.md#statistics-in-responses); `metadata` carries the release (`pkdb_id` and date), the curation issue number and the review status and items of a study in study format 2.
 

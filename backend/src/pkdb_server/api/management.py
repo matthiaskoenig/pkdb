@@ -16,7 +16,11 @@ from pkdb_server.services.credentials import (
     require_admin_session,
     revoke_user_credentials,
 )
-from pkdb_server.services.ingestion import lock_publication
+from pkdb_server.services.ingestion import (
+    LOCK_ATTEMPTS,
+    StudyChanged,
+    lock_publication,
+)
 from pkdb_server.services.profiles import public_profile
 
 router = APIRouter(prefix="/api/v1/admin")
@@ -170,16 +174,8 @@ def update_user(user_id: int, data: PatchUser, request: Request):
         }
 
 
-# Attempts to lock a study whose PKDB identifier changes meanwhile.
-LOCK_ATTEMPTS = 3
-
-
 class StudyNotFound(LookupError):
     """No study is stored under the sid."""
-
-
-class StudyChanged(Exception):
-    """The PKDB identifier of a study changed before its locks were taken."""
 
 
 def lock_study(session, sid: str) -> None:
@@ -187,8 +183,9 @@ def lock_study(session, sid: str) -> None:
 
     A publication locks its sid and its PKDB identifier, then the uploader's
     account, then the study row. It replaces the study under the same sid or
-    takes it over by its PKDB identifier (a rename), so the locks of both
-    names exclude every publication of the study. With the sid alone, a rename
+    takes it over by its PKDB identifier (a rename); a takeover of a study
+    format 1 study by its publication locks that study's sid as well. So the
+    locks of both names exclude every publication of the study. With the sid alone, a rename
     could hold the account row of a curator, which the grant inserts wait for,
     while it waits for the study row: a deadlock. StudyChanged if the PKDB
     identifier changed before the locks were taken; the caller has taken no

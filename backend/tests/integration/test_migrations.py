@@ -157,7 +157,14 @@ def test_retirement_preserves_publication_files_and_attribution(
 
 
 STUDY_FORMAT_COLUMNS = {
-    "studies": {"pkdb_id", "release_date", "issue", "review_status", "review"},
+    "studies": {
+        "pkdb_id",
+        "release_date",
+        "issue",
+        "review_status",
+        "review",
+        "legacy_sid",
+    },
     "interventions": {
         "gmean",
         "gsd",

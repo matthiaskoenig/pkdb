@@ -46,7 +46,7 @@ ERRORS = {
     409: (
         "publication_conflict",
         "compatibility",
-        "Refresh the vocabulary and check processing compatibility before retrying.",
+        "Resolve the conflict that the message describes, then upload again.",
     ),
     413: (
         "upload_too_large",
@@ -229,6 +229,7 @@ def build_report(scope, status_code, payload):
             message = (
                 "Client and server processing or vocabulary versions do not match."
             )
+            advice = "Refresh the vocabulary and check processing compatibility before retrying."
             details = {"expected": state.get("upload_versions", {})}
         if status_code == 413 and "upload_limit_actual" in state:
             details.update(

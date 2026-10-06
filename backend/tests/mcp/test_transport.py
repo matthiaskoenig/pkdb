@@ -63,11 +63,13 @@ async def test_read_tools_match_rest_and_removed_tools_cannot_write(
 
 
 @pytest.mark.anyio
-async def test_get_study_reads_substance_and_name_and_pkdb_identifiers(
+async def test_get_study_reads_substance_and_name_pkdb_identifiers_and_legacy_sids(
     mcp_http, mcp_connect, ingestion_context, tmp_path, session_factory
 ):
     import httpx2
+    from sqlalchemy import update
 
+    from pkdb_server.db.models.studies import Study
     from pkdb_server.db.models.users import User
     from pkdb_server.services.authentication import issue_token
     from tests.fixtures.study_folders import write_study
@@ -76,6 +78,9 @@ async def test_get_study_reads_substance_and_name_and_pkdb_identifiers(
     _, principal = ingestion_context
     folder = write_study(tmp_path / "sources", release="PKDB00198")
     app.state.ingestion.replace(folder, principal)
+    # As if the study had taken over a study format 1 row named Vilsboll2008.
+    with session_factory.begin() as session:
+        session.execute(update(Study).values(legacy_sid="Vilsboll2008"))
     async with (
         httpx2.AsyncClient(
             base_url=url, headers={"Authorization": f"Bearer {token}"}
@@ -87,7 +92,7 @@ async def test_get_study_reads_substance_and_name_and_pkdb_identifiers(
         moved = await rest.get("/api/v2/studies/PKDB00198")
         assert moved.status_code == 308
         assert moved.headers["location"] == "/api/v2/studies/caffeine/Example"
-        for sid in ("caffeine/Example", "PKDB00198"):
+        for sid in ("caffeine/Example", "PKDB00198", "Vilsboll2008"):
             study = await client.call_tool("get_study", {"sid": sid})
             assert not study.is_error, sid
             assert study.structured_content == expected
@@ -102,6 +107,7 @@ async def test_get_study_reads_substance_and_name_and_pkdb_identifiers(
     async with mcp_connect(url, other_token) as client:
         for sid, message in (
             ("PKDB00198", "Not found"),
+            ("Vilsboll2008", "Not found"),
             ("caffeine/Example", "Action not permitted"),
         ):
             study = await client.call_tool("get_study", {"sid": sid})

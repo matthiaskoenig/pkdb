@@ -78,6 +78,8 @@ class Study(Identity, Timestamped, Base):
     validation_report: Mapped[dict] = mapped_column(JSONB, default=dict)
     source_manifest: Mapped[dict] = mapped_column(JSONB, default=dict)
     pkdb_id: Mapped[str | None] = mapped_column(String(16), unique=True)
+    # The study format 1 sid of a study that a study format 2 upload took over.
+    legacy_sid: Mapped[str | None] = mapped_column(String(255), unique=True)
     release_date: Mapped[Date | None]
     issue: Mapped[int | None]
     review_status: Mapped[str | None] = mapped_column(String(16))
@@ -89,6 +91,11 @@ class Study(Identity, Timestamped, Base):
         CheckConstraint("licence IN ('open', 'closed')", name="licence"),
         CheckConstraint("length(sid) > 0", name="sid"),
         CheckConstraint("pkdb_id ~ '^PKDB[0-9]{5}$'", name="pkdb_id"),
+        CheckConstraint(
+            "legacy_sid IS NULL OR (length(legacy_sid) > 0 AND "
+            "strpos(legacy_sid, '/') = 0)",
+            name="legacy_sid",
+        ),
         CheckConstraint("(pkdb_id IS NULL) = (release_date IS NULL)", name="release"),
         CheckConstraint("issue IS NULL OR issue > 0", name="issue"),
         CheckConstraint(

@@ -21,15 +21,18 @@ from pkdb_server.services.authorization import AuthorizationDenied, authorize
 def released_study(
     session: Session, identifier: str, principal: Principal
 ) -> s.Study | None:
-    """The study released as `identifier` and stored under another sid.
+    """The study released as `identifier` or formerly stored as `identifier`.
 
     A PKDB identifier is also the study format 1 sid of a released study that
-    is now stored as `<substance>/<name>`. Only readers of the study learn
-    which study it is; for anyone else there is no such study.
+    is now stored as `<substance>/<name>`; `legacy_sid` keeps the study format
+    1 sid of a study that a study format 2 upload took over. Callers look for
+    a study stored under `identifier` first, so a live sid always wins. Only
+    readers of the study learn which study it is; for anyone else there is no
+    such study.
     """
     root = session.scalar(
         select(s.Study).where(s.Study.pkdb_id == identifier, s.Study.sid != identifier)
-    )
+    ) or session.scalar(select(s.Study).where(s.Study.legacy_sid == identifier))
     if root is None:
         return None
     try:
@@ -46,7 +49,7 @@ def read_study(
     *,
     by_pkdb_id: bool = False,
 ) -> CanonicalStudy:
-    """The study stored under `sid`; with `by_pkdb_id`, else the study released as `sid`."""
+    """The study stored under `sid`; with `by_pkdb_id`, else the study released or formerly stored as `sid`."""
     with session_factory() as session:
         session.connection(execution_options={"isolation_level": "REPEATABLE READ"})
         root = session.scalar(select(s.Study).where(s.Study.sid == sid))
@@ -61,7 +64,7 @@ def read_study(
 def moved_study(
     identifier: str, principal: Principal, session_factory: sessionmaker[Session]
 ) -> str | None:
-    """The sid of the study released as `identifier` under another sid, if readable."""
+    """The sid of the study released or formerly stored as `identifier`, if readable."""
     with session_factory() as session:
         root = released_study(session, identifier, principal)
         return root.sid if root is not None else None

@@ -2,11 +2,12 @@
 
 import hashlib
 import time
+from collections.abc import Iterable
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import NoReturn
 
-from sqlalchemy import or_, select, text
+from sqlalchemy import or_, select, text, tuple_
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, sessionmaker
 
@@ -27,11 +28,13 @@ from pkdb_server.config import Settings
 from pkdb_server.db import replace
 from pkdb_server.db.bootstrap import VOCABULARY_LOCK, load_vocabulary
 from pkdb_server.db.models.files import StoredFile, StudyAttachment
-from pkdb_server.db.models.studies import Study, StudyGrant
+from pkdb_server.db.models.studies import PublicationIdentifier, Study, StudyGrant
 from pkdb_server.db.models.users import User
 from pkdb_server.db.models.vocabulary import VocabularyVersion
+from pkdb_server.db.publications import identifiers
 from pkdb_server.files.store import FileStore, StagedFile, study_access
 from pkdb_server.services.authorization import (
+    Action,
     AuthorizationDenied,
     authorize,
     authorize_creation,
@@ -42,21 +45,85 @@ class PublicationConflict(ValueError):
     pass
 
 
+class StudyChanged(Exception):
+    """A study changed between reading its names and locking them; start again."""
+
+
+# How often a transaction starts again when the study changes before its locks.
+LOCK_ATTEMPTS = 3
+
+
 def sid_lock(sid: str) -> int:
     return int.from_bytes(hashlib.sha256(sid.encode()).digest()[:8], "big", signed=True)
 
 
-def lock_publication(session: Session, sid: str, pkdb_id: str | None) -> set[str]:
+def lock_publication(
+    session: Session, sid: str, pkdb_id: str | None, former: Iterable[str] = ()
+) -> set[str]:
     """Take the advisory locks of a publication of `sid` released as `pkdb_id`.
 
     A release locks its PKDB identifier too, so a study format 1 upload under
-    that sid and a rename of the released study serialize. The locks are
-    taken in sorted order, which avoids deadlocks. Returns the locked names.
+    that sid and a rename of the released study serialize. A publication that
+    takes over study format 1 studies locks their sids (`former`) as well. The
+    locks are taken in sorted order, which avoids deadlocks. Returns the
+    locked names.
     """
-    names = {sid, *([pkdb_id] if pkdb_id else [])}
+    names = {name for name in (sid, pkdb_id, *former) if name}
     for key in sorted(sid_lock(name) for name in names):
         session.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": key})
     return names
+
+
+def is_located(sid: str) -> bool:
+    """Whether `sid` is a study format 2 sid `<substance>/<name>`."""
+    return "/" in sid
+
+
+def publication_studies(
+    session: Session, study: CanonicalStudy, *, lock: bool = False
+) -> list[Study]:
+    """The stored studies of the publication and source of `study`."""
+    keys = identifiers(study.reference)
+    publications = select(PublicationIdentifier.publication_id).where(
+        tuple_(PublicationIdentifier.namespace, PublicationIdentifier.value).in_(keys)
+    )
+    statement = (
+        select(Study)
+        .where(
+            Study.publication_id.in_(publications),
+            Study.source_key == study.metadata.provenance.source_key,
+        )
+        .order_by(Study.sid)
+    )
+    return list(session.scalars(statement.with_for_update() if lock else statement))
+
+
+def former_sids(session: Session, study: CanonicalStudy) -> set[str]:
+    """The study format 1 sids of the stored studies that `study` may take over.
+
+    They are read before the publication locks them; stored_study checks the
+    locked row again. A release may take over the study of its PKDB identifier,
+    and a study format 2 study the only study of its publication and source.
+    """
+    names = set()
+    release = study.metadata.release
+    if release is not None:
+        names.update(
+            session.scalars(
+                select(Study.sid).where(
+                    or_(
+                        Study.sid == release.pkdb_id,
+                        Study.pkdb_id == release.pkdb_id,
+                        Study.legacy_sid == release.pkdb_id,
+                    )
+                )
+            )
+        )
+    if is_located(study.sid):
+        same = publication_studies(session, study)
+        if len(same) == 1:
+            names.add(same[0].sid)
+    return {name for name in names if not is_located(name)}
 
 
 def stored_study(
@@ -65,26 +132,34 @@ def stored_study(
     principal: Principal,
     *,
     lock: bool = False,
+    locked: set[str] | None = None,
 ) -> Study | None:
     """The stored study that an upload replaces, or None for a new study.
 
     That is the study with the same sid. A released study not yet stored under
     its sid takes over the study stored under its PKDB identifier, as sid
-    (study format 1) or as `pkdb_id` (a renamed folder); the caller renames it.
-    A PKDB identifier names at most one study. Refusals name other studies
-    only when the principal may read them.
+    (study format 1), as `pkdb_id` (a renamed folder) or as `legacy_sid`; the
+    caller renames it. Otherwise a study format 2 study not yet stored under its
+    sid takes over the study format 1 study of the same publication and source,
+    when the principal may edit it. A PKDB identifier names at most one study.
+    Refusals name other studies only when the principal may read them. With
+    `locked`, the names that the caller locked, StudyChanged when a taken over
+    study format 1 study is not among them.
     """
 
     def rows(*conditions):
         statement = select(Study).where(*conditions).order_by(Study.sid)
         return session.scalars(statement.with_for_update() if lock else statement).all()
 
-    def readable(row: Study) -> bool:
+    def allowed(action: Action, row: Study) -> bool:
         try:
-            authorize(principal, "read", study_access(row, session))
+            authorize(principal, action, study_access(row, session))
         except AuthorizationDenied:
             return False
         return True
+
+    def readable(row: Study) -> bool:
+        return allowed("read", row)
 
     def refuse(message: str, field: str) -> NoReturn:
         fail(
@@ -97,8 +172,15 @@ def stored_study(
     release = study.metadata.release
     pkdb_id = release.pkdb_id if release is not None else None
     root = next(iter(rows(Study.sid == study.sid)), None)
+    released = None
     if root is None and pkdb_id is not None:
-        claimed = rows(or_(Study.sid == pkdb_id, Study.pkdb_id == pkdb_id))
+        claimed = rows(
+            or_(
+                Study.sid == pkdb_id,
+                Study.pkdb_id == pkdb_id,
+                Study.legacy_sid == pkdb_id,
+            )
+        )
         if len(claimed) > 1:
             named = (
                 f" ({', '.join(row.sid for row in claimed)})"
@@ -110,12 +192,45 @@ def stored_study(
                 "an administrator must remove one of them",
                 "release.pkdb_id",
             )
-        root = next(iter(claimed), None)
+        root = released = next(iter(claimed), None)
+    if is_located(study.sid) and root is released:
+        same = publication_studies(session, study, lock=lock)
+        if len(same) == 1 and same[0] is not root:
+            [match] = same
+            if root is not None:
+                raise PublicationConflict(
+                    f"{pkdb_id} identifies the study {root.sid}, but the study "
+                    f"{match.sid} has the same publication and source"
+                    if readable(root) and readable(match)
+                    else f"{pkdb_id} and the publication identify different studies"
+                )
+            if not is_located(match.sid):
+                if not allowed("write", match):
+                    raise PublicationConflict(
+                        f"The study {match.sid} already exists for this publication "
+                        f"and source; uploading it as {study.sid} needs edit rights "
+                        f"on {match.sid}"
+                        if readable(match)
+                        else "A study already exists for this publication and source"
+                    )
+                root = match
+    if (
+        locked is not None
+        and root is not None
+        and root.sid not in locked
+        and not is_located(root.sid)
+    ):
+        raise StudyChanged
     others = [] if root is None else [Study.id != root.id]
     if pkdb_id is not None:
         other = session.scalar(
             select(Study).where(
-                or_(Study.sid == pkdb_id, Study.pkdb_id == pkdb_id), *others
+                or_(
+                    Study.sid == pkdb_id,
+                    Study.pkdb_id == pkdb_id,
+                    Study.legacy_sid == pkdb_id,
+                ),
+                *others,
             )
         )
         if other is not None:
@@ -135,6 +250,13 @@ def stored_study(
             if readable(renamed)
             else f"Another study already uses {study.sid} as its PKDB identifier",
             "sid",
+        )
+    moved = session.scalar(select(Study).where(Study.legacy_sid == study.sid, *others))
+    if moved is not None:
+        raise PublicationConflict(
+            f"{study.sid} is now the study {moved.sid}; upload its study format 2 folder"
+            if readable(moved)
+            else f"Another study was stored as {study.sid}"
         )
     return root
 
@@ -321,6 +443,28 @@ class IngestionService:
         expected_vocabulary_hash: str | None = None,
         expected_processing_version: str | None = None,
     ) -> ReplacementResult:
+        for _ in range(LOCK_ATTEMPTS):
+            try:
+                return self._publish_once(
+                    prepared,
+                    principal,
+                    staged,
+                    expected_vocabulary_hash=expected_vocabulary_hash,
+                    expected_processing_version=expected_processing_version,
+                )
+            except StudyChanged:
+                continue
+        raise PublicationConflict("The study changed during the upload; upload again")
+
+    def _publish_once(
+        self,
+        prepared: PreparedStudy,
+        principal: Principal,
+        staged: list[StagedFile],
+        *,
+        expected_vocabulary_hash: str | None = None,
+        expected_processing_version: str | None = None,
+    ) -> ReplacementResult:
         study = prepared.study
         try:
             with self.session_factory.begin() as session:
@@ -329,8 +473,9 @@ class IngestionService:
                     {"key": VOCABULARY_LOCK},
                 )
                 release = study.metadata.release
-                lock_publication(
-                    session, study.sid, release.pkdb_id if release else None
+                pkdb_id = release.pkdb_id if release else None
+                locked = lock_publication(
+                    session, study.sid, pkdb_id, former_sids(session, study)
                 )
                 self.check_compatibility(
                     expected_vocabulary_hash,
@@ -347,7 +492,7 @@ class IngestionService:
                 version = session.get(VocabularyVersion, 1)
                 if version is None or version.version != prepared.vocabulary_version:
                     raise PublicationConflict("vocabulary_changed")
-                root = stored_study(session, study, current, lock=True)
+                root = stored_study(session, study, current, lock=True, locked=locked)
                 created = root is None
                 renamed_from = None
                 if root is None:
@@ -369,6 +514,9 @@ class IngestionService:
                     if root.sid != study.sid:
                         # Rename on re-upload: the study keeps its row and data.
                         renamed_from, root.sid = root.sid, study.sid
+                        if not is_located(renamed_from) and renamed_from != pkdb_id:
+                            # Its study format 1 sid keeps redirecting to it.
+                            root.legacy_sid = renamed_from
                         session.flush()
                 from pkdb_server.db.publications import assign_publication
 
