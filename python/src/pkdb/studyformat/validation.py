@@ -126,11 +126,12 @@ def acknowledgements(study: LoadedStudy) -> dict[str, list[Acknowledgement]]:
     """The acknowledgements of the review items by issue code.
 
     The lines that a row filter selects are computed once per review item, not
-    once per issue, so that many acknowledged warnings stay fast.
+    once per issue, so that many acknowledged warnings stay fast. Dismissed items
+    acknowledge nothing, so dismissing an acknowledgement brings its warning back.
     """
     result: dict[str, list[Acknowledgement]] = defaultdict(list)
     for item in study.review.items if study.review else ():
-        if item.acknowledges is None:
+        if item.acknowledges is None or item.state == "dismissed":
             continue
         target = item.target
         if target is None or target.file is None:

@@ -624,3 +624,29 @@ def test_scatter_of_groups_and_individuals_is_reported_before_postprocessing(
     # pkdb format sorts the group first; the individuals are the usual kind.
     assert (issue.source.row, issue.source.header) == (2, "subjects")
     assert "'all' is a group, but 'S1' in line 3 is an individual" in issue.message
+
+
+def test_dismissed_item_no_longer_acknowledges(valid_study, sf_vocabulary, tsv):
+    # An unused intervention is a warning that a review item can acknowledge.
+    interventions = (valid_study / "interventions.tsv").read_text()
+    extra = interventions.splitlines()[1].replace("\tD1\t", "\tD2\t")
+    (valid_study / "interventions.tsv").write_text(interventions + extra + "\n")
+    item = {
+        "id": "01JA2XK7Q8M3R5T6V9W0Y1Z2AB",
+        "kind": "issue",
+        "acknowledges": "unused_intervention",
+        "text": "Arm without data.",
+        "author": "curator",
+        "created": "2026-10-06T10:00:00Z",
+        "state": "resolved",
+        "resolved_by": "curator",
+        "resolved": "2026-10-06T10:00:00Z",
+    }
+    review = valid_study / "review.json"
+    review.write_text(dump_json({"status": "draft", "items": [item]}))
+    codes = [issue.code for issue in validate_folder(valid_study, sf_vocabulary).issues]
+    assert "unused_intervention" not in codes
+    item["state"] = "dismissed"
+    review.write_text(dump_json({"status": "draft", "items": [item]}))
+    codes = [issue.code for issue in validate_folder(valid_study, sf_vocabulary).issues]
+    assert "unused_intervention" in codes

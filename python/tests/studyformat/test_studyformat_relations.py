@@ -285,7 +285,19 @@ def test_review_rules(run):
             "target": {"file": "Example.pdf"},
         },
     ]
-    found = run(**{"review.json": dump_json({"status": "approved", "items": items})})
+    found = run(
+        **{
+            "review.json": dump_json(
+                {
+                    "status": "approved",
+                    "reviewers": ["mkoenig"],
+                    "approved_by": "mkoenig",
+                    "approved": "2026-10-06T12:00:00Z",
+                    "items": items,
+                }
+            )
+        }
+    )
     assert found == {
         ("approved_with_open_items", "review.json", None),
         ("review_target_unmatched", "review.json", None),
@@ -298,7 +310,16 @@ def review_messages(make_study, valid_files, *targets, status="draft"):
         {**ITEM, "id": f"01JA2XK7Q8M3R5T6V9W0Y1Z2A{index}", "target": target}
         for index, target in enumerate(targets)
     ]
-    review = dump_json({"status": status, "items": items})
+    approval = (
+        {
+            "reviewers": ["mkoenig"],
+            "approved_by": "mkoenig",
+            "approved": "2026-10-06T12:00:00Z",
+        }
+        if status == "approved"
+        else {}
+    )
+    review = dump_json({"status": status, **approval, "items": items})
     study = load_study(make_study({**valid_files, "review.json": review}))
     return [issue.message for issue in check_relations(study)]
 
