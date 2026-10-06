@@ -293,6 +293,9 @@ def _print_result(label: str, result, issues) -> None:
         # The problems below stopped the sync before the workbook was created.
         words = ("not created", "cannot be created")[planned]
         say(f"  {result.workbook.name}: {words} because of the problems below")
+    elif result.workbook_action == "close_to_update" and not result.workbook.exists():
+        # A lock file without workbook: it is open while it is saved.
+        say(f"  {result.workbook.name}: not created because it is open")
     else:
         words = WORKBOOK_ACTIONS[result.workbook_action][planned]
         say(f"  {result.workbook.name}: {words}")

@@ -491,8 +491,23 @@ def _write_tables(
 def _create(
     outcome: SyncResult, tables: Mapping[str, str], vocabulary: Vocabulary
 ) -> SyncResult:
-    """Generate the missing workbook from the tables."""
+    """Generate the missing workbook from the tables, unless its lock file exists.
+
+    Excel on Windows replaces the workbook through renames while it saves it,
+    so for a moment the workbook is missing while it is open.
+    """
     path = outcome.workbook
+    if (lock := open_lock(path)) is not None:
+        issue = make_issue(
+            "workbook_open",
+            f"{path.name} is missing, but its lock file shows that a spreadsheet "
+            "application has it open, perhaps while it saves it; sync again when "
+            f"it is closed. If the workbook is not open, delete {lock}",
+            file=path.name,
+        )
+        return replace(
+            outcome, workbook_action="close_to_update", lock=lock, issues=(issue,)
+        )
     if outcome.checked:
         return replace(outcome, workbook_action="created")
     try:

@@ -1068,6 +1068,28 @@ def test_check_mode_reports_the_plan_without_writing(study, workbook, sf_vocabul
     assert snapshot(study) == before
 
 
+@pytest.mark.parametrize("check", [False, True])
+def test_a_missing_workbook_with_a_lock_file_is_not_created(
+    study, workbook, sf_vocabulary, check
+):
+    # Excel on Windows renames the workbook while it saves it.
+    write_state(workbook, "0123456789abcdef0123456789abcdef", {OUTPUTS: None})
+    workbook.unlink()
+    (study / LOCK).write_text("lock")
+    before = snapshot(study)
+
+    result = sync_study(study, sf_vocabulary, check=check)
+
+    assert result.ok
+    assert result.workbook_action == "close_to_update"
+    assert result.lock == study / LOCK
+    [issue] = result.issues
+    assert (issue.code, issue.severity) == ("workbook_open", "warning")
+    assert "is missing" in issue.message and LOCK in issue.message
+    assert not workbook.exists()
+    assert snapshot(study) == before
+
+
 def test_check_mode_without_a_workbook(valid_study, sf_vocabulary):
     before = snapshot(valid_study)
 

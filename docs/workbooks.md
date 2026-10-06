@@ -87,6 +87,8 @@ Terminal output lists the first ten rows of each side. `--format json` lists all
 
 A workbook that is open in a spreadsheet application is never replaced. Excel marks an open workbook with the lock file `~$Harder1988.xlsx` and LibreOffice with `.~lock.Harder1988.xlsx#`. The sync still writes your saved workbook edits to the tables, and when the tables hold something the workbook lacks, it reports the warning `workbook_open` and leaves the workbook as it is. Close the workbook and sync again to update it. An application that crashed can leave a stale lock file behind; if the workbook is not open, delete the lock file that the message names.
 
+A sync never creates a workbook while its lock file exists, because Excel on Windows renames the workbook while it saves it, so that it is missing for a moment; it reports `workbook_open` instead.
+
 A workbook that you save while a sync runs is not replaced either. The sync reports `workbook_changed` and the next sync merges that save.
 
 ## Formulas

@@ -661,6 +661,18 @@ def test_a_workbook_that_was_not_created_says_why(
     assert not workbook_path(valid_study).exists()
 
 
+def test_a_missing_workbook_that_is_open_is_not_created(study, vocabulary, capsys):
+    workbook_path(study).unlink()
+    (study / LOCK).write_text("lock")
+
+    assert tables("sync", study, "--format", "human", *vocabulary) == 0
+
+    out = capsys.readouterr().out.splitlines()
+    assert out[1] == "  Example.xlsx: not created because it is open"
+    assert any("[workbook_open]" in line for line in out)
+    assert not workbook_path(study).exists()
+
+
 def test_open_does_not_open_a_workbook_that_was_not_created(
     valid_study, vocabulary, capsys, monkeypatch
 ):
