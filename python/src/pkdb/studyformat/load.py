@@ -1,13 +1,14 @@
 """Read a study format 2 folder into typed tables without judging the content."""
 
-from collections.abc import Iterator, Mapping
+from collections.abc import Iterable, Iterator, Mapping
 from dataclasses import dataclass, field
 from difflib import get_close_matches
+from io import BytesIO
 from pathlib import Path
 
 from pydantic import BaseModel, ValidationError
 
-from pkdb.schemas.validation import ValidationIssue
+from pkdb.schemas.validation import ValidationIssue, fail
 from pkdb.studyformat.cells import canonical_cell, parse_cell
 from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.jsonio import JsonFileError, load_json
@@ -20,7 +21,7 @@ from pkdb.studyformat.tables import (
     TABLES,
     TableSpec,
 )
-from pkdb.studyformat.text import TsvError, parse_tsv
+from pkdb.studyformat.text import TsvError, TsvLine, read_tsv
 
 # Column names of study format 1 sheets and their format 2 replacement.
 LEGACY_COLUMNS = {
@@ -136,36 +137,31 @@ def _candidates(name: str, spec: TableSpec) -> list[str]:
     return get_close_matches(name, spec.names, n=3, cutoff=0.6)
 
 
-def load_table(
-    file: str, data: bytes, spec: TableSpec, source: str | None, *, study: str
-) -> tuple[LoadedTable | None, list[ValidationIssue]]:
-    """Read one table; `study` and `source` are the values of the owned columns."""
-    try:
-        parsed = parse_tsv(data)
-    except TsvError as error:
-        return None, [make_issue("invalid_encoding", str(error), file=file)]
-    if parsed.conflicts:
-        return None, [
-            make_issue(
-                "merge_conflict",
-                f"Line {parsed.conflicts[0]} is a git conflict marker; resolve the git conflict and remove the markers",
-                file=file,
-                line=parsed.conflicts[0],
-            )
-        ]
-    if not any(parsed.header):
-        return None, [
-            make_issue(
-                "missing_header",
-                "The first line must contain the column names",
-                file=file,
-                line=1,
-            )
-        ]
+@dataclass
+class RowLimit:
+    """Counts the data lines of a study's tables against the upload row limit.
+
+    Reading stops at the first line beyond the limit, so memory stays bounded
+    by the limit and not by the size of the files.
+    """
+
+    maximum: int | None = None
+    lines: int = 0
+
+    def count(self) -> None:
+        self.lines += 1
+        if self.maximum is not None and self.lines > self.maximum:
+            fail("row_limit", f"The study tables have more than {self.maximum} rows")
+
+
+def _header_issues(
+    file: str, header: tuple[str, ...], spec: TableSpec, filled: set[int]
+) -> tuple[dict[str, int], list[ValidationIssue]]:
+    # Column positions and the issues of the header. An unnamed column is
+    # ignored unless a line has a value in it (`filled`).
     issues = []
     positions: dict[str, int] = {}
-    width = len(parsed.header)
-    for index, name in enumerate(parsed.header):
+    for index, name in enumerate(header):
         if name in spec.names:
             if name in positions:
                 issues.append(
@@ -180,11 +176,7 @@ def load_table(
                 )
             else:
                 positions[name] = index
-        elif name == "" and not any(
-            index < len(line.cells) and line.cells[index] for line in parsed.lines
-        ):
-            continue
-        else:
+        elif name != "" or index in filled:
             issues.append(
                 make_issue(
                     "unknown_column",
@@ -196,73 +188,160 @@ def load_table(
                     candidates=_candidates(name, spec),
                 )
             )
-    for line in parsed.lines:
-        extra = [index for index in range(width, len(line.cells)) if line.cells[index]]
-        if extra:
-            issues.append(
-                make_issue(
-                    "extra_cells",
-                    f"Row has values beyond the {width} header columns",
-                    file=file,
-                    line=line.number,
-                    column=extra[0],
-                )
-            )
-    if issues:
-        return None, issues
+    return positions, issues
+
+
+def load_table(
+    file: str,
+    data: bytes | Iterable[bytes],
+    spec: TableSpec,
+    source: str | None,
+    *,
+    study: str,
+    limit: RowLimit | None = None,
+) -> tuple[LoadedTable | None, list[ValidationIssue]]:
+    """Read one table; `study` and `source` are the values of the owned columns.
+
+    `data` is the content of the file, or its lines as a binary file yields
+    them. The file is read one line at a time; `limit` counts its data lines
+    and stops reading at the first line beyond the row limit.
+    """
+    lines = read_tsv(BytesIO(data) if isinstance(data, bytes) else data)
     owned = {"study": study, "source": source or ""}
-    rows, stray = [], []
-    for line in parsed.lines:
-        cells, values = {}, {}
-        for column in spec.columns:
-            index = positions.get(column.name)
-            raw = (
-                line.cells[index]
-                if index is not None and index < len(line.cells)
-                else ""
+    conflict: int | None = None
+    header: tuple[str, ...] = ()
+    unnamed: set[int] = set()
+    filled: set[int] = set()
+    positions: dict[str, int] = {}
+    broken: list[ValidationIssue] = []
+    extra: list[ValidationIssue] = []
+    rows: list[Row] = []
+    issues: list[ValidationIssue] = []
+    stray: list[ValidationIssue] = []
+    try:
+        for line in lines:
+            if line.number == 1:
+                header = line.cells
+                unnamed = {index for index, name in enumerate(header) if name == ""}
+                positions, broken = _header_issues(file, header, spec, set())
+            elif limit is not None:
+                limit.count()
+            if line.conflict and conflict is None:
+                conflict = line.number
+            if line.number == 1 or conflict is not None or not any(header):
+                # Only the encoding and the row limit still matter.
+                continue
+            filled.update(
+                index
+                for index in unnamed
+                if index < len(line.cells) and line.cells[index]
             )
-            text = canonical_cell(column, raw)
-            value, problem = parse_cell(column, text)
-            cells[column.name], values[column.name] = text, value
-            if problem and not column.owned:
-                issues.append(
+            surplus = [
+                index
+                for index in range(len(header), len(line.cells))
+                if line.cells[index]
+            ]
+            if surplus:
+                extra.append(
                     make_issue(
-                        problem.code,
-                        problem.message,
+                        "extra_cells",
+                        f"Row has values beyond the {len(header)} header columns",
                         file=file,
                         line=line.number,
-                        column=index,
-                        header=column.name,
-                        hint=problem.hint,
-                        actual=text,
+                        column=surplus[0],
                     )
                 )
-        if any(cells[column.name] for column in spec.columns if not column.owned):
-            rows.append(Row(line.number, cells, values))
-            continue
-        # A row with the values `pkdb format` writes and nothing else is empty;
-        # other text only in owned columns would be lost when formatting.
-        unexpected = [
-            column.name
-            for column in spec.columns
-            if column.owned and cells[column.name] not in ("", owned[column.name])
-        ]
-        if unexpected:
-            name = unexpected[0]
-            stray.append(
-                make_issue(
-                    "stray_text",
-                    f"Line {line.number} has text only in the {name} column, which pkdb format writes; this is often a broken multi-line cell or a leftover of a merge",
-                    file=file,
-                    line=line.number,
-                    column=positions[name],
-                    header=name,
-                    actual=cells[name],
-                )
+            if broken or extra:
+                # The table cannot load; its cells are not judged.
+                continue
+            row, problems, unexpected = _read_row(file, line, spec, positions, owned)
+            issues.extend(problems)
+            if row is not None:
+                rows.append(row)
+            elif unexpected is not None:
+                stray.append(unexpected)
+    except TsvError as error:
+        return None, [make_issue("invalid_encoding", str(error), file=file)]
+    if conflict is not None:
+        return None, [
+            make_issue(
+                "merge_conflict",
+                f"Line {conflict} is a git conflict marker; resolve the git conflict and remove the markers",
+                file=file,
+                line=conflict,
             )
+        ]
+    if not any(header):
+        return None, [
+            make_issue(
+                "missing_header",
+                "The first line must contain the column names",
+                file=file,
+                line=1,
+            )
+        ]
+    _, structure = _header_issues(file, header, spec, filled)
+    if structure or extra:
+        return None, [*structure, *extra]
     if stray:
         return None, stray
-    return LoadedTable(file, spec, source, parsed.header, rows), issues
+    return LoadedTable(file, spec, source, header, rows), issues
+
+
+def _read_row(
+    file: str,
+    line: TsvLine,
+    spec: TableSpec,
+    positions: Mapping[str, int],
+    owned: Mapping[str, str],
+) -> tuple[Row | None, list[ValidationIssue], ValidationIssue | None]:
+    # The row with the issues of its cells, or no row for an empty line and
+    # the stray_text issue when an owned column has text it should not have.
+    cells, values, issues = {}, {}, []
+    for column in spec.columns:
+        index = positions.get(column.name)
+        raw = line.cells[index] if index is not None and index < len(line.cells) else ""
+        text = canonical_cell(column, raw)
+        value, problem = parse_cell(column, text)
+        cells[column.name], values[column.name] = text, value
+        if problem and not column.owned:
+            issues.append(
+                make_issue(
+                    problem.code,
+                    problem.message,
+                    file=file,
+                    line=line.number,
+                    column=index,
+                    header=column.name,
+                    hint=problem.hint,
+                    actual=text,
+                )
+            )
+    if any(cells[column.name] for column in spec.columns if not column.owned):
+        return Row(line.number, cells, values), issues, None
+    # A row with the values `pkdb format` writes and nothing else is empty;
+    # other text only in owned columns would be lost when formatting.
+    unexpected = [
+        column.name
+        for column in spec.columns
+        if column.owned and cells[column.name] not in ("", owned[column.name])
+    ]
+    if not unexpected:
+        return None, issues, None
+    name = unexpected[0]
+    return (
+        None,
+        issues,
+        make_issue(
+            "stray_text",
+            f"Line {line.number} has text only in the {name} column, which pkdb format writes; this is often a broken multi-line cell or a leftover of a merge",
+            file=file,
+            line=line.number,
+            column=positions[name],
+            header=name,
+            actual=cells[name],
+        ),
+    )
 
 
 # Marks a JSON file that cannot be used: missing, or already reported.
@@ -302,18 +381,31 @@ def _validate[M: BaseModel](
         return None
 
 
-def load_study(folder: Path) -> LoadedStudy:
-    """Read a study folder into typed tables and JSON files; problems become issues."""
+def load_study(
+    folder: Path, *, max_rows: int | None = None, max_files: int | None = None
+) -> LoadedStudy:
+    """Read a study folder into typed tables and JSON files; problems become issues.
+
+    Upload limits fail with `file_limit` when the study has more than
+    `max_files` files besides study.json and reference.json, and with
+    `row_limit` as soon as its tables have more than `max_rows` data lines.
+    """
     study = LoadedStudy(layout=(layout := scan_folder(Path(folder))))
     study.issues.extend(layout.issues)
+    files = layout.files - {STUDY_JSON, REFERENCE_JSON}
+    if max_files is not None and len(files) > max_files:
+        fail("file_limit", f"The study has more than {max_files} files")
+    limit = RowLimit(max_rows)
     for table_file in layout.tables:
-        table, issues = load_table(
-            table_file.name,
-            (layout.folder / table_file.name).read_bytes(),
-            table_file.spec,
-            table_file.source,
-            study=layout.study,
-        )
+        with (layout.folder / table_file.name).open("rb") as stream:
+            table, issues = load_table(
+                table_file.name,
+                stream,
+                table_file.spec,
+                table_file.source,
+                study=layout.study,
+                limit=limit,
+            )
         study.issues.extend(issues)
         if table is None:
             study.broken.add(table_file.spec.kind)

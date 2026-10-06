@@ -19,7 +19,6 @@ from pkdb.schemas.validation import (
     StudyValidationError,
     ValidationIssue,
     ValidationReport,
-    fail,
 )
 from pkdb.studyformat.formatter import planned_files
 from pkdb.studyformat.issues import make_issue
@@ -28,7 +27,7 @@ from pkdb.studyformat.load import LoadedStudy, load_study
 from pkdb.studyformat.reader import read_study
 from pkdb.studyformat.relations import check_relations
 from pkdb.studyformat.rows import check_rows
-from pkdb.studyformat.tables import REFERENCE_JSON, STUDY_JSON
+from pkdb.studyformat.tables import STUDY_JSON
 from pkdb.studyformat.terms import check_terms
 
 FORMAT_VERSION = 2
@@ -220,21 +219,6 @@ def validate_folder(
     return _check(load_study(Path(folder)), vocabulary, max_issues)[1]
 
 
-def check_limits(
-    study: LoadedStudy, *, max_rows: int | None = None, max_files: int | None = None
-) -> None:
-    """Fail with `file_limit` or `row_limit` when a study exceeds upload limits.
-
-    `max_rows` limits the table rows and `max_files` the files besides
-    study.json and reference.json.
-    """
-    files = study.layout.files - {STUDY_JSON, REFERENCE_JSON}
-    if max_files is not None and len(files) > max_files:
-        fail("file_limit", f"The study has more than {max_files} files")
-    if max_rows is not None and sum(len(t.rows) for t in study.tables) > max_rows:
-        fail("row_limit", f"The study tables have more than {max_rows} rows")
-
-
 def prepare_folder(
     folder: Path,
     vocabulary: Vocabulary,
@@ -250,8 +234,7 @@ def prepare_folder(
     `max_rows` limits the table rows and `max_files` the files besides
     study.json and reference.json.
     """
-    study = load_study(Path(folder))
-    check_limits(study, max_rows=max_rows, max_files=max_files)
+    study = load_study(Path(folder), max_rows=max_rows, max_files=max_files)
     prepared, report = _check(study, vocabulary, max_issues)
     if prepared is None:
         raise StudyValidationError(report)

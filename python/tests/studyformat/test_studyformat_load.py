@@ -1,7 +1,12 @@
+import itertools
+
 import pytest
 
-from pkdb.studyformat.load import load_study, load_table
+from pkdb.schemas.validation import StudyValidationError
+from pkdb.studyformat import load
+from pkdb.studyformat.load import RowLimit, load_study, load_table
 from pkdb.studyformat.tables import TABLES
+from pkdb.studyformat.text import read_tsv
 
 OUT = TABLES["outputs"]
 
@@ -278,3 +283,68 @@ def test_identifiers_keep_their_spelling(make_study, valid_files):
     assert study.metadata.reference.doi == "10.1234/ABC%2Fdef"
     assert study.reference is not None
     assert study.reference["doi"] == "https://doi.org/10.1234/ABC"
+
+
+def test_load_table_stops_reading_at_the_row_limit():
+    read = []
+
+    def lines():
+        yield b"subjects\tmean\n"
+        for number in itertools.count():
+            read.append(number)
+            yield b"all\t1\n"
+
+    with pytest.raises(StudyValidationError) as error:
+        load_table(
+            "outputs_Tab1.tsv", lines(), OUT, "Tab1", study="Example", limit=RowLimit(5)
+        )
+    [issue] = error.value.report.issues
+    assert (issue.code, issue.message) == (
+        "row_limit",
+        "The study tables have more than 5 rows",
+    )
+    # The generator never ends, so the reader stopped at the sixth row.
+    assert len(read) == 6
+
+
+def test_row_limit_counts_the_rows_of_all_tables(make_study, valid_files):
+    folder = make_study(valid_files)
+    assert (
+        sum(len(table.rows) for table in load_study(folder, max_rows=15).tables) == 15
+    )
+    with pytest.raises(StudyValidationError) as error:
+        load_study(folder, max_rows=14)
+    assert codes(error.value.report.issues) == ["row_limit"]
+
+
+def test_study_reading_stops_at_the_row_limit(
+    make_study, valid_files, tsv, monkeypatch
+):
+    rows = [{"subjects": "all", "measurement": "cmax", "mean": "1"}] * 100_000
+    folder = make_study({**valid_files, "outputs_Tab2.tsv": tsv("outputs", *rows)})
+    read = []
+
+    def counting(chunks):
+        for line in read_tsv(chunks):
+            read.append(line)
+            yield line
+
+    monkeypatch.setattr(load, "read_tsv", counting)
+    with pytest.raises(StudyValidationError) as error:
+        load_study(folder, max_rows=20)
+    assert codes(error.value.report.issues) == ["row_limit"]
+    # Headers and the rows up to the first one beyond the limit.
+    assert len(read) < 30
+    monkeypatch.undo()
+    assert len(load_study(folder).of_kind("outputs")[0].rows) == 100_000
+
+
+def test_file_limit_counts_files_besides_study_and_reference_json(
+    make_study, valid_files
+):
+    folder = make_study(valid_files)
+    files = len(valid_files) - 2
+    assert load_study(folder, max_files=files).issues == []
+    with pytest.raises(StudyValidationError) as error:
+        load_study(folder, max_files=files - 1)
+    assert codes(error.value.report.issues) == ["file_limit"]

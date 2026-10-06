@@ -25,7 +25,6 @@ from pkdb.source_files import ignored_source
 from pkdb.studyformat.load import load_study
 from pkdb.studyformat.tables import REFERENCE_JSON, STUDY_JSON
 from pkdb.studyformat.validation import (
-    check_limits,
     is_v2_folder,
     prepare_folder,
     study_path,
@@ -125,7 +124,7 @@ class UploadSource:
     def check_rows(self, max_rows: int) -> None:
         """Fail with `row_limit` when the tables have more rows than `max_rows`."""
         if self.study_format == 2:
-            check_limits(load_study(self.root), max_rows=max_rows)
+            load_study(self.root, max_rows=max_rows)
         else:
             parse_bundle(load_folder(self.root), max_rows=max_rows)
 

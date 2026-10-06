@@ -309,24 +309,36 @@ def test_mixed_study_parts_are_bundle_fields(client, creator_headers, folder):
 
 
 @pytest.fixture
-def limited_client(ingestion_context, session_factory):
-    """A server that accepts as many files as the study folder has attachments."""
+def limited_server(ingestion_context, session_factory):
+    """Start servers with upload limits; each one stops at the end of the test."""
+    from contextlib import ExitStack
+
     from fastapi.testclient import TestClient
 
     from pkdb_server.app import create_app
     from pkdb_server.config import Settings
 
     ingestion, _ = ingestion_context
-    settings = Settings(
-        database_url=session_factory.kw["bind"].url.render_as_string(
-            hide_password=False
-        ),
-        file_root=ingestion.file_store.root,
-        rate_limits_enabled=False,
-        upload_max_files=8,
-    )
-    with TestClient(create_app(settings)) as client:
-        yield client
+
+    def start(**limits):
+        settings = Settings(
+            database_url=session_factory.kw["bind"].url.render_as_string(
+                hide_password=False
+            ),
+            file_root=ingestion.file_store.root,
+            rate_limits_enabled=False,
+            **limits,
+        )
+        return stack.enter_context(TestClient(create_app(settings)))
+
+    with ExitStack() as stack:
+        yield start
+
+
+@pytest.fixture
+def limited_client(limited_server):
+    """A server that accepts as many files as the study folder has attachments."""
+    return limited_server(upload_max_files=8)
 
 
 def test_file_limit_counts_attachments_only(
@@ -349,6 +361,26 @@ def test_file_limit_counts_attachments_only(
         response = limited_client.put(url, headers=creator_headers, files=parts)
         assert response.status_code == status, response.text
     assert response.json()["issues"][0]["code"] == "invalid_bundle"
+
+
+def test_row_limit_stops_a_format_2_upload(
+    limited_server, creator_headers, folder, session_factory
+):
+    rows = sum(len(path.read_text().splitlines()) - 1 for path in folder.glob("*.tsv"))
+    for limit, status in ((rows, 201), (rows - 1, 422)):
+        server = limited_server(upload_max_rows=limit)
+        response = server.put(URL, headers=creator_headers, **multipart(folder))
+        assert response.status_code == status, response.text
+    [issue] = response.json()["issues"]
+    assert (issue["code"], issue["message"]) == (
+        "row_limit",
+        f"The study tables have more than {rows - 1} rows",
+    )
+    validation = server.post(
+        URL + "/validate", headers=creator_headers, **multipart(folder)
+    )
+    assert validation.status_code == 422
+    assert validation.json()["issues"][0]["code"] == "row_limit"
 
 
 def test_long_file_names_are_refused(client, creator_headers, folder, valid_bundle):
