@@ -15,7 +15,10 @@ from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.errors import ClientError, SourceChangedError
 from pkdb.preparation import prepare
 from pkdb.schemas.validation import StudyValidationError
+from pkdb.studyformat import sync_study
 from pkdb.studyformat.jsonio import dump_json
+from pkdb.studyformat.tables import parse_table_file
+from pkdb.studyformat.workbook.base import workbook_path
 
 ENDPOINT = "https://example.test"
 JSON_FILES = {"study.json", "reference.json"}
@@ -283,17 +286,6 @@ def test_batch_reference_keys_compare_normalized_dois(study, sf_vocabulary, tmp_
 def test_batch_uploads_and_resumes_by_substance_and_name(
     study, sf_vocabulary, tmp_path
 ):
-    # A workbook of study format 1 must not be exported into hidden tables.
-    import openpyxl
-
-    workbook = openpyxl.Workbook()
-    sheet = workbook.active
-    assert sheet is not None
-    sheet.title = "Tab2"
-    sheet.append(["description"])
-    sheet.append(["measurement_type", "mean"])
-    sheet.append(["cmax", 2.5])
-    workbook.save(study / "Example.xlsx")
     before = sorted(path.name for path in study.iterdir())
     report = tmp_path / "report.json"
     requests = []
@@ -360,3 +352,166 @@ def test_batch_identity_of_an_invalid_pubmed_id_is_unknown(study, tmp_path):
     data["reference"] = {"pmid": "1" * 5000}
     path.write_text(dump_json(data), encoding="utf-8", newline="")
     assert _identity(study) == ("caffeine/Example", None)
+
+
+def set_mean(path, sheet, row, mean):
+    """Change the mean of a sheet row and save, as in a spreadsheet application."""
+    import openpyxl
+    from openpyxl.utils import get_column_letter
+
+    parsed = parse_table_file(f"{sheet}.tsv")
+    assert parsed is not None
+    workbook = openpyxl.load_workbook(path)
+    column = get_column_letter(parsed[0].names.index("mean") + 1)
+    workbook[sheet][f"{column}{row}"] = mean
+    workbook.save(path)
+
+
+def edit_mean(folder, file, line, mean):
+    """Change the mean of a TSV line, as in a text editor."""
+    parsed = parse_table_file(file)
+    assert parsed is not None
+    path = folder / file
+    rows = path.read_text(encoding="utf-8").removesuffix("\n").split("\n")
+    cells = rows[line - 1].split("\t")
+    cells[parsed[0].names.index("mean")] = mean
+    rows[line - 1] = "\t".join(cells)
+    path.write_text("\n".join(rows) + "\n", encoding="utf-8", newline="")
+
+
+def folder_state(folder):
+    return {
+        path.name: (path.read_bytes(), path.stat().st_mtime_ns)
+        for path in sorted(folder.iterdir())
+    }
+
+
+def batch_upload(folder, vocabulary, tmp_path, *, max_rows=1_000_000):
+    """Upload one folder with `upload_many`, as pkdb upload does; return the requests."""
+    requests = []
+
+    def handler(request):
+        requests.append(request)
+        if request.url.path == "/api/v2/capabilities":
+            return httpx2.Response(
+                200, json=capabilities(vocabulary, max_rows=max_rows)
+            )
+        assert request.method == "PUT"
+        return httpx2.Response(201, json=confirmation())
+
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+        result = upload_many(
+            [folder],
+            endpoint=ENDPOINT,
+            api_key="secret",
+            vocabulary=vocabulary,
+            options=BatchOptions(reference_cache=tmp_path / "refs"),
+            transport=transport,
+        )
+    [row] = result["results"]
+    return row, requests
+
+
+def uploaded_files(requests):
+    [put] = [request for request in requests if request.method == "PUT"]
+    return {filename: content for _, filename, content in form_parts(put)[2:]}
+
+
+def test_upload_sends_the_workbook_changes(study, sf_vocabulary, tmp_path):
+    assert sync_study(study, sf_vocabulary).workbook_action == "created"
+    set_mean(workbook_path(study), "outputs_Tab2", 2, 3.25)
+
+    row, requests = batch_upload(study, sf_vocabulary, tmp_path)
+
+    assert row["ok"], row
+    files = uploaded_files(requests)
+    assert b"\t3.25\t" in files["outputs_Tab2.tsv"]
+    assert files["outputs_Tab2.tsv"] == (study / "outputs_Tab2.tsv").read_bytes()
+    assert "Example.xlsx" not in files
+    assert "outputs_Tab2.tsv" in row["tables_updated"]
+
+
+def test_upload_formats_the_tables_first(
+    make_study, valid_files, tmp_path, sf_vocabulary
+):
+    from pkdb.studyformat import format_folder
+
+    # Before formatting, the owned study and source columns are empty.
+    folder = make_study(valid_files)
+
+    row, requests = batch_upload(folder, sf_vocabulary, tmp_path)
+
+    assert row["ok"], row
+    assert "subjects.tsv" in row["tables_updated"]
+    assert format_folder(folder, check=True).changes == []
+    assert (
+        uploaded_files(requests)["subjects.tsv"]
+        == (folder / "subjects.tsv").read_bytes()
+    )
+    assert not workbook_path(folder).exists()
+
+
+def format_1_workbook(study, sf_vocabulary):
+    # A workbook of study format 1 must not be exported into hidden tables.
+    import openpyxl
+
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    assert sheet is not None
+    sheet.title = "Tab2"
+    sheet.append(["description"])
+    sheet.append(["measurement_type", "mean"])
+    sheet.append(["cmax", 2.5])
+    workbook.save(study / "Example.xlsx")
+    return "unknown_sheet"
+
+
+def conflict(study, sf_vocabulary):
+    assert sync_study(study, sf_vocabulary).ok
+    set_mean(workbook_path(study), "outputs_Tab2", 2, 0.25)
+    edit_mean(study, "outputs_Tab2.tsv", 2, "0.75")
+    return "sync_conflict"
+
+
+def too_many_rows(study, sf_vocabulary):
+    # The study has 15 rows; the server accepts 3.
+    assert sync_study(study, sf_vocabulary).ok
+    return "row_limit"
+
+
+@pytest.mark.parametrize(
+    ("damage", "max_rows"),
+    [(conflict, 1_000_000), (format_1_workbook, 1_000_000), (too_many_rows, 3)],
+)
+def test_upload_stops_when_the_workbook_cannot_be_synced(
+    study, sf_vocabulary, tmp_path, damage, max_rows
+):
+    code = damage(study, sf_vocabulary)
+    before = folder_state(study)
+
+    row, requests = batch_upload(study, sf_vocabulary, tmp_path, max_rows=max_rows)
+
+    assert not row["ok"]
+    assert row["stage"] == "sync"
+    assert row["persistence"] == "not_attempted"
+    assert "nothing was uploaded" in row["error"]
+    assert code in {issue["code"] for issue in row["report"]["issues"]}
+    assert all(request.method == "GET" for request in requests)
+    assert folder_state(study) == before
+
+
+def test_upload_stops_when_the_tables_cannot_be_formatted(
+    study, sf_vocabulary, tmp_path
+):
+    path = study / "outputs_Tab2.tsv"
+    path.write_text(path.read_text(encoding="utf-8").replace("mean", "average", 1))
+    broken = path.read_bytes()
+
+    row, requests = batch_upload(study, sf_vocabulary, tmp_path)
+
+    assert not row["ok"]
+    assert row["stage"] == "format"
+    assert "nothing was uploaded" in row["error"]
+    assert "unknown_column" in {issue["code"] for issue in row["report"]["issues"]}
+    assert all(request.method == "GET" for request in requests)
+    assert path.read_bytes() == broken

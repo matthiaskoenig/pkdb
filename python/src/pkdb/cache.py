@@ -173,3 +173,21 @@ class VocabularyCache:
         if vocabulary_hash(vocabulary) != digest:
             raise ValueError("Vocabulary cache index does not match snapshot")
         return vocabulary
+
+
+def select_vocabulary(
+    path: str | Path | None, endpoint: str | None, cache: VocabularyCache
+) -> Vocabulary:
+    """The vocabulary that validates studies, without contacting a server.
+
+    A pinned snapshot file comes first, then the cached vocabulary of the
+    endpoint, and otherwise the vocabulary bundled with the client.
+    """
+    if path:
+        return load_vocabulary(path)
+    if endpoint:
+        try:
+            return cache.load(endpoint)
+        except FileNotFoundError:
+            pass
+    return bundled_vocabulary()

@@ -31,7 +31,13 @@ from pkdb.domain.vocabulary import Vocabulary
 from pkdb.schemas.validation import StudyValidationError, ValidationIssue
 from pkdb.studyformat.formatter import FileChange, render_table, subject_order
 from pkdb.studyformat.issues import make_issue
-from pkdb.studyformat.load import STRUCTURAL, LoadedTable, load_study, load_table
+from pkdb.studyformat.load import (
+    STRUCTURAL,
+    LoadedStudy,
+    LoadedTable,
+    load_study,
+    load_table,
+)
 from pkdb.studyformat.merge import Conflict, merge_lines
 from pkdb.studyformat.tables import KIND_ORDER, TableSpec, parse_table_file, table_file
 from pkdb.studyformat.text import natural_key
@@ -339,6 +345,19 @@ def _plan(
     return plan
 
 
+def table_texts(study: LoadedStudy) -> dict[str, str]:
+    """The canonical text of every table of a study; tables without rows are left out.
+
+    These are the tables a generated workbook holds.
+    """
+    order = subject_order(study.table(SUBJECTS))
+    return {
+        table.file: text
+        for table in study.tables
+        if (text := render_table(table, study.name, order)) is not None
+    }
+
+
 def _remove_state(workbook: Path) -> None:
     # Best effort: read_state ignores the state file of an old generation.
     with suppress(OSError):
@@ -517,11 +536,7 @@ def sync_study(
     if blocking:
         return replace(outcome, issues=blocking)
     order = subject_order(study.table(SUBJECTS))
-    tables = {
-        table.file: text
-        for table in study.tables
-        if (text := render_table(table, study.name, order)) is not None
-    }
+    tables = table_texts(study)
     if not path.exists():
         return _create(outcome, tables, vocabulary)
 

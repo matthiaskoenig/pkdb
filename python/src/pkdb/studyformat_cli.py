@@ -67,7 +67,7 @@ def _schema(args) -> int:
     return 0
 
 
-def _say(text: str, *, file=None) -> None:
+def say(text: str, *, file=None) -> None:
     """Print one human line; folder names and messages come from untrusted files."""
     from pkdb.terminal import safe_text
 
@@ -98,14 +98,28 @@ def _print_human(label: str, result, check: bool) -> None:
         summary = "already formatted"
     else:
         summary = "not formatted, fix the problems below"
-    _say(f"{label}: {summary}")
-    for issue in result.issues:
+    say(f"{label}: {summary}")
+    print_issues(result.issues)
+
+
+def print_issues(issues) -> None:
+    """Print issues for people: location, message and code, then each suggestion.
+
+    Candidates of a hint are printed one per line, such as lines to add to a file.
+    """
+    from pkdb.studyformat.issues import DID_YOU_MEAN
+
+    for issue in issues:
         where = _location(issue.source)
-        _say(f"  {where + ': ' if where else ''}{issue.message} [{issue.code}]")
+        say(f"  {where + ': ' if where else ''}{issue.message} [{issue.code}]")
         for suggestion in issue.suggestions:
-            if suggestion.candidates:
+            if suggestion.message == DID_YOU_MEAN:
                 candidates = ", ".join(map(str, suggestion.candidates))
-                _say(f"    Did you mean: {candidates}")
+                say(f"    Did you mean: {candidates}")
+                continue
+            say(f"    {suggestion.message}")
+            for candidate in suggestion.candidates:
+                say(f"      {candidate}")
 
 
 def _format(args) -> int:
@@ -123,7 +137,7 @@ def _format(args) -> int:
         if not is_v2_folder(folder):
             message = "study format 1, left unchanged"
             if human:
-                _say(f"{study_label(folder)}: skipped, {message}")
+                say(f"{study_label(folder)}: skipped, {message}")
             else:
                 print(json.dumps({"path": str(folder), "skipped": message}), flush=True)
             continue
@@ -135,7 +149,7 @@ def _format(args) -> int:
             if error.filename:
                 message += f" ({error.filename})"
             if human:
-                _say(f"{study_label(folder)}: {message}", file=sys.stderr)
+                say(f"{study_label(folder)}: {message}", file=sys.stderr)
             else:
                 print(
                     json.dumps({"path": str(folder), "ok": False, "error": message}),

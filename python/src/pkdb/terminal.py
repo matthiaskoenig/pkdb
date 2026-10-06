@@ -11,6 +11,11 @@ from rich.table import Table
 
 from pkdb.progress import ProgressEvent
 
+WORKBOOK_PENDING = "Workbook changes are not in the tables yet; run pkdb tables sync"
+WORKBOOK_UNSYNCABLE = (
+    "The workbook cannot be synced with the tables; run pkdb tables sync to see why"
+)
+
 
 def safe_text(value: object) -> str:
     """Strip terminal controls and bound potentially untrusted display text."""
@@ -126,6 +131,12 @@ class Terminal:
             self.console.print(f"  {safe_text(result['tables_updated'])}")
         if result.get("reference_updated"):
             self.console.print(f"  {safe_text(result['reference_updated'])}")
+        if workbook := result.get("workbook"):
+            # pkdb validate and prepare plan the sync of the workbook without writing.
+            if workbook.get("changes") or workbook.get("conflicts"):
+                self.console.print(f"  {WORKBOOK_PENDING}")
+            elif not workbook.get("ok", True):
+                self.console.print(f"  {WORKBOOK_UNSYNCABLE}")
         if state in {"created", "replaced"} and result.get("counts"):
             counts = result["counts"]
             preferred = (

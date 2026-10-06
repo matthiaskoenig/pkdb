@@ -23,6 +23,7 @@ WARNINGS = frozenset(
         "formula_value",
         "workbook_open",
         "workbook_changed",
+        "workbook_not_ignored",
     }
 )
 _GROUPS = {
@@ -119,6 +120,7 @@ _GROUPS = {
         "formula_value",
         "workbook_open",
         "workbook_changed",
+        "workbook_not_ignored",
         "sync_conflict",
         "sync_write_failed",
     ),
@@ -157,6 +159,8 @@ _PARSE = frozenset({"layout", "format", "schema", "workbook"})
 REPEATED_ISSUES = 10
 # The end of the message of such a summary issue.
 LISTED = f"the first {REPEATED_ISSUES} are listed"
+# The message of a suggestion that only lists candidates.
+DID_YOU_MEAN = "Did you mean one of these?"
 
 
 class IssueCap:
@@ -220,7 +224,7 @@ def make_issue(
         [
             Suggestion(
                 kind="fix",
-                message=hint or "Did you mean one of these?",
+                message=hint or DID_YOU_MEAN,
                 candidates=candidates,
             )
         ]
