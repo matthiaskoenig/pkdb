@@ -10,7 +10,7 @@ def test_known_curator_resolves_bundled_profile_and_avatar():
     assert known["username"] == "mkoenig"
     assert known["display_name"] == "Matthias König"
     assert known["title"] == "Prof. Dr."
-    assert known["avatar_url"] == "/static/avatars/matthias_koenig.webp"
+    assert known["avatar_url"] == "/avatars/matthias_koenig.webp"
     unknown = profile("someone-new")
     assert unknown == {
         "username": "someone-new",

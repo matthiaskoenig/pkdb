@@ -26,7 +26,7 @@ def profile(username: str) -> dict:
         "display_name": known.get("display_name", username),
         "title": known.get("title"),
         "affiliation": known.get("affiliation"),
-        "avatar_url": f"/static/avatars/{avatar}" if avatar else None,
+        "avatar_url": f"/avatars/{avatar}" if avatar else None,
     }
 
 

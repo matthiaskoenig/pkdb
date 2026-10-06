@@ -23,6 +23,17 @@ MAX_BODY = 1024 * 1024
 # What a refused request may still send so that the client receives the refusal.
 DRAIN_LIMIT = 4 * MAX_BODY
 ASSETS = Path(__file__).parent / "static"
+AVATARS = Path(__file__).parent / "avatars"
+NONCE_PLACEHOLDER = b"__PKDB_NONCE__"
+
+
+def _csp(nonce: str | None) -> str:
+    style = "style-src 'self'" + (f" 'nonce-{nonce}'" if nonce else "")
+    return (
+        f"default-src 'self'; script-src 'self'; {style}; "
+        "img-src 'self' https://avatars.githubusercontent.com data:; "
+        "connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'"
+    )
 
 
 def _matches(received, expected):
@@ -91,6 +102,7 @@ class Handler(BaseHTTPRequestHandler):
         content_type="application/json",
         cookie=None,
         etag=None,
+        nonce=None,
     ):
         data = value if isinstance(value, bytes) else json.dumps(value).encode()
         self.send_response(status)
@@ -103,12 +115,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "no-referrer")
         self.send_header("Cross-Origin-Resource-Policy", "same-origin")
-        self.send_header(
-            "Content-Security-Policy",
-            "default-src 'self'; script-src 'self'; style-src 'self'; "
-            "img-src 'self' https://avatars.githubusercontent.com data:; "
-            "connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'",
-        )
+        self.send_header("Content-Security-Policy", _csp(nonce))
         if cookie:
             self.send_header("Set-Cookie", cookie)
         self.end_headers()
@@ -226,19 +233,25 @@ class Handler(BaseHTTPRequestHandler):
             except Exception:
                 self._reply(500, {"error": "Unable to read the local workspace state"})
             return
-        asset = (
-            ASSETS
-            / (unquote(path).removeprefix("/static/").lstrip("/") or "index.html")
-        ).resolve()
-        if not asset.is_relative_to(ASSETS.resolve()) or not asset.is_file():
+        if path.startswith("/avatars/"):
+            root, name = AVATARS, unquote(path.removeprefix("/avatars/"))
+        else:
+            root = ASSETS
+            name = unquote(path).removeprefix("/static/").lstrip("/") or "index.html"
+        asset = (root / name).resolve()
+        content_type = mimetypes.guess_type(asset.name)[0] or "application/octet-stream"
+        if (
+            not asset.is_relative_to(root.resolve())
+            or not asset.is_file()
+            or (root is AVATARS and not content_type.startswith("image/"))
+        ):
             self._reply(404, {"error": "Unknown resource"})
             return
-        self._reply(
-            200,
-            asset.read_bytes(),
-            content_type=mimetypes.guess_type(asset.name)[0]
-            or "application/octet-stream",
-        )
+        data, nonce = asset.read_bytes(), None
+        if root is ASSETS and asset == (ASSETS / "index.html").resolve():
+            nonce = secrets.token_urlsafe(16)
+            data = data.replace(NONCE_PLACEHOLDER, nonce.encode())
+        self._reply(200, data, content_type=content_type, nonce=nonce)
 
     def do_POST(self):
         if not self._allowed(mutation=True):

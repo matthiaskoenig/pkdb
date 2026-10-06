@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ROSTER = ROOT / "backend/bootstrap/curator-roster.json"
 AVATARS = ROOT / "frontend/public"
 TARGET = ROOT / "python/src/pkdb/data/curators.json"
-TARGET_AVATARS = ROOT / "python/src/pkdb/curation/static/avatars"
+TARGET_AVATARS = ROOT / "python/src/pkdb/curation/avatars"
 
 
 def build():

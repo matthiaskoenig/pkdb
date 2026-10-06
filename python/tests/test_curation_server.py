@@ -1,6 +1,9 @@
 """Exercise the actual local HTTP boundary without launching desktop apps."""
 
 import json
+import re
+import shlex
+import sys
 import threading
 from pathlib import Path
 from unittest.mock import Mock
@@ -17,7 +20,9 @@ from pkdb.curation.launch import open_path
 def local_server(tmp_path, monkeypatch):
     assets = tmp_path / "static"
     assets.mkdir()
-    (assets / "index.html").write_text("<h1>Local curation</h1>")
+    (assets / "index.html").write_text(
+        '<h1>Local curation</h1><style nonce="__PKDB_NONCE__"></style>'
+    )
     (assets / "app.js").write_text("console.log('loaded')")
     monkeypatch.setattr(transport, "ASSETS", assets)
     engine = Mock()
@@ -243,14 +248,61 @@ def test_bundled_curator_avatars_are_served_as_images():
         assert headers["Content-Type"] == "image/webp"
         assert data[:4] == b"RIFF"
         for path in (
-            "/static/avatars/..%2f..%2fmetadata.py",
-            "/static/avatars/missing.webp",
+            "/avatars/..%2f..%2fmetadata.py",
+            "/avatars/../metadata.py",
+            "/avatars/missing.webp",
+            "/static/avatars/matthias_koenig.webp",
         ):
             assert request(server, "GET", path)[0] == 404
     finally:
         server.shutdown()
         server.server_close()
         thread.join(timeout=3)
+
+
+def _style_src(headers):
+    policy = headers["Content-Security-Policy"]
+    return next(
+        part.strip()
+        for part in policy.split(";")
+        if part.strip().startswith("style-src")
+    )
+
+
+def test_index_gets_a_fresh_style_nonce_per_response(local_server):
+    server, _ = local_server
+    nonces = []
+    for path in ("/", "/index.html"):
+        status, headers, data = request(server, "GET", path)
+        assert status == 200
+        assert b"__PKDB_NONCE__" not in data
+        found = re.search(rb'nonce="([^"]+)"', data)
+        assert found
+        nonce = found.group(1).decode()
+        assert _style_src(headers) == f"style-src 'self' 'nonce-{nonce}'"
+        assert "unsafe-inline" not in headers["Content-Security-Policy"]
+        nonces.append(nonce)
+    assert nonces[0] != nonces[1]
+    status, headers, _ = request(server, "GET", "/static/app.js")
+    assert status == 200
+    assert _style_src(headers) == "style-src 'self'"
+    assert "unsafe-inline" not in headers["Content-Security-Policy"]
+
+
+def test_open_path_runs_the_recording_command(tmp_path, monkeypatch):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    record = tmp_path / "record.txt"
+    monkeypatch.setenv(
+        "PKDB_OPEN_COMMAND",
+        f"{shlex.quote(sys.executable)} -c "
+        + shlex.quote(
+            "import sys, pathlib; "
+            f"pathlib.Path({str(record)!r}).write_text(sys.argv[1])"
+        ),
+    )
+    open_path(file)
+    assert record.read_text() == str(file)
 
 
 def test_folder_browsing_and_recent_workspace_actions(local_server):
