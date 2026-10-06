@@ -1,18 +1,18 @@
-"""study.json and review.json of study format 2."""
+"""study.json, review.json and reference.json of study format 2."""
 
-from datetime import date as Date
+from collections.abc import Callable
 from typing import Annotated, Literal
 
-from pydantic import (
-    AwareDatetime,
-    BaseModel,
-    ConfigDict,
-    Field,
-    PlainSerializer,
-    model_validator,
-)
+from pydantic import AfterValidator, Field, PlainSerializer, model_validator
 
+from pkdb.references import ReferenceError, normalize_doi, normalize_pmid
 from pkdb.schemas.provenance import ManualCuration, StudyProvenance
+from pkdb.schemas.review import Model, Release, Review, Text, User
+from pkdb.schemas.review import ReviewItem as ReviewItem
+from pkdb.schemas.review import ReviewTarget as ReviewTarget
+from pkdb.schemas.review import ThreadEntry as ThreadEntry
+from pkdb.schemas.review import Ulid as Ulid
+from pkdb.schemas.study import Reference
 from pkdb.studyformat.jsonio import dump_json
 
 TABLE_KINDS = (
@@ -26,22 +26,36 @@ TABLE_KINDS = (
 TableKind = Literal[
     "subjects", "interventions", "characteristica", "outputs", "timecourses", "scatters"
 ]
-User = Annotated[str, Field(min_length=1, max_length=255, pattern=r"^\S+$")]
-Text = Annotated[str, Field(min_length=1)]
-Ulid = Annotated[str, Field(pattern=r"^[0-9A-HJKMNP-TV-Z]{26}$")]
 
 
-class Model(BaseModel):
-    """Base of the study format 2 JSON models; unknown fields are refused."""
+def _normalizable(normalizer: Callable[[str], str], kind: str) -> AfterValidator:
+    """Accept an identifier that PK-DB can normalize, unchanged.
 
-    model_config = ConfigDict(extra="forbid")
+    The server matches publications by normalized identifiers, so one that has
+    no normalized form cannot be published.
+    """
+
+    def check(value: str) -> str:
+        try:
+            normalizer(value)
+        except ReferenceError:
+            raise ValueError(
+                f"{value!r} is not a valid {kind}, also after decoding percent escapes"
+            ) from None
+        return value
+
+    return AfterValidator(check)
+
+
+PubMedId = Annotated[str, _normalizable(normalize_pmid, "PubMed ID")]
+Doi = Annotated[str, _normalizable(normalize_doi, "DOI")]
 
 
 class StudyReference(Model):
     """Identifiers of the publication; the single source for which paper is curated."""
 
-    pmid: Annotated[str, Field(pattern=r"^[1-9][0-9]*$")] | None = None
-    doi: Annotated[str, Field(pattern=r"^10\.\d{4,9}/\S+$")] | None = None
+    pmid: Annotated[PubMedId, Field(pattern=r"^[1-9][0-9]*$")] | None = None
+    doi: Annotated[Doi, Field(pattern=r"^10\.\d{4,9}/\S+$")] | None = None
 
     @model_validator(mode="after")
     def identifier(self):
@@ -81,11 +95,15 @@ class Notes(Model):
     comments: list[Comment] = Field(default_factory=list)
 
 
-class Release(Model):
-    """Release of the study in PK-DB: its `PKDB` identifier and date."""
+class ReferenceSnapshot(Reference):
+    """Content of `reference.json`: the canonical reference of the publication.
 
-    pkdb_id: Annotated[str, Field(pattern=r"^PKDB[0-9]{5}$")]
-    date: Date
+    Its PubMed ID and DOI must have the normalized form by which the server
+    matches publications.
+    """
+
+    pmid: PubMedId | None = None
+    doi: Doi | None = None
 
 
 class StudyMetadata(Model):
@@ -127,70 +145,6 @@ def canonical_study_json(study: StudyMetadata) -> str:
             data, ("curators", "collaborators", "descriptions", "comments", "notes")
         )
     )
-
-
-class ReviewTarget(Model):
-    """What a review item refers to: a file, optionally narrowed to rows and a column.
-
-    `rows` and `column` require `file`.
-    """
-
-    file: str | None = None
-    rows: dict[str, str] = Field(default_factory=dict)
-    column: str | None = None
-
-    @model_validator(mode="after")
-    def file_required(self):
-        if (self.rows or self.column) and self.file is None:
-            raise ValueError("rows and column require file")
-        return self
-
-
-class ThreadEntry(Model):
-    """A reply in the discussion thread of a review item."""
-
-    author: User
-    created: AwareDatetime
-    text: Text
-
-
-class ReviewItem(Model):
-    """A question, uncertainty or issue raised in a review, with its state and thread.
-
-    `resolved_by` and `resolved` are set exactly for resolved or dismissed items.
-    """
-
-    id: Ulid
-    kind: Literal["question", "uncertainty", "issue"]
-    state: Literal["open", "resolved", "dismissed"] = "open"
-    target: ReviewTarget | None = None
-    acknowledges: str | None = None
-    text: Text
-    author: User
-    agent: str | None = None
-    created: AwareDatetime
-    thread: list[ThreadEntry] = Field(default_factory=list)
-    resolved_by: User | None = None
-    resolved: AwareDatetime | None = None
-
-    @model_validator(mode="after")
-    def resolution(self):
-        closed = self.state != "open"
-        if closed != (self.resolved_by is not None) or closed != (
-            self.resolved is not None
-        ):
-            raise ValueError(
-                "resolved_by and resolved are set exactly when the state is resolved or dismissed"
-            )
-        return self
-
-
-class Review(Model):
-    """Content of `review.json`: review status, reviewers and items."""
-
-    status: Literal["draft", "in_review", "approved"]
-    reviewers: list[User] = Field(default_factory=list)
-    items: list[ReviewItem] = Field(default_factory=list)
 
 
 def canonical_review_json(review: Review) -> str:

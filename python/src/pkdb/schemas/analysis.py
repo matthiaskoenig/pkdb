@@ -26,11 +26,14 @@ class AnalysisGroup(ResponseModel):
     group_parent_pk: int | None
     characteristica_pk: int | None
     count: int | None
+    tissue: str | None
+    method: str | None
+    time: float | None
+    time_unit: str | None
     measurement_type: str | None
     calculation_type: str | None
     choice: str | None
     substance: str | None
-    value: float | None
     mean: float | None
     median: float | None
     min: float | None
@@ -38,6 +41,11 @@ class AnalysisGroup(ResponseModel):
     sd: float | None
     se: float | None
     cv: float | None
+    gmean: float | None
+    gsd: float | None
+    gcv: float | None
+    error_bar: float | None
+    error_type: str | None
     unit: str | None
 
 
@@ -49,11 +57,14 @@ class AnalysisIndividual(ResponseModel):
     individual_group_pk: int | None
     characteristica_pk: int | None
     count: int | None
+    tissue: str | None
+    method: str | None
+    time: float | None
+    time_unit: str | None
     measurement_type: str | None
     calculation_type: str | None
     choice: str | None
     substance: str | None
-    value: float | None
     mean: float | None
     median: float | None
     min: float | None
@@ -61,6 +72,11 @@ class AnalysisIndividual(ResponseModel):
     sd: float | None
     se: float | None
     cv: float | None
+    gmean: float | None
+    gsd: float | None
+    gcv: float | None
+    error_bar: float | None
+    error_type: str | None
     unit: str | None
 
 
@@ -77,9 +93,16 @@ class AnalysisIntervention(ResponseModel):
     form_label: str | None
     application: str | None
     application_label: str | None
-    time: str | None
+    tissue: str | None
+    tissue_label: str | None
+    method: str | None
+    method_label: str | None
+    time: float | list[float] | None
     time_end: float | None
+    interval: float | None
+    doses: int | None
     time_unit: str | None
+    subject_pk: int | None
     measurement_type: str | None
     measurement_type_label: str | None
     calculation_type: str | None
@@ -88,7 +111,7 @@ class AnalysisIntervention(ResponseModel):
     choice_label: str | None
     substance: str | None
     substance_label: str | None
-    value: float | None
+    count: int | None
     mean: float | None
     median: float | None
     min: float | None
@@ -96,6 +119,11 @@ class AnalysisIntervention(ResponseModel):
     sd: float | None
     se: float | None
     cv: float | None
+    gmean: float | None
+    gsd: float | None
+    gcv: float | None
+    error_bar: float | None
+    error_type: str | None
     unit: str | None
 
 
@@ -124,7 +152,7 @@ class AnalysisOutput(ResponseModel):
     choice_label: str | None
     substance: str | None
     substance_label: str | None
-    value: float | None
+    count: int | None
     mean: float | None
     median: float | None
     min: float | None
@@ -132,6 +160,11 @@ class AnalysisOutput(ResponseModel):
     sd: float | None
     se: float | None
     cv: float | None
+    gmean: float | None
+    gsd: float | None
+    gcv: float | None
+    error_bar: float | None
+    error_type: str | None
     unit: str | None
 
 
@@ -158,7 +191,7 @@ class AnalysisTimecourse(ResponseModel):
     choice_label: str | None
     substance: str | None
     substance_label: str | None
-    value: list[float | None] | None
+    count: list[int | None] | None
     mean: list[float | None] | None
     median: list[float | None] | None
     min: list[float | None] | None
@@ -166,6 +199,11 @@ class AnalysisTimecourse(ResponseModel):
     sd: list[float | None] | None
     se: list[float | None] | None
     cv: list[float | None] | None
+    gmean: list[float | None] | None
+    gsd: list[float | None] | None
+    gcv: list[float | None] | None
+    error_bar: list[float | None] | None
+    error_type: list[str | None] | None
     unit: str | None
 
 

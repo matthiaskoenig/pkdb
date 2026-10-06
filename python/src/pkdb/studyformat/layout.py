@@ -18,6 +18,9 @@ from pkdb.studyformat.tables import (
 from pkdb.studyformat.text import natural_key
 
 DATA_SUFFIXES = frozenset({".tsv", ".json", ".csv", ".xls", ".xlsx"})
+# Study names that PK-DB URLs use after a study identifier, such as
+# /api/v2/studies/{sid}/publication, so `<substance>/publication` would be ambiguous.
+RESERVED_NAMES = frozenset({"publication", "validate"})
 REQUIRED_FILES = (STUDY_JSON, REFERENCE_JSON, REVIEW_JSON, "subjects.tsv")
 TABLE_NAMES = (
     "Table files are subjects.tsv, interventions.tsv, characteristica.tsv or "
@@ -54,6 +57,14 @@ def scan_folder(folder: Path) -> Layout:
     folder = Path(folder).resolve()
     study = folder.name
     files, tables, attachments, issues = set(), [], [], []
+    if study in RESERVED_NAMES:
+        issues.append(
+            make_issue(
+                "reserved_name",
+                f"A study folder cannot be named {study!r}; PK-DB uses the name in study URLs",
+                hint="Name the folder after the first author and the year, such as Smith2020.",
+            )
+        )
     for path in sorted(folder.iterdir(), key=lambda item: natural_key(item.name)):
         name = path.name
         if path.is_symlink():

@@ -77,11 +77,31 @@ class Study(Identity, Timestamped, Base):
     processing_version: Mapped[str | None]
     validation_report: Mapped[dict] = mapped_column(JSONB, default=dict)
     source_manifest: Mapped[dict] = mapped_column(JSONB, default=dict)
+    pkdb_id: Mapped[str | None] = mapped_column(String(16), unique=True)
+    # The study format 1 sid of a study that a study format 2 upload took over.
+    legacy_sid: Mapped[str | None] = mapped_column(String(255), unique=True)
+    release_date: Mapped[Date | None]
+    issue: Mapped[int | None]
+    review_status: Mapped[str | None] = mapped_column(String(16))
+    # Reviewers and review items of `review.json`; the status has its own column.
+    review: Mapped[dict | None] = mapped_column(JSONB(none_as_null=True))
     __table_args__ = (
         UniqueConstraint("publication_id", "source_key"),
         CheckConstraint("access IN ('public', 'private')", name="access"),
         CheckConstraint("licence IN ('open', 'closed')", name="licence"),
         CheckConstraint("length(sid) > 0", name="sid"),
+        CheckConstraint("pkdb_id ~ '^PKDB[0-9]{5}$'", name="pkdb_id"),
+        CheckConstraint(
+            "legacy_sid IS NULL OR (length(legacy_sid) > 0 AND "
+            "strpos(legacy_sid, '/') = 0)",
+            name="legacy_sid",
+        ),
+        CheckConstraint("(pkdb_id IS NULL) = (release_date IS NULL)", name="release"),
+        CheckConstraint("issue IS NULL OR issue > 0", name="issue"),
+        CheckConstraint(
+            "review_status IN ('draft', 'in_review', 'approved')", name="review_status"
+        ),
+        CheckConstraint("(review_status IS NULL) = (review IS NULL)", name="review"),
     )
 
 
@@ -126,7 +146,11 @@ class Note(Identity, Base):
 
 
 Base.metadata.tables["studies"].append_constraint(
-    Index("ix_studies_search", vector([Study.sid, Study.name]), postgresql_using="gin")
+    Index(
+        "ix_studies_search",
+        vector([Study.sid, Study.name, Study.pkdb_id]),
+        postgresql_using="gin",
+    )
 )
 
 Base.metadata.tables["references"].append_constraint(

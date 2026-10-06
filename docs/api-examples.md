@@ -21,7 +21,7 @@ bash tools/api_examples/example.sh api-example-curl-results
 unset PKDB_API_KEY
 ```
 
-Both scripts stop on an HTTP failure. The Python script accepts `--endpoint`, `--substance`, and `--study-sid` overrides. Its output includes study identifiers from the first page, the canonical study identifier, total matching measurements and groups, and ZIP member names. It saves `study.json`, `dataset.zip`, and `summary.json`; existing files in the output directory are overwritten.
+Both scripts stop on an HTTP failure. The Python script accepts `--endpoint`, `--substance`, and `--study-sid` overrides; the shell script takes the study identifier as an optional second argument (`bash tools/api_examples/example.sh api-example-curl-results PKDB01110`). Its output includes study identifiers from the first page, the canonical study identifier, total matching measurements and groups, and ZIP member names. It saves `study.json`, `dataset.zip`, and `summary.json`; existing files in the output directory are overwritten.
 
 ## Understand the requests
 
@@ -34,6 +34,12 @@ Both scripts stop on an HTTP failure. The Python script accepts `--endpoint`, `-
 | Export | `POST /api/v2/exports` with a study selection | ZIP containing tabular data and reuse terms |
 
 List responses contain `items`, `total`, `page`, `page_size`, `next`, and `previous`. The scripts intentionally read a first page while reporting total matches. Retrieve subsequent pages for complete tabular analysis, or use the export. The canonical study endpoint returns the complete study rather than a page.
+
+## Study format 2 studies
+
+A study in study format 2 is identified by its substance and name, such as `caffeine/Harder1988`, instead of `PKDB01110`. Pass it as the study identifier (`--study-sid caffeine/Harder1988` or the second argument of the shell script) and the same requests read it: `GET /api/v2/studies/caffeine/Harder1988` has two path segments, and `GET /api/v2/measurements?study_sid=caffeine/Harder1988` and the groups query take the identifier as a value. The PKDB identifier of a released study redirects to it, so `GET /api/v2/studies/PKDB00198` answers `308` with the `Location` of the two-segment route. `curl --location` and the `pkdb` Python client follow it, but the example scripts do not, so give them the canonical identifier. See [study identifiers and redirects](api.md#study-identifiers-and-redirects).
+
+Measurement rows have no `value` field: the value of a single subject or an unspecified summary is in `mean` (see [statistics in responses](api.md#statistics-in-responses) for the statistics of a row).
 
 ## Verified fixture output
 

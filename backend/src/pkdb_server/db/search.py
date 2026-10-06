@@ -90,7 +90,7 @@ def science_match(model, term):
 def search_condition(entity, term):
     if entity == "info_nodes":
         return search_match(term)
-    parts = [text_match([Study.sid, Study.name], term)]
+    parts = [text_match([Study.sid, Study.name, Study.pkdb_id], term)]
     if entity == "studies":
         parts.extend(
             [

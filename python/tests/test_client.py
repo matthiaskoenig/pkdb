@@ -182,6 +182,66 @@ def test_typed_get_and_query_filter_serialization(study_folder, vocabulary):
             assert page.page == 2
 
 
+def test_reads_follow_permanent_redirects_within_the_endpoint(study_folder, vocabulary):
+    from pkdb.client import MAX_REDIRECTS
+
+    prepared = prepare(study_folder, vocabulary=vocabulary)
+    study = prepared.study.model_dump(mode="json")
+    requests = []
+    redirects = {
+        # A released study moved to <substance>/<name>.
+        "/api/v2/studies/PKDB00198": (308, "/api/v2/studies/TEST1"),
+        "/api/v2/studies/LOOP": (308, "/api/v2/studies/LOOP"),
+        "/api/v2/studies/AWAY": (308, "https://other.test/api/v2/studies/TEST1"),
+        "/api/v2/studies/FOUND": (301, "/api/v2/studies/TEST1"),
+        "/api/v2/query": (308, "/api/v2/query"),
+    }
+
+    def handler(request):
+        requests.append(
+            (request.method, str(request.url), request.headers.get("authorization"))
+        )
+        if request.method == "PUT":
+            return httpx2.Response(308, headers={"location": "/api/v2/studies/TEST1"})
+        if request.url.path in redirects:
+            status, location = redirects[request.url.path]
+            return httpx2.Response(status, headers={"location": location})
+        assert request.url.path == "/api/v2/studies/TEST1"
+        return httpx2.Response(200, json=study)
+
+    with httpx2.Client(transport=httpx2.MockTransport(handler)) as transport:
+        with Client(
+            endpoint="https://example.test", api_key="secret", transport=transport
+        ) as client:
+            assert client.studies.get("PKDB00198") == prepared.study
+            assert requests == [
+                (
+                    "GET",
+                    "https://example.test/api/v2/studies/PKDB00198",
+                    "Token secret",
+                ),
+                ("GET", "https://example.test/api/v2/studies/TEST1", "Token secret"),
+            ]
+            # Other redirects, other origins and endless redirects stay errors.
+            for sid, count in (("LOOP", 1 + MAX_REDIRECTS), ("AWAY", 1), ("FOUND", 1)):
+                requests.clear()
+                with pytest.raises(ClientError, match="HTTP 30"):
+                    client.studies.get(sid)
+                assert len(requests) == count
+                assert all(
+                    url.startswith("https://example.test/") for _, url, _ in requests
+                )
+            # Writes and POST queries never follow redirects.
+            for method, path in (
+                ("PUT", "/api/v2/studies/TEST1"),
+                ("POST", "/api/v2/query"),
+            ):
+                requests.clear()
+                with pytest.raises(ClientError, match="HTTP 308"):
+                    client._request(method, path)
+                assert [request[0] for request in requests] == [method]
+
+
 @pytest.mark.parametrize("failure", ["redirect", "html", "timeout", "wrong_sid"])
 def test_ambiguous_upload_is_never_retried(study_folder, vocabulary, failure):
     from pkdb.errors import ClientError
@@ -371,18 +431,28 @@ def test_query_keywords_preserve_scientific_types_and_aliases():
         "measurements",
         {
             "substance_sid": "apixaban",
-            "value__gte": "2.5",
+            "mean__gte": "2.5",
+            "gmean__lt": "3",
             "normed": "false",
             "pk__in": [1, 2],
-            "ordering": "-value",
+            "ordering": "-mean",
         },
     )
-    assert query.entity == "outputs" and query.sort == "-value"
+    assert query.entity == "outputs" and query.sort == "-mean"
     assert [(p.field, p.operator, p.value) for p in query.predicates] == [
         ("substance", "eq", "apixaban"),
-        ("value", "gte", 2.5),
+        ("mean", "gte", 2.5),
+        ("gmean", "lt", 3.0),
         ("normed", "eq", False),
         ("id", "in", [1, 2]),
+    ]
+    query = query_from_filters(
+        "interventions", {"route": "oral", "tissue": "plasma", "method_sid": "hplc"}
+    )
+    assert [(p.field, p.value) for p in query.predicates] == [
+        ("route_name", "oral"),
+        ("tissue_name", "plasma"),
+        ("method", "hplc"),
     ]
     query = query_from_filters(
         "groups", {"measurement_type_sid": "sex", "choice_sid": "male"}
@@ -399,7 +469,7 @@ def test_query_keywords_preserve_scientific_types_and_aliases():
         and export.queries["outputs"].predicates[0].field == "substance"
     )
     with pytest.raises(ValueError):
-        query_from_filters("outputs", {"value__gte": "NaN"})
+        query_from_filters("outputs", {"mean__gte": "NaN"})
     with pytest.raises(ValueError):
         export_from_filters({"substance": "apixaban"})
 

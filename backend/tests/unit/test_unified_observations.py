@@ -47,7 +47,7 @@ def test_group_characteristic_and_output_complete_statistics_identically(
     assert left.statistics.cv == 0.1
 
 
-def test_individual_observations_keep_value_and_count_one(valid_study, vocabulary):
+def test_individual_observations_keep_mean_and_count_one(valid_study, vocabulary):
     vocabulary = vocabulary.model_copy(
         update={
             "measurements": (
@@ -60,7 +60,7 @@ def test_individual_observations_keep_value_and_count_one(valid_study, vocabular
         key="individual-weight",
         measurement_type="weight",
         unit="kg",
-        statistics=Statistics(value=80.0),
+        statistics=Statistics(mean=80.0),
     )
     valid_study.individuals.append(
         Individual(key="person", name="person", group="all", characteristica=[record])
@@ -77,7 +77,7 @@ def test_individual_observations_keep_value_and_count_one(valid_study, vocabular
     right = next(
         record for record in result.measurements if record.key == "individual-output"
     )
-    assert left.statistics == right.statistics == Statistics(value=80.0, count=1)
+    assert left.statistics == right.statistics == Statistics(mean=80.0, count=1)
     assert left.calculation_type is None and right.calculation_type is None
 
 

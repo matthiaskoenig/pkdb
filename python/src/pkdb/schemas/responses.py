@@ -1,5 +1,7 @@
 """Explicit public scientific response contracts."""
 
+from typing import Literal
+
 from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
 from pkdb.schemas.provenance import ManualCuration, StudyProvenance
@@ -35,7 +37,6 @@ class ScientificResponse(ResponseModel):
     calculation_type: NodeResponse | None
     choice: NodeResponse | None
     substance: NodeResponse | None
-    value: float | None
     mean: float | None
     median: float | None
     min: float | None
@@ -43,6 +44,12 @@ class ScientificResponse(ResponseModel):
     sd: float | None
     se: float | None
     cv: float | None
+    gmean: float | None
+    gsd: float | None
+    gcv: float | None
+    count: int | None
+    error_bar: float | None
+    error_type: str | None
     unit: str | None
 
 
@@ -62,7 +69,10 @@ class OutputResponse(ScientificResponse):
 
 
 class CharacteristicResponse(ScientificResponse):
-    count: int | None
+    tissue: NodeResponse | None
+    method: NodeResponse | None
+    time: float | None
+    time_unit: str | None
     group_count: int | None
 
 
@@ -84,9 +94,14 @@ class InterventionResponse(ScientificResponse):
     route: NodeResponse | None
     form: NodeResponse | None
     application: NodeResponse | None
-    time: str | None
+    tissue: NodeResponse | None
+    method: NodeResponse | None
+    time: float | list[float] | None
     time_end: float | None
+    interval: float | None
+    doses: int | None
     time_unit: str | None
+    subject: SubjectSummary | None
     study: StudySummary
 
 
@@ -128,7 +143,6 @@ class ArrayOutput(ResponseModel):
     interventions: list[SubjectSummary]
     ex: SourceReference | EmptyResponse
     normed: bool
-    value: float | None
     mean: float | None
     median: float | None
     min: float | None
@@ -136,6 +150,12 @@ class ArrayOutput(ResponseModel):
     se: float | None
     sd: float | None
     cv: float | None
+    gmean: float | None
+    gsd: float | None
+    gcv: float | None
+    count: int | None
+    error_bar: float | None
+    error_type: str | None
     unit: str | None
     time_unit: str | None
     time: float | None
@@ -227,6 +247,12 @@ class StudyResponse(NotesResponse):
     licence: str
     access: str
     date: str | None
+    # Release, GitHub issue and review of study format 2 studies.
+    pkdb_id: str | None = None
+    release_date: str | None = None
+    issue: int | None = None
+    review_status: Literal["draft", "in_review", "approved"] | None = None
+    open_review_items: int = 0
     group_count: int
     individual_count: int
     intervention_count: int

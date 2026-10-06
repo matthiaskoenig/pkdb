@@ -29,7 +29,6 @@ def effective_characteristics(entity):
         "calculation_type",
         "choice",
         "unit",
-        "value",
         "mean",
         "median",
         "minimum",
@@ -37,6 +36,9 @@ def effective_characteristics(entity):
         "sd",
         "se",
         "cv",
+        "gmean",
+        "gsd",
+        "gcv",
         "count",
     )
     candidates = (
@@ -76,7 +78,6 @@ def characteristic_fields(effective):
             "measurement_type",
             "substance",
             "choice",
-            "value",
             "mean",
             "median",
             "minimum",
@@ -84,6 +85,9 @@ def characteristic_fields(effective):
             "sd",
             "se",
             "cv",
+            "gmean",
+            "gsd",
+            "gcv",
             "unit",
             "count",
         )

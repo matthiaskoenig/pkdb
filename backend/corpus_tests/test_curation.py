@@ -2,6 +2,7 @@
 
 import json
 import os
+import shutil
 import time
 from collections import Counter
 from pathlib import Path
@@ -27,9 +28,13 @@ def test_curation_apixaban_roundtrip(session_factory, tmp_path, monkeypatch):
     value = os.environ.get("PKDB_CURATION_CORPUS")
     if not value:
         pytest.skip("Set PKDB_CURATION_CORPUS to the read-only apixaban directory")
-    corpus = Path(value).resolve()
+    source = Path(value).resolve()
+    before = source_hashes(source)
+    # Uploads sync hidden TSV exports into the study folders; work on a copy so
+    # the read-only corpus never changes.
+    corpus = tmp_path / "corpus"
+    shutil.copytree(source, corpus, symlinks=True)
     root = Path(__file__).resolve().parents[1]
-    before = source_hashes(corpus)
     assert not bootstrap(root / "bootstrap", session_factory).errors
     create_admin(
         session_factory,
@@ -149,4 +154,4 @@ def test_curation_apixaban_roundtrip(session_factory, tmp_path, monkeypatch):
                 )
         finally:
             engine.close()
-    assert source_hashes(corpus) == before
+    assert source_hashes(source) == before

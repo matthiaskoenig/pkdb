@@ -62,7 +62,7 @@ def valid_study():
                     "name": "dose",
                     "measurement_type": "dosing",
                     "substance": "drug",
-                    "statistics": {"value": 10.0},
+                    "statistics": {"mean": 10.0},
                     "unit": "mg",
                     "time": 0.0,
                     "time_unit": "h",

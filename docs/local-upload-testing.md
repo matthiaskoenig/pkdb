@@ -96,7 +96,7 @@ curl --fail -H "Authorization: Bearer $PKDB_API_KEY" \
   "$PKDB_ENDPOINT/api/v1/studies/PKDB01110/"
 ```
 
-Replace `PKDB01110` with your study SID. The Frost2014 example contains one group, 70 individuals, 782 measurements, and eight timecourses.
+Replace `PKDB01110` with your study identifier; for a study format 2 study it is `<substance>/<name>`, so its URL has two segments (`$PKDB_ENDPOINT/api/v1/studies/apixaban/Frost2014/`), and a request with the PKDB identifier of a released study is answered with a redirect to it (add `--location` to `curl` to follow it). The Frost2014 example contains one group, 70 individuals, 782 measurements, and eight timecourses.
 
 ## Test multiple studies
 

@@ -1,6 +1,7 @@
 """Validation issues of study format 2, located by file, sheet, row and column."""
 
-from collections.abc import Iterable
+from collections import Counter
+from collections.abc import Iterable, Iterator
 from typing import TYPE_CHECKING, Literal
 
 from pkdb.schemas.source import SourceLocation
@@ -21,6 +22,7 @@ WARNINGS = frozenset(
 )
 _GROUPS = {
     "layout": (
+        "reserved_name",
         "unknown_directory",
         "symlink",
         "unknown_file",
@@ -35,6 +37,7 @@ _GROUPS = {
         "unknown_column",
         "duplicate_column",
         "extra_cells",
+        "too_many_columns",
         "stray_text",
         "invalid_json",
         "duplicate_key",
@@ -78,10 +81,12 @@ _GROUPS = {
         "missing_root",
         "root_parent",
         "missing_parent",
+        "parent_not_group",
         "subject_cycle",
         "subject_count_exceeds_parent",
         "inconsistent_series",
         "duplicate_time",
+        "mixed_scatter_subjects",
         "duplicate_row",
         "duplicate_observation",
         "unused_intervention",
@@ -117,6 +122,30 @@ _GROUPS = {
 }
 CATEGORIES = {code: category for category, codes in _GROUPS.items() for code in codes}
 _PARSE = frozenset({"layout", "format", "schema"})
+
+
+# A single line, cell or JSON file reports at most this many issues of one
+# code; one more issue states how many there are in all.
+REPEATED_ISSUES = 10
+# The end of the message of such a summary issue.
+LISTED = f"the first {REPEATED_ISSUES} are listed"
+
+
+class IssueCap:
+    """Admits the first REPEATED_ISSUES issues of each code and counts all."""
+
+    def __init__(self) -> None:
+        self.counts: Counter[str] = Counter()
+
+    def admit(self, code: str) -> bool:
+        self.counts[code] += 1
+        return self.counts[code] <= REPEATED_ISSUES
+
+    def beyond(self) -> Iterator[tuple[str, int]]:
+        """The codes with more issues than were admitted, and their totals."""
+        for code, total in self.counts.items():
+            if total > REPEATED_ISSUES:
+                yield code, total
 
 
 def column_letter(index: int) -> str:

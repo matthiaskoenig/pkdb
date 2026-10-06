@@ -13,7 +13,11 @@ from pkdb.domain.pharmacokinetics import (
     build_timecourses,
     derive_pk,
 )
-from pkdb.domain.statistics import complete_statistics
+from pkdb.domain.statistics import (
+    RELATIVE_TOLERANCE,
+    complete_statistics,
+    inconsistent_statistics,
+)
 from pkdb.domain.units import ureg
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.schemas.prepared import PreparedStudy
@@ -31,8 +35,23 @@ from pkdb.schemas.validation import (
     ValidationReport,
 )
 
-PROCESSING_VERSION = "8"
-NUMERIC_FIELDS = ("value", "mean", "median", "min", "max", "sd", "se", "cv")
+PROCESSING_VERSION = "9"
+NUMERIC_FIELDS = ("mean", "median", "min", "max", "sd", "se", "cv", "gmean")
+UNSPECIFIED_SUMMARY = "unspecified summary"
+# A single subject reports one value in mean; max stays allowed as a detection limit.
+INDIVIDUAL_PROHIBITED = (
+    "median",
+    "min",
+    "sd",
+    "se",
+    "cv",
+    "gmean",
+    "gsd",
+    "gcv",
+    "error_bar",
+    "error_type",
+)
+SUMMARY_PROHIBITED = (*INDIVIDUAL_PROHIBITED, "max")
 
 
 def prepare_study(
@@ -42,8 +61,10 @@ def prepare_study(
         raise ValueError("max_issues must be positive")
     study = study.model_copy(deep=True)
     observation_subjects = dict()
+    reported = dict()
     for subject, record in subject_observations(study):
         observation_subjects[record.key] = subject
+        reported[record.key] = record
         count = subject.count if isinstance(subject, Group) else 1
         if record.statistics.count is None:
             record.statistics.count = count
@@ -61,6 +82,7 @@ def prepare_study(
             "unknown_group": "group",
             "unknown_individual": "individual",
             "unknown_intervention": "interventions",
+            "unknown_subject": "subject",
         }
         if code in reference_fields:
             field = reference_fields[code]
@@ -69,6 +91,7 @@ def prepare_study(
                 "group": groups,
                 "individual": individuals,
                 "interventions": interventions,
+                "subject": groups.keys() | individuals.keys(),
             }[field]
             details.setdefault("category", "reference")
             details.setdefault("stage", "validate")
@@ -190,12 +213,6 @@ def prepare_study(
                     "Characteristic count exceeds group count",
                     characteristic,
                 )
-            if characteristic.statistics.value is not None:
-                issue(
-                    "group_value",
-                    "Group characteristics use mean/median, not individual value",
-                    characteristic,
-                )
     for individual in study.individuals:
         if individual.group and individual.group not in groups:
             issue(
@@ -207,41 +224,43 @@ def prepare_study(
     def validate_individual(record):
         prohibited = [
             field
-            for field in ("mean", "median", "min", "sd", "se", "cv")
+            for field in INDIVIDUAL_PROHIBITED
             if getattr(record.statistics, field) is not None
         ]
         if prohibited or record.calculation_type is not None:
             issue(
                 "individual_statistics",
-                "Individual records cannot contain population statistics or calculation_type",
+                "Individual records report their value in mean and cannot contain "
+                "population statistics or calculation_type",
                 record,
+                field=prohibited[0] if prohibited else "calculation_type",
+            )
+
+    def validate_summary(record):
+        if record.calculation_type == UNSPECIFIED_SUMMARY and (
+            prohibited := [
+                field
+                for field in SUMMARY_PROHIBITED
+                if getattr(record.statistics, field) is not None
+            ]
+        ):
+            issue(
+                "unspecified_summary_statistics",
+                "Unspecified summaries report only a mean and cannot claim other statistics",
+                record,
+                field=prohibited[0],
             )
 
     for individual in study.individuals:
         for characteristic in individual.characteristica:
             validate_individual(characteristic)
+    for group in study.groups:
+        for characteristic in group.characteristica:
+            validate_summary(characteristic)
     for measurement in study.measurements:
-        if measurement.calculation_type == "unspecified summary" and any(
-            getattr(measurement.statistics, field) is not None
-            for field in ("mean", "median", "min", "max", "sd", "se", "cv")
-        ):
-            issue(
-                "unspecified_summary_statistics",
-                "Unspecified summaries use value and cannot claim population statistics",
-                measurement,
-            )
+        validate_summary(measurement)
         if measurement.individual:
             validate_individual(measurement)
-        if (
-            measurement.group
-            and measurement.statistics.value is not None
-            and measurement.calculation_type != "unspecified summary"
-        ):
-            issue(
-                "group_value",
-                "Group outputs cannot contain individual value",
-                measurement,
-            )
         if bool(measurement.group) == bool(measurement.individual):
             issue(
                 "subject_reference",
@@ -322,7 +341,7 @@ def prepare_study(
             ("route", vocabulary.routes),
             ("form", vocabulary.forms),
             ("application", vocabulary.applications),
-            ("calculation_type", vocabulary.calculation_types),
+            ("calculation_type", (*vocabulary.calculation_types, UNSPECIFIED_SUMMARY)),
         ]:
             value = getattr(record, field, None)
             if value and value not in allowed:
@@ -392,6 +411,8 @@ def prepare_study(
                 record,
                 severity="warning",
             )
+        # Only outputs require a time. Format 1 characteristica have no time, and
+        # study format 2 requires the times of characteristica in layer 5.
         if isinstance(record, Measurement):
             if (
                 rule.time_required
@@ -438,7 +459,7 @@ def prepare_study(
             )
             normalized[record.key] = candidate
             if rule.name == "recovery":
-                for field in ("value", "mean", "median"):
+                for field in ("mean", "median", "gmean"):
                     value = getattr(record.statistics, field)
                     if (
                         value is not None
@@ -460,6 +481,14 @@ def prepare_study(
                     ),
                 )
     for intervention in study.interventions:
+        if intervention.subject and not (
+            intervention.subject in groups or intervention.subject in individuals
+        ):
+            issue(
+                "unknown_subject",
+                f"Unknown subject: {intervention.subject}",
+                intervention,
+            )
         if intervention.measurement_type in {"dosing", "medication"}:
             for field in ("substance", "route", "unit"):
                 if not getattr(intervention, field):
@@ -468,11 +497,20 @@ def prepare_study(
                         f"{field} required for dosing",
                         intervention,
                     )
-            if intervention.statistics.value is None:
-                issue("missing_dose", "Dose value is required", intervention)
+            if intervention.statistics.mean is None:
+                issue(
+                    "missing_dose",
+                    "The dose is required in mean",
+                    intervention,
+                    field="mean",
+                )
         if intervention.measurement_type == "dosing":
+            unreported = {
+                "time": intervention.time_not_reported,
+                "time_unit": intervention.time_unit_not_reported,
+            }
             for field in ("form", "application", "time", "time_unit"):
-                if getattr(intervention, field) is None:
+                if getattr(intervention, field) is None and not unreported.get(field):
                     issue(
                         "missing_dosing_field",
                         f"{field} required for dosing",
@@ -488,17 +526,33 @@ def prepare_study(
                     "Unsupported dosing application",
                     intervention,
                 )
-    if not report.valid:
-        raise StudyValidationError(report)
     for key, candidate in normalized.items():
         subject = observation_subjects.get(key)
         if isinstance(subject, Group) and candidate.calculation_type in {
             None,
             "sample mean",
         }:
+            # Checked on the reported values, whose decimal places give the
+            # rounding uncertainty; the comparison does not depend on the unit.
+            if inconsistency := inconsistent_statistics(
+                reported[key].statistics, subject.count
+            ):
+                # Located at the field that disagrees with the most others, so
+                # a review item can acknowledge it at that column.
+                issue(
+                    "inconsistent_statistics",
+                    inconsistency.message,
+                    candidate,
+                    severity="warning",
+                    field=inconsistency.field,
+                    expected={"relative_tolerance": RELATIVE_TOLERANCE},
+                    context=inconsistency.context,
+                )
             candidate.statistics = complete_statistics(
                 candidate.statistics, subject.count
             )
+    if not report.valid:
+        raise StudyValidationError(report)
     prepared = study.model_copy(deep=True)
     prepared.measurements.extend(
         item

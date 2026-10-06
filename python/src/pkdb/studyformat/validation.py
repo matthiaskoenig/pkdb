@@ -1,16 +1,30 @@
-"""Validate a study format 2 folder: layout, format, rows, relationships, vocabulary."""
+"""Validate and prepare a study format 2 folder.
+
+Layers 1 to 5 check layout, format, rows, relationships and vocabulary terms.
+Layer 6 reads the folder into the canonical study and runs the postprocessing
+of the server (`prepare_study`): derived statistics, unit normalization,
+datasets and pharmacokinetics.
+"""
 
 import re
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
+from urllib.parse import quote
 
+from pkdb.domain.validation import prepare_study
 from pkdb.domain.vocabulary import Vocabulary
-from pkdb.schemas.validation import ValidationIssue, ValidationReport
+from pkdb.schemas.prepared import PreparedStudy
+from pkdb.schemas.validation import (
+    StudyValidationError,
+    ValidationIssue,
+    ValidationReport,
+)
 from pkdb.studyformat.formatter import planned_files
 from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.jsonio import JsonFileError, load_json
 from pkdb.studyformat.load import LoadedStudy, load_study
+from pkdb.studyformat.reader import read_study
 from pkdb.studyformat.relations import check_relations
 from pkdb.studyformat.rows import check_rows
 from pkdb.studyformat.tables import STUDY_JSON
@@ -26,6 +40,15 @@ def study_label(folder: Path) -> str:
     """The `<substance>/<name>` label of a study folder, independent of how the path was spelled."""
     folder = Path(folder).resolve()
     return f"{folder.parent.name}/{folder.name}"
+
+
+def study_path(sid: str) -> str:
+    """The URL path of a study: its sid with each segment percent-encoded.
+
+    A study format 2 sid `<substance>/<name>` takes two path segments, a
+    study format 1 sid one.
+    """
+    return "/".join(quote(part, safe="") for part in sid.split("/"))
 
 
 def is_v2_folder(folder: Path) -> bool:
@@ -143,11 +166,19 @@ def acknowledged(
     return False
 
 
-def validate_folder(
-    folder: Path, vocabulary: Vocabulary, *, max_issues: int = 1000
-) -> ValidationReport:
-    """Run every validation layer and collect all issues except acknowledged warnings."""
-    study = load_study(Path(folder))
+def _severities(issues: list[ValidationIssue]) -> tuple[int, int]:
+    errors = sum(issue.severity == "error" for issue in issues)
+    return errors, len(issues) - errors
+
+
+def _check(
+    study: LoadedStudy, vocabulary: Vocabulary, max_issues: int
+) -> tuple[PreparedStudy | None, ValidationReport]:
+    """Run every layer; layer 6 runs only when layers 1 to 5 found no error.
+
+    Returns the prepared study, None when any layer found an error, and the
+    report of all issues except acknowledged warnings.
+    """
     issues = [
         *study.issues,
         *format_issues(study),
@@ -155,6 +186,56 @@ def validate_folder(
         *check_relations(study),
         *check_terms(study, vocabulary),
     ]
+    prepared = None
+    postprocessing = ValidationReport()
+    if not any(issue.severity == "error" for issue in issues):
+        try:
+            prepared = prepare_study(
+                read_study(study), vocabulary, max_issues=max_issues
+            )
+            postprocessing = prepared.report
+        except StudyValidationError as error:
+            postprocessing = error.report
+        issues.extend(postprocessing.issues)
     known = acknowledgements(study)
     kept = [issue for issue in issues if not acknowledged(issue, known)]
-    return ValidationReport(issues=kept).finalize(max_issues)
+    # Issues that postprocessing counted but did not return stay counted.
+    returned_errors, returned_warnings = _severities(postprocessing.issues)
+    errors, warnings = _severities(kept)
+    report = ValidationReport(
+        issues=kept,
+        error_count=errors + postprocessing.error_count - returned_errors,
+        warning_count=warnings + postprocessing.warning_count - returned_warnings,
+        complete=postprocessing.complete,
+        stopped_reason=postprocessing.stopped_reason,
+    ).finalize(max_issues)
+    return (prepared if report.valid else None), report
+
+
+def validate_folder(
+    folder: Path, vocabulary: Vocabulary, *, max_issues: int = 1000
+) -> ValidationReport:
+    """Run every validation layer and collect all issues except acknowledged warnings."""
+    return _check(load_study(Path(folder)), vocabulary, max_issues)[1]
+
+
+def prepare_folder(
+    folder: Path,
+    vocabulary: Vocabulary,
+    *,
+    max_issues: int = 1000,
+    max_rows: int | None = None,
+    max_files: int | None = None,
+) -> PreparedStudy:
+    """Validate a folder and prepare its canonical study as the server does.
+
+    The prepared report holds the warnings of every layer except acknowledged
+    ones. Any error raises StudyValidationError with the report of all layers.
+    `max_rows` limits the table rows and `max_files` the files besides
+    study.json and reference.json.
+    """
+    study = load_study(Path(folder), max_rows=max_rows, max_files=max_files)
+    prepared, report = _check(study, vocabulary, max_issues)
+    if prepared is None:
+        raise StudyValidationError(report)
+    return prepared.model_copy(update={"report": report})

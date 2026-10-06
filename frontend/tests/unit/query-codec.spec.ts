@@ -26,7 +26,7 @@ describe("durable applied searches", () => {
         tab: "measurements" as const,
         page: 2,
         pageSize: 50,
-        order: "-value",
+        order: "-central_value",
         tableSearch: "zero & precision",
       },
     };
@@ -45,6 +45,7 @@ describe("durable applied searches", () => {
     { v: "1", pageSize: "1000" },
     { v: "1", tab: "missing" },
     { v: "1", order: "password" },
+    { v: "1", tab: "measurements", order: "value" },
     { v: ["1", "1"] },
   ])("rejects invalid URLs without silently broadening (%j)", (query) => {
     expect(() => decodeLocation(query)).toThrow();

@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref, shallowRef, watch } from "vue";
+import { computed, onBeforeUnmount, ref, shallowRef, watch } from "vue";
 import { VBtn, VSelect } from "vuetify/components";
 import { api, errorMessage } from "../../../api/client";
 import { useSessionStore } from "../../../stores/session";
 import { isRecord, text, type DetailRecord, type Relation } from "../types";
+import { formatNumber } from "../../results/format";
+import { centralValue } from "../../results/statistics";
+import { scheduleText } from "../schedule";
 const props = defineProps<{ sid: string }>();
 defineEmits<{ open: [relation: Relation] }>();
 const session = useSessionStore();
@@ -32,6 +35,25 @@ function relation(row: DetailRecord): Relation | undefined {
     title: text(row.name ?? row.measurement_type ?? identifier),
   };
 }
+// A quantity that is not reported is left out, not shown as a placeholder.
+function quantity(row: DetailRecord): string {
+  const value = centralValue(row);
+  if (value === undefined || value === null) return "";
+  const shown = typeof value === "number" ? formatNumber(value) : text(value);
+  return row.unit ? `${shown} ${text(row.unit)}` : shown;
+}
+function points(row: DetailRecord): string {
+  const count = Array.isArray(row.array) ? row.array.length : 0;
+  return `${count} ${count === 1 ? "point" : "points"}`;
+}
+function summary(row: DetailRecord): string {
+  if (["timecourses", "scatters"].includes(category.value)) return points(row);
+  const schedule =
+    category.value === "interventions" ? scheduleText(row) : undefined;
+  return [quantity(row), schedule].filter(Boolean).join(" · ");
+}
+const PAGE_SIZE = 20;
+const pages = computed(() => Math.max(1, Math.ceil(count.value / PAGE_SIZE)));
 async function load() {
   controller?.abort();
   controller = new AbortController();
@@ -43,7 +65,7 @@ async function load() {
   const params: Record<string, string | number | boolean> = {
     study_sid: props.sid,
     page: page.value,
-    page_size: 20,
+    page_size: PAGE_SIZE,
   };
   const entity = ["timecourses", "scatters"].includes(category.value)
     ? "subsets"
@@ -109,8 +131,14 @@ onBeforeUnmount(() => {
       {{ failure }} <VBtn @click="load">Retry study records</VBtn>
     </div>
     <template v-else>
-      <p>{{ count }} records</p>
-      <ul>
+      <p>
+        {{
+          count === 0
+            ? "No records"
+            : `${count} ${count === 1 ? "record" : "records"}`
+        }}
+      </p>
+      <ul class="records">
         <li v-for="(row, index) in rows" :key="text(row.pk) + index">
           <VBtn
             v-if="relation(row)"
@@ -119,17 +147,55 @@ onBeforeUnmount(() => {
           >
             {{ text(row.name ?? row.measurement_type ?? row.pk) }} ·
             {{ text(row.pk) }} </VBtn
-          ><span v-if="category === 'outputs'"
-            >{{ text(row.value ?? row.mean ?? row.median) }}
-            {{ text(row.unit) }}</span
+          ><span
+            v-if="
+              ['outputs', 'interventions', 'timecourses', 'scatters'].includes(
+                category,
+              ) && summary(row)
+            "
+            class="summary"
+            >{{ summary(row) }}</span
           >
         </li>
       </ul>
-      <VBtn :disabled="page === 1" @click="turn(-1)">Previous records</VBtn
-      ><span>Page {{ page }}</span
-      ><VBtn :disabled="page * 20 >= count" @click="turn(1)">
-        Next records
-      </VBtn>
+      <div v-if="pages > 1" class="pager">
+        <VBtn :disabled="page === 1" @click="turn(-1)">Previous records</VBtn>
+        <span>Page {{ page }} of {{ pages }}</span>
+        <VBtn :disabled="page >= pages" @click="turn(1)">
+          Next records
+        </VBtn>
+      </div>
     </template>
   </section>
 </template>
+<style scoped>
+.records {
+  list-style: none;
+  padding: 0;
+}
+.records li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.5rem;
+}
+/* The record text lines up with the text around the list. */
+.records :deep(.v-btn) {
+  padding-inline: 0.5rem;
+  margin-inline-start: -0.5rem;
+  min-width: 0;
+}
+/* The summary reads like the record button next to it and wraps as a block. */
+.summary {
+  flex: 1 1 14rem;
+  min-width: 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+</style>

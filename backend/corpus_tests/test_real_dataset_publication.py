@@ -31,8 +31,15 @@ def test_real_scatter_studies_publish(name, pairs, session_factory, tmp_path):
         *(curator.user for curator in study.metadata.curators),
         *comment_authors(study),
     }
+    # Study creation requires the uploading creator to hold the curator role.
     (tmp_path / "users.json").write_text(
-        json.dumps([{"username": username} for username in names])
+        json.dumps(
+            [
+                {"username": username}
+                | ({"role": "curator"} if username == study.metadata.creator else {})
+                for username in names
+            ]
+        )
     )
     shutil.copy(
         Path(__file__).parents[1] / "bootstrap/vocabulary.json",

@@ -2,7 +2,9 @@
 
 import math
 import re
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
+from io import BytesIO
 
 NUMBER_PATTERN = re.compile(r"[+-]?(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?")
 _DIGITS = re.compile(r"([0-9]+)")
@@ -68,16 +70,33 @@ def unquote(cell: str) -> str:
     return cell
 
 
+# Far more cells than any table or spreadsheet (16,384 columns) has. A longer
+# line is not split, so that a single line cannot exhaust memory.
+MAX_CELLS = 1_000_000
+
+
 class TsvError(ValueError):
     """The bytes are not a UTF-8 text table."""
 
 
+class TooManyCells(TsvError):
+    """A line has more than MAX_CELLS cells."""
+
+    def __init__(self, number: int, width: int):
+        self.number, self.width = number, width
+        super().__init__(
+            f"Line {number} has {width:,} cells; a table has at most {MAX_CELLS:,}"
+        )
+
+
 @dataclass(frozen=True)
 class TsvLine:
-    """A data line of a TSV file: its 1-based line number and its cell texts."""
+    """A line of a TSV file: its 1-based line number and its cell texts."""
 
     number: int
     cells: tuple[str, ...]
+    # The line is a git conflict marker.
+    conflict: bool = False
 
 
 @dataclass(frozen=True)
@@ -94,29 +113,60 @@ def _cells(line: str) -> tuple[str, ...]:
     return tuple(unquote(cell.strip()) for cell in line.split("\t"))
 
 
+_BOM = b"\xef\xbb\xbf"
+
+
+def _text_lines(chunks: Iterable[bytes]) -> Iterator[str]:
+    # A binary file yields its bytes split after each LF. CRLF, CR and LF all
+    # end a line, and the text after the last line break is a line if it is
+    # not empty. CR and LF never occur inside a UTF-8 multibyte sequence.
+    offset = 0
+    for chunk in chunks:
+        start = offset
+        offset += len(chunk)
+        if start == 0 and chunk.startswith(_BOM):
+            chunk, start = chunk[len(_BOM) :], len(_BOM)
+        ended = chunk.endswith(b"\n")
+        body = chunk[: -2 if chunk.endswith(b"\r\n") else -1] if ended else chunk
+        parts = body.split(b"\r")
+        if not ended and not parts[-1]:
+            parts.pop()
+        for part in parts:
+            try:
+                yield part.decode("utf-8")
+            except UnicodeDecodeError as error:
+                raise TsvError(
+                    f"File is not UTF-8 encoded (byte {start + error.start})"
+                ) from None
+            start += len(part) + 1
+
+
+def read_tsv(chunks: Iterable[bytes]) -> Iterator[TsvLine]:
+    """Read a tab-separated table lazily, one line at a time.
+
+    `chunks` are the bytes of the file, split after each LF as a binary file
+    yields them. The header comes first, followed by the data lines; blank
+    data lines are skipped. A line that is not UTF-8 raises TsvError, and a
+    line of more than MAX_CELLS cells TooManyCells, when it is reached.
+    """
+    for number, text in enumerate(_text_lines(chunks), start=1):
+        if number == 1 or text.strip():
+            if (width := text.count("\t") + 1) > MAX_CELLS:
+                raise TooManyCells(number, width)
+            yield TsvLine(number, _cells(text), text.startswith(CONFLICT_MARKERS))
+
+
 def parse_tsv(data: bytes) -> ParsedTsv:
-    """Read a tab-separated table leniently; blank lines are skipped."""
-    try:
-        text = data.decode("utf-8-sig")
-    except UnicodeDecodeError as error:
-        raise TsvError(f"File is not UTF-8 encoded (byte {error.start})") from None
-    lines = text.replace("\r\n", "\n").replace("\r", "\n").split("\n")
-    if lines and lines[-1] == "":
-        lines.pop()
-    if not lines:
+    """Read a whole tab-separated table leniently; blank lines are skipped."""
+    lines = read_tsv(BytesIO(data))
+    header = next(lines, None)
+    if header is None:
         return ParsedTsv((), ())
+    rest = tuple(lines)
     return ParsedTsv(
-        _cells(lines[0]),
-        tuple(
-            TsvLine(number, _cells(line))
-            for number, line in enumerate(lines[1:], start=2)
-            if line.strip()
-        ),
-        tuple(
-            number
-            for number, line in enumerate(lines, start=1)
-            if line.startswith(CONFLICT_MARKERS)
-        ),
+        header.cells,
+        rest,
+        tuple(line.number for line in (header, *rest) if line.conflict),
     )
 
 

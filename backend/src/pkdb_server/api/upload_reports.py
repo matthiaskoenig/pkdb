@@ -46,7 +46,7 @@ ERRORS = {
     409: (
         "publication_conflict",
         "compatibility",
-        "Refresh the vocabulary and check processing compatibility before retrying.",
+        "Resolve the conflict that the message describes, then upload again.",
     ),
     413: (
         "upload_too_large",
@@ -77,8 +77,11 @@ REQUEST_GUIDANCE = {
     "invalid_json": "Check that the study and reference parts contain valid JSON objects, with no duplicate keys or nonfinite numbers.",
     "duplicate_json_key": "Remove the duplicate JSON property after checking which value the source intended.",
     "sid_mismatch": "Make the request URL study identifier match the sid in the study JSON part.",
+    "study_format_route": "Send study format 2 folders to /api/v2/studies/{substance}/{name} and study format 1 bundles to /api/v2/studies/{sid}; the Python client chooses the route.",
+    "invalid_study_location": "Name the substance folder and the study folder in the request URL, without dot segments, backslashes or control characters.",
+    "duplicate_pkdb_id": "Check the release block of study.json: each PKDB identifier belongs to exactly one study.",
     "invalid_file": "Send attachments as named files multipart parts.",
-    "invalid_filename": "Use unique attachment basenames without path separators or parent-directory components.",
+    "invalid_filename": "Use unique attachment basenames without path separators or parent-directory components. For study format 2, send study.json and reference.json as the study and reference parts and only the other files of the study as files.",
     "invalid_bundle": "Check the study, reference, and attachment fields against the source bundle schema.",
 }
 
@@ -226,6 +229,7 @@ def build_report(scope, status_code, payload):
             message = (
                 "Client and server processing or vocabulary versions do not match."
             )
+            advice = "Refresh the vocabulary and check processing compatibility before retrying."
             details = {"expected": state.get("upload_versions", {})}
         if status_code == 413 and "upload_limit_actual" in state:
             details.update(
@@ -309,6 +313,24 @@ def build_report(scope, status_code, payload):
     return envelope
 
 
+def upload_route(method: str, path: str) -> bool:
+    """Whether a request validates or uploads a study.
+
+    Study format 1 uses `/api/v2/studies/validate` and `/api/v2/studies/{sid}`,
+    study format 2 `/api/v2/studies/{substance}/{name}` and its `/validate`.
+    """
+    if not path.startswith("/api/v2/studies/"):
+        return False
+    segments = path.removeprefix("/api/v2/studies/").split("/")
+    if not all(segments):
+        return False
+    if method == "PUT":
+        return len(segments) in {1, 2}
+    return method == "POST" and (
+        segments == ["validate"] or len(segments) == 3 and segments[2] == "validate"
+    )
+
+
 class UploadReports:
     """Wrap only public bundle endpoints; preserve all legacy bodies byte-for-byte."""
 
@@ -316,13 +338,8 @@ class UploadReports:
         self.app = app
 
     async def __call__(self, scope, receive, send):
-        path = scope.get("path", "")
-        target = scope["type"] == "http" and (
-            scope.get("method") == "POST"
-            and path == "/api/v2/studies/validate"
-            or scope.get("method") == "PUT"
-            and path.startswith("/api/v2/studies/")
-            and "/" not in path.removeprefix("/api/v2/studies/")
+        target = scope["type"] == "http" and upload_route(
+            scope.get("method", ""), scope.get("path", "")
         )
         if not target:
             return await self.app(scope, receive, send)

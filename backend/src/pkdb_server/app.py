@@ -6,7 +6,6 @@ import shutil
 from contextlib import asynccontextmanager
 from pathlib import Path
 from tempfile import TemporaryDirectory, TemporaryFile
-from urllib.parse import quote
 from uuid import uuid4
 
 from fastapi import FastAPI, Request
@@ -24,6 +23,9 @@ from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.schemas.security import Principal
 from pkdb.schemas.source import SourceBundle
 from pkdb.schemas.validation import StudyValidationError, fail
+from pkdb.studyformat.jsonio import JsonFileError, load_json
+from pkdb.studyformat.tables import REFERENCE_JSON, STUDY_JSON
+from pkdb.studyformat.validation import FORMAT_VERSION, study_path
 from pkdb_server import __version__
 from pkdb_server.api import (
     accounts,
@@ -40,6 +42,7 @@ from pkdb_server.api import (
 )
 from pkdb_server.api.credentials import install_browser_security
 from pkdb_server.api.errors import account_validation_error
+from pkdb_server.api.identity import MOVED, study_redirect
 from pkdb_server.api.limits import UploadLimits
 from pkdb_server.api.quotas import RequestQuotas
 from pkdb_server.api.upload_reports import UploadReports
@@ -64,7 +67,34 @@ from pkdb_server.services.queries import QueryService
 from pkdb_server.services.quotas import QuotaService
 
 log = logging.getLogger(__name__)
-SCHEMA_REVISION = "p005vocabsearch"
+SCHEMA_REVISION = "p006studyformat"
+# File names and folder names are limited by common file systems.
+NAME_BYTES = 255
+SID_LENGTH = 255
+FORMAT_1_ROUTE = (
+    "Upload study format 1 bundles to /api/v2/studies/{sid} "
+    "and validate them at /api/v2/studies/validate"
+)
+FORMAT_2_ROUTE = (
+    "Upload study format 2 folders to /api/v2/studies/{substance}/{name} "
+    "and validate them at /api/v2/studies/{substance}/{name}/validate"
+)
+
+FORMAT_2_FILES = (
+    "Send study.json and reference.json of a study format 2 folder as files, "
+    "so the server checks their exact bytes"
+)
+
+
+def valid_location(location: tuple[str, str]) -> bool:
+    """Whether a study format 2 location names a folder in a temporary folder."""
+    return len("/".join(location)) <= SID_LENGTH and all(
+        part not in {".", ".."}
+        and "\\" not in part
+        and part.isprintable()
+        and len(part.encode()) <= NAME_BYTES
+        for part in location
+    )
 
 
 def create_app(settings: Settings | None = None) -> FastAPI:
@@ -215,10 +245,26 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             return json.loads(
                 value, object_pairs_hook=unique_pairs, parse_constant=invalid_constant
             )
-        except json.JSONDecodeError, RecursionError:
+        except StudyValidationError:
+            raise
+        except ValueError, RecursionError:
+            # Malformed JSON, or an integer with more digits than Python converts.
             fail("invalid_json", "Malformed JSON form field")
 
-    async def upload(request: Request, sid: str | None = None):
+    async def upload(
+        request: Request,
+        *,
+        publish: bool,
+        sid: str | None = None,
+        location: tuple[str, str] | None = None,
+    ):
+        """Validate or publish an uploaded study.
+
+        A study format 1 bundle names its study by the `sid` in study.json. A
+        study format 2 folder is named by its location `<substance>/<name>` in
+        the URL; its files are written to a folder of that name and read like
+        the client reads them.
+        """
         request.state.upload_stage = "compatibility"
         actor = await run_in_threadpool(principal, request)
         expected_hash = request.headers.get("X-PKDB-Vocabulary-Hash")
@@ -244,7 +290,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         request.state.upload_stage = "parse"
         try:
             async with request.form(
-                max_files=settings.upload_max_files,
+                # Study format 2 sends study.json and reference.json as files too.
+                max_files=settings.upload_max_files
+                + (2 if location is not None else 0),
                 max_fields=2,
                 max_part_size=settings.upload_max_bytes,
             ) as form:
@@ -257,18 +305,74 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                     )
                 if set(form) - {"study", "reference", "files"}:
                     fail("bundle_fields", "Unknown multipart field")
-                study = parse_json(form["study"])
-                reference = parse_json(form["reference"])
-                if not isinstance(study, dict) or not isinstance(reference, dict):
-                    fail("invalid_json", "Study and reference must be JSON objects")
-                request.state.upload_study = {
-                    key: study[key]
-                    for key in ("sid", "name")
-                    if isinstance(study.get(key), str)
-                }
-                if sid is not None and str(study.get("sid")) != sid:
-                    fail("sid_mismatch", "Path SID must match study SID")
+                if location is not None:
+                    request.state.upload_study = {
+                        "sid": "/".join(location),
+                        "name": location[1],
+                    }
+                    if not valid_location(location):
+                        fail(
+                            "invalid_study_location",
+                            "The substance and the study name must be folder names "
+                            f"of at most {NAME_BYTES} bytes, and the study identifier "
+                            f"at most {SID_LENGTH} characters",
+                        )
+                study_part, reference_part = form["study"], form["reference"]
+                contents: dict[str, bytes] = {}
+                if isinstance(study_part, UploadFile) and isinstance(
+                    reference_part, UploadFile
+                ):
+                    # Study format 2 sends study.json and reference.json as files,
+                    # so validation sees the exact bytes of the curator's files.
+                    contents = {
+                        STUDY_JSON: await study_part.read(),
+                        REFERENCE_JSON: await reference_part.read(),
+                    }
+                    try:
+                        declared = load_json(contents[STUDY_JSON])
+                    except JsonFileError:
+                        # Validation reports a broken study.json at its file.
+                        declared = None
+                    version = (
+                        declared.get("format") if isinstance(declared, dict) else None
+                    )
+                    if location is None:
+                        if version == FORMAT_VERSION:
+                            fail("study_format_route", FORMAT_2_ROUTE)
+                        fail("invalid_json", "JSON form fields must contain text")
+                    if isinstance(declared, dict) and version != FORMAT_VERSION:
+                        fail("study_format_route", FORMAT_1_ROUTE)
+                else:
+                    if location is not None and not (
+                        isinstance(study_part, str) and isinstance(reference_part, str)
+                    ):
+                        fail("bundle_fields", FORMAT_2_FILES)
+                    if not isinstance(study_part, str) or not isinstance(
+                        reference_part, str
+                    ):
+                        fail("invalid_json", "JSON form fields must contain text")
+                    study = parse_json(study_part)
+                    reference = parse_json(reference_part)
+                    if not isinstance(study, dict) or not isinstance(reference, dict):
+                        fail("invalid_json", "Study and reference must be JSON objects")
+                    if study.get("format") == FORMAT_VERSION:
+                        if location is None:
+                            fail("study_format_route", FORMAT_2_ROUTE)
+                        fail("bundle_fields", FORMAT_2_FILES)
+                    if location is not None:
+                        fail("study_format_route", FORMAT_1_ROUTE)
+                    request.state.upload_study = {
+                        key: study[key]
+                        for key in ("sid", "name")
+                        if isinstance(study.get(key), str)
+                    }
+                    if sid is not None and str(study.get("sid")) != sid:
+                        fail("sid_mismatch", "Path SID must match study SID")
                 with TemporaryDirectory(prefix="pkdb-upload-") as directory:
+                    folder = Path(directory)
+                    if location is not None:
+                        folder = folder.joinpath(*location)
+                        folder.mkdir(parents=True)
                     files = {}
                     for item in form.getlist("files"):
                         if not isinstance(item, UploadFile) or not item.filename:
@@ -283,14 +387,33 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                                 "invalid_filename",
                                 "Invalid or duplicate attachment filename",
                             )
-                        path = Path(directory) / name
+                        if len(name.encode()) > NAME_BYTES:
+                            fail(
+                                "invalid_filename",
+                                f"File names must be at most {NAME_BYTES} bytes",
+                            )
+                        if location is not None and name in contents:
+                            fail(
+                                "invalid_filename",
+                                f"{name} is sent as a study or reference part, "
+                                "not as a file",
+                            )
+                        path = folder / name
                         await run_in_threadpool(copy_upload, item.file, path)
                         files[name] = path
-                    bundle = SourceBundle(study=study, reference=reference, files=files)
+                    source: SourceBundle | Path
+                    if location is not None:
+                        for name, content in contents.items():
+                            (folder / name).write_bytes(content)
+                        source = folder
+                    else:
+                        source = SourceBundle(
+                            study=study, reference=reference, files=files
+                        )
                     request.state.upload_stage = "server_validation"
-                    if sid is None:
+                    if not publish:
                         prepared = await run_in_threadpool(
-                            ingestion.validate, bundle, actor
+                            ingestion.validate, source, actor
                         )
                         return {
                             **(
@@ -304,7 +427,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                     request.state.upload_timings = {}
                     result = await run_in_threadpool(
                         ingestion.replace,
-                        bundle,
+                        source,
                         actor,
                         timings=request.state.upload_timings,
                         expected_vocabulary_hash=expected_hash,
@@ -317,7 +440,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                     payload = result.model_dump(mode="json", exclude_unset=False)
                     payload["url"] = (
                         f"{settings.browser_origin.rstrip('/')}"
-                        f"/data/{quote(result.sid, safe='')}"
+                        f"/data/{study_path(result.sid)}"
                     )
                     if request.headers.get("X-PKDB-Report-Version") != "2":
                         payload["warnings"] = [
@@ -384,27 +507,49 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.post("/api/v2/studies/validate")
     async def validate_upload(request: Request):
-        return await upload(request)
+        return await upload(request, publish=False)
 
     @app.put("/api/v2/studies/{sid}")
     async def replace_upload(sid: str, request: Request):
-        return await upload(request, sid)
+        return await upload(request, publish=True, sid=sid)
 
-    @app.get("/api/v2/studies/{sid}")
+    def study_or_redirect(read, sid: str, request: Request, *, redirect: bool):
+        """Read a study by sid; a single-segment PKDB identifier redirects."""
+        actor = principal(request, required=False)
+        try:
+            return read(sid, actor, session_factory)
+        except LookupError:
+            if redirect and (moved := study_redirect(request, sid, actor)):
+                return moved
+            raise HTTPException(404, "Study not found") from None
+
+    @app.get("/api/v2/studies/{sid}", responses=MOVED)
     def get_study(sid: str, request: Request):
-        actor = principal(request, required=False)
-        try:
-            return read_study(sid, actor, session_factory)
-        except LookupError:
-            raise HTTPException(404, "Study not found") from None
+        return study_or_redirect(read_study, sid, request, redirect=True)
 
-    @app.get("/api/v2/studies/{sid}/publication")
+    # Before the two-segment routes, so PKDB00198/publication keeps its meaning.
+    @app.get("/api/v2/studies/{sid}/publication", responses=MOVED)
     def get_publication(sid: str, request: Request):
-        actor = principal(request, required=False)
-        try:
-            return publication_state(sid, actor, session_factory)
-        except LookupError:
-            raise HTTPException(404, "Study not found") from None
+        return study_or_redirect(publication_state, sid, request, redirect=True)
+
+    # Study format 2 studies are named by their folder location <substance>/<name>.
+    @app.post("/api/v2/studies/{substance}/{name}/validate")
+    async def validate_folder_upload(substance: str, name: str, request: Request):
+        return await upload(request, publish=False, location=(substance, name))
+
+    @app.put("/api/v2/studies/{substance}/{name}")
+    async def replace_folder_upload(substance: str, name: str, request: Request):
+        return await upload(request, publish=True, location=(substance, name))
+
+    @app.get("/api/v2/studies/{substance}/{name}")
+    def get_folder_study(substance: str, name: str, request: Request):
+        sid = f"{substance}/{name}"
+        return study_or_redirect(read_study, sid, request, redirect=False)
+
+    @app.get("/api/v2/studies/{substance}/{name}/publication")
+    def get_folder_publication(substance: str, name: str, request: Request):
+        sid = f"{substance}/{name}"
+        return study_or_redirect(publication_state, sid, request, redirect=False)
 
     @app.get("/api/v1/swagger/", include_in_schema=False)
     def legacy_documentation():

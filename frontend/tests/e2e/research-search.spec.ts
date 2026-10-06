@@ -68,7 +68,7 @@ test("all seven result tabs and independent table refinement", async ({
   await page.getByRole("tab", { name: "Studies 1", exact: true }).click();
   await expect(page).toHaveURL(/tab=studies/);
   await expect(
-    page.getByText("1 studies in the applied selection"),
+    page.getByText("1 study in the applied selection"),
   ).toBeVisible();
   const before = page.url();
   await page
@@ -86,7 +86,7 @@ test("all seven result tabs and independent table refinement", async ({
   ).toBeVisible();
   await page.goBack();
   await expect(
-    page.getByText("1 studies in the applied selection"),
+    page.getByText("1 study in the applied selection"),
   ).toBeVisible();
 });
 
@@ -166,7 +166,7 @@ test("keyboard tabs and study detail return preserve applied result location", a
   await expect(studies).toBeFocused();
   await page.getByLabel('Search table', { exact: true }).fill('FRONTEND_SCOPE')
   await page.getByRole('button', { name: 'Apply table search', exact: true }).click()
-  await expect(page.getByText('1 studies in this table refinement')).toBeVisible()
+  await expect(page.getByText('1 study in this table refinement')).toBeVisible()
   const row = page.getByRole("button", {
     name: "View FRONTEND_SCOPE",
     exact: true,

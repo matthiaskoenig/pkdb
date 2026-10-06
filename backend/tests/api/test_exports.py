@@ -281,9 +281,8 @@ def test_frontend_multi_match_search_alias_filters_study_membership(
         assert response.json()["data"]["count"] == count
 
 
-def test_analysis_details_match_list_rows_and_enforce_saved_visibility(
-    client, creator_headers, valid_bundle, session_factory
-):
+def add_timecourse(valid_bundle, session_factory):
+    """Make the outputs of the bundle one timecourse; it needs the PK parameters."""
     from pkdb_server.db.models.vocabulary import VocabularyNode
 
     with session_factory.begin() as session:
@@ -323,6 +322,12 @@ def test_analysis_details_match_list_rows_and_enforce_saved_visibility(
         }
         for time in range(4)
     ]
+
+
+def test_analysis_details_match_list_rows_and_enforce_saved_visibility(
+    client, creator_headers, valid_bundle, session_factory
+):
+    add_timecourse(valid_bundle, session_factory)
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
         headers=creator_headers,
@@ -365,6 +370,55 @@ def test_analysis_details_match_list_rows_and_enforce_saved_visibility(
     )
 
 
+def test_analysis_rows_and_downloads_carry_the_count(
+    client, creator_headers, valid_bundle, session_factory
+):
+    import csv
+    from io import BytesIO, StringIO
+    from zipfile import ZipFile
+
+    add_timecourse(valid_bundle, session_factory)
+    valid_bundle.study["interventionset"]["interventions"][0]["count"] = 2
+    response = client.put(
+        f"/api/v2/studies/{valid_bundle.study['sid']}",
+        headers=creator_headers,
+        data={
+            "study": json.dumps(valid_bundle.study),
+            "reference": json.dumps(valid_bundle.reference),
+        },
+    )
+    assert response.status_code == 201, response.json()
+
+    def rows(entity):
+        response = client.get(f"/api/v1/pkdata/{entity}/", headers=creator_headers)
+        assert response.status_code == 200, response.text
+        return response.json()["data"]["data"]
+
+    # The group has 4 subjects; every point of the timecourse inherits it, and
+    # the pharmacokinetic parameters derived from the course take its count.
+    outputs = rows("outputs")
+    assert {row["count"] for row in outputs if not row["calculated"]} == {4}
+    assert any(row["calculated"] for row in outputs)
+    assert {row["count"] for row in outputs if row["calculated"]} == {4}
+    assert {row["count"] for row in rows("interventions")} == {2}
+    [course] = rows("timecourses")
+    assert course["count"] == [4, 4, 4, 4]
+    assert course["unit"] == "mg/l"
+    response = client.get(
+        "/api/v1/filter/", headers=creator_headers, params={"download": "true"}
+    )
+    assert response.status_code == 200
+    with ZipFile(BytesIO(response.content)) as archive:
+
+        def table(name):
+            return list(csv.DictReader(StringIO(archive.read(name).decode())))
+
+        counts = {row["calculated"]: row["count"] for row in table("outputs.csv")}
+        assert counts == {"False": "4", "True": "4"}
+        assert {row["count"] for row in table("interventions.csv")} == {"2"}
+        assert [row["count"] for row in table("timecourses.csv")] == ["[4, 4, 4, 4]"]
+
+
 def test_authenticated_exports_have_no_concurrency_limit(client, ingestion_context):
     from pkdb.schemas.filters import FilterSpec
 
@@ -378,3 +432,76 @@ def test_authenticated_exports_have_no_concurrency_limit(client, ingestion_conte
     finally:
         for stream in streams:
             stream.close()
+
+
+def test_scatter_downloads_carry_the_count_of_each_axis(
+    client, creator_headers, tmp_path, session_factory
+):
+    import csv
+    from io import BytesIO, StringIO
+    from zipfile import ZipFile
+
+    from pkdb.studyformat.formatter import format_folder
+    from pkdb_server.db.models.vocabulary import VocabularyNode
+    from tests.fixtures.study_folders import multipart, tsv, write_study
+
+    with session_factory.begin() as session:
+        session.add_all(
+            VocabularyNode(
+                sid=name,
+                name=name,
+                kind="measurement",
+                definition={"dtype": "numeric", "units": [unit]},
+            )
+            for name, unit in (("weight", "kg"), ("cmax", "mg/l"))
+        )
+    folder = write_study(tmp_path / "sources")
+    (folder / "subjects.tsv").write_text(
+        tsv(
+            "subjects",
+            {"name": "all", "count": "14", "source": "Tab1"},
+            {"name": "G1", "parent": "all", "count": "6", "source": "Tab1"},
+            {"name": "G2", "parent": "all", "count": "8", "source": "Tab1"},
+        ),
+        encoding="utf-8",
+    )
+    point = {
+        "name": "weight_vs_cmax",
+        "x_measurement": "weight",
+        "x_unit": "kg",
+        "y_interventions": "D1",
+        "y_measurement": "cmax",
+        "y_substance": "drug",
+        "y_tissue": "plasma",
+        "y_unit": "mg/l",
+    }
+    (folder / "scatters_Tab2.tsv").write_text(
+        tsv(
+            "scatters",
+            {**point, "subjects": "G1", "x_mean": "70", "y_mean": "2"},
+            {**point, "subjects": "G2", "x_mean": "80", "y_mean": "3"},
+        ),
+        encoding="utf-8",
+    )
+    assert format_folder(folder).ok
+    response = client.put(
+        "/api/v2/studies/caffeine/Example",
+        headers=creator_headers,
+        **multipart(folder),
+    )
+    assert response.status_code == 201, response.text
+    response = client.get(
+        "/api/v1/filter/", headers=creator_headers, params={"download": "true"}
+    )
+    assert response.status_code == 200
+    with ZipFile(BytesIO(response.content)) as archive:
+        rows = list(csv.DictReader(StringIO(archive.read("scatters.csv").decode())))
+    # One row per scatter subset and representation; each axis lists the
+    # count of its points, the counts of the groups G1 and G2.
+    assert rows
+    for row in rows:
+        assert (row["x_count"], row["y_count"]) == ("(6, 8)", "(6, 8)")
+        assert (row["x_measurement_type"], row["y_measurement_type"]) == (
+            "weight",
+            "cmax",
+        )

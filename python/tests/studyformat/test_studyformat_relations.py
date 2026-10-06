@@ -160,6 +160,55 @@ def test_labels_and_scatter_names_are_unique_across_files(run, tsv, valid_files)
     assert found == {("duplicate_label", "timecourses_Fig3.tsv", "label")}
 
 
+def test_timecourse_labels_differ_from_scatter_axis_labels(run, tsv):
+    # Scatter axes are labelled <name>_x and <name>_y in the canonical study.
+    rows = [
+        {**POINT, "label": "age_vs_cmax_y", "time": "0", "mean": "1"},
+        {**POINT, "label": "age_vs_cmax_y", "time": "1", "mean": "2"},
+        {**POINT, "label": "age_vs_cmax_z", "time": "0", "mean": "1"},
+        {**POINT, "label": "age_vs_cmax_z", "time": "1", "mean": "2"},
+    ]
+    study = {"timecourses_Fig1.tsv": tsv("timecourses", *rows)}
+    assert run(**study) == {("duplicate_label", "timecourses_Fig1.tsv", "label")}
+
+
+def test_timecourse_label_conflicts_are_reported_once_per_label(
+    make_study, valid_files, tsv
+):
+    rows = [
+        {**POINT, "label": "age_vs_cmax_x", "time": str(time), "mean": "1"}
+        for time in range(3)
+    ]
+    files = {**valid_files, "timecourses_Fig1.tsv": tsv("timecourses", *rows)}
+    issues = check_relations(load_study(make_study(files)))
+    [issue] = [issue for issue in issues if issue.code == "duplicate_label"]
+    assert issue.source is not None
+    assert (issue.source.row, issue.source.cell) == (2, "C2")
+    assert "age_vs_cmax" in issue.message and "scatters_Fig2.tsv" in issue.message
+
+
+def test_parent_must_be_a_group(make_study, valid_files, tsv):
+    subjects = tsv(
+        "subjects",
+        {"name": "all", "count": "2", "source": "Tab1"},
+        {"name": "S1", "parent": "all", "count": "1", "source": "TabA"},
+        {"name": "S2", "parent": "S1", "count": "1", "source": "TabA"},
+        {"name": "unknown", "parent": "all"},
+        {"name": "S3", "parent": "unknown", "count": "1"},
+    )
+    files = {**valid_files, "subjects.tsv": subjects}
+    issues = check_relations(load_study(make_study(files)))
+    [issue] = [issue for issue in issues if issue.code == "parent_not_group"]
+    assert (issue.severity, issue.category) == ("error", "reference")
+    assert issue.source is not None
+    assert (issue.source.row, issue.source.header, issue.source.cell) == (
+        4,
+        "parent",
+        "C4",
+    )
+    assert "'S1'" in issue.message
+
+
 def test_duplicates(run, tsv):
     rows = [CMAX, CMAX, {**CMAX, "mean": "3"}]
     found = run(**{"outputs_Tab2.tsv": tsv("outputs", *rows)})
@@ -276,3 +325,112 @@ def test_approval_with_open_items_names_the_rule(make_study, valid_files):
     assert messages == [
         "A study can only be approved when no review item is open; 2 are open"
     ]
+
+
+def test_scatter_mixing_groups_and_individuals_is_reported_at_the_other_rows(
+    make_study, valid_files, tsv
+):
+    point = {
+        "name": "age_vs_cmax",
+        "x_measurement": "age",
+        "x_unit": "yr",
+        "y_interventions": "D1",
+        "y_measurement": "cmax",
+        "y_substance": "drug",
+        "y_tissue": "plasma",
+        "y_unit": "mg/l",
+    }
+    scatter = tsv(
+        "scatters",
+        {**point, "subjects": "S1", "x_mean": "30", "y_mean": "2"},
+        {**point, "subjects": "all", "x_mean": "35", "y_mean": "2.5"},
+        {**point, "subjects": "S2", "x_mean": "40", "y_mean": "3"},
+        # Another scatter of groups only is fine.
+        {**point, "name": "groups", "subjects": "all", "x_mean": "35", "y_mean": "2"},
+    )
+    study = load_study(make_study({**valid_files, "scatters_Fig2.tsv": scatter}))
+    [issue] = check_relations(study)
+    assert issue.code == "mixed_scatter_subjects"
+    assert issue.severity == "error" and issue.category == "reference"
+    assert issue.source is not None
+    assert (issue.source.file, issue.source.row, issue.source.header) == (
+        "scatters_Fig2.tsv",
+        3,
+        "subjects",
+    )
+    assert issue.message == (
+        "Scatter 'age_vs_cmax' mixes groups and individuals: 'all' is a group, "
+        "but 'S1' in line 2 is an individual"
+    )
+
+
+def test_scatter_with_as_many_groups_as_individuals_follows_its_first_row(
+    make_study, valid_files, tsv
+):
+    point = {
+        "name": "age_vs_cmax",
+        "x_measurement": "age",
+        "x_unit": "yr",
+        "y_measurement": "cmax",
+        "y_unit": "mg/l",
+    }
+    scatter = tsv(
+        "scatters",
+        {**point, "subjects": "all", "x_mean": "35", "y_mean": "2.5"},
+        {**point, "subjects": "S1", "x_mean": "30", "y_mean": "2"},
+    )
+    study = load_study(make_study({**valid_files, "scatters_Fig2.tsv": scatter}))
+    [issue] = [i for i in check_relations(study) if i.code == "mixed_scatter_subjects"]
+    assert issue.source is not None and issue.source.row == 3
+
+
+def test_names_of_one_cell_are_reported_a_bounded_number_of_times(
+    make_study, valid_files, tsv
+):
+    from pkdb.studyformat.issues import REPEATED_ISSUES
+
+    unknown = ",".join(f"X{i}" for i in range(10_000))
+    repeated = ",".join(["D1"] * 10_000)
+    files = {
+        **valid_files,
+        "outputs_Tab2.tsv": tsv(
+            "outputs",
+            {**CMAX, "interventions": unknown},
+            {**CMAX, "mean": "3", "interventions": repeated},
+        ),
+    }
+    issues = check_relations(load_study(make_study(files)))
+    for code, total, row in (
+        ("unknown_reference", 10_000, 2),
+        ("duplicate_reference", 9_999, 3),
+    ):
+        found = [i for i in issues if i.code == code]
+        assert len(found) == REPEATED_ISSUES + 1, code
+        assert {i.source.row for i in found if i.source} == {row}
+        assert found[-1].message.startswith(f"{total:,} names of this cell")
+
+
+def test_every_review_item_with_an_unknown_target_is_reported(make_study, valid_files):
+    # Review items are curation targets of their own, like rows, so none is folded
+    # into a summary.
+    from pkdb.studyformat.issues import REPEATED_ISSUES
+
+    count = REPEATED_ISSUES + 5
+    review = {
+        "status": "draft",
+        "items": [
+            {
+                **ITEM,
+                "id": f"01JA2XK7Q8M3R5T6V9W0Y{i:05d}"[:26],
+                "target": {"file": f"missing{i}.tsv"},
+            }
+            for i in range(count)
+        ],
+    }
+    folder = make_study({**valid_files, "review.json": dump_json(review)})
+    found = [
+        i
+        for i in check_relations(load_study(folder))
+        if i.code == "unknown_review_target"
+    ]
+    assert len(found) == count

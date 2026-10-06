@@ -1,3 +1,5 @@
+import { studyApiPath } from "./studyPath";
+
 export type DetailRecord = Record<string, unknown>;
 
 export function isRecord(value: unknown): value is DetailRecord {
@@ -25,6 +27,49 @@ export function text(value: unknown): string {
   return "Not reported";
 }
 
+// Fields of measurement responses that only serve older clients.
+const LEGACY_FIELDS = new Set(["ex"]);
+
+// The fields of a record that it reports, for a compact listing: vocabulary
+// terms and related records read as their label or name, lists as their names.
+export function reportedFields(value: DetailRecord): DetailRecord {
+  return Object.fromEntries(
+    Object.entries(value).flatMap(([key, item]): [string, unknown][] => {
+      if (LEGACY_FIELDS.has(key) || item === null || item === undefined)
+        return [];
+      if (item === "") return [];
+      if (Array.isArray(item)) {
+        const names = item.map(text).filter((name) => name !== "Not reported");
+        return names.length ? [[key, names.join(", ")]] : [];
+      }
+      if (isRecord(item))
+        return Object.keys(item).length ? [[key, text(item)]] : [];
+      return [[key, item]];
+    }),
+  );
+}
+
+// The measurements of a subset by point: one measurement of a timecourse
+// point, the X and the Y measurement of a scatter point.
+export function subsetPoints(
+  array: unknown,
+  kind: "timecourse" | "scatter" | undefined,
+): DetailRecord {
+  if (!Array.isArray(array)) return {};
+  return Object.fromEntries(
+    array.map((pair, index) => {
+      const measurements = records(pair).map(reportedFields);
+      const point =
+        kind === "scatter" && measurements.length === 2
+          ? { x: measurements[0], y: measurements[1] }
+          : measurements.length === 1
+            ? measurements[0]
+            : { measurements };
+      return [`point_${index + 1}`, point];
+    }),
+  );
+}
+
 export function label(key: string): string {
   const labels: Record<string, string> = {
     pk: "Record ID",
@@ -32,6 +77,12 @@ export function label(key: string): string {
     sd: "Standard deviation",
     se: "Standard error",
     cv: "Coefficient of variation",
+    gmean: "Geometric mean",
+    gsd: "Geometric standard deviation",
+    gcv: "Geometric coefficient of variation",
+    error_bar: "Error bar",
+    error_type: "Error bar type",
+    time_end: "End time",
     normed: "Normalized",
     characteristica: "Characteristics",
     output_count: "Whole-study measurement count",
@@ -89,6 +140,7 @@ export function detailPath(
   )
     throw new Error("Unsupported detail type.");
   if (!String(identifier)) throw new Error("A record identifier is required.");
+  if (resource === "studies") return studyApiPath(String(identifier));
   return `/api/v1/${resource}/${encodeURIComponent(identifier)}/`;
 }
 

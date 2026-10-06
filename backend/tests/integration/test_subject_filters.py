@@ -65,7 +65,7 @@ def test_inherited_filters_use_effective_same_characteristic(
                     key="weight",
                     individual_id=person.id,
                     measurement_type="weight-test",
-                    value=72,
+                    mean=72,
                     origin="normalized",
                 ),
             ]
@@ -119,7 +119,7 @@ def test_inherited_filters_use_effective_same_characteristic(
             "individuals",
             [
                 {"field": "characteristics.measurement_type", "value": "sex"},
-                {"field": "characteristics.value", "operator": "gte", "value": 70},
+                {"field": "characteristics.mean", "operator": "gte", "value": 70},
             ],
         ).count
         == 0
@@ -129,7 +129,7 @@ def test_inherited_filters_use_effective_same_characteristic(
             "individuals",
             [
                 {"field": "characteristics.measurement_type", "value": "weight-test"},
-                {"field": "characteristics.value", "operator": "gte", "value": 70},
+                {"field": "characteristics.mean", "operator": "gte", "value": 70},
             ],
         ).count
         == 1

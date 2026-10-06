@@ -1,7 +1,15 @@
+import itertools
+import json
+
 import pytest
 
-from pkdb.studyformat.load import load_study, load_table
+from pkdb.schemas.validation import StudyValidationError
+from pkdb.studyformat import load
+from pkdb.studyformat.issues import REPEATED_ISSUES
+from pkdb.studyformat.jsonio import dump_json
+from pkdb.studyformat.load import RowLimit, load_study, load_table
 from pkdb.studyformat.tables import TABLES
+from pkdb.studyformat.text import MAX_CELLS, read_tsv
 
 OUT = TABLES["outputs"]
 
@@ -227,3 +235,161 @@ def test_symlinked_json_is_not_read(make_study, valid_files, tmp_path):
         for issue in study.issues
         if issue.source and issue.source.file == "study.json"
     ) == ["missing_file", "symlink"]
+
+
+@pytest.mark.parametrize("doi", ["10.1234/a%20b", "10.1234/a%0Ab"])
+def test_identifiers_without_normalized_form_are_refused(make_study, valid_files, doi):
+    # The server matches publications by normalized identifiers.
+    import json
+
+    study_json = json.loads(valid_files["study.json"])
+    study_json["reference"] = {"doi": doi}
+    reference = {"sid": "x", "name": "Example", "doi": doi}
+    study = load_study(
+        make_study(
+            {
+                **valid_files,
+                "study.json": json.dumps(study_json),
+                "reference.json": json.dumps(reference),
+            }
+        )
+    )
+    assert study.metadata is None and study.reference is None
+    found = sorted(
+        (issue.code, issue.source.file, issue.field)
+        for issue in study.issues
+        if issue.source
+    )
+    assert found == [
+        ("invalid_reference_json", "reference.json", "doi"),
+        ("invalid_study_json", "study.json", "reference.doi"),
+    ]
+    assert all("not a valid DOI" in issue.message for issue in study.issues)
+
+
+def test_identifiers_keep_their_spelling(make_study, valid_files):
+    import json
+
+    study_json = json.loads(valid_files["study.json"])
+    study_json["reference"] = {"doi": "10.1234/ABC%2Fdef"}
+    reference = {"sid": "x", "name": "Example", "doi": "https://doi.org/10.1234/ABC"}
+    study = load_study(
+        make_study(
+            {
+                **valid_files,
+                "study.json": json.dumps(study_json),
+                "reference.json": json.dumps(reference),
+            }
+        )
+    )
+    assert study.metadata is not None and study.metadata.reference is not None
+    assert study.metadata.reference.doi == "10.1234/ABC%2Fdef"
+    assert study.reference is not None
+    assert study.reference["doi"] == "https://doi.org/10.1234/ABC"
+
+
+def test_load_table_stops_reading_at_the_row_limit():
+    read = []
+
+    def lines():
+        yield b"subjects\tmean\n"
+        for number in itertools.count():
+            read.append(number)
+            yield b"all\t1\n"
+
+    with pytest.raises(StudyValidationError) as error:
+        load_table(
+            "outputs_Tab1.tsv", lines(), OUT, "Tab1", study="Example", limit=RowLimit(5)
+        )
+    [issue] = error.value.report.issues
+    assert (issue.code, issue.message) == (
+        "row_limit",
+        "The study tables have more than 5 rows",
+    )
+    # The generator never ends, so the reader stopped at the sixth row.
+    assert len(read) == 6
+
+
+def test_row_limit_counts_the_rows_of_all_tables(make_study, valid_files):
+    folder = make_study(valid_files)
+    assert (
+        sum(len(table.rows) for table in load_study(folder, max_rows=15).tables) == 15
+    )
+    with pytest.raises(StudyValidationError) as error:
+        load_study(folder, max_rows=14)
+    assert codes(error.value.report.issues) == ["row_limit"]
+
+
+def test_study_reading_stops_at_the_row_limit(
+    make_study, valid_files, tsv, monkeypatch
+):
+    rows = [{"subjects": "all", "measurement": "cmax", "mean": "1"}] * 100_000
+    folder = make_study({**valid_files, "outputs_Tab2.tsv": tsv("outputs", *rows)})
+    read = []
+
+    def counting(chunks):
+        for line in read_tsv(chunks):
+            read.append(line)
+            yield line
+
+    monkeypatch.setattr(load, "read_tsv", counting)
+    with pytest.raises(StudyValidationError) as error:
+        load_study(folder, max_rows=20)
+    assert codes(error.value.report.issues) == ["row_limit"]
+    # Headers and the rows up to the first one beyond the limit.
+    assert len(read) < 30
+    monkeypatch.undo()
+    assert len(load_study(folder).of_kind("outputs")[0].rows) == 100_000
+
+
+def test_file_limit_counts_files_besides_study_and_reference_json(
+    make_study, valid_files
+):
+    folder = make_study(valid_files)
+    files = len(valid_files) - 2
+    assert load_study(folder, max_files=files).issues == []
+    with pytest.raises(StudyValidationError) as error:
+        load_study(folder, max_files=files - 1)
+    assert codes(error.value.report.issues) == ["file_limit"]
+
+
+def test_unknown_header_columns_are_reported_a_bounded_number_of_times():
+    header = "\t".join(["subjects", "mean", *(f"x{i}" for i in range(100_000))])
+    data = f"{header}\nall\t1\n".encode()
+    table, issues = load_table("outputs_Tab1.tsv", data, OUT, "Tab1", study="Example")
+    assert table is None
+    assert codes(issues) == ["unknown_column"] * (REPEATED_ISSUES + 1)
+    assert issues[-1].message == (
+        f"100,000 header columns are unknown; the first {REPEATED_ISSUES} are listed"
+    )
+    # Repeated known columns are bounded the same way.
+    _, issues = load_table(
+        "outputs_Tab1.tsv", ("mean\t" * 50_000).encode(), OUT, "Tab1", study="Example"
+    )
+    assert codes(issues) == ["duplicate_column"] * (REPEATED_ISSUES + 1)
+    assert issues[-1].message.startswith("49,999 header columns repeat a column")
+
+
+def test_a_line_with_more_cells_than_any_table_is_not_split():
+    data = b"subjects\tmean\nall" + b"\t1" * MAX_CELLS + b"\n"
+    table, issues = load_table("outputs_Tab1.tsv", data, OUT, "Tab1", study="Example")
+    assert table is None
+    [issue] = issues
+    assert issue.code == "too_many_columns"
+    assert issue.source is not None and issue.source.row == 2
+    assert issue.message == (
+        f"Line 2 has {MAX_CELLS + 1:,} cells; a table has at most {MAX_CELLS:,}"
+    )
+
+
+def test_invalid_json_entries_are_reported_a_bounded_number_of_times(
+    make_study, valid_files
+):
+    study = json.loads(valid_files["study.json"])
+    study["curators"] = [{"user": "", "rating": 9}] * 10_000
+    folder = make_study({**valid_files, "study.json": dump_json(study)})
+    issues = [i for i in load_study(folder).issues if i.code == "invalid_study_json"]
+    assert len(issues) == REPEATED_ISSUES + 1
+    assert issues[-1].message.endswith(
+        f"entries of study.json are invalid; the first {REPEATED_ISSUES} are listed"
+    )

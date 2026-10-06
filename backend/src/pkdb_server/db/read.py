@@ -15,19 +15,64 @@ from pkdb_server.db.models.files import StoredFile, StudyAttachment
 from pkdb_server.db.models.users import User
 from pkdb_server.db.models.vocabulary import VocabularyNode
 from pkdb_server.files.store import study_access
-from pkdb_server.services.authorization import authorize
+from pkdb_server.services.authorization import AuthorizationDenied, authorize
+
+
+def released_study(
+    session: Session, identifier: str, principal: Principal
+) -> s.Study | None:
+    """The study released as `identifier` or formerly stored as `identifier`.
+
+    A PKDB identifier is also the study format 1 sid of a released study that
+    is now stored as `<substance>/<name>`; `legacy_sid` keeps the study format
+    1 sid of a study that a study format 2 upload took over. Callers look for
+    a study stored under `identifier` first, so a live sid always wins. Only
+    readers of the study learn which study it is; for anyone else there is no
+    such study.
+    """
+    root = session.scalar(
+        select(s.Study).where(s.Study.pkdb_id == identifier, s.Study.sid != identifier)
+    ) or session.scalar(select(s.Study).where(s.Study.legacy_sid == identifier))
+    if root is None:
+        return None
+    try:
+        authorize(principal, "read", study_access(root, session))
+    except AuthorizationDenied:
+        return None
+    return root
 
 
 def read_study(
-    sid: str, principal: Principal, session_factory: sessionmaker[Session]
+    sid: str,
+    principal: Principal,
+    session_factory: sessionmaker[Session],
+    *,
+    by_pkdb_id: bool = False,
 ) -> CanonicalStudy:
+    """The study stored under `sid`; with `by_pkdb_id`, else the study released or formerly stored as `sid`."""
     with session_factory() as session:
         session.connection(execution_options={"isolation_level": "REPEATABLE READ"})
         root = session.scalar(select(s.Study).where(s.Study.sid == sid))
+        if root is None and by_pkdb_id:
+            root = released_study(session, sid, principal)
         if root is None:
             raise LookupError("Study not found")
         authorize(principal, "read", study_access(root, session))
         return assemble_study(root, session)
+
+
+def moved_study(
+    identifier: str, principal: Principal, session_factory: sessionmaker[Session]
+) -> str | None:
+    """The sid of the study released or formerly stored as `identifier`, if readable."""
+    with session_factory() as session:
+        root = released_study(session, identifier, principal)
+        return root.sid if root is not None else None
+
+
+def intervention_time(row: i.Intervention) -> float | list[float] | None:
+    """Canonical intervention time: a list of times or one time."""
+    return row.time_list if row.time_list is not None else row.time
 
 
 def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
@@ -99,6 +144,7 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
         )
     }
     group_names = {row.id: row.name for row in groups}
+    subject_names = {row.id: row.name for row in subjects}
     individual_names = {row.id: row.name for row in individuals}
     intervention_names = {row.id: row.name for row in interventions}
     characteristic_keys = {row.id: row.key for row in characteristics}
@@ -122,11 +168,35 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
             statistics={
                 **{
                     name: getattr(row, name)
-                    for name in ("value", "mean", "median", "sd", "se", "cv", "count")
+                    for name in (
+                        "mean",
+                        "median",
+                        "sd",
+                        "se",
+                        "cv",
+                        "gmean",
+                        "gsd",
+                        "gcv",
+                        "count",
+                        "error_bar",
+                        "error_type",
+                    )
                 },
                 "min": row.minimum,
                 "max": row.maximum,
             },
+        )
+
+    def context(row):
+        """Where and when an observation was made, shared by characteristics and outputs."""
+        return dict(
+            tissue=vocab.get(row.tissue),
+            method=vocab.get(row.method),
+            time=row.time,
+            time_unit=row.time_unit,
+            time_not_reported=row.time_not_reported,
+            time_unit_not_reported=row.time_unit_not_reported,
+            image=row.image,
         )
 
     group_characteristics = defaultdict(list)
@@ -137,7 +207,7 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
             if row.group_id
             else individual_characteristics[row.individual_id]
         )
-        target.append(science(row, characteristic_keys))
+        target.append(science(row, characteristic_keys) | context(row))
     measurement_interventions = defaultdict(list)
     for row in session.scalars(
         select(m.MeasurementIntervention)
@@ -153,24 +223,13 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
         if row.derived_from_course_id:
             record["derived_from"] = course_keys[row.derived_from_course_id]
         record.update(
+            context(row),
             group=group_names.get(row.group_id),
             individual=individual_names.get(row.individual_id),
             interventions=measurement_interventions[row.id],
-            tissue=vocab.get(row.tissue),
-            method=vocab.get(row.method),
-            **{
-                name: getattr(row, name)
-                for name in (
-                    "series_key",
-                    "label",
-                    "output_type",
-                    "time",
-                    "time_unit",
-                    "time_not_reported",
-                    "time_unit_not_reported",
-                    "image",
-                )
-            },
+            series_key=row.series_key,
+            label=row.label,
+            output_type=row.output_type,
         )
         outputs.append(record)
     by_key = {output["key"]: output for output in outputs}
@@ -227,6 +286,13 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                 name=root.name,
                 provenance=root.acquisition,
                 date=root.date,
+                issue=root.issue,
+                release=dict(pkdb_id=root.pkdb_id, date=root.release_date)
+                if root.pkdb_id is not None
+                else None,
+                review=dict(root.review, status=root.review_status)
+                if root.review is not None
+                else None,
                 creator=users[root.creator_id],
                 access=root.access,
                 licence=root.licence,
@@ -294,10 +360,17 @@ def assemble_study(root: s.Study, session: Session) -> CanonicalStudy:
                 dict(
                     **science(row, intervention_keys),
                     name=row.name,
-                    time=row.time_text if row.time_text is not None else row.time,
+                    time=intervention_time(row),
                     image=row.image,
                     time_end=row.time_end,
+                    interval=row.interval,
+                    doses=row.doses,
                     time_unit=row.time_unit,
+                    time_not_reported=row.time_not_reported,
+                    time_unit_not_reported=row.time_unit_not_reported,
+                    tissue=vocab.get(row.tissue),
+                    method=vocab.get(row.method),
+                    subject=subject_names.get(row.subject_id),
                     route=vocab.get(row.route),
                     form=vocab.get(row.form),
                     application=vocab.get(row.application),

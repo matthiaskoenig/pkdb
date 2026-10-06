@@ -79,7 +79,7 @@ def test_coverage_dates_distinct_substances_pk_hierarchy_and_permissions(
                     group_id=group.id,
                     measurement_type=mtype,
                     substance=substance,
-                    value=1,
+                    mean=1,
                     origin=origin,
                     calculated=calculated,
                 )

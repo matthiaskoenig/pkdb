@@ -113,7 +113,7 @@ def rows(session, spec, principal):
                         columns[key].append(value)
                 for key, values in columns.items():
                     record[f"{prefix}_{key}"] = collapse(
-                        values, keep=key in {"time", "value", "mean", "median", "cv"}
+                        values, keep=key in {"time", "mean", "median", "cv", "gmean"}
                     )
             keys = (
                 "outputs_pk",
@@ -136,7 +136,6 @@ def rows(session, spec, principal):
                 "choice_label",
                 "substance",
                 "substance_label",
-                "value",
                 "mean",
                 "median",
                 "min",
@@ -144,6 +143,12 @@ def rows(session, spec, principal):
                 "sd",
                 "se",
                 "cv",
+                "gmean",
+                "gsd",
+                "gcv",
+                "count",
+                "error_bar",
+                "error_type",
                 "unit",
                 "dimension",
                 "data_point",

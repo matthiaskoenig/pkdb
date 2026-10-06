@@ -284,10 +284,10 @@ def warfarin(builder, rows):
                     "characteristica": [
                         {
                             "measurement_type": "weight",
-                            "value": row["wt"],
+                            "mean": row["wt"],
                             "unit": "kg",
                         },
-                        {"measurement_type": "age", "value": row["age"], "unit": "yr"},
+                        {"measurement_type": "age", "mean": row["age"], "unit": "yr"},
                         {
                             "measurement_type": "sex",
                             "choice": {"male": "M", "female": "F"}[row["sex"]],
@@ -311,7 +311,7 @@ def warfarin(builder, rows):
                     "name": name,
                     "measurement_type": "dosing",
                     "substance": substance,
-                    "value": row["amt"],
+                    "mean": row["amt"],
                     "unit": "mg",
                     "time": row["time"],
                     "time_unit": "hr",

@@ -9,7 +9,7 @@ from functools import cache
 from pathlib import Path
 
 from pkdb.schemas.validation import ValidationIssue
-from pkdb.studyformat.issues import make_issue, row_issue
+from pkdb.studyformat.issues import LISTED, IssueCap, make_issue, row_issue
 from pkdb.studyformat.load import LoadedStudy, LoadedTable, Row
 from pkdb.studyformat.tables import (
     REFERENCE_JSON,
@@ -57,6 +57,7 @@ def check_relations(study: LoadedStudy) -> list[ValidationIssue]:
         _references,
         _subject_tree,
         _series,
+        _scatter_subjects,
         _duplicates,
         _unused,
         _images,
@@ -90,6 +91,27 @@ def _unique_names(study: LoadedStudy) -> Issues:
                 )
             else:
                 seen[name] = row.line
+    # The canonical study labels scatter axes <name>_x and <name>_y, so a
+    # timecourse label must not take one of these labels.
+    axes = {
+        f"{row.cells['name']}_{axis}": (row.cells["name"], table.file)
+        for table, row in study.rows("scatters")
+        if row.cells["name"]
+        for axis in ("x", "y")
+    }
+    conflicts: set[tuple[str, str]] = set()
+    for table, row in study.rows("timecourses"):
+        label = row.cells["label"]
+        if label in axes and (table.file, label) not in conflicts:
+            conflicts.add((table.file, label))
+            name, file = axes[label]
+            yield row_issue(
+                table,
+                row,
+                "duplicate_label",
+                f"{label!r} is the label of an axis of scatter {name!r} in {file}; choose another label",
+                "label",
+            )
     for kind, column, code in (
         ("timecourses", "label", "duplicate_label"),
         ("scatters", "name", "duplicate_name"),
@@ -133,8 +155,10 @@ def _references(study: LoadedStudy) -> Issues:
             names = set(known[target])
             for row in table.rows:
                 seen: set[str] = set()
+                # A cell of very many names lists the first issues and counts all.
+                cap = IssueCap()
                 for name in _names(row.values[column.name]):
-                    if name in seen:
+                    if name in seen and cap.admit("duplicate_reference"):
                         yield row_issue(
                             table,
                             row,
@@ -143,7 +167,7 @@ def _references(study: LoadedStudy) -> Issues:
                             column.name,
                         )
                     seen.add(name)
-                    if name not in names:
+                    if name not in names and cap.admit("unknown_reference"):
                         yield row_issue(
                             table,
                             row,
@@ -153,6 +177,18 @@ def _references(study: LoadedStudy) -> Issues:
                             actual=name,
                             candidates=suggest(name, target),
                         )
+                kinds = {
+                    "duplicate_reference": "are listed twice",
+                    "unknown_reference": f"are not rows of {target}.tsv",
+                }
+                for code, total in cap.beyond():
+                    yield row_issue(
+                        table,
+                        row,
+                        code,
+                        f"{total:,} names of this cell {kinds[code]}; {LISTED}",
+                        column.name,
+                    )
 
 
 def _subject_tree(study: LoadedStudy) -> Issues:
@@ -206,6 +242,14 @@ def _subject_tree(study: LoadedStudy) -> Issues:
         done.update(path)
     for name, row in rows.items():
         parent = rows.get(parents[name])
+        if parent is not None and parent.values["count"] == 1:
+            yield row_issue(
+                table,
+                row,
+                "parent_not_group",
+                f"{parents[name]!r} has count 1 and is an individual; a parent must be a group",
+                "parent",
+            )
         child_count = row.values["count"]
         parent_count = parent.values["count"] if parent else None
         if (
@@ -255,6 +299,42 @@ def _series(study: LoadedStudy) -> Issues:
                         )
                     else:
                         times[key] = row.line
+
+
+def _scatter_subjects(study: LoadedStudy) -> Issues:
+    # The points of a scatter share a group or an individual field, so the
+    # subjects of a scatter are all groups or all individuals (count 1). The
+    # rows of the rarer kind are reported; on a tie, those that differ from the
+    # first row of the scatter.
+    counts = {
+        row.cells["name"]: row.values["count"] for _, row in study.rows("subjects")
+    }
+    scatters: dict[str, list[tuple[LoadedTable, Row, bool]]] = defaultdict(list)
+    for table, row in study.rows("scatters"):
+        name, subject = row.cells["name"], row.cells["subjects"]
+        if name and subject in counts:
+            scatters[name].append((table, row, counts[subject] == 1))
+    kinds = ("a group", "an individual")
+    for name, rows in scatters.items():
+        individuals = sum(individual for _, _, individual in rows)
+        if individuals in (0, len(rows)):
+            continue
+        usual = (
+            rows[0][2] if 2 * individuals == len(rows) else 2 * individuals > len(rows)
+        )
+        _, reference, _ = next(item for item in rows if item[2] == usual)
+        for table, row, individual in rows:
+            if individual != usual:
+                yield row_issue(
+                    table,
+                    row,
+                    "mixed_scatter_subjects",
+                    f"Scatter {name!r} mixes groups and individuals: "
+                    f"{row.cells['subjects']!r} is {kinds[individual]}, but "
+                    f"{reference.cells['subjects']!r} in line {reference.line} is "
+                    f"{kinds[usual]}",
+                    "subjects",
+                )
 
 
 def _duplicates(study: LoadedStudy) -> Issues:

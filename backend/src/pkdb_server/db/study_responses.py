@@ -227,6 +227,13 @@ def study_responses(session, rows, principal):
             "licence": row.licence,
             "access": row.access,
             "date": row.date.isoformat() if row.date else None,
+            "pkdb_id": row.pkdb_id,
+            "release_date": row.release_date.isoformat() if row.release_date else None,
+            "issue": row.issue,
+            "review_status": row.review_status,
+            "open_review_items": sum(
+                item["state"] == "open" for item in (row.review or {}).get("items", [])
+            ),
             "creator": users.get(row.creator_id),
             "curators": [
                 {**users[member.user_id], "rating": member.rating or 0}

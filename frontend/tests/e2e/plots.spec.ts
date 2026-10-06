@@ -54,7 +54,7 @@ test("study exploration loads Plotly on demand and preserves complete subset val
     .getByText("Accessible plot data and uncertainty", { exact: true })
     .click();
   const table = page.getByRole("table", {
-    name: "Reported point values; missing values are shown as -",
+    name: "Point values and their uncertainty; missing values are shown as -",
   });
   await expect(table).toContainText("0.002125");
   await expect(table).toContainText("gram / liter");

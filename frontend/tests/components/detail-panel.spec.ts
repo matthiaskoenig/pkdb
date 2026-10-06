@@ -22,23 +22,33 @@ beforeEach(() => {
 });
 describe("record exploration", () => {
   it("identifies automatically imported studies with their provider and release", async () => {
-    mocks.get.mockResolvedValueOnce({ data: { sid: "OSP1", name: "OSP study", provenance: {
-      kind: "data_import", source_key: "osp.observed-data", release: "v1.9",
-    } } });
+    mocks.get.mockResolvedValueOnce({
+      data: {
+        sid: "OSP1",
+        name: "OSP study",
+        provenance: {
+          kind: "data_import",
+          source_key: "osp.observed-data",
+          release: "v1.9",
+        },
+      },
+    });
     const wrapper = mount(DetailPanel, {
       props: { entity: "studies", identifier: "OSP1" },
       global: { stubs: { StudyContents: true } },
     });
     await flushPromises();
-    expect(wrapper.get('[aria-label="Data source"]').text()).toContain("Automatic import · osp.observed-data · v1.9");
+    expect(wrapper.get('[aria-label="Data source"]').text()).toContain(
+      "Automatic import · osp.observed-data · v1.9",
+    );
     wrapper.unmount();
   });
   it("keeps zero and uncertainty visible and prevents unsafe external links", () => {
     const wrapper = mount(RecordFields, {
       props: {
         data: {
-          value: 0,
-          mean: null,
+          mean: 0,
+          gmean: null,
           sd: 1e-9,
           annotations: [{ url: "javascript:alert(1)", term: "<b>escaped</b>" }],
         },
@@ -61,7 +71,7 @@ describe("record exploration", () => {
           }),
       )
       .mockResolvedValueOnce({
-        data: { pk: 2, name: "Current record", value: 0 },
+        data: { pk: 2, name: "Current record", mean: 0 },
       });
     const wrapper = mount(DetailPanel, {
       props: { entity: "outputs", identifier: 1 },
@@ -121,6 +131,379 @@ describe("record exploration", () => {
     await back?.trigger("click");
     await flushPromises();
     expect(wrapper.text()).toContain("Measurement");
+    wrapper.unmount();
+  });
+  describe("study release, issue and review", () => {
+    const study = {
+      pk: "5",
+      sid: "caffeine/Harder1988",
+      name: "Harder1988",
+      pkdb_id: "PKDB00198",
+      release_date: "2026-09-28",
+      issue: 2158,
+      review_status: "in_review",
+      open_review_items: 2,
+    };
+    const mountStudy = async (data: Record<string, unknown>) => {
+      mocks.get.mockResolvedValueOnce({ data });
+      const wrapper = mount(DetailPanel, {
+        props: { entity: "studies", identifier: "caffeine/Harder1988" },
+        global: { stubs: { StudyContents: true } },
+      });
+      await flushPromises();
+      return wrapper;
+    };
+    it("reads a study by its two path segments", async () => {
+      const wrapper = await mountStudy(study);
+      expect(mocks.get).toHaveBeenCalledWith(
+        "/api/v1/studies/caffeine/Harder1988/",
+        expect.objectContaining({ signal: expect.any(AbortSignal) }),
+      );
+      wrapper.unmount();
+    });
+    it("shows identifier, release date, issue link and open review items compactly", async () => {
+      const wrapper = await mountStudy(study);
+      const status = wrapper.get('[aria-label="Study status"]');
+      expect(status.findAll("dt").map((term) => term.text())).toEqual([
+        "Identifier",
+        "PKDB identifier",
+        "Released",
+        "Curation issue",
+        "Review",
+      ]);
+      expect(status.text()).toContain("caffeine/Harder1988");
+      expect(status.text()).toContain("PKDB00198");
+      expect(status.text()).toContain("2026-09-28");
+      expect(status.text()).toContain("In review");
+      expect(status.text()).toContain("2 open items");
+      const issue = status.get("a");
+      expect(issue.text()).toBe("#2158");
+      expect(issue.attributes("href")).toBe(
+        "https://github.com/matthiaskoenig/pkdb_data/issues/2158",
+      );
+      expect(issue.attributes("rel")).toContain("noopener");
+      const labels = [
+        ...wrapper
+          .get(".record-fields")
+          .element.querySelectorAll(":scope > dt"),
+      ].map((term) => term.textContent);
+      // The identifier is shown once, in the status.
+      expect(labels).not.toContain("Identifier");
+      expect(labels).not.toContain("Pkdb id");
+      expect(labels).not.toContain("Open review items");
+      expect(labels).not.toContain("Review status");
+      wrapper.unmount();
+    });
+    it("shows a draft without release or issue and says when nothing is open", async () => {
+      const wrapper = await mountStudy({
+        ...study,
+        pkdb_id: null,
+        release_date: null,
+        issue: null,
+        review_status: "draft",
+        open_review_items: 0,
+      });
+      const status = wrapper.get('[aria-label="Study status"]');
+      expect(status.text()).toContain("Draft");
+      expect(status.text()).toContain("no open items");
+      expect(status.text()).not.toContain("PKDB identifier");
+      expect(status.text()).not.toContain("Released");
+      expect(status.find("a").exists()).toBe(false);
+      wrapper.unmount();
+    });
+    it("counts a single open item and an approved review", async () => {
+      const wrapper = await mountStudy({
+        ...study,
+        review_status: "approved",
+        open_review_items: 1,
+      });
+      expect(wrapper.get('[aria-label="Study status"]').text()).toContain(
+        "Approved · 1 open item",
+      );
+      wrapper.unmount();
+    });
+    it("shows only the identifier of a study format 1 study", async () => {
+      const wrapper = await mountStudy({
+        pk: "1",
+        sid: "PKDB00057",
+        name: "Old",
+        pkdb_id: null,
+        release_date: null,
+        issue: null,
+        review_status: null,
+        open_review_items: 0,
+      });
+      const status = wrapper.get('[aria-label="Study status"]');
+      expect(status.findAll("dt").map((term) => term.text())).toEqual([
+        "Identifier",
+      ]);
+      expect(status.text()).toContain("PKDB00057");
+      expect(wrapper.text()).not.toContain("Open review items");
+      wrapper.unmount();
+    });
+    it("announces the sid a PKDB identifier resolved to and does not reload for it", async () => {
+      mocks.get.mockResolvedValueOnce({ data: study });
+      const wrapper = mount(DetailPanel, {
+        props: { entity: "studies", identifier: "PKDB00198" },
+        global: { stubs: { StudyContents: true } },
+      });
+      await flushPromises();
+      expect(wrapper.emitted("loaded")?.[0]?.[0]).toMatchObject({
+        sid: "caffeine/Harder1988",
+      });
+      await wrapper.setProps({ identifier: "caffeine/Harder1988" });
+      await flushPromises();
+      expect(mocks.get).toHaveBeenCalledTimes(1);
+      expect(wrapper.text()).toContain("Harder1988");
+      await wrapper.setProps({ identifier: "caffeine/Other" });
+      await flushPromises();
+      expect(mocks.get).toHaveBeenCalledTimes(2);
+      wrapper.unmount();
+    });
+  });
+  it("opens the study of a record by its two path segments", async () => {
+    mocks.get
+      .mockResolvedValueOnce({
+        data: {
+          pk: 1,
+          name: "Measurement",
+          study: { sid: "caffeine/Harder1988", name: "Harder1988" },
+        },
+      })
+      .mockResolvedValueOnce({
+        data: { pk: "5", sid: "caffeine/Harder1988", name: "Harder1988" },
+      });
+    const wrapper = mount(DetailPanel, {
+      props: { entity: "outputs", identifier: 1 },
+      global: { stubs: { StudyContents: true } },
+    });
+    await flushPromises();
+    await wrapper
+      .findAll("button")
+      .find((button) => button.text().includes("Study: Harder1988"))
+      ?.trigger("click");
+    await flushPromises();
+    expect(mocks.get).toHaveBeenLastCalledWith(
+      "/api/v1/studies/caffeine/Harder1988/",
+      expect.objectContaining({ signal: expect.any(AbortSignal) }),
+    );
+    expect(wrapper.emitted("loaded")).toHaveLength(1);
+    wrapper.unmount();
+  });
+  it("shows an intervention schedule readably instead of its raw fields", async () => {
+    mocks.get.mockResolvedValueOnce({
+      data: {
+        pk: 3,
+        name: "D1",
+        mean: 10,
+        unit: "mg",
+        time: 0,
+        interval: 24,
+        doses: 7,
+        time_end: null,
+        time_unit: "h",
+        subject: { pk: 2, name: "all" },
+      },
+    });
+    const wrapper = mount(DetailPanel, {
+      props: { entity: "interventions", identifier: 3 },
+    });
+    await flushPromises();
+    const schedule = wrapper.get('[aria-label="Schedule"]');
+    expect(schedule.text()).toContain(
+      "every 24\u00a0h, 7\u00a0doses from 0\u00a0h",
+    );
+    const labels = wrapper.findAll("dt").map((term) => term.text());
+    expect(labels).toEqual(expect.arrayContaining(["Mean", "Unit", "Subject"]));
+    for (const raw of ["Time", "Interval", "Doses", "Time unit", "End time"])
+      expect(labels).not.toContain(raw);
+    wrapper.unmount();
+  });
+  it("lists irregular administration times and labels geometric statistics", async () => {
+    mocks.get.mockResolvedValueOnce({
+      data: {
+        pk: 4,
+        name: "D2",
+        time: [0, 12, 40],
+        time_unit: "h",
+        gmean: 3,
+        gsd: 1.5,
+        gcv: 0.4227,
+        error_bar: 5,
+        error_type: "gsd",
+      },
+    });
+    const wrapper = mount(DetailPanel, {
+      props: { entity: "interventions", identifier: 4 },
+    });
+    await flushPromises();
+    expect(wrapper.get('[aria-label="Schedule"]').text()).toContain(
+      "0, 12, 40\u00a0h",
+    );
+    const labels = wrapper.findAll("dt").map((term) => term.text());
+    expect(labels).toEqual(
+      expect.arrayContaining([
+        "Geometric mean",
+        "Geometric standard deviation",
+        "Geometric coefficient of variation",
+        "Error bar",
+        "Error bar type",
+      ]),
+    );
+    wrapper.unmount();
+  });
+  it("keeps the raw time of a record that is not an intervention", async () => {
+    mocks.get.mockResolvedValueOnce({
+      data: { pk: 9, name: "Concentration", time: 2, time_unit: "h", mean: 1 },
+    });
+    const wrapper = mount(DetailPanel, {
+      props: { entity: "outputs", identifier: 9 },
+    });
+    await flushPromises();
+    expect(wrapper.find('[aria-label="Schedule"]').exists()).toBe(false);
+    expect(wrapper.findAll("dt").map((term) => term.text())).toContain("Time");
+    wrapper.unmount();
+  });
+  it("rounds statistics to four digits and shows coefficients of variation as percent", async () => {
+    mocks.get.mockResolvedValueOnce({
+      data: {
+        pk: 123456,
+        name: "Concentration",
+        count: 12345,
+        mean: 0.009000000000000001,
+        sd: 0.1111111111111111,
+        cv: 0.07,
+        gmean: 2.123456,
+        gsd: 1.60380788,
+        gcv: 0.22595033203145737,
+        error_bar: null,
+        time: 1.5000000000000002,
+      },
+    });
+    const wrapper = mount(DetailPanel, {
+      props: { entity: "outputs", identifier: 123456 },
+    });
+    await flushPromises();
+    const values = Object.fromEntries(
+      wrapper
+        .findAll("dt")
+        .map((term) => [
+          term.text(),
+          term.element.nextElementSibling?.textContent,
+        ]),
+    );
+    expect(values).toMatchObject({
+      "Record ID": "123456",
+      Count: "12345",
+      Mean: "0.009",
+      "Standard deviation": "0.1111",
+      "Coefficient of variation": "7\u00a0%",
+      "Geometric mean": "2.123",
+      "Geometric standard deviation": "1.604",
+      "Geometric coefficient of variation": "22.6\u00a0%",
+      "Error bar": "Not reported",
+      Time: "1.5",
+    });
+    wrapper.unmount();
+  });
+  it("shows only the parts of a publication that are known", async () => {
+    mocks.get.mockResolvedValueOnce({
+      data: {
+        pk: 1,
+        sid: "caffeine/X",
+        name: "X",
+        reference: {
+          title: "A title",
+          journal: null,
+          date: null,
+          abstract: null,
+        },
+      },
+    });
+    const wrapper = mount(DetailPanel, {
+      props: { entity: "studies", identifier: "caffeine/X" },
+      global: { stubs: { StudyContents: true } },
+    });
+    await flushPromises();
+    const publication = wrapper.get('[aria-label="Publication"]');
+    expect(publication.findAll("p")).toHaveLength(0);
+    expect(wrapper.text()).not.toContain("Not reported · Not reported");
+    wrapper.unmount();
+    mocks.get.mockResolvedValueOnce({
+      data: {
+        pk: 1,
+        sid: "caffeine/X",
+        name: "X",
+        reference: { title: "A title", journal: "Pharm Res", date: "2020" },
+      },
+    });
+    const known = mount(DetailPanel, {
+      props: { entity: "studies", identifier: "caffeine/X" },
+      global: { stubs: { StudyContents: true } },
+    });
+    await flushPromises();
+    expect(known.get('[aria-label="Publication"]').text()).toContain(
+      "Pharm Res · 2020",
+    );
+    known.unmount();
+  });
+  it("lists the points of a subset with the fields they report", async () => {
+    const point = (pk: number, extra: Record<string, unknown>) => ({
+      pk,
+      group: { pk: 2, name: "all", count: 4 },
+      individual: {},
+      interventions: [
+        { pk: 7, name: "D1" },
+        { pk: 8, name: "D2" },
+      ],
+      ex: { pk: 7 },
+      normed: true,
+      mean: null,
+      sd: null,
+      error_bar: null,
+      unit: "gram / liter",
+      tissue: { sid: "plasma", name: "plasma", label: "plasma" },
+      method: null,
+      ...extra,
+    });
+    mocks.get.mockResolvedValueOnce({
+      data: {
+        pk: 7,
+        name: "Plasma",
+        data_type: "scatter",
+        array: [
+          [point(32, { mean: 70 }), point(33, { gmean: 0.008, gcv: 0.7854 })],
+        ],
+      },
+    });
+    const wrapper = mount(DetailPanel, {
+      props: { entity: "subsets", identifier: 7 },
+      global: { stubs: { ScientificPlot: true } },
+    });
+    await flushPromises();
+    const details = wrapper.get("details");
+    const labels = details.findAll("dt").map((term) => term.text());
+    expect(labels.slice(0, 2)).toEqual(["Point 1", "X"]);
+    expect(labels).toContain("Y");
+    // Vocabulary terms, related records and lists read as their names; empty
+    // fields and the legacy `ex` field are left out.
+    for (const missing of ["Ex", "Individual", "Mean", "Method", "Error bar"])
+      expect(labels.filter((label) => label === missing)).toHaveLength(
+        missing === "Mean" ? 1 : 0,
+      );
+    expect(details.text()).not.toContain("Not reported");
+    expect(details.text()).not.toContain("Dimensions");
+    const values = details.findAll("dd").map((value) => value.text());
+    expect(values).toEqual(
+      expect.arrayContaining(["all", "D1, D2", "plasma", "78.54\u00a0%"]),
+    );
+    wrapper.unmount();
+  });
+  it("shows an empty related record as not reported", () => {
+    const wrapper = mount(RecordFields, {
+      props: { data: { individual: {}, group: { name: "all" } } },
+    });
+    expect(wrapper.findAll("dd")[0]?.text()).toBe("Not reported");
     wrapper.unmount();
   });
 });

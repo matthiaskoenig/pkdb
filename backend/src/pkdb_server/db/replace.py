@@ -104,6 +104,16 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
         for index, author in enumerate(study.reference.authors)
     )
     root.reference_id = reference.id
+    release, review = study.metadata.release, study.metadata.review
+    root.pkdb_id = release.pkdb_id if release else None
+    root.release_date = release.date if release else None
+    root.issue = study.metadata.issue
+    root.review_status = review.status if review else None
+    root.review = (
+        review.model_dump(mode="json", include={"reviewers", "items"})
+        if review
+        else None
+    )
     session.add_all(
         s.StudyUser(
             study_id=sid,
@@ -150,6 +160,8 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
     individual_names = {
         individual.name: individuals[individual.key] for individual in study.individuals
     }
+    # Canonical validation guarantees subject names resolve; groups win name clashes.
+    subject_names = individual_names | group_names
     observation_records = []
     for kind, subjects, identifiers in (
         ("group", study.groups, groups),
@@ -167,9 +179,16 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
             name=record.name,
             image=record.image,
             time=record.time if isinstance(record.time, (int, float)) else None,
-            time_text=record.time if isinstance(record.time, str) else None,
+            time_list=record.time if isinstance(record.time, list) else None,
             time_end=record.time_end,
+            interval=record.interval,
+            doses=record.doses,
             time_unit=record.time_unit,
+            time_not_reported=record.time_not_reported,
+            time_unit_not_reported=record.time_unit_not_reported,
+            tissue=node("tissue", record.tissue),
+            method=node("method", record.method),
+            subject_id=subject_names[record.subject] if record.subject else None,
             route=node("route", record.route),
             form=node("form", record.form),
             application=node("application", record.application),
@@ -216,7 +235,6 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
     record_contexts = {}
     value_fields = {
         "unit",
-        "value",
         "mean",
         "median",
         "minimum",
@@ -224,7 +242,12 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
         "sd",
         "se",
         "cv",
+        "gmean",
+        "gsd",
+        "gcv",
         "count",
+        "error_bar",
+        "error_type",
         "origin",
     }
     for kind, record, subject_id in observation_records:
@@ -243,13 +266,13 @@ def insert_graph(session: Session, root: s.Study, study: CanonicalStudy) -> None
             series_key=getattr(record, "series_key", None),
             label=getattr(record, "label", None),
             output_type=getattr(record, "output_type", "output"),
-            time=getattr(record, "time", None),
-            time_unit=getattr(record, "time_unit", None),
-            time_not_reported=getattr(record, "time_not_reported", False),
-            time_unit_not_reported=getattr(record, "time_unit_not_reported", False),
-            tissue=node("tissue", getattr(record, "tissue", None)),
-            method=node("method", getattr(record, "method", None)),
-            image=getattr(record, "image", None),
+            time=record.time,
+            time_unit=record.time_unit,
+            time_not_reported=record.time_not_reported,
+            time_unit_not_reported=record.time_unit_not_reported,
+            tissue=node("tissue", record.tissue),
+            method=node("method", record.method),
+            image=record.image,
         )
         # Only representations of the same observation with identical context share identity.
         identity = record.derived_from if record.origin == "normalized" else record.key

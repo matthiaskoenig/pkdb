@@ -942,24 +942,7 @@ class CurationEngine:
 
     def _server_validate(self, client, prepared):
         with prepared.source() as source, ExitStack() as stack:
-            parts: list[tuple[str, tuple]] = [
-                (name, (None, json.dumps(value)))
-                for name, value in (
-                    ("study", source.study),
-                    ("reference", source.reference),
-                )
-            ]
-            parts.extend(
-                (
-                    "files",
-                    (
-                        name,
-                        stack.enter_context(path.open("rb")),
-                        "application/octet-stream",
-                    ),
-                )
-                for name, path in source.files.items()
-            )
+            parts = source.parts(stack)
             headers = {
                 **client._headers(required=True),
                 "X-PKDB-Report-Version": "2",
@@ -967,7 +950,7 @@ class CurationEngine:
                 "X-PKDB-Processing-Version": PROCESSING_VERSION,
             }
             return client._request(
-                "POST", "/api/v2/studies/validate", headers=headers, files=parts
+                "POST", source.validation_path, headers=headers, files=parts
             ).json()
 
     def run_job(self, job):

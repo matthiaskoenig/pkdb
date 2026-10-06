@@ -212,3 +212,8 @@ def test_negative_baseline_inr_remains_invalid(
     with pytest.raises(StudyValidationError) as error:
         prepare_study(valid_study, vocabulary)
     assert "negative_value" in {issue.code for issue in error.value.report.issues}
+
+
+def test_unspecified_summary_is_a_calculation_type(scientific_vocabulary):
+    # Validation accepts it with any vocabulary; storage needs the vocabulary node.
+    assert "unspecified summary" in scientific_vocabulary.calculation_types

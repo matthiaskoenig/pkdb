@@ -70,35 +70,45 @@ EXTRAVASCULAR_ROUTES = frozenset(
 def _pk_dose(
     dose: Intervention | None, substance: str | None, time_unit: str, dose_units
 ) -> Dose | None:
-    """Only use a scalar single dose with a known administration route.
+    """Only use a scalar single dose in mean with a known administration route.
 
     PK-DB's clearance and vd include apparent CL/F and Vz/F for extravascular
     routes. An unknown route cannot establish either IV or extravascular dosing.
     """
+    amount = dose.statistics.mean if dose is not None else None
     if (
         dose is None
         or dose.application != "single dose"
         or dose.substance != substance
         or not dose.unit
-        or dose.statistics.value is None
-        or dose.statistics.value <= 0
+        or amount is None
+        or amount <= 0
         or not any(
             ureg.Unit(dose.unit).dimensionality == ureg.Unit(unit).dimensionality
             for unit in dose_units
         )
     ):
         return None
+    # Processing version 8 kept schedules (time lists, interval and doses) as text
+    # and timed such a dose at zero; only one administration time is a dose time.
+    start = (
+        dose.time
+        if isinstance(dose.time, (int, float))
+        and dose.interval is None
+        and dose.doses is None
+        else None
+    )
     time = 0.0
-    if isinstance(dose.time, (int, float)) and dose.time_unit:
-        time = float(ureg.Quantity(dose.time, dose.time_unit).to(time_unit).magnitude)
+    if start is not None and dose.time_unit:
+        time = float(ureg.Quantity(start, dose.time_unit).to(time_unit).magnitude)
     duration = None
     if dose.route == "iv":
         route = Route.IV_BOLUS
         if dose.time_end is not None:
-            if not isinstance(dose.time, (int, float)) or not dose.time_unit:
+            if start is None or not dose.time_unit:
                 return None
             duration = float(
-                ureg.Quantity(dose.time_end - dose.time, dose.time_unit)
+                ureg.Quantity(dose.time_end - start, dose.time_unit)
                 .to(time_unit)
                 .magnitude
             )
@@ -110,7 +120,7 @@ def _pk_dose(
     else:
         return None
     return Dose(
-        amount=dose.statistics.value,
+        amount=amount,
         unit=str(ureg.Unit(dose.unit)),
         route=route,
         time=time,
@@ -182,7 +192,7 @@ def derive_pk(
     statistic = next(
         (
             name
-            for name in ("mean", "median", "value")
+            for name in ("mean", "median")
             if any(getattr(p.statistics, name) is not None for p in points)
         ),
         None,
@@ -212,6 +222,11 @@ def derive_pk(
             terminal=TerminalPhase(method=TerminalMethod.ALL_AFTER_TMAX),
         ),
     )
+    # The count of the timecourse: the smallest count of its points, or None
+    # when the count of a point is unknown.
+    counts = [point.statistics.count for point in points]
+    known = [count for count in counts if count is not None]
+    count = min(known) if len(known) == len(counts) else None
     results = []
     for name, measurement_type in PK_FIELDS.items():
         if name not in calculated:
@@ -231,7 +246,9 @@ def derive_pk(
         record.output_type = "output"
         record.measurement_type = measurement_type
         record.unit = parameter.attrs["units"]
-        record.statistics = Statistics.model_validate({statistic: value})
+        record.statistics = Statistics.model_validate(
+            {statistic: value, "count": count}
+        )
         record.time = max(times) if name == "auc_last" else None
         record.time_unit = first.time_unit if name == "auc_last" else None
         record.time_not_reported = False

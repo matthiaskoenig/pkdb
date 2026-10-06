@@ -55,7 +55,7 @@ def test_individual_inherits_group_characteristics_with_local_override(
                     key="person-weight",
                     individual_id=person.id,
                     measurement_type="bodyweight",
-                    value=72,
+                    mean=72,
                     unit="kg",
                     origin="normalized",
                 ),
@@ -71,7 +71,7 @@ def test_individual_inherits_group_characteristics_with_local_override(
     characteristics = {
         row["measurement_type"]["name"]: row for row in record["characteristica"]
     }
-    assert characteristics["bodyweight"]["value"] == 72
+    assert characteristics["bodyweight"]["mean"] == 72
     assert "species" in characteristics
     assert (
         len(

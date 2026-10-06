@@ -1,5 +1,5 @@
 import { api } from "./client";
-import { asRecord, parsePage } from "./contracts";
+import { asRecord, parsePage, type ApiRecord } from "./contracts";
 import { tabs } from "../features/search/model";
 import type { Criteria, ResultTab } from "../features/search/model";
 import type { FilterField } from "../features/search/fields";
@@ -38,6 +38,15 @@ export async function createSelection(
     { signal },
   );
   return parseSelection(response.data);
+}
+// A study format 1 study has no `pkdb_id`; its sid is its PKDB identifier.
+const pkdbSid = /^PKDB\d{5}$/u;
+function identifier(field: FilterField, item: ApiRecord): string | undefined {
+  const id = item[field.idKey];
+  if (typeof id === "string") return id;
+  if (field.idKey === "pkdb_id" && typeof item.sid === "string")
+    return pkdbSid.test(item.sid) ? item.sid : undefined;
+  return undefined;
 }
 export interface Suggestion {
   id: string;
@@ -96,17 +105,20 @@ export async function suggestions(
     return [...names.values()];
   }
   return items.flatMap((item) => {
-    const id = item[field.idKey];
-    if (typeof id !== "string") return [];
+    const id = identifier(field, item);
+    if (id === undefined) return [];
+    const name =
+      typeof item.name === "string"
+        ? item.name
+        : typeof item.label === "string"
+          ? item.label
+          : id;
     return [
       {
         id,
+        // A PKDB identifier alone does not say which study it is.
         title:
-          typeof item.name === "string"
-            ? item.name
-            : typeof item.label === "string"
-              ? item.label
-              : id,
+          field.idKey === "pkdb_id" && name !== id ? `${id} · ${name}` : name,
         description:
           typeof item.description === "string" ? item.description : "",
       },

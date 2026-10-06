@@ -1,13 +1,11 @@
 """Synchronous, typed HTTP API with explicit offline preparation."""
 
-import json
 import math
 import os
 from contextlib import ExitStack
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-from typing import BinaryIO
-from urllib.parse import quote
+from urllib.parse import urljoin, urlsplit
 
 import httpx2
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -19,11 +17,16 @@ from pkdb.cache import (
     endpoint_root,
     parse_vocabulary,
 )
-from pkdb.domain.validation import PROCESSING_VERSION, prepare_study
+from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.errors import ClientError, CompatibilityError
-from pkdb.importers.folder import load_folder, parse_bundle
-from pkdb.preparation import PreparedBundle, prepare, source_snapshot
+from pkdb.preparation import (
+    PreparedBundle,
+    UploadSource,
+    prepare,
+    read_upload,
+    source_snapshot,
+)
 from pkdb.progress import ProgressCallback, emit
 from pkdb.querying import export_from_filters, query_from_filters
 from pkdb.schemas.data import DataPage
@@ -38,6 +41,10 @@ from pkdb.schemas.responses import (
 )
 from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import ValidationReport, fail
+from pkdb.studyformat.validation import is_v2_folder, study_path
+
+# Permanent redirects that a read follows within the endpoint's origin.
+MAX_REDIRECTS = 5
 
 
 def _known_report(value: dict) -> dict:
@@ -120,7 +127,7 @@ class Studies:
     def get(self, sid: str) -> CanonicalStudy:
         return self.client._model(
             CanonicalStudy,
-            self.client._request("GET", f"/api/v2/studies/{quote(str(sid), safe='')}"),
+            self.client._request("GET", f"/api/v2/studies/{study_path(str(sid))}"),
         )
 
     def list(self, **filters) -> ResultPage[StudyResponse]:
@@ -305,6 +312,8 @@ class Client:
                     follow_redirects=False,
                     **kwargs,
                 )
+                if method == "GET":
+                    response = self._follow_moved(response, request_headers)
         except httpx2.RequestError:
             message = "PK-DB request failed"
             if not read_only:
@@ -323,6 +332,26 @@ class Client:
             if read_only:
                 error.persistence = "not_attempted"
             raise
+        return response
+
+    def _follow_moved(self, response, headers):
+        """Follow permanent redirects of a read within the endpoint's origin.
+
+        PK-DB answers 308 for the PKDB identifier of a study that moved to
+        `<substance>/<name>`. Other redirects, redirects to another origin and
+        more than MAX_REDIRECTS redirects are returned as they are.
+        """
+        origin = urlsplit(self.endpoint)[:2]
+        for _ in range(MAX_REDIRECTS):
+            location = response.headers.get("location")
+            if response.status_code != 308 or not location:
+                break
+            target = urljoin(str(response.url), location)
+            if urlsplit(target)[:2] != origin:
+                break
+            response = self._transport.request(
+                "GET", target, headers=headers, follow_redirects=False
+            )
         return response
 
     @staticmethod
@@ -401,10 +430,8 @@ class Client:
         # Detect file changes and validate again against the captured vocabulary
         # before contacting the server. Never trust mutated Pydantic objects.
         with prepared.source() as source:
-            canonical = parse_bundle(source, max_rows=prepared.max_rows)
-            checked = prepare_study(canonical, prepared.vocabulary)
             return self._upload_source(
-                source, checked, prepared.vocabulary_hash, prepared.max_rows, headers
+                source, prepared.vocabulary_hash, prepared.max_rows, headers
             )
 
     def _upload_folder(self, folder, vocabulary, capabilities, before_submit):
@@ -414,16 +441,15 @@ class Client:
         self.last_upload_report = None
         emit(self.progress, "read")
         with source_snapshot(Path(folder)) as (root, hashes):
-            source = load_folder(root)
-            emit(self.progress, "parse")
-            canonical = parse_bundle(
-                source, max_rows=capabilities.upload_limits.max_rows
+            source = read_upload(
+                root,
+                vocabulary,
+                study_format=2 if is_v2_folder(root) else 1,
+                max_rows=capabilities.upload_limits.max_rows,
+                progress=self.progress,
             )
-            emit(self.progress, "validate")
-            checked = prepare_study(canonical, vocabulary)
             return self._upload_source(
                 source,
-                checked,
                 vocabulary_hash(vocabulary),
                 capabilities.upload_limits.max_rows,
                 self._headers(required=True),
@@ -436,13 +462,12 @@ class Client:
 
         return self._model(
             PublicationState,
-            self._request("GET", f"/api/v2/studies/{quote(sid, safe='')}/publication"),
+            self._request("GET", f"/api/v2/studies/{study_path(sid)}/publication"),
         )
 
     def _upload_source(
         self,
-        source,
-        checked,
+        source: UploadSource,
         vocabulary_digest,
         max_rows,
         headers,
@@ -466,16 +491,12 @@ class Client:
         if len(source.files) > limits.max_files:
             fail("file_limit", "Too many source files for this server")
         if limits.max_rows < max_rows:
-            parse_bundle(source, max_rows=limits.max_rows)
+            source.check_rows(limits.max_rows)
         sizes = [path.stat().st_size for path in source.files.values()]
         if any(size > limits.max_attachment_bytes for size in sizes):
             fail("file_limit", "Attachment exceeds the server's byte limit")
-        payloads = {
-            "study": json.dumps(source.study),
-            "reference": json.dumps(source.reference),
-        }
         if (
-            sum(sizes) + sum(len(value.encode()) for value in payloads.values())
+            sum(sizes) + len(source.study) + len(source.reference)
             > limits.max_upload_bytes
         ):
             fail("file_limit", "Study bundle exceeds the server's upload byte limit")
@@ -486,27 +507,11 @@ class Client:
             }
         )
         with ExitStack() as stack:
-            parts: list[tuple[str, tuple[None, str] | tuple[str, BinaryIO, str]]] = [
-                (name, (None, value)) for name, value in payloads.items()
-            ]
-            parts.extend(
-                (
-                    "files",
-                    (
-                        name,
-                        stack.enter_context(path.open("rb")),
-                        "application/octet-stream",
-                    ),
-                )
-                for name, path in source.files.items()
-            )
+            parts = source.parts(stack)
             if before_submit:
-                before_submit(checked)
+                before_submit(source.prepared)
             response = self._request(
-                "PUT",
-                f"/api/v2/studies/{quote(checked.study.sid, safe='')}",
-                headers=headers,
-                files=parts,
+                "PUT", source.upload_path, headers=headers, files=parts
             )
         try:
             body = response.json()
@@ -532,7 +537,7 @@ class Client:
                 persistence="unknown",
                 stage="save",
             ) from None
-        if result.sid != checked.study.sid:
+        if result.sid != source.prepared.study.sid:
             raise ClientError(
                 "Server did not confirm the uploaded study identifier",
                 persistence="unknown",

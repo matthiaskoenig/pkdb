@@ -7,6 +7,7 @@ import { useAccountActivity } from "../useAccountActivity";
 import { useProfile } from "../useProfile";
 import { useCredentials } from "../useCredentials";
 import { useReauthentication } from "../useReauthentication";
+import { studyLocation } from "../../details/studyPath";
 import type { EmailAddress } from "../../../api/session";
 import type { ApiKey, BrowserSession } from "../../../api/account";
 import UserLogin from "./UserLogin.vue";
@@ -579,7 +580,7 @@ const revokeSession = (value: BrowserSession) =>
               <v-list-item
                 v-for="study in studies"
                 :key="study.sid"
-                :to="'/data/' + encodeURIComponent(study.sid)"
+                :to="studyLocation(study.sid)"
               >
                 <div>
                   <v-list-item-title>

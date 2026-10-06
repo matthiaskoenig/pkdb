@@ -45,6 +45,24 @@ def test_terminal_half_life_and_zero_tmax_are_preserved(exponential_course):
     assert outputs["auc_end"].derived_from == "curve"
 
 
+@pytest.mark.parametrize(
+    ("counts", "expected"),
+    [
+        ((4,) * 7, 4),
+        ((12, 12, 12, 11, 11, 10, 10), 10),
+        ((4, None, 4, 4, 4, 4, 4), None),
+    ],
+)
+def test_derived_parameters_take_the_count_of_the_timecourse(
+    exponential_course, counts, expected
+):
+    for point, count in zip(exponential_course.points, counts, strict=True):
+        point.statistics.count = count
+    outputs = derive_pk(exponential_course)
+    assert outputs
+    assert {record.statistics.count for record in outputs} == {expected}
+
+
 def test_course_builder_sorts_time_without_mutating_input(exponential_course):
     points = list(reversed(exponential_course.points))
     courses = build_timecourses(points)
@@ -101,6 +119,8 @@ def test_preparation_derives_validated_pk_outputs(
     assert len(dataset.subsets[0].points) == 7
     calculated = [p for p in prepared.study.measurements if p.origin == "calculated"]
     assert any(p.measurement_type == "thalf" for p in calculated)
+    # The points of the course take the count of the group "all".
+    assert {p.statistics.count for p in calculated} == {4}
 
 
 def test_calculated_outputs_also_have_normalized_copies(
@@ -154,9 +174,9 @@ def test_single_point_cannot_form_a_timecourse(exponential_course):
 
 
 @pytest.mark.parametrize(
-    "unit,statistics", [("ml", {"value": 40.0}), ("mg", {"mean": 40.0})]
+    "unit,statistics", [("ml", {"mean": 40.0}), ("mg", {"median": 40.0})]
 )
-def test_unsupported_or_non_scalar_dose_preserves_dose_independent_pk(
+def test_unsupported_or_non_mean_dose_preserves_dose_independent_pk(
     exponential_course, unit, statistics
 ):
     from pkdb.schemas.study import Intervention
@@ -171,6 +191,7 @@ def test_unsupported_or_non_scalar_dose_preserves_dose_independent_pk(
         unit=unit,
         time=0,
         time_unit="h",
+        route="oral",
     )
     expected = derive_pk(exponential_course)
     actual = derive_pk(exponential_course, dose)
@@ -203,12 +224,65 @@ def scalar_dose(**updates):
         measurement_type="dosing",
         substance="drug",
         application="single dose",
-        statistics=Statistics(value=40),
+        statistics=Statistics(mean=40),
         unit="mg",
         time=0,
         time_unit="h",
         route="oral",
     ).model_copy(update=updates)
+
+
+def test_dose_is_taken_from_mean(exponential_course):
+    outputs = {
+        p.measurement_type: p for p in derive_pk(exponential_course, scalar_dose())
+    }
+    auc = outputs["auc_inf"].statistics.mean
+    assert scalar_dose().statistics == Statistics(mean=40)
+    assert auc is not None
+    assert outputs["clearance"].statistics.mean == pytest.approx(40 / auc)
+
+
+@pytest.mark.parametrize(
+    "schedule",
+    [
+        {"time": -6.0, "interval": 1.0, "doses": 7},
+        {"time": [-6.0, 0.0]},
+        {"time": -6.0, "doses": 1},
+    ],
+)
+def test_scheduled_single_dose_keeps_the_version_8_dose_time(
+    exponential_course, schedule
+):
+    # Version 8 stored schedules as text and timed such a dose at zero.
+    assert derive_pk(exponential_course, scalar_dose(**schedule)) == derive_pk(
+        exponential_course, scalar_dose(time=0.0)
+    )
+    assert derive_pk(exponential_course, scalar_dose(time=-6.0)) != derive_pk(
+        exponential_course, scalar_dose(time=0.0)
+    )
+
+
+def test_scheduled_infusion_is_not_a_scalar_dose(exponential_course):
+    infusion = scalar_dose(route="iv", time=[0.0, 12.0], time_end=1.0)
+    assert derive_pk(exponential_course, infusion) == derive_pk(exponential_course)
+
+
+def test_individual_curve_uses_mean(exponential_course):
+    for point in exponential_course.points:
+        point.group = None
+        point.individual = "person"
+    outputs = {p.measurement_type: p for p in derive_pk(exponential_course)}
+    assert outputs["cmax"].statistics == Statistics(
+        mean=max(p.statistics.mean for p in exponential_course.points)
+    )
+
+
+def test_median_curve_is_used_without_means(exponential_course):
+    for point in exponential_course.points:
+        point.statistics = Statistics(median=point.statistics.mean)
+    outputs = {p.measurement_type: p for p in derive_pk(exponential_course)}
+    assert outputs["cmax"].statistics.median is not None
+    assert outputs["cmax"].statistics.mean is None
 
 
 def test_linear_auc_and_observed_terminal_extrapolation(exponential_course):
@@ -257,7 +331,8 @@ def test_route_specific_clearance_and_volume(exponential_course, route):
         {"route": "intraarterial"},
         {"application": "multiple doses"},
         {"substance": "other"},
-        {"statistics": Statistics(value=0)},
+        {"statistics": Statistics(mean=0)},
+        {"statistics": Statistics(median=40)},
     ],
 )
 def test_unestablished_dosing_keeps_dose_independent_outputs(

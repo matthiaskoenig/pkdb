@@ -3,10 +3,16 @@ export interface Column {
   key: string;
   title: string;
   order?: string;
+  // A value that reads as one unit, such as `2.5 ± 0.5 (SD)`, or a unit such
+  // as `gram * hour / liter`, stays on one line.
+  nowrap?: boolean;
+  // A study identifier `<substance>/<name>` stays on one line while the table
+  // has room and breaks after the slash only as a fallback.
+  identifier?: boolean;
 }
 export const columns: Record<ResultTab, Column[]> = {
   studies: [
-    { key: "sid", title: "Study", order: "sid" },
+    { key: "sid", title: "Study", order: "sid", identifier: true },
     { key: "name", title: "Name", order: "name" },
     { key: "reference", title: "Reference" },
     { key: "provenance", title: "Source" },
@@ -16,22 +22,23 @@ export const columns: Record<ResultTab, Column[]> = {
   groups: [
     { key: "name", title: "Group", order: "name" },
     { key: "count", title: "Participants" },
-    { key: "study", title: "Study", order: "study_sid" },
+    { key: "study", title: "Study", order: "study_sid", identifier: true },
     { key: "characteristica", title: "Characteristics" },
   ],
   individuals: [
     { key: "name", title: "Individual", order: "name" },
     { key: "group", title: "Group" },
-    { key: "study", title: "Study", order: "study_sid" },
+    { key: "study", title: "Study", order: "study_sid", identifier: true },
     { key: "characteristica", title: "Characteristics" },
   ],
   interventions: [
     { key: "name", title: "Intervention", order: "name" },
     { key: "substance", title: "Substance", order: "substance" },
-    { key: "value", title: "Value", order: "value" },
-    { key: "unit", title: "Unit", order: "unit" },
+    { key: "unit", title: "Unit", order: "unit", nowrap: true },
+    { key: "statistics", title: "Value", order: "central_value", nowrap: true },
     { key: "route", title: "Route", order: "route" },
-    { key: "study", title: "Study", order: "study_sid" },
+    { key: "schedule", title: "Schedule" },
+    { key: "study", title: "Study", order: "study_sid", identifier: true },
   ],
   measurements: [
     {
@@ -40,24 +47,20 @@ export const columns: Record<ResultTab, Column[]> = {
       order: "measurement_type",
     },
     { key: "substance", title: "Substance", order: "substance" },
-    { key: "value", title: "Value", order: "value" },
-    { key: "mean", title: "Mean", order: "mean" },
-    { key: "median", title: "Median", order: "median" },
-    { key: "sd", title: "SD", order: "sd" },
-    { key: "se", title: "SE", order: "se" },
-    { key: "unit", title: "Unit", order: "unit" },
+    { key: "unit", title: "Unit", order: "unit", nowrap: true },
+    { key: "statistics", title: "Value", order: "central_value", nowrap: true },
     { key: "subject", title: "Subject" },
     { key: "interventions", title: "Related interventions" },
-    { key: "study", title: "Study", order: "study_sid" },
+    { key: "study", title: "Study", order: "study_sid", identifier: true },
   ],
   timecourses: [
     { key: "name", title: "Timecourse", order: "name" },
-    { key: "study", title: "Study", order: "study_sid" },
+    { key: "study", title: "Study", order: "study_sid", identifier: true },
     { key: "dimensions", title: "Dimensions" },
   ],
   scatters: [
     { key: "name", title: "Scatter data", order: "name" },
-    { key: "study", title: "Study", order: "study_sid" },
+    { key: "study", title: "Study", order: "study_sid", identifier: true },
     { key: "dimensions", title: "Dimensions" },
   ],
 };

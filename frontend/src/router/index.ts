@@ -18,6 +18,18 @@ export const router = createRouter({
       component: () => import("../features/search/components/SearchPage.vue"),
     },
     {
+      // A study format 2 study: its sid is `<substance>/<name>`.
+      path: "/data/:substance/:name",
+      name: "StudyByName",
+      props: (route) => ({
+        sid: `${String(route.params.substance)}/${String(route.params.name)}`,
+      }),
+      component: () =>
+        import("../features/details/components/StudyDetailPage.vue"),
+    },
+    {
+      // A study format 1 sid, or the PKDB identifier of a released study,
+      // which the API redirects to the study's own sid.
       path: "/data/:sid",
       name: "DataSingle",
       props: true,
