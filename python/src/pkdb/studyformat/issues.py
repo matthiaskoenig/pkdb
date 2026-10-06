@@ -37,6 +37,8 @@ _GROUPS = {
         "missing_image",
         "table_name_too_long",
         "duplicate_table_name",
+        "invalid_table_name",
+        "table_exists",
     ),
     "format": (
         "invalid_encoding",

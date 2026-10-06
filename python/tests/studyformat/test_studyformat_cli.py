@@ -442,3 +442,24 @@ def test_validate_names_a_workbook_that_cannot_be_synced(
     out = capsys.readouterr().out
     assert PENDING not in out
     assert "The workbook cannot be synced with the tables; run pkdb tables sync" in out
+
+
+def test_validate_leaves_broken_tables_to_validation(
+    valid_study, sf_vocabulary, tmp_path, capsys
+):
+    from pkdb.studyformat import sync_study
+
+    assert sync_study(valid_study, sf_vocabulary).ok
+    path = valid_study / "outputs_Tab2.tsv"
+    path.write_text(path.read_text(encoding="utf-8").replace("mean", "average", 1))
+    lock = tmp_path / "vocabulary.json"
+    sf_vocabulary.save(lock)
+    args = ["validate", str(valid_study), "--offline", "--vocabulary", str(lock)]
+
+    assert main([*args, "--format", "json"]) == 1
+    result = lines(capsys)[-1]
+    assert result["workbook"]["ok"] is None
+    assert "unknown_column" in {issue["code"] for issue in result["report"]["issues"]}
+    assert main([*args, "--format", "human"]) == 1
+    out = capsys.readouterr().out
+    assert PENDING not in out and "The workbook cannot be synced" not in out

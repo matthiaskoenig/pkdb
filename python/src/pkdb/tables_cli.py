@@ -11,7 +11,6 @@ import os
 import shutil
 import subprocess
 import sys
-from contextlib import suppress
 from pathlib import Path
 
 from pkdb.studyformat_cli import print_issues, say
@@ -37,10 +36,6 @@ WORKBOOK_ACTIONS = {
         "not updated because it was saved during the sync",
     ),
 }
-CLOSE_FIRST = (
-    "Close the workbook first, or copy a sheet in the spreadsheet application "
-    "and rename it to {table}"
-)
 
 
 def _vocabulary_options(command) -> None:
@@ -294,9 +289,13 @@ def _print_result(label: str, result, issues) -> None:
     say(f"{label}: {summary}")
     for change in result.changes:
         say(f"  {CHANGES[change.action][planned]} {change.file}")
-    say(
-        f"  {result.workbook.name}: {WORKBOOK_ACTIONS[result.workbook_action][planned]}"
-    )
+    if result.workbook_action == "unchanged" and not result.workbook.exists():
+        # The problems below stopped the sync before the workbook was created.
+        words = ("not created", "cannot be created")[planned]
+        say(f"  {result.workbook.name}: {words} because of the problems below")
+    else:
+        words = WORKBOOK_ACTIONS[result.workbook_action][planned]
+        say(f"  {result.workbook.name}: {words}")
     for conflict in result.conflicts:
         kept = f", kept {conflict.kept}" if conflict.kept else ""
         say(f"  conflict in sheet {conflict.sheet}{kept}")
@@ -380,10 +379,9 @@ def _open(args) -> int:
     _print_result(label, result, [*result.issues, *_git_issues(result.workbook)])
     if not args.no_open:
         if not result.workbook.is_file():
-            say(
-                f"{result.workbook.name} was not created; fix the problems above",
-                file=sys.stderr,
-            )
+            # A failed sync said why it did not create the workbook.
+            if result.ok:
+                say(f"{result.workbook} does not exist", file=sys.stderr)
             return 1
         from pkdb.curation.launch import open_path
 
@@ -396,164 +394,38 @@ def _open(args) -> int:
     return int(not result.ok)
 
 
-def _table_problem(table: str) -> str | None:
-    """Why a name cannot be a new table, or None."""
-    from pkdb.studyformat.tables import TABLES, parse_table_file
-    from pkdb.studyformat.workbook.base import SHEET_NAME_LIMIT
-
-    parsed = parse_table_file(f"{table}.tsv")
-    if parsed is None or not parsed[0].per_source:
-        *kinds, last = [kind for kind, spec in TABLES.items() if spec.per_source]
-        return (
-            f"{table!r} is not a table name <kind>_<source> with the kind "
-            f"{', '.join(kinds)} or {last} and a source such as Tab3, Fig2A or Text"
-        )
-    if len(table) > SHEET_NAME_LIMIT:
-        return (
-            f"{table!r} has {len(table)} characters; Excel limits sheet names to "
-            f"{SHEET_NAME_LIMIT} characters"
-        )
-    return None
-
-
-def _same_name(name: str, names) -> str | None:
-    """The name among `names` that equals `name` ignoring case, as Excel compares sheets."""
-    return next((other for other in names if other.casefold() == name.casefold()), None)
-
-
-def _signature(path: Path) -> tuple[int, int] | None:
-    """Modification time and size of a file, None when it is gone."""
-    try:
-        status = path.stat()
-    except OSError:
-        return None
-    return status.st_mtime_ns, status.st_size
-
-
 def _add(args) -> int:
-    from pkdb.cache import atomic_bytes
-    from pkdb.studyformat import study_label, sync_study
-    from pkdb.studyformat.issues import make_issue
-    from pkdb.studyformat.load import load_study
-    from pkdb.studyformat.sync import table_texts
-    from pkdb.studyformat.tables import TEXT_SOURCE, image_file, parse_table_file
-    from pkdb.studyformat.workbook import write
-    from pkdb.studyformat.workbook.base import open_lock, remove_state
-    from pkdb.studyformat.workbook.read import read_workbook
+    from pkdb.studyformat import add_table, study_label
 
     table = args.table
-
-    def refuse(reason: str) -> int:
-        say(f"Cannot add {table}: {reason}", file=sys.stderr)
-        return 1
-
     folder = _study(args.study)
     if folder is None:
         return 1
-    if (problem := _table_problem(table)) is not None:
-        return refuse(problem)
-    files = [path.name for path in folder.iterdir()]
-    if (existing := _same_name(f"{table}.tsv", files)) is not None:
-        return refuse(f"{existing} already exists")
     vocabulary = _vocabulary(args)
     if vocabulary is None:
         return 1
     try:
-        result = sync_study(folder, vocabulary)
+        result = add_table(folder, vocabulary, table)
     except OSError as error:
-        return refuse(f"the sync failed: {_reason(error)}")
-    _print_result(study_label(folder), result, result.issues)
-    if not result.ok:
-        return refuse("fix the problems of the sync first")
-    path = result.workbook
-    close_first = CLOSE_FIRST.format(table=table)
-    if result.workbook_action == "close_to_update" or open_lock(path) is not None:
-        return refuse(f"{path.name} is open. {close_first}")
-    # The workbook is rebuilt from the tables, so it must hold nothing else.
-    signature = _signature(path)
-    study = load_study(folder)
-    tables = table_texts(study)
-    content = read_workbook(path, study.name)
-    if not content.ok:
-        print_issues(content.issues)
-        return refuse(f"{path.name} cannot be read")
-    if {file: sheet.text for file, sheet in content.tables.items()} != tables:
-        return refuse(f"{path.name} was saved during the sync; sync again")
-    if (sheet := _same_name(table, content.sheets)) is not None:
-        return refuse(f"the sheet {sheet} already exists in {path.name}")
-    # Sheets added before keep their place until they have rows.
-    empty = [
-        name
-        for name in content.sheets
-        if f"{name}.tsv" not in content.tables
-        and (parsed := parse_table_file(f"{name}.tsv")) is not None
-        and parsed[0].per_source
-    ]
-    try:
-        build = write.build_workbook(
-            tables, vocabulary, existing=path, empty_sheets=[table, *empty]
+        say(f"Cannot add {table}: {_reason(error)}", file=sys.stderr)
+        return 1
+    if result.sync is not None:
+        _print_result(study_label(folder), result.sync, result.sync.issues)
+    if result.ok:
+        assert result.sync is not None
+        say(
+            f"Added the sheet {table} to {result.sync.workbook.name}; {table}.tsv is "
+            "written when the sheet has a row and the workbook is synced"
         )
-    except write.WorkbookError as error:
-        return refuse(error.message)
-    if build.data is None:
-        print_issues(build.issues)
-        return refuse(f"{path.name} cannot hold the tables")
-    if open_lock(path) is not None:
-        return refuse(f"{path.name} is open. {close_first}")
-    if _signature(path) != signature:
-        return refuse(
-            f"{path.name} was saved while the sheet was added; run pkdb tables add again"
-        )
-    try:
-        atomic_bytes(path, build.data)
-    except PermissionError:
-        # Windows keeps an open workbook locked.
-        return refuse(
-            f"{path.name} cannot be replaced, probably because it is open. {close_first}"
-        )
-    except OSError as error:
-        return refuse(f"{path.name} cannot be written: {_reason(error)}")
-    # A new generation starts; a state file left behind belongs to the old one.
-    with suppress(OSError):
-        remove_state(path)
-    say(
-        f"Added the sheet {table} to {path.name}; {table}.tsv is written when the "
-        "sheet has a row and the workbook is synced"
-    )
-    issues = list(build.issues)
-    source = table.partition("_")[2]
-    image = image_file(study.name, source)
-    if source != TEXT_SOURCE and not (folder / image).exists():
-        issues.append(
-            make_issue(
-                "missing_image",
-                f"{image} is missing; validation needs the image of {source} in "
-                "the study folder",
-                severity="warning",
-            )
-        )
-    print_issues(issues)
-    return 0
-
-
-def workbook_check(folder: Path, vocabulary) -> dict | None:
-    """Plan the sync of a format 2 folder without writing, for pkdb validate and prepare.
-
-    None when the folder has no workbook. Planned TSV changes and conflicts are
-    workbook changes that pkdb tables sync has not written to the tables yet.
-    """
-    from pkdb.studyformat import sync_study
-    from pkdb.studyformat.workbook.base import workbook_path
-
-    folder = Path(folder).resolve()
-    if not workbook_path(folder).exists():
-        return None
-    result = sync_study(folder, vocabulary, check=True)
-    return {
-        "action": result.workbook_action,
-        "changes": [
-            {"file": change.file, "action": change.action} for change in result.changes
-        ],
-        "conflicts": len(result.conflicts),
-        "ok": result.ok,
-    }
+        print_issues(result.issues)
+        return 0
+    errors = [issue for issue in result.issues if issue.severity == "error"]
+    # The sync report comes first, also when stdout is a pipe.
+    sys.stdout.flush()
+    if not errors:
+        say(f"Cannot add {table}: fix the problems of the sync first", file=sys.stderr)
+    for issue in errors:
+        say(f"Cannot add {table}: {issue.message} [{issue.code}]", file=sys.stderr)
+        for suggestion in issue.suggestions:
+            say(f"  {suggestion.message}", file=sys.stderr)
+    return 1

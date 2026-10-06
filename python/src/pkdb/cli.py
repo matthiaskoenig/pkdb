@@ -183,8 +183,12 @@ def main(argv=None, *, client=None) -> int:
     from pkdb.preparation import prepare, study_folders
     from pkdb.references import ReferenceResolver, sync_reference
     from pkdb.schemas.validation import StudyValidationError
-    from pkdb.studyformat import is_v2_folder, study_label, validate_folder
-    from pkdb.tables_cli import workbook_check
+    from pkdb.studyformat import (
+        is_v2_folder,
+        study_label,
+        validate_folder,
+        workbook_check,
+    )
     from pkdb.terminal import Terminal, safe_text
     from pkdb.tsv import sync_tsvs
 

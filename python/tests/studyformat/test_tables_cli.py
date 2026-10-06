@@ -1,6 +1,7 @@
 """The pkdb tables commands: open, sync and add a study workbook from the command line."""
 
 import json
+import os
 import shutil
 import subprocess
 
@@ -471,9 +472,7 @@ def test_add_never_replaces_a_workbook_saved_meanwhile(
         set_cells(path, "outputs_Tab2", 2, mean=9.5)
         return built
 
-    monkeypatch.setattr(
-        "pkdb.studyformat.workbook.write.build_workbook", save_meanwhile
-    )
+    monkeypatch.setattr("pkdb.studyformat.sync.build_workbook", save_meanwhile)
 
     assert tables("add", study, "outputs_Tab3", *vocabulary) == 1
 
@@ -488,8 +487,23 @@ def git_repository(folder):
     subprocess.run(["git", "init", "-q", str(folder)], check=True)
 
 
+@pytest.fixture
+def isolated_git(monkeypatch, tmp_path):
+    """git without the configuration and ignore files of the user and the system.
+
+    git finds no repository above tmp_path, wherever pytest keeps it.
+    """
+    for name in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR"):
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", os.devnull)
+    monkeypatch.setenv("GIT_CONFIG_NOSYSTEM", "1")
+    # The default global ignore file is $XDG_CONFIG_HOME/git/ignore.
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
+    monkeypatch.setenv("GIT_CEILING_DIRECTORIES", str(tmp_path.parent))
+
+
 @git
-def test_git_ignore_warning(study, vocabulary, capsys):
+def test_git_ignore_warning(study, vocabulary, capsys, isolated_git):
     from pkdb.tables_cli import ignored_by_git
 
     root = study.parent.parent
@@ -565,3 +579,40 @@ def test_a_long_conflict_lists_the_first_rows(capsys):
     assert out[0] == "    workbook row 2: subjects=all"
     assert len(out) == LISTED_ROWS + 1
     assert out[-1] == "    and 2 more; --format json lists all"
+
+
+@pytest.mark.parametrize(
+    ("check", "words"),
+    [([], "not created"), (["--check"], "cannot be created")],
+)
+def test_a_workbook_that_was_not_created_says_why(
+    valid_study, vocabulary, capsys, check, words
+):
+    path = valid_study / OUTPUTS
+    path.write_text(path.read_text(encoding="utf-8").replace("mean", "average", 1))
+
+    assert tables("sync", valid_study, "--format", "human", *check, *vocabulary) == 1
+
+    out = capsys.readouterr().out.splitlines()
+    assert out[1] == f"  Example.xlsx: {words} because of the problems below"
+    assert "unchanged" not in "\n".join(out)
+    assert any("[unknown_column]" in line for line in out)
+    assert not workbook_path(valid_study).exists()
+
+
+def test_open_does_not_open_a_workbook_that_was_not_created(
+    valid_study, vocabulary, capsys, monkeypatch
+):
+    opened = []
+    monkeypatch.setattr(
+        "pkdb.curation.launch.open_path", lambda path, **kwargs: opened.append(path)
+    )
+    path = valid_study / OUTPUTS
+    path.write_text(path.read_text(encoding="utf-8").replace("mean", "average", 1))
+
+    assert tables("open", valid_study, *vocabulary) == 1
+
+    captured = capsys.readouterr()
+    assert "  Example.xlsx: not created because of the problems below" in captured.out
+    assert captured.err == ""
+    assert opened == []

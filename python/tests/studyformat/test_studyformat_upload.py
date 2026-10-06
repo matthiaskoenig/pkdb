@@ -515,3 +515,68 @@ def test_upload_stops_when_the_tables_cannot_be_formatted(
     assert "unknown_column" in {issue["code"] for issue in row["report"]["issues"]}
     assert all(request.method == "GET" for request in requests)
     assert path.read_bytes() == broken
+
+
+def edit_both_sides(study, sf_vocabulary):
+    """A workbook edit and a tables edit in another table, so the workbook needs both."""
+    assert sync_study(study, sf_vocabulary).workbook_action == "created"
+    set_mean(workbook_path(study), "outputs_Tab2", 2, 3.25)
+    edit_mean(study, "timecourses_Fig1.tsv", 4, "1.5")
+
+
+def test_upload_with_the_workbook_open(study, sf_vocabulary, tmp_path):
+    edit_both_sides(study, sf_vocabulary)
+    (study / ".~lock.Example.xlsx#").write_text("curator", encoding="utf-8")
+    workbook = workbook_path(study).read_bytes()
+
+    row, requests = batch_upload(study, sf_vocabulary, tmp_path)
+
+    assert row["ok"], row
+    files = uploaded_files(requests)
+    assert b"\t3.25\t" in files["outputs_Tab2.tsv"]
+    assert b"\t1.5\t" in files["timecourses_Fig1.tsv"]
+    assert workbook_path(study).read_bytes() == workbook
+    assert "workbook_open" in {issue["code"] for issue in row["warnings"]}
+
+
+@pytest.mark.parametrize("saves", [1, 2])
+def test_upload_syncs_a_workbook_saved_during_the_sync_again(
+    study, sf_vocabulary, tmp_path, monkeypatch, saves
+):
+    from pkdb.studyformat import sync
+
+    edit_both_sides(study, sf_vocabulary)
+    build = sync.build_workbook
+    calls = []
+
+    def save_meanwhile(*arguments, **options):
+        built = build(*arguments, **options)
+        calls.append(arguments)
+        if len(calls) <= saves:
+            # A row apart from the tables edit at line 4, so that it merges.
+            set_mean(workbook_path(study), "timecourses_Fig1", 2, 0.25)
+        return built
+
+    monkeypatch.setattr(sync, "build_workbook", save_meanwhile)
+
+    row, requests = batch_upload(study, sf_vocabulary, tmp_path)
+
+    if saves == 1:
+        # The second sync merges the save and regenerates the workbook.
+        assert row["ok"], row
+        files = uploaded_files(requests)
+        assert b"\t0.25\t" in files["timecourses_Fig1.tsv"]
+        assert b"\t1.5\t" in files["timecourses_Fig1.tsv"]
+        assert b"\t3.25\t" in files["outputs_Tab2.tsv"]
+        assert "workbook_changed" not in {
+            issue["code"] for issue in row.get("warnings", [])
+        }
+    else:
+        assert not row["ok"]
+        assert row["stage"] == "sync"
+        assert "upload again" in row["error"]
+        assert "workbook_changed" in {
+            issue["code"] for issue in row["report"]["issues"]
+        }
+        assert all(request.method == "GET" for request in requests)
+    assert len(calls) == 2

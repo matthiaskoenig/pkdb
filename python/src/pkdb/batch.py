@@ -109,29 +109,45 @@ def _sync_tables(
     vocabulary: Vocabulary,
     max_rows: int,
     progress: ProgressCallback | None,
-) -> str | None:
+) -> tuple[str | None, tuple[ValidationIssue, ...]]:
     """Sync the workbook of a study format 2 folder into its tables, then format them.
 
     The upload sends what the curator sees in the workbook. Returns what changed
-    in the folder, or None. Raises _TablesNotReady when the sync or the
-    formatting has errors, such as a conflict; then nothing is uploaded. A
-    folder without workbook has nothing to sync, and none is created.
+    in the folder, or None, and the warnings of the sync. A workbook saved
+    during the sync is synced once more. Raises _TablesNotReady when the sync or
+    the formatting has errors, such as a conflict, or when the workbook was
+    saved during both syncs; then nothing is uploaded. A folder without
+    workbook has nothing to sync, and none is created.
     """
-    done = []
+    changes: list[FileChange] = []
+    warnings: tuple[ValidationIssue, ...] = ()
     emit(progress, "sync")
     if workbook_path(folder).exists():
         synced = sync_study(folder, vocabulary, max_rows=max_rows)
+        changes += synced.changes
+        if synced.ok and synced.workbook_action == "sync_again":
+            # The save is not in the tables yet; this sync merges it.
+            synced = sync_study(folder, vocabulary, max_rows=max_rows)
+            changes += synced.changes
         if not synced.ok:
             raise _TablesNotReady(
                 "The workbook and the tables cannot be synced, so nothing was "
                 "uploaded; run pkdb tables sync",
                 synced.issues,
             )
-        done += _described(
-            synced.changes,
-            "wrote {} from the workbook",
-            "removed {} because the workbook has no rows for it",
-        )
+        if synced.workbook_action == "sync_again":
+            raise _TablesNotReady(
+                "The workbook was saved during the sync again, so its last save is "
+                "not in the tables and nothing was uploaded; upload again",
+                synced.issues,
+            )
+        warnings = synced.issues
+    # A file written by both syncs is described once, by its last change.
+    done = _described(
+        list({change.file: change for change in changes}.values()),
+        "wrote {} from the workbook",
+        "removed {}, which the workbook no longer holds",
+    )
     emit(progress, "format")
     formatted = format_folder(folder)
     if not formatted.ok:
@@ -140,10 +156,8 @@ def _sync_tables(
             formatted.issues,
         )
     done += _described(formatted.changes, "formatted {}", "removed {} without rows")
-    if not done:
-        return None
     text = "; ".join(done)
-    return text[0].upper() + text[1:]
+    return (text[0].upper() + text[1:] if text else None), warnings
 
 
 def _worker(
@@ -204,12 +218,20 @@ def _worker(
 
             api.progress = progress
             result = {"ok": False, "persistence": "not_attempted", "stop": False}
+            # Warnings of the workbook sync, such as a workbook left open.
+            sync_warnings: list[dict] = []
             try:
                 if is_v2_folder(Path(path)):
-                    max_rows = capabilities.upload_limits.max_rows
-                    if tables := _sync_tables(
-                        Path(path), vocabulary, max_rows, progress
-                    ):
+                    tables, warnings = _sync_tables(
+                        Path(path),
+                        vocabulary,
+                        capabilities.upload_limits.max_rows,
+                        progress,
+                    )
+                    sync_warnings = [
+                        issue.model_dump(mode="json") for issue in warnings
+                    ]
+                    if tables:
                         result["tables_updated"] = tables
                 elif tables := sync_tsvs(path):
                     result["tables_updated"] = tables
@@ -264,6 +286,8 @@ def _worker(
                     persistence="unknown" if submitting else "not_attempted",
                     stop=submitting,
                 )
+            if sync_warnings:
+                result["warnings"] = [*sync_warnings, *result.get("warnings", [])]
             timings[stage] = timings.get(stage, 0) + time.monotonic() - stage_started
             result.update(
                 stage=stage, timings=timings, elapsed_seconds=time.monotonic() - started

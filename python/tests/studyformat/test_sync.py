@@ -13,7 +13,7 @@ import openpyxl
 import pytest
 from openpyxl.utils import get_column_letter
 
-from pkdb.studyformat import SyncResult, sync, sync_study
+from pkdb.studyformat import SyncResult, add_table, sync, sync_study, workbook_check
 from pkdb.studyformat.formatter import FileChange, format_folder
 from pkdb.studyformat.sync import SyncConflict
 from pkdb.studyformat.tables import parse_table_file
@@ -1137,3 +1137,164 @@ def test_a_large_study_syncs_quickly(make_study, valid_files, tsv, sf_vocabulary
     assert rows[first]["mean"] == "99"
     assert rows[last]["sd"] == "0.75"
     assert elapsed < 30, f"syncing 20,000 rows took {elapsed:.1f} s"
+
+
+def test_add_table_adds_an_empty_sheet(study, workbook, sf_vocabulary):
+    set_cells(workbook, "outputs_Tab2", 2, mean=3.25)
+
+    result = add_table(study, sf_vocabulary, "outputs_Tab3")
+
+    assert result.ok, result.issues
+    assert result.sync is not None
+    assert result.sync.changes == (FileChange(OUTPUTS, "write"),)
+    assert [(issue.code, issue.severity) for issue in result.issues] == [
+        ("missing_image", "warning")
+    ]
+    content = content_of(workbook)
+    assert "outputs_Tab3" in content.sheets
+    assert "outputs_Tab3.tsv" not in content.tables
+    assert_in_step(study, workbook)
+    assert cell(study, OUTPUTS, 2, "mean") == "3.25"
+
+
+@pytest.mark.parametrize(
+    ("table", "code"),
+    [
+        ("results_Tab3", "invalid_table_name"),
+        ("interventions", "invalid_table_name"),
+        ("outputs_Tab3_with_a_very_long_name_x", "table_name_too_long"),
+        ("outputs_Tab2", "table_exists"),
+    ],
+)
+def test_add_table_rejects_a_name_before_the_sync(
+    study, workbook, sf_vocabulary, table, code
+):
+    before = snapshot(study)
+
+    result = add_table(study, sf_vocabulary, table)
+
+    assert not result.ok
+    assert result.sync is None
+    assert codes(result) == [code]
+    assert snapshot(study) == before
+
+
+def test_add_table_rejects_a_sheet_that_exists_ignoring_case(
+    study, workbook, sf_vocabulary
+):
+    assert add_table(study, sf_vocabulary, "outputs_TabA").ok
+    before = snapshot(study)
+
+    result = add_table(study, sf_vocabulary, "outputs_Taba")
+
+    assert not result.ok
+    assert result.sync is not None and result.sync.ok
+    assert codes(result) == ["table_exists"]
+    assert snapshot(study) == before
+
+
+def test_add_table_needs_a_closed_workbook(study, workbook, sf_vocabulary):
+    (study / LOCK).write_text("curator", encoding="utf-8")
+    before = snapshot(study)
+
+    result = add_table(study, sf_vocabulary, "outputs_Tab3")
+
+    assert not result.ok
+    [issue] = result.issues
+    assert (issue.code, issue.severity) == ("workbook_open", "error")
+    assert "rename it to outputs_Tab3" in issue.message
+    assert snapshot(study) == before
+
+
+def test_add_table_stops_when_the_sync_fails(study, workbook, sf_vocabulary):
+    set_cells(workbook, "timecourses_Fig1", 2, mean=0.25)
+    edit_table(study, TIMECOURSES, 2, mean="0.75")
+    before = snapshot(study)
+
+    result = add_table(study, sf_vocabulary, "outputs_Tab3")
+
+    assert not result.ok
+    assert result.sync is not None and codes(result.sync) == ["sync_conflict"]
+    assert result.issues == ()
+    assert snapshot(study) == before
+
+
+def test_add_table_reports_a_workbook_it_cannot_read(
+    study, workbook, sf_vocabulary, monkeypatch
+):
+    from pkdb.schemas.validation import fail
+
+    calls = []
+    read = sync.read_workbook
+
+    def limited(*arguments, **options):
+        # The sync reads the workbook first; the read before rebuilding fails.
+        calls.append(arguments)
+        if len(calls) > 1:
+            fail("row_limit", "The workbook has too many rows")
+        return read(*arguments, **options)
+
+    monkeypatch.setattr(sync, "read_workbook", limited)
+    before = snapshot(study)
+
+    result = add_table(study, sf_vocabulary, "outputs_Tab3")
+
+    assert not result.ok
+    assert codes(result) == ["row_limit"]
+    assert snapshot(study) == before
+
+
+def test_add_table_never_replaces_a_workbook_saved_meanwhile(
+    study, workbook, sf_vocabulary, monkeypatch
+):
+    build = sync.build_workbook
+
+    def build_meanwhile(*arguments, **options):
+        built = build(*arguments, **options)
+        set_cells(workbook, "timecourses_Fig1", 3, mean=2.25)
+        return built
+
+    monkeypatch.setattr(sync, "build_workbook", build_meanwhile)
+
+    result = add_table(study, sf_vocabulary, "outputs_Tab3")
+    saved = workbook.read_bytes()
+
+    assert not result.ok
+    [issue] = result.issues
+    assert (issue.code, issue.severity) == ("workbook_changed", "error")
+    assert workbook.read_bytes() == saved
+    assert "outputs_Tab3" not in content_of(workbook).sheets
+
+
+def test_workbook_check_plans_without_writing(study, workbook, sf_vocabulary):
+    in_step = {"action": "unchanged", "changes": [], "conflicts": 0, "ok": True}
+    assert workbook_check(study, sf_vocabulary) == in_step
+    set_cells(workbook, "outputs_Tab2", 2, mean=3.25)
+    before = snapshot(study)
+
+    assert workbook_check(study, sf_vocabulary) == {
+        **in_step,
+        "changes": [{"file": OUTPUTS, "action": "write"}],
+    }
+    assert snapshot(study) == before
+
+
+def test_workbook_check_without_a_workbook(valid_study, sf_vocabulary):
+    assert workbook_check(valid_study, sf_vocabulary) is None
+    assert not workbook_path(valid_study).exists()
+
+
+@pytest.mark.parametrize(("broken", "ok"), [("workbook", False), ("tables", None)])
+def test_workbook_check_names_why_it_cannot_sync(
+    study, workbook, sf_vocabulary, broken, ok
+):
+    if broken == "workbook":
+        set_cells(workbook, "outputs_Tab2", 2, mean="#DIV/0!")
+    else:
+        path = study / OUTPUTS
+        path.write_text(path.read_text(encoding="utf-8").replace("mean", "x", 1))
+
+    check = workbook_check(study, sf_vocabulary)
+
+    assert check is not None
+    assert check["ok"] is ok

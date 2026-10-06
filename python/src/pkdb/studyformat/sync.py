@@ -17,10 +17,11 @@ of the new tables. The sync state file next to the workbook records it as the
 base of every table it changed since its generation and overrides `_base`, so a
 workbook saved again while it stays open does not conflict with the first sync.
 The workbook is rewritten only when the tables hold content it lacks, never
-while it is open, and never when it was saved during the sync.
+while it is open, and never when it was saved during the sync. `add_table`
+adds the empty sheet of a new table under the same rules.
 """
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Iterable, Mapping, Sequence
 from contextlib import suppress
 from dataclasses import dataclass, field, replace
 from pathlib import Path
@@ -39,9 +40,18 @@ from pkdb.studyformat.load import (
     load_table,
 )
 from pkdb.studyformat.merge import Conflict, merge_lines
-from pkdb.studyformat.tables import KIND_ORDER, TableSpec, parse_table_file, table_file
+from pkdb.studyformat.tables import (
+    KIND_ORDER,
+    TABLES,
+    TEXT_SOURCE,
+    TableSpec,
+    image_file,
+    parse_table_file,
+    table_file,
+)
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.workbook.base import (
+    SHEET_NAME_LIMIT,
     open_lock,
     read_state,
     remove_state,
@@ -438,6 +448,76 @@ def _create(
     return replace(outcome, workbook_action="created", issues=issues)
 
 
+@dataclass(frozen=True)
+class _Replacement:
+    """Outcome of rebuilding and replacing the workbook.
+
+    `status` is `written`, `open` when a lock file or Windows kept the workbook
+    from being replaced, `saved` when it was saved since it was read, or
+    `failed`, explained by an error in `issues`. `issues` also hold the issues
+    of the build. `lock` is the lock file of an open workbook, if one was found.
+    """
+
+    status: Literal["written", "open", "saved", "failed"]
+    issues: tuple[ValidationIssue, ...] = ()
+    lock: Path | None = None
+
+
+def _empty_sheets(
+    content: WorkbookContent, files: Mapping[str, str | None]
+) -> list[str]:
+    """The sheets that pkdb tables add added and that have no rows yet.
+
+    They stay until they have rows; the sheet of a table that the sync removes goes.
+    """
+    return [
+        name
+        for name in content.sheets
+        if _parsed(f"{name}.tsv")[0].per_source
+        and f"{name}.tsv" not in content.tables
+        and files.get(f"{name}.tsv") is None
+    ]
+
+
+def _replace_workbook(
+    path: Path,
+    tables: Mapping[str, str],
+    vocabulary: Vocabulary,
+    *,
+    empty_sheets: Sequence[str],
+    signature: tuple[int, int] | None,
+) -> _Replacement:
+    """Rebuild the workbook from the tables, keeping its scratch sheets, and replace it.
+
+    `signature` is that of the workbook before it was read. A workbook opened or
+    saved since then is not replaced, so that no save is lost. The replacement
+    is atomic and starts a new generation without sync state file.
+    """
+    try:
+        build = build_workbook(
+            tables, vocabulary, existing=path, empty_sheets=empty_sheets
+        )
+    except WorkbookError as error:
+        issue = make_issue(error.code, error.message, file=path.name)
+        return _Replacement("failed", (issue,))
+    issues = tuple(build.issues)
+    if build.data is None:
+        return _Replacement("failed", issues)
+    if (lock := open_lock(path)) is not None:
+        return _Replacement("open", issues, lock)
+    if _signature(path) != signature:
+        return _Replacement("saved", issues)
+    try:
+        atomic_bytes(path, build.data)
+    except PermissionError:
+        # Windows keeps an open workbook locked.
+        return _Replacement("open", issues)
+    except OSError as error:
+        return _Replacement("failed", (*issues, _write_issue(path.name, error)))
+    _remove_state(path)
+    return _Replacement("written", issues)
+
+
 def _regenerate(
     outcome: SyncResult,
     files: Mapping[str, str | None],
@@ -445,40 +525,27 @@ def _regenerate(
     signature: tuple[int, int] | None,
     vocabulary: Vocabulary,
 ) -> SyncResult:
-    """Rewrite the workbook from the new tables, keeping its scratch sheets.
+    """Rewrite the workbook from the new tables, unless it is open or was saved meanwhile.
 
-    `signature` is that of the workbook before it was read. A workbook opened or
-    saved since then is not replaced, so that the save is merged next time.
+    A save during the sync is merged by the next sync.
     """
     path = outcome.workbook
-    # Sheets added by pkdb tables add stay until they have rows; the sheet of a
-    # table that the sync removes goes.
-    empty_sheets = [
-        name
-        for name in content.sheets
-        if _parsed(f"{name}.tsv")[0].per_source
-        and f"{name}.tsv" not in content.tables
-        and files.get(f"{name}.tsv") is None
-    ]
-    tables = {file: text for file, text in files.items() if text is not None}
-    try:
-        build = build_workbook(
-            tables, vocabulary, existing=path, empty_sheets=empty_sheets
-        )
-    except WorkbookError as error:
-        issue = make_issue(error.code, error.message, file=path.name)
-        return replace(outcome, issues=(*outcome.issues, issue))
-    issues = (*outcome.issues, *build.issues)
-    if build.data is None:
-        return replace(outcome, issues=issues)
-    if (lock := open_lock(path)) is not None:
+    replaced = _replace_workbook(
+        path,
+        {file: text for file, text in files.items() if text is not None},
+        vocabulary,
+        empty_sheets=_empty_sheets(content, files),
+        signature=signature,
+    )
+    issues = (*outcome.issues, *replaced.issues)
+    if replaced.status == "open":
         return replace(
             outcome,
             workbook_action="close_to_update",
-            lock=lock,
-            issues=(*issues, _open_issue(path, lock)),
+            lock=replaced.lock or outcome.lock,
+            issues=(*issues, _open_issue(path, replaced.lock)),
         )
-    if _signature(path) != signature:
+    if replaced.status == "saved":
         changed = make_issue(
             "workbook_changed",
             f"{path.name} was saved during the sync, so it was not updated with "
@@ -486,18 +553,8 @@ def _regenerate(
             file=path.name,
         )
         return replace(outcome, workbook_action="sync_again", issues=(*issues, changed))
-    try:
-        atomic_bytes(path, build.data)
-    except PermissionError:
-        # Windows keeps an open workbook locked.
-        return replace(
-            outcome,
-            workbook_action="close_to_update",
-            issues=(*issues, _open_issue(path, None)),
-        )
-    except OSError as error:
-        return replace(outcome, issues=(*issues, _write_issue(path.name, error)))
-    _remove_state(path)
+    if replaced.status == "failed":
+        return replace(outcome, issues=issues)
     return replace(outcome, workbook_action="regenerated", issues=issues)
 
 
@@ -607,3 +664,192 @@ def sync_study(
     if check:
         return replace(outcome, workbook_action="regenerated")
     return _regenerate(outcome, plan.files, content, signature, vocabulary)
+
+
+@dataclass(frozen=True)
+class AddTableResult:
+    """Outcome of adding the empty sheet of a new table to the workbook.
+
+    `sync` is the sync that runs first, None when the table name was rejected
+    before. `issues` are the problems of adding the sheet, and a warning when
+    the image of its source is missing. `ok` means the sheet was added.
+    """
+
+    table: str
+    sync: SyncResult | None
+    issues: tuple[ValidationIssue, ...] = ()
+
+    @property
+    def ok(self) -> bool:
+        """The sync was ok and the sheet was added."""
+        return (
+            self.sync is not None
+            and self.sync.ok
+            and not any(issue.severity == "error" for issue in self.issues)
+        )
+
+
+def _table_name_issue(table: str) -> ValidationIssue | None:
+    """Why a name cannot be the sheet of a new table, or None."""
+    parsed = parse_table_file(f"{table}.tsv")
+    if parsed is None or not parsed[0].per_source:
+        *kinds, last = [kind for kind, spec in TABLES.items() if spec.per_source]
+        return make_issue(
+            "invalid_table_name",
+            f"{table!r} is not a table name <kind>_<source> with the kind "
+            f"{', '.join(kinds)} or {last} and a source such as Tab3, Fig2A or Text",
+        )
+    if len(table) > SHEET_NAME_LIMIT:
+        return make_issue(
+            "table_name_too_long",
+            f"{table!r} has {len(table)} characters; Excel limits sheet names to "
+            f"{SHEET_NAME_LIMIT} characters",
+        )
+    return None
+
+
+def _same_name(name: str, names: Iterable[str]) -> str | None:
+    """The name among `names` equal to `name` ignoring case, as Excel compares sheets."""
+    return next((other for other in names if other.casefold() == name.casefold()), None)
+
+
+def _add_open_issue(workbook: Path, table: str, lock: Path | None) -> ValidationIssue:
+    return make_issue(
+        "workbook_open",
+        f"{workbook.name} is open in a spreadsheet application. Close the workbook "
+        "first, or copy a sheet in the spreadsheet application and rename it to "
+        f"{table}",
+        file=workbook.name,
+        severity="error",
+        hint=None if lock is None else f"If the workbook is not open, delete {lock}",
+    )
+
+
+def add_table(
+    folder: Path,
+    vocabulary: Vocabulary,
+    table: str,
+    *,
+    max_rows: int | None = None,
+) -> AddTableResult:
+    """Add the empty sheet of a new `<kind>_<source>` table, such as outputs_Tab3.
+
+    The name must be a table split by source, at most 31 characters long, and
+    new as a TSV file and as a sheet, ignoring case as Excel does. The workbook
+    and the tables are synced first, creating the workbook if needed. The
+    workbook is then rebuilt from the tables with the new sheet and the empty
+    sheets added before, unless it is open or was saved meanwhile. The TSV file
+    is written when the sheet has a row and the workbook is synced.
+    """
+    folder = Path(folder).resolve()
+    path = workbook_path(folder)
+    if (issue := _table_name_issue(table)) is not None:
+        return AddTableResult(table, None, (issue,))
+    try:
+        names = [entry.name for entry in folder.iterdir()]
+    except OSError:
+        # The sync reports a folder it cannot read.
+        names = []
+    if (existing := _same_name(f"{table}.tsv", names)) is not None:
+        issue = make_issue("table_exists", f"{existing} already exists", file=existing)
+        return AddTableResult(table, None, (issue,))
+    synced = sync_study(folder, vocabulary, max_rows=max_rows)
+
+    def refused(issue: ValidationIssue) -> AddTableResult:
+        return AddTableResult(table, synced, (issue,))
+
+    if not synced.ok:
+        return AddTableResult(table, synced)
+    lock = synced.lock or open_lock(path)
+    if lock is not None or synced.workbook_action == "close_to_update":
+        return refused(_add_open_issue(path, table, lock))
+    # The workbook is rebuilt from the tables, so it must hold just them.
+    signature = _signature(path)
+    try:
+        study = load_study(folder, max_rows=max_rows)
+        content = read_workbook(path, study.name, max_rows=max_rows)
+    except StudyValidationError as error:
+        return AddTableResult(table, synced, tuple(error.report.issues))
+    blocking = [issue for issue in study.issues if issue.code in STRUCTURAL]
+    if blocking or not content.ok:
+        return AddTableResult(table, synced, (*blocking, *content.issues))
+    tables = table_texts(study)
+    if (
+        synced.workbook_action == "sync_again"
+        or {file: sheet.text for file, sheet in content.tables.items()} != tables
+    ):
+        return refused(
+            make_issue(
+                "workbook_changed",
+                "The workbook or the tables changed during the sync; sync again "
+                f"and then add {table}",
+                file=path.name,
+                severity="error",
+            )
+        )
+    if (sheet := _same_name(table, content.sheets)) is not None:
+        return refused(
+            make_issue(
+                "table_exists",
+                f"The sheet {sheet} already exists in {path.name}",
+                file=path.name,
+            )
+        )
+    replaced = _replace_workbook(
+        path,
+        tables,
+        vocabulary,
+        empty_sheets=[*_empty_sheets(content, tables), table],
+        signature=signature,
+    )
+    if replaced.status == "open":
+        return refused(_add_open_issue(path, table, replaced.lock))
+    if replaced.status == "saved":
+        return refused(
+            make_issue(
+                "workbook_changed",
+                f"{path.name} was saved while {table} was added; add it again",
+                file=path.name,
+                severity="error",
+            )
+        )
+    issues = replaced.issues
+    if replaced.status == "written":
+        source = table.partition("_")[2]
+        image = image_file(study.name, source)
+        if source != TEXT_SOURCE and not (folder / image).exists():
+            missing = make_issue(
+                "missing_image",
+                f"{image} is missing; validation needs the image of {source} in "
+                "the study folder",
+                severity="warning",
+            )
+            issues = (*issues, missing)
+    return AddTableResult(table, synced, issues)
+
+
+def workbook_check(folder: Path, vocabulary: Vocabulary) -> dict | None:
+    """Plan the sync of a folder without writing, as pkdb validate and prepare report it.
+
+    None when the folder has no workbook. Planned TSV `changes` and `conflicts`
+    are workbook changes that are not in the tables yet. `ok` is False when the
+    workbook cannot be synced, and None when the tables do not load, so the
+    workbook could not be compared with them; validation reports the tables.
+    """
+    folder = Path(folder).resolve()
+    if not workbook_path(folder).exists():
+        return None
+    result = sync_study(folder, vocabulary, check=True)
+    ok: bool | None = result.ok
+    if not ok and not result.conflicts:
+        study = load_study(folder)
+        if any(issue.code in STRUCTURAL for issue in study.issues):
+            ok = None
+    return {
+        "action": result.workbook_action,
+        "changes": [
+            {"file": change.file, "action": change.action} for change in result.changes
+        ],
+        "conflicts": len(result.conflicts),
+        "ok": ok,
+    }

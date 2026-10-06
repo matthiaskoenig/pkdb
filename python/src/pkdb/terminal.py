@@ -135,7 +135,8 @@ class Terminal:
             # pkdb validate and prepare plan the sync of the workbook without writing.
             if workbook.get("changes") or workbook.get("conflicts"):
                 self.console.print(f"  {WORKBOOK_PENDING}")
-            elif not workbook.get("ok", True):
+            elif workbook.get("ok") is False:
+                # None: the tables do not load, which validation reports.
                 self.console.print(f"  {WORKBOOK_UNSYNCABLE}")
         if state in {"created", "replaced"} and result.get("counts"):
             counts = result["counts"]
