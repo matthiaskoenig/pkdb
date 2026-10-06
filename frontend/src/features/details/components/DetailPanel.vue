@@ -18,6 +18,7 @@ import {
   record,
   records,
   relations,
+  subsetPoints,
   text,
   type DetailRecord,
 } from "../types";
@@ -245,7 +246,7 @@ onBeforeUnmount(() => {
       <RecordFields :data="data" :omit="omitted" />
       <details v-if="data.array">
         <summary>Complete subset measurements</summary>
-        <RecordFields :data="{ measurements: data.array }" />
+        <RecordFields :data="subsetPoints(data.array, kind)" />
       </details>
       <section v-if="reference">
         <h3>Reference details</h3>

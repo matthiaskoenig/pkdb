@@ -447,4 +447,63 @@ describe("record exploration", () => {
     );
     known.unmount();
   });
+  it("lists the points of a subset with the fields they report", async () => {
+    const point = (pk: number, extra: Record<string, unknown>) => ({
+      pk,
+      group: { pk: 2, name: "all", count: 4 },
+      individual: {},
+      interventions: [
+        { pk: 7, name: "D1" },
+        { pk: 8, name: "D2" },
+      ],
+      ex: { pk: 7 },
+      normed: true,
+      mean: null,
+      sd: null,
+      error_bar: null,
+      unit: "gram / liter",
+      tissue: { sid: "plasma", name: "plasma", label: "plasma" },
+      method: null,
+      ...extra,
+    });
+    mocks.get.mockResolvedValueOnce({
+      data: {
+        pk: 7,
+        name: "Plasma",
+        data_type: "scatter",
+        array: [
+          [point(32, { mean: 70 }), point(33, { gmean: 0.008, gcv: 0.7854 })],
+        ],
+      },
+    });
+    const wrapper = mount(DetailPanel, {
+      props: { entity: "subsets", identifier: 7 },
+      global: { stubs: { ScientificPlot: true } },
+    });
+    await flushPromises();
+    const details = wrapper.get("details");
+    const labels = details.findAll("dt").map((term) => term.text());
+    expect(labels.slice(0, 2)).toEqual(["Point 1", "X"]);
+    expect(labels).toContain("Y");
+    // Vocabulary terms, related records and lists read as their names; empty
+    // fields and the legacy `ex` field are left out.
+    for (const missing of ["Ex", "Individual", "Mean", "Method", "Error bar"])
+      expect(labels.filter((label) => label === missing)).toHaveLength(
+        missing === "Mean" ? 1 : 0,
+      );
+    expect(details.text()).not.toContain("Not reported");
+    expect(details.text()).not.toContain("Dimensions");
+    const values = details.findAll("dd").map((value) => value.text());
+    expect(values).toEqual(
+      expect.arrayContaining(["all", "D1, D2", "plasma", "78.54\u00a0%"]),
+    );
+    wrapper.unmount();
+  });
+  it("shows an empty related record as not reported", () => {
+    const wrapper = mount(RecordFields, {
+      props: { data: { individual: {}, group: { name: "all" } } },
+    });
+    expect(wrapper.findAll("dd")[0]?.text()).toBe("Not reported");
+    wrapper.unmount();
+  });
 });

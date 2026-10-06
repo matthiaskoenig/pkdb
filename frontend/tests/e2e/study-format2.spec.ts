@@ -174,6 +174,38 @@ test.describe("a curator reads the study format 2 study", () => {
     );
     expect(lines.length).toBeGreaterThan(5);
     expect(Math.max(...lines)).toBe(1);
+    // A unit stays on one line; it never wraps after an operator.
+    const unit = page.getByRole("cell", {
+      name: "gram * hour / liter",
+      exact: true,
+    });
+    await expect(unit.first()).toBeVisible();
+    expect(
+      await unit.first().evaluate((cell) => {
+        const range = document.createRange();
+        range.selectNodeContents(cell);
+        return new Set(
+          [...range.getClientRects()]
+            .filter((rect) => rect.height > 0)
+            .map((rect) => Math.round(rect.top)),
+        ).size;
+      }),
+    ).toBe(1);
+    // Header texts start where the texts of their columns start.
+    const starts = await page.locator("table.science-table").evaluate((element) => {
+      const text = (node: Element) => {
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        return Math.round(range.getClientRects()[0]?.left ?? -1);
+      };
+      const headers = [...element.querySelectorAll("thead th")];
+      const cells = [...element.querySelectorAll("tbody tr:first-child td")];
+      return headers.map((header, index) => [
+        text(header.querySelector("button") ?? header),
+        text(cells[index]?.querySelector("button") ?? cells[index]!),
+      ]);
+    });
+    for (const [header, cell] of starts) expect(header).toBe(cell);
     await expect(table).not.toContainText("Not reported");
     const sorted = page.waitForResponse(
       (response) =>
@@ -234,6 +266,27 @@ test.describe("a curator reads the study format 2 study", () => {
     await expect(page).toHaveURL(/\/data\?/);
   });
 
+  test("a focused text field shows its ring around the whole field", async () => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/data");
+    const box = page.getByRole("combobox", {
+      name: "PKDB identifiers",
+      exact: true,
+    });
+    await box.focus();
+    await page.keyboard.press("Shift+Tab");
+    await page.keyboard.press("Tab");
+    await expect(box).toBeFocused();
+    // Around the input, the ring would cross the floating label.
+    await expect(box).toHaveCSS("outline-style", "none");
+    await expect(
+      box.locator(
+        "xpath=ancestor::div[contains(concat(' ', normalize-space(@class), ' '), ' v-field ')][1]",
+      ),
+    ).toHaveCSS("outline-style", "solid");
+    await page.keyboard.press("Escape");
+  });
+
   test("a PKDB identifier filter selects the released study", async () => {
     const criteria = {
       filters: { studies__pkdb_id__in: ["PKDB09901"] },
@@ -262,6 +315,12 @@ test.describe("a curator reads the study format 2 study", () => {
   test("timecourse traces carry the timecourse label and the geometric SD is a multiplicative band", async () => {
     await page.goto(address);
     await category(page, "Timecourses");
+    // Each timecourse states how many points it has; one page needs no pager.
+    const list = page.getByRole("region", { name: "Whole-study data" });
+    await expect(list.locator(".summary")).toHaveText(["3 points", "3 points"]);
+    await expect(
+      list.getByRole("button", { name: "Next records" }),
+    ).toHaveCount(0);
     await page
       .getByRole("button", { name: /Plasma after 10 mg daily \(geometric\)/ })
       .click();
@@ -344,6 +403,50 @@ test.describe("a curator reads the study format 2 study", () => {
     await expect(table).toContainText("22.6 %");
     await expect(table).toContainText("78.54 %");
     await expect(table).not.toContainText("0.2259");
+    // Points are numbered, a timecourse has no axis column, and the table
+    // starts where the text above it starts.
+    await expect(table.getByRole("columnheader")).toHaveText([
+      "Point",
+      "Time",
+      "Time unit",
+      "Mean",
+      "Median",
+      "SD",
+      "SE",
+      "CV",
+      "Geometric mean",
+      "Geometric SD",
+      "Geometric CV",
+      "Unit",
+    ]);
+    await expect(table.locator("tbody th")).toHaveText(["1", "2", "3"]);
+    const left = async (locator: ReturnType<Page["locator"]>) => {
+      const box = await locator.evaluate((element) => {
+        const range = document.createRange();
+        range.selectNodeContents(element);
+        return range.getBoundingClientRect().left;
+      });
+      return Math.round(box);
+    };
+    expect(await left(table.getByRole("columnheader").first())).toBe(
+      await left(
+        page.locator("p", {
+          hasText:
+            "Point values and their uncertainty; missing values are shown as -",
+        }),
+      ),
+    );
+    // The measurements of the subset list what they report, point by point.
+    await page
+      .getByText("Complete subset measurements", { exact: true })
+      .click();
+    const subset = page.locator("details", {
+      hasText: "Complete subset measurements",
+    });
+    await expect(subset.locator("dt").first()).toHaveText("Point 1");
+    await expect(subset).toContainText("Point 3");
+    await expect(subset).not.toContainText("Not reported");
+    await expect(subset.getByText("Ex", { exact: true })).toHaveCount(0);
     await page.getByRole("button", { name: "Back to previous record" }).click();
     await category(page, "Timecourses");
     await page

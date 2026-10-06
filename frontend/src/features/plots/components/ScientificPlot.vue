@@ -178,7 +178,7 @@ onBeforeUnmount(() => {
             <thead>
               <tr>
                 <th>Point</th>
-                <th>Axis</th>
+                <th v-if="kind === 'scatter'">Axis</th>
                 <th>Time</th>
                 <th>Time unit</th>
                 <th>Mean</th>
@@ -198,10 +198,8 @@ onBeforeUnmount(() => {
                 :key="index"
               >
                 <tr v-for="(point, axis) in pair" :key="point.pk">
-                  <th>{{ point.pk }}</th>
-                  <td>
-                    {{ kind === "timecourse" ? "Y" : axis === 0 ? "X" : "Y" }}
-                  </td>
+                  <th>{{ index + 1 }}</th>
+                  <td v-if="kind === 'scatter'">{{ axis === 0 ? "X" : "Y" }}</td>
                   <td>{{ cell("time", point.time) }}</td>
                   <td>{{ point.time_unit ?? "-" }}</td>
                   <td>{{ cell("mean", point.mean) }}</td>
@@ -235,13 +233,17 @@ onBeforeUnmount(() => {
 .plot-data {
   overflow-x: auto;
 }
-caption {
-  text-align: start;
+.plot-data table {
+  border-collapse: collapse;
 }
 th,
 td {
   padding: 0.4rem;
   text-align: left;
   white-space: nowrap;
+}
+/* The point numbers line up with the text above the table. */
+tr > :first-child {
+  padding-inline-start: 0;
 }
 </style>

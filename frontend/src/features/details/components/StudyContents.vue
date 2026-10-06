@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeUnmount, ref, shallowRef, watch } from "vue";
+import { computed, onBeforeUnmount, ref, shallowRef, watch } from "vue";
 import { VBtn, VSelect } from "vuetify/components";
 import { api, errorMessage } from "../../../api/client";
 import { useSessionStore } from "../../../stores/session";
@@ -42,11 +42,18 @@ function quantity(row: DetailRecord): string {
   const shown = typeof value === "number" ? formatNumber(value) : text(value);
   return row.unit ? `${shown} ${text(row.unit)}` : shown;
 }
+function points(row: DetailRecord): string {
+  const count = Array.isArray(row.array) ? row.array.length : 0;
+  return `${count} ${count === 1 ? "point" : "points"}`;
+}
 function summary(row: DetailRecord): string {
+  if (["timecourses", "scatters"].includes(category.value)) return points(row);
   const schedule =
     category.value === "interventions" ? scheduleText(row) : undefined;
   return [quantity(row), schedule].filter(Boolean).join(" · ");
 }
+const PAGE_SIZE = 20;
+const pages = computed(() => Math.max(1, Math.ceil(count.value / PAGE_SIZE)));
 async function load() {
   controller?.abort();
   controller = new AbortController();
@@ -58,7 +65,7 @@ async function load() {
   const params: Record<string, string | number | boolean> = {
     study_sid: props.sid,
     page: page.value,
-    page_size: 20,
+    page_size: PAGE_SIZE,
   };
   const entity = ["timecourses", "scatters"].includes(category.value)
     ? "subsets"
@@ -124,7 +131,13 @@ onBeforeUnmount(() => {
       {{ failure }} <VBtn @click="load">Retry study records</VBtn>
     </div>
     <template v-else>
-      <p>{{ count }} {{ count === 1 ? "record" : "records" }}</p>
+      <p>
+        {{
+          count === 0
+            ? "No records"
+            : `${count} ${count === 1 ? "record" : "records"}`
+        }}
+      </p>
       <ul class="records">
         <li v-for="(row, index) in rows" :key="text(row.pk) + index">
           <VBtn
@@ -136,17 +149,19 @@ onBeforeUnmount(() => {
             {{ text(row.pk) }} </VBtn
           ><span
             v-if="
-              ['outputs', 'interventions'].includes(category) && summary(row)
+              ['outputs', 'interventions', 'timecourses', 'scatters'].includes(
+                category,
+              ) && summary(row)
             "
             class="summary"
             >{{ summary(row) }}</span
           >
         </li>
       </ul>
-      <div class="pager">
+      <div v-if="pages > 1" class="pager">
         <VBtn :disabled="page === 1" @click="turn(-1)">Previous records</VBtn>
-        <span>Page {{ page }}</span>
-        <VBtn :disabled="page * 20 >= count" @click="turn(1)">
+        <span>Page {{ page }} of {{ pages }}</span>
+        <VBtn :disabled="page >= pages" @click="turn(1)">
           Next records
         </VBtn>
       </div>

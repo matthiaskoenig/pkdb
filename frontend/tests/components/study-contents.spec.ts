@@ -140,4 +140,46 @@ describe("whole-study contents", () => {
     expect(wrapper.text()).not.toContain("-");
     wrapper.unmount();
   });
+  it("counts the points of each timecourse and scatter", async () => {
+    mocks.get.mockResolvedValue(
+      page([
+        { pk: 6, name: "Plasma", data_type: "timecourse", array: [[{}], [{}], [{}]] },
+        { pk: 7, name: "Urine", data_type: "timecourse", array: [[{}]] },
+      ]),
+    );
+    const wrapper = mount(StudyContents, { props: { sid: "caffeine/X" } });
+    await flushPromises();
+    await wrapper.getComponent({ name: "VSelect" }).setValue("timecourses");
+    await flushPromises();
+    expect(mocks.get.mock.calls.at(-1)?.[1]?.params).toMatchObject({
+      data_type: "timecourse",
+    });
+    expect(wrapper.findAll("li .summary").map((item) => item.text())).toEqual([
+      "3 points",
+      "1 point",
+    ]);
+    wrapper.unmount();
+  });
+  it("says that there are no records and pages only through more than one page", async () => {
+    mocks.get.mockResolvedValue(page([]));
+    const wrapper = mount(StudyContents, { props: { sid: "caffeine/X" } });
+    await flushPromises();
+    expect(wrapper.text()).toContain("No records");
+    expect(wrapper.text()).not.toContain("0 records");
+    expect(wrapper.text()).not.toContain("Next records");
+    mocks.get.mockResolvedValue({
+      data: {
+        data: {
+          count: 45,
+          data: Array.from({ length: 20 }, (_, pk) => ({ pk, name: `G${pk}` })),
+        },
+      },
+    });
+    await wrapper.getComponent({ name: "VSelect" }).setValue("individuals");
+    await flushPromises();
+    expect(wrapper.text()).toContain("45 records");
+    expect(wrapper.text()).toContain("Page 1 of 3");
+    expect(wrapper.text()).toContain("Next records");
+    wrapper.unmount();
+  });
 });

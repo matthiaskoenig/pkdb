@@ -53,7 +53,7 @@ function items(value: unknown): unknown[] {
           </ul>
         </template>
         <RecordFields
-          v-else-if="isRecord(value) && depth < 8"
+          v-else-if="isRecord(value) && Object.keys(value).length && depth < 8"
           :data="value"
           :depth="depth + 1"
         />
@@ -88,6 +88,13 @@ li {
   }
   dd {
     margin-bottom: 0.75rem;
+  }
+  /* In one column, the fields of a nested record are indented under its label. */
+  dd > .record-fields {
+    margin-block: 0.25rem 0;
+    padding-inline-start: 0.75rem;
+    border-inline-start: 2px solid
+      rgba(var(--v-border-color), var(--v-border-opacity));
   }
 }
 </style>

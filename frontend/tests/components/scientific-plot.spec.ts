@@ -206,3 +206,52 @@ it("draws the chart on the surface of the light and the dark theme", async () =>
   expect(engine.react.mock.lastCall?.[1][0].line.color).toBe("#79d5d6");
   wrapper.unmount();
 });
+
+it("numbers the points of a scatter and pairs their axes", async () => {
+  const wrapper = mount(ScientificPlot, {
+    props: {
+      kind: "scatter",
+      points: [
+        [
+          { pk: 9, unit: "kg", mean: 70 },
+          { pk: 10, unit: "mg/l", mean: 2 },
+        ],
+        [
+          { pk: 11, unit: "kg", mean: 80 },
+          { pk: 12, unit: "mg/l", mean: 3 },
+        ],
+      ],
+    },
+  });
+  await flushPromises();
+  const rows = wrapper
+    .findAll("tbody tr")
+    .map((row) => row.findAll("th, td").slice(0, 2).map((cell) => cell.text()));
+  expect(rows).toEqual([
+    ["1", "X"],
+    ["1", "Y"],
+    ["2", "X"],
+    ["2", "Y"],
+  ]);
+  wrapper.unmount();
+});
+it("numbers the points of a timecourse without an axis column", async () => {
+  const wrapper = mount(ScientificPlot, {
+    props: {
+      kind: "timecourse",
+      points: [
+        [{ pk: 32, time: 1, time_unit: "h", unit: "mg/l", mean: 8 }],
+        [{ pk: 33, time: 2, time_unit: "h", unit: "mg/l", mean: 4 }],
+      ],
+    },
+  });
+  await flushPromises();
+  const headers = wrapper.findAll("thead th").map((header) => header.text());
+  expect(headers.slice(0, 2)).toEqual(["Point", "Time"]);
+  expect(headers).not.toContain("Axis");
+  expect(wrapper.findAll("tbody th").map((cell) => cell.text())).toEqual([
+    "1",
+    "2",
+  ]);
+  wrapper.unmount();
+});
