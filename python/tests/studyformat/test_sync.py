@@ -1,11 +1,10 @@
 """Tests of the sync engine between the study workbook and the TSV tables.
 
-Performance budget, checked on CI (plan Review Focus 5): a 20,000-row study
-syncs a one-cell workbook change together with a tables change, which merges the
-table and regenerates the workbook, in under 30 seconds.
+Performance, checked on CI (plan Review Focus 5): a one-cell workbook change
+together with a tables change, which merges the table and regenerates the
+workbook, takes CPU time linear in the rows of the study, up to 20,000 rows.
 """
 
-import time
 import warnings
 from pathlib import Path
 
@@ -1310,37 +1309,58 @@ def test_keep_must_name_a_side(study, sf_vocabulary):
         sync_study(study, sf_vocabulary, keep="both")  # ty: ignore[invalid-argument-type]
 
 
-def test_a_large_study_syncs_quickly(make_study, valid_files, tsv, sf_vocabulary):
-    rows = [
-        {
-            "subjects": "all",
-            "interventions": "D1",
-            "measurement": "cmax",
-            "substance": "drug",
-            "tissue": "plasma",
-            "time": str(index % 24),
-            "time_unit": "h",
-            "mean": str(index * 0.25),
-            "sd": "0.5",
-            "unit": "mg/l",
-            "comment": f"row {index}",
-        }
-        for index in range(20_000)
-    ]
-    folder = make_study({**valid_files, "outputs_Tab1.tsv": tsv("outputs", *rows)})
-    assert format_folder(folder).ok
-    assert sync_study(folder, sf_vocabulary).workbook_action == "created"
-    path = workbook_path(folder)
-    first, last = (
-        cell(folder, "outputs_Tab1.tsv", line, "comment") for line in (2, 20_001)
-    )
-    set_cells(path, "outputs_Tab1", 2, mean=99)
-    edit_table(folder, "outputs_Tab1.tsv", 20_001, sd="0.75")
+def test_the_cpu_time_check_tells_linear_from_quadratic_work(linear_cpu_time):
+    def linear(count):
+        return lambda: sum(range(count * 5_000))
 
-    start = time.perf_counter()
-    result = sync_study(folder, sf_vocabulary)
-    elapsed = time.perf_counter() - start
+    def quadratic(count):
+        return lambda: sum(1 for _ in range(count) for _ in range(count))
 
+    assert linear_cpu_time(linear, 1_000) == sum(range(20_000_000))
+    with pytest.raises(AssertionError, match="times the CPU time"):
+        linear_cpu_time(quadratic, 1_000)
+
+
+def test_a_large_study_syncs_quickly(
+    make_study, valid_files, tsv, sf_vocabulary, linear_cpu_time
+):
+    folders, edited = {}, {}
+
+    def prepare(count):
+        rows = [
+            {
+                "subjects": "all",
+                "interventions": "D1",
+                "measurement": "cmax",
+                "substance": "drug",
+                "tissue": "plasma",
+                "time": str(index % 24),
+                "time_unit": "h",
+                "mean": str(index * 0.25),
+                "sd": "0.5",
+                "unit": "mg/l",
+                "comment": f"row {index}",
+            }
+            for index in range(count)
+        ]
+        folder = folders[count] = make_study(
+            {**valid_files, "outputs_Tab1.tsv": tsv("outputs", *rows)},
+            substance=f"rows{count}",
+        )
+        assert format_folder(folder).ok
+        assert sync_study(folder, sf_vocabulary).workbook_action == "created"
+        edited[count] = tuple(
+            cell(folder, "outputs_Tab1.tsv", line, "comment") for line in (2, count + 1)
+        )
+        set_cells(workbook_path(folder), "outputs_Tab1", 2, mean=99)
+        edit_table(folder, "outputs_Tab1.tsv", count + 1, sd="0.75")
+        return lambda: sync_study(folder, sf_vocabulary)
+
+    # A merge and a regeneration of 5,000 and of 20,000 rows.
+    result = linear_cpu_time(prepare, 5_000)
+
+    folder = folders[20_000]
+    first, last = edited[20_000]
     assert result.ok, result.issues[:3]
     assert result.changes == (FileChange("outputs_Tab1.tsv", "write"),)
     assert result.workbook_action == "regenerated"
@@ -1355,7 +1375,6 @@ def test_a_large_study_syncs_quickly(make_study, valid_files, tsv, sf_vocabulary
     assert len(rows) == 20_000
     assert rows[first]["mean"] == "99"
     assert rows[last]["sd"] == "0.75"
-    assert elapsed < 30, f"syncing 20,000 rows took {elapsed:.1f} s"
 
 
 def test_add_table_adds_an_empty_sheet(study, workbook, sf_vocabulary):

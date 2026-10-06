@@ -211,8 +211,8 @@ import json, sys, time
 from pkdb.studyformat.rows import time_unit_status, unit_known
 result = {}
 for unit in json.loads(sys.argv[1]):
-    start = time.monotonic()
-    result[unit] = [unit_known(unit), time_unit_status(unit), time.monotonic() - start]
+    start = time.process_time()
+    result[unit] = [unit_known(unit), time_unit_status(unit), time.process_time() - start]
 print(json.dumps(result))
 """
 
@@ -229,6 +229,8 @@ def test_power_bombs_are_rejected_quickly():
     ).stdout
     for unit, (known, status, seconds) in json.loads(output).items():
         assert (unit, known, status) == (unit, False, "invalid")
+        # A rejected unit takes less than a millisecond of CPU time; evaluating
+        # the power would take far longer.
         assert seconds < 1, unit
 
 

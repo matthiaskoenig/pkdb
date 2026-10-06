@@ -1,14 +1,14 @@
 """Tests of reading the study workbook back into canonical TSV tables.
 
-Performance budgets, checked on CI (plan Review Focus 5):
+Performance, checked on CI (plan Review Focus 5):
 
-- A 20,000-row `outputs_Tab1` sheet reads in under 15 seconds.
+- Reading an `outputs_Tab1` sheet takes CPU time linear in its rows, up to
+  20,000 rows.
 - A workbook whose stored `<dimension>` claims `A1:Z1048576` but which holds
-  10 rows reads in under 2 seconds.
+  10 rows reads in under 2 CPU seconds.
 """
 
 import re
-import time
 import warnings
 from datetime import UTC, datetime
 from pathlib import Path
@@ -607,33 +607,35 @@ def test_the_row_limit_counts_the_rows_of_every_sheet(workbook):
     assert error.value.report.issues[0].code == "row_limit"
 
 
-def test_reading_a_large_sheet_is_fast(sf_vocabulary, tmp_path):
-    rows = [
-        {
-            "subjects": "all",
-            "interventions": "D1",
-            "measurement": "cmax",
-            "substance": "drug",
-            "tissue": "plasma",
-            "time": str(index % 24),
-            "time_unit": "h",
-            "mean": str(index * 0.25),
-            "sd": "0.5",
-            "unit": "mg/l",
-            "comment": f"row {index}",
-        }
-        for index in range(20_000)
-    ]
-    tables = {"subjects.tsv": subjects(), "outputs_Tab1.tsv": outputs(*rows)}
-    path = build(tables, sf_vocabulary, tmp_path / "Example.xlsx")
+def test_reading_a_large_sheet_is_fast(sf_vocabulary, tmp_path, linear_cpu_time):
+    def prepare(count):
+        rows = [
+            {
+                "subjects": "all",
+                "interventions": "D1",
+                "measurement": "cmax",
+                "substance": "drug",
+                "tissue": "plasma",
+                "time": str(index % 24),
+                "time_unit": "h",
+                "mean": str(index * 0.25),
+                "sd": "0.5",
+                "unit": "mg/l",
+                "comment": f"row {index}",
+            }
+            for index in range(count)
+        ]
+        tables = {"subjects.tsv": subjects(), "outputs_Tab1.tsv": outputs(*rows)}
+        folder = tmp_path / str(count)
+        folder.mkdir()
+        path = build(tables, sf_vocabulary, folder / "Example.xlsx")
+        return lambda: read_workbook(path, STUDY)
 
-    start = time.perf_counter()
-    content = read_workbook(path, STUDY)
-    elapsed = time.perf_counter() - start
+    # A sheet of 5,000 and one of 20,000 rows.
+    content = linear_cpu_time(prepare, 5_000)
 
     assert content.ok, content.issues[:3]
     assert len(content.tables["outputs_Tab1.tsv"].rows) == 20_001
-    assert elapsed < 15, f"reading 20,000 rows took {elapsed:.1f} s"
 
 
 def with_dimension(path, dimension) -> Path:
@@ -654,7 +656,7 @@ def with_dimension(path, dimension) -> Path:
 
 
 @pytest.mark.parametrize("dimension", ["A1:Z1048576", "A1"])
-def test_the_stored_dimension_is_ignored(sf_vocabulary, tmp_path, dimension):
+def test_the_stored_dimension_is_ignored(sf_vocabulary, tmp_path, cpu_time, dimension):
     # The comment column AA lies beyond both dimensions.
     rows = [
         {"subjects": "all", "measurement": "cmax", "mean": str(n), "comment": "c"}
@@ -665,15 +667,15 @@ def test_the_stored_dimension_is_ignored(sf_vocabulary, tmp_path, dimension):
         build(tables, sf_vocabulary, tmp_path / "Example.xlsx"), dimension
     )
 
-    start = time.perf_counter()
-    content = read_workbook(path, STUDY)
-    elapsed = time.perf_counter() - start
+    content, seconds = cpu_time(lambda: read_workbook(path, STUDY))
 
     assert content.ok, content.issues
     assert texts(content) == tables
     assert content.base is not None
     assert dict(content.base.files) == tables
-    assert elapsed < 2, f"reading took {elapsed:.1f} s"
+    # Reading the 10 rows takes about 0.05 CPU seconds; reading every row of
+    # the claimed dimension would take minutes.
+    assert seconds < 2, f"reading took {seconds:.1f} CPU seconds"
 
 
 def test_the_workbook_is_read_from_one_snapshot(workbook, study_tables, monkeypatch):

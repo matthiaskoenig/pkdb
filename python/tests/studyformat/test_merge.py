@@ -328,16 +328,17 @@ def test_large_tables_merge_quickly():
         side[position] = f"changed {position}"
     assert sum(line != old for line, old in zip(ours, base)) == 200
 
-    start = time.perf_counter()
+    start = time.process_time()
     result = merge_lines(base, ours, theirs)
-    elapsed = time.perf_counter() - start
+    elapsed = time.process_time() - start
 
     expected = [
         theirs[index] if ours[index] == line else ours[index]
         for index, line in enumerate(base)
     ]
     assert result == MergeResult(tuple(expected), ())
-    assert elapsed < 2, f"merging 20,000 lines took {elapsed:.2f} s"
+    # About 0.05 CPU seconds, so the budget leaves a margin of 40 times.
+    assert elapsed < 2, f"merging 20,000 lines took {elapsed:.2f} CPU seconds"
 
 
 def test_far_apart_changes_to_repeated_lines_merge(tmp_path):
@@ -360,12 +361,14 @@ def test_repetitive_tables_merge_quickly():
     expected = list(base)
     expected[5_000], expected[15_000] = "ours", "theirs"
 
-    start = time.perf_counter()
+    start = time.process_time()
     result = merge_lines(base, ours, theirs)
-    elapsed = time.perf_counter() - start
+    elapsed = time.process_time() - start
 
     assert result == MergeResult(tuple(expected), ())
-    assert elapsed < 2, f"merging 20,000 lines took {elapsed:.2f} s"
+    # About 0.002 CPU seconds with the common prefix and suffix matched first;
+    # SequenceMatcher on all lines took about 1 second.
+    assert elapsed < 2, f"merging 20,000 lines took {elapsed:.2f} CPU seconds"
 
 
 @pytest.mark.parametrize("inserted", [0, 3])
