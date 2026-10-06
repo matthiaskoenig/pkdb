@@ -432,3 +432,76 @@ def test_authenticated_exports_have_no_concurrency_limit(client, ingestion_conte
     finally:
         for stream in streams:
             stream.close()
+
+
+def test_scatter_downloads_carry_the_count_of_each_axis(
+    client, creator_headers, tmp_path, session_factory
+):
+    import csv
+    from io import BytesIO, StringIO
+    from zipfile import ZipFile
+
+    from pkdb.studyformat.formatter import format_folder
+    from pkdb_server.db.models.vocabulary import VocabularyNode
+    from tests.fixtures.study_folders import multipart, tsv, write_study
+
+    with session_factory.begin() as session:
+        session.add_all(
+            VocabularyNode(
+                sid=name,
+                name=name,
+                kind="measurement",
+                definition={"dtype": "numeric", "units": [unit]},
+            )
+            for name, unit in (("weight", "kg"), ("cmax", "mg/l"))
+        )
+    folder = write_study(tmp_path / "sources")
+    (folder / "subjects.tsv").write_text(
+        tsv(
+            "subjects",
+            {"name": "all", "count": "14", "source": "Tab1"},
+            {"name": "G1", "parent": "all", "count": "6", "source": "Tab1"},
+            {"name": "G2", "parent": "all", "count": "8", "source": "Tab1"},
+        ),
+        encoding="utf-8",
+    )
+    point = {
+        "name": "weight_vs_cmax",
+        "x_measurement": "weight",
+        "x_unit": "kg",
+        "y_interventions": "D1",
+        "y_measurement": "cmax",
+        "y_substance": "drug",
+        "y_tissue": "plasma",
+        "y_unit": "mg/l",
+    }
+    (folder / "scatters_Tab2.tsv").write_text(
+        tsv(
+            "scatters",
+            {**point, "subjects": "G1", "x_mean": "70", "y_mean": "2"},
+            {**point, "subjects": "G2", "x_mean": "80", "y_mean": "3"},
+        ),
+        encoding="utf-8",
+    )
+    assert format_folder(folder).ok
+    response = client.put(
+        "/api/v2/studies/caffeine/Example",
+        headers=creator_headers,
+        **multipart(folder),
+    )
+    assert response.status_code == 201, response.text
+    response = client.get(
+        "/api/v1/filter/", headers=creator_headers, params={"download": "true"}
+    )
+    assert response.status_code == 200
+    with ZipFile(BytesIO(response.content)) as archive:
+        rows = list(csv.DictReader(StringIO(archive.read("scatters.csv").decode())))
+    # One row per scatter subset and representation; each axis lists the
+    # count of its points, the counts of the groups G1 and G2.
+    assert rows
+    for row in rows:
+        assert (row["x_count"], row["y_count"]) == ("(6, 8)", "(6, 8)")
+        assert (row["x_measurement_type"], row["y_measurement_type"]) == (
+            "weight",
+            "cmax",
+        )
