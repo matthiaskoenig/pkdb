@@ -8,13 +8,22 @@ XYAxes (javascript/core/axes/xy.js, commit 3a3ecb1).
 
 import math
 import re
+import tarfile
+from collections.abc import Iterator
 from copy import deepcopy
 from dataclasses import dataclass, field
+from pathlib import Path
+from typing import TYPE_CHECKING
 
+from pkdb.cache import atomic_bytes, atomic_text
 from pkdb.schemas.validation import ValidationIssue
-from pkdb.studyformat.issues import make_issue
+from pkdb.studyformat.issues import make_issue, row_issue
 from pkdb.studyformat.jsonio import JsonFileError, dump_json, load_json
+from pkdb.studyformat.tables import STUDY_JSON, image_file
 from pkdb.studyformat.text import NUMBER_PATTERN
+
+if TYPE_CHECKING:
+    from pkdb.studyformat.load import LoadedStudy, LoadedTable, Row
 
 DIGITIZATION_SUFFIX = ".wpd.json"
 FIGURE_SOURCE = re.compile(r"Fig[A-Za-z0-9_-]+")
@@ -317,3 +326,247 @@ def png_size(data: bytes) -> tuple[int, int] | None:
     if len(data) < 24 or not data.startswith(PNG_SIGNATURE) or data[12:16] != b"IHDR":
         return None
     return int.from_bytes(data[16:20]), int.from_bytes(data[20:24])
+
+
+ERROR_BAR_SUFFIX = ";error_bar"
+MISMATCH_PIXELS = 2.0
+CENTRAL = ("mean", "median", "gmean")
+PROJECT_MEMBER = "wpd.json"
+
+
+@dataclass(frozen=True)
+class MappedPoint:
+    """A mapped row as a point of a dataset, in axis units."""
+
+    dataset: str
+    file: str
+    line: int
+    column: str
+    x: float
+    y: float
+
+
+def central_column(row: Row) -> str | None:
+    """The column of the central value of a timecourse row: mean, median or gmean."""
+    return next(
+        (name for name in CENTRAL if isinstance(row.values.get(name), float)), None
+    )
+
+
+def mapped_points(table: LoadedTable) -> list[MappedPoint]:
+    """The rows of a timecourse or scatter table as dataset points."""
+    points: list[MappedPoint] = []
+    for row in table.rows:
+        values = row.values
+        if table.kind == "timecourses":
+            time, label = values.get("time"), row.cells.get("label", "")
+            column = central_column(row)
+            if not isinstance(time, float) or column is None or not label:
+                continue
+            value = values[column]
+            assert isinstance(value, float)
+            points.append(MappedPoint(label, table.file, row.line, column, time, value))
+            if isinstance(bar := values.get("error_bar"), float):
+                points.append(
+                    MappedPoint(
+                        label + ERROR_BAR_SUFFIX,
+                        table.file,
+                        row.line,
+                        "error_bar",
+                        time,
+                        bar,
+                    )
+                )
+        elif table.kind == "scatters":
+            x, y = values.get("x_mean"), values.get("y_mean")
+            name = row.cells.get("name", "")
+            if isinstance(x, float) and isinstance(y, float) and name:
+                points.append(MappedPoint(name, table.file, row.line, "y_mean", x, y))
+    return points
+
+
+def _outside_image(
+    digitization: LoadedDigitization, size: tuple[int, int]
+) -> ValidationIssue | None:
+    """The `digitization_outside_image` issue when a calibration or dataset pixel is off the image."""
+    width, height = size
+    pixels = [(p.px, p.py) for axes in digitization.axes.values() for p in axes.points]
+    pixels += [point for dataset in digitization.datasets for point in dataset.points]
+    for px, py in pixels:
+        if not (0 <= px <= width and 0 <= py <= height):
+            return make_issue(
+                "digitization_outside_image",
+                f"The pixel ({px:g}, {py:g}) lies outside the {width} x {height} image",
+                file=digitization.file,
+            )
+    return None
+
+
+def _header_size(path: Path) -> tuple[int, int] | None:
+    with path.open("rb") as stream:
+        return png_size(stream.read(24))
+
+
+def _pixel(axes: Axes, x: float, y: float) -> tuple[float, float] | None:
+    try:
+        return axes.data_to_pixel(x, y)
+    except DigitizationError:
+        return None
+
+
+def check_digitizations(study: LoadedStudy) -> Iterator[ValidationIssue]:
+    """Compare each digitization with its image and the mapped rows of its source."""
+    for digitization in study.digitizations:
+        image = image_file(study.name, digitization.source)
+        if image not in study.layout.files:
+            continue
+        size = _header_size(study.folder / image)
+        if size is None:
+            yield make_issue(
+                "digitization_invalid",
+                f"{image} is not a PNG image",
+                file=digitization.file,
+            )
+            continue
+        if issue := _outside_image(digitization, size):
+            yield issue
+        points = [
+            point
+            for table in study.tables
+            if table.source == digitization.source
+            for point in mapped_points(table)
+        ]
+        tables = {table.file: table for table in study.tables}
+        datasets = {dataset.name: dataset for dataset in digitization.datasets}
+        mapped = {point.dataset for point in points}
+        for dataset in digitization.datasets:
+            if dataset.name not in mapped:
+                yield make_issue(
+                    "unknown_dataset",
+                    f"The dataset {dataset.name!r} matches no mapped row of source {digitization.source}",
+                    file=digitization.file,
+                )
+        matched: dict[str, set[int]] = {name: set() for name in datasets}
+        for point in points:
+            dataset = datasets.get(point.dataset)
+            if dataset is None or not dataset.points:
+                continue
+            pixel = _pixel(digitization.axes[dataset.axes], point.x, point.y)
+            if pixel is None:
+                continue
+            distances = [math.dist(pixel, other) for other in dataset.points]
+            nearest = min(distances)
+            for index, distance in enumerate(distances):
+                if distance <= MISMATCH_PIXELS:
+                    matched[dataset.name].add(index)
+            if nearest <= MISMATCH_PIXELS:
+                continue
+            table = tables[point.file]
+            row = next(row for row in table.rows if row.line == point.line)
+            value = row.values[point.column]
+            assert isinstance(value, float)
+            yield row_issue(
+                table,
+                row,
+                "digitized_mismatch",
+                f"{point.column} {value:g} at {point.x:g} lies {nearest:.1f} pixels from the nearest point of dataset {dataset.name!r} in {digitization.file}",
+                point.column,
+            )
+        for dataset in digitization.datasets:
+            if dataset.name not in mapped:
+                continue
+            unmatched = len(dataset.points) - len(matched[dataset.name])
+            if unmatched:
+                yield make_issue(
+                    "digitized_mismatch",
+                    f"{unmatched} points of dataset {dataset.name!r} have no mapped row within {MISMATCH_PIXELS:g} pixels",
+                    file=digitization.file,
+                )
+
+
+@dataclass(frozen=True)
+class ImportResult:
+    """The outcome of importing a project: the file written and the issues that stopped it."""
+
+    file: str
+    wrote_image: bool
+    issues: list[ValidationIssue]
+
+
+def _read_archive(path: Path) -> tuple[bytes, bytes | None]:
+    """The project JSON and the single PNG image (or None) of a WebPlotDigitizer .tar file."""
+    projects: list[bytes] = []
+    images: list[bytes] = []
+    with tarfile.open(path, "r:") as tar:
+        for member in tar.getmembers():
+            if not member.isfile():
+                continue
+            name = member.name.rsplit("/", 1)[-1]
+            if name == PROJECT_MEMBER or name.lower().endswith(".png"):
+                stream = tar.extractfile(member)
+                assert stream is not None
+                (projects if name == PROJECT_MEMBER else images).append(stream.read())
+    if len(projects) != 1:
+        raise ValueError(f"The archive needs exactly one {PROJECT_MEMBER} member")
+    return projects[0], images[0] if len(images) == 1 else None
+
+
+def import_project(folder: Path, source: str, path: Path) -> ImportResult:
+    """Import a WebPlotDigitizer project (JSON or .tar) as the digitization of a figure.
+
+    Raises ValueError for a source or study that cannot take it. Nothing is
+    written when the project has an error.
+    """
+    if not FIGURE_SOURCE.fullmatch(source):
+        raise ValueError(f"{source!r} is not a figure source such as Fig1")
+    if not (folder / STUDY_JSON).is_file():
+        raise ValueError(f"{folder} is not a study folder: it has no {STUDY_JSON}")
+    study = folder.name
+    file = digitization_file(study, source)
+    image_name = image_file(study, source)
+    if path.suffix == ".tar":
+        try:
+            content, archive_image = _read_archive(path)
+        except tarfile.TarError as error:
+            return ImportResult(
+                file,
+                False,
+                [make_issue("digitization_invalid", f"Not a tar archive: {error}")],
+            )
+        except ValueError as error:
+            return ImportResult(
+                file, False, [make_issue("digitization_invalid", str(error))]
+            )
+    else:
+        content, archive_image = path.read_bytes(), None
+    existing = folder / image_name
+    image = existing.read_bytes() if existing.is_file() else archive_image
+    write_image = not existing.is_file() and archive_image is not None
+    loaded, issues = load_digitization(file, content, source)
+    if loaded is None:
+        return ImportResult(file, False, issues)
+    if image is None:
+        return ImportResult(
+            file,
+            False,
+            [make_issue("missing_image", f"{image_name} is missing", file=file)],
+        )
+    size = png_size(image)
+    if size is None:
+        return ImportResult(
+            file,
+            False,
+            [
+                make_issue(
+                    "digitization_invalid",
+                    f"{image_name} is not a PNG image",
+                    file=file,
+                )
+            ],
+        )
+    if issue := _outside_image(loaded, size):
+        return ImportResult(file, False, [issue])
+    if write_image:
+        atomic_bytes(existing, image)
+    atomic_text(folder / file, canonical_digitization(loaded))
+    return ImportResult(file, write_image, [])

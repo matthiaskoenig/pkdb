@@ -129,12 +129,19 @@ def main(argv=None, *, client=None) -> int:
     sync.add_argument(
         "--output", type=Path, help="Portable project vocabulary lock file"
     )
-    from pkdb import import_cli, reference_cli, studyformat_cli, tables_cli
+    from pkdb import (
+        figure_cli,
+        import_cli,
+        reference_cli,
+        studyformat_cli,
+        tables_cli,
+    )
 
     reference_cli.register(commands)
     import_cli.register(commands)
     studyformat_cli.register(commands)
     tables_cli.register(commands)
+    figure_cli.register(commands)
     update = commands.add_parser(
         "update",
         help="Update pkdb to the newest release",
@@ -155,6 +162,8 @@ def main(argv=None, *, client=None) -> int:
         return studyformat_cli.run(args)
     if args.command == "tables":
         return tables_cli.run(args)
+    if args.command == "digitize":
+        return figure_cli.run(args)
     if args.command == "curate":
         from pkdb.curation.engine import WorkspaceError
         from pkdb.curation.launch import run

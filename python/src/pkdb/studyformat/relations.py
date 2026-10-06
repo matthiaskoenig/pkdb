@@ -9,6 +9,7 @@ from functools import cache
 from pathlib import Path
 
 from pkdb.schemas.validation import ValidationIssue
+from pkdb.studyformat.digitize import check_digitizations
 from pkdb.studyformat.issues import LISTED, IssueCap, make_issue, row_issue
 from pkdb.studyformat.load import LoadedStudy, LoadedTable, Row
 from pkdb.studyformat.tables import (
@@ -61,6 +62,7 @@ def check_relations(study: LoadedStudy) -> list[ValidationIssue]:
         _duplicates,
         _unused,
         _images,
+        check_digitizations,
         _study_rules,
         _review_rules,
     ):
@@ -432,6 +434,15 @@ def _images(study: LoadedStudy) -> Issues:
             reported.add(raw.source)
             yield make_issue(
                 "missing_image", f"{image} is missing for {raw.file}", file=raw.file
+            )
+    for digitization in study.digitizations:
+        image = image_file(study.name, digitization.source)
+        if digitization.source not in reported and image not in study.layout.files:
+            reported.add(digitization.source)
+            yield make_issue(
+                "missing_image",
+                f"{image} is missing for {digitization.file}",
+                file=digitization.file,
             )
 
 
