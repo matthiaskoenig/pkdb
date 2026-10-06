@@ -79,3 +79,50 @@ def test_study_reference_failed_refresh_exits_1_after_writing(
     assert "unreachable" in output["reference_error"]
     reference = metadata.read_metadata(valid_study).metadata.reference
     assert reference is not None and reference.pmid == "456"
+
+
+def test_review_commands(valid_study, sf_vocabulary, tmp_path, capsys, monkeypatch):
+    lock = tmp_path / "vocabulary.json"
+    sf_vocabulary.save(lock)
+    monkeypatch.setenv("PKDB_USER", "curator")
+    monkeypatch.delenv("PKDB_AGENT", raising=False)
+    add = ["review", "add", str(valid_study), "--kind", "question", "--text", "Why?"]
+    add += ["--file", "timecourses_Fig1.tsv", "--rows", "label=drug_plasma"]
+    assert main([*add, "--format", "json"]) == 0
+    item = json.loads(capsys.readouterr().out)["item"]
+    resolve = ["review", "resolve", str(valid_study), item["id"], "--text", "Fine."]
+    assert main([*resolve, "--format", "json"]) == 0
+    capsys.readouterr()
+    assert main(["review", "show", str(valid_study), "--format", "json"]) == 0
+    shown = json.loads(capsys.readouterr().out)
+    assert shown["items"][0]["state"] == "resolved" and shown["items"][0]["matches"] > 0
+    status = [
+        "review",
+        "status",
+        str(valid_study),
+        "approved",
+        "--vocabulary",
+        str(lock),
+    ]
+    assert main([*status, "--agent", "claude", "--format", "json"]) == 1
+    assert json.loads(capsys.readouterr().out)["error"] == "approval_refused"
+    assert main([*status, "--format", "json"]) == 0
+    capsys.readouterr()
+    monkeypatch.delenv("PKDB_USER")
+    assert (
+        main(["review", "reopen", str(valid_study), item["id"], "--format", "json"])
+        == 1
+    )
+    assert json.loads(capsys.readouterr().out)["error"] == "no_user"
+
+
+def test_review_acknowledge_without_matching_warning(
+    valid_study, sf_vocabulary, tmp_path, capsys, monkeypatch
+):
+    lock = tmp_path / "vocabulary.json"
+    sf_vocabulary.save(lock)
+    monkeypatch.setenv("PKDB_USER", "curator")
+    command = ["review", "acknowledge", str(valid_study), "outside_range"]
+    command += ["--file", "timecourses_Fig1.tsv", "--text", "x"]
+    assert main([*command, "--vocabulary", str(lock), "--format", "json"]) == 1
+    assert json.loads(capsys.readouterr().out)["error"] == "no_such_warning"
