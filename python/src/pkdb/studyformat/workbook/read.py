@@ -9,9 +9,12 @@ from datetime import date, time, timedelta
 from io import BytesIO
 from pathlib import Path
 
-import openpyxl
+from openpyxl.cell.text import Text
+from openpyxl.reader.excel import ExcelReader
 from openpyxl.styles.numbers import is_date_format
 from openpyxl.workbook import Workbook
+from openpyxl.xml.constants import SHARED_STRINGS, SHEET_MAIN_NS
+from openpyxl.xml.functions import iterparse
 
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.formatter import subject_order, table_rows
@@ -25,6 +28,7 @@ from pkdb.studyformat.workbook.base import (
     WorkbookBase,
     parse_base,
 )
+from pkdb.studyformat.workbook.write import not_xml
 
 SUBJECTS = "subjects"
 # The texts of the error values of Excel and LibreOffice.
@@ -42,6 +46,9 @@ ERROR_VALUES = frozenset(
 )
 # The error value of a date-formatted number that openpyxl cannot convert.
 OUTSIDE_CALENDAR = "#VALUE!"
+# The OOXML escape of a character, such as `_x0041_` for A and `_x005F_` for _.
+ESCAPE = re.compile(r"_x([0-9A-Fa-f]{4})_")
+SHARED_STRING = f"{{{SHEET_MAIN_NS}}}si"
 LINE_BREAK = re.compile(r"[\t\n\r]")
 LINE_BREAKS = {"\t": "tab", "\n": "line break", "\r": "carriage return"}
 DATE_HINT = (
@@ -50,6 +57,7 @@ DATE_HINT = (
 )
 CELL_ISSUES = {
     "cell_line_break": "contain a tab or a line break",
+    "illegal_character": "contain characters a table cannot hold",
     "cell_date": "hold a date or a time",
     "cell_percent": "are formatted as percentages",
     "cell_error": "hold an error value",
@@ -103,14 +111,46 @@ class _Unreadable(Exception):
     """openpyxl cannot read the workbook or one of its sheets."""
 
 
+class _Reader(ExcelReader):
+    """The reader of openpyxl, keeping the shared strings as the file stores them.
+
+    openpyxl removes every `x005F_` from a shared string, which turns the stored
+    `a_x005F_x005F_b` of the text `a_x005F_b` into `a_b`, and it keeps the
+    escapes of inline strings. `_decoded` decodes both kinds alike.
+    """
+
+    def read_strings(self) -> None:
+        part = self.package.find(SHARED_STRINGS)
+        if part is None:
+            return
+        strings = []
+        with self.archive.open(part.PartName[1:]) as source:
+            for _, node in iterparse(source):
+                if node.tag == SHARED_STRING:
+                    strings.append(Text.from_tree(node).content)
+                    node.clear()
+        self.shared_strings = strings
+
+
 def _load(data: bytes, *, data_only: bool) -> Workbook:
     try:
-        return openpyxl.load_workbook(
-            BytesIO(data), read_only=True, data_only=data_only
-        )
+        reader = _Reader(BytesIO(data), read_only=True, data_only=data_only)
+        reader.read()
     except Exception as error:
         # openpyxl raises many kinds of errors for a damaged or foreign file.
         raise _Unreadable(str(error)) from error
+    return reader.wb
+
+
+def _character(match: re.Match[str]) -> str:
+    code = int(match.group(1), 16)
+    # A lone surrogate is no character; its escape stays text.
+    return match.group() if 0xD800 <= code <= 0xDFFF else chr(code)
+
+
+def _decoded(text: str) -> str:
+    """A stored text with its OOXML escapes decoded, as spreadsheet applications read it."""
+    return ESCAPE.sub(_character, text) if "_x" in text else text
 
 
 def _rows(sheet, *, values_only: bool = False) -> Iterator[tuple]:
@@ -143,6 +183,7 @@ def _value_text(cell) -> tuple[str, Problem | None]:
             )
         return str(value), _error_value(str(value))
     if isinstance(value, str):
+        value = _decoded(value)
         if value.strip() in ERROR_VALUES:
             return value, _error_value(value.strip())
         if (match := LINE_BREAK.search(value)) is not None:
@@ -151,6 +192,13 @@ def _value_text(cell) -> tuple[str, Problem | None]:
                 "cell_line_break",
                 f"The cell contains a {name}; a table cell holds a single line",
                 f"Remove the {name} from the cell.",
+            )
+        if (character := not_xml(value)) is not None:
+            # Excel stores a control character as its escape, such as _x0001_.
+            return value, (
+                "illegal_character",
+                f"The cell contains {character}, which a table cannot hold",
+                "Remove the character.",
             )
         return value, None
     if isinstance(value, bool):
@@ -317,8 +365,12 @@ def _read_base(
                 file=workbook,
             )
         ]
+    rows = (
+        tuple(_decoded(cell) if isinstance(cell, str) else cell for cell in row)
+        for row in _rows(values[BASE_SHEET], values_only=True)
+    )
     try:
-        return parse_base(_rows(values[BASE_SHEET], values_only=True)), []
+        return parse_base(rows), []
     except BaseError as error:
         return None, [make_issue(error.code, error.message, file=workbook)]
 

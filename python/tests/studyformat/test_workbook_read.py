@@ -23,6 +23,7 @@ from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.issues import REPEATED_ISSUES
 from pkdb.studyformat.tables import TABLES
 from pkdb.studyformat.text import render_tsv
+from pkdb.studyformat.workbook import read
 from pkdb.studyformat.workbook.base import BASE_SHEET
 from pkdb.studyformat.workbook.read import SheetTable, read_workbook
 from pkdb.studyformat.workbook.write import build_workbook
@@ -72,6 +73,16 @@ EDGE_ROWS = (
         "unit": "50%",
         # U+0085 and U+2028 end a line for str.splitlines, but not in a TSV file.
         "comment": f"'quoted 1/2 3.0 +1 {chr(0x1F600)}{chr(0xFFFD)}{chr(0x85)}{chr(0x2028)}x",
+    },
+    # Spreadsheet applications read _x0041_ as the escape of A.
+    {
+        "subjects": "S2",
+        "interventions": "D1",
+        "measurement": "cmax",
+        "time": "2",
+        "tissue": "_x0041_",
+        "method": "a_x005F_b",
+        "comment": "_x005F_x0041_",
     },
 )
 
@@ -163,7 +174,7 @@ def workbook(study_tables, sf_vocabulary, tmp_path):
     return build(study_tables, sf_vocabulary, tmp_path / "Example.xlsx")
 
 
-def check_round_trip(content, tables):
+def check_round_trip(content, tables, base=None):
     assert content.issues == []
     assert content.ok
     assert texts(content) == tables
@@ -184,7 +195,7 @@ def check_round_trip(content, tables):
     assert content.base is not None
     assert content.base.generation == GENERATION
     assert content.base.created == CREATED
-    assert dict(content.base.files) == tables
+    assert dict(content.base.files) == (tables if base is None else base)
 
 
 @pytest.fixture
@@ -194,7 +205,14 @@ def edge_tables(make_study, valid_files, tsv):
     assert format_folder(folder).ok
     tables = tables_of(folder)
     # The edge texts survive formatting, so the round trip covers them.
-    for text in ("0.30000000000000004", "1234567890123456", "\tNR\tNR\t", "\t=x\t"):
+    for text in (
+        "0.30000000000000004",
+        "1234567890123456",
+        "\tNR\tNR\t",
+        "\t=x\t",
+        "\t_x0041_\ta_x005F_b\t",
+        "\t_x005F_x0041_\n",
+    ):
         assert text in tables["outputs_Tab1.tsv"]
     return tables
 
@@ -209,6 +227,18 @@ def edge_workbook(edge_tables, sf_vocabulary, tmp_path):
     )
 
 
+def libreoffice_saved(tables):
+    """The edge tables as LibreOffice saves them.
+
+    It saves the escapes of _x005F_x0041_ wrongly, which reads back as _x0041_;
+    the generation warns about such text (cell_escape_text).
+    """
+    edge = "outputs_Tab1.tsv"
+    changed = tables[edge].replace("\t_x005F_x0041_\n", "\t_x0041_\n")
+    assert changed != tables[edge]
+    return {**tables, edge: changed}
+
+
 def test_round_trip_is_lossless(edge_workbook, edge_tables):
     check_round_trip(read_workbook(edge_workbook, STUDY), edge_tables)
 
@@ -217,7 +247,18 @@ def test_round_trip_is_lossless_after_a_libreoffice_save(
     edge_workbook, edge_tables, libreoffice_resave
 ):
     resaved = libreoffice_resave(edge_workbook)
-    check_round_trip(read_workbook(resaved, STUDY), edge_tables)
+    check_round_trip(
+        read_workbook(resaved, STUDY), libreoffice_saved(edge_tables), edge_tables
+    )
+
+
+def test_round_trip_is_lossless_after_two_libreoffice_saves(
+    edge_workbook, edge_tables, libreoffice_resave
+):
+    resaved = libreoffice_resave(libreoffice_resave(edge_workbook))
+    check_round_trip(
+        read_workbook(resaved, STUDY), libreoffice_saved(edge_tables), edge_tables
+    )
 
 
 def test_rows_map_canonical_lines_to_sheet_rows(sf_vocabulary, tmp_path):
@@ -308,6 +349,9 @@ DATE_HINT = (
         ("mean", "#DIV/0!", None, "cell_error", None),
         ("comment", "two\nlines", None, "cell_line_break", "line break"),
         ("comment", "a\tb", None, "cell_line_break", "tab"),
+        # Excel stores a carriage return and a control character as escapes.
+        ("comment", "a_x000D_b", None, "cell_line_break", "carriage return"),
+        ("comment", "a_x0001_b", None, "illegal_character", "Remove the character"),
     ],
 )
 def test_converted_cells_are_errors_at_their_cell(
@@ -618,16 +662,16 @@ def test_the_stored_dimension_is_ignored(sf_vocabulary, tmp_path, dimension):
 
 def test_the_workbook_is_read_from_one_snapshot(workbook, study_tables, monkeypatch):
     # Both passes read the same bytes, even if the file is replaced in between.
-    original = openpyxl.load_workbook
     calls = []
 
-    def load(source, **options):
-        calls.append(source)
-        if len(calls) == 1:
-            workbook.write_bytes(b"replaced while reading")
-        return original(source, **options)
+    class Reader(read._Reader):
+        def __init__(self, source, **options):
+            calls.append(source)
+            if len(calls) == 1:
+                workbook.write_bytes(b"replaced while reading")
+            super().__init__(source, **options)
 
-    monkeypatch.setattr(openpyxl, "load_workbook", load)
+    monkeypatch.setattr(read, "_Reader", Reader)
     content = read_workbook(workbook, STUDY)
 
     assert len(calls) == 2

@@ -12,6 +12,7 @@ import warnings
 from datetime import UTC, datetime, timedelta
 from io import BytesIO
 from pathlib import Path
+from zipfile import ZipFile
 
 import openpyxl
 import pytest
@@ -474,6 +475,67 @@ def test_tabs_line_breaks_and_other_planes_are_kept(sf_vocabulary):
     sheet = workbook["outputs_Tab1"]
     assert sheet[f"{letter('outputs', 'comment')}2"].value == comment
     assert list_values(workbook, "tissues") == ["a\tb", "c\nd"]
+
+
+def stored_strings(data):
+    """The texts of the string cells of a workbook as its XML stores them."""
+    with ZipFile(BytesIO(data)) as archive:
+        xml = "".join(
+            archive.read(name).decode("utf-8")
+            for name in archive.namelist()
+            if name.startswith("xl/worksheets/") or name == "xl/sharedStrings.xml"
+        )
+    return re.findall(r"<t(?: [^>]*)?>([^<]*)</t>", xml)
+
+
+def decoded(text):
+    """A stored text as OOXML defines it: _xHHHH_ is the escape of a character."""
+    return re.sub(r"_x([0-9A-Fa-f]{4})_", lambda match: chr(int(match[1], 16)), text)
+
+
+# Texts that a spreadsheet application would read as escapes of characters.
+ESCAPE_LIKE = {
+    "_x0041_": "_x005F_x0041_",
+    "a_x005F_b": "a_x005F_x005F_b",
+    "_x005F_x0042_": "_x005F_x005F_x005F_x0042_",
+}
+
+
+def test_text_like_an_escape_is_escaped(sf_vocabulary, tmp_path, libreoffice_resave):
+    vocabulary = sf_vocabulary.model_copy(update={"tissues": tuple(ESCAPE_LIKE)})
+    result = build(
+        {"outputs_Tab1.tsv": outputs(*({"comment": text} for text in ESCAPE_LIKE))},
+        vocabulary,
+    )
+    assert result.data is not None
+    stored = stored_strings(result.data)
+    # In the data sheet and in _lists.
+    assert all(stored.count(escaped) == 2 for escaped in ESCAPE_LIKE.values()), stored
+    assert [decoded(escaped) for escaped in ESCAPE_LIKE.values()] == list(ESCAPE_LIKE)
+
+    path = tmp_path / "Example.xlsx"
+    path.write_bytes(result.data)
+    texts = [
+        decoded(text) for text in stored_strings(libreoffice_resave(path).read_bytes())
+    ]
+    # LibreOffice reads every text as written, and saves those whose escapes do
+    # not share an underscore so that they read back unchanged. It keeps one
+    # shared string of the cells of both sheets.
+    assert "_x0041_" in texts and "a_x005F_b" in texts
+    assert "A" not in texts and "a_b" not in texts
+    assert "_x0042_" in texts and "_x005F_x0042_" not in texts
+
+
+def test_text_whose_escapes_share_an_underscore_is_a_warning(sf_vocabulary):
+    result = build(
+        {"outputs_Tab1.tsv": outputs({"comment": "a_x005F_x0041_b"})}, sf_vocabulary
+    )
+    assert result.data is not None
+    [issue] = result.issues
+    assert (issue.code, issue.severity) == ("cell_escape_text", "warning")
+    assert "_x005F_x0041_" in issue.message
+    assert issue.source.file == "outputs_Tab1.tsv"
+    assert issue.source.cell == f"{letter('outputs', 'comment')}2"
 
 
 def test_repeated_cell_issues_are_capped(sf_vocabulary):

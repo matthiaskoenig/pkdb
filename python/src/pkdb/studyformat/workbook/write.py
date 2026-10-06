@@ -53,6 +53,13 @@ CELL_LIMIT = 32_767
 # Characters XML 1.0, and so a workbook, cannot hold: control characters other
 # than tab, line feed and carriage return, surrogates and U+FFFE and U+FFFF.
 NOT_XML = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\ud800-\udfff\ufffe\uffff]")
+# OOXML stores a character as the escape `_xHHHH_`, and `_x005F_` is the
+# underscore; this matches every underscore that starts such an escape.
+ESCAPE_START = re.compile(r"_(?=x[0-9A-Fa-f]{4}_)")
+ESCAPED_UNDERSCORE = "_x005F_"
+# Two such escapes that share an underscore, as in `_x005F_x0041_`, which
+# LibreOffice 24.2 saves unescaped, so that it reads back as `_x0041_`.
+OVERLAPPING_ESCAPES = re.compile(r"_x[0-9A-Fa-f]{4}_x[0-9A-Fa-f]{4}_")
 # LibreOffice saves numbers with at most 15 significant digits.
 NUMBER_DIGITS = 15
 NUMBER_TYPES = frozenset({ColumnType.NUMBER, ColumnType.INTEGER, ColumnType.TIME})
@@ -68,6 +75,7 @@ BOLD.bold = True
 CELL_ISSUES = {
     "cell_too_long": "cells are longer than a spreadsheet cell",
     "illegal_character": "cells contain characters a workbook cannot hold",
+    "cell_escape_text": "cells contain text that LibreOffice changes when it saves",
 }
 
 
@@ -153,7 +161,7 @@ def _number(text: str) -> int | float | None:
     return value if any(mark in text for mark in ".eE") else int(text)
 
 
-def _not_xml(text: str) -> str | None:
+def not_xml(text: str) -> str | None:
     """The first character of a text that a workbook cannot hold, described, or None."""
     match = NOT_XML.search(text)
     if match is None:
@@ -169,9 +177,22 @@ def _not_xml(text: str) -> str | None:
     return f"the {kind} U+{code:04X}"
 
 
+def escape_text(text: str) -> str:
+    """A text as a workbook stores it, so that spreadsheet applications read it back.
+
+    Excel and LibreOffice read `_x0041_` as the escape of the character A, as
+    OOXML defines, so every underscore that starts such an escape is stored as
+    the escape `_x005F_` of the underscore: `_x0041_` becomes `_x005F_x0041_`.
+    """
+    return ESCAPE_START.sub(ESCAPED_UNDERSCORE, text)
+
+
 def _put_text(cell: Cell, text: str) -> None:
     """Write a text cell; a text starting with `=` stays text instead of a formula."""
+    # openpyxl checks the characters and cuts a text after 32,767 characters,
+    # which the escaped text may exceed while the text itself fits.
     cell.value = text
+    cell._value = escape_text(text)
     cell.data_type = "s"
     cell.number_format = TEXT_FORMAT
 
@@ -332,7 +353,10 @@ def _write_table(
 
 
 def _write_cell(cell: Cell, column: Column, text: str) -> tuple[str, str, str] | None:
-    """Write one cell; the code, message and hint of an issue, or None."""
+    """Write one cell; the code, message and hint of an issue, or None.
+
+    A cell with an error is not written; a cell with a warning is.
+    """
     # A text has at most two UTF-16 code units per character.
     if len(text) * 2 > CELL_LIMIT:
         units = len(text.encode("utf-16-le", "surrogatepass")) // 2
@@ -343,7 +367,7 @@ def _write_cell(cell: Cell, column: Column, text: str) -> tuple[str, str, str] |
                 f"spreadsheet cell holds at most {CELL_LIMIT:,}",
                 "Shorten the text.",
             )
-    if (character := _not_xml(text)) is not None:
+    if (character := not_xml(text)) is not None:
         return (
             "illegal_character",
             f"The cell contains {character}, which a workbook cannot hold",
@@ -351,8 +375,16 @@ def _write_cell(cell: Cell, column: Column, text: str) -> tuple[str, str, str] |
         )
     if not _is_text(column) and (number := _number(text)) is not None:
         cell.value = number
-    else:
-        _put_text(cell, text)
+        return None
+    _put_text(cell, text)
+    if (match := OVERLAPPING_ESCAPES.search(text)) is not None:
+        return (
+            "cell_escape_text",
+            f"The cell contains {match.group()}, two escapes of the form _xHHHH_ "
+            "that share an underscore; LibreOffice changes such text when it "
+            "saves the workbook",
+            "Edit this cell in the TSV file or in Excel, or change the text.",
+        )
     return None
 
 
@@ -362,7 +394,7 @@ def _write_lists(
     issues = []
     for index, (key, values) in enumerate(lists.items(), start=1):
         for row, value in enumerate((key, *values), start=1):
-            if (character := _not_xml(value)) is not None:
+            if (character := not_xml(value)) is not None:
                 issues.append(
                     make_issue(
                         "illegal_character",
