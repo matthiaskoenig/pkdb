@@ -112,7 +112,14 @@ jobs:
           python-version: ${{ matrix.python }}
           enable-cache: true
       - run: uv sync --python ${{ matrix.python }} --locked --all-extras
+      # The workbook round trip tests re-save workbooks with LibreOffice.
+      - name: Install LibreOffice Calc
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends libreoffice-calc
       - run: uv run --python ${{ matrix.python }} --locked --all-extras pytest -q
+        env:
+          # On Linux a missing LibreOffice fails the round trip tests; macOS and Windows skip them.
+          PKDB_REQUIRE_LIBREOFFICE: ${{ runner.os == 'Linux' && '1' || '' }}
       - run: uv run --python ${{ matrix.python }} --locked ruff check .
       - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
       - run: uv run --python ${{ matrix.python }} --locked ty check --python-version ${{ matrix.python }}

@@ -1,9 +1,15 @@
 import json
 from pathlib import Path
 
-from pkdb.studyformat.formatter import format_folder, subject_order
+from pkdb.studyformat.formatter import (
+    format_folder,
+    render_table,
+    subject_order,
+    table_rows,
+)
 from pkdb.studyformat.load import load_table
 from pkdb.studyformat.tables import TABLES
+from pkdb.studyformat.text import render_tsv
 
 
 def read(folder, name):
@@ -200,6 +206,47 @@ def test_subject_order_is_depth_first_with_all_first():
         "x",
         "y",
     ]
+
+
+def test_table_rows_keep_the_source_line_of_each_sorted_row():
+    data = (
+        b"study\tname\tparent\tcount\n"
+        b"Old\tS2\tall\t1\n\nWrong\tall\t\t2\nOld\tS1\tall\t1\n"
+    )
+    table, _ = load_table(
+        "subjects.tsv", data, TABLES["subjects"], None, study="Example"
+    )
+    assert table is not None
+    order = subject_order(table)
+    rows = table_rows(table, "Example", order)
+    assert rows is not None
+    assert rows == [
+        (4, ("Example", "all", "", "2", "", "")),
+        (5, ("Example", "S1", "all", "1", "", "")),
+        (2, ("Example", "S2", "all", "1", "", "")),
+    ]
+    assert render_table(table, "Example", order) == render_tsv(
+        TABLES["subjects"].names, [cells for _, cells in rows]
+    )
+
+
+def test_table_rows_of_a_table_without_rows(tsv):
+    for kind, expected in (("subjects", []), ("interventions", None)):
+        table, _ = load_table(
+            f"{kind}.tsv", tsv(kind).encode(), TABLES[kind], None, study="Example"
+        )
+        assert table is not None
+        assert table_rows(table, "Example", {}) == expected
+    outputs, _ = load_table(
+        "outputs_Tab1.tsv",
+        tsv("outputs").encode(),
+        TABLES["outputs"],
+        "Tab1",
+        study="Example",
+    )
+    assert outputs is not None
+    assert table_rows(outputs, "Example", {}) is None
+    assert render_table(outputs, "Example", {}) is None
 
 
 def test_timecourse_points_sort_by_label_then_numeric_time(

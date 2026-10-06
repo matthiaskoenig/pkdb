@@ -18,6 +18,9 @@ WARNINGS = frozenset(
         "unused_subject",
         "review_target_unmatched",
         "deprecated_measurement",
+        "workbook_base_missing",
+        "workbook_base_invalid",
+        "formula_value",
     }
 )
 _GROUPS = {
@@ -100,8 +103,18 @@ _GROUPS = {
         "workbook_unreadable",
         "workbook_newer",
         "workbook_base_invalid",
+        "workbook_base_missing",
         "cell_too_long",
         "illegal_character",
+        "unknown_sheet",
+        "missing_sheet",
+        "value_outside_table",
+        "cell_line_break",
+        "cell_date",
+        "cell_percent",
+        "cell_error",
+        "formula_without_value",
+        "formula_value",
     ),
     "review": (
         "approved_with_open_items",

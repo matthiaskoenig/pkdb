@@ -101,10 +101,10 @@ def _row_key(spec: TableSpec, cells: tuple[str, ...], order: dict[str, int]) -> 
     return (*keys, "\t".join(cells))
 
 
-def render_table(
+def table_rows(
     table: LoadedTable, study_name: str, order: dict[str, int]
-) -> str | None:
-    """Canonical TSV text of a table with the owned columns filled and the rows sorted.
+) -> list[tuple[int, tuple[str, ...]]] | None:
+    """The source line and cells of each row in canonical order, with the owned columns filled.
 
     None means the optional table has no rows and is removed.
     """
@@ -115,11 +115,25 @@ def render_table(
         cells["study"] = study_name
         if spec.per_source:
             cells["source"] = table.source or ""
-        rows.append(tuple(cells[name] for name in spec.names))
+        rows.append((row.line, tuple(cells[name] for name in spec.names)))
     if not rows and not spec.required:
         return None
-    rows.sort(key=lambda cells: _row_key(spec, cells, order))
-    return render_tsv(spec.names, rows)
+    # A stable sort: equal rows keep the order of their lines.
+    rows.sort(key=lambda row: _row_key(spec, row[1], order))
+    return rows
+
+
+def render_table(
+    table: LoadedTable, study_name: str, order: dict[str, int]
+) -> str | None:
+    """Canonical TSV text of a table with the owned columns filled and the rows sorted.
+
+    None means the optional table has no rows and is removed.
+    """
+    rows = table_rows(table, study_name, order)
+    if rows is None:
+        return None
+    return render_tsv(table.spec.names, [cells for _, cells in rows])
 
 
 def planned_files(study: LoadedStudy) -> dict[str, str | None]:
