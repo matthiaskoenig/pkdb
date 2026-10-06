@@ -31,10 +31,9 @@ from pkdb.schemas.validation import (
     ValidationIssue,
     ValidationReport,
 )
-from pkdb.studyformat import format_folder, sync_study
 from pkdb.studyformat.formatter import FileChange
+from pkdb.studyformat.pipeline import sync_and_format
 from pkdb.studyformat.validation import is_v2_folder, study_label, study_path
-from pkdb.studyformat.workbook.base import workbook_path
 from pkdb.tsv import sync_tsvs
 
 
@@ -129,45 +128,39 @@ def _sync_tables(
     nothing is uploaded, and the error says which tables the syncs wrote. A
     folder without workbook has nothing to sync, and none is created.
     """
-    changes: list[FileChange] = []
-    warnings: tuple[ValidationIssue, ...] = ()
-    done: list[str] = []
+    result = sync_and_format(
+        folder,
+        vocabulary,
+        max_rows=max_rows,
+        on_stage=lambda stage: emit(progress, stage),
+    )
+    # A file written by both syncs is described once, by its last change.
+    synced = {change.file: change for sync in result.syncs for change in sync.changes}
+    done = _described(
+        list(synced.values()),
+        "wrote {} from the workbook",
+        "removed {}, which the workbook no longer holds",
+    )
 
     def updated() -> str | None:
         text = "; ".join(done)
         return text[0].upper() + text[1:] if text else None
 
-    def described_sync() -> list[str]:
-        # A file written by both syncs is described once, by its last change.
-        return _described(
-            list({change.file: change for change in changes}.values()),
-            "wrote {} from the workbook",
-            "removed {}, which the workbook no longer holds",
-        )
-
-    emit(progress, "sync")
-    if workbook_path(folder).exists():
-        synced = sync_study(folder, vocabulary, max_rows=max_rows)
-        changes += synced.changes
-        if synced.ok and synced.workbook_action == "sync_again":
-            # The save is not in the tables yet; this sync merges it.
-            synced = sync_study(folder, vocabulary, max_rows=max_rows)
-            changes += synced.changes
-        done = described_sync()
-        if not synced.ok:
+    match result.stopped:
+        case "sync":
             raise _TablesNotReady(
                 "The workbook and the tables cannot be synced, so nothing was "
                 "uploaded; run pkdb tables sync",
-                synced.issues,
+                result.issues,
                 updated(),
             )
-        if synced.workbook_action == "sync_again":
+        case "saved_again":
             # The save that is not in the tables stops the upload.
             issues = [
                 issue.model_copy(update={"severity": "error"})
                 if issue.code == "workbook_changed"
                 else issue
-                for issue in synced.issues
+                for issue in result.issues
             ]
             raise _TablesNotReady(
                 "The workbook was saved during the sync again, so its last save is "
@@ -175,16 +168,17 @@ def _sync_tables(
                 issues,
                 updated(),
             )
-        warnings = synced.issues
-    emit(progress, "format")
-    formatted = format_folder(folder)
-    if not formatted.ok:
-        raise _TablesNotReady(
-            "The tables cannot be formatted, so nothing was uploaded; run pkdb format",
-            formatted.issues,
-            updated(),
-        )
-    done += _described(formatted.changes, "formatted {}", "removed {} without rows")
+        case "format":
+            raise _TablesNotReady(
+                "The tables cannot be formatted, so nothing was uploaded; run pkdb format",
+                result.issues,
+                updated(),
+            )
+    assert result.formatted is not None
+    done += _described(
+        result.formatted.changes, "formatted {}", "removed {} without rows"
+    )
+    warnings = result.syncs[-1].issues if result.syncs else ()
     return updated(), warnings
 
 
