@@ -166,7 +166,7 @@ def main(argv=None, *, client=None) -> int:
         return study_cli.run(args)
     if args.command == "tables":
         return tables_cli.run(args)
-    if args.command == "digitize":
+    if args.command in {"digitize", "plot"}:
         return figure_cli.run(args)
     if args.command == "curate":
         from pkdb.curation.engine import WorkspaceError
