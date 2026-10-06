@@ -40,7 +40,7 @@ from pkdb.studyformat.load import (
     load_study,
     load_table,
 )
-from pkdb.studyformat.merge import Conflict, merge_lines
+from pkdb.studyformat.merge import Conflict, Preference, merge_lines
 from pkdb.studyformat.tables import (
     KIND_ORDER,
     TABLES,
@@ -70,7 +70,7 @@ WorkbookAction = Literal[
 
 SUBJECTS = table_file("subjects")
 # merge_lines merges the workbook as ours and the tables as theirs.
-PREFER: dict[Side, Literal["ours", "theirs"]] = {
+PREFER: dict[Side, Preference] = {
     "workbook": "ours",
     "tables": "theirs",
 }

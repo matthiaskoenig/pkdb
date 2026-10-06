@@ -14,9 +14,11 @@ Lines carry no line terminators. Callers split canonical TSV text with `text.rem
 from collections.abc import Sequence
 from dataclasses import dataclass
 from difflib import SequenceMatcher
-from typing import Literal
+from typing import Literal, get_args
 
-PREFERENCES = ("ours", "theirs")
+# The side whose lines resolve a conflicting region.
+Preference = Literal["ours", "theirs"]
+PREFERENCES: tuple[Preference, ...] = get_args(Preference)
 
 
 @dataclass(frozen=True)
@@ -50,7 +52,7 @@ def merge_lines(
     ours: Sequence[str],
     theirs: Sequence[str],
     *,
-    prefer: Literal["ours", "theirs"] | None = None,
+    prefer: Preference | None = None,
 ) -> MergeResult:
     """Merge the changes of ours and theirs to base.
 
@@ -91,6 +93,45 @@ def merge_lines(
     return MergeResult(lines, tuple(conflicts))
 
 
+def _matching_blocks(
+    base: tuple[str, ...], side: tuple[str, ...]
+) -> list[tuple[int, int, int]]:
+    """Runs of equal lines of base and side, as `SequenceMatcher.get_matching_blocks` gives them.
+
+    The common prefix and suffix are matched first and only the lines between them are diffed, as `xdl_trim_ends` of git's xdiff does. Otherwise SequenceMatcher, which matches the longest run of equal lines first, aligns repeated lines away from a change, and the diff is slow for tables with few distinct lines.
+    """
+    limit = min(len(base), len(side))
+    prefix = 0
+    while prefix < limit and base[prefix] == side[prefix]:
+        prefix += 1
+    suffix = 0
+    while suffix < limit - prefix and base[-1 - suffix] == side[-1 - suffix]:
+        suffix += 1
+    middle = SequenceMatcher(
+        None,
+        base[prefix : len(base) - suffix],
+        side[prefix : len(side) - suffix],
+        autojunk=False,
+    ).get_matching_blocks()
+    found = [
+        (0, 0, prefix),
+        *((start + prefix, other + prefix, length) for start, other, length in middle),
+        (len(base) - suffix, len(side) - suffix, suffix),
+    ]
+    blocks: list[tuple[int, int, int]] = []
+    for start, other, length in found:
+        if not length:
+            continue
+        if blocks and blocks[-1][0] + blocks[-1][2] == start:
+            if blocks[-1][1] + blocks[-1][2] == other:
+                # Adjacent runs are one block, as SequenceMatcher gives them.
+                blocks[-1] = (*blocks[-1][:2], blocks[-1][2] + length)
+                continue
+        blocks.append((start, other, length))
+    blocks.append((len(base), len(side), 0))
+    return blocks
+
+
 def _sync_regions(
     base: tuple[str, ...], ours: tuple[str, ...], theirs: tuple[str, ...]
 ) -> list[tuple[int, int, int, int]]:
@@ -99,8 +140,7 @@ def _sync_regions(
     Each region is (base start, ours start, theirs start, length). The last region has length zero and starts at the ends of all three sequences.
     """
     ours_blocks, theirs_blocks = (
-        SequenceMatcher(None, base, side, autojunk=False).get_matching_blocks()
-        for side in (ours, theirs)
+        _matching_blocks(base, side) for side in (ours, theirs)
     )
     regions: list[tuple[int, int, int, int]] = []
     ours_index = theirs_index = 0

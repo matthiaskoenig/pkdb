@@ -251,6 +251,7 @@ def git_merge(folder, base, ours, theirs, *options) -> tuple[bool, str]:
     completed = subprocess.run(
         [GIT, "merge-file", "-p", *options, *paths],
         capture_output=True,
+        cwd=folder,
         env=GIT_ENV,
         check=False,
     )
@@ -337,3 +338,45 @@ def test_large_tables_merge_quickly():
     ]
     assert result == MergeResult(tuple(expected), ())
     assert elapsed < 2, f"merging 20,000 lines took {elapsed:.2f} s"
+
+
+def test_far_apart_changes_to_repeated_lines_merge(tmp_path):
+    # SequenceMatcher alone aligns runs of equal lines away from the changes.
+    base = ["x"] * 1000
+    ours, theirs = list(base), list(base)
+    ours[249], theirs[749] = "ours", "theirs"
+    expected = list(base)
+    expected[249], expected[749] = "ours", "theirs"
+
+    assert merge_lines(base, ours, theirs) == MergeResult(tuple(expected), ())
+    if GIT is not None:
+        assert git_merge(tmp_path, base, ours, theirs) == (True, joined(expected))
+
+
+def test_repetitive_tables_merge_quickly():
+    base = [f"value {index % 50}" for index in range(20_000)]
+    ours, theirs = list(base), list(base)
+    ours[5_000], theirs[15_000] = "ours", "theirs"
+    expected = list(base)
+    expected[5_000], expected[15_000] = "ours", "theirs"
+
+    start = time.perf_counter()
+    result = merge_lines(base, ours, theirs)
+    elapsed = time.perf_counter() - start
+
+    assert result == MergeResult(tuple(expected), ())
+    assert elapsed < 2, f"merging 20,000 lines took {elapsed:.2f} s"
+
+
+@pytest.mark.parametrize("inserted", [0, 3])
+def test_conflicts_in_repeated_lines_start_where_they_are(inserted):
+    base = ["x"] * 1000
+    ours = [f"new {index}" for index in range(inserted)] + list(base)
+    theirs = list(base)
+    ours[inserted + 499], theirs[499] = "ours", "theirs"
+
+    result = merge_lines(base, ours, theirs)
+
+    assert result.conflicts == (
+        Conflict(("x",), ("ours",), ("theirs",), 499, inserted + 499, 499),
+    )
