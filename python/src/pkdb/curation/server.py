@@ -262,8 +262,6 @@ class Handler(BaseHTTPRequestHandler):
             return {"ok": True}
         if path == "/local/assignments/refresh":
             return engine.refresh_assignments()
-        if path == "/local/assignments/map":
-            return engine.map_assignment(body["number"], body["study_id"])
         if path == "/local/resume":
             return engine.resume(body.get("ids"))
         raise LookupError(path)

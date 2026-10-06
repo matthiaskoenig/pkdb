@@ -112,3 +112,43 @@ def test_summary_of_unreadable_files(workspace):
     engine.scan()
     summary = engine.snapshot()["studies"][0]["summary"]
     assert summary["review_status"] is None and summary["curators"] == []
+
+
+def test_issue_comes_from_the_number_in_study_json(workspace):
+    engine, folder, legacy = workspace
+    metadata = json.loads((folder / "study.json").read_text())
+    (folder / "study.json").write_text(dump_json({**metadata, "issue": 2158}))
+    engine.github.data = {
+        **engine.github.data,
+        "issues": [
+            {
+                "number": 2158,
+                "title": "Curate caffeine/Example",
+                "html_url": "https://github.com/matthiaskoenig/pkdb_data/issues/2158",
+                "state": "open",
+                "assignees": ["mkoenig"],
+                "labels": ["caffeine", "check"],
+            }
+        ],
+    }
+    engine.scan()
+    assert engine.snapshot()["studies"][0]["issue"] == {
+        "number": 2158,
+        "state": "open",
+        "labels": ["caffeine", "check"],
+        "assignees": ["mkoenig"],
+        "url": "https://github.com/matthiaskoenig/pkdb_data/issues/2158",
+    }
+    engine.github.data = {**engine.github.data, "issues": []}
+    assert engine.snapshot()["studies"][0]["issue"]["state"] is None
+
+
+def test_old_state_with_mappings_loads(tmp_path, tmp_path_factory):
+    state = tmp_path_factory.mktemp("state")
+    (state / "state.json").write_text(json.dumps({"mappings": {"a#1": ["/x"]}}))
+    engine = module.CurationEngine(tmp_path, state_dir=state, offline=True, start=False)
+    try:
+        assert not hasattr(engine, "mappings")
+        engine.snapshot()
+    finally:
+        engine.close()

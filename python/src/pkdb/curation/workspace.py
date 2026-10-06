@@ -1,6 +1,6 @@
 """Workspace selection, scanning and file resolution for the curation engine.
 
-Reads and writes engine attributes: lock, root, studies, modes, mappings, recent_workspaces,
+Reads and writes engine attributes: lock, root, studies, modes, recent_workspaces,
 reference_previews, paused, queue, stop, wakeup, state_dir. Uses engine methods _save,
 _enqueue_one, snapshot, _local_vocabulary and _sync_later.
 """

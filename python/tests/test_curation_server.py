@@ -327,3 +327,16 @@ def test_curate_cli_explains_missing_workspace(tmp_path, capsys):
         == 1
     )
     assert f"Folder does not exist: {missing}" in capsys.readouterr().err
+
+
+def test_assignment_mapping_route_is_gone(local_server):
+    server, _ = local_server
+    headers = authenticate(server)
+    status = request(
+        server,
+        "POST",
+        "/local/assignments/map",
+        {"number": 1, "study_id": "caffeine/Example"},
+        headers,
+    )[0]
+    assert status == 404

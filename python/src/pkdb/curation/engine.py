@@ -97,7 +97,6 @@ class CurationEngine(WorkspaceMixin, JobsMixin, ConnectionMixin, IssuesMixin):
                     "Interrupted by previous shutdown; inspect before retrying"
                 )
         self.modes = saved.get("modes", {})
-        self.mappings = saved.get("mappings", {})
         self.recent_workspaces = [
             item for item in saved.get("recent_workspaces", []) if isinstance(item, str)
         ][:RECENT_LIMIT]
@@ -136,7 +135,6 @@ class CurationEngine(WorkspaceMixin, JobsMixin, ConnectionMixin, IssuesMixin):
                 "repository": self.repository,
                 "github": self.github.data,
                 "modes": self.modes,
-                "mappings": self.mappings,
                 "recent_workspaces": self.recent_workspaces,
                 "jobs": self.jobs,
             },
@@ -148,7 +146,6 @@ class CurationEngine(WorkspaceMixin, JobsMixin, ConnectionMixin, IssuesMixin):
         # Existence checks may touch slow mounts, so they run outside the lock.
         recent = [{"path": path, "exists": Path(path).is_dir()} for path in recent]
         with self.lock:
-            issues = self._issue_rows()
             return json.loads(
                 json.dumps(
                     {
@@ -171,10 +168,18 @@ class CurationEngine(WorkspaceMixin, JobsMixin, ConnectionMixin, IssuesMixin):
                             **self.github.data,
                             "user": self.github_user,
                             "repository": self.repository,
-                            "issues": issues,
                         },
                         "studies": [
-                            {k: v for k, v in row.items() if not k.startswith("_")}
+                            {
+                                **{
+                                    k: v
+                                    for k, v in row.items()
+                                    if not k.startswith("_")
+                                },
+                                "issue": self._issue_for(
+                                    (row.get("summary") or {}).get("issue")
+                                ),
+                            }
                             for row in self.studies.values()
                         ],
                         "format1_folders": self.format1_folders,

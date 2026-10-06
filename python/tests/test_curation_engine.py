@@ -434,21 +434,6 @@ def test_invalid_settings_leave_endpoint_and_queue_intact(workspace):
     assert len(engine.queue) == 1
 
 
-def test_assignment_mapping_overrides_ambiguous_title(workspace):
-    engine, folder = workspace
-    engine.github.data["issues"] = [{"number": 1, "title": "apixaban/Example2020"}]
-    original = row(engine)
-    other = dict(
-        original,
-        id="other",
-        _folder=folder.parent.parent / "other" / "apixaban" / folder.name,
-    )
-    engine.studies["other"] = other
-    assert engine.snapshot()["github"]["issues"][0]["study_ids"] == []
-    engine.mappings[f"{engine.repository}#1"] = [str(folder)]
-    assert engine.snapshot()["github"]["issues"][0]["study_ids"] == [original["id"]]
-
-
 @pytest.mark.parametrize("persistence,attempts", [("not_saved", 2), ("unknown", 1)])
 def test_vocabulary_retry_is_bounded_and_never_replays_unknown(
     workspace, monkeypatch, persistence, attempts
