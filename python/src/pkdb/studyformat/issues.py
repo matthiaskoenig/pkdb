@@ -18,6 +18,13 @@ WARNINGS = frozenset(
         "unused_subject",
         "review_target_unmatched",
         "deprecated_measurement",
+        "workbook_base_missing",
+        "workbook_base_invalid",
+        "formula_value",
+        "workbook_open",
+        "workbook_changed",
+        "workbook_not_ignored",
+        "workbook_tracked",
     }
 )
 _GROUPS = {
@@ -29,6 +36,10 @@ _GROUPS = {
         "legacy_file",
         "missing_file",
         "missing_image",
+        "table_name_too_long",
+        "duplicate_table_name",
+        "invalid_table_name",
+        "table_exists",
     ),
     "format": (
         "invalid_encoding",
@@ -94,6 +105,30 @@ _GROUPS = {
         "reference_mismatch",
         "public_requires_release",
     ),
+    "workbook": (
+        "workbook_unreadable",
+        "workbook_newer",
+        "workbook_base_invalid",
+        "workbook_base_missing",
+        "cell_too_long",
+        "illegal_character",
+        "cell_escape_text",
+        "unknown_sheet",
+        "missing_sheet",
+        "value_outside_table",
+        "cell_line_break",
+        "cell_date",
+        "cell_percent",
+        "cell_error",
+        "formula_without_value",
+        "formula_value",
+        "workbook_open",
+        "workbook_changed",
+        "workbook_not_ignored",
+        "workbook_tracked",
+        "sync_conflict",
+        "sync_write_failed",
+    ),
     "review": (
         "approved_with_open_items",
         "unknown_review_target",
@@ -121,7 +156,7 @@ _GROUPS = {
     ),
 }
 CATEGORIES = {code: category for category, codes in _GROUPS.items() for code in codes}
-_PARSE = frozenset({"layout", "format", "schema"})
+_PARSE = frozenset({"layout", "format", "schema", "workbook"})
 
 
 # A single line, cell or JSON file reports at most this many issues of one
@@ -129,6 +164,8 @@ _PARSE = frozenset({"layout", "format", "schema"})
 REPEATED_ISSUES = 10
 # The end of the message of such a summary issue.
 LISTED = f"the first {REPEATED_ISSUES} are listed"
+# The message of a suggestion that only lists candidates.
+DID_YOU_MEAN = "Did you mean one of these?"
 
 
 class IssueCap:
@@ -163,6 +200,7 @@ def make_issue(
     message: str,
     *,
     file: str | None = None,
+    sheet: str | None = None,
     line: int | None = None,
     column: int | None = None,
     header: str | None = None,
@@ -173,15 +211,20 @@ def make_issue(
 ) -> ValidationIssue:
     """Create a validation issue at an optional file, line and column.
 
-    A hint or candidates add a suggestion. The severity defaults to warning for
-    warning codes and to error otherwise.
+    An issue of a TSV file is located at its line, and its sheet is the file
+    name without `.tsv`. An issue found in the workbook names the workbook as
+    `file` and its `sheet`, and `line` is the sheet row. A hint or candidates
+    add a suggestion. The severity defaults to warning for warning codes and to
+    error otherwise.
     """
     source = None
     if file is not None:
         letter = column_letter(column) if column is not None else None
+        if sheet is None and file.endswith(".tsv"):
+            sheet = file.removesuffix(".tsv")
         source = SourceLocation(
             file=file,
-            sheet=file.removesuffix(".tsv") if file.endswith(".tsv") else None,
+            sheet=sheet,
             row=line,
             column=letter,
             cell=f"{letter}{line}" if letter and line else None,
@@ -192,7 +235,7 @@ def make_issue(
         [
             Suggestion(
                 kind="fix",
-                message=hint or "Did you mean one of these?",
+                message=hint or DID_YOU_MEAN,
                 candidates=candidates,
             )
         ]

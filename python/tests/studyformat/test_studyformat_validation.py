@@ -1,5 +1,3 @@
-import time
-
 import pytest
 
 from pkdb.domain.vocabulary import SubstanceDefinition
@@ -219,8 +217,7 @@ def test_non_ascii_names(make_study, valid_files, sf_vocabulary):
     assert report.issues == []
 
 
-def test_large_study_is_fast(valid_study, tsv, sf_vocabulary):
-    # 20,000 timecourse rows (200 series with 100 points each) validate within 10 seconds.
+def test_large_study_is_fast(valid_study, tsv, sf_vocabulary, linear_cpu_time):
     base = {
         "subjects": "all",
         "interventions": "D1",
@@ -230,17 +227,20 @@ def test_large_study_is_fast(valid_study, tsv, sf_vocabulary):
         "time_unit": "h",
         "unit": "mg/l",
     }
-    rows = [
-        {**base, "label": f"series{label}", "time": str(t), "mean": str(t + 1)}
-        for label in range(200)
-        for t in range(100)
-    ]
-    (valid_study / "timecourses_Fig1.tsv").write_text(
-        tsv("timecourses", *rows), encoding="utf-8"
-    )
-    start = time.monotonic()
-    report = validate_folder(valid_study, sf_vocabulary)
-    assert time.monotonic() - start < 10
+
+    def prepare(series):
+        rows = [
+            {**base, "label": f"series{label}", "time": str(t), "mean": str(t + 1)}
+            for label in range(series)
+            for t in range(100)
+        ]
+        (valid_study / "timecourses_Fig1.tsv").write_text(
+            tsv("timecourses", *rows), encoding="utf-8"
+        )
+        return lambda: validate_folder(valid_study, sf_vocabulary)
+
+    # 5,000 and 20,000 timecourse rows: 50 and 200 series of 100 points.
+    report = linear_cpu_time(prepare, 50)
     assert codes(report) <= {"not_formatted"}
 
 
@@ -277,7 +277,9 @@ def timecourse_rows(count, **change):
     ]
 
 
-def test_misspelled_substance_in_a_large_study_is_fast(valid_study, tsv, sf_vocabulary):
+def test_misspelled_substance_in_a_large_study_is_fast(
+    valid_study, tsv, sf_vocabulary, cpu_time
+):
     # Close matches are computed once per misspelled value, not once per row.
     substances = tuple(
         SubstanceDefinition(name=f"substance {index}", sid=f"s{index}")
@@ -290,18 +292,22 @@ def test_misspelled_substance_in_a_large_study_is_fast(valid_study, tsv, sf_voca
         tsv("timecourses", *timecourse_rows(20_000, substance="drugg")),
         encoding="utf-8",
     )
-    start = time.monotonic()
-    report = validate_folder(valid_study, vocabulary)
-    assert time.monotonic() - start < 10
+
+    _, few = cpu_time(lambda: validate_folder(valid_study, sf_vocabulary))
+    report, many = cpu_time(lambda: validate_folder(valid_study, vocabulary))
+
     assert "unknown_substance" in codes(report)
+    # Only the close matches depend on the number of substances. Among 2,000
+    # substances they take about 0.2 ms, so for each of the 20,000 rows they
+    # would add about 4 s, three times the rest; once per value they add nothing
+    # measurable.
+    assert many <= 2 * few, f"{many:.2f} s with 2,002 and {few:.2f} s with 2 substances"
 
 
-def test_many_acknowledged_warnings_are_fast(valid_study, tsv, sf_vocabulary):
-    # 20,000 duplicate observations, acknowledged by one review item with a row filter.
-    rows = [{**CMAX, "mean": str(index + 1)} for index in range(20_001)]
-    (valid_study / "outputs_Tab2.tsv").write_text(
-        tsv("outputs", *rows), encoding="utf-8"
-    )
+def test_many_acknowledged_warnings_are_fast(
+    valid_study, tsv, sf_vocabulary, linear_cpu_time
+):
+    # Duplicate observations, acknowledged by one review item with a row filter.
     item = {
         **ITEM,
         "acknowledges": "duplicate_observation",
@@ -313,10 +319,17 @@ def test_many_acknowledged_warnings_are_fast(valid_study, tsv, sf_vocabulary):
     (valid_study / "review.json").write_text(
         dump_json({"status": "draft", "items": [item]}), encoding="utf-8"
     )
-    assert format_folder(valid_study).ok
-    start = time.monotonic()
-    report = validate_folder(valid_study, sf_vocabulary)
-    assert time.monotonic() - start < 10
+
+    def prepare(count):
+        rows = [{**CMAX, "mean": str(index + 1)} for index in range(count + 1)]
+        (valid_study / "outputs_Tab2.tsv").write_text(
+            tsv("outputs", *rows), encoding="utf-8"
+        )
+        assert format_folder(valid_study).ok
+        return lambda: validate_folder(valid_study, sf_vocabulary)
+
+    # 5,000 and 20,000 acknowledged warnings.
+    report = linear_cpu_time(prepare, 5_000)
     assert report.issues == []
 
 

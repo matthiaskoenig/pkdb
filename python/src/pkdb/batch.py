@@ -7,7 +7,7 @@ import queue
 import signal
 import threading
 import time
-from collections.abc import Callable
+from collections.abc import Callable, Iterable, Sequence
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
@@ -19,14 +19,22 @@ from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import Vocabulary, vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError
 from pkdb.preparation import source_hashes
+from pkdb.progress import ProgressCallback, emit
 from pkdb.references import (
     ReferenceError,
     ReferenceResolver,
     publication_identifier,
     sync_reference,
 )
-from pkdb.schemas.validation import StudyValidationError
+from pkdb.schemas.validation import (
+    StudyValidationError,
+    ValidationIssue,
+    ValidationReport,
+)
+from pkdb.studyformat import format_folder, sync_study
+from pkdb.studyformat.formatter import FileChange
 from pkdb.studyformat.validation import is_v2_folder, study_label, study_path
+from pkdb.studyformat.workbook.base import workbook_path
 from pkdb.tsv import sync_tsvs
 
 
@@ -77,6 +85,107 @@ def redact(value, token):
     if isinstance(value, list):
         return [redact(item, token) for item in value]
     return value
+
+
+class _TablesNotReady(Exception):
+    """The workbook and the tables of a study could not be synced or formatted.
+
+    `tables_updated` says what the sync changed in the folder before it stopped.
+    """
+
+    def __init__(
+        self,
+        message: str,
+        issues: Iterable[ValidationIssue],
+        tables_updated: str | None = None,
+    ):
+        super().__init__(message)
+        self.report = ValidationReport(issues=list(issues)).finalize()
+        self.tables_updated = tables_updated
+
+
+def _described(changes: Sequence[FileChange], wrote: str, removed: str) -> list[str]:
+    """The written and the removed files in words; `{}` stands for the file names."""
+    parts = []
+    for action, words in (("write", wrote), ("delete", removed)):
+        if files := [change.file for change in changes if change.action == action]:
+            parts.append(words.format(", ".join(files)))
+    return parts
+
+
+def _sync_tables(
+    folder: Path,
+    vocabulary: Vocabulary,
+    max_rows: int,
+    progress: ProgressCallback | None,
+) -> tuple[str | None, tuple[ValidationIssue, ...]]:
+    """Sync the workbook of a study format 2 folder into its tables, then format them.
+
+    The upload sends what the curator sees in the workbook. Returns what changed
+    in the folder, or None, and the warnings of the sync. A workbook saved
+    during the sync is synced once more. Raises _TablesNotReady when the sync or
+    the formatting has errors, such as a conflict, or when the workbook was
+    saved during both syncs, which makes `workbook_changed` an error; then
+    nothing is uploaded, and the error says which tables the syncs wrote. A
+    folder without workbook has nothing to sync, and none is created.
+    """
+    changes: list[FileChange] = []
+    warnings: tuple[ValidationIssue, ...] = ()
+    done: list[str] = []
+
+    def updated() -> str | None:
+        text = "; ".join(done)
+        return text[0].upper() + text[1:] if text else None
+
+    def described_sync() -> list[str]:
+        # A file written by both syncs is described once, by its last change.
+        return _described(
+            list({change.file: change for change in changes}.values()),
+            "wrote {} from the workbook",
+            "removed {}, which the workbook no longer holds",
+        )
+
+    emit(progress, "sync")
+    if workbook_path(folder).exists():
+        synced = sync_study(folder, vocabulary, max_rows=max_rows)
+        changes += synced.changes
+        if synced.ok and synced.workbook_action == "sync_again":
+            # The save is not in the tables yet; this sync merges it.
+            synced = sync_study(folder, vocabulary, max_rows=max_rows)
+            changes += synced.changes
+        done = described_sync()
+        if not synced.ok:
+            raise _TablesNotReady(
+                "The workbook and the tables cannot be synced, so nothing was "
+                "uploaded; run pkdb tables sync",
+                synced.issues,
+                updated(),
+            )
+        if synced.workbook_action == "sync_again":
+            # The save that is not in the tables stops the upload.
+            issues = [
+                issue.model_copy(update={"severity": "error"})
+                if issue.code == "workbook_changed"
+                else issue
+                for issue in synced.issues
+            ]
+            raise _TablesNotReady(
+                "The workbook was saved during the sync again, so its last save is "
+                "not in the tables and nothing was uploaded; upload again",
+                issues,
+                updated(),
+            )
+        warnings = synced.issues
+    emit(progress, "format")
+    formatted = format_folder(folder)
+    if not formatted.ok:
+        raise _TablesNotReady(
+            "The tables cannot be formatted, so nothing was uploaded; run pkdb format",
+            formatted.issues,
+            updated(),
+        )
+    done += _described(formatted.changes, "formatted {}", "removed {} without rows")
+    return updated(), warnings
 
 
 def _worker(
@@ -137,8 +246,22 @@ def _worker(
 
             api.progress = progress
             result = {"ok": False, "persistence": "not_attempted", "stop": False}
+            # Warnings of the workbook sync, such as a workbook left open.
+            sync_warnings: list[dict] = []
             try:
-                if tables := sync_tsvs(path):
+                if is_v2_folder(Path(path)):
+                    tables, warnings = _sync_tables(
+                        Path(path),
+                        vocabulary,
+                        capabilities.upload_limits.max_rows,
+                        progress,
+                    )
+                    sync_warnings = [
+                        issue.model_dump(mode="json") for issue in warnings
+                    ]
+                    if tables:
+                        result["tables_updated"] = tables
+                elif tables := sync_tsvs(path):
                     result["tables_updated"] = tables
                 change = sync_reference(
                     path, ReferenceResolver(reference_cache, client=transport)
@@ -158,6 +281,12 @@ def _worker(
                         server_report=api.last_upload_report,
                         request_id=api.last_upload_report.get("request_id"),
                     )
+            except _TablesNotReady as error:
+                result.update(
+                    error=str(error), report=error.report.model_dump(mode="json")
+                )
+                if error.tables_updated:
+                    result["tables_updated"] = error.tables_updated
             except StudyValidationError as error:
                 result.update(
                     error="Study validation failed",
@@ -187,6 +316,8 @@ def _worker(
                     persistence="unknown" if submitting else "not_attempted",
                     stop=submitting,
                 )
+            if sync_warnings:
+                result["warnings"] = [*sync_warnings, *result.get("warnings", [])]
             timings[stage] = timings.get(stage, 0) + time.monotonic() - stage_started
             result.update(
                 stage=stage, timings=timings, elapsed_seconds=time.monotonic() - started

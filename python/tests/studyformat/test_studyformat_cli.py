@@ -59,6 +59,7 @@ def test_validate_format_2(valid_study, sf_vocabulary, tmp_path, capsys):
     assert result["ok"] and result["study_format"] == 2
     assert result["sid"] == "caffeine/Example"
     assert result["report"]["issues"] == []
+    assert "workbook" not in result
 
 
 def test_validate_format_2_failure(valid_study, sf_vocabulary, tmp_path, capsys):
@@ -332,3 +333,133 @@ def test_prepared_format_2_folder_reads_its_upload(valid_study, sf_vocabulary):
         assert source.upload_path == "/api/v2/studies/caffeine/Example"
         assert source.validation_path == "/api/v2/studies/caffeine/Example/validate"
     assert snapshot(valid_study) == before
+
+
+PENDING = "Workbook changes are not in the tables yet; run pkdb tables sync"
+
+
+def set_mean(path, sheet, row, mean):
+    """Change the mean of a sheet row and save, as in a spreadsheet application."""
+    import openpyxl
+    from openpyxl.utils import get_column_letter
+
+    from pkdb.studyformat.tables import parse_table_file
+
+    parsed = parse_table_file(f"{sheet}.tsv")
+    assert parsed is not None
+    workbook = openpyxl.load_workbook(path)
+    column = get_column_letter(parsed[0].names.index("mean") + 1)
+    workbook[sheet][f"{column}{row}"] = mean
+    workbook.save(path)
+
+
+def file_state(folder):
+    return {
+        path.name: (path.read_bytes(), path.stat().st_mtime_ns)
+        for path in sorted(folder.iterdir())
+    }
+
+
+@pytest.mark.parametrize("command", ["validate", "prepare"])
+def test_validate_and_prepare_report_workbook_changes_without_writing(
+    valid_study, sf_vocabulary, tmp_path, capsys, command
+):
+    from pkdb.studyformat import sync_study
+    from pkdb.studyformat.workbook.base import workbook_path
+
+    assert sync_study(valid_study, sf_vocabulary).ok
+    lock = tmp_path / "vocabulary.json"
+    sf_vocabulary.save(lock)
+    args = [command, str(valid_study), "--offline", "--vocabulary", str(lock)]
+    assert main([*args, "--format", "json"]) == 0
+    assert lines(capsys)[-1]["workbook"] == {
+        "action": "unchanged",
+        "changes": [],
+        "conflicts": 0,
+        "ok": True,
+    }
+    assert main([*args, "--format", "human"]) == 0
+    assert PENDING not in capsys.readouterr().out
+    set_mean(workbook_path(valid_study), "outputs_Tab2", 2, 3.25)
+    before = file_state(valid_study)
+
+    assert main([*args, "--format", "json"]) == 0
+    result = lines(capsys)[-1]
+    assert result["ok"]
+    assert result["workbook"] == {
+        "action": "unchanged",
+        "changes": [{"file": "outputs_Tab2.tsv", "action": "write"}],
+        "conflicts": 0,
+        "ok": True,
+    }
+    assert main([*args, "--format", "human"]) == 0
+    assert PENDING in capsys.readouterr().out
+    assert file_state(valid_study) == before
+
+
+def test_validate_counts_workbook_conflicts(
+    valid_study, sf_vocabulary, tmp_path, capsys
+):
+    from pkdb.studyformat import sync_study
+    from pkdb.studyformat.workbook.base import workbook_path
+
+    assert sync_study(valid_study, sf_vocabulary).ok
+    set_mean(workbook_path(valid_study), "outputs_Tab2", 2, 0.25)
+    path = valid_study / "outputs_Tab2.tsv"
+    path.write_text(path.read_text(encoding="utf-8").replace("\t2.5\t", "\t0.75\t"))
+    before = file_state(valid_study)
+
+    assert validate_json(valid_study, sf_vocabulary, tmp_path) == 0
+    result = lines(capsys)[-1]
+    assert result["workbook"] == {
+        "action": "unchanged",
+        "changes": [],
+        "conflicts": 1,
+        "ok": False,
+    }
+    lock = tmp_path / "vocabulary.json"
+    args = ["validate", str(valid_study), "--offline", "--vocabulary", str(lock)]
+    assert main([*args, "--format", "human"]) == 0
+    assert PENDING in capsys.readouterr().out
+    assert file_state(valid_study) == before
+
+
+def test_validate_names_a_workbook_that_cannot_be_synced(
+    valid_study, sf_vocabulary, tmp_path, capsys
+):
+    from pkdb.studyformat import sync_study
+    from pkdb.studyformat.workbook.base import workbook_path
+
+    assert sync_study(valid_study, sf_vocabulary).ok
+    set_mean(workbook_path(valid_study), "outputs_Tab2", 2, "#DIV/0!")
+    lock = tmp_path / "vocabulary.json"
+    sf_vocabulary.save(lock)
+    args = ["validate", str(valid_study), "--offline", "--vocabulary", str(lock)]
+
+    assert main([*args, "--format", "json"]) == 0
+    assert lines(capsys)[-1]["workbook"]["ok"] is False
+    assert main([*args, "--format", "human"]) == 0
+    out = capsys.readouterr().out
+    assert PENDING not in out
+    assert "The workbook cannot be synced with the tables; run pkdb tables sync" in out
+
+
+def test_validate_leaves_broken_tables_to_validation(
+    valid_study, sf_vocabulary, tmp_path, capsys
+):
+    from pkdb.studyformat import sync_study
+
+    assert sync_study(valid_study, sf_vocabulary).ok
+    path = valid_study / "outputs_Tab2.tsv"
+    path.write_text(path.read_text(encoding="utf-8").replace("mean", "average", 1))
+    lock = tmp_path / "vocabulary.json"
+    sf_vocabulary.save(lock)
+    args = ["validate", str(valid_study), "--offline", "--vocabulary", str(lock)]
+
+    assert main([*args, "--format", "json"]) == 1
+    result = lines(capsys)[-1]
+    assert result["workbook"]["ok"] is None
+    assert "unknown_column" in {issue["code"] for issue in result["report"]["issues"]}
+    assert main([*args, "--format", "human"]) == 1
+    out = capsys.readouterr().out
+    assert PENDING not in out and "The workbook cannot be synced" not in out

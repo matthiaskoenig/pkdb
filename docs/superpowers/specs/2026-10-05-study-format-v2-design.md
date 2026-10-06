@@ -362,6 +362,19 @@ Formulas remain usable in the workbook as a scratch aid. Only the computed value
 - The existing 1-second watcher runs sync, format and validate on every change and lists issues with sheet and cell.
 - Actions: Open tables, Add table, sync status, conflict resolution, metadata editor, reference dialog (exists today), review items with their target rows and the figure image, "acknowledge" on validation warnings, and the `pkdb plot` comparison.
 
+### 10.6 Workbook and sync decisions
+
+Decided on 2026-10-06 while planning sub-project 3:
+
+- Saving the workbook twice while it stays open must never conflict with the first sync. Besides the `_base` sheet, the engine keeps a hidden sync state file `.<name>.xlsx.pkdb-base` beside the workbook. It holds the base of every table written from the workbook since the workbook was generated, keyed by the generation identifier stored in `_base`, and overrides `_base` for those tables. The workbook is rewritten only when the tables hold content the workbook lacks (a pull, a merge, a new or removed file), not merely to refresh the base, so formatting and scratch formulas in data sheets survive ordinary syncs. Regeneration starts a new generation and removes the sync state file.
+- Dropdowns of the reference columns (`subjects`, `interventions` and the scatter axes) read the live `name` column of the `subjects` and `interventions` sheets, so new rows appear immediately. Vocabulary and choice lists come from the hidden `_lists` sheet and leave out deprecated measurements. Dropdowns suggest values but never block other input; validation stays with `pkdb validate`.
+- Numbers with more than 15 significant digits are written as text cells, because LibreOffice saves at most 15 significant digits. Every other number is a number cell, so TSV to workbook to TSV is lossless in Excel and LibreOffice.
+- Excel limits sheet names to 31 characters and compares them ignoring case. Layout validation therefore rejects table file names longer than 31 characters before `.tsv` and table file names that differ only in case.
+- A cell the spreadsheet application converted is an error at its cell: a date, a percentage (20% is stored as 0.2), an error value such as `#DIV/0!`, a line break or a tab in text, or a value outside the header columns.
+- `pkdb tables add` adds an empty sheet with the template header, which is not a file yet: the TSV appears when the sheet has a row and is synced, because the formatter removes tables without rows.
+- `pkdb tables sync --keep workbook|tables` resolves the conflicting parts of every conflicting table to one side and still merges the other changes; `--check` reports the planned changes without writing.
+- `pkdb upload` syncs and formats a format 2 folder before preparing it and stops on conflicts. `pkdb validate` and `pkdb prepare` never write; they report workbook changes that are not yet in the tables.
+
 ## 11. Postprocessing and canonical model
 
 ### 11.1 Reading

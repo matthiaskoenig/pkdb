@@ -131,7 +131,7 @@ def column_reference() -> str:
         "",
         "    This page describes study format 2. The studies in pkdb_data are still in study format 1 until the migration; `pkdb format`, `pkdb validate`, `pkdb prepare` and `pkdb upload` all support study format 2 folders.",
         "",
-        "A study folder in study format 2 contains `study.json`, `reference.json`, `review.json`, the tab-separated tables below, the publication PDF and an image `<study>_<source>.png` for every paper table or figure the data come from. `pkdb format` writes all files in canonical form, `pkdb validate` checks them, and `pkdb schema export` writes the same definitions as JSON Schema.",
+        "A study folder in study format 2 contains `study.json`, `reference.json`, `review.json`, the tab-separated tables below, the publication PDF and an image `<study>_<source>.png` for every paper table or figure the data come from. `pkdb format` writes all files in canonical form, `pkdb validate` checks them, `pkdb tables` edits the tables in a [workbook](workbooks.md), and `pkdb schema export` writes the same definitions as JSON Schema.",
         "",
         "## Identity and upload",
         "",

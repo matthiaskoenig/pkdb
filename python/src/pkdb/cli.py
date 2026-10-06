@@ -129,11 +129,12 @@ def main(argv=None, *, client=None) -> int:
     sync.add_argument(
         "--output", type=Path, help="Portable project vocabulary lock file"
     )
-    from pkdb import import_cli, reference_cli, studyformat_cli
+    from pkdb import import_cli, reference_cli, studyformat_cli, tables_cli
 
     reference_cli.register(commands)
     import_cli.register(commands)
     studyformat_cli.register(commands)
+    tables_cli.register(commands)
     update = commands.add_parser(
         "update",
         help="Update pkdb to the newest release",
@@ -152,6 +153,8 @@ def main(argv=None, *, client=None) -> int:
         return reference_cli.run(args, client=client)
     if args.command in {"format", "schema"}:
         return studyformat_cli.run(args)
+    if args.command == "tables":
+        return tables_cli.run(args)
     if args.command == "curate":
         from pkdb.curation.engine import WorkspaceError
         from pkdb.curation.launch import run
@@ -174,14 +177,18 @@ def main(argv=None, *, client=None) -> int:
     if args.command == "upload":
         if args.jobs < 1:
             parser.error("--jobs must be positive")
-    from pkdb.cache import VocabularyCache, atomic_json, bundled_vocabulary
+    from pkdb.cache import VocabularyCache, atomic_json, select_vocabulary
     from pkdb.client import Client
-    from pkdb.domain.vocabulary import Vocabulary
     from pkdb.errors import ClientError, CompatibilityError
     from pkdb.preparation import prepare, study_folders
     from pkdb.references import ReferenceResolver, sync_reference
     from pkdb.schemas.validation import StudyValidationError
-    from pkdb.studyformat import is_v2_folder, study_label, validate_folder
+    from pkdb.studyformat import (
+        is_v2_folder,
+        study_label,
+        validate_folder,
+        workbook_check,
+    )
     from pkdb.terminal import Terminal, safe_text
     from pkdb.tsv import sync_tsvs
 
@@ -235,15 +242,7 @@ def main(argv=None, *, client=None) -> int:
                 raise ValueError(
                     "Write --output outside the study folder to keep source files unchanged"
                 )
-        if args.vocabulary:
-            snapshot = Vocabulary.load(args.vocabulary)
-        elif args.endpoint:
-            try:
-                snapshot = cache.load(args.endpoint)
-            except FileNotFoundError:
-                snapshot = bundled_vocabulary()
-        else:
-            snapshot = bundled_vocabulary()
+        snapshot = select_vocabulary(args.vocabulary, args.endpoint, cache)
         if args.command == "upload" and (not args.endpoint or not token):
             raise ValueError("Upload requires an endpoint and PKDB_API_KEY")
     except (ValueError, OSError, ClientError) as error:
@@ -376,7 +375,12 @@ def main(argv=None, *, client=None) -> int:
             "persistence": "not_attempted",
         }
         try:
-            if is_v2_folder(folder) and args.command == "prepare":
+            v2 = is_v2_folder(folder)
+            # Validation and preparation never write; they only report workbook
+            # changes that pkdb tables sync has not written to the tables yet.
+            if v2 and (workbook := workbook_check(folder, snapshot)):
+                result["workbook"] = workbook
+            if v2 and args.command == "prepare":
                 result.update(study_format=2, sid=study_label(folder))
                 prepared = prepare(
                     folder, vocabulary=snapshot, progress=terminal.progress
@@ -385,7 +389,7 @@ def main(argv=None, *, client=None) -> int:
                 batch["processing_version"] = prepared.prepared.processing_version
                 result.update(prepared.model_dump())
                 result["ok"] = True
-            elif is_v2_folder(folder):
+            elif v2:
                 from pkdb.domain.validation import PROCESSING_VERSION
                 from pkdb.domain.vocabulary import vocabulary_hash
 

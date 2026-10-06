@@ -137,3 +137,54 @@ def test_reserved_study_names(make_study, valid_files, name):
 def test_names_containing_reserved_words_are_allowed(make_study, valid_files):
     layout = scan_folder(make_study(valid_files, name="Publication2020"))
     assert "reserved_name" not in {issue.code for issue in layout.issues}
+
+
+def table_issues(layout, code):
+    return [issue for issue in layout.issues if issue.code == code]
+
+
+def test_table_names_of_at_most_31_characters_fit_an_excel_sheet(
+    make_study, valid_files
+):
+    exact = "timecourses_Fig1_plasma_conc_ab"
+    assert len(exact) == 31
+    folder = make_study({**valid_files, f"{exact}.tsv": "a\n"})
+    layout = scan_folder(folder)
+    assert table_issues(layout, "table_name_too_long") == []
+    assert f"{exact}.tsv" in [table.name for table in layout.tables]
+
+
+def test_long_table_names_are_reported(make_study, valid_files):
+    name = "timecourses_Fig1_plasma_concentrations.tsv"
+    assert len(name.removesuffix(".tsv")) == 38
+    folder = make_study({**valid_files, name: "a\n"})
+    [issue] = table_issues(scan_folder(folder), "table_name_too_long")
+    assert (issue.severity, issue.category, issue.stage) == (
+        "error",
+        "layout",
+        "parse",
+    )
+    assert issue.source is not None
+    assert issue.source.file == name
+    assert "Excel limits sheet names to 31 characters" in issue.message
+    assert issue.suggestions
+    assert "shorter source" in issue.suggestions[0].message
+
+
+def test_table_names_equal_ignoring_case_are_duplicates(make_study, valid_files):
+    folder = make_study(
+        {**valid_files, "outputs_TabA.tsv": "a\n", "outputs_Taba.tsv": "a\n"}
+    )
+    [issue] = table_issues(scan_folder(folder), "duplicate_table_name")
+    assert (issue.severity, issue.category) == ("error", "layout")
+    assert issue.source is not None
+    assert issue.source.file == "outputs_Taba.tsv"
+    # Both tables are named alike, as files.
+    assert issue.message.startswith(
+        "The table file 'outputs_Taba.tsv' equals 'outputs_TabA.tsv' ignoring case"
+    )
+
+
+def test_distinct_table_names_are_not_duplicates(make_study, valid_files):
+    folder = make_study(valid_files)
+    assert table_issues(scan_folder(folder), "duplicate_table_name") == []

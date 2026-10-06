@@ -108,7 +108,7 @@ The menu explains the last failure, when the server was last checked, and the cl
 
 The app requires no Node installation, Docker, or hosted frontend. It binds to loopback and opens a protected launch URL in your default browser. With `--no-browser`, open the printed URL manually. Keep the local process running while you work; press **Ctrl+C** in its terminal to stop it. Use `--state-dir /path/to/app-state` for an isolated configuration and history directory outside your study workspace.
 
-On-save actions initially use file polling with a quiet period. The app never edits study sources. Existing studies may be replaced by an authorized upload. The **Upload selected** review shows the target and identity, and labels unknown remote state rather than claiming that a study is new.
+On-save actions initially use file polling with a quiet period. The app never edits study sources. A later release of the app will use the same sync as [`pkdb tables`](workbooks.md) for study format 2 folders. Existing studies may be replaced by an authorized upload. The **Upload selected** review shows the target and identity, and labels unknown remote state rather than claiming that a study is new.
 
 See the [technical design](superpowers/specs/2026-09-24-local-curation-interface-design.md) for job behavior and access boundaries. A connected server must support the current package API and API-key curation context. Offline validation does not establish server compatibility or upload permission.
 

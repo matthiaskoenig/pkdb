@@ -18,6 +18,7 @@ nav = [
   { "Example study" = "example-study.md" },
   { "Local curation" = "local-curation.md" },
   { "Study format" = "study-format.md" },
+  { "Edit tables in a workbook" = "workbooks.md" },
   { "Literature references" = "reference-metadata.md" },
   { "API" = [
     { "Accounts and API keys" = "authentication.md" },
