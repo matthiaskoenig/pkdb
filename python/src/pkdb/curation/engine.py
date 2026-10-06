@@ -16,6 +16,7 @@ from pkdb.curation.connection import ConnectionMixin
 from pkdb.curation.github import GitHubAssignments
 from pkdb.curation.issues import IssuesMixin
 from pkdb.curation.jobs import JobsMixin, fingerprint, now
+from pkdb.curation.studies import StudiesMixin
 from pkdb.curation.workspace import (
     RECENT_LIMIT,
     WorkspaceError,
@@ -27,7 +28,9 @@ from pkdb.update import newer
 __all__ = ["CurationEngine", "WorkspaceError", "fingerprint", "folder_kind", "now"]
 
 
-class CurationEngine(WorkspaceMixin, JobsMixin, ConnectionMixin, IssuesMixin):
+class CurationEngine(
+    WorkspaceMixin, JobsMixin, ConnectionMixin, IssuesMixin, StudiesMixin
+):
     def __init__(
         self,
         path=None,

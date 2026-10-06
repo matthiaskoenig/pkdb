@@ -1,5 +1,6 @@
 """Loopback-only HTTP transport for the local curation workspace."""
 
+import hashlib
 import json
 import mimetypes
 import secrets
@@ -10,6 +11,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 from pkdb.curation.engine import WorkspaceError
+from pkdb.curation.studies import AmbiguousStudy
 from pkdb.references import ReferenceError
 
 MAX_BODY = 64 * 1024
@@ -20,6 +22,20 @@ def _matches(received, expected):
     return isinstance(received, str) and secrets.compare_digest(
         received.encode("utf-8"), expected.encode("utf-8")
     )
+
+
+def _segments(path):
+    """The segments of a URL path, each percent-decoded after splitting on `/`.
+
+    ValueError for an empty segment, `.`, `..`, or a segment with a separator or NUL.
+    """
+    segments = []
+    for segment in path.split("/"):
+        value = unquote(segment, errors="strict")
+        if value in {"", ".", ".."} or any(char in value for char in "/\\\0"):
+            raise ValueError("Invalid path segment")
+        segments.append(value)
+    return segments
 
 
 class CurationServer(ThreadingHTTPServer):
@@ -48,13 +64,22 @@ class Handler(BaseHTTPRequestHandler):
         # Request URLs and payloads must never leak bootstrap tokens or API keys.
         pass
 
-    def _reply(self, status, value, *, content_type="application/json", cookie=None):
-        data = (
-            json.dumps(value).encode() if content_type == "application/json" else value
-        )
+    def _reply(
+        self,
+        status,
+        value,
+        *,
+        content_type="application/json",
+        cookie=None,
+        etag=None,
+    ):
+        data = value if isinstance(value, bytes) else json.dumps(value).encode()
         self.send_response(status)
-        self.send_header("Content-Type", content_type)
-        self.send_header("Content-Length", str(len(data)))
+        if status != 304:
+            self.send_header("Content-Type", content_type)
+            self.send_header("Content-Length", str(len(data)))
+        if etag:
+            self.send_header("ETag", etag)
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.send_header("Referrer-Policy", "no-referrer")
@@ -68,7 +93,44 @@ class Handler(BaseHTTPRequestHandler):
         if cookie:
             self.send_header("Set-Cookie", cookie)
         self.end_headers()
-        self.wfile.write(data)
+        if status != 304:
+            self.wfile.write(data)
+
+    def _versioned(self, version, build):
+        """Reply with the JSON that `build` returns, or 304 when the client has `version`."""
+        etag = f'"{version}"'
+        if self.headers.get("If-None-Match") == etag:
+            self._reply(304, b"", etag=etag)
+            return
+        self._reply(200, build(), etag=etag)
+
+    def _json(self, value):
+        """Reply with a JSON value whose ETag is the hash of its JSON."""
+        data = json.dumps(value).encode()
+        self._versioned(hashlib.sha256(data).hexdigest(), lambda: data)
+
+    def _study(self, path):
+        engine = self.server.engine
+        segments = _segments(path.removeprefix("/local/studies/"))
+        if len(segments) < 2:
+            raise LookupError(path)
+        substance, name, *rest = segments
+        identity = f"{substance}/{name}"
+        match rest:
+            case []:
+                self._versioned(
+                    engine.study_version(identity),
+                    lambda: engine.study_detail(identity),
+                )
+            case ["tables", file]:
+                self._json(engine.study_table(identity, file))
+            case ["sources", source]:
+                self._json(engine.study_source(identity, source))
+            case ["files", file]:
+                data, media_type = engine.study_image(identity, file)
+                self._reply(200, data, content_type=media_type)
+            case _:
+                raise LookupError(path)
 
     def _allowed(self, *, mutation=False):
         if self.headers.get_all("Host") != [self.server.origin.removeprefix("http://")]:
@@ -111,23 +173,25 @@ class Handler(BaseHTTPRequestHandler):
                 return
             try:
                 if path == "/local/state":
-                    self._reply(
-                        200,
+                    self._json(
                         {
                             **self.server.engine.snapshot(),
                             "csrf_token": self.server.csrf_token,
-                        },
+                        }
                     )
                 elif path.startswith("/local/reports/"):
-                    self._reply(
-                        200,
+                    self._json(
                         self.server.engine.report(
                             unquote(path.removeprefix("/local/reports/"))
-                        ),
+                        )
                     )
+                elif path.startswith("/local/studies/"):
+                    self._study(path)
                 else:
                     self._reply(404, {"error": "Unknown resource"})
-            except ValueError, KeyError, FileNotFoundError:
+            except AmbiguousStudy as error:
+                self._reply(409, {"error": str(error)})
+            except ValueError, LookupError, FileNotFoundError:
                 self._reply(404, {"error": "Resource is not available"})
             except Exception:
                 self._reply(500, {"error": "Unable to read the local workspace state"})

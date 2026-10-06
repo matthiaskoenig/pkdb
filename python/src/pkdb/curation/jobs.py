@@ -19,6 +19,7 @@ from pkdb.cache import (
 )
 from pkdb.client import Client
 from pkdb.curation.state import EngineState
+from pkdb.curation.studies import AmbiguousStudy
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError, SourceChangedError
@@ -160,10 +161,7 @@ class JobsMixin(EngineState):
             if not matches:
                 raise ValueError("Study is not in this workspace")
             if len(matches) > 1:
-                paths = ", ".join(row["path"] for row in matches)
-                raise ValueError(
-                    f"{identifier} is the identity of two folders: {paths}; rename one"
-                )
+                raise AmbiguousStudy(identifier, [row["path"] for row in matches])
             rows.append(matches[0])
         return rows
 
