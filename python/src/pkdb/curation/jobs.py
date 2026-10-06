@@ -60,11 +60,11 @@ def describe(pipeline: PipelineResult) -> str | None:
     return text[0].upper() + text[1:] if text else None
 
 
-def wrote_files(pipeline: PipelineResult) -> bool:
-    """Whether the pipeline changed a file of the folder: a table or the workbook."""
-    return bool(pipeline.changes) or any(
-        sync.workbook_action in {"created", "regenerated"} for sync in pipeline.syncs
-    )
+def sync_later(row: dict) -> None:
+    """Queue a validation whose sync regenerates the closed workbook; it needs no upload."""
+    if not row["_pending"]:
+        # An initial job only validates, whatever the save action of the study.
+        row.update(_pending=True, _initial=True, _changed_at=time.monotonic())
 
 
 def issue_counts(report: dict) -> dict:
@@ -310,15 +310,29 @@ class JobsMixin(EngineState):
                     self._save()
 
         try:
+            with self.lock:
+                row["status"] = "validating"
+            # The reference is written before the source of this job is fixed below; a
+            # failed lookup is reported after the sync, which needs no reference.
+            try:
+                change = sync_reference(
+                    row["_folder"], ReferenceResolver(offline=self.offline)
+                )
+                reference_error = None
+            except ReferenceError as error:
+                change, reference_error = None, error
+            if change:
+                outcome["reference_updated"] = change
             # Chosen before the folder lock, which is never held while waiting for self.lock.
             local = self._local_vocabulary()
             with self.lock:
-                row["status"] = "validating"
                 row["sync"] = {**row["sync"], "status": "syncing"}
             try:
                 # App writes take the same lock, so the formatter never overwrites one.
                 with folder_lock(row["_folder"]):
                     pipeline = sync_and_format(row["_folder"], local)
+                    # The source this job validates; any later save belongs to the next job.
+                    synced_source = fingerprint(source_hashes(row["_folder"]))
             finally:
                 synced = self._sync_state(row["_folder"])
                 with self.lock:
@@ -333,17 +347,28 @@ class JobsMixin(EngineState):
                 job.update(status="conflict", message=stop_message(pipeline))
                 row.update(status="conflict", stale=True)
                 return  # The finally block writes the report.
-            change = sync_reference(
-                row["_folder"], ReferenceResolver(offline=self.offline)
-            )
-            if wrote_files(pipeline) or change:
+            if synced_source != expected:
                 with self.lock:
                     self.scan()
-                    # This job validates the repaired source; do not queue it again.
-                    expected = row["_fingerprint"]
-                    row.update(status="validating", _pending=False)
-                if change:
-                    outcome["reference_updated"] = change
+                    # This job validates the repaired source; a save after it stays pending.
+                    row.update(
+                        status="validating",
+                        _pending=row["_fingerprint"] != synced_source,
+                    )
+                expected = synced_source
+            if synced["changes"] or synced["conflicts"]:
+                # The workbook was saved after the sync read it, so the tables are stale.
+                raise SourceChangedError("A workbook save superseded this validation")
+            if (
+                synced["status"] == "changed"
+                and pipeline.syncs
+                and pipeline.syncs[-1].workbook_action == "close_to_update"
+            ):
+                # The sync found the workbook open and it is closed now.
+                with self.lock:
+                    sync_later(row)
+            if reference_error is not None:
+                raise reference_error
             if pipeline.stopped == "format":
                 # Tables that cannot be formatted are reported like validation problems.
                 raise StudyValidationError(

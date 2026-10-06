@@ -1,10 +1,13 @@
 """The curation engine syncs and formats a format 2 study before it validates it."""
 
+from contextlib import contextmanager
+
 import openpyxl
 import pytest
 
 from pkdb.curation import engine as module
 from pkdb.curation import jobs
+from pkdb.studyformat import pipeline as pipeline_module
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.sync import sync_study
 from pkdb.studyformat.workbook.base import workbook_path
@@ -186,5 +189,149 @@ def test_regenerated_workbook_is_validated_by_the_same_job(workspace, sf_vocabul
     job = run_next(engine)
     assert job["status"] == "succeeded", job["message"]
     assert workbook_mean(folder, "timecourses_Fig1") == 3
+    settle(engine)
+    assert not engine.queue
+
+
+def run_all(engine):
+    jobs_run = []
+    settle(engine)
+    while engine.queue:
+        jobs_run.append(run_next(engine))
+        settle(engine)
+    return jobs_run
+
+
+@pytest.mark.parametrize(
+    "moment", ["while formatting", "after the folder lock", "after the sync state"]
+)
+def test_a_save_during_the_job_is_never_absorbed(
+    workspace, sf_vocabulary, monkeypatch, moment
+):
+    engine, folder = workspace
+    assert format_folder(folder).ok
+    assert sync_study(folder, sf_vocabulary).ok
+    set_workbook_mean(folder, "timecourses_Fig1", 5)
+    engine.scan()
+    saved = []
+
+    def save_again():
+        if not saved:
+            saved.append(moment)
+            set_workbook_mean(folder, "timecourses_Fig1", 9)
+
+    if moment == "while formatting":
+        real_format = pipeline_module.format_folder
+
+        def formatting(path, **kwargs):
+            save_again()
+            return real_format(path, **kwargs)
+
+        monkeypatch.setattr(pipeline_module, "format_folder", formatting)
+    elif moment == "after the folder lock":
+        real_lock = jobs.folder_lock
+
+        @contextmanager
+        def lock(path):
+            with real_lock(path):
+                yield
+            save_again()
+
+        monkeypatch.setattr(jobs, "folder_lock", lock)
+    else:
+        real_describe = jobs.describe
+
+        def describing(pipeline):
+            save_again()
+            return real_describe(pipeline)
+
+        monkeypatch.setattr(jobs, "describe", describing)
+    settle(engine)
+    first = run_next(engine)
+    assert saved
+    # The job validated tables without the last save, so it must not count as current.
+    assert first["status"] == "canceled", first["message"]
+    assert engine.studies["caffeine/Example"]["_pending"] is True
+    later = run_all(engine)
+    assert [job["status"] for job in later] == ["succeeded"]
+    assert "\t9\t" in (folder / "timecourses_Fig1.tsv").read_text().splitlines()[2]
+    assert row(engine)["sync"]["status"] == "in_sync"
+
+
+def test_closing_the_workbook_regenerates_it(workspace, sf_vocabulary):
+    engine, folder = workspace
+    assert format_folder(folder).ok
+    assert sync_study(folder, sf_vocabulary).ok
+    engine.scan()
+    assert [job["status"] for job in run_all(engine)] == ["succeeded"]
+    lock = folder / f".~lock.{folder.name}.xlsx#"
+    lock.write_text("open")
+    engine.scan()
+    # Opening the workbook changes no source: no job.
+    assert row(engine)["sync"]["status"] == "in_sync"
+    settle(engine)
+    assert not engine.queue
+    set_mean(folder, "timecourses_Fig1.tsv", "6")
+    engine.scan()
+    assert row(engine)["sync"]["status"] == "workbook_open"
+    assert [job["status"] for job in run_all(engine)] == ["succeeded"]
+    assert row(engine)["sync"]["status"] == "workbook_open"
+    assert workbook_mean(folder, "timecourses_Fig1") == 2
+    lock.unlink()
+    engine.scan()
+    assert row(engine)["sync"] == {"status": "changed", "changes": 0, "conflicts": 0}
+    assert engine.studies["caffeine/Example"]["_pending"] is True
+    settle(engine)
+    assert [job["action"] for job in engine.queue.values()] == ["validate"]
+    assert [job["status"] for job in run_all(engine)] == ["succeeded"]
+    assert workbook_mean(folder, "timecourses_Fig1") == 6
+    assert row(engine)["sync"]["status"] == "in_sync"
+
+
+def test_a_closed_workbook_behind_the_tables_is_changed(workspace, sf_vocabulary):
+    engine, folder = workspace
+    assert format_folder(folder).ok
+    assert sync_study(folder, sf_vocabulary).ok
+    set_mean(folder, "timecourses_Fig1.tsv", "6")
+    engine.scan()
+    assert row(engine)["sync"] == {"status": "changed", "changes": 0, "conflicts": 0}
+
+
+def test_a_workbook_closed_during_the_job_is_regenerated(
+    workspace, sf_vocabulary, monkeypatch
+):
+    engine, folder = workspace
+    # The tables are not formatted yet, so the job writes them and scans again.
+    assert sync_study(folder, sf_vocabulary).ok
+    lock = folder / f".~lock.{folder.name}.xlsx#"
+    lock.write_text("open")
+    set_mean(folder, "timecourses_Fig1.tsv", "6")
+    engine.scan()
+    real_format = pipeline_module.format_folder
+
+    def formatting(path, **kwargs):
+        lock.unlink(missing_ok=True)
+        return real_format(path, **kwargs)
+
+    monkeypatch.setattr(pipeline_module, "format_folder", formatting)
+    settle(engine)
+    assert run_next(engine)["status"] == "succeeded"
+    assert engine.studies["caffeine/Example"]["_pending"] is True
+    assert [job["status"] for job in run_all(engine)] == ["succeeded"]
+    assert workbook_mean(folder, "timecourses_Fig1") == 6
+    assert row(engine)["sync"]["status"] == "in_sync"
+
+
+def test_a_failed_reference_lookup_still_syncs_the_workbook(workspace, sf_vocabulary):
+    engine, folder = workspace
+    assert sync_study(folder, sf_vocabulary).ok
+    set_workbook_mean(folder, "timecourses_Fig1", 5)
+    (folder / "reference.json").unlink()  # offline, nothing cached: the lookup fails
+    engine.scan()
+    settle(engine)
+    job = run_next(engine)
+    assert job["status"] == "failed" and "reference.json" in job["message"]
+    assert "\t5\t" in (folder / "timecourses_Fig1.tsv").read_text().splitlines()[2]
+    assert row(engine)["sync"]["status"] == "in_sync"
     settle(engine)
     assert not engine.queue

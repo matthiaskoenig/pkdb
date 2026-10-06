@@ -12,7 +12,7 @@ from collections import Counter
 from pathlib import Path
 from uuid import uuid4
 
-from pkdb.curation.jobs import fingerprint
+from pkdb.curation.jobs import fingerprint, sync_later
 from pkdb.curation.metadata import reference_summary
 from pkdb.curation.state import EngineState
 from pkdb.curation.studies import study_summary
@@ -21,7 +21,7 @@ from pkdb.schemas.validation import StudyValidationError
 from pkdb.source_files import ignored_source
 from pkdb.studyformat import is_v2_folder
 from pkdb.studyformat.sync import workbook_check
-from pkdb.studyformat.workbook.base import workbook_path
+from pkdb.studyformat.workbook.base import open_lock, workbook_path
 
 RECENT_LIMIT = 10
 DIRECTORY_LIMIT = 2000
@@ -190,7 +190,7 @@ class WorkspaceMixin(EngineState):
                     for p in folder.rglob("*")
                     if not ignored_source(p.relative_to(folder))
                 )
-                signature = [
+                files = [
                     (
                         p.relative_to(folder).as_posix(),
                         p.stat().st_size,
@@ -199,6 +199,8 @@ class WorkspaceMixin(EngineState):
                     for p in paths
                     if p.is_file()
                 ]
+                # Opening or closing the workbook changes its sync status, not the source.
+                signature = (files, open_lock(workbook_path(folder)) is not None)
                 if signature == row["_signature"]:
                     continue
                 hashes = source_hashes(folder)
@@ -207,6 +209,12 @@ class WorkspaceMixin(EngineState):
                 sync = self._sync_state(folder)
                 with self.lock:
                     old = row["_fingerprint"]
+                    was_open = row["_signature"] is not None and row["_signature"][1]
+                    closed = was_open and not signature[1]
+                    behind = (
+                        sync["status"] == "changed"
+                        or row["sync"]["status"] == "workbook_open"
+                    )
                     row.update(
                         files=[{"id": name, "path": name} for name in hashes],
                         summary=summary,
@@ -225,6 +233,9 @@ class WorkspaceMixin(EngineState):
                         # An initial scan validates locally, never uploads a backlog.
                         row["_pending"] = True
                         row["_initial"] = initial or old is None
+                    if closed and behind:
+                        # The workbook lacks the tables and is closed now: sync it.
+                        sync_later(row)
                     for job in self.jobs:
                         if (
                             job.get("study_id") == row["id"]
@@ -270,7 +281,8 @@ class WorkspaceMixin(EngineState):
         elif not check["ok"]:
             # The tables do not load or the workbook cannot be read.
             status = "unknown"
-        elif changes:
+        elif changes or check["action"] in {"created", "regenerated"}:
+            # The tables lack workbook edits, or the workbook lacks the tables.
             status = "changed"
         else:
             status = "in_sync"
