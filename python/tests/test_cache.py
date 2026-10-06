@@ -1,6 +1,7 @@
 """Caches preserve explicit endpoint pins and verify content identity."""
 
 import json
+import os
 
 import pytest
 
@@ -52,3 +53,51 @@ def test_missing_pinned_snapshot_does_not_silently_fall_back(tmp_path, vocabular
     path.unlink()
     with pytest.raises(ValueError, match="snapshot"):
         cache.load("https://example.test")
+
+
+def test_atomic_text_writes_lf(tmp_path):
+    from pkdb.cache import atomic_text
+
+    target = tmp_path / "a" / "table.tsv"
+    atomic_text(target, "x\ty\n1\t2\n")
+    assert target.read_bytes() == b"x\ty\n1\t2\n"
+
+
+@pytest.mark.skipif(os.name != "posix", reason="POSIX permissions")
+def test_atomic_text_keeps_the_permissions_of_the_replaced_file(tmp_path):
+    from pkdb.cache import atomic_text
+
+    target = tmp_path / "table.tsv"
+    target.write_text("old")
+    target.chmod(0o640)
+    atomic_text(target, "new")
+    assert target.read_text() == "new"
+    assert target.stat().st_mode & 0o777 == 0o640
+
+
+@pytest.mark.skipif(os.name != "posix", reason="POSIX permissions")
+@pytest.mark.parametrize(
+    ("umask", "mode"), [(0o022, 0o644), (0o027, 0o640)], ids=["022", "027"]
+)
+def test_atomic_text_creates_files_by_the_umask(tmp_path, umask, mode):
+    from pkdb.cache import atomic_text
+
+    previous = os.umask(umask)
+    try:
+        atomic_text(tmp_path / "table.tsv", "new")
+    finally:
+        os.umask(previous)
+    assert (tmp_path / "table.tsv").stat().st_mode & 0o777 == mode
+    assert [path.name for path in tmp_path.iterdir()] == ["table.tsv"]
+
+
+def test_atomic_text_removes_its_temporary_file_on_failure(tmp_path, monkeypatch):
+    from pkdb.cache import atomic_text
+
+    def fail(fd):
+        raise OSError("disk full")
+
+    monkeypatch.setattr("pkdb.cache.os.fsync", fail)
+    with pytest.raises(OSError, match="disk full"):
+        atomic_text(tmp_path / "table.tsv", "new")
+    assert list(tmp_path.iterdir()) == []

@@ -1,5 +1,7 @@
 # Unreleased
 
+- Introduce study format 2 for curated study folders: fixed tab-separated tables (`subjects`, `interventions`, `characteristica`, `outputs_<source>`, `timecourses_<source>`, `scatters_<source>`) with `study.json` metadata and `review.json` review items, defined by one schema and committed as canonical text instead of workbooks (#866). Add `pkdb format` to write folders in canonical form, `pkdb schema export` and `pkdb schema docs` for the JSON Schema and the generated **Study format** documentation page, and validate format 2 folders with `pkdb validate`, which reports every layout, format, row, relationship and vocabulary issue with file, row and column. `pkdb reference resolve` reads the format 2 reference identifiers. `pkdb prepare` and `pkdb upload` do not accept format 2 folders yet; format 1 folders behave as before.
+
 - Show whether the local curation app is connected to the PK-DB server and its database in the **Connection** header badge, rechecked every 30 seconds (#860). Distinguish unreachable servers, rejected API keys, incompatible client releases, offline mode, and a stopped local service, and show the last check time and client and server versions.
 
 - Read `PKDB_ENDPOINT`, `PKDB_USER`, and `PKDB_API_KEY` as defaults in the `pkdb` command-line tools, Python client, and local curation app (#859). `PKDB_USER` or `--user` names the expected PK-DB account; uploads stop and the curation app reports a mismatch when the API key belongs to another account.
