@@ -16,9 +16,10 @@ After a sync, the workbook content is the common ancestor of its later saves and
 of the new tables. The sync state file next to the workbook records it as the
 base of every table it changed since its generation and overrides `_base`, so a
 workbook saved again while it stays open does not conflict with the first sync.
-The workbook is rewritten only when the tables hold content it lacks, never
-while it is open, and never when it was saved during the sync. `add_table`
-adds the empty sheet of a new table under the same rules.
+The workbook is rewritten only when the tables hold content it lacks, or when
+it lost its `_base` but holds the tables after the sync, so that it gets its
+base back; never while it is open, and never when it was saved during the sync.
+`add_table` adds the empty sheet of a new table under the same rules.
 """
 
 from collections.abc import Iterable, Mapping, Sequence
@@ -411,20 +412,35 @@ def _write_issue(file: str, error: OSError) -> ValidationIssue:
     )
 
 
-def _open_issue(workbook: Path, lock: Path | None) -> ValidationIssue:
+def _open_issue(
+    workbook: Path, lock: Path | None, *, restore_base: bool = False
+) -> ValidationIssue:
+    """The workbook is open, so it was not regenerated.
+
+    `restore_base` tells that the regeneration would only restore the lost
+    `_base` sheet of a workbook that holds the tables.
+    """
+    purpose = (
+        "restore its base, which the sync needs to merge changes of both sides"
+        if restore_base
+        else "update it with the changes of the tables"
+    )
     if lock is None:
         message = (
             f"{workbook.name} cannot be replaced, probably because it is open in a "
-            "spreadsheet application; close it and sync again to update it with "
-            "the changes of the tables"
+            f"spreadsheet application; close it and sync again to {purpose}"
         )
     else:
         message = (
             f"{workbook.name} is open in a spreadsheet application; close it and "
-            "sync again to update it with the changes of the tables. If the "
-            f"workbook is not open, delete {lock}"
+            f"sync again to {purpose}. If the workbook is not open, delete {lock}"
         )
-    return make_issue("workbook_open", message, file=workbook.name)
+    hint = (
+        "Closing the workbook and syncing again restores its base."
+        if restore_base
+        else None
+    )
+    return make_issue("workbook_open", message, file=workbook.name, hint=hint)
 
 
 def _changes(
@@ -573,10 +589,13 @@ def _regenerate(
     content: WorkbookContent,
     signature: tuple[int, int] | None,
     vocabulary: Vocabulary,
+    *,
+    restore_base: bool,
 ) -> SyncResult:
     """Rewrite the workbook from the new tables, unless it is open or was saved meanwhile.
 
-    A save during the sync is merged by the next sync.
+    A save during the sync is merged by the next sync. `restore_base` tells
+    that the workbook holds the tables and only gets its base back.
     """
     path = outcome.workbook
     replaced = _replace_workbook(
@@ -592,7 +611,10 @@ def _regenerate(
             outcome,
             workbook_action="close_to_update",
             lock=replaced.lock or outcome.lock,
-            issues=(*issues, _open_issue(path, replaced.lock)),
+            issues=(
+                *issues,
+                _open_issue(path, replaced.lock, restore_base=restore_base),
+            ),
         )
     if replaced.status == "saved":
         changed = make_issue(
@@ -622,7 +644,9 @@ def sync_study(
     workbook is regenerated when the tables hold content it lacks, unless it is
     open. Changes on both sides merge line by line, and `keep` resolves
     conflicting rows to one side. Without `_base`, a table on one side only is
-    kept, and a table that differs between the sides conflicts. An error, or a
+    kept, and a table that differs between the sides conflicts; a workbook
+    without `_base` that holds the tables after the sync is regenerated to get
+    it back. An error, or a
     conflict left unresolved, writes nothing; every file is replaced
     atomically. `check` only plans.
     `max_rows` limits the data rows of the tables and of the workbook, as an
@@ -698,17 +722,25 @@ def sync_study(
             )
     lock = open_lock(path)
     outcome = replace(outcome, changes=tuple(changes), lock=lock)
-    if all(text == workbook.get(file) for file, text in plan.files.items()):
+    # A workbook that holds the new tables is regenerated only to get back a
+    # lost base, without which every later change of both sides conflicts.
+    restore_base = all(text == workbook.get(file) for file, text in plan.files.items())
+    if restore_base and content.base is not None:
         return outcome
     if lock is not None:
         return replace(
             outcome,
             workbook_action="close_to_update",
-            issues=(*outcome.issues, _open_issue(path, lock)),
+            issues=(
+                *outcome.issues,
+                _open_issue(path, lock, restore_base=restore_base),
+            ),
         )
     if check:
         return replace(outcome, workbook_action="regenerated")
-    return _regenerate(outcome, plan.files, content, signature, vocabulary)
+    return _regenerate(
+        outcome, plan.files, content, signature, vocabulary, restore_base=restore_base
+    )
 
 
 @dataclass(frozen=True)

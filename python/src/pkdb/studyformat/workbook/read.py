@@ -52,6 +52,10 @@ CELL_ISSUES = {
     "formula_value": "hold formulas that are stored as their values",
     "value_outside_table": "have values outside the header columns",
 }
+BASE_HINT = (
+    "Close the workbook and run pkdb tables sync; if the tables and the workbook "
+    "differ, choose a side with --keep"
+)
 SHEET_HINT = (
     "Rename the sheet to subjects, interventions, characteristica or "
     "<kind>_<source>, such as outputs_Tab2, or start its name with _ to keep it as "
@@ -382,6 +386,7 @@ def _read_base(
                 f"The workbook has no {BASE_SHEET} sheet, so changes in both the "
                 "workbook and the tables cannot be merged",
                 file=workbook,
+                hint=BASE_HINT,
             )
         ]
     rows = (
@@ -391,7 +396,9 @@ def _read_base(
     try:
         return parse_base(rows), []
     except BaseError as error:
-        return None, [make_issue(error.code, error.message, file=workbook)]
+        # A newer workbook format is an error that a sync cannot repair.
+        hint = BASE_HINT if error.code == "workbook_base_invalid" else None
+        return None, [make_issue(error.code, error.message, file=workbook, hint=hint)]
 
 
 def _sheet_table(

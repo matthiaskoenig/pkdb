@@ -60,6 +60,8 @@ The sync compares three versions of each table: the base (the tables the workboo
 
 All files are written atomically. An error or an unresolved conflict found by the sync stops it before it writes anything, so the tables and the workbook stay as they were, and a sync never overwrites a workbook that holds changes that are not in the tables yet.
 
+A workbook can lose its `_base` sheet, for example when another application saves it, and an invalid one counts as lost. The sync then warns (`workbook_base_missing` or `workbook_base_invalid`): it cannot tell which side changed a table, so a table that differs between the workbook and the tables conflicts as a whole. When the workbook and the tables are equal after the sync, it regenerates the closed workbook, which restores the base and keeps the scratch sheets; while the workbook is open, it reports `workbook_open`, and closing the workbook and syncing again restores the base. If the tables and the workbook differ, choose a side with `--keep workbook` or `--keep tables`, and the same sync restores the base.
+
 Next to the workbook, the sync keeps a hidden state file `.Harder1988.xlsx.pkdb-base`. It records the base of every table that was written from the workbook since the workbook was generated, so saving the workbook twice while it stays open never conflicts with the first sync. A regeneration starts afresh and removes the file. Do not edit it. If it is lost, the sync falls back to the `_base` sheet, and rows that you edited again after an earlier sync can conflict.
 
 ## Conflicts

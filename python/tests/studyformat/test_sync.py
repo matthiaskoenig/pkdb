@@ -776,19 +776,74 @@ def test_errors_write_nothing(study, workbook, sf_vocabulary, damage, code):
     assert snapshot(study) == before
 
 
-def test_a_missing_base_is_fine_while_the_workbook_is_in_step(
+def damage_base(workbook):
+    workbook["_base"]["A1"] = "something else"
+
+
+@pytest.mark.parametrize(
+    ("damage", "code"),
+    [
+        (remove_sheet("_base"), "workbook_base_missing"),
+        (damage_base, "workbook_base_invalid"),
+    ],
+)
+def test_a_lost_base_is_restored_while_the_workbook_is_in_step(
+    study, workbook, sf_vocabulary, damage, code
+):
+    edit(workbook, damage)
+    edit(workbook, lambda book: book.create_sheet("_scratch").cell(1, 1, "kept"))
+    tables = tables_of(study)
+
+    result = sync_study(study, sf_vocabulary)
+
+    assert result.ok
+    assert codes(result) == [code]
+    assert result.changes == ()
+    assert result.workbook_action == "regenerated"
+    assert tables_of(study) == tables
+    assert_in_step(study, workbook)
+    assert "_scratch" in openpyxl.load_workbook(workbook).sheetnames
+
+    # The base merges the next changes of both sides.
+    set_cells(workbook, "timecourses_Fig1", 2, mean=0.25)
+    edit_table(study, TIMECOURSES, 4, mean="7")
+    merged = sync_study(study, sf_vocabulary)
+    assert merged.ok, merged.issues
+    assert merged.issues == ()
+    assert [cell(study, TIMECOURSES, line, "mean") for line in (2, 4)] == ["0.25", "7"]
+
+
+def test_a_lost_base_of_an_open_workbook_is_restored_after_it_is_closed(
     study, workbook, sf_vocabulary
 ):
     edit(workbook, remove_sheet("_base"))
+    (study / LOCK).write_text("lock")
     before = snapshot(study)
 
     result = sync_study(study, sf_vocabulary)
 
     assert result.ok
-    assert codes(result) == ["workbook_base_missing"]
-    assert result.changes == ()
-    assert result.workbook_action == "unchanged"
+    assert codes(result) == ["workbook_base_missing", "workbook_open"]
+    assert result.workbook_action == "close_to_update"
+    issue = result.issues[1]
+    assert "restore" in issue.message
+    assert "restores its base" in issue.suggestions[0].message
     assert snapshot(study) == before
+
+    (study / LOCK).unlink()
+    assert sync_study(study, sf_vocabulary).workbook_action == "regenerated"
+    assert_in_step(study, workbook)
+
+
+@pytest.mark.parametrize("code", ["workbook_base_missing", "workbook_base_invalid"])
+def test_a_lost_base_names_how_to_restore_it(study, workbook, sf_vocabulary, code):
+    edit(workbook, remove_sheet("_base") if code.endswith("missing") else damage_base)
+    issue = read_workbook(workbook, STUDY).issues[0]
+    assert issue.code == code
+    assert issue.suggestions[0].message == (
+        "Close the workbook and run pkdb tables sync; if the tables and the "
+        "workbook differ, choose a side with --keep"
+    )
 
 
 @pytest.mark.parametrize("keep", [None, "workbook", "tables"])
@@ -820,8 +875,14 @@ def test_without_a_base_differences_conflict_unless_kept(
     elif keep == "workbook":
         assert result.ok
         assert result.changes == (FileChange(TIMECOURSES, "write"),)
-        assert result.workbook_action == "unchanged"
+        # The workbook gets its base back.
+        assert result.workbook_action == "regenerated"
         assert table_lines(study, TIMECOURSES) == sheet
+        assert_in_step(study, workbook)
+        set_cells(workbook, "timecourses_Fig1", 4, mean=9)
+        edit_table(study, OUTPUTS, 2, mean="3")
+        merged = sync_study(study, sf_vocabulary)
+        assert merged.ok and merged.issues == (), merged.issues
     else:
         assert result.ok
         assert result.changes == ()
