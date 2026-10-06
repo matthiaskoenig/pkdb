@@ -2,6 +2,7 @@
 
 import json
 import os
+import shlex
 import shutil
 import subprocess
 from datetime import datetime
@@ -636,8 +637,10 @@ def test_git_ignore_warning(study, vocabulary, capsys):
 
 
 @git
-def test_a_workbook_that_git_tracks_is_a_warning(study, vocabulary, capsys):
-    from pkdb.studyformat.workbook.git import tracked_by_git
+def test_a_workbook_that_git_tracks_is_a_warning(
+    study, vocabulary, capsys, monkeypatch
+):
+    from pkdb.studyformat.workbook.git import git_issues, tracked_by_git
 
     root = study.parent.parent
     path = workbook_path(study)
@@ -647,13 +650,20 @@ def test_a_workbook_that_git_tracks_is_a_warning(study, vocabulary, capsys):
     assert tracked_by_git(path) is False
     subprocess.run(["git", "add", "-f", str(path)], cwd=root, check=True)
     assert tracked_by_git(path) is True
+    # Outside the current directory, the command names the absolute folder.
+    [issue] = git_issues(path)
+    assert issue.suggestions[0].candidates == [
+        f"git -C {shlex.quote(str(study))} rm --cached Example.xlsx"
+    ]
+    monkeypatch.chdir(root)
 
-    assert tables("sync", study, "--format", "json", *vocabulary) == 0
+    assert tables("sync", "caffeine/Example", "--format", "json", *vocabulary) == 0
     [issue] = entries(capsys)[0]["issues"]
     assert issue["code"] == "workbook_tracked"
     assert issue["severity"] == "warning"
     assert issue["source"]["file"] == "Example.xlsx"
-    assert issue["suggestions"][0]["candidates"] == ["git rm --cached Example.xlsx"]
+    [command] = issue["suggestions"][0]["candidates"]
+    assert command == "git -C caffeine/Example rm --cached Example.xlsx"
 
     # The state file is not ignored and the workbook is tracked.
     (root / ".gitignore").write_text("")
@@ -664,7 +674,9 @@ def test_a_workbook_that_git_tracks_is_a_warning(study, vocabulary, capsys):
         ".*.pkdb-base"
     ]
 
-    subprocess.run(["git", "rm", "-q", "--cached", path.name], cwd=study, check=True)
+    # The command works from the current directory.
+    subprocess.run([*shlex.split(command), "-q"], check=True)
+    assert tracked_by_git(path) is False
     (root / ".gitignore").write_text("*.xlsx\n.*.pkdb-base\n")
     assert tables("sync", study, "--format", "json", *vocabulary) == 0
     assert entries(capsys)[0]["issues"] == []

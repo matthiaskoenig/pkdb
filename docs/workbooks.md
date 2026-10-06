@@ -124,7 +124,7 @@ Commit the tables, not the workbook. Add these lines to the `.gitignore` of the 
 .*.pkdb-base
 ```
 
-`pkdb tables sync` and `open` warn (`workbook_not_ignored`) and print the missing lines when the study is in a git repository that does not ignore the workbook or its state file. Git never ignores a file that it already tracks, such as a workbook of study format 1, so for a tracked workbook or state file they warn with `workbook_tracked` instead and print the command `git rm --cached Harder1988.xlsx`, which stops tracking the file and keeps it.
+`pkdb tables sync` and `open` warn (`workbook_not_ignored`) and print the missing lines when the study is in a git repository that does not ignore the workbook or its state file. Git never ignores a file that it already tracks, such as a workbook of study format 1, so for a tracked workbook or state file they warn with `workbook_tracked` instead and print the command that stops tracking the file and keeps it, such as `git -C studies/caffeine/Harder1988 rm --cached Harder1988.xlsx`, with the folder relative to the current directory.
 
 ## Upload, validate and prepare
 

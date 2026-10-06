@@ -5,6 +5,8 @@ app warn when the study is in a git work tree that tracks the workbook or its
 state file, or does not ignore them.
 """
 
+import re
+import shlex
 import shutil
 import subprocess
 from pathlib import Path
@@ -17,6 +19,8 @@ from pkdb.studyformat.workbook.base import state_path
 GITIGNORE_WORKBOOK = "*.xlsx"
 GITIGNORE_STATE = ".*.pkdb-base"
 TIMEOUT = 30
+# Characters of a path that a shell command can hold without quotes.
+PLAIN = re.compile(r"[\w@%+=:,./-]+")
 
 
 def _git(path: Path, *arguments: str) -> int | None:
@@ -52,8 +56,30 @@ def tracked_by_git(path: Path) -> bool | None:
     return {0: True, 1: False}.get(_git(path, "ls-files", "--error-unmatch"))
 
 
-def git_issues(workbook: Path) -> list[ValidationIssue]:
-    """Warnings when the study is in a git work tree that tracks or does not ignore the workbook or its state file."""
+def _shell(text: str) -> str:
+    return text if PLAIN.fullmatch(text) else shlex.quote(text)
+
+
+def _untrack(path: Path, cwd: Path | None) -> str:
+    """The git command that stops tracking a file and keeps it, to run in `cwd`.
+
+    It names the folder relative to `cwd`, the current directory by default,
+    when the folder is inside it, and as an absolute path otherwise.
+    """
+    folder = path.parent.absolute()
+    try:
+        folder = folder.relative_to((cwd or Path.cwd()).absolute())
+    except ValueError:
+        pass
+    return f"git -C {_shell(str(folder))} rm --cached {_shell(path.name)}"
+
+
+def git_issues(workbook: Path, *, cwd: Path | None = None) -> list[ValidationIssue]:
+    """Warnings when the study is in a git work tree that tracks or does not ignore the workbook or its state file.
+
+    The command that stops tracking a file runs in `cwd`, the current directory
+    by default.
+    """
     state = state_path(workbook)
     tracked = [path for path in (workbook, state) if tracked_by_git(path)]
     missing = [
@@ -70,7 +96,7 @@ def git_issues(workbook: Path) -> list[ValidationIssue]:
                 f"Git tracks {names}; commit only the TSV tables",
                 file=workbook.name,
                 hint="Stop tracking them, keeping the files, with:",
-                candidates=[f"git rm --cached {path.name}" for path in tracked],
+                candidates=[_untrack(path, cwd) for path in tracked],
             )
         )
     if missing:
