@@ -88,6 +88,11 @@ Serve the frontend and backend behind one HTTPS origin. Forward `/api/` and `/ac
 | `PKDB_SMTP_USERNAME`, `PKDB_SMTP_PASSWORD` | Optional SMTP authentication; provide both when required |
 | `PKDB_SMTP_STARTTLS` | Defaults to `true`; SMTP transport uses STARTTLS, not implicit TLS |
 | `PKDB_CORS_ORIGINS` | Explicit JSON array when needed; same-origin deployment normally needs none |
+| `PKDB_UPLOAD_MAX_ROWS` | Table rows of one upload, study format 1 or 2; defaults to `1000000` |
+| `PKDB_UPLOAD_MAX_BYTES`, `PKDB_UPLOAD_MAX_FILES` | Size and number of files of one upload; default to 256 MB and `256` |
+| `PKDB_UPLOAD_CONCURRENCY` | Uploads processed at the same time; defaults to `2` |
+
+Size the memory of the API workers for `PKDB_UPLOAD_MAX_ROWS`. Validating and preparing an upload holds its rows in memory, about 2 KB per row for study format 1 and study format 2 alike, so the default of one million rows needs about 2 GB for each concurrent upload, and the default concurrency of 2 about 4 GB. Uploads stop reading at the row limit, so the limit and not the file size bounds this memory. Lower `PKDB_UPLOAD_MAX_ROWS` (or `PKDB_UPLOAD_CONCURRENCY`) when the workers have less memory; real studies have far fewer rows.
 
 Production cookies are Secure, HttpOnly and SameSite=Lax, with `__Host-` names. Insecure cookies are restricted to local development hosts. Browser mutations require the expected Origin and a CSRF token obtained from `GET /api/v1/auth/csrf`; the frontend handles this automatically. An invalid explicit Authorization header does not fall back to a browser cookie.
 
