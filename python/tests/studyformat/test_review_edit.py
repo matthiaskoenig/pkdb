@@ -4,6 +4,7 @@ import pytest
 
 from pkdb.identity import Author
 from pkdb.schemas.review import ReviewTarget
+from pkdb.studyformat.issues import row_issue
 from pkdb.studyformat.load import load_study
 from pkdb.studyformat.review_edit import (
     ApprovalRefused,
@@ -45,10 +46,12 @@ def test_item_lifecycle(valid_study):
     stored = read_review(valid_study).review.items[0]
     assert stored.state == "resolved" and stored.resolved_by == "curator"
     assert len(stored.thread) == 2
-    with pytest.raises(ReviewError):
-        dismiss(valid_study, PERSON, item.id, revision=revision, now=NOW)
+    with pytest.raises(ReviewError, match="resolved, not open"):
+        resolve(valid_study, PERSON, item.id, revision=revision, now=NOW)
     revision = reopen(valid_study, PERSON, item.id, revision=revision, now=NOW)
     assert read_review(valid_study).review.items[0].resolved is None
+    with pytest.raises(ReviewError, match="open already"):
+        reopen(valid_study, PERSON, item.id, revision=revision, now=NOW)
 
 
 def test_unknown_item(valid_study):
@@ -98,19 +101,24 @@ def test_approval_refused_with_validation_errors(valid_study, sf_vocabulary):
         set_status(valid_study, PERSON, "approved", vocabulary=sf_vocabulary, now=NOW)
 
 
-def test_acknowledge_targets_exactly_the_row(valid_study, sf_vocabulary):
-    timecourses = valid_study / "timecourses_Fig1.tsv"
+def _outside_range(folder, vocabulary):
+    """Make the mean of the timecourse row at time 1 lie outside its range; the warning."""
+    timecourses = folder / "timecourses_Fig1.tsv"
     lines = timecourses.read_text().splitlines()
     header = lines[0].split("\t")
     row = lines[2].split("\t")
     row[header.index("min")], row[header.index("max")] = "3", "4"  # mean outside
     lines[2] = "\t".join(row)
     timecourses.write_text("\n".join(lines) + "\n")
-    issue = next(
+    return next(
         i
-        for i in validate_folder(valid_study, sf_vocabulary).issues
+        for i in validate_folder(folder, vocabulary).issues
         if i.code == "outside_range"
     )
+
+
+def test_acknowledge_targets_exactly_the_row(valid_study, sf_vocabulary):
+    issue = _outside_range(valid_study, sf_vocabulary)
     target = target_for_issue(load_study(valid_study), issue)
     assert target is not None
     assert target.file == "timecourses_Fig1.tsv" and target.column == "mean"
@@ -135,3 +143,142 @@ def test_acknowledge_refuses_errors(valid_study, sf_vocabulary):
     )
     with pytest.raises(ReviewError):
         acknowledge(valid_study, PERSON, issue, "No.", now=NOW)
+
+
+def _codes(folder, vocabulary):
+    return [issue.code for issue in validate_folder(folder, vocabulary).issues]
+
+
+def test_dismissing_an_acknowledgement_brings_its_warning_back(
+    valid_study, sf_vocabulary
+):
+    issue = _outside_range(valid_study, sf_vocabulary)
+    item, revision = acknowledge(valid_study, PERSON, issue, "As printed.", now=NOW)
+    assert "outside_range" not in _codes(valid_study, sf_vocabulary)
+    revision = dismiss(
+        valid_study, PERSON, item.id, "Not as printed.", revision=revision, now=NOW
+    )
+    stored = read_review(valid_study).review.items[0]
+    assert (stored.state, stored.resolved_by, len(stored.thread)) == (
+        "dismissed",
+        "curator",
+        1,
+    )
+    assert "outside_range" in _codes(valid_study, sf_vocabulary)
+    with pytest.raises(ReviewError, match="dismissed"):
+        dismiss(valid_study, PERSON, item.id, revision=revision, now=NOW)
+    revision = reopen(valid_study, PERSON, item.id, revision=revision, now=NOW)
+    revision = dismiss(valid_study, PERSON, item.id, revision=revision, now=NOW)
+    assert read_review(valid_study).review.items[0].state == "dismissed"
+
+
+APPROVED = "The study is approved; set the status to in_review first"
+
+
+def _approve(folder, vocabulary):
+    return set_status(folder, PERSON, "approved", vocabulary=vocabulary, now=NOW)
+
+
+def test_approved_study_refuses_open_items(valid_study, sf_vocabulary):
+    item, revision = add_item(
+        valid_study, PERSON, kind="question", text="Why?", now=NOW
+    )
+    revision = resolve(valid_study, PERSON, item.id, revision=revision, now=NOW)
+    revision = _approve(valid_study, sf_vocabulary)
+    with pytest.raises(ReviewError, match=APPROVED):
+        add_item(valid_study, PERSON, kind="issue", text="Late.", now=NOW)
+    with pytest.raises(ReviewError, match=APPROVED):
+        reopen(valid_study, PERSON, item.id, now=NOW)
+    assert read_review(valid_study).revision == revision
+    # A resolved acknowledgement keeps the study valid, so it stays allowed.
+    issue = _outside_range(valid_study, sf_vocabulary)
+    acknowledge(valid_study, PERSON, issue, "As printed.", now=NOW)
+    review = read_review(valid_study).review
+    assert review.status == "approved" and len(review.items) == 2
+    assert "approved_with_open_items" not in _codes(valid_study, sf_vocabulary)
+
+
+def test_add_item_refuses_a_target_outside_the_study(valid_study):
+    before = read_review(valid_study).revision
+    with pytest.raises(ReviewError, match="not a file of this study") as error:
+        add_item(
+            valid_study,
+            PERSON,
+            kind="question",
+            text="Where?",
+            target=ReviewTarget(file="timecourses_Fig9.tsv"),
+            now=NOW,
+        )
+    assert [issue.code for issue in error.value.issues] == ["unknown_review_target"]
+    assert read_review(valid_study).revision == before
+    item, _ = add_item(
+        valid_study,
+        PERSON,
+        kind="question",
+        text="Which panel?",
+        target=ReviewTarget(file="Example_Fig1.png"),
+        now=NOW,
+    )
+    assert item.target == ReviewTarget(file="Example_Fig1.png")
+
+
+def test_approving_an_approved_study_keeps_the_approval(valid_study, sf_vocabulary):
+    revision = _approve(valid_study, sf_vocabulary)
+    later = datetime(2026, 10, 7, 9, 30, tzinfo=UTC)
+    again = set_status(
+        valid_study,
+        Author("second"),
+        "approved",
+        vocabulary=sf_vocabulary,
+        revision=revision,
+        now=later,
+    )
+    assert again == revision
+    review = read_review(valid_study).review
+    assert (review.approved_by, review.approved, review.reviewers) == (
+        "curator",
+        NOW,
+        ["curator"],
+    )
+    with pytest.raises(RevisionConflict):
+        set_status(
+            valid_study,
+            PERSON,
+            "approved",
+            vocabulary=sf_vocabulary,
+            revision="0" * 64,
+            now=later,
+        )
+
+
+def test_target_filter_adds_columns_until_it_matches_one_row(
+    make_study, valid_files, tsv
+):
+    timecourse = {
+        "label": "drug_plasma",
+        "interventions": "D1",
+        "measurement": "concentration",
+        "substance": "drug",
+        "tissue": "plasma",
+        "time": "1",
+        "time_unit": "h",
+        "unit": "mg/l",
+    }
+    files = {
+        **valid_files,
+        "timecourses_Fig1.tsv": tsv(
+            "timecourses",
+            {**timecourse, "subjects": "S1", "mean": "2"},
+            {**timecourse, "subjects": "S2", "mean": "3"},
+        ),
+    }
+    study = load_study(make_study(files))
+    table = study.table("timecourses_Fig1.tsv")
+    assert table is not None
+    row = next(row for row in table.rows if row.cells["subjects"] == "S2")
+    issue = row_issue(table, row, "outside_range", "Out of range.", "mean")
+    target = target_for_issue(study, issue)
+    assert target is not None
+    assert target.rows == {"label": "drug_plasma", "time": "1", "subjects": "S2"}
+    assert target.column == "mean"
+    assert table.matching_lines(target.rows) == {row.line}

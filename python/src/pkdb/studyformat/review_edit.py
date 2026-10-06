@@ -13,14 +13,21 @@ from pkdb.schemas.review import Review, ReviewItem, ReviewTarget, ThreadEntry
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.jsonio import JsonFileError, load_json
+from pkdb.studyformat.layout import scan_folder
 from pkdb.studyformat.load import LoadedStudy, load_study, validation_issues
 from pkdb.studyformat.models import canonical_review_json
-from pkdb.studyformat.revision import folder_lock, read_revision, write_checked
+from pkdb.studyformat.revision import (
+    check_revision,
+    folder_lock,
+    read_revision,
+    write_checked,
+)
 from pkdb.studyformat.tables import REVIEW_JSON
 from pkdb.studyformat.ulid import new_ulid
 from pkdb.studyformat.validation import validate_folder
 
 CODE = "invalid_review_json"
+APPROVED = "The study is approved; set the status to in_review first"
 
 
 class ReviewError(ValueError):
@@ -75,15 +82,18 @@ def _update(
     """Read, change and write review.json under the folder lock.
 
     The changed review is validated before writing. `revision` None writes over
-    the current revision.
+    the current revision. A change that returns the review it was given writes
+    nothing and returns the current revision.
     """
+    path = Path(folder) / REVIEW_JSON
     with folder_lock(folder):
         document = read_review(folder)
         expected = document.revision if revision is None else revision
-        review = _validated(change(document.review).model_dump(mode="json"))
-        new_revision = write_checked(
-            Path(folder) / REVIEW_JSON, canonical_review_json(review), expected
-        )
+        changed = change(document.review)
+        if changed is document.review:
+            return changed, check_revision(path, expected)
+        review = _validated(changed.model_dump(mode="json"))
+        new_revision = write_checked(path, canonical_review_json(review), expected)
     return review, new_revision
 
 
@@ -114,6 +124,14 @@ def add_item(
     revision: str | None = None,
     now: datetime | None = None,
 ) -> tuple[ReviewItem, str]:
+    """Add an open item; refused while the study is approved or for a file it lacks."""
+    if target is not None and target.file is not None:
+        if target.file not in scan_folder(Path(folder)).files:
+            message = f"{target.file} is not a file of this study"
+            raise ReviewError(
+                message,
+                [make_issue("unknown_review_target", message, file=REVIEW_JSON)],
+            )
     item = ReviewItem(
         id=new_ulid(),
         kind=kind,
@@ -129,6 +147,8 @@ def add_item(
 
 def _add(folder: Path, item: ReviewItem, revision: str | None) -> str:
     def change(review: Review) -> Review:
+        if item.state == "open" and review.status == "approved":
+            raise ReviewError(APPROVED)
         return review.model_copy(update={"items": [*review.items, item]})
 
     return _update(folder, revision, change)[1]
@@ -160,10 +180,15 @@ def _close(
     revision: str | None,
     now: datetime | None,
 ) -> str:
+    """Resolve an open item, or dismiss an open or resolved one."""
+    allowed = ("open", "resolved") if state == "dismissed" else ("open",)
+
     def change(review: Review) -> Review:
         item = _item(review, item_id)
-        if item.state != "open":
-            raise ReviewError(f"Review item {item_id} is {item.state}, not open")
+        if item.state not in allowed:
+            raise ReviewError(
+                f"Review item {item_id} is {item.state}, not {' or '.join(allowed)}"
+            )
         thread = [*item.thread, _entry(author, now, text)] if text else item.thread
         changes = {
             "state": state,
@@ -197,6 +222,7 @@ def dismiss(
     revision: str | None = None,
     now: datetime | None = None,
 ) -> str:
+    """Dismiss an open or resolved item; a dismissed item acknowledges nothing."""
     return _close("dismissed", folder, author, item_id, text, revision, now)
 
 
@@ -213,6 +239,8 @@ def reopen(
         item = _item(review, item_id)
         if item.state == "open":
             raise ReviewError(f"Review item {item_id} is open already")
+        if review.status == "approved":
+            raise ReviewError(APPROVED)
         thread = [*item.thread, _entry(author, now, text)] if text else item.thread
         changes = {
             "state": "open",
@@ -234,12 +262,24 @@ def set_status(
     revision: str | None = None,
     now: datetime | None = None,
 ) -> str:
-    if status == "approved":
-        if author.agent:
-            raise ApprovalRefused(
-                "A person must approve a study; this command runs for agent "
-                f"{author.agent}"
-            )
+    """Set the review status; only approval validates the folder with `vocabulary`.
+
+    Approving an approved study writes nothing and keeps who approved it and when.
+    """
+    if status == "approved" and author.agent:
+        raise ApprovalRefused(
+            f"A person must approve a study; this command runs for agent {author.agent}"
+        )
+
+    def change(review: Review) -> Review:
+        if status != "approved":
+            changes = {"status": status, "approved_by": None, "approved": None}
+            return review.model_copy(update=changes)
+        if review.status == "approved":
+            return review
+        open_items = [item for item in review.items if item.state == "open"]
+        if open_items:
+            raise ApprovalRefused(f"{len(open_items)} review items are open")
         errors = [
             issue
             for issue in validate_folder(folder, vocabulary).issues
@@ -247,14 +287,6 @@ def set_status(
         ]
         if errors:
             raise ApprovalRefused(f"Validation has {len(errors)} errors", errors)
-
-    def change(review: Review) -> Review:
-        if status != "approved":
-            changes = {"status": status, "approved_by": None, "approved": None}
-            return review.model_copy(update=changes)
-        open_items = [item for item in review.items if item.state == "open"]
-        if open_items:
-            raise ApprovalRefused(f"{len(open_items)} review items are open")
         reviewers = review.reviewers
         if author.user not in reviewers:
             reviewers = [*reviewers, author.user]

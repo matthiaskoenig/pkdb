@@ -53,11 +53,17 @@ def folder_lock(folder: Path) -> Iterator[None]:
         yield
 
 
-def write_checked(path: Path, text: str, expected: str | None) -> str:
-    """Replace a file atomically when its revision is still `expected`; the new revision."""
+def check_revision(path: Path, expected: str | None) -> str:
+    """The current revision of a file; RevisionConflict when it is not `expected`."""
     data, current = read_revision(path)
     if expected is not None and expected != current:
         content = None if data is None else data.decode("utf-8", "replace")
         raise RevisionConflict(path.name, expected, current, content)
+    return current
+
+
+def write_checked(path: Path, text: str, expected: str | None) -> str:
+    """Replace a file atomically when its revision is still `expected`; the new revision."""
+    check_revision(path, expected)
     atomic_text(path, text)
     return revision_of(text.encode("utf-8"))
