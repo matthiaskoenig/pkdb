@@ -101,3 +101,50 @@ def test_atomic_text_removes_its_temporary_file_on_failure(tmp_path, monkeypatch
     with pytest.raises(OSError, match="disk full"):
         atomic_text(tmp_path / "table.tsv", "new")
     assert list(tmp_path.iterdir()) == []
+
+
+def test_atomic_bytes_writes_bytes_and_leaves_no_temporary_file(tmp_path):
+    from pkdb.cache import atomic_bytes
+
+    target = tmp_path / "a" / "book.xlsx"
+    atomic_bytes(target, b"PK\x03\x04\r\n\x00")
+    assert target.read_bytes() == b"PK\x03\x04\r\n\x00"
+    assert [path.name for path in target.parent.iterdir()] == ["book.xlsx"]
+
+
+@pytest.mark.skipif(os.name != "posix", reason="POSIX permissions")
+def test_atomic_bytes_keeps_the_permissions_of_the_replaced_file(tmp_path):
+    from pkdb.cache import atomic_bytes
+
+    target = tmp_path / "book.xlsx"
+    target.write_bytes(b"old")
+    target.chmod(0o640)
+    atomic_bytes(target, b"new")
+    assert target.read_bytes() == b"new"
+    assert target.stat().st_mode & 0o777 == 0o640
+
+
+def test_atomic_bytes_keeps_the_old_content_when_the_replace_fails(
+    tmp_path, monkeypatch
+):
+    from pkdb.cache import atomic_bytes
+
+    target = tmp_path / "book.xlsx"
+    target.write_bytes(b"old")
+
+    def fail(self, destination):
+        raise OSError("locked")
+
+    monkeypatch.setattr("pkdb.cache.Path.replace", fail)
+    with pytest.raises(OSError, match="locked"):
+        atomic_bytes(target, b"new")
+    assert target.read_bytes() == b"old"
+    assert [path.name for path in tmp_path.iterdir()] == ["book.xlsx"]
+
+
+def test_atomic_text_encodes_utf8_with_lf_newlines(tmp_path):
+    from pkdb.cache import atomic_text
+
+    target = tmp_path / "table.tsv"
+    atomic_text(target, "caf\u00e9\r\nx\n")
+    assert target.read_bytes() == "caf\u00e9\r\nx\n".encode()

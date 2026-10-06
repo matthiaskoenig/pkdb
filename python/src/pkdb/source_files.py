@@ -2,10 +2,13 @@
 
 import hashlib
 import json
+import re
 from collections.abc import Mapping
 from pathlib import Path
 
 CHUNK = 1024 * 1024
+# The temporary files of pkdb.cache.atomic_bytes, next to the files they replace.
+TEMPORARY_FILE = re.compile(r"\.tmp[0-9a-f]{16}")
 
 
 def ignored_source(path: Path) -> bool:
@@ -16,6 +19,9 @@ def ignored_source(path: Path) -> bool:
         or name.startswith("~$")
         or (name.startswith(".~lock.") and name.endswith("#"))
         or (name.startswith(".") and name.endswith((".swp", ".swo")))
+        or TEMPORARY_FILE.fullmatch(name) is not None
+        # The state files of the workbook sync, such as .Example.xlsx.pkdb-base.
+        or (name.startswith(".") and name.endswith(".pkdb-base"))
     )
 
 

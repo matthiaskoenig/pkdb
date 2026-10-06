@@ -67,14 +67,20 @@ def _create_temporary(folder: Path) -> tuple[int, Path]:
     raise FileExistsError(f"Cannot create a temporary file in {folder}")
 
 
-def atomic_text(path: Path, text: str) -> None:
-    """Replace a file atomically; line endings are written as LF on every platform."""
+def atomic_bytes(path: Path, data: bytes) -> None:
+    """Replace a file atomically; the primitive of all atomic writes.
+
+    The data is written and fsynced to a temporary file next to the target, which
+    takes the permissions of the file it replaces and then replaces it. The
+    directory is fsynced on POSIX. On failure the target keeps its old content
+    and the temporary file is removed.
+    """
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = None
     try:
         descriptor, temporary = _create_temporary(path.parent)
-        with open(descriptor, "w", encoding="utf-8", newline="\n") as handle:
-            handle.write(text)
+        with open(descriptor, "wb") as handle:
+            handle.write(data)
             handle.flush()
             os.fsync(handle.fileno())
         if path.exists():
@@ -90,6 +96,11 @@ def atomic_text(path: Path, text: str) -> None:
     finally:
         if temporary is not None:
             temporary.unlink(missing_ok=True)
+
+
+def atomic_text(path: Path, text: str) -> None:
+    """Replace a file atomically with UTF-8 text; newlines are written as LF on every platform."""
+    atomic_bytes(path, text.encode("utf-8"))
 
 
 def atomic_json(path: Path, value: dict) -> None:

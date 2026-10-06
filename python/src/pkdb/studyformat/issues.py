@@ -29,6 +29,8 @@ _GROUPS = {
         "legacy_file",
         "missing_file",
         "missing_image",
+        "table_name_too_long",
+        "duplicate_table_name",
     ),
     "format": (
         "invalid_encoding",

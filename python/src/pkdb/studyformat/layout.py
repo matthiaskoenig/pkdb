@@ -16,6 +16,7 @@ from pkdb.studyformat.tables import (
     parse_table_file,
 )
 from pkdb.studyformat.text import natural_key
+from pkdb.studyformat.workbook.base import SHEET_NAME_LIMIT
 
 DATA_SUFFIXES = frozenset({".tsv", ".json", ".csv", ".xls", ".xlsx"})
 # Study names that PK-DB URLs use after a study identifier, such as
@@ -49,6 +50,39 @@ class Layout:
     tables: list[TableFile] = field(default_factory=list)
     attachments: list[str] = field(default_factory=list)
     issues: list[ValidationIssue] = field(default_factory=list)
+
+
+def table_name_issues(tables: list[TableFile]) -> list[ValidationIssue]:
+    """Issues of table names that cannot be the sheets of one Excel workbook.
+
+    A sheet name has at most 31 characters and Excel compares sheet names
+    ignoring case; the tables are in natural order, so the later of two tables
+    with equal names is the duplicate.
+    """
+    issues, seen = [], {}
+    for table in tables:
+        sheet = table.name.removesuffix(".tsv")
+        if len(sheet) > SHEET_NAME_LIMIT:
+            issues.append(
+                make_issue(
+                    "table_name_too_long",
+                    f"The table name {sheet!r} has {len(sheet)} characters; "
+                    f"Excel limits sheet names to {SHEET_NAME_LIMIT} characters",
+                    file=table.name,
+                    hint="Rename the file with a shorter source, such as Fig1 or Tab2.",
+                )
+            )
+        if (first := seen.setdefault(sheet.casefold(), table.name)) != table.name:
+            issues.append(
+                make_issue(
+                    "duplicate_table_name",
+                    f"The table name {sheet!r} equals {first!r} ignoring case; "
+                    "Excel sheet names are case-insensitive",
+                    file=table.name,
+                    hint="Rename one of the files with a different source.",
+                )
+            )
+    return issues
 
 
 def scan_folder(folder: Path) -> Layout:
@@ -126,6 +160,7 @@ def scan_folder(folder: Path) -> Layout:
     tables.sort(
         key=lambda table: (KIND_ORDER[table.spec.kind], natural_key(table.source or ""))
     )
+    issues.extend(table_name_issues(tables))
     return Layout(
         folder, study, folder.parent.name, frozenset(files), tables, attachments, issues
     )
