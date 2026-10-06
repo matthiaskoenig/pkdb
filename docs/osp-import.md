@@ -13,7 +13,7 @@ The output directory must be new or empty. It contains study folders, a portable
 
 Studies are identified by **publication + source**. OSP records use source `osp.observed-data` and are labelled **Automatic import**. Manual curation, imports, and automatic curation share the scientific model but retain separate provenance and citation snapshots. Re-importing a release replaces the same source study without overwriting manual curation. See the [data model](data-model.md).
 
-Ambiguous statistics, units, and dosing schedules remain in source attachments and are listed in the report. Unknown sample sizes stay null. Review the vocabulary additions and warnings before uploading; not every source cell has a native scientific representation.
+Ambiguous statistics, units, and dosing schedules remain in source attachments and are listed in the report. Individual values and doses are written to `mean`, and geometric means to `gmean`, so an OSP geometric summary keeps its meaning. Unknown sample sizes stay null. Review the vocabulary additions and warnings before uploading; not every source cell has a native scientific representation.
 
 To load a configured server, create the attribution account, apply migration `p004sources`, and reconcile the vocabulary additions first. Set `PKDB_API_TOKEN`, then run:
 

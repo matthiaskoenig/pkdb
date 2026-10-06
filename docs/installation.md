@@ -191,7 +191,7 @@ Image lifecycle and backup/restore tests live in `backend/system_tests`. They re
 
 Commit Alembic migrations in `backend/alembic/versions/`. Compose applies them before starting the API. The ASGI application itself does not mutate database schemas. For native development, set `PKDB_DATABASE_URL`, change into `backend/`, and run `uv run alembic upgrade head`. Check model/schema agreement with `uv run alembic check`.
 
-The unified data-model baseline (`p001initial`) requires an empty database and fresh study uploads. Historical migration revisions are no longer supported. Follow the [local upload guide](local-upload-testing.md) for account setup and uploading, and the [data-model guide](data-model.md#fresh-database-setup) for the baseline details.
+The unified data-model baseline (`p001initial`) requires an empty database and fresh study uploads. Historical migration revisions are no longer supported. Follow the [local upload guide](local-upload-testing.md) for account setup and uploading, and the [data-model guide](data-model.md#fresh-database-setup) for the baseline details. Migration `p006studyformat` upgrades an existing database to study format 2 and processing version 9; every study must be uploaded again afterwards, see [upgrade to study format 2](data-model.md#upgrade-to-study-format-2).
 
 ## Documentation
 
