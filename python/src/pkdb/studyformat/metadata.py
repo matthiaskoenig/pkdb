@@ -61,12 +61,18 @@ def read_metadata(folder: Path) -> MetadataDocument:
 
 
 def write_metadata(
-    folder: Path, metadata: StudyMetadata, revision: str | None, *, resolver=None
+    folder: Path,
+    metadata: StudyMetadata,
+    revision: str | None,
+    *,
+    resolver=None,
+    refresh_reference: bool = False,
 ) -> MetadataWrite:
     """Write study.json in canonical form when it is still at `revision`.
 
-    A changed PubMed ID or DOI refreshes reference.json with `resolver`;
-    without one, validation reports the mismatch.
+    A changed PubMed ID or DOI refreshes reference.json with `resolver`, and
+    `refresh_reference` refreshes it also for unchanged identifiers; without a
+    resolver, validation reports the mismatch.
     """
     folder = Path(folder)
     metadata = _validated(metadata.model_dump(mode="json"))
@@ -79,7 +85,7 @@ def write_metadata(
             folder / STUDY_JSON, canonical_study_json(metadata), revision
         )
     reference = None
-    if resolver is not None and metadata.reference != before:
+    if resolver is not None and (refresh_reference or metadata.reference != before):
         try:
             reference = sync_reference(folder, resolver)
         except (ReferenceError, OSError) as error:
@@ -102,7 +108,12 @@ def merge_patch(target: object, patch: object) -> object:
 
 
 def patch_metadata(
-    folder: Path, patch: dict, revision: str | None, *, resolver=None
+    folder: Path,
+    patch: dict,
+    revision: str | None,
+    *,
+    resolver=None,
+    refresh_reference: bool = False,
 ) -> MetadataWrite:
     """Apply a merge patch to study.json and write it.
 
@@ -118,4 +129,5 @@ def patch_metadata(
         _validated(data),
         document.revision if revision is None else revision,
         resolver=resolver,
+        refresh_reference=refresh_reference,
     )

@@ -57,8 +57,16 @@ def register(commands) -> None:
     )
     reference.add_argument("--pmid")
     reference.add_argument("--doi")
-    reference.add_argument("--offline", action="store_true")
-    reference.add_argument("--cache-dir", type=Path)
+    # A patch that changes the PubMed ID or DOI refreshes reference.json as well.
+    for action in (patch, reference):
+        action.add_argument(
+            "--offline",
+            action="store_true",
+            help="Refresh reference.json from cached metadata only",
+        )
+        action.add_argument(
+            "--cache-dir", type=Path, help="Cache folder of reference metadata"
+        )
     for action in (show, patch, reference):
         action.add_argument("study", type=Path, help="Study folder")
         add_format(action)
@@ -196,32 +204,48 @@ def _patch(args, folder: Path) -> int:
             },
             lambda: say(f"Invalid patch: {message}", file=sys.stderr),
         )
-    return _write(args, folder, patch, args.revision, None)
+    resolver = None
+    if "reference" in patch:  # a changed PubMed ID or DOI refreshes reference.json
+        resolver = _resolver(args)
+        if resolver is None:
+            return 1
+    return _write(args, folder, patch, args.revision, resolver)
+
+
+def _resolver(args):
+    """The reference resolver of the --offline and --cache-dir options, or None after an error."""
+    from pkdb.references import ReferenceResolver
+
+    try:
+        return ReferenceResolver(args.cache_dir, offline=args.offline)
+    except ValueError as error:
+        say(f"Cannot resolve references: {error}", file=sys.stderr)
+        return None
 
 
 def _reference(args, folder: Path) -> int:
-    from pkdb.references import ReferenceResolver
-
     identifiers = {"pmid": args.pmid, "doi": args.doi}
     given = {key: value for key, value in identifiers.items() if value is not None}
     if not given:
         say("Give --pmid or --doi", file=sys.stderr)
         return 1
-    try:
-        resolver = ReferenceResolver(args.cache_dir, offline=args.offline)
-    except ValueError as error:
-        say(f"Cannot resolve references: {error}", file=sys.stderr)
+    resolver = _resolver(args)
+    if resolver is None:
         return 1
-    return _write(args, folder, {"reference": given}, None, resolver)
+    return _write(args, folder, {"reference": given}, None, resolver, refresh=True)
 
 
-def _write(args, folder: Path, patch: dict, revision, resolver) -> int:
+def _write(
+    args, folder: Path, patch: dict, revision, resolver, *, refresh: bool = False
+) -> int:
     from pkdb.studyformat import study_label
     from pkdb.studyformat.metadata import MetadataError, patch_metadata
     from pkdb.studyformat.revision import RevisionConflict
 
     try:
-        written = patch_metadata(folder, patch, revision, resolver=resolver)
+        written = patch_metadata(
+            folder, patch, revision, resolver=resolver, refresh_reference=refresh
+        )
     except MetadataError as error:
         return _invalid(args, folder, error)
     except RevisionConflict as conflict:

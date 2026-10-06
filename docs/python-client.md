@@ -197,8 +197,8 @@ The curation commands read and edit a study folder with checked, atomic writes; 
 | Command | Purpose |
 | --- | --- |
 | `pkdb study show FOLDER` | Print `study.json` with its revision |
-| `pkdb study patch FOLDER --json TEXT` or `--file FILE` | Apply a JSON merge patch to `study.json` |
-| `pkdb study reference FOLDER --pmid ID` or `--doi DOI` | Set the PubMed ID or DOI and refresh `reference.json` (`--offline`, `--cache-dir`) |
+| `pkdb study patch FOLDER --json TEXT` or `--file FILE` | Apply a JSON merge patch to `study.json`; a changed PubMed ID or DOI refreshes `reference.json` (`--offline`, `--cache-dir`) |
+| `pkdb study reference FOLDER --pmid ID` or `--doi DOI` | Set the PubMed ID or DOI and refresh `reference.json`, also when the identifiers are unchanged (`--offline`, `--cache-dir`) |
 | `pkdb review show FOLDER` | Print the review items with the revision and the number of rows each target matches (`--state open\|resolved\|dismissed`) |
 | `pkdb review add FOLDER --kind question\|uncertainty\|issue --text TEXT` | Add an item, optionally for `--file`, `--rows COL=VALUE ...`, `--column` or a warning `--acknowledges CODE` |
 | `pkdb review reply FOLDER ID --text TEXT` | Add a reply to the thread of an item |

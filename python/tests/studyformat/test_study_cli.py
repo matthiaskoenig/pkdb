@@ -286,3 +286,34 @@ def test_study_patch_revision_conflict_in_human_output(valid_study, capsys):
         f"study.json changed on disk since revision {'0' * 64}; "
         "show it again and retry\n"
     )
+
+
+def test_study_patch_of_an_identifier_refreshes_the_reference(
+    valid_study, tmp_path, capsys, monkeypatch
+):
+    calls = []
+
+    def fake_sync(folder, resolver):
+        calls.append((resolver.offline, resolver.cache_dir))
+        return "replaced reference.json"
+
+    monkeypatch.setattr(metadata, "sync_reference", fake_sync)
+    patch = ["study", "patch", str(valid_study), "--offline", "--format", "json"]
+    patch += ["--cache-dir", str(tmp_path / "cache")]
+    assert main([*patch, "--json", '{"licence": "closed"}']) == 0
+    assert json.loads(capsys.readouterr().out)["reference"] is None
+    assert calls == []
+    assert main([*patch, "--json", '{"reference": {"pmid": "456"}}']) == 0
+    assert json.loads(capsys.readouterr().out)["reference"] == (
+        "replaced reference.json"
+    )
+    assert calls == [(True, tmp_path / "cache" / "references")]
+
+
+def test_study_reference_refreshes_unchanged_identifiers(
+    valid_study, capsys, monkeypatch
+):
+    monkeypatch.setattr(metadata, "sync_reference", lambda folder, resolver: "saved")
+    args = ["study", "reference", str(valid_study), "--offline", "--format", "json"]
+    assert main([*args, "--pmid", "123"]) == 0
+    assert json.loads(capsys.readouterr().out)["reference"] == "saved"

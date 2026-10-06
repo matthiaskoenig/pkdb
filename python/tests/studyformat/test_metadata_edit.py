@@ -92,3 +92,27 @@ def test_failed_reference_refresh_keeps_study_json_written(valid_study, monkeypa
     assert current.metadata.reference is not None
     assert current.metadata.reference.pmid == "456"
     assert result.revision == current.revision
+
+
+def test_refresh_reference_forces_the_refresh(valid_study, monkeypatch):
+    calls = []
+    monkeypatch.setattr(
+        module, "sync_reference", lambda folder, resolver: calls.append(folder) or "ok"
+    )
+    document = read_metadata(valid_study)
+    result = write_metadata(
+        valid_study,
+        document.metadata,
+        document.revision,
+        resolver=object(),
+        refresh_reference=True,
+    )
+    assert result.reference == "ok" and calls == [valid_study]
+    patched = patch_metadata(
+        valid_study,
+        {"reference": {"pmid": "123"}},
+        None,
+        resolver=object(),
+        refresh_reference=True,
+    )
+    assert patched.reference == "ok" and len(calls) == 2
