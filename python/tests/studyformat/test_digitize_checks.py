@@ -48,6 +48,30 @@ def test_moved_point_is_a_mismatch_at_its_row(make_study, valid_files, sf_vocabu
     ]
     assert len(sources) == 1 and sources[0].file == "timecourses_Fig1.tsv"
     assert sources[0].header == "mean"
+    messages = [
+        i.message
+        for i in validate_folder(folder, sf_vocabulary).issues
+        if i.code == "digitized_mismatch"
+    ]
+    assert messages == [
+        "1 point of dataset 'drug_plasma' has no mapped row within 2 pixels",
+        "mean 2 at 1 h lies 10.0 pixels from the nearest point of dataset "
+        "'drug_plasma' in Example_Fig1.wpd.json",
+    ]
+
+
+def test_mismatch_counts_unmatched_points_in_plural(
+    make_study, valid_files, sf_vocabulary
+):
+    folder = study_with(make_study, valid_files, project([*GOOD, (30, 50), (40, 50)]))
+    messages = [
+        i.message
+        for i in validate_folder(folder, sf_vocabulary).issues
+        if i.code == "digitized_mismatch"
+    ]
+    assert messages == [
+        "2 points of dataset 'drug_plasma' have no mapped row within 2 pixels"
+    ]
 
 
 def test_unknown_dataset_and_outside_image(make_study, valid_files, sf_vocabulary):
@@ -110,3 +134,36 @@ def test_import_rejects_points_outside_the_existing_image(
     result = import_project(folder, "Fig1", file)
     assert [issue.code for issue in result.issues] == ["digitization_outside_image"]
     assert not (folder / "Example_Fig1.wpd.json").exists()
+
+
+def _archive(path, image):
+    with tarfile.open(path, "w") as tar:
+        for name, data in (
+            ("project/wpd.json", json.dumps(project(GOOD)).encode()),
+            ("project/fig.png", image),
+        ):
+            info = tarfile.TarInfo(name)
+            info.size = len(data)
+            tar.addfile(info, io.BytesIO(data))
+    return path
+
+
+def test_import_refuses_a_project_digitized_on_another_image_size(
+    make_study, valid_files, tmp_path
+):
+    folder = make_study({**valid_files, "Example_Fig1.png": png(100, 100)})
+    archive = _archive(tmp_path / "project.tar", png(200, 150))
+    result = import_project(folder, "Fig1", archive)
+    assert [(issue.code, issue.message) for issue in result.issues] == [
+        (
+            "digitization_invalid",
+            "The project was digitized on an image of 200x150, "
+            "the study image Example_Fig1.png is 100x100",
+        )
+    ]
+    assert not result.wrote_image
+    assert not (folder / "Example_Fig1.wpd.json").exists()
+    assert (folder / "Example_Fig1.png").read_bytes() == png(100, 100)
+    same = _archive(tmp_path / "same.tar", png(100, 100))
+    assert import_project(folder, "Fig1", same).issues == []
+    assert (folder / "Example_Fig1.wpd.json").exists()

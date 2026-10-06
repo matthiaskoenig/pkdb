@@ -2,6 +2,8 @@ import json
 from pathlib import Path
 
 import pytest
+from digitize_fixtures import GOOD
+from digitize_fixtures import project as fixture_project
 
 from pkdb.studyformat.digitize import (
     Axes,
@@ -173,3 +175,30 @@ def test_layout_loader_and_formatter(make_study, valid_files):
         ]
         is None
     )
+
+
+def _steep_log_project() -> dict:
+    """A log y axis with Y1 and Y2 0.05 pixels apart: 20 decades per pixel."""
+    data = fixture_project(GOOD)
+    axes = data["axesColl"][0]
+    axes["isLogY"] = True
+    axes["calibrationPoints"][2] |= {"py": 100, "dy": "1"}
+    axes["calibrationPoints"][3] |= {"py": 99.95, "dy": "10"}
+    return data
+
+
+def test_point_values_that_overflow_a_log_axis_are_invalid():
+    data = dump_json(_steep_log_project()).encode()
+    loaded, issues = load_digitization("Example_Fig1.wpd.json", data, "Fig1")
+    assert loaded is None
+    assert [issue.code for issue in issues] == ["digitization_invalid"]
+    assert "drug_plasma" in issues[0].message
+
+
+@pytest.mark.parametrize("value", ["1e999", "-1e999"])
+def test_calibration_values_must_be_finite(value):
+    data = project()
+    data["axesColl"][0]["calibrationPoints"][1]["dx"] = value
+    with pytest.raises(DigitizationError, match="finite") as error:
+        parse_project(data)
+    assert error.value.code == "digitization_invalid"

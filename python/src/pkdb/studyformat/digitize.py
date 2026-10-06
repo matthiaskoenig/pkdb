@@ -213,7 +213,9 @@ def _number(value: object, what: str) -> float:
     if isinstance(value, int | float) and math.isfinite(value):
         return float(value)
     if isinstance(value, str) and NUMBER_PATTERN.fullmatch(value.strip()):
-        return float(value)
+        if math.isfinite(number := float(value)):
+            return number
+        raise _invalid(f"{what} {value!r} is not a finite number")
     if isinstance(value, str):
         raise _unsupported(f"{what} {value!r} is not a number; dates are not supported")
     raise _invalid(f"{what} is not a number")
@@ -285,7 +287,27 @@ def parse_project(data: object) -> tuple[dict[str, Axes], list[Dataset]]:
                 ),
             )
         )
+    for dataset in datasets:
+        _check_values(dataset, axes[dataset.axes])
     return axes, datasets
+
+
+def _check_values(dataset: Dataset, axes: Axes) -> None:
+    """Refuse a dataset with a point whose axis values are not finite numbers.
+
+    A steep log axis turns pixels into values beyond the float range, which the
+    canonical form, the source views and the plots could not use.
+    """
+    for px, py in dataset.points:
+        try:
+            values = axes.pixel_to_data(px, py)
+        except OverflowError:
+            values = (math.inf, math.inf)
+        if not all(math.isfinite(value) for value in values):
+            raise _invalid(
+                f"The point ({px:g}, {py:g}) of dataset {dataset.name!r} has no finite "
+                f"value on axes {axes.name!r}; check the calibration points"
+            )
 
 
 def load_digitization(
@@ -465,11 +487,15 @@ def check_digitizations(study: LoadedStudy) -> Iterator[ValidationIssue]:
             row = next(row for row in table.rows if row.line == point.line)
             value = row.values[point.column]
             assert isinstance(value, float)
+            unit = row.cells.get(
+                "time_unit" if table.kind == "timecourses" else "x_unit"
+            )
+            at = f"{point.x:g} {unit}" if unit else f"{point.x:g}"
             yield row_issue(
                 table,
                 row,
                 "digitized_mismatch",
-                f"{point.column} {value:g} at {point.x:g} lies {nearest:.1f} pixels from the nearest point of dataset {dataset.name!r} in {digitization.file}",
+                f"{point.column} {value:g} at {at} lies {nearest:.1f} pixels from the nearest point of dataset {dataset.name!r} in {digitization.file}",
                 point.column,
             )
         for dataset in digitization.datasets:
@@ -477,9 +503,12 @@ def check_digitizations(study: LoadedStudy) -> Iterator[ValidationIssue]:
                 continue
             unmatched = len(dataset.points) - len(matched[dataset.name])
             if unmatched:
+                points, have = (
+                    ("point", "has") if unmatched == 1 else ("points", "have")
+                )
                 yield make_issue(
                     "digitized_mismatch",
-                    f"{unmatched} points of dataset {dataset.name!r} have no mapped row within {MISMATCH_PIXELS:g} pixels",
+                    f"{unmatched} {points} of dataset {dataset.name!r} {have} no mapped row within {MISMATCH_PIXELS:g} pixels",
                     file=digitization.file,
                 )
 
@@ -564,6 +593,26 @@ def import_project(folder: Path, source: str, path: Path) -> ImportResult:
                 )
             ],
         )
+    if archive_image is not None and not write_image:
+        digitized = png_size(archive_image)
+        if digitized != size:
+            on = (
+                f"an image of {digitized[0]}x{digitized[1]}"
+                if digitized
+                else "an image that is not a PNG image"
+            )
+            return ImportResult(
+                file,
+                False,
+                [
+                    make_issue(
+                        "digitization_invalid",
+                        f"The project was digitized on {on}, the study image "
+                        f"{image_name} is {size[0]}x{size[1]}",
+                        file=file,
+                    )
+                ],
+            )
     if issue := _outside_image(loaded, size):
         return ImportResult(file, False, [issue])
     if write_image:

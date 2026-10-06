@@ -4,7 +4,7 @@ import json
 import sys
 from pathlib import Path
 
-from pkdb.studyformat_cli import print_issues, say
+from pkdb.studyformat_cli import print_issues, say, study_folder
 
 
 def register(commands) -> None:
@@ -131,8 +131,11 @@ def _digitize(args) -> int:
     from pkdb.studyformat.digitize import import_project
 
     human = args.format == "human" or (args.format is None and sys.stdout.isatty())
+    folder = study_folder(args.study, args.command)
+    if folder is None:
+        return 1
     try:
-        result = import_project(args.study, args.source, args.file)
+        result = import_project(folder, args.source, args.file)
     except (ValueError, OSError) as error:
         say(f"Cannot import {args.file}: {error}", file=sys.stderr)
         return 1
