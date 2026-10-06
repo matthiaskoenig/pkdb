@@ -605,6 +605,22 @@ def test_writes_need_a_user(api):
         headers,
     )
     assert metadata[0] == 403 and json.loads(metadata[2])["error"] == "no_user"
+    for body in [
+        {"action": "open"},
+        {"action": "sync"},
+        {"action": "resolve", "keep": "workbook"},
+        {"action": "add", "raw": "Tab3"},
+    ]:
+        tables = request(
+            server,
+            "POST",
+            "/local/studies/tables",
+            {"study": "caffeine/Example", **body},
+            headers,
+        )
+        assert tables[0] == 403, body["action"]
+        assert json.loads(tables[2])["error"] == "no_user"
+    assert not workbook_path(folder).exists()
 
 
 def test_the_author_is_the_account_of_a_checked_key(api):

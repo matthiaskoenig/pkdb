@@ -599,6 +599,8 @@ class StudiesMixin(EngineState):
 
     def tables_action(self, identity: str, payload: dict) -> dict:
         """Open the workbook, sync it, resolve its conflicts with `keep`, or add a sheet."""
+        # The workbook and the tables record no author, but writes need a user (spec 7.4).
+        self.author()
         folder = self.study_folder(identity)
         action = payload.get("action")
         if action == "add":
