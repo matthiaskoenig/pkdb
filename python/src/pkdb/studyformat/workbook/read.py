@@ -10,6 +10,7 @@ from io import BytesIO
 from pathlib import Path
 
 import openpyxl
+from openpyxl.styles.numbers import is_date_format
 from openpyxl.workbook import Workbook
 
 from pkdb.schemas.validation import ValidationIssue
@@ -39,6 +40,8 @@ ERROR_VALUES = frozenset(
         "#GETTING_DATA",
     }
 )
+# The error value of a date-formatted number that openpyxl cannot convert.
+OUTSIDE_CALENDAR = "#VALUE!"
 LINE_BREAK = re.compile(r"[\t\n\r]")
 LINE_BREAKS = {"\t": "tab", "\n": "line break", "\r": "carriage return"}
 DATE_HINT = (
@@ -130,6 +133,14 @@ def _value_text(cell) -> tuple[str, Problem | None]:
     if value is None:
         return "", None
     if cell.data_type == "e":
+        if value == OUTSIDE_CALENDAR and is_date_format(cell.number_format):
+            # openpyxl reads a date serial beyond the calendar as this error.
+            return "", (
+                "cell_date",
+                "The cell is formatted as a date, and its value is outside the "
+                "calendar",
+                DATE_HINT,
+            )
         return str(value), _error_value(str(value))
     if isinstance(value, str):
         if value.strip() in ERROR_VALUES:
@@ -393,8 +404,9 @@ def read_workbook(
     """
     path = Path(path)
     with warnings.catch_warnings(), ExitStack() as stack:
-        # openpyxl warns about parts of Excel files it does not support.
-        warnings.simplefilter("ignore")
+        # openpyxl warns about parts of Excel files it does not support and
+        # about dates beyond the calendar; the reader reports what matters.
+        warnings.filterwarnings("ignore", module="openpyxl")
         try:
             data = path.read_bytes()
             formulas = _load(data, data_only=False)

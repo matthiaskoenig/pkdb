@@ -99,6 +99,11 @@ def edit(path, change) -> Path:
     return path
 
 
+def lines(text):
+    """The lines of canonical TSV text; str.splitlines would also split at U+2028."""
+    return text.removesuffix("\n").split("\n")
+
+
 def letter(kind, name):
     return get_column_letter(TABLES[kind].names.index(name) + 1)
 
@@ -182,21 +187,37 @@ def check_round_trip(content, tables):
     assert dict(content.base.files) == tables
 
 
-def test_round_trip_is_lossless(
-    make_study, valid_files, tsv, sf_vocabulary, tmp_path, libreoffice_resave
-):
+@pytest.fixture
+def edge_tables(make_study, valid_files, tsv):
+    """The canonical tables of the valid study plus the edge table."""
     folder = make_study({**valid_files, "outputs_Tab1.tsv": tsv("outputs", *EDGE_ROWS)})
     assert format_folder(folder).ok
     tables = tables_of(folder)
-    # The edge texts survive formatting, so the round trip below covers them.
+    # The edge texts survive formatting, so the round trip covers them.
     for text in ("0.30000000000000004", "1234567890123456", "\tNR\tNR\t", "\t=x\t"):
         assert text in tables["outputs_Tab1.tsv"]
-    path = build(
-        tables, sf_vocabulary, tmp_path / "Example.xlsx", empty_sheets=["outputs_Tab3"]
+    return tables
+
+
+@pytest.fixture
+def edge_workbook(edge_tables, sf_vocabulary, tmp_path):
+    return build(
+        edge_tables,
+        sf_vocabulary,
+        tmp_path / "Example.xlsx",
+        empty_sheets=["outputs_Tab3"],
     )
 
-    check_round_trip(read_workbook(path, STUDY), tables)
-    check_round_trip(read_workbook(libreoffice_resave(path), STUDY), tables)
+
+def test_round_trip_is_lossless(edge_workbook, edge_tables):
+    check_round_trip(read_workbook(edge_workbook, STUDY), edge_tables)
+
+
+def test_round_trip_is_lossless_after_a_libreoffice_save(
+    edge_workbook, edge_tables, libreoffice_resave
+):
+    resaved = libreoffice_resave(edge_workbook)
+    check_round_trip(read_workbook(resaved, STUDY), edge_tables)
 
 
 def test_rows_map_canonical_lines_to_sheet_rows(sf_vocabulary, tmp_path):
@@ -253,7 +274,7 @@ def test_formula_value_after_a_spreadsheet_save(workbook, libreoffice_resave):
     issue = only(content, "formula_value")
     assert issue.severity == "warning"
     assert at(issue) == ("outputs_Tab2", SD_CELL)
-    row = content.tables["outputs_Tab2.tsv"].text.splitlines()[1].split("\t")
+    row = lines(content.tables["outputs_Tab2.tsv"].text)[1].split("\t")
     assert row[TABLES["outputs"].names.index("sd")] == "5"
 
 
@@ -269,7 +290,7 @@ def test_formula_with_an_empty_text_value_is_an_empty_cell(
 
     assert content.ok, content.issues
     assert codes(content) == ["formula_value"]
-    row = content.tables["outputs_Tab2.tsv"].text.splitlines()[1].split("\t")
+    row = lines(content.tables["outputs_Tab2.tsv"].text)[1].split("\t")
     assert row[TABLES["outputs"].names.index("comment")] == ""
 
 
@@ -326,10 +347,20 @@ def test_an_error_value_as_text_is_an_error(workbook):
     assert at(content.issues[0]) == ("outputs_Tab2", cell)
 
 
-def test_a_date_beyond_the_calendar_is_an_error_and_warns_nothing(workbook):
+@pytest.mark.parametrize(
+    ("value", "code"),
+    [
+        # openpyxl turns a date serial beyond the calendar into #VALUE! and warns.
+        (1e10, "cell_date"),
+        ("#DIV/0!", "cell_error"),
+    ],
+)
+def test_a_date_formatted_cell_beyond_the_calendar_is_a_date(workbook, value, code):
+    cell = f"{letter('outputs', 'mean')}2"
+
     def convert(book):
-        target = book["outputs_Tab2"][f"{letter('outputs', 'mean')}2"]
-        target.value = 1e10
+        target = book["outputs_Tab2"][cell]
+        target.value = value
         target.number_format = "yyyy-mm-dd"
 
     path = edit(workbook, convert)
@@ -338,7 +369,10 @@ def test_a_date_beyond_the_calendar_is_an_error_and_warns_nothing(workbook):
         content = read_workbook(path, STUDY)
 
     assert caught == []
-    assert codes(content) == ["cell_error"]
+    assert codes(content) == [code]
+    assert at(content.issues[0]) == ("outputs_Tab2", cell)
+    if code == "cell_date":
+        assert content.issues[0].suggestions[0].message == DATE_HINT
 
 
 def test_booleans_and_numbers_become_canonical_text(workbook):
@@ -352,7 +386,7 @@ def test_booleans_and_numbers_become_canonical_text(workbook):
     content = read_workbook(edit(workbook, convert), STUDY)
 
     assert content.ok, content.issues
-    row = content.tables["outputs_Tab2.tsv"].text.splitlines()[1].split("\t")
+    row = lines(content.tables["outputs_Tab2.tsv"].text)[1].split("\t")
     names = TABLES["outputs"].names
     assert row[names.index("comment")] == "TRUE"
     assert row[names.index("mean")] == "2.5"
