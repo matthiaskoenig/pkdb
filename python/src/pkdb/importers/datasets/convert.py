@@ -12,6 +12,27 @@ from pkdb.importers.datasets.common import Builder, number, reference, text
 from pkdb.importers.datasets.releases import RELEASES
 
 
+def _factor(codes, attrs):
+    # R stores factors as 1-based level codes; missing codes are masked or invalid.
+    levels = attrs["levels"]
+    return [
+        levels[code - 1] if code is not None and 0 < code <= len(levels) else None
+        for code in codes.tolist()
+    ]
+
+
+def _data_frame(columns, attrs):
+    import polars as pl
+
+    return pl.DataFrame(
+        {
+            str(name): column.tolist() if hasattr(column, "mask") else column
+            for name, column in columns.items()
+        },
+        strict=False,
+    )
+
+
 def rda_rows(payload, name):
     try:
         rdata = import_module("rdata")
@@ -19,16 +40,18 @@ def rda_rows(payload, name):
         raise ValueError(
             "R datasets require the optional dependency: pip install 'pkdb[imports]'"
         ) from error
-    import pandas as pd
+    import polars as pl
 
-    frame = rdata.read_rda(io.BytesIO(payload))[name]
-    return [
-        {
-            str(k): None if pd.isna(v) else v.item() if hasattr(v, "item") else v
-            for k, v in row.items()
-        }
-        for row in frame.to_dict("records")
-    ]
+    constructors = {
+        **rdata.conversion.DEFAULT_CLASS_MAP,
+        "data.frame": _data_frame,
+        "factor": _factor,
+        "ordered": _factor,
+    }
+    parsed = rdata.parser.parse_data(payload)
+    frame = rdata.conversion.convert(parsed, constructors)[name]
+    # Missing values, including R's NA_real_ and NaN, become None.
+    return frame.with_columns(pl.selectors.float().fill_nan(None)).rows(named=True)
 
 
 def frdb(builder, rows):
@@ -369,7 +392,7 @@ def import_dataset(provider, path, output, *, creator):
         from importlib.metadata import PackageNotFoundError, version
 
         try:
-            builder.software.update(rdata=version("rdata"), pandas=version("pandas"))
+            builder.software.update(rdata=version("rdata"), polars=version("polars"))
         except PackageNotFoundError as error:
             raise ValueError(
                 "R datasets require: pip install 'pkdb[imports]'"
