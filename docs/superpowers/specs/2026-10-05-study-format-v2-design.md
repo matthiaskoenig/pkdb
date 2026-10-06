@@ -76,10 +76,12 @@ studies/<substance>/<name>/
   scatters_<source>.tsv
   <name>.pdf
   <name>_<source>.png        image of each paper table or figure
+  <name>_<source>.tsv        raw extraction of a paper table as printed (optional)
+  <name>_<source>.wpd.json   WebPlotDigitizer project of a figure (optional)
   <name>.xlsx                generated working copy, gitignored
 ```
 
-`study.json`, `reference.json`, `review.json` and `subjects.tsv` are required. The other tables are optional, and an observation file exists only when it has rows.
+`study.json`, `reference.json`, `review.json` and `subjects.tsv` are required. The other tables are optional, and an observation file exists only when it has rows. The raw extraction files are specified in section 4 of the [curation app design](2026-10-06-curation-app-design.md); study folder names `outputs`, `timecourses` and `scatters` are reserved.
 
 A file is an error when it is a `.tsv` or `.json` file with a name not listed above, a `.csv`, `.xls` or `.xlsx` file other than the generated workbook, or a hidden TSV from v1. Every other file (PDF, images, documents) is an attachment and is uploaded as today.
 
@@ -242,13 +244,13 @@ Row order (natural sort, so `Tab2` sorts before `Tab10`; remaining ties are brok
 - `state` is `open`, `resolved` or `dismissed`. `resolved_by` and `resolved` are set when the state leaves `open`.
 - `target` is optional (missing means the whole study). `file` names a table, `rows` is a column-to-value filter that may match several rows (for example a series by `label`), and `column` names a column. A filter survives re-sorting and edits.
 - `author` is the responsible person. `agent` is set when an AI wrote the item.
-- `acknowledges` names a validation warning code. The validator then no longer reports that warning for the target.
+- `acknowledges` names a validation warning code. The validator then no longer reports that warning for the target, unless the item is `dismissed`.
 - `id` is a ULID. Items are sorted by `id`.
 
 Rules:
 
 - A target that no longer matches any row is a warning.
-- `approved` requires zero open items.
+- `approved` requires zero open items. `approved_by` and `approved` record the person who approved and when; they are set exactly when the status is `approved`, and setting it also requires zero validation errors and is refused for agents (section 4.4 of the [curation app design](2026-10-06-curation-app-design.md)).
 - `access: public` requires a `release`, and `pkdb release` requires `approved`.
 
 Concurrent additions on two branches can conflict at the end of the item list. This is rare because AI curation and review run one after the other. If it becomes a real problem, items move to one file each (`review/<id>.json`).
@@ -292,16 +294,17 @@ The same code runs on workbook save in the curation app, in `pkdb validate`, in 
 |---|---|
 | `pkdb format [paths] [--check]` | Write canonical TSV and JSON: headers, column order, row order, numbers, empty cells, `study` and `source` columns, removal of empty observation files. `--check` reports and exits non-zero without writing. |
 | `pkdb validate [paths] [--json]` | Run section 9. |
-| `pkdb tables open\|sync\|add <study>` | Build and open the workbook, sync it, or add a `<kind>_<source>` table. |
-| `pkdb study ...` | Edit `study.json`: metadata, curators, notes, provenance, reference identifiers. |
-| `pkdb review add\|reply\|resolve\|dismiss\|status` | Edit `review.json`. |
+| `pkdb tables open\|sync\|add <study>` | Build and open the workbook, sync it, or add a `<kind>_<source>` table or, with `--raw <source>`, a raw table sheet. |
+| `pkdb study show\|patch\|reference` | Show and edit `study.json`: metadata, curators, notes, provenance, reference identifiers. |
+| `pkdb review show\|add\|reply\|resolve\|dismiss\|reopen\|status\|acknowledge` | Show and edit `review.json`. |
 | `pkdb reference ...` | Resolve and write `reference.json` (exists today). |
 | `pkdb new <substance>/<name> --pmid N \| --doi D` | Create a study (section 12). |
 | `pkdb move <old> <new>` | Rename or move a study, including its GitHub issue title. |
 | `pkdb release <study>...` | Assign PKDB identifiers and release dates (section 12). |
 | `pkdb registry` | List released studies with PKDB identifier, location and date. |
 | `pkdb issues sync [--adopt] [--dry-run]` | Align GitHub issues with the repository (section 12). |
-| `pkdb plot <study> [--source S]` | Render the series of a source on the axes of the original figure for comparison. |
+| `pkdb plot <study> [--source S] [--out DIR]` | Render the raw extraction and mapped rows of a source on the figure image for comparison. |
+| `pkdb digitize import <study> <source> <file>` | Store a WebPlotDigitizer project as the raw extraction of a figure. |
 | `pkdb check --staged` | Pre-commit entry point: sync state, format check and offline validation for studies with staged files. |
 | `pkdb schema export` | Write the JSON Schema files. |
 | `pkdb migrate <paths> --report <file>` | Convert v1 studies (section 15). |
@@ -361,6 +364,8 @@ Formulas remain usable in the workbook as a scratch aid. Only the computed value
 
 - The existing 1-second watcher runs sync, format and validate on every change and lists issues with sheet and cell.
 - Actions: Open tables, Add table, sync status, conflict resolution, metadata editor, reference dialog (exists today), review items with their target rows and the figure image, "acknowledge" on validation warnings, and the `pkdb plot` comparison.
+
+The design of the app, including the exact commands of `pkdb study`, `pkdb review`, `pkdb digitize` and `pkdb plot`, is the [curation app design](2026-10-06-curation-app-design.md).
 
 ### 10.6 Workbook and sync decisions
 
@@ -451,7 +456,7 @@ The contract for AI agents is the `pkdb` CLI (every command supports `--json`), 
 Workflow for a new study:
 
 1. `pkdb new <substance>/<name> --pmid N` creates the folder, `study.json` with provenance `automatic_curation` (model and run id) and the responsible person as creator, `reference.json`, `subjects.tsv` with `all`, `review.json` with status `draft`, and the GitHub issue.
-2. The agent reads the PDF and writes `subjects`, `characteristica` and `interventions`, `outputs_<Tab>` from tables and `timecourses_<Fig>` by digitizing figures. It saves the table and figure crops as `<name>_<source>.png`.
+2. The agent reads the PDF and saves the table and figure crops as `<name>_<source>.png`. It transcribes each table as printed into `<name>_<source>.tsv` and digitizes each figure into a WebPlotDigitizer project imported with `pkdb digitize import`, then maps the raw extractions into `subjects`, `characteristica`, `interventions`, `outputs_<Tab>` and `timecourses_<Fig>`. Every command runs with `--agent <model>`.
 3. It runs `pkdb format` and `pkdb validate --json` until there are no errors. Each warning is fixed or acknowledged with a review item. `pkdb plot` renders the digitized series on the axes of each figure, and the agent compares the rendering with the image and corrects the data.
 4. It records every assumption and every low-confidence value as a review item (`question` or `uncertainty`). Every digitized series gets an `uncertainty` item until a person has checked it. The status becomes `in_review`.
 5. It commits as the `pkdb-ai` identity on its own branch and opens one pull request per study that links the study's issue and lists the tables, the review items and the validation summary.
