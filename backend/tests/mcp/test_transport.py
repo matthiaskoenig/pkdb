@@ -63,6 +63,37 @@ async def test_read_tools_match_rest_and_removed_tools_cannot_write(
 
 
 @pytest.mark.anyio
+async def test_get_study_reads_substance_and_name_and_pkdb_identifiers(
+    mcp_http, mcp_connect, ingestion_context, tmp_path
+):
+    import httpx2
+
+    from tests.fixtures.study_folders import write_study
+
+    app, url, token = mcp_http
+    _, principal = ingestion_context
+    folder = write_study(tmp_path / "sources", release="PKDB00198")
+    app.state.ingestion.replace(folder, principal)
+    async with (
+        httpx2.AsyncClient(
+            base_url=url, headers={"Authorization": f"Bearer {token}"}
+        ) as rest,
+        mcp_connect(url, token) as client,
+    ):
+        expected = (await rest.get("/api/v2/studies/caffeine/Example")).json()
+        assert expected["sid"] == "caffeine/Example"
+        moved = await rest.get("/api/v2/studies/PKDB00198")
+        assert moved.status_code == 308
+        assert moved.headers["location"] == "/api/v2/studies/caffeine/Example"
+        for sid in ("caffeine/Example", "PKDB00198"):
+            study = await client.call_tool("get_study", {"sid": sid})
+            assert not study.is_error, sid
+            assert study.structured_content == expected
+        for sid in ("PKDB00199", "caffeine/Missing"):
+            assert (await client.call_tool("get_study", {"sid": sid})).is_error
+
+
+@pytest.mark.anyio
 async def test_transport_requires_current_bearer_token(mcp_http, session_factory):
     from datetime import UTC, datetime
 

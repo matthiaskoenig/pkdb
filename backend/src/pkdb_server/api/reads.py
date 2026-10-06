@@ -7,7 +7,9 @@ from pydantic import ValidationError
 from starlette.exceptions import HTTPException
 
 from pkdb.schemas.queries import Predicate, QuerySpec
+from pkdb.schemas.security import Principal
 from pkdb_server import __version__
+from pkdb_server.api.identity import MOVED, study_redirect
 
 router = APIRouter(prefix="/api/v1")
 ALIASES = {
@@ -251,7 +253,8 @@ def references(request: Request):
     return result_page(request, query_spec(request, "references"))
 
 
-@router.get("/references/{sid}/")
+# Reference sids are PubMed IDs or DOIs, and DOIs contain slashes.
+@router.get("/references/{sid:path}/")
 def reference_detail(sid: str, request: Request):
     actor = request.app.state.principal(request, required=False)
     page = request.app.state.queries.search(
@@ -278,16 +281,32 @@ def studies(request: Request):
     return result_page(request, query_spec(request, "studies"))
 
 
-@router.get("/studies/{sid}/")
-def study_detail(sid: str, request: Request):
-    actor = request.app.state.principal(request, required=False)
+def study_record(sid: str, request: Request, actor: Principal):
     page = request.app.state.queries.search(
         QuerySpec(entity="studies", predicates=[Predicate(field="sid", value=sid)]),
         actor,
     )
-    if not page.items:
+    return page.items[0] if page.items else None
+
+
+@router.get("/studies/{sid}/", responses=MOVED)
+def study_detail(sid: str, request: Request):
+    """A study by its study format 1 sid; PKDB identifiers redirect."""
+    actor = request.app.state.principal(request, required=False)
+    if (record := study_record(sid, request, actor)) is not None:
+        return record
+    if (redirect := study_redirect(request, sid, actor)) is not None:
+        return redirect
+    raise HTTPException(404, "Not found")
+
+
+@router.get("/studies/{substance}/{name}/")
+def located_study_detail(substance: str, name: str, request: Request):
+    """A study format 2 study by its sid `<substance>/<name>`."""
+    actor = request.app.state.principal(request, required=False)
+    if (record := study_record(f"{substance}/{name}", request, actor)) is None:
         raise HTTPException(404, "Not found")
-    return page.items[0]
+    return record
 
 
 @router.get("/info_nodes/")

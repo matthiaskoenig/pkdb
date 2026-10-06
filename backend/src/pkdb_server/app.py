@@ -42,6 +42,7 @@ from pkdb_server.api import (
 )
 from pkdb_server.api.credentials import install_browser_security
 from pkdb_server.api.errors import account_validation_error
+from pkdb_server.api.identity import MOVED, study_redirect
 from pkdb_server.api.limits import UploadLimits
 from pkdb_server.api.quotas import RequestQuotas
 from pkdb_server.api.upload_reports import UploadReports
@@ -512,22 +513,24 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def replace_upload(sid: str, request: Request):
         return await upload(request, publish=True, sid=sid)
 
-    @app.get("/api/v2/studies/{sid}")
-    def get_study(sid: str, request: Request):
+    def study_or_redirect(read, sid: str, request: Request, *, redirect: bool):
+        """Read a study by sid; a single-segment PKDB identifier redirects."""
         actor = principal(request, required=False)
         try:
-            return read_study(sid, actor, session_factory)
+            return read(sid, actor, session_factory)
         except LookupError:
+            if redirect and (moved := study_redirect(request, sid, actor)):
+                return moved
             raise HTTPException(404, "Study not found") from None
 
+    @app.get("/api/v2/studies/{sid}", responses=MOVED)
+    def get_study(sid: str, request: Request):
+        return study_or_redirect(read_study, sid, request, redirect=True)
+
     # Before the two-segment routes, so PKDB00198/publication keeps its meaning.
-    @app.get("/api/v2/studies/{sid}/publication")
+    @app.get("/api/v2/studies/{sid}/publication", responses=MOVED)
     def get_publication(sid: str, request: Request):
-        actor = principal(request, required=False)
-        try:
-            return publication_state(sid, actor, session_factory)
-        except LookupError:
-            raise HTTPException(404, "Study not found") from None
+        return study_or_redirect(publication_state, sid, request, redirect=True)
 
     # Study format 2 studies are named by their folder location <substance>/<name>.
     @app.post("/api/v2/studies/{substance}/{name}/validate")
@@ -540,11 +543,13 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     @app.get("/api/v2/studies/{substance}/{name}")
     def get_folder_study(substance: str, name: str, request: Request):
-        return get_study(f"{substance}/{name}", request)
+        sid = f"{substance}/{name}"
+        return study_or_redirect(read_study, sid, request, redirect=False)
 
     @app.get("/api/v2/studies/{substance}/{name}/publication")
     def get_folder_publication(substance: str, name: str, request: Request):
-        return get_publication(f"{substance}/{name}", request)
+        sid = f"{substance}/{name}"
+        return study_or_redirect(publication_state, sid, request, redirect=False)
 
     @app.get("/api/v1/swagger/", include_in_schema=False)
     def legacy_documentation():

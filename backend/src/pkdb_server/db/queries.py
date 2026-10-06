@@ -28,7 +28,8 @@ from pkdb_server.db.vocabulary_search import relevance
 from pkdb_server.services.authorization import AuthorizationDenied
 
 STUDY_FIELDS = {
-    name: getattr(Study, name) for name in ("sid", "name", "access", "licence")
+    name: getattr(Study, name)
+    for name in ("sid", "name", "access", "licence", "pkdb_id")
 }
 OUTPUT_FIELDS = {
     name: getattr(Measurement, name)

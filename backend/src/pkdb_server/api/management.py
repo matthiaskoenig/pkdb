@@ -7,6 +7,7 @@ from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy import delete, select, text
 
+from pkdb_server.api.identity import MOVED, study_redirect
 from pkdb_server.db.models.audit import AuditEvent
 from pkdb_server.db.models.credentials import ApiKey
 from pkdb_server.db.models.studies import Study, StudyGrant
@@ -169,54 +170,136 @@ def update_user(user_id: int, data: PatchUser, request: Request):
         }
 
 
-@router.put("/studies/{sid}/access")
+# Attempts to lock a study whose PKDB identifier changes meanwhile.
+LOCK_ATTEMPTS = 3
+
+
+class StudyChanged(Exception):
+    """The PKDB identifier of a study changed before its locks were taken."""
+
+
+def lock_publications(session, sid: str) -> set[str]:
+    """Take the advisory locks that every publication of the study takes.
+
+    A publication locks its sid and its PKDB identifier in sorted order, then
+    the uploader's account, then the study row. It replaces the study under
+    the same sid or takes it over by its PKDB identifier (a rename), so the
+    locks of both names exclude every publication of the study. With the sid
+    alone, a rename could hold the account row of a curator, which the grant
+    inserts wait for, while it waits for the study row: a deadlock. Returns
+    the locked names.
+    """
+    pkdb_id = session.scalar(select(Study.pkdb_id).where(Study.sid == sid))
+    names = {sid, *([pkdb_id] if pkdb_id else [])}
+    for key in sorted(sid_lock(name) for name in names):
+        session.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": key})
+    return names
+
+
+def locked_study(session, sid: str, names: set[str]) -> Study | None:
+    """The study row, locked; StudyChanged if its PKDB identifier is not locked."""
+    study = session.scalar(select(Study).where(Study.sid == sid).with_for_update())
+    if study is not None and study.pkdb_id and study.pkdb_id not in names:
+        raise StudyChanged
+    return study
+
+
+@router.put("/studies/{sid}/access", responses=MOVED)
 def study_access(sid: str, data: Access, request: Request):
-    with request.app.state.session_factory.begin() as session:
-        # Same ordering as ingestion publication: study advisory lock before account locks.
-        session.execute(
-            text("SELECT pg_advisory_xact_lock(:key)"), {"key": sid_lock(sid)}
-        )
-        administrator = actor(request, session)
-        study = session.scalar(select(Study).where(Study.sid == sid).with_for_update())
-        if study is None:
-            raise HTTPException(404, "Study not found")
-        ids = set(data.curator_ids)
-        if data.creator_id is not None:
-            ids.add(data.creator_id)
-        found = set(session.scalars(select(User.id).where(User.id.in_(ids))))
-        if found != ids:
-            raise HTTPException(422, "Unknown account in access grants")
-        before = {
-            "access": study.access,
-            "licence": study.licence,
-            "creator_id": study.creator_id,
-        }
-        study.access, study.licence = data.access, data.licence
-        if data.creator_id is not None:
-            study.creator_id = data.creator_id
-        session.execute(delete(StudyGrant).where(StudyGrant.study_id == study.id))
-        session.add_all(
-            StudyGrant(study_id=study.id, user_id=identifier, role="curator")
-            for identifier in sorted(set(data.curator_ids))
-        )
-        session.add(
-            AuditEvent(
-                actor_id=administrator.id,
-                action="study.access",
-                target=sid,
-                details={"before": before, "after": data.model_dump()},
-            )
-        )
-        return data.model_dump()
+    """Access of a study by its study format 1 sid; PKDB identifiers redirect."""
+    try:
+        return update_access(sid, data, request)
+    except LookupError:
+        # Only the designated administrator gets here.
+        if (redirect := study_redirect(request, sid)) is not None:
+            return redirect
+        raise HTTPException(404, "Study not found") from None
 
 
-@router.get("/studies/{sid}/access")
+@router.put("/studies/{substance}/{name}/access")
+def located_study_access(substance: str, name: str, data: Access, request: Request):
+    """Access of a study format 2 study by its sid `<substance>/<name>`."""
+    try:
+        return update_access(f"{substance}/{name}", data, request)
+    except LookupError:
+        raise HTTPException(404, "Study not found") from None
+
+
+def update_access(sid: str, data: Access, request: Request):
+    """Set the access of a study; LookupError if there is no study `sid`."""
+    for _ in range(LOCK_ATTEMPTS):
+        try:
+            with request.app.state.session_factory.begin() as session:
+                # The lock order of a publication: names, account, study row.
+                names = lock_publications(session, sid)
+                administrator = actor(request, session)
+                study = locked_study(session, sid, names)
+                if study is None:
+                    raise LookupError("Study not found")
+                return set_access(session, administrator, study, data)
+        except StudyChanged:
+            continue
+    raise HTTPException(409, "The study changed during the update; try again")
+
+
+def set_access(session, administrator: User, study: Study, data: Access):
+    ids = set(data.curator_ids)
+    if data.creator_id is not None:
+        ids.add(data.creator_id)
+    found = set(session.scalars(select(User.id).where(User.id.in_(ids))))
+    if found != ids:
+        raise HTTPException(422, "Unknown account in access grants")
+    before = {
+        "access": study.access,
+        "licence": study.licence,
+        "creator_id": study.creator_id,
+    }
+    study.access, study.licence = data.access, data.licence
+    if data.creator_id is not None:
+        study.creator_id = data.creator_id
+    session.execute(delete(StudyGrant).where(StudyGrant.study_id == study.id))
+    session.add_all(
+        StudyGrant(study_id=study.id, user_id=identifier, role="curator")
+        for identifier in sorted(set(data.curator_ids))
+    )
+    session.add(
+        AuditEvent(
+            actor_id=administrator.id,
+            action="study.access",
+            target=study.sid,
+            details={"before": before, "after": data.model_dump()},
+        )
+    )
+    return data.model_dump()
+
+
+@router.get("/studies/{sid}/access", responses=MOVED)
 def read_access(sid: str, request: Request):
+    """Access of a study by its study format 1 sid; PKDB identifiers redirect."""
+    try:
+        return access_grants(sid, request)
+    except LookupError:
+        # Only the designated administrator gets here.
+        if (redirect := study_redirect(request, sid)) is not None:
+            return redirect
+        raise HTTPException(404, "Study not found") from None
+
+
+@router.get("/studies/{substance}/{name}/access")
+def read_located_access(substance: str, name: str, request: Request):
+    """Access of a study format 2 study by its sid `<substance>/<name>`."""
+    try:
+        return access_grants(f"{substance}/{name}", request)
+    except LookupError:
+        raise HTTPException(404, "Study not found") from None
+
+
+def access_grants(sid: str, request: Request):
     with request.app.state.session_factory() as session:
         actor(request, session)
         study = session.scalar(select(Study).where(Study.sid == sid))
         if study is None:
-            raise HTTPException(404, "Study not found")
+            raise LookupError("Study not found")
         grants = list(
             session.scalars(select(StudyGrant).where(StudyGrant.study_id == study.id))
         )

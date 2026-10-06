@@ -1,5 +1,7 @@
 """Explicit public scientific response contracts."""
 
+from typing import Literal
+
 from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
 from pkdb.schemas.provenance import ManualCuration, StudyProvenance
@@ -244,6 +246,12 @@ class StudyResponse(NotesResponse):
     licence: str
     access: str
     date: str | None
+    # Release, GitHub issue and review of study format 2 studies.
+    pkdb_id: str | None = None
+    release_date: str | None = None
+    issue: int | None = None
+    review_status: Literal["draft", "in_review", "approved"] | None = None
+    open_review_items: int = 0
     group_count: int
     individual_count: int
     intervention_count: int

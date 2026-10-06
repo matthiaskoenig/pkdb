@@ -2,6 +2,7 @@ import math
 
 from fastapi import APIRouter, HTTPException, Request
 
+from pkdb_server.api.identity import MOVED, study_redirect
 from pkdb_server.api.reads import query_spec
 from pkdb_server.db.analysis import ENTITIES
 
@@ -34,10 +35,12 @@ def analysis_rows(entity: str, request: Request):
     }
 
 
-@router.get("/pkdata/{entity}/{identifier}/")
+@router.get("/pkdata/{entity}/{identifier}/", responses=MOVED)
 def analysis_detail(entity: str, identifier: str, request: Request):
-    from pkdb.schemas.queries import Predicate
+    """A record by its identifier; a study by its study format 1 sid.
 
+    PKDB identifiers redirect to their studies.
+    """
     fields = {
         "studies": "sid",
         "interventions": "intervention_pk",
@@ -54,6 +57,30 @@ def analysis_detail(entity: str, identifier: str, request: Request):
         except ValueError:
             raise HTTPException(404, "Not found") from None
     actor = request.app.state.principal(request, required=False)
+    record, actor = analysis_record(entity, fields[entity], value, request, actor)
+    if record is not None:
+        return record
+    if entity == "studies" and (
+        redirect := study_redirect(request, identifier, actor, parameter="identifier")
+    ):
+        return redirect
+    raise HTTPException(404, "Not found")
+
+
+@router.get("/pkdata/studies/{substance}/{name}/")
+def located_study_analysis(substance: str, name: str, request: Request):
+    """A study format 2 study by its sid `<substance>/<name>`."""
+    actor = request.app.state.principal(request, required=False)
+    record, _ = analysis_record("studies", "sid", f"{substance}/{name}", request, actor)
+    if record is None:
+        raise HTTPException(404, "Not found")
+    return record
+
+
+def analysis_record(entity, field, value, request, actor):
+    """The record whose `field` is `value`, and the principal of a saved selection."""
+    from pkdb.schemas.queries import Predicate
+
     query = query_spec(request, ENTITIES[entity], analysis=True)
     query = query.model_copy(
         update={
@@ -61,7 +88,7 @@ def analysis_detail(entity: str, identifier: str, request: Request):
             "page_size": 1,
             "predicates": [
                 *query.predicates,
-                Predicate(field=fields[entity], value=value),
+                Predicate(field=field, value=value),
             ],
         }
     )
@@ -70,9 +97,7 @@ def analysis_detail(entity: str, identifier: str, request: Request):
         page = request.app.state.analysis.search(entity, query, actor, filter_spec=spec)
     except ValueError:
         raise HTTPException(400, "Invalid query parameters") from None
-    if not page.items:
-        raise HTTPException(404, "Not found")
-    return page.items[0]
+    return (page.items[0] if page.items else None), actor
 
 
 def saved_selection(request, actor):
