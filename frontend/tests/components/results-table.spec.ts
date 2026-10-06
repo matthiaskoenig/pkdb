@@ -66,19 +66,51 @@ it("shows unit before one value column and the study identifier", () => {
   ]);
   wrapper.unmount();
 });
-it("keeps a value on one line and sorts it by the mean", async () => {
+it("keeps a value on one line and sorts it by the value of the row", async () => {
   const wrapper = table();
   expect(wrapper.findAll("td.nowrap")).toHaveLength(2);
   const sort = wrapper
     .findAll("button.sort-button")
     .find((button) => button.text().startsWith("Value"));
   await sort?.trigger("click");
-  expect(wrapper.emitted("order")?.[0]).toEqual(["mean"]);
+  expect(wrapper.emitted("order")?.[0]).toEqual(["central_value"]);
   wrapper.unmount();
 });
-it("allows a break after the slash of a study identifier only", () => {
+it("keeps a study identifier whole and breaks only a very long one after its slash", () => {
+  const long = `${"a".repeat(30)}/${"b".repeat(30)}`;
+  const wrapper = table([
+    ...rows,
+    { ...rows[0]!, pk: 3, study: { sid: long, name: "Long" } },
+  ]);
+  const cells = wrapper.findAll("tbody tr").map((row) => row.findAll("td")[7]);
+  expect(cells[0]?.html()).not.toContain("<wbr>");
+  expect(cells[0]?.text()).toBe("drug/Format2Fixture");
+  expect(cells[2]?.html()).toContain(
+    `${"a".repeat(30)}/<wbr>${"b".repeat(30)}`,
+  );
+  wrapper.unmount();
+});
+it("shows a dash in every empty cell of an intervention without route and substance", () => {
+  const wrapper = mount(ResultsTable, {
+    props: {
+      tab: "interventions",
+      items: [{ pk: 3, name: "D3", substance: null, route: null, study: null }],
+      order: "",
+      query: "",
+    },
+  });
+  expect(
+    wrapper
+      .findAll("tbody tr")[0]
+      ?.findAll("td")
+      .map((cell) => cell.text()),
+  ).toEqual(["View ↗", "D3", "-", "-", "-", "-", "-", "-"]);
+  wrapper.unmount();
+});
+it("keeps a study identifier together and lets the name of a format 1 study wrap", () => {
   const wrapper = table();
-  const cell = wrapper.findAll("tbody tr")[0]?.findAll("td")[7];
-  expect(cell?.html()).toContain("drug/<wbr>Format2Fixture");
+  const [first, second] = wrapper.findAll("tbody tr");
+  expect(first?.findAll("td")[7]?.classes()).toContain("identifier");
+  expect(second?.findAll("td")[7]?.classes()).not.toContain("identifier");
   wrapper.unmount();
 });

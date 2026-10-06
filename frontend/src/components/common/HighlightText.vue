@@ -1,7 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import BreakableText from "./BreakableText.vue";
-const props = defineProps<{ text: string; query?: string }>();
+const props = defineProps<{
+  text: string;
+  query?: string;
+  keepUpTo?: number;
+}>();
+// A highlighted part is a piece of the text: keep the whole text together.
+const keepTogether = computed(() =>
+  props.text.length <= (props.keepUpTo ?? 0) ? props.text.length : 0,
+);
 const parts = computed(() => {
   const q = props.query?.trim();
   if (!q) return [{ text: props.text, match: false }];
@@ -25,7 +33,11 @@ const parts = computed(() => {
 <template>
   <span
     ><template v-for="(part, index) in parts" :key="index"
-      ><mark v-if="part.match"><BreakableText :text="part.text" /></mark
-      ><BreakableText v-else :text="part.text" /></template
+      ><mark v-if="part.match"
+        ><BreakableText :text="part.text" :keep-up-to="keepTogether" /></mark
+      ><BreakableText
+        v-else
+        :text="part.text"
+        :keep-up-to="keepTogether" /></template
   ></span>
 </template>

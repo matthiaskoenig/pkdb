@@ -46,4 +46,17 @@ describe("dosing schedules", () => {
     expect(scheduleText(null)).toBeUndefined();
     expect(scheduleText("0\u00a0h")).toBeUndefined();
   });
+  it("rounds times to four significant digits", () => {
+    expect(
+      scheduleText({ time: [0.1 + 0.2, 12.000000000000002], time_unit: "h" }),
+    ).toBe("0.3, 12\u00a0h");
+    expect(
+      scheduleText({
+        time: 0.30000000000000004,
+        interval: 1 / 3,
+        doses: 2,
+        time_unit: "h",
+      }),
+    ).toBe("every 0.3333\u00a0h, 2\u00a0doses from 0.3\u00a0h");
+  });
 });

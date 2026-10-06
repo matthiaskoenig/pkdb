@@ -63,6 +63,11 @@ OUTPUT_FIELDS = {
     )
 }
 OUTPUT_FIELDS.update(
+    # The value a row stands for, as tables show it: mean, else median, else
+    # geometric mean. Rows without any of them sort last.
+    central_value=func.coalesce(
+        Measurement.mean, Measurement.median, Measurement.gmean
+    ),
     normed=Measurement.origin == "normalized",
     minimum=Measurement.minimum,
     maximum=Measurement.maximum,
@@ -198,6 +203,9 @@ def fields_for(entity):
                     "calculated",
                 )
             },
+            "central_value": func.coalesce(
+                Intervention.mean, Intervention.median, Intervention.gmean
+            ),
             "minimum": Intervention.minimum,
             "maximum": Intervention.maximum,
         }

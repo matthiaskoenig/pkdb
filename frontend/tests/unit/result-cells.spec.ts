@@ -1,12 +1,41 @@
 import { describe, it, expect } from "vitest";
 import { cellText } from "../../src/features/results/cells";
+import type { ApiRecord } from "../../src/api/contracts";
 import { columns, validOrder } from "../../src/features/results/columns";
 describe("scientific result cells", () => {
   it("labels all acquisition types and their source", () => {
     expect(cellText({ provenance: { kind: "data_import", source_key: "osp.observed-data", release: "v1.9" } }, "provenance")).toBe("Automatic import · osp.observed-data · v1.9");
     expect(cellText({ provenance: { kind: "manual_curation", source_key: "pkdb.manual" } }, "provenance")).toBe("Manual curation · pkdb.manual");
     expect(cellText({ provenance: { kind: "automatic_curation", source_key: "pipeline" } }, "provenance")).toBe("Automatic curation · pipeline");
-    expect(cellText({}, "provenance")).toBe("Not reported");
+    expect(cellText({}, "provenance")).toBe("-");
+  });
+  it("shows one dash for every empty cell of every table", () => {
+    const gaps: ApiRecord = {
+      pk: 3,
+      name: "D3",
+      substance: null,
+      route: null,
+      unit: null,
+      mean: null,
+      interventions: [],
+      group: null,
+      study: null,
+      provenance: null,
+      array: [],
+      characteristica: [],
+      reference: null,
+    };
+    expect(
+      columns.interventions.map((column) => cellText(gaps, column.key)),
+    ).toEqual(["D3", "-", "-", "-", "-", "-", "-"]);
+    for (const tab of Object.keys(columns) as (keyof typeof columns)[])
+      for (const column of columns[tab])
+        if (column.key !== "name")
+          expect(cellText(gaps, column.key)).not.toContain("Not reported");
+    expect(cellText(gaps, "interventions")).toBe("-");
+    expect(cellText(gaps, "subject")).toBe("-");
+    expect(cellText(gaps, "dimensions")).toBe("-");
+    expect(cellText(gaps, "characteristica")).toBe("-");
   });
   it("keeps a measured zero and shows a missing statistic as a dash", () => {
     expect(cellText({ mean: 0 }, "statistics")).toBe("0");
@@ -112,11 +141,11 @@ describe("scientific result cells", () => {
   it("does not offer unsupported participant-count sorting", () => {
     expect(validOrder("groups", "count")).toBe(false);
   });
-  it("sorts by the mean of format 2 and no longer by value", () => {
-    expect(validOrder("measurements", "mean")).toBe(true);
-    expect(validOrder("measurements", "-mean")).toBe(true);
-    expect(validOrder("interventions", "-mean")).toBe(true);
-    for (const order of ["value", "gmean", "gsd", "cv", "statistics"])
+  it("sorts the value column by the value of a row and no longer by value", () => {
+    expect(validOrder("measurements", "central_value")).toBe(true);
+    expect(validOrder("measurements", "-central_value")).toBe(true);
+    expect(validOrder("interventions", "-central_value")).toBe(true);
+    for (const order of ["value", "mean", "gmean", "gsd", "cv", "statistics"])
       expect(validOrder("measurements", order)).toBe(false);
     expect(validOrder("interventions", "value")).toBe(false);
     expect(validOrder("interventions", "schedule")).toBe(false);
@@ -143,7 +172,7 @@ describe("scientific result cells", () => {
     const value = columns.measurements.find((c) => c.key === "statistics");
     expect(value).toMatchObject({
       title: "Value",
-      order: "mean",
+      order: "central_value",
       nowrap: true,
     });
   });

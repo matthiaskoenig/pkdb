@@ -3,7 +3,7 @@ import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useDisplay } from "vuetify";
 import { useSearchController } from "../useSearchController";
-import { tabs, tabLabels } from "../model";
+import { countLabel, tabs, tabLabels } from "../model";
 import { encodeLocation } from "../codec";
 import { endpoints } from "../../../api/results";
 import SearchPanel from "./SearchPanel.vue";
@@ -259,8 +259,7 @@ async function copyLink() {
           </div>
           <template v-else-if="result">
             <p class="row-count" role="status">
-              {{ result.count.toLocaleString() }}
-              {{ tabLabels[search.view.tab].toLowerCase()
+              {{ countLabel(search.view.tab, result.count)
               }}{{
                 search.view.tableSearch
                   ? " in this table refinement"

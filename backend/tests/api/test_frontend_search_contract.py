@@ -453,3 +453,50 @@ def test_format2_fixture_has_schedules_geometric_statistics_and_labels(
         "Plasma after 10 mg daily (geometric)",
         "Plasma after 10 mg daily (arithmetic)",
     }
+
+
+def test_value_ordering_uses_the_mean_else_the_median_else_the_geometric_mean(
+    client, creator_headers, format2_study
+):
+    from tests.fixtures.frontend_search import FORMAT2_SID
+
+    def values(entity, ordering):
+        response = client.get(
+            f"/api/v1/{entity}/",
+            headers=creator_headers,
+            params={
+                "study_sid": FORMAT2_SID,
+                "normed": "true",
+                "ordering": ordering,
+                "page_size": 100,
+            },
+        )
+        assert response.status_code == 200, response.text
+        return [
+            next(
+                (
+                    row[key]
+                    for key in ("mean", "median", "gmean")
+                    if row[key] is not None
+                ),
+                None,
+            )
+            for row in response.json()["data"]["data"]
+        ]
+
+    outputs = values("outputs", "central_value")
+    reported = [value for value in outputs if value is not None]
+    # Rows with a mean and rows with a geometric mean take part in one order.
+    assert len(set(reported)) > 3
+    assert reported == sorted(reported)
+    assert outputs[: len(reported)] == reported
+    descending = values("outputs", "-central_value")
+    assert [value for value in descending if value is not None] == sorted(
+        reported, reverse=True
+    )
+    assert values("interventions", "central_value") == sorted(
+        values("interventions", "central_value")
+    )
+    assert values("interventions", "-central_value") == sorted(
+        values("interventions", "central_value"), reverse=True
+    )

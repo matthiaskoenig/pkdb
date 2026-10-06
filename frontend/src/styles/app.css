@@ -44,16 +44,22 @@ p {
   line-height: 1.65;
   margin: 0.5rem 0 1rem;
 }
+/* Hidden until it has keyboard focus, so it is in no screenshot or print. */
 .skip-link {
   position: fixed;
-  top: -100px;
+  top: 12px;
   left: 16px;
   z-index: 9999;
   padding: 12px;
   background: rgb(var(--v-theme-surface));
 }
-.skip-link:focus {
-  top: 12px;
+.skip-link:not(:focus) {
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  clip-path: inset(50%);
 }
 .app-header {
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
@@ -377,6 +383,9 @@ table {
 .science-table td.nowrap {
   white-space: nowrap;
 }
+.science-table td.identifier {
+  white-space: nowrap;
+}
 .science-table tbody tr:last-child td {
   border: 0;
 }
@@ -497,7 +506,7 @@ table {
   min-width: 720px;
 }
 .science-table td {
-  min-width: 100px;
+  min-width: 72px;
 }
 .v-combobox {
   --v-input-control-height: 40px;

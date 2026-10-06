@@ -25,6 +25,10 @@ function open(row: ApiRecord) {
   const id = identifier(row);
   if (id !== undefined) emit("detail", id);
 }
+// `<substance>/<name>`, as opposed to the name of a study format 1 study.
+function isIdentifier(text: string): boolean {
+  return /^[^\s/]+\/[^\s/]+$/u.test(text);
+}
 function sort(key: string) {
   emit("order", props.order === key ? `-${key}` : key);
 }
@@ -91,9 +95,17 @@ function sort(key: string) {
           <td
             v-for="column in headers"
             :key="column.key"
-            :class="{ nowrap: column.nowrap }"
+            :class="{
+              nowrap: column.nowrap,
+              identifier:
+                column.identifier && isIdentifier(cellText(row, column.key)),
+            }"
           >
-            <HighlightText :text="cellText(row, column.key)" :query="query" />
+            <HighlightText
+              :text="cellText(row, column.key)"
+              :query="query"
+              :keep-up-to="column.identifier ? 40 : 0"
+            />
           </td>
         </tr>
       </tbody>

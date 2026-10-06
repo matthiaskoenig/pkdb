@@ -127,3 +127,30 @@ it("opens a study from the results at its canonical address", async () => {
   );
   wrapper.unmount();
 });
+it("counts one record in the singular, in the selection and in a table refinement", async () => {
+  const wrapper = await page();
+  const search = useSearchStore();
+  search.view.tab = "measurements";
+  search.rows = {
+    status: "ready",
+    data: { items: [{ pk: 1 }], count: 1, page: 1, lastPage: 1 },
+  };
+  await flushPromises();
+  expect(wrapper.get(".row-count").text()).toBe(
+    "1 measurement in the applied selection",
+  );
+  search.view.tableSearch = "x";
+  await flushPromises();
+  expect(wrapper.get(".row-count").text()).toBe(
+    "1 measurement in this table refinement",
+  );
+  search.rows = {
+    status: "ready",
+    data: { items: [{ pk: 1 }, { pk: 2 }], count: 2, page: 1, lastPage: 1 },
+  };
+  await flushPromises();
+  expect(wrapper.get(".row-count").text()).toBe(
+    "2 measurements in this table refinement",
+  );
+  wrapper.unmount();
+});

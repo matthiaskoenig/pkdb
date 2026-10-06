@@ -26,7 +26,7 @@ describe("durable applied searches", () => {
         tab: "measurements" as const,
         page: 2,
         pageSize: 50,
-        order: "-mean",
+        order: "-central_value",
         tableSearch: "zero & precision",
       },
     };

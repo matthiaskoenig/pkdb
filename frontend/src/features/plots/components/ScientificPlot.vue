@@ -21,6 +21,8 @@ let engine: Awaited<ReturnType<typeof loadPlotly>> | undefined;
 let observer: ResizeObserver | undefined;
 let disposed = false;
 let rendering = Promise.resolve();
+const caption =
+  "Point values and their uncertainty; missing values are shown as -";
 // Statistics are rounded for reading; coefficients of variation show as percent.
 function cell(key: string, value: number | null): string {
   return value === null
@@ -163,10 +165,15 @@ onBeforeUnmount(() => {
       <p v-for="note in model.value.notes" :key="note">{{ note }}</p>
       <details>
         <summary>Accessible plot data and uncertainty</summary>
+        <!-- The caption names the table for assistive technology; the visible
+             copy wraps within the screen while the table scrolls. -->
+        <p aria-hidden="true">{{ caption }}</p>
         <div class="plot-data">
           <table>
-            <caption>
-              Point values and their uncertainty; missing values are shown as -
+            <caption class="sr-only">
+              {{
+                caption
+              }}
             </caption>
             <thead>
               <tr>
@@ -195,7 +202,7 @@ onBeforeUnmount(() => {
                   <td>
                     {{ kind === "timecourse" ? "Y" : axis === 0 ? "X" : "Y" }}
                   </td>
-                  <td>{{ point.time ?? "-" }}</td>
+                  <td>{{ cell("time", point.time) }}</td>
                   <td>{{ point.time_unit ?? "-" }}</td>
                   <td>{{ cell("mean", point.mean) }}</td>
                   <td>{{ cell("median", point.median) }}</td>
@@ -227,6 +234,9 @@ onBeforeUnmount(() => {
 }
 .plot-data {
   overflow-x: auto;
+}
+caption {
+  text-align: start;
 }
 th,
 td {

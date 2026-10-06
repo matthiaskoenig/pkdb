@@ -116,4 +116,28 @@ describe("whole-study contents", () => {
     expect(wrapper.get("li").text()).toMatch(/0\.009 mg\/l$/);
     wrapper.unmount();
   });
+  it("leaves out a quantity that is not reported", async () => {
+    mocks.get.mockResolvedValue(
+      page([
+        { pk: 1, name: "D1", time: 0, interval: 24, doses: 7, time_unit: "h" },
+        { pk: 2, name: "D2" },
+      ]),
+    );
+    const wrapper = mount(StudyContents, { props: { sid: "caffeine/X" } });
+    await flushPromises();
+    await wrapper.getComponent({ name: "VSelect" }).setValue("interventions");
+    await flushPromises();
+    const items = wrapper.findAll("li").map((item) => item.text());
+    expect(items[0]).toBe("D1 · 1every 24\u00a0h, 7\u00a0doses from 0\u00a0h");
+    expect(items[1]).toBe("D2 · 2");
+    expect(wrapper.findAll(".summary")).toHaveLength(1);
+    mocks.get.mockResolvedValue(
+      page([{ pk: 3, measurement_type: { name: "Concentration" } }]),
+    );
+    await wrapper.getComponent({ name: "VSelect" }).setValue("outputs");
+    await flushPromises();
+    expect(wrapper.get("li").text()).toBe("Concentration · 3");
+    expect(wrapper.text()).not.toContain("-");
+    wrapper.unmount();
+  });
 });

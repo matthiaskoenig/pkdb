@@ -42,7 +42,7 @@ const shown = computed(
 );
 </script>
 <template>
-  <section v-if="shown" class="study-status" aria-label="Release and review">
+  <section v-if="shown" class="study-status" aria-label="Study status">
     <dl>
       <div v-if="identifier" class="wide">
         <dt>Identifier</dt>

@@ -173,6 +173,17 @@ STUDY_FORMAT_COLUMNS = {
 }
 
 
+def search_index(session_factory):
+    """The definition of the study text search index, as the database reports it."""
+    with session_factory() as session:
+        return session.execute(
+            text(
+                "SELECT indexdef FROM pg_indexes WHERE schemaname = current_schema() "
+                "AND indexname = 'ix_studies_search'"
+            )
+        ).scalar_one()
+
+
 def test_study_format_revision_round_trip_keeps_published_studies(
     ingestion_context, valid_bundle, session_factory
 ):
@@ -182,12 +193,16 @@ def test_study_format_revision_round_trip_keeps_published_studies(
     published = ingestion.replace(valid_bundle, principal)
     before = read_study(published.sid, principal, session_factory)
     config = alembic_config(session_factory)
+    current = search_index(session_factory)
+    assert "pkdb_id" in current
     command.downgrade(config, "p005vocabsearch")
     with session_factory() as session:
         inspector = inspect(session.connection())
         for table, columns in STUDY_FORMAT_COLUMNS.items():
             names = {column["name"] for column in inspector.get_columns(table)}
             assert not columns & names
+    before_revision = search_index(session_factory)
+    assert "pkdb_id" not in before_revision
     command.upgrade(config, "head")
     command.check(config)
     with session_factory() as session:
@@ -196,6 +211,12 @@ def test_study_format_revision_round_trip_keeps_published_studies(
             names = {column["name"] for column in inspector.get_columns(table)}
             assert columns <= names
     assert read_study(published.sid, principal, session_factory) == before
+    # The study text search index is rebuilt as it was, and as it is now.
+    assert search_index(session_factory) == current
+    command.downgrade(config, "p005vocabsearch")
+    assert search_index(session_factory) == before_revision
+    command.upgrade(config, "head")
+    command.check(config)
 
 
 VALUES = """

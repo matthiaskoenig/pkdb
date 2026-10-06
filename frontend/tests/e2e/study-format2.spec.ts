@@ -43,7 +43,7 @@ test.describe("a curator reads the study format 2 study", () => {
     await expect(
       page.getByRole("heading", { name: "Format2Fixture", exact: true }),
     ).toBeVisible();
-    const status = page.getByRole("region", { name: "Release and review" });
+    const status = page.getByRole("region", { name: "Study status" });
     await expect(status).toContainText(sid);
     await expect(status).toContainText("PKDB identifier");
     await expect(status).toContainText("PKDB09901");
@@ -67,7 +67,7 @@ test.describe("a curator reads the study format 2 study", () => {
       page.getByRole("region", { name: "Whole-study data" }),
     ).not.toContainText("1 records");
     await expect(
-      record.getByRole("region", { name: "Release and review" }).getByText(sid),
+      record.getByRole("region", { name: "Study status" }).getByText(sid),
     ).toBeVisible();
     for (const raw of ["Pkdb id", "Release date", "Review status"])
       await expect(record.getByText(raw, { exact: true })).toHaveCount(0);
@@ -89,7 +89,7 @@ test.describe("a curator reads the study format 2 study", () => {
     await redirected;
     await expect(page).toHaveURL(new RegExp(`${address}$`));
     await expect(
-      page.getByRole("region", { name: "Release and review" }),
+      page.getByRole("region", { name: "Study status" }),
     ).toContainText("PKDB09901");
     // The identifier is replaced, not kept as a history entry.
     await page.goBack();
@@ -160,17 +160,45 @@ test.describe("a curator reads the study format 2 study", () => {
     await expect(table).toContainText(`0.004${nb}×/÷${nb}1.5${nb}(GSD)`);
     await expect(table).toContainText(`0.009${nb}±${nb}0.001${nb}(SD)`);
     await expect(table).toContainText("drug/Format2Fixture");
+    // A study identifier stays on one line while the table has room.
+    const lines = await page.locator("td.identifier").evaluateAll((cells) =>
+      cells.map((cell) => {
+        const range = document.createRange();
+        range.selectNodeContents(cell);
+        return new Set(
+          [...range.getClientRects()]
+            .filter((rect) => rect.height > 0)
+            .map((rect) => Math.round(rect.top)),
+        ).size;
+      }),
+    );
+    expect(lines.length).toBeGreaterThan(5);
+    expect(Math.max(...lines)).toBe(1);
     await expect(table).not.toContainText("Not reported");
     const sorted = page.waitForResponse(
       (response) =>
         response.url().includes("/api/v1/outputs/") &&
-        new URL(response.url()).searchParams.get("ordering") === "mean",
+        new URL(response.url()).searchParams.get("ordering") ===
+          "central_value",
     );
     await page.getByRole("button", { name: "Value", exact: true }).click();
     expect((await sorted).status()).toBe(200);
     await expect(
       page.getByRole("columnheader", { name: "Value", exact: true }),
     ).toHaveAttribute("aria-sort", "ascending");
+    // Rows with a mean and rows with a geometric mean share one order.
+    const valueOrder = async () =>
+      (await page.locator("tbody tr td:nth-child(5)").allTextContents())
+        .map((text) => Number.parseFloat(text.replace(/^[^\d-]+/u, "")))
+        .filter((value) => !Number.isNaN(value));
+    await expect
+      .poll(async () => {
+        const values = await valueOrder();
+        return (
+          values.length > 5 && values.every((v, i) => !i || values[i - 1]! <= v)
+        );
+      })
+      .toBe(true);
     await page.getByRole("tab", { name: /^Interventions / }).click();
     await expect(
       page.getByRole("columnheader", { name: "Schedule", exact: true }),
@@ -187,14 +215,18 @@ test.describe("a curator reads the study format 2 study", () => {
       .getByRole("button", { name: "Apply table search", exact: true })
       .click();
     await expect(
-      page.getByText("1 studies in this table refinement"),
+      page.getByText("1 study in this table refinement"),
     ).toBeVisible();
     await page
       .getByRole("button", { name: `View ${sid}`, exact: true })
       .click();
     await expect(page).toHaveURL(new RegExp(`${address}\\?`));
+    // The study heading, not the skip link, takes focus after the navigation.
     await expect(
-      page.getByRole("region", { name: "Release and review" }),
+      page.getByRole("heading", { name: "Format2Fixture", exact: true }),
+    ).toBeFocused();
+    await expect(
+      page.getByRole("region", { name: "Study status" }),
     ).toContainText("PKDB09901");
     await page
       .getByRole("button", { name: "Close details", exact: true })
@@ -356,7 +388,7 @@ test("a private study and its PKDB identifier stay hidden from visitors", async 
     ).toBeVisible();
     await expect(page.getByRole("alert")).toContainText("Not found");
     await expect(
-      page.getByRole("region", { name: "Release and review" }),
+      page.getByRole("region", { name: "Study status" }),
     ).toHaveCount(0);
     // The identifier is not resolved to the sid of the private study.
     await expect(page).toHaveURL(new RegExp(`${path}$`));

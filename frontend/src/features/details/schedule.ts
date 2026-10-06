@@ -1,4 +1,4 @@
-import { NBSP } from "../results/format";
+import { NBSP, formatNumber } from "../results/format";
 import { isRecord } from "./types";
 
 function finite(value: unknown): number | undefined {
@@ -13,13 +13,17 @@ function finite(value: unknown): number | undefined {
 export function scheduleText(row: unknown): string | undefined {
   if (!isRecord(row)) return undefined;
   const unit = typeof row.time_unit === "string" ? row.time_unit : "";
-  const at = (value: number) =>
-    unit ? `${value}${NBSP}${unit}` : String(value);
+  const at = (value: number) => {
+    const shown = formatNumber(value);
+    return unit ? `${shown}${NBSP}${unit}` : shown;
+  };
   const times = (Array.isArray(row.time) ? row.time : [row.time]).flatMap(
     (item) => finite(item) ?? [],
   );
-  if (times.length > 1)
-    return unit ? `${times.join(", ")}${NBSP}${unit}` : times.join(", ");
+  if (times.length > 1) {
+    const list = times.map(formatNumber).join(", ");
+    return unit ? `${list}${NBSP}${unit}` : list;
+  }
   const start = times[0];
   const interval = finite(row.interval);
   const doses = finite(row.doses);

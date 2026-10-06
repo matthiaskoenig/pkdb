@@ -29,6 +29,9 @@ describe("statistic number format", () => {
     expect(statisticText("gsd", 1.60380788)).toBe("1.604");
     expect(statisticText("cv", 0.5)).toBe("50 %");
     expect(statisticText("gcv", 0.4227)).toBe("42.27 %");
+    expect(statisticText("time", 0.30000000000000004)).toBe("0.3");
+    expect(statisticText("time_end", 24.000000000000004)).toBe("24");
+    expect(statisticText("interval", 1 / 3)).toBe("0.3333");
     expect(statisticText("pk", 123456)).toBeUndefined();
     expect(statisticText("count", 12345)).toBeUndefined();
     expect(statisticText("mean", null)).toBeUndefined();

@@ -27,6 +27,7 @@ ALIASES = {
 }
 BOOLEANS = {"normed", "calculated"}
 NUMBERS = {
+    "central_value",
     "mean",
     "median",
     "sd",

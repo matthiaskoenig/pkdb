@@ -31,3 +31,21 @@ it("does not offer a break inside an operator or around spaced slashes", () => {
     wrapper.unmount();
   }
 });
+it("keeps text up to the given length together", () => {
+  const short = mount(HighlightText, {
+    props: { text: "drug/Format2Fixture", keepUpTo: 40 },
+  });
+  expect(short.findAll("wbr")).toHaveLength(0);
+  const highlighted = mount(HighlightText, {
+    props: { text: "drug/Format2Fixture", keepUpTo: 40, query: "format" },
+  });
+  expect(highlighted.findAll("wbr")).toHaveLength(0);
+  expect(highlighted.get("mark").text()).toBe("Format");
+  const long = mount(HighlightText, {
+    props: { text: `${"a".repeat(30)}/${"b".repeat(30)}`, keepUpTo: 40 },
+  });
+  expect(long.findAll("wbr")).toHaveLength(1);
+  short.unmount();
+  highlighted.unmount();
+  long.unmount();
+});

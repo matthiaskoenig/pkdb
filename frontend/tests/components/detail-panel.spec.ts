@@ -163,7 +163,7 @@ describe("record exploration", () => {
     });
     it("shows identifier, release date, issue link and open review items compactly", async () => {
       const wrapper = await mountStudy(study);
-      const status = wrapper.get('[aria-label="Release and review"]');
+      const status = wrapper.get('[aria-label="Study status"]');
       expect(status.findAll("dt").map((term) => term.text())).toEqual([
         "Identifier",
         "PKDB identifier",
@@ -203,7 +203,7 @@ describe("record exploration", () => {
         review_status: "draft",
         open_review_items: 0,
       });
-      const status = wrapper.get('[aria-label="Release and review"]');
+      const status = wrapper.get('[aria-label="Study status"]');
       expect(status.text()).toContain("Draft");
       expect(status.text()).toContain("no open items");
       expect(status.text()).not.toContain("PKDB identifier");
@@ -217,7 +217,7 @@ describe("record exploration", () => {
         review_status: "approved",
         open_review_items: 1,
       });
-      expect(wrapper.get('[aria-label="Release and review"]').text()).toContain(
+      expect(wrapper.get('[aria-label="Study status"]').text()).toContain(
         "Approved · 1 open item",
       );
       wrapper.unmount();
@@ -233,7 +233,7 @@ describe("record exploration", () => {
         review_status: null,
         open_review_items: 0,
       });
-      const status = wrapper.get('[aria-label="Release and review"]');
+      const status = wrapper.get('[aria-label="Study status"]');
       expect(status.findAll("dt").map((term) => term.text())).toEqual([
         "Identifier",
       ]);
@@ -328,7 +328,7 @@ describe("record exploration", () => {
         time_unit: "h",
         gmean: 3,
         gsd: 1.5,
-        gcv: 40,
+        gcv: 0.4227,
         error_bar: 5,
         error_type: "gsd",
       },
@@ -377,7 +377,7 @@ describe("record exploration", () => {
         gsd: 1.60380788,
         gcv: 0.22595033203145737,
         error_bar: null,
-        time: 1.5,
+        time: 1.5000000000000002,
       },
     });
     const wrapper = mount(DetailPanel, {

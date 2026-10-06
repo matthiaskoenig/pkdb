@@ -35,9 +35,10 @@ function relation(row: DetailRecord): Relation | undefined {
     title: text(row.name ?? row.measurement_type ?? identifier),
   };
 }
+// A quantity that is not reported is left out, not shown as a placeholder.
 function quantity(row: DetailRecord): string {
   const value = centralValue(row);
-  if (value === undefined || value === null) return "-";
+  if (value === undefined || value === null) return "";
   const shown = typeof value === "number" ? formatNumber(value) : text(value);
   return row.unit ? `${shown} ${text(row.unit)}` : shown;
 }
@@ -134,7 +135,9 @@ onBeforeUnmount(() => {
             {{ text(row.name ?? row.measurement_type ?? row.pk) }} ·
             {{ text(row.pk) }} </VBtn
           ><span
-            v-if="['outputs', 'interventions'].includes(category)"
+            v-if="
+              ['outputs', 'interventions'].includes(category) && summary(row)
+            "
             class="summary"
             >{{ summary(row) }}</span
           >

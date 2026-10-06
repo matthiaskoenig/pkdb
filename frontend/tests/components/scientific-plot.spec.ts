@@ -145,7 +145,7 @@ it("rounds the table and the hover to four significant digits", async () => {
         [
           {
             pk: 7,
-            time: 1,
+            time: 0.30000000000000004,
             time_unit: "h",
             unit: "mg/l",
             mean: 0.009000000000000001,
@@ -159,7 +159,7 @@ it("rounds the table and the hover to four significant digits", async () => {
   await flushPromises();
   const cells = wrapper.findAll("tbody td").map((cell) => cell.text());
   expect(cells).toEqual(
-    expect.arrayContaining(["0.009", "0.1111", "7\u00a0%"]),
+    expect.arrayContaining(["0.3", "0.009", "0.1111", "7\u00a0%"]),
   );
   expect(engine.react).toHaveBeenCalledWith(
     expect.any(HTMLElement),

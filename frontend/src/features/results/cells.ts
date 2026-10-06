@@ -31,14 +31,13 @@ function studyText(row: ApiRecord): string {
     ? sid
     : label(study ?? row.study_sid);
 }
-export function cellText(row: ApiRecord, key: string): string {
+function rawCellText(row: ApiRecord, key: string): string {
   if (key === "provenance") return provenanceText(row.provenance);
-  if (key === "schedule") return scheduleText(row) ?? "-";
+  if (key === "schedule") return scheduleText(row) ?? "";
   if (key === "statistics") return compactValue(row);
-  if (key === "unit")
-    return typeof row.unit === "string" && row.unit ? row.unit : "-";
+  if (key === "unit") return typeof row.unit === "string" ? row.unit : "";
   if (key === "interventions" && Array.isArray(row.interventions))
-    return row.interventions.length ? label(row.interventions) : "-";
+    return row.interventions.length ? label(row.interventions) : "";
   if (key === "subject") return label(row.individual ?? row.group);
   if (key === "study") return studyText(row);
   if (key === "characteristica")
@@ -62,4 +61,11 @@ export function cellText(row: ApiRecord, key: string): string {
       .join(" × ");
   }
   return label(row[key]);
+}
+// One placeholder for every empty cell of a table; detail views keep "Not
+// reported" and the plot data table its own dash.
+export const EMPTY_CELL = "-";
+export function cellText(row: ApiRecord, key: string): string {
+  const text = rawCellText(row, key);
+  return text === "" || text === "Not reported" ? EMPTY_CELL : text;
 }

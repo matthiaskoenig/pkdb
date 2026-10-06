@@ -1,10 +1,14 @@
-// Statistics are shown with at most four significant digits; the stored values
-// are never changed. A non-breaking space keeps a number with its unit or sign.
+// Statistics and times are shown with at most four significant digits; the stored
+// values are never changed. A non-breaking space keeps a number with its unit or sign.
 export const NBSP = " ";
 const SIGNIFICANT = 4;
 // Coefficients of variation are fractions in the data and percent on screen.
 const percents = new Set(["cv", "gcv"]);
+// Statistics and the times of a record are shown rounded; the record is not.
 const statistics = new Set([
+  "time",
+  "time_end",
+  "interval",
   "mean",
   "median",
   "min",
