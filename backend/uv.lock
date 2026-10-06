@@ -1437,6 +1437,7 @@ source = { editable = "../python" }
 dependencies = [
     { name = "fastexcel" },
     { name = "httpx2" },
+    { name = "matplotlib" },
     { name = "numpy" },
     { name = "openpyxl" },
     { name = "pint" },
@@ -1452,6 +1453,7 @@ dependencies = [
 requires-dist = [
     { name = "fastexcel", specifier = ">=0.21.0,<1" },
     { name = "httpx2", specifier = ">=2.13.0,<3" },
+    { name = "matplotlib", specifier = ">=3.11.2" },
     { name = "numpy", specifier = ">=2.5.3,<3" },
     { name = "openpyxl", specifier = ">=3.1.5,<4" },
     { name = "pint", specifier = ">=0.26.1,<1" },
