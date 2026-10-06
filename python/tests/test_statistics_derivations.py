@@ -5,7 +5,11 @@ import math
 import pytest
 
 from pkdb.domain.normalization import SCALED_FIELDS, normalize_record
-from pkdb.domain.statistics import complete_statistics, inconsistent_statistics
+from pkdb.domain.statistics import (
+    _half_unit,
+    complete_statistics,
+    inconsistent_statistics,
+)
 from pkdb.domain.vocabulary import MeasurementRule
 from pkdb.schemas.study import Measurement, Statistics
 
@@ -188,16 +192,16 @@ def test_statistics_without_new_fields_complete_exactly_as_before():
 
 
 def test_sd_and_se_that_disagree_are_inconsistent():
-    result = inconsistent_statistics(Statistics(mean=10.0, sd=1.0, se=1.0, count=4))
+    result = inconsistent_statistics(Statistics(mean=10.0, sd=1.2, se=1.1, count=4))
     assert result is not None
     # Reported values and the implied standard deviations are kept apart.
     assert result.context == {
-        "reported": {"sd": 1.0, "se": 1.0},
-        "implied_sd": {"sd": 1.0, "se": 2.0},
+        "reported": {"sd": 1.2, "se": 1.1},
+        "implied_sd": {"sd": 1.2, "se": 2.2},
         "implied_sigma_log": {},
         "disagreeing": [["sd", "se"]],
     }
-    assert result.message == "sd is 1, but se 1 implies sd 2"
+    assert result.message == "sd is 1.2, but se 1.1 implies sd 2.2"
     assert result.field == "sd"
 
 
@@ -206,8 +210,8 @@ def test_sd_and_se_that_agree_are_consistent():
 
 
 def test_effective_count_argument_is_used_when_the_record_has_none():
-    assert inconsistent_statistics(Statistics(sd=1.0, se=1.0), count=4)
-    assert not inconsistent_statistics(Statistics(sd=2.0, se=1.0), count=4)
+    assert inconsistent_statistics(Statistics(sd=1.2, se=1.1), count=4)
+    assert not inconsistent_statistics(Statistics(sd=2.2, se=1.1), count=4)
 
 
 def test_cv_is_checked_against_sd_and_se():
@@ -309,10 +313,10 @@ def test_arithmetic_check_needs_the_inputs_of_each_conversion():
 
 
 def test_arithmetic_check_tolerates_two_percent_relative_difference():
-    assert not inconsistent_statistics(Statistics(sd=2.0, se=1.01, count=4))
-    assert not inconsistent_statistics(Statistics(sd=2.0, se=0.99, count=4))
-    assert inconsistent_statistics(Statistics(sd=2.0, se=1.05, count=4))
-    assert inconsistent_statistics(Statistics(sd=2.0, se=0.95, count=4))
+    assert not inconsistent_statistics(Statistics(sd=2.01, se=1.01, count=4))
+    assert not inconsistent_statistics(Statistics(sd=2.01, se=0.99, count=4))
+    assert inconsistent_statistics(Statistics(sd=2.01, se=1.05, count=4))
+    assert inconsistent_statistics(Statistics(sd=2.01, se=0.95, count=4))
     # Precise values: 2.04 implied sd against 2 differs by just under 2 percent.
     assert not inconsistent_statistics(Statistics(sd=2.0, se=1.02, count=4))
     assert inconsistent_statistics(Statistics(sd=2.0001, se=1.0215, count=4))
@@ -332,14 +336,54 @@ def test_rounding_of_the_reported_digits_is_tolerated():
 
 
 def test_rounding_uncertainty_of_cv_includes_the_mean():
-    # cv 7 % (6.5 to 7.5) of mean 3.0 (2.95 to 3.05) implies sd 0.21 with the
-    # uncertainty 0.005 * 3 + 0.07 * 0.05 = 0.0185; sd 0.228 adds 0.0005.
-    assert not inconsistent_statistics(Statistics(mean=3.0, cv=0.07, sd=0.228))
-    assert inconsistent_statistics(Statistics(mean=3.0, cv=0.07, sd=0.231))
+    # cv 7 % (6.5 to 7.5 %) of mean 3.1 (3.05 to 3.15) implies sd 0.217 with
+    # the uncertainty 0.005 * 3.1 + 0.07 * 0.05 = 0.019; sd 0.235 adds 0.0005.
+    assert not inconsistent_statistics(Statistics(mean=3.1, cv=0.07, sd=0.235))
+    assert inconsistent_statistics(Statistics(mean=3.1, cv=0.07, sd=0.238))
     # The percent conversion leaves floating noise that is not a reported digit.
     noisy = 7.0 / 100 / 100
     assert repr(noisy) != "0.0007"
     assert not inconsistent_statistics(Statistics(mean=300.0, cv=noisy, sd=0.215))
+
+
+def test_a_whole_number_counts_its_units_place():
+    # A reported 2 means 1.5 to 2.5: se 1.2 with the count 4 (sd 2.4) agrees,
+    # se 1.4 (sd 2.8) does not.
+    assert inconsistent_statistics(Statistics(sd=2.0, se=1.2, count=4)) is None
+    assert inconsistent_statistics(Statistics(sd=2.0, se=1.4, count=4))
+    # Half a unit of the last place: whole numbers, including trailing zeros,
+    # count their units place.
+    assert [_half_unit(value) for value in (2.0, 1200.0, 0.25, 1e-05)] == [
+        0.5,
+        0.5,
+        0.005,
+        pytest.approx(5e-06),
+    ]
+
+
+@pytest.mark.parametrize(
+    ("cv", "inside", "outside"),
+    [
+        # cv 20 % means 19.5 to 20.5 %: sd 2 of mean 10 (9.5 to 10.5) give
+        # 2 +- 0.15, and the reported sd adds 0.005.
+        (0.2, 2.15, 2.16),
+        # cv 30 %: 3 +- 0.2.
+        (0.3, 3.19, 3.21),
+    ],
+)
+def test_cv_rounds_in_percent(cv, inside, outside):
+    assert inconsistent_statistics(Statistics(mean=10.0, cv=cv, sd=inside)) is None
+    assert inconsistent_statistics(Statistics(mean=10.0, cv=cv, sd=outside))
+    # cv 20 % against sd 2.5 at mean 10 is far apart.
+    assert inconsistent_statistics(Statistics(mean=10.0, cv=0.2, sd=2.5))
+
+
+def test_gcv_rounds_in_percent():
+    # gcv 50 % means 49.5 to 50.5 % (sigma_log 0.4724 +- 0.0042); gsd 1.61
+    # agrees, gsd 1.62 is outside 2 percent, and gsd 1.55 is far apart.
+    assert inconsistent_statistics(Statistics(gsd=1.61, gcv=0.5)) is None
+    assert inconsistent_statistics(Statistics(gsd=1.62, gcv=0.5))
+    assert inconsistent_statistics(Statistics(gsd=1.55, gcv=0.5))
 
 
 def test_zero_spread_reported_twice_is_consistent():
@@ -390,20 +434,20 @@ def test_geometric_error_bar_is_checked_against_gsd_and_gcv():
     statistics = Statistics(gmean=2.0, error_bar=2.6, error_type="gsd", gcv=0.267)
     assert inconsistent_statistics(statistics) is None
     result = inconsistent_statistics(
-        Statistics(gmean=2.0, error_bar=2.6, error_type="gsd", gsd=1.6, gcv=0.267)
+        Statistics(gmean=2.05, error_bar=2.665, error_type="gsd", gsd=1.6, gcv=0.267)
     )
     assert result is not None
     assert result.disagreeing == [("gsd", "gcv"), ("gsd", "error_bar")]
     assert result.field == "gsd"
     assert result.message == (
         "gsd is 1.6, but gcv 26.7% implies gsd 1.3; "
-        "gsd is 1.6, but error_bar 2.6 (gsd) implies gsd 1.3"
+        "gsd is 1.6, but error_bar 2.665 (gsd) implies gsd 1.3"
     )
 
 
 def test_geometric_and_arithmetic_families_are_reported_together():
     result = inconsistent_statistics(
-        Statistics(mean=10.0, sd=1.0, se=1.0, gsd=1.3, gcv=0.5, count=4)
+        Statistics(mean=10.0, sd=1.2, se=1.1, gsd=1.3, gcv=0.5, count=4)
     )
     assert result is not None
     assert result.disagreeing == [("sd", "se"), ("gsd", "gcv")]

@@ -83,23 +83,23 @@ def test_group_characteristic_gets_the_same_completion(valid_study, vocabulary):
 
 
 def test_inconsistent_sd_and_se_are_reported_as_a_warning(valid_study, vocabulary):
-    study = with_statistics(valid_study, mean=10.0, sd=1.0, se=1.0)
+    study = with_statistics(valid_study, mean=10.0, sd=1.2, se=1.1)
     prepared = prepare_study(study, vocabulary)
     assert prepared.report.valid
     (issue,) = warnings(prepared)
     assert issue.severity == "warning"
     assert issue.category == "scientific"
     assert issue.stage == "validate"
-    assert issue.message == "sd is 1, but se 1 implies sd 2"
+    assert issue.message == "sd is 1.2, but se 1.1 implies sd 2.2"
     assert issue.context == {
-        "reported": {"sd": 1.0, "se": 1.0},
-        "implied_sd": {"sd": 1.0, "se": 2.0},
+        "reported": {"sd": 1.2, "se": 1.1},
+        "implied_sd": {"sd": 1.2, "se": 2.2},
         "implied_sigma_log": {},
         "disagreeing": [["sd", "se"]],
     }
     assert prepared.report.warning_count == 1
     statistics = normalized(prepared.study, "m1").statistics
-    assert (statistics.sd, statistics.se) == (1.0, 1.0)
+    assert (statistics.sd, statistics.se) == (1.2, 1.1)
 
 
 def test_consistent_sd_and_se_do_not_warn(valid_study, vocabulary):
@@ -116,14 +116,14 @@ def test_inconsistent_gsd_and_gcv_are_reported_as_a_warning(valid_study, vocabul
 def test_one_warning_per_record_even_when_both_families_disagree(
     valid_study, vocabulary
 ):
-    study = with_statistics(valid_study, mean=10.0, sd=1.0, se=1.0, gsd=1.3, gcv=0.5)
+    study = with_statistics(valid_study, mean=10.0, sd=1.2, se=1.1, gsd=1.3, gcv=0.5)
     assert len(warnings(prepare_study(study, vocabulary))) == 1
 
 
 def test_warning_points_to_the_source_record(valid_study, vocabulary):
     from pkdb.schemas.source import SourceLocation
 
-    study = with_statistics(valid_study, mean=10.0, sd=1.0, se=1.0)
+    study = with_statistics(valid_study, mean=10.0, sd=1.2, se=1.1)
     study.measurements[0].source = SourceLocation(file="outputs.tsv", row=7)
     (issue,) = warnings(prepare_study(study, vocabulary))
     assert issue.source.row == 7
@@ -133,7 +133,7 @@ def test_warning_points_to_the_outlier_statistic(valid_study, vocabulary):
     from pkdb.schemas.source import SourceLocation
 
     # cv agrees with sd; se disagrees with both.
-    study = with_statistics(valid_study, mean=10.0, sd=1.0, se=1.0, cv=0.1)
+    study = with_statistics(valid_study, mean=10.5, sd=1.05, se=1.1, cv=0.1)
     source = SourceLocation(file="outputs.tsv", sheet="outputs", row=7)
     source._columns.update(sd="O", se="P", cv="Q")
     source._headers.update(sd="sd", se="se", cv="cv")
@@ -167,7 +167,7 @@ def test_warning_checks_the_reported_values_before_unit_conversion(
 
 
 def test_warning_survives_a_failed_preparation(valid_study, vocabulary):
-    study = with_statistics(valid_study, mean=10.0, sd=1.0, se=1.0)
+    study = with_statistics(valid_study, mean=10.0, sd=1.2, se=1.1)
     study.measurements.append(
         Measurement(
             key="bad",

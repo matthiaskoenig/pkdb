@@ -175,10 +175,21 @@ def _half_unit(value: float) -> float:
 
     The place comes from the shortest decimal representation (repr) of the
     value, rounded to 15 significant digits first, so that the noise of a
-    conversion such as percent to fraction does not count as a reported digit.
+    conversion does not count as a reported digit. A whole number counts its
+    units place: a reported 2 means 1.5 to 2.5.
     """
-    exponent = Decimal(repr(float(f"{value:.15g}"))).as_tuple().exponent
-    return 0.5 * 10.0 ** int(exponent)
+    text = repr(float(f"{value:.15g}"))
+    if text.endswith(".0"):
+        return 0.5
+    return 0.5 * 10.0 ** int(Decimal(text).as_tuple().exponent)
+
+
+def _half_percent(fraction: float) -> float:
+    """Half a unit of the last place of a fraction that tables give in percent.
+
+    cv and gcv are entered in percent, so 20 % (0.2) means 19.5 to 20.5 %.
+    """
+    return _half_unit(fraction * 100) / 100
 
 
 def _text(value: float, digits: int = 15) -> str:
@@ -232,7 +243,7 @@ def _implied_spreads(statistics: Statistics, count: int | None) -> dict[str, _Im
             "cv",
             "arithmetic",
             cv * abs(mean),
-            _half_unit(cv) * abs(mean) + abs(cv) * _half_unit(mean),
+            _half_percent(cv) * abs(mean) + abs(cv) * _half_unit(mean),
             cv,
         )
     if gsd is not None and gsd >= 1:
@@ -242,7 +253,7 @@ def _implied_spreads(statistics: Statistics, count: int | None) -> dict[str, _Im
             "gcv",
             "geometric",
             math.sqrt(math.log1p(gcv**2)),
-            _sigma_log_uncertainty(gcv) * _half_unit(gcv),
+            _sigma_log_uncertainty(gcv) * _half_percent(gcv),
             gcv,
         )
     error_type, error_bar = statistics.error_type, statistics.error_bar
