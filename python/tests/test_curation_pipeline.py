@@ -335,3 +335,97 @@ def test_a_failed_reference_lookup_still_syncs_the_workbook(workspace, sf_vocabu
     assert row(engine)["sync"]["status"] == "in_sync"
     settle(engine)
     assert not engine.queue
+
+
+def test_closing_the_workbook_keeps_a_queued_upload(workspace, sf_vocabulary):
+    engine, folder = workspace
+    assert format_folder(folder).ok
+    assert sync_study(folder, sf_vocabulary).ok
+    engine.scan()
+    assert [job["status"] for job in run_all(engine)] == ["succeeded"]
+    engine.offline = False
+    engine.endpoint = "https://example.test"
+    engine.api_key = "private-api-key"
+    engine.account = "curator"
+    engine.can_upload = True
+    engine.set_mode(["caffeine/Example"], "upload")
+    lock = folder / f".~lock.{folder.name}.xlsx#"
+    lock.write_text("open")
+    set_mean(folder, "timecourses_Fig1.tsv", "6")
+    engine.scan()
+    settle(engine)
+    [upload] = engine.queue.values()
+    assert upload["action"] == "upload"
+    lock.unlink()
+    engine.scan()
+    assert row(engine)["sync"]["status"] == "changed"
+    settle(engine)
+    # The queued upload syncs, and so regenerates, the closed workbook itself.
+    assert list(engine.queue.values()) == [upload]
+    assert upload["status"] == "queued"
+
+
+def test_a_workbook_closed_while_the_job_validates_is_regenerated(
+    workspace, sf_vocabulary, monkeypatch
+):
+    engine, folder = workspace
+    assert format_folder(folder).ok
+    assert sync_study(folder, sf_vocabulary).ok
+    lock = folder / f".~lock.{folder.name}.xlsx#"
+    lock.write_text("open")
+    set_mean(folder, "timecourses_Fig1.tsv", "6")
+    engine.scan()
+    real_prepare = jobs.prepare
+
+    def preparing(*args, **kwargs):
+        # The watcher sees the workbook close while this job runs.
+        lock.unlink()
+        engine.scan()
+        return real_prepare(*args, **kwargs)
+
+    monkeypatch.setattr(jobs, "prepare", preparing)
+    settle(engine)
+    assert run_next(engine)["status"] == "succeeded"
+    assert engine.studies["caffeine/Example"]["_pending"] is True
+    monkeypatch.setattr(jobs, "prepare", real_prepare)
+    assert [job["action"] for job in run_all(engine)] == ["validate"]
+    assert workbook_mean(folder, "timecourses_Fig1") == 6
+    assert row(engine)["sync"]["status"] == "in_sync"
+
+
+def test_a_workbook_closed_during_an_upload_keeps_the_upload_pending(
+    workspace, sf_vocabulary, monkeypatch
+):
+    engine, folder = workspace
+    assert format_folder(folder).ok
+    assert sync_study(folder, sf_vocabulary).ok
+    engine.scan()
+    assert [job["status"] for job in run_all(engine)] == ["succeeded"]
+    engine.offline = False
+    engine.endpoint = "https://example.test"
+    engine.api_key = "private-api-key"
+    engine.account = "curator"
+    engine.can_upload = True
+    engine.set_mode(["caffeine/Example"], "upload")
+    monkeypatch.setattr(engine, "_vocabulary", lambda client, **kwargs: sf_vocabulary)
+    lock = folder / f".~lock.{folder.name}.xlsx#"
+    lock.write_text("open")
+    set_mean(folder, "timecourses_Fig1.tsv", "6")
+    engine.scan()
+    real_prepare = jobs.prepare
+
+    def preparing(*args, **kwargs):
+        # The watcher sees the workbook close, then the curator pauses before the transfer.
+        lock.unlink()
+        engine.scan()
+        engine.paused = True
+        return real_prepare(*args, **kwargs)
+
+    monkeypatch.setattr(jobs, "prepare", preparing)
+    settle(engine)
+    job = run_next(engine)
+    assert job["action"] == "upload" and job["status"] == "canceled"
+    engine.paused = False
+    settle(engine)
+    # The edit is still uploaded; that job's sync regenerates the workbook.
+    assert [queued["action"] for queued in engine.queue.values()] == ["upload"]

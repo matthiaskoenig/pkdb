@@ -60,13 +60,6 @@ def describe(pipeline: PipelineResult) -> str | None:
     return text[0].upper() + text[1:] if text else None
 
 
-def sync_later(row: dict) -> None:
-    """Queue a validation whose sync regenerates the closed workbook; it needs no upload."""
-    if not row["_pending"]:
-        # An initial job only validates, whatever the save action of the study.
-        row.update(_pending=True, _initial=True, _changed_at=time.monotonic())
-
-
 def issue_counts(report: dict) -> dict:
     """The errors and warnings of a report, from its counts when it has them."""
     issues = report.get("issues", [])
@@ -238,6 +231,16 @@ class JobsMixin(EngineState):
                         self.active = None
                         self._save()
 
+    def _sync_later(self, row):
+        """Queue a validation whose sync regenerates the closed workbook; it needs no upload.
+
+        A pending or queued job of the study syncs, and so regenerates, the workbook itself.
+        """
+        if row["_pending"] or row["id"] in self.queue:
+            return
+        # An initial job only validates, whatever the save action of the study.
+        row.update(_pending=True, _initial=True, _changed_at=time.monotonic())
+
     def _local_vocabulary(self):
         """The vocabulary of local work: the cached one of the endpoint, else the bundled one."""
         with self.lock:
@@ -291,6 +294,8 @@ class JobsMixin(EngineState):
                 return
         expected = row["_fingerprint"]
         outcome = {"persistence": "not_attempted", "report": {"issues": []}}
+        # The sync found the workbook open, so it could not give it the tables.
+        found_open = False
 
         def progress(event):
             with self.lock:
@@ -337,6 +342,9 @@ class JobsMixin(EngineState):
                 synced = self._sync_state(row["_folder"])
                 with self.lock:
                     row["sync"] = synced
+            found_open = bool(pipeline.syncs) and (
+                pipeline.syncs[-1].workbook_action == "close_to_update"
+            )
             outcome["pipeline_issues"] = [
                 issue.model_dump(mode="json") for issue in pipeline.issues
             ]
@@ -359,14 +367,6 @@ class JobsMixin(EngineState):
             if synced["changes"] or synced["conflicts"]:
                 # The workbook was saved after the sync read it, so the tables are stale.
                 raise SourceChangedError("A workbook save superseded this validation")
-            if (
-                synced["status"] == "changed"
-                and pipeline.syncs
-                and pipeline.syncs[-1].workbook_action == "close_to_update"
-            ):
-                # The sync found the workbook open and it is closed now.
-                with self.lock:
-                    sync_later(row)
             if reference_error is not None:
                 raise reference_error
             if pipeline.stopped == "format":
@@ -539,6 +539,9 @@ class JobsMixin(EngineState):
             row["status"] = job["status"]
         finally:
             with self.lock:
+                if found_open and row["sync"]["status"] == "changed":
+                    # The workbook was closed during this job, which scans skip.
+                    self._sync_later(row)
                 job["persistence"] = outcome["persistence"]
                 job["report_id"] = job["id"]
                 outcome.update(job=job.copy(), endpoint=job["endpoint"])

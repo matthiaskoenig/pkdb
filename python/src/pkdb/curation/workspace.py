@@ -2,7 +2,7 @@
 
 Reads and writes engine attributes: lock, root, studies, modes, mappings, recent_workspaces,
 reference_previews, paused, queue, stop, wakeup, state_dir. Uses engine methods _save,
-_enqueue_one, snapshot and _local_vocabulary.
+_enqueue_one, snapshot, _local_vocabulary and _sync_later.
 """
 
 import json
@@ -12,7 +12,7 @@ from collections import Counter
 from pathlib import Path
 from uuid import uuid4
 
-from pkdb.curation.jobs import fingerprint, sync_later
+from pkdb.curation.jobs import fingerprint
 from pkdb.curation.metadata import reference_summary
 from pkdb.curation.state import EngineState
 from pkdb.curation.studies import study_summary
@@ -233,9 +233,10 @@ class WorkspaceMixin(EngineState):
                         # An initial scan validates locally, never uploads a backlog.
                         row["_pending"] = True
                         row["_initial"] = initial or old is None
-                    if closed and behind:
-                        # The workbook lacks the tables and is closed now: sync it.
-                        sync_later(row)
+                    if closed and behind and self.active != row["id"]:
+                        # The workbook lacks the tables and is closed now: sync it. A
+                        # running job handles a close itself when it ends.
+                        self._sync_later(row)
                     for job in self.jobs:
                         if (
                             job.get("study_id") == row["id"]
