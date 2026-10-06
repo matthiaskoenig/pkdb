@@ -110,7 +110,7 @@ def _print_human(label: str, result, check: bool) -> None:
     print_issues(result.issues)
 
 
-def print_issues(issues) -> None:
+def print_issues(issues, *, file=None) -> None:
     """Print issues for people: location, message and code, then each suggestion.
 
     Candidates of a hint are printed one per line, such as lines to add to a file.
@@ -119,15 +119,18 @@ def print_issues(issues) -> None:
 
     for issue in issues:
         where = _location(issue.source)
-        say(f"  {where + ': ' if where else ''}{issue.message} [{issue.code}]")
+        say(
+            f"  {where + ': ' if where else ''}{issue.message} [{issue.code}]",
+            file=file,
+        )
         for suggestion in issue.suggestions:
             if suggestion.message == DID_YOU_MEAN:
                 candidates = ", ".join(map(str, suggestion.candidates))
-                say(f"    Did you mean: {candidates}")
+                say(f"    Did you mean: {candidates}", file=file)
                 continue
-            say(f"    {suggestion.message}")
+            say(f"    {suggestion.message}", file=file)
             for candidate in suggestion.candidates:
-                say(f"      {candidate}")
+                say(f"      {candidate}", file=file)
 
 
 def _format(args) -> int:

@@ -432,13 +432,11 @@ def _add(args) -> int:
         )
         print_issues(result.issues)
         return 0
-    errors = [issue for issue in result.issues if issue.severity == "error"]
     # The sync report comes first, also when stdout is a pipe.
     sys.stdout.flush()
-    if not errors:
+    if any(issue.severity == "error" for issue in result.issues):
+        say(f"Cannot add {table}: fix the problems below", file=sys.stderr)
+        print_issues(result.issues, file=sys.stderr)
+    else:
         say(f"Cannot add {table}: fix the problems of the sync first", file=sys.stderr)
-    for issue in errors:
-        say(f"Cannot add {table}: {issue.message} [{issue.code}]", file=sys.stderr)
-        for suggestion in issue.suggestions:
-            say(f"  {suggestion.message}", file=sys.stderr)
     return 1

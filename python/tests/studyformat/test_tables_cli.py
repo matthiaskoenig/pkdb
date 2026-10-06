@@ -514,7 +514,12 @@ def test_add_rejects_a_table_twice_and_names_differing_in_case(
     before = snapshot(study)
 
     assert tables("add", study, "outputs_TabA", *vocabulary) == 1
-    assert "outputs_TabA already exists" in capsys.readouterr().err
+    err = capsys.readouterr().err.splitlines()
+    assert err == [
+        "Cannot add outputs_TabA: fix the problems below",
+        "  Example.xlsx, sheet outputs_TabA: The sheet outputs_TabA already exists "
+        "in Example.xlsx [table_exists]",
+    ]
     assert tables("add", study, "outputs_Taba", *vocabulary) == 1
     assert "already exists" in capsys.readouterr().err
     assert snapshot(study) == before
@@ -526,7 +531,11 @@ def test_add_needs_a_closed_workbook(study, vocabulary, capsys):
 
     assert tables("add", study, "outputs_Tab3", *vocabulary) == 1
 
-    assert CLOSE_FIRST in capsys.readouterr().err
+    err = capsys.readouterr().err.splitlines()
+    assert err[0] == "Cannot add outputs_Tab3: fix the problems below"
+    assert err[1].startswith("  Example.xlsx: Example.xlsx is open")
+    assert CLOSE_FIRST in err[1] and err[1].endswith("[workbook_open]")
+    assert err[2] == f"    If the workbook is not open, delete {study / LOCK}"
     assert snapshot(study) == before
 
 
