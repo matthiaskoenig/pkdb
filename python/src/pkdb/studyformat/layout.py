@@ -6,6 +6,7 @@ from pathlib import Path
 
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.source_files import ignored_source
+from pkdb.studyformat.digitize import parse_digitization_file
 from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.raw import parse_raw_file
 from pkdb.studyformat.tables import (
@@ -69,6 +70,7 @@ class Layout:
     files: frozenset[str]
     tables: list[TableFile] = field(default_factory=list)
     raw_tables: list[RawFile] = field(default_factory=list)
+    digitizations: list[RawFile] = field(default_factory=list)
     attachments: list[str] = field(default_factory=list)
     issues: list[ValidationIssue] = field(default_factory=list)
 
@@ -111,7 +113,14 @@ def scan_folder(folder: Path) -> Layout:
     # The study and substance names come from the path, so make it absolute first.
     folder = Path(folder).resolve()
     study = folder.name
-    files, tables, raw_tables, attachments, issues = set(), [], [], [], []
+    files, tables, raw_tables, digitizations, attachments, issues = (
+        set(),
+        [],
+        [],
+        [],
+        [],
+        [],
+    )
     if study in RESERVED_NAMES:
         issues.append(
             make_issue(
@@ -148,6 +157,9 @@ def scan_folder(folder: Path) -> Layout:
             continue
         if (source := parse_raw_file(name, study)) is not None:
             raw_tables.append(RawFile(name, source))
+            continue
+        if (source := parse_digitization_file(name, study)) is not None:
+            digitizations.append(RawFile(name, source))
             continue
         suffix = path.suffix.lower()
         if name.startswith("."):
@@ -186,6 +198,7 @@ def scan_folder(folder: Path) -> Layout:
         key=lambda table: (KIND_ORDER[table.spec.kind], natural_key(table.source or ""))
     )
     raw_tables.sort(key=lambda raw: natural_key(raw.source))
+    digitizations.sort(key=lambda item: natural_key(item.source))
     issues.extend(table_name_issues([*tables, *raw_tables]))
     return Layout(
         folder,
@@ -194,6 +207,7 @@ def scan_folder(folder: Path) -> Layout:
         frozenset(files),
         tables,
         raw_tables,
+        digitizations,
         attachments,
         issues,
     )

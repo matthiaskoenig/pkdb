@@ -25,6 +25,8 @@ WARNINGS = frozenset(
         "workbook_changed",
         "workbook_not_ignored",
         "workbook_tracked",
+        "unknown_dataset",
+        "digitized_mismatch",
     }
 )
 _GROUPS = {
@@ -40,7 +42,11 @@ _GROUPS = {
         "duplicate_table_name",
         "invalid_table_name",
         "table_exists",
+        "digitization_invalid",
+        "digitization_unsupported",
+        "digitization_outside_image",
     ),
+    "digitization": ("unknown_dataset", "digitized_mismatch"),
     "format": (
         "invalid_encoding",
         "merge_conflict",

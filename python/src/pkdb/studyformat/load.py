@@ -10,6 +10,7 @@ from pydantic import BaseModel, ValidationError
 
 from pkdb.schemas.validation import ValidationIssue, fail
 from pkdb.studyformat.cells import canonical_cell, parse_cell
+from pkdb.studyformat.digitize import LoadedDigitization, load_digitization
 from pkdb.studyformat.issues import LISTED, IssueCap, make_issue
 from pkdb.studyformat.jsonio import JsonFileError, load_json
 from pkdb.studyformat.layout import Layout, scan_folder
@@ -59,6 +60,8 @@ STRUCTURAL = frozenset(
         "invalid_study_json",
         "invalid_review_json",
         "invalid_reference_json",
+        "digitization_invalid",
+        "digitization_unsupported",
     }
 )
 
@@ -105,6 +108,7 @@ class LoadedStudy:
     layout: Layout
     tables: list[LoadedTable] = field(default_factory=list)
     raw_tables: list[LoadedRaw] = field(default_factory=list)
+    digitizations: list[LoadedDigitization] = field(default_factory=list)
     # Table kinds that cannot be used: the file failed to load, or a required
     # table is missing. Nothing refers into them.
     broken: set[str] = field(default_factory=set)
@@ -126,6 +130,9 @@ class LoadedStudy:
 
     def raw(self, file: str) -> LoadedRaw | None:
         return next((raw for raw in self.raw_tables if raw.file == file), None)
+
+    def digitization(self, source: str) -> LoadedDigitization | None:
+        return next((d for d in self.digitizations if d.source == source), None)
 
     def of_kind(self, kind: str) -> list[LoadedTable]:
         return [table for table in self.tables if table.kind == kind]
@@ -447,6 +454,15 @@ def load_study(
         study.issues.extend(issues)
         if raw is not None:
             study.raw_tables.append(raw)
+    for digitization_file in layout.digitizations:
+        loaded, issues = load_digitization(
+            digitization_file.name,
+            (layout.folder / digitization_file.name).read_bytes(),
+            digitization_file.source,
+        )
+        study.issues.extend(issues)
+        if loaded is not None:
+            study.digitizations.append(loaded)
     present = {table_file.spec.kind for table_file in layout.tables}
     study.broken.update(
         spec.kind
