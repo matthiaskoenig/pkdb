@@ -380,11 +380,10 @@ table {
 .science-table th {
   background: rgba(var(--v-theme-primary), 0.05);
   font-size: 0.75rem;
-  white-space: nowrap;
 }
 .science-table th,
 .science-table td {
-  padding: 14px 16px;
+  padding: 14px 12px;
   border-bottom: 1px solid rgba(var(--v-border-color), 0.08);
   max-width: 300px;
   overflow-wrap: break-word;
@@ -401,9 +400,12 @@ table {
 .science-table tbody tr:hover {
   background: rgba(var(--v-theme-primary), 0.035);
 }
+/* A sortable title keeps its arrow; other titles wrap between words when the
+   table needs the room. */
 .sort-button {
   text-align: left;
   font-weight: 700;
+  white-space: nowrap;
 }
 .detail-button {
   color: rgb(var(--v-theme-primary));

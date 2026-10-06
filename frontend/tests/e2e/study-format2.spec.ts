@@ -150,11 +150,14 @@ test.describe("a curator reads the study format 2 study", () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     const scroll = page.locator(".table-scroll");
     await expect(scroll).toBeVisible();
-    expect(
-      await scroll.evaluate(
-        (element) => element.scrollWidth <= element.clientWidth,
-      ),
-    ).toBe(true);
+    // The table lays out again after the resize.
+    await expect
+      .poll(() =>
+        scroll.evaluate(
+          (element) => element.scrollWidth <= element.clientWidth,
+        ),
+      )
+      .toBe(true);
     const table = page.getByRole("table");
     const nb = "\u00a0";
     await expect(table).toContainText(`0.004${nb}×/÷${nb}1.5${nb}(GSD)`);
@@ -307,9 +310,15 @@ test.describe("a curator reads the study format 2 study", () => {
     await expect(
       page.getByRole("button", { name: `View ${sid}`, exact: true }),
     ).toBeVisible();
-    await expect(
-      page.getByRole("combobox", { name: "PKDB identifiers", exact: true }),
-    ).toBeVisible();
+    // The filter field shows the selected identifier; its text input only
+    // takes room while the field has focus.
+    const field = page.locator(".v-input").filter({
+      has: page.getByRole("combobox", {
+        name: "PKDB identifiers",
+        exact: true,
+      }),
+    });
+    await expect(field.locator(".v-chip")).toHaveText("PKDB09901");
   });
 
   test("timecourse traces carry the timecourse label and the geometric SD is a multiplicative band", async () => {
