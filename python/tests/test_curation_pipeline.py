@@ -429,3 +429,65 @@ def test_a_workbook_closed_during_an_upload_keeps_the_upload_pending(
     settle(engine)
     # The edit is still uploaded; that job's sync regenerates the workbook.
     assert [queued["action"] for queued in engine.queue.values()] == ["upload"]
+
+
+def test_a_workbook_that_cannot_be_replaced_is_not_requeued(
+    workspace, sf_vocabulary, monkeypatch
+):
+    from pkdb.studyformat import sync
+
+    engine, folder = workspace
+    assert format_folder(folder).ok
+    assert sync_study(folder, sf_vocabulary).ok
+    real_atomic_bytes = sync.atomic_bytes
+
+    def atomic_bytes(path, data):
+        if path == workbook_path(folder):
+            # Windows keeps an open workbook locked, without a lock file of ours.
+            raise PermissionError(13, "Permission denied", str(path))
+        return real_atomic_bytes(path, data)
+
+    monkeypatch.setattr(sync, "atomic_bytes", atomic_bytes)
+    set_mean(folder, "timecourses_Fig1.tsv", "6")
+    engine.scan()
+    statuses = []
+    for _ in range(5):
+        settle(engine)
+        if not engine.queue:
+            break
+        statuses.append(run_next(engine)["status"])
+        engine.scan()
+    assert statuses == ["succeeded"]
+    assert row(engine)["sync"] == {
+        "status": "workbook_open",
+        "changes": 0,
+        "conflicts": 0,
+    }
+    assert workbook_mean(folder, "timecourses_Fig1") == 2
+
+
+def test_a_workbook_closed_during_a_failed_job_is_regenerated(
+    workspace, sf_vocabulary, monkeypatch
+):
+    engine, folder = workspace
+    assert format_folder(folder).ok
+    assert sync_study(folder, sf_vocabulary).ok
+    lock = folder / f".~lock.{folder.name}.xlsx#"
+    lock.write_text("open")
+    set_mean(folder, "timecourses_Fig1.tsv", "6")
+    engine.scan()
+    assert row(engine)["sync"]["status"] == "workbook_open"
+    real_pipeline = jobs.sync_and_format
+
+    def failing(path, vocabulary, **kwargs):
+        lock.unlink()
+        raise OSError("disk unavailable")
+
+    monkeypatch.setattr(jobs, "sync_and_format", failing)
+    settle(engine)
+    assert run_next(engine)["status"] == "failed"
+    assert engine.studies["caffeine/Example"]["_pending"] is True
+    monkeypatch.setattr(jobs, "sync_and_format", real_pipeline)
+    assert [job["action"] for job in run_all(engine)] == ["validate"]
+    assert workbook_mean(folder, "timecourses_Fig1") == 6
+    assert row(engine)["sync"]["status"] == "in_sync"

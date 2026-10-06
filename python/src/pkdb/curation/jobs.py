@@ -28,6 +28,7 @@ from pkdb.studyformat import is_v2_folder
 from pkdb.studyformat.pipeline import PipelineResult, sync_and_format
 from pkdb.studyformat.revision import folder_lock
 from pkdb.studyformat.sync import conflict_data
+from pkdb.studyformat.workbook.base import open_lock, workbook_path
 
 
 def now():
@@ -294,8 +295,10 @@ class JobsMixin(EngineState):
                 return
         expected = row["_fingerprint"]
         outcome = {"persistence": "not_attempted", "report": {"issues": []}}
-        # The sync found the workbook open, so it could not give it the tables.
-        found_open = False
+        workbook = workbook_path(row["_folder"])
+        # A lock file of the workbook at the start or in the sync: closing it during
+        # this job, which scans skip, is handled when the job ends.
+        was_open = open_lock(workbook) is not None
 
         def progress(event):
             with self.lock:
@@ -342,9 +345,19 @@ class JobsMixin(EngineState):
                 synced = self._sync_state(row["_folder"])
                 with self.lock:
                     row["sync"] = synced
-            found_open = bool(pipeline.syncs) and (
-                pipeline.syncs[-1].workbook_action == "close_to_update"
-            )
+            last = pipeline.syncs[-1] if pipeline.syncs else None
+            was_open = was_open or (last is not None and last.lock is not None)
+            if (
+                last is not None
+                and last.workbook_action == "close_to_update"
+                and last.lock is None
+                and synced["status"] == "changed"
+                and not synced["changes"]
+            ):
+                # Replacing the workbook failed although no lock file shows it open.
+                synced = {**synced, "status": "workbook_open"}
+                with self.lock:
+                    row["sync"] = synced
             outcome["pipeline_issues"] = [
                 issue.model_dump(mode="json") for issue in pipeline.issues
             ]
@@ -539,8 +552,12 @@ class JobsMixin(EngineState):
             row["status"] = job["status"]
         finally:
             with self.lock:
-                if found_open and row["sync"]["status"] == "changed":
-                    # The workbook was closed during this job, which scans skip.
+                if (
+                    was_open
+                    and open_lock(workbook) is None
+                    and row["sync"]["status"] in {"changed", "workbook_open"}
+                ):
+                    # The workbook lacks the tables and was closed during this job.
                     self._sync_later(row)
                 job["persistence"] = outcome["persistence"]
                 job["report_id"] = job["id"]
