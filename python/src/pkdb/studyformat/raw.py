@@ -102,8 +102,11 @@ def load_raw(
     return LoadedRaw(file, source, rows), []
 
 
-def raw_grid(raw: LoadedRaw) -> list[tuple[str, ...]]:
-    """The canonical rows: padded to the widest row without trailing empty cells."""
+def raw_lines(raw: LoadedRaw) -> list[tuple[int, tuple[str, ...]]]:
+    """The canonical rows with their line numbers, as `raw_grid` keeps them.
+
+    A line number is that of the file, or the row of the sheet, it was read from.
+    """
     width = max(
         (
             max((index + 1 for index, cell in enumerate(row.cells) if cell), default=0)
@@ -112,10 +115,15 @@ def raw_grid(raw: LoadedRaw) -> list[tuple[str, ...]]:
         default=0,
     )
     return [
-        tuple((*row.cells, *([""] * width))[:width])
+        (row.line, tuple((*row.cells, *([""] * width))[:width]))
         for row in raw.rows
         if any(row.cells[:width])
     ]
+
+
+def raw_grid(raw: LoadedRaw) -> list[tuple[str, ...]]:
+    """The canonical rows: padded to the widest row without trailing empty cells."""
+    return [cells for _, cells in raw_lines(raw)]
 
 
 def render_raw(raw: LoadedRaw) -> str | None:

@@ -20,6 +20,7 @@ from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.formatter import subject_order, table_rows
 from pkdb.studyformat.issues import LISTED, IssueCap, column_letter, make_issue
 from pkdb.studyformat.load import STRUCTURAL, LoadedTable, RowLimit, load_table
+from pkdb.studyformat.raw import load_raw, parse_raw_file, raw_lines, render_raw
 from pkdb.studyformat.tables import TableSpec, parse_table_file
 from pkdb.studyformat.text import format_number, render_tsv
 from pkdb.studyformat.workbook.base import (
@@ -58,8 +59,9 @@ BASE_HINT = (
 )
 SHEET_HINT = (
     "Rename the sheet to subjects, interventions, characteristica or "
-    "<kind>_<source>, such as outputs_Tab2, or start its name with _ to keep it as "
-    "a scratch sheet."
+    "<kind>_<source>, such as outputs_Tab2, or <study>_<source> for the raw table "
+    "of a paper table, such as Example_Tab2, or start its name with _ to keep it "
+    "as a scratch sheet."
 )
 
 # The code, message and hint of an issue at a cell.
@@ -70,9 +72,10 @@ type Report = Callable[[Problem, int, int, str | None], None]
 
 @dataclass(frozen=True)
 class SheetTable:
-    """A data sheet as the canonical TSV text of its table file.
+    """A data or raw sheet as the canonical TSV text of its table file.
 
-    `rows[i]` is the sheet row of canonical line `i + 1`; `rows[0]` is 1, the header.
+    `rows[i]` is the sheet row of canonical line `i + 1`; for a data sheet,
+    `rows[0]` is 1, the header.
     """
 
     file: str
@@ -82,10 +85,11 @@ class SheetTable:
 
 @dataclass(frozen=True)
 class WorkbookContent:
-    """The tables of a workbook, its data sheets in workbook order, its base and issues.
+    """The tables of a workbook, its sheets in workbook order, its base and issues.
 
-    An optional table without rows is left out of `tables`, as if absent, but its
-    sheet is listed in `sheets`. `base` is None when `_base` is missing or invalid.
+    The sheets are the data and raw sheets. An optional table or a raw table
+    without rows is left out of `tables`, as if absent, but its sheet is listed in
+    `sheets`. `base` is None when `_base` is missing or invalid.
     """
 
     tables: dict[str, SheetTable]
@@ -305,6 +309,25 @@ def _lines(rows: Iterable[tuple[tuple, tuple]], report: Report) -> Iterator[byte
         yield ("\t".join(cells) + "\n").encode("utf-8")
 
 
+def _raw_lines(rows: Iterable[tuple[tuple, tuple]], report: Report) -> Iterator[bytes]:
+    """TSV lines of a raw sheet, one per sheet row, so that line numbers are sheet rows.
+
+    Every cell is read as its text. A raw table is as wide as its widest row, so
+    no value is outside the table.
+    """
+    for number, (formulas, values) in enumerate(rows, start=1):
+        cells: list[str] = []
+        for index, (formula, value) in enumerate(zip(formulas, values, strict=True)):
+            if value.value is None and formula.data_type != "f":
+                cells.append("")
+                continue
+            text, problem = _cell_text(formula, value)
+            cells.append(text)
+            if problem is not None:
+                report(problem, number, index, None)
+        yield ("\t".join(cells) + "\n").encode("utf-8")
+
+
 def _in_sheet(issue: ValidationIssue, workbook: str) -> ValidationIssue:
     """An issue of the table text of a sheet, located in the workbook.
 
@@ -317,20 +340,17 @@ def _in_sheet(issue: ValidationIssue, workbook: str) -> ValidationIssue:
     )
 
 
-def _read_sheet(
+def _read_lines[T](
     workbooks: tuple[Workbook, Workbook],
     workbook: str,
     name: str,
-    parsed: tuple[TableSpec, str | None],
-    study_name: str,
-    limit: RowLimit,
-) -> tuple[LoadedTable | None, list[ValidationIssue]]:
-    """Load a data sheet as a table; its cell issues and the structural issues.
+    lines: Callable[[Iterable[tuple[tuple, tuple]], Report], Iterator[bytes]],
+    load: Callable[[Iterator[bytes]], tuple[T | None, list[ValidationIssue]]],
+) -> tuple[T | None, list[ValidationIssue]]:
+    """Load the TSV lines of a sheet; its cell issues and the structural issues.
 
     The issues are located in the sheet of the workbook.
     """
-    file = f"{name}.tsv"
-    spec, source = parsed
     formulas, values = (book[name] for book in workbooks)
     issues: list[ValidationIssue] = []
     cap = IssueCap()
@@ -352,14 +372,7 @@ def _read_sheet(
             )
 
     rows = zip(_rows(formulas), _rows(values), strict=True)
-    table, found = load_table(
-        file,
-        _lines(rows, report),
-        spec,
-        source,
-        study=study_name,
-        limit=limit,
-    )
+    loaded, found = load(lines(rows, report))
     issues.extend(
         make_issue(
             code,
@@ -373,7 +386,54 @@ def _read_sheet(
     issues.extend(
         _in_sheet(issue, workbook) for issue in found if issue.code in STRUCTURAL
     )
-    return table, issues
+    return loaded, issues
+
+
+def _read_sheet(
+    workbooks: tuple[Workbook, Workbook],
+    workbook: str,
+    name: str,
+    parsed: tuple[TableSpec, str | None],
+    study_name: str,
+    limit: RowLimit,
+) -> tuple[LoadedTable | None, list[ValidationIssue]]:
+    """Load a data sheet as a table; its cell issues and the structural issues."""
+    file = f"{name}.tsv"
+    spec, source = parsed
+    return _read_lines(
+        workbooks,
+        workbook,
+        name,
+        _lines,
+        lambda lines: load_table(
+            file, lines, spec, source, study=study_name, limit=limit
+        ),
+    )
+
+
+def _read_raw_sheet(
+    workbooks: tuple[Workbook, Workbook],
+    workbook: str,
+    name: str,
+    source: str,
+    limit: RowLimit,
+) -> tuple[SheetTable | None, list[ValidationIssue]]:
+    """A raw sheet as the canonical text of its raw table, None without cells.
+
+    Its lines are read as those of the TSV file, so a cell reads as in the
+    file. The issues are those of the cells and of lines a TSV file cannot hold.
+    """
+    file = f"{name}.tsv"
+    raw, issues = _read_lines(
+        workbooks,
+        workbook,
+        name,
+        _raw_lines,
+        lambda lines: load_raw(file, lines, source, limit=limit),
+    )
+    if raw is None or (text := render_raw(raw)) is None:
+        return None, issues
+    return SheetTable(file, text, tuple(line for line, _ in raw_lines(raw))), issues
 
 
 def _read_base(
@@ -425,12 +485,14 @@ def _read(
     issues: list[ValidationIssue] = []
     worksheets = {sheet.title for sheet in values.worksheets}
     data: dict[str, tuple[TableSpec, str | None]] = {}
+    raw: dict[str, str] = {}
     for name in values.sheetnames:
         if name.startswith("_"):
             # `_lists`, `_base` and scratch sheets.
             continue
         parsed = parse_table_file(f"{name}.tsv")
-        if parsed is None or name not in worksheets:
+        source = parse_raw_file(f"{name}.tsv", study_name)
+        if (parsed is None and source is None) or name not in worksheets:
             issues.append(
                 make_issue(
                     "unknown_sheet",
@@ -440,8 +502,10 @@ def _read(
                     hint=SHEET_HINT,
                 )
             )
-        else:
+        elif parsed is not None:
             data[name] = parsed
+        elif source is not None:
+            raw[name] = source
     if SUBJECTS not in data:
         issues.append(
             make_issue(
@@ -464,19 +528,23 @@ def _read(
         if name == SUBJECTS:
             order = subject_order(table)
         read[name] = _sheet_table(table, study_name, order), found
+    for name, source in raw.items():
+        read[name] = _read_raw_sheet(workbooks, workbook, name, source, limit)
     tables: dict[str, SheetTable] = {}
-    for name in data:
+    # In workbook order.
+    sheets = tuple(name for name in values.sheetnames if name in read)
+    for name in sheets:
         sheet, found = read[name]
         if sheet is not None:
             tables[sheet.file] = sheet
         issues.extend(found)
-    return WorkbookContent(tables, tuple(data), base, issues)
+    return WorkbookContent(tables, sheets, base, issues)
 
 
 def read_workbook(
     path: Path, study_name: str, *, max_rows: int | None = None
 ) -> WorkbookContent:
-    """Read the data sheets of a workbook into the canonical text of their tables.
+    """Read the sheets of a workbook into the canonical text of their table files.
 
     Formula cells are read as the value the spreadsheet application saved. The
     file is read once, and both passes of openpyxl, with formulas and with

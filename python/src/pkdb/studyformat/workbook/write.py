@@ -25,6 +25,7 @@ from pkdb.domain.vocabulary import Vocabulary
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.columns import Column, ColumnType
 from pkdb.studyformat.issues import LISTED, IssueCap, column_letter, make_issue
+from pkdb.studyformat.raw import parse_raw_file
 from pkdb.studyformat.tables import (
     KIND_ORDER,
     TABLES,
@@ -72,6 +73,10 @@ COMMENT_WIDTH, COMMENT_CHARACTERS, COMMENT_LINE, COMMENT_MARGIN = 320, 48, 16, 1
 # The font of the cells, in bold; a font without a name looks different in LibreOffice.
 BOLD = copy(DEFAULT_FONT)
 BOLD.bold = True
+# A raw table holds text cells; columns past its widest row are text as well,
+# so that values typed there stay text.
+RAW_COLUMN = Column("cell", ColumnType.TEXT, "A cell of a raw table, kept as printed.")
+RAW_MARGIN = 10
 CELL_ISSUES = {
     "cell_too_long": "cells are longer than a spreadsheet cell",
     "illegal_character": "cells contain characters a workbook cannot hold",
@@ -99,11 +104,11 @@ class WorkbookError(Exception):
 
 @dataclass(frozen=True)
 class _Sheet:
-    # A data sheet: its table file, specification, source and canonical text,
-    # which is None for a sheet with the header only.
+    # A data or raw sheet: its file, specification (None for a raw table),
+    # source and canonical text, which is None for a sheet without rows.
     name: str
     file: str
-    spec: TableSpec
+    spec: TableSpec | None
     source: str | None
     text: str | None
 
@@ -220,8 +225,22 @@ def _comment(text: str) -> Comment:
     )
 
 
-def _plan(tables: Mapping[str, str], empty_sheets: Iterable[str]) -> list[_Sheet]:
-    """The data sheets in workbook order: the tables not split by source come first."""
+def _classify(file: str, study: str | None) -> tuple[TableSpec | None, str | None]:
+    """Specification and source of a table file; no specification for a raw table."""
+    if (parsed := parse_table_file(file)) is not None:
+        return parsed
+    if study is not None and (source := parse_raw_file(file, study)) is not None:
+        return None, source
+    raise ValueError(f"{file} is not a table file")
+
+
+def _plan(
+    tables: Mapping[str, str], empty_sheets: Iterable[str], study: str | None
+) -> list[_Sheet]:
+    """The sheets in workbook order.
+
+    The tables not split by source come first, the raw tables of the `study` last.
+    """
     files = [
         *tables,
         *(f"{name}.tsv" for name in empty_sheets),
@@ -230,9 +249,7 @@ def _plan(tables: Mapping[str, str], empty_sheets: Iterable[str]) -> list[_Sheet
     # Excel compares sheet names ignoring case.
     sheets: dict[str, _Sheet] = {}
     for file in files:
-        parsed = parse_table_file(file)
-        if parsed is None:
-            raise ValueError(f"{file} is not a table file")
+        spec, source = _classify(file, study)
         name = file.removesuffix(".tsv")
         if len(name) > SHEET_NAME_LIMIT:
             raise WorkbookError(
@@ -241,7 +258,7 @@ def _plan(tables: Mapping[str, str], empty_sheets: Iterable[str]) -> list[_Sheet
                 f"Excel limits sheet names to {SHEET_NAME_LIMIT} characters",
             )
         sheet = sheets.setdefault(
-            name.casefold(), _Sheet(name, file, *parsed, tables.get(file))
+            name.casefold(), _Sheet(name, file, spec, source, tables.get(file))
         )
         if sheet.name != name:
             raise WorkbookError(
@@ -252,7 +269,7 @@ def _plan(tables: Mapping[str, str], empty_sheets: Iterable[str]) -> list[_Sheet
     return sorted(
         sheets.values(),
         key=lambda sheet: (
-            KIND_ORDER[sheet.spec.kind],
+            len(KIND_ORDER) if sheet.spec is None else KIND_ORDER[sheet.spec.kind],
             natural_key(sheet.source or ""),
         ),
     )
@@ -285,9 +302,8 @@ def _open(existing: Path | None) -> Workbook:
 
 
 def _write_table(
-    sheet: Worksheet, plan: _Sheet, lists: Mapping[str, list[str]]
+    sheet: Worksheet, plan: _Sheet, spec: TableSpec, lists: Mapping[str, list[str]]
 ) -> list[ValidationIssue]:
-    spec = plan.spec
     widths = [len(name) + HEADER_PADDING for name in spec.names]
     for index, column in enumerate(spec.columns):
         cell = sheet.cell(1, index + 1)
@@ -349,6 +365,45 @@ def _write_table(
             sheet.add_data_validation(validation)
     sheet.freeze_panes = "A2"
     sheet.auto_filter.ref = f"A1:{column_letter(len(spec.columns) - 1)}{last}"
+    return issues
+
+
+def _write_raw(sheet: Worksheet, plan: _Sheet) -> list[ValidationIssue]:
+    """Write a raw table: every cell as text, no header styling, filter or panes."""
+    issues: list[ValidationIssue] = []
+    cap = IssueCap()
+    lines = plan.text.removesuffix("\n").split("\n") if plan.text else []
+    width = max((line.count("\t") + 1 for line in lines), default=0)
+    widths = [MIN_WIDTH] * width
+    for number, line in enumerate(lines, start=1):
+        for index, text in enumerate(line.split("\t")):
+            if not text:
+                continue
+            if number <= WIDTH_ROWS + 1:
+                widths[index] = max(widths[index], len(text) + CELL_PADDING)
+            problem = _write_cell(sheet.cell(number, index + 1), RAW_COLUMN, text)
+            if problem is not None and cap.admit(problem[0]):
+                code, message, hint = problem
+                issues.append(
+                    make_issue(
+                        code,
+                        message,
+                        file=plan.file,
+                        line=number,
+                        column=index,
+                        hint=hint,
+                    )
+                )
+    issues.extend(
+        make_issue(code, f"{total:,} {CELL_ISSUES[code]}; {LISTED}", file=plan.file)
+        for code, total in cap.beyond()
+    )
+    for index in range(width + RAW_MARGIN):
+        dimension = sheet.column_dimensions[column_letter(index)]
+        # New cells typed into the table are text, as printed.
+        dimension.number_format = TEXT_FORMAT
+        if index < width:
+            dimension.width = min(MAX_WIDTH, widths[index])
     return issues
 
 
@@ -434,6 +489,7 @@ def build_workbook(
     tables: Mapping[str, str],
     vocabulary: Vocabulary,
     *,
+    study: str | None = None,
     existing: Path | None = None,
     empty_sheets: Iterable[str] = (),
     generation: str | None = None,
@@ -441,8 +497,10 @@ def build_workbook(
 ) -> WorkbookBuild:
     """Generate the workbook of the canonical TSV text of each table file.
 
-    `empty_sheets` names further sheets with the header only, such as
-    `outputs_Tab3`. The scratch sheets of an `existing` workbook are kept. A new
+    Raw tables of a `study`, such as `Example_Tab2.tsv`, need its name; their
+    sheets hold text cells and come after the data sheets. `empty_sheets` names
+    further sheets without rows, such as `outputs_Tab3`, which has the header
+    only. The scratch sheets of an `existing` workbook are kept. A new
     generation and the current time are used unless given. Cells a workbook
     cannot hold are issues, and then no workbook is written. A sheet name that
     Excel does not accept or an unreadable existing workbook raise WorkbookError.
@@ -452,7 +510,7 @@ def build_workbook(
         (created or datetime.now(UTC)).astimezone(UTC),
         dict(tables),
     )
-    plan = _plan(tables, empty_sheets)
+    plan = _plan(tables, empty_sheets, study)
     terms = vocabulary_terms(vocabulary)
     deprecated = {rule.name for rule in vocabulary.measurements if rule.deprecated}
     terms["measurements"] -= deprecated
@@ -461,13 +519,18 @@ def build_workbook(
             terms[column.vocabulary] if column.vocabulary else column.choices,
             key=natural_key,
         )
-        for key, column in _list_columns(sheet.spec for sheet in plan).items()
+        for key, column in _list_columns(
+            sheet.spec for sheet in plan if sheet.spec is not None
+        ).items()
     }
     workbook = _open(existing)
     issues: list[ValidationIssue] = []
     for index, sheet in enumerate(plan):
+        worksheet = workbook.create_sheet(sheet.name, index)
         issues.extend(
-            _write_table(workbook.create_sheet(sheet.name, index), sheet, lists)
+            _write_raw(worksheet, sheet)
+            if sheet.spec is None
+            else _write_table(worksheet, sheet, sheet.spec, lists)
         )
     issues.extend(_write_lists(workbook.create_sheet(LISTS_SHEET), lists))
     if any(issue.severity == "error" for issue in issues):
