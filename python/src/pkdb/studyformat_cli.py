@@ -75,8 +75,16 @@ def say(text: str, *, file=None) -> None:
 
 
 def _location(source) -> str:
+    """Where an issue is: a TSV file with its line or cell, or a workbook sheet with its cell or row."""
     if source is None:
         return ""
+    if source.sheet and not source.file.endswith(".tsv"):
+        parts = [source.file, f"sheet {source.sheet}"]
+        if source.cell:
+            parts.append(f"cell {source.cell}")
+        elif source.row:
+            parts.append(f"row {source.row}")
+        return ", ".join(parts)
     if source.cell:
         return f"{source.file} {source.cell}"
     if source.row:

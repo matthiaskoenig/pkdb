@@ -144,7 +144,9 @@ def only(content, code):
 
 
 def at(issue):
+    """The sheet and the cell of an issue in the workbook."""
     assert issue.source is not None
+    assert issue.source.file == "Example.xlsx"
     return issue.source.sheet, issue.source.cell
 
 

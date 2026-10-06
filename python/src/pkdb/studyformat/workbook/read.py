@@ -20,7 +20,7 @@ from pkdb.schemas.validation import ValidationIssue
 from pkdb.studyformat.formatter import subject_order, table_rows
 from pkdb.studyformat.issues import LISTED, IssueCap, column_letter, make_issue
 from pkdb.studyformat.load import STRUCTURAL, LoadedTable, RowLimit, load_table
-from pkdb.studyformat.tables import TableSpec, parse_table_file, table_file
+from pkdb.studyformat.tables import TableSpec, parse_table_file
 from pkdb.studyformat.text import format_number, render_tsv
 from pkdb.studyformat.workbook.base import (
     BASE_SHEET,
@@ -301,17 +301,33 @@ def _lines(rows: Iterable[tuple[tuple, tuple]], report: Report) -> Iterator[byte
         yield ("\t".join(cells) + "\n").encode("utf-8")
 
 
+def _in_sheet(issue: ValidationIssue, workbook: str) -> ValidationIssue:
+    """An issue of the table text of a sheet, located in the workbook.
+
+    The lines of the text are the sheet rows, so the row and the cell stay.
+    """
+    if issue.source is None:
+        return issue
+    return issue.model_copy(
+        update={"source": issue.source.model_copy(update={"file": workbook})}
+    )
+
+
 def _read_sheet(
     workbooks: tuple[Workbook, Workbook],
+    workbook: str,
     name: str,
     parsed: tuple[TableSpec, str | None],
     study_name: str,
     limit: RowLimit,
 ) -> tuple[LoadedTable | None, list[ValidationIssue]]:
-    """Load a data sheet as a table; its cell issues and the structural issues."""
+    """Load a data sheet as a table; its cell issues and the structural issues.
+
+    The issues are located in the sheet of the workbook.
+    """
     file = f"{name}.tsv"
     spec, source = parsed
-    formulas, values = (workbook[name] for workbook in workbooks)
+    formulas, values = (book[name] for book in workbooks)
     issues: list[ValidationIssue] = []
     cap = IssueCap()
 
@@ -322,7 +338,8 @@ def _read_sheet(
                 make_issue(
                     code,
                     message,
-                    file=file,
+                    file=workbook,
+                    sheet=name,
                     line=number,
                     column=index,
                     header=header or None,
@@ -340,11 +357,18 @@ def _read_sheet(
         limit=limit,
     )
     issues.extend(
-        make_issue(code, f"{total:,} cells {CELL_ISSUES[code]}; {LISTED}", file=file)
+        make_issue(
+            code,
+            f"{total:,} cells {CELL_ISSUES[code]}; {LISTED}",
+            file=workbook,
+            sheet=name,
+        )
         for code, total in cap.beyond()
     )
     # The content is judged by validation, as when formatting.
-    issues.extend(issue for issue in found if issue.code in STRUCTURAL)
+    issues.extend(
+        _in_sheet(issue, workbook) for issue in found if issue.code in STRUCTURAL
+    )
     return table, issues
 
 
@@ -404,7 +428,8 @@ def _read(
                 make_issue(
                     "unknown_sheet",
                     f"The sheet {name!r} is not a table of the study",
-                    file=f"{name}.tsv",
+                    file=workbook,
+                    sheet=name,
                     hint=SHEET_HINT,
                 )
             )
@@ -415,7 +440,8 @@ def _read(
             make_issue(
                 "missing_sheet",
                 f"The workbook has no {SUBJECTS} sheet",
-                file=table_file(SUBJECTS),
+                file=workbook,
+                sheet=SUBJECTS,
                 hint=f"Add the {SUBJECTS} sheet again; every study needs it.",
             )
         )
@@ -425,7 +451,9 @@ def _read(
     order: dict[str, int] = {}
     # The subjects come first: their order sorts the rows of every table.
     for name in sorted(data, key=lambda name: name != SUBJECTS):
-        table, found = _read_sheet(workbooks, name, data[name], study_name, limit)
+        table, found = _read_sheet(
+            workbooks, workbook, name, data[name], study_name, limit
+        )
         if name == SUBJECTS:
             order = subject_order(table)
         read[name] = _sheet_table(table, study_name, order), found

@@ -72,11 +72,11 @@ caffeine/Harder1988: cannot sync, resolve the conflicts below
   conflict in sheet timecourses_Fig1
     workbook row 2: label=drug_plasma, subjects=all, interventions=D1, measurement=concentration, substance=drug, tissue=plasma, time=0, time_unit=h, mean=0.25, unit=mg/l
     timecourses_Fig1.tsv line 2: label=drug_plasma, subjects=all, interventions=D1, measurement=concentration, substance=drug, tissue=plasma, time=0, time_unit=h, mean=0.75, unit=mg/l
-  timecourses_Fig1.tsv line 2: The workbook and the tables changed the same rows of timecourses_Fig1 differently since the last sync: row 2 of the sheet, line 2 of timecourses_Fig1.tsv [sync_conflict]
+  Harder1988.xlsx, sheet timecourses_Fig1, row 2: The workbook and the tables changed the same rows of timecourses_Fig1 differently since the last sync: row 2 of the sheet, line 2 of timecourses_Fig1.tsv [sync_conflict]
     Keep one side with pkdb tables sync --keep workbook or --keep tables, or edit the workbook so that the conflicting rows equal the tables.
 ```
 
-Terminal output lists the first ten rows of each side. `--format json` lists all of them, with the base lines. Resolve a conflict in one of two ways:
+Terminal output lists the first ten rows of each side. `--format json` lists all of them, with the base lines. An issue found in the workbook, such as a conflict or a converted cell, names the workbook, the sheet and the row or cell, in JSON as `source.file`, `source.sheet`, `source.row` and `source.cell`; an issue of a TSV file names the file and its line. Resolve a conflict in one of two ways:
 
 - `pkdb tables sync --keep workbook` or `--keep tables` resolves the conflicting parts of every conflicting table to that side, and still merges all other changes. The sync names the kept side. The other version is discarded, so copy anything you need from the listing first.
 - Edit the workbook so that the conflicting rows equal the version in the tables, save, and sync again. To end with a third value, sync first, then edit the row again.

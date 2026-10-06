@@ -199,6 +199,7 @@ def make_issue(
     message: str,
     *,
     file: str | None = None,
+    sheet: str | None = None,
     line: int | None = None,
     column: int | None = None,
     header: str | None = None,
@@ -209,15 +210,20 @@ def make_issue(
 ) -> ValidationIssue:
     """Create a validation issue at an optional file, line and column.
 
-    A hint or candidates add a suggestion. The severity defaults to warning for
-    warning codes and to error otherwise.
+    An issue of a TSV file is located at its line, and its sheet is the file
+    name without `.tsv`. An issue found in the workbook names the workbook as
+    `file` and its `sheet`, and `line` is the sheet row. A hint or candidates
+    add a suggestion. The severity defaults to warning for warning codes and to
+    error otherwise.
     """
     source = None
     if file is not None:
         letter = column_letter(column) if column is not None else None
+        if sheet is None and file.endswith(".tsv"):
+            sheet = file.removesuffix(".tsv")
         source = SourceLocation(
             file=file,
-            sheet=file.removesuffix(".tsv") if file.endswith(".tsv") else None,
+            sheet=sheet,
             row=line,
             column=letter,
             cell=f"{letter}{line}" if letter and line else None,

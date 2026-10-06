@@ -193,12 +193,18 @@ def _numbers(word: str, numbers: Sequence[int]) -> str:
 
 
 def _region_conflict(
-    file: str, rows: Sequence[int], conflict: Conflict, keep: Side | None
+    workbook: str,
+    file: str,
+    rows: Sequence[int],
+    conflict: Conflict,
+    keep: Side | None,
 ) -> tuple[SyncConflict, ValidationIssue | None]:
     """A conflicting region of a merge, and its issue unless `keep` resolved it.
 
-    `rows` are the sheet rows of the canonical workbook lines. A side without
-    lines is located at the line before the region, or at the header.
+    `rows` are the sheet rows of the canonical workbook lines. The issue is
+    located at the first row of the region in the sheet of the `workbook`, and
+    its message names the lines of the TSV file. A side without lines is
+    located at the line before the region, or at the header.
     """
     sheet = file.removesuffix(".tsv")
     workbook_rows = tuple(
@@ -229,19 +235,25 @@ def _region_conflict(
         f"The workbook and the tables changed the same rows of {sheet} "
         f"differently since the last sync: {in_workbook} of the sheet, "
         f"{in_tables} of {file}",
-        file=file,
+        file=workbook,
+        sheet=sheet,
         line=row,
         hint=KEEP_HINT,
     )
 
 
 def _removal_conflict(
+    workbook_name: str,
     file: str,
     versions: tuple[str | None, str | None, str | None],
     content: WorkbookContent,
     keep: Side | None,
 ) -> tuple[SyncConflict, ValidationIssue | None]:
-    """One side removed a table that the other changed, and its issue unless kept."""
+    """One side removed a table that the other changed, and its issue unless kept.
+
+    The issue is located at the sheet in the workbook, at its header row while
+    the sheet exists.
+    """
     workbook, tables, base = versions
     sheet = file.removesuffix(".tsv")
     workbook_rows = (
@@ -276,12 +288,18 @@ def _removal_conflict(
         )
         row = None
     return found, make_issue(
-        "sync_conflict", message, file=file, line=row, hint=KEEP_HINT
+        "sync_conflict",
+        message,
+        file=workbook_name,
+        sheet=sheet,
+        line=row,
+        hint=KEEP_HINT,
     )
 
 
 def _plan(
     study: str,
+    workbook_name: str,
     tables: Mapping[str, str],
     tables_order: Mapping[str, int],
     workbook: Mapping[str, str],
@@ -311,7 +329,9 @@ def _plan(
             text, sorted_by = w, workbook_order
         elif w is None or t is None:
             # Here b is not None, or the absent side would equal it.
-            conflict, issue = _removal_conflict(file, (w, t, b), content, keep)
+            conflict, issue = _removal_conflict(
+                workbook_name, file, (w, t, b), content, keep
+            )
             plan.conflicts.append(conflict)
             if issue is not None:
                 plan.issues.append(issue)
@@ -325,7 +345,9 @@ def _plan(
             )
             rows = content.tables[file].rows
             for region in merged.conflicts:
-                conflict, issue = _region_conflict(file, rows, region, keep)
+                conflict, issue = _region_conflict(
+                    workbook_name, file, rows, region, keep
+                )
                 plan.conflicts.append(conflict)
                 if issue is not None:
                     plan.issues.append(issue)
@@ -644,7 +666,7 @@ def sync_study(
                 base[file] = text
 
     workbook = {file: sheet.text for file, sheet in content.tables.items()}
-    plan = _plan(study.name, tables, order, workbook, content, base, keep)
+    plan = _plan(study.name, path.name, tables, order, workbook, content, base, keep)
     outcome = replace(
         outcome,
         conflicts=tuple(plan.conflicts),
@@ -816,6 +838,7 @@ def add_table(
                 "table_exists",
                 f"The sheet {sheet} already exists in {path.name}",
                 file=path.name,
+                sheet=sheet,
             )
         )
     replaced = _replace_workbook(

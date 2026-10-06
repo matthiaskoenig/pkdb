@@ -4,6 +4,7 @@ import json
 import os
 import shutil
 import subprocess
+from datetime import datetime
 
 import openpyxl
 import pytest
@@ -228,6 +229,66 @@ def test_a_conflict_fails_and_lists_both_versions(conflicting, vocabulary, capsy
     assert tsv.startswith(f"    {TIMECOURSES} line 2: ") and "mean=0.75" in tsv
     assert "label=drug_plasma" in workbook and "\t" not in workbook
     assert any("--keep workbook or --keep tables" in line for line in out)
+
+
+def test_a_conflict_is_located_at_the_sheet_row(study, vocabulary, capsys):
+    path = workbook_path(study)
+    workbook = openpyxl.load_workbook(path)
+    # Two empty rows above the data, so that time 0 is in row 4.
+    workbook["timecourses_Fig1"].insert_rows(2, 2)
+    workbook.save(path)
+    set_cells(path, "timecourses_Fig1", 4, mean=0.25)
+    edit_table(study, TIMECOURSES, 2, mean="0.75")
+
+    assert tables("sync", study, "--format", "json", *vocabulary) == 1
+    [issue] = entries(capsys)[0]["issues"]
+    assert issue["source"]["file"] == "Example.xlsx"
+    assert issue["source"]["sheet"] == "timecourses_Fig1"
+    assert issue["source"]["row"] == 4
+    assert issue["source"].get("cell") is None
+    assert issue["message"].endswith(
+        "row 4 of the sheet, line 2 of timecourses_Fig1.tsv"
+    )
+
+    assert tables("sync", study, "--format", "human", *vocabulary) == 1
+    out = capsys.readouterr().out.splitlines()
+    assert "    workbook row 4: " in "\n".join(out)
+    [line] = [line for line in out if line.endswith("[sync_conflict]")]
+    assert line.startswith(
+        "  Example.xlsx, sheet timecourses_Fig1, row 4: The workbook and the tables "
+    )
+
+
+def test_issues_name_the_workbook_or_the_table_file(study, vocabulary, capsys):
+    path = workbook_path(study)
+    comment = f"{letter(TIMECOURSES, 'comment')}3"
+    workbook = openpyxl.load_workbook(path)
+    workbook["timecourses_Fig1"][comment] = datetime(2020, 1, 2)
+    workbook.save(path)
+    original = (study / OUTPUTS).read_bytes()
+    edit_table(study, OUTPUTS, 1, mean="average")
+
+    # A table that does not load stops the sync before the workbook is read.
+    assert tables("sync", study, "--format", "json", *vocabulary) == 1
+    [issue] = entries(capsys)[0]["issues"]
+    assert issue["code"] == "unknown_column"
+    assert issue["source"]["file"] == OUTPUTS
+    assert issue["source"]["sheet"] == "outputs_Tab2"
+    (study / OUTPUTS).write_bytes(original)
+
+    assert tables("sync", study, "--format", "json", *vocabulary) == 1
+    [issue] = entries(capsys)[0]["issues"]
+    assert issue["code"] == "cell_date"
+    assert issue["source"]["file"] == "Example.xlsx"
+    assert issue["source"]["sheet"] == "timecourses_Fig1"
+    assert issue["source"]["cell"] == comment
+    assert issue["source"]["header"] == "comment"
+
+    assert tables("sync", study, "--format", "human", *vocabulary) == 1
+    assert (
+        f"  Example.xlsx, sheet timecourses_Fig1, cell {comment}: The cell holds"
+        in capsys.readouterr().out
+    )
 
 
 def test_keep_tables_resolves_a_conflict(conflicting, vocabulary, capsys):
