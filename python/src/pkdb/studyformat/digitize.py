@@ -261,7 +261,7 @@ def parse_project(data: object) -> tuple[dict[str, Axes], list[Dataset]]:
         if not isinstance(entry, dict) or not isinstance(entry.get("name"), str):
             raise _invalid("A dataset has no name")
         name, axes_name = entry["name"], entry.get("axesName")
-        if axes_name not in axes:
+        if not isinstance(axes_name, str) or axes_name not in axes:
             raise _invalid(f"Dataset {name!r} refers to unknown axes {axes_name!r}")
         points = entry.get("data") or []
         if not isinstance(points, list) or not all(isinstance(p, dict) for p in points):

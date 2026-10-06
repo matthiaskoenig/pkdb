@@ -109,6 +109,17 @@ def test_canonical_form_recomputes_values_and_drops_detection_data():
             "digitization_invalid",
         ),
         ({"axesColl": []}, "digitization_invalid"),
+        (
+            {"datasetColl": [{"name": "s", "axesName": ["XY"], "data": []}]},
+            "digitization_invalid",
+        ),
+        (
+            {"datasetColl": [{"name": "s", "axesName": {"a": 1}, "data": []}]},
+            "digitization_invalid",
+        ),
+        ({"datasetColl": [{"name": "s", "data": []}]}, "digitization_invalid"),
+        ({"datasetColl": ["s"]}, "digitization_invalid"),
+        ({"axesColl": ["XY"]}, "digitization_invalid"),
     ],
 )
 def test_unsupported_and_invalid_projects(change, code):
