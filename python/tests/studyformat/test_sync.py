@@ -1447,22 +1447,27 @@ def test_add_table_never_replaces_a_workbook_saved_meanwhile(
     study, workbook, sf_vocabulary, monkeypatch
 ):
     build = sync.build_workbook
+    saved = []
 
     def build_meanwhile(*arguments, **options):
         built = build(*arguments, **options)
         set_cells(workbook, "timecourses_Fig1", 3, mean=2.25)
+        saved.append(workbook.read_bytes())
         return built
 
     monkeypatch.setattr(sync, "build_workbook", build_meanwhile)
 
     result = add_table(study, sf_vocabulary, "outputs_Tab3")
-    saved = workbook.read_bytes()
 
     assert not result.ok
     [issue] = result.issues
     assert (issue.code, issue.severity) == ("workbook_changed", "error")
-    assert workbook.read_bytes() == saved
-    assert "outputs_Tab3" not in content_of(workbook).sheets
+    # The save during add_table is kept as it was saved.
+    assert [workbook.read_bytes()] == saved
+    content = content_of(workbook)
+    assert "outputs_Tab3" not in content.sheets
+    [_, _, row, _] = lines(content.tables[TIMECOURSES].text)
+    assert row.split("\t")[names(TIMECOURSES).index("mean")] == "2.25"
 
 
 def test_workbook_check_plans_without_writing(study, workbook, sf_vocabulary):

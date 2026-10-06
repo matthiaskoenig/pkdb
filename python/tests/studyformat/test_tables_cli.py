@@ -77,6 +77,23 @@ def entries(capsys):
     ]
 
 
+@pytest.fixture(autouse=True)
+def isolated_git(monkeypatch, tmp_path):
+    """git without the configuration and ignore files of the user and the system.
+
+    git finds no repository above tmp_path, wherever pytest keeps it, so every
+    test of the module sees the same git, also when pytest keeps tmp_path in a
+    git work tree.
+    """
+    for name in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR"):
+        monkeypatch.delenv(name, raising=False)
+    monkeypatch.setenv("GIT_CONFIG_GLOBAL", os.devnull)
+    monkeypatch.setenv("GIT_CONFIG_NOSYSTEM", "1")
+    # The default global ignore file is $XDG_CONFIG_HOME/git/ignore.
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
+    monkeypatch.setenv("GIT_CEILING_DIRECTORIES", str(tmp_path.parent))
+
+
 @pytest.fixture
 def vocabulary(sf_vocabulary, tmp_path):
     """The vocabulary options of a command, pinned to the test vocabulary."""
@@ -582,23 +599,8 @@ def git_repository(folder):
     subprocess.run(["git", "init", "-q", str(folder)], check=True)
 
 
-@pytest.fixture
-def isolated_git(monkeypatch, tmp_path):
-    """git without the configuration and ignore files of the user and the system.
-
-    git finds no repository above tmp_path, wherever pytest keeps it.
-    """
-    for name in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE", "GIT_COMMON_DIR"):
-        monkeypatch.delenv(name, raising=False)
-    monkeypatch.setenv("GIT_CONFIG_GLOBAL", os.devnull)
-    monkeypatch.setenv("GIT_CONFIG_NOSYSTEM", "1")
-    # The default global ignore file is $XDG_CONFIG_HOME/git/ignore.
-    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / "config"))
-    monkeypatch.setenv("GIT_CEILING_DIRECTORIES", str(tmp_path.parent))
-
-
 @git
-def test_git_ignore_warning(study, vocabulary, capsys, isolated_git):
+def test_git_ignore_warning(study, vocabulary, capsys):
     from pkdb.tables_cli import ignored_by_git
 
     root = study.parent.parent
