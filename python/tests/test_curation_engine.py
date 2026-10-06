@@ -1,13 +1,18 @@
 """Save generations, immutable inputs, and recovery in the local workspace."""
 
 import json
+from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
 
 import pytest
 
+from pkdb.curation import connection, jobs
 from pkdb.curation import engine as module
-from pkdb.errors import ClientError
+from pkdb.curation import workspace as workspace_module
+from pkdb.domain.validation import PROCESSING_VERSION
+from pkdb.domain.vocabulary import vocabulary_hash
+from pkdb.errors import ClientError, CompatibilityError
 from pkdb.preparation import source_hashes
 from pkdb.progress import ProgressEvent
 
@@ -63,7 +68,7 @@ def prepare_mock(monkeypatch, *, after=None):
             after()
         return prepared
 
-    monkeypatch.setattr(module, "prepare", prepare)
+    monkeypatch.setattr(jobs, "prepare", prepare)
 
 
 def enable_upload(engine, monkeypatch, upload):
@@ -77,9 +82,10 @@ def enable_upload(engine, monkeypatch, upload):
     client.__exit__ = Mock(return_value=False)
     client.upload.side_effect = upload
     factory = Mock(return_value=client)
-    monkeypatch.setattr(module, "Client", factory)
+    monkeypatch.setattr(jobs, "Client", factory)
+    monkeypatch.setattr(connection, "Client", factory)
     monkeypatch.setattr(
-        engine, "_vocabulary", Mock(return_value=module.bundled_vocabulary())
+        engine, "_vocabulary", Mock(return_value=jobs.bundled_vocabulary())
     )
     return client, factory
 
@@ -127,7 +133,7 @@ def test_offline_validation_never_requests_http(workspace, monkeypatch):
     engine, _ = workspace
     prepare_mock(monkeypatch)
     request = Mock(side_effect=AssertionError("Offline network request"))
-    monkeypatch.setattr(module.Client, "_request", request)
+    monkeypatch.setattr(jobs.Client, "_request", request)
     engine.connect()
     engine.refresh_assignments()
     engine.enqueue([row(engine)["id"]], "validate")
@@ -260,12 +266,12 @@ def test_confirmed_upload_persistence_survives_later_source_error(
 ):
     engine, _ = workspace
     prepare_mock(monkeypatch)
-    hashes = module.source_hashes
+    hashes = jobs.source_hashes
 
     def upload(_):
-        monkeypatch.setattr(
-            module, "source_hashes", Mock(side_effect=OSError("locked"))
-        )
+        locked = Mock(side_effect=OSError("locked"))
+        monkeypatch.setattr(jobs, "source_hashes", locked)
+        monkeypatch.setattr(workspace_module, "source_hashes", locked)
         return SimpleNamespace(
             created=True, url=None, model_dump=lambda **_: {"created": True}
         )
@@ -274,7 +280,8 @@ def test_confirmed_upload_persistence_survives_later_source_error(
     client.last_upload_report = None
     engine.enqueue([row(engine)["id"]], "upload")
     job = run_next(engine)
-    monkeypatch.setattr(module, "source_hashes", hashes)
+    monkeypatch.setattr(jobs, "source_hashes", hashes)
+    monkeypatch.setattr(workspace_module, "source_hashes", hashes)
     assert job["persistence"] == "created"
     assert job["status"] != "unknown"
     assert row(engine)["_blocked"] is False
@@ -283,7 +290,7 @@ def test_confirmed_upload_persistence_survives_later_source_error(
 def test_real_scientific_validation_and_external_edit(
     study_folder, vocabulary, tmp_path, monkeypatch
 ):
-    monkeypatch.setattr(module, "bundled_vocabulary", lambda: vocabulary)
+    monkeypatch.setattr(jobs, "bundled_vocabulary", lambda: vocabulary)
     engine = module.CurationEngine(
         study_folder, state_dir=tmp_path / "app-state", offline=True, start=False
     )
@@ -335,7 +342,7 @@ def test_save_during_failed_validation_keeps_diagnostics_stale(workspace, monkey
         (folder / "latest.txt").write_text("newer input")
         fail("invalid", "Previous save was invalid")
 
-    monkeypatch.setattr(module, "prepare", prepare)
+    monkeypatch.setattr(jobs, "prepare", prepare)
     engine.enqueue([row(engine)["id"]], "validate")
     job = run_next(engine)
     assert job["status"] == "canceled"
@@ -370,7 +377,8 @@ def test_old_connection_cannot_restore_account_after_endpoint_change(
             started.set()
             assert release.wait(3)
 
-    monkeypatch.setattr(module, "Client", client)
+    monkeypatch.setattr(jobs, "Client", client)
+    monkeypatch.setattr(connection, "Client", client)
     monkeypatch.setattr(engine, "_vocabulary", vocabulary)
     thread = threading.Thread(target=engine.connect)
     thread.start()
@@ -389,12 +397,12 @@ def test_stale_connection_vocabulary_does_not_replace_current_status(
     workspace, monkeypatch
 ):
     engine, _ = workspace
-    vocabulary = module.bundled_vocabulary()
+    vocabulary = jobs.bundled_vocabulary()
     client = Mock()
     client.endpoint = "https://old.test"
     client.capabilities.return_value = SimpleNamespace(
-        processing_version=module.PROCESSING_VERSION,
-        vocabulary_hash=module.vocabulary_hash(vocabulary),
+        processing_version=PROCESSING_VERSION,
+        vocabulary_hash=vocabulary_hash(vocabulary),
     )
     client.vocabulary.return_value = vocabulary
     monkeypatch.setattr(engine.cache, "load", Mock(return_value=vocabulary))
@@ -463,7 +471,7 @@ def test_vocabulary_retry_is_bounded_and_never_replays_unknown(
 ):
     engine, _ = workspace
     prepare_mock(monkeypatch)
-    error = module.CompatibilityError("Rules changed", persistence=persistence)
+    error = CompatibilityError("Rules changed", persistence=persistence)
     client, _ = enable_upload(engine, monkeypatch, [error, error])
     job = engine.enqueue([row(engine)["id"]], "upload")[0]
     engine.queue.clear()
@@ -540,7 +548,8 @@ def connection_engine(engine, monkeypatch, *, identity=None, failure=None):
         username="curator", can_upload=True
     )
     factory = Mock(return_value=client)
-    monkeypatch.setattr(module, "Client", factory)
+    monkeypatch.setattr(jobs, "Client", factory)
+    monkeypatch.setattr(connection, "Client", factory)
 
     def vocabulary(client, **kwargs):
         engine.server_version = "99.0.0"
@@ -588,14 +597,12 @@ def test_connection_status_reports_reachable_server(workspace, monkeypatch):
             "rejected the API key",
         ),
         (
-            module.CompatibilityError(
-                "Upgrade pkdb", code="processing_version_mismatch"
-            ),
+            CompatibilityError("Upgrade pkdb", code="processing_version_mismatch"),
             "incompatible",
             "Run `pkdb update`",
         ),
         (
-            module.CompatibilityError("Server vocabulary changed; validate again"),
+            CompatibilityError("Server vocabulary changed; validate again"),
             "error",
             "Server vocabulary changed",
         ),
@@ -833,13 +840,13 @@ def test_list_directories_classifies_and_filters_folders(workspace, tmp_path):
 def test_list_directories_defaults_limits_and_rejects(workspace, tmp_path, monkeypatch):
     engine, folder = workspace
     assert engine.list_directories()["path"] == str(engine.root)
-    assert engine.list_directories("~")["path"] == str(module.Path.home())
-    root = engine.list_directories(module.Path(engine.root).anchor)
+    assert engine.list_directories("~")["path"] == str(Path.home())
+    root = engine.list_directories(Path(engine.root).anchor)
     assert root["parent"] is None
     many = tmp_path / "many"
     for index in range(5):
         (many / f"d{index}").mkdir(parents=True)
-    monkeypatch.setattr(module, "DIRECTORY_LIMIT", 3)
+    monkeypatch.setattr(workspace_module, "DIRECTORY_LIMIT", 3)
     limited = engine.list_directories(str(many))
     assert [e["name"] for e in limited["entries"]] == ["d0", "d1", "d2"]
     assert limited["truncated"] is True
@@ -850,7 +857,7 @@ def test_list_directories_defaults_limits_and_rejects(workspace, tmp_path, monke
     with pytest.raises(module.WorkspaceError, match="not a folder"):
         engine.list_directories(str(folder / "study.json"))
     engine.root = tmp_path / "removed"
-    assert engine.list_directories()["path"] == str(module.Path.home())
+    assert engine.list_directories()["path"] == str(Path.home())
 
 
 def test_missing_remembered_workspace_falls_back_at_startup(
