@@ -446,11 +446,14 @@ def test_broken_folders_are_reported(break_folder, valid_study, sf_vocabulary):
     assert not report.valid
 
 
-def inconsistent_study(folder, tsv, *items):
-    """Make the study report sd and se that contradict each other (layer 6)."""
-    (folder / "outputs_Tab2.tsv").write_text(
-        tsv("outputs", {**CMAX, "se": "1"}), encoding="utf-8"
-    )
+def inconsistent_study(folder, tsv, *items, **cells):
+    """Make the study report statistics that contradict each other (layer 6).
+
+    sd 0.5 and cv 20 % of the mean 2.5 agree; se 1 with the count 2 implies
+    sd 1.414 and disagrees with both.
+    """
+    row = {**CMAX, "se": "1", "cv": "20", **cells}
+    (folder / "outputs_Tab2.tsv").write_text(tsv("outputs", row), encoding="utf-8")
     review = {"status": "draft", "items": [{**ITEM, **item} for item in items]}
     (folder / "review.json").write_text(dump_json(review), encoding="utf-8")
     assert format_folder(folder).ok
@@ -468,25 +471,50 @@ def test_postprocessing_issues_are_located_in_the_table(
         "warning",
         "scientific",
     )
+    assert issue.message == (
+        "sd is 0.5, but se 1 implies sd 1.414; "
+        "se 1 implies sd 1.414, but cv 20% implies sd 0.5"
+    )
     assert issue.source is not None
-    # The warning points to the first statistic that disagrees.
+    # The warning points to the statistic that disagrees with the most others.
     assert (
         issue.source.file,
         issue.source.sheet,
         issue.source.row,
         issue.source.cell,
         issue.source.header,
-    ) == ("outputs_Tab2.tsv", "outputs_Tab2", 2, "O2", "sd")
+    ) == ("outputs_Tab2.tsv", "outputs_Tab2", 2, "P2", "se")
 
 
-@pytest.mark.parametrize(("column", "kept"), [("sd", False), ("se", True)])
+@pytest.mark.parametrize(
+    ("column", "kept"), [("se", False), ("sd", True), ("cv", True)]
+)
 def test_postprocessing_warnings_can_be_acknowledged_at_their_column(
     valid_study, tsv, sf_vocabulary, column, kept
 ):
-    # The target form of a review item that acknowledges an sd/se mismatch.
+    # The target form of a review item that acknowledges the contradiction:
+    # only the outlier column matches.
     target = {"file": OUTPUTS, "rows": {"measurement": "cmax"}, "column": column}
     item = {"acknowledges": "inconsistent_statistics", "target": target}
     folder = inconsistent_study(valid_study, tsv, item)
+    assert bool(validate_folder(folder, sf_vocabulary).issues) is kept
+
+
+@pytest.mark.parametrize(("column", "kept"), [("error_bar", False), ("se", True)])
+def test_error_bar_contradictions_are_acknowledged_at_the_error_bar(
+    valid_study, tsv, sf_vocabulary, column, kept
+):
+    # The error bar 4.5 around the mean 2.5 implies sd 2; se 0.1 implies sd 0.141.
+    cells = {"sd": "", "cv": "", "se": "0.1", "error_bar": "4.5", "error_type": "sd"}
+    folder = inconsistent_study(valid_study, tsv, **cells)
+    [issue] = validate_folder(folder, sf_vocabulary).issues
+    assert issue.message == (
+        "se 0.1 implies sd 0.1414, but error_bar 4.5 (sd) implies sd 2"
+    )
+    assert issue.source is not None and issue.source.header == "error_bar"
+    target = {"file": OUTPUTS, "column": column}
+    item = {"acknowledges": "inconsistent_statistics", "target": target}
+    folder = inconsistent_study(valid_study, tsv, item, **cells)
     assert bool(validate_folder(folder, sf_vocabulary).issues) is kept
 
 

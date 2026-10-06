@@ -90,8 +90,12 @@ def test_inconsistent_sd_and_se_are_reported_as_a_warning(valid_study, vocabular
     assert issue.severity == "warning"
     assert issue.category == "scientific"
     assert issue.stage == "validate"
-    assert "sd" in issue.message and "se" in issue.message
-    assert issue.context["arithmetic"]["se"] == pytest.approx(2.0)
+    assert issue.message == "sd is 1, but se 1 implies sd 2"
+    assert issue.context == {
+        "reported": {"sd": 1.0, "se": 1.0},
+        "implied_sd": {"sd": 1.0, "se": 2.0},
+        "disagreeing": [["sd", "se"]],
+    }
     assert prepared.report.warning_count == 1
     statistics = normalized(prepared.study, "m1").statistics
     assert (statistics.sd, statistics.se) == (1.0, 1.0)
@@ -105,7 +109,7 @@ def test_consistent_sd_and_se_do_not_warn(valid_study, vocabulary):
 def test_inconsistent_gsd_and_gcv_are_reported_as_a_warning(valid_study, vocabulary):
     study = with_statistics(valid_study, gsd=1.3, gcv=0.5)
     (issue,) = warnings(prepare_study(study, vocabulary))
-    assert "gsd" in issue.message and "gcv" in issue.message
+    assert issue.message == "gsd is 1.3, but gcv 50% implies gsd 1.604"
 
 
 def test_one_warning_per_record_even_when_both_families_disagree(
@@ -124,18 +128,41 @@ def test_warning_points_to_the_source_record(valid_study, vocabulary):
     assert issue.source.row == 7
 
 
-def test_warning_points_to_the_first_disagreeing_statistic(valid_study, vocabulary):
+def test_warning_points_to_the_outlier_statistic(valid_study, vocabulary):
     from pkdb.schemas.source import SourceLocation
 
-    study = with_statistics(valid_study, mean=10.0, sd=1.0, se=1.0)
+    # cv agrees with sd; se disagrees with both.
+    study = with_statistics(valid_study, mean=10.0, sd=1.0, se=1.0, cv=0.1)
     source = SourceLocation(file="outputs.tsv", sheet="outputs", row=7)
-    source._columns.update(sd="O", se="P")
-    source._headers.update(sd="sd", se="se")
+    source._columns.update(sd="O", se="P", cv="Q")
+    source._headers.update(sd="sd", se="se", cv="cv")
     study.measurements[0].source = source
     (issue,) = warnings(prepare_study(study, vocabulary))
-    assert issue.field == "sd"
+    assert issue.field == "se"
     assert issue.source is not None
-    assert (issue.source.row, issue.source.cell, issue.source.header) == (7, "O7", "sd")
+    assert (issue.source.row, issue.source.cell, issue.source.header) == (7, "P7", "se")
+
+
+def test_warning_checks_the_reported_values_before_unit_conversion(
+    valid_study, vocabulary
+):
+    nanograms = vocabulary.model_copy(
+        update={
+            "measurements": (
+                MeasurementRule(
+                    name="concentration", units=("ng/ml",), time_required=True
+                ),
+                *vocabulary.measurements[1:],
+            )
+        }
+    )
+    # se 0.3 with the count 4 implies sd 0.6 (0.5 to 0.7), which sd 0.68 meets;
+    # the scaled values would have lost the reported decimal places.
+    study = with_statistics(valid_study, mean=10.0, sd=0.68, se=0.3)
+    assert not warnings(prepare_study(study, nanograms))
+    study = with_statistics(valid_study, mean=10.0, sd=0.72, se=0.3)
+    (issue,) = warnings(prepare_study(study, nanograms))
+    assert issue.context["reported"] == {"sd": 0.72, "se": 0.3}
 
 
 def test_warning_survives_a_failed_preparation(valid_study, vocabulary):

@@ -61,8 +61,10 @@ def prepare_study(
         raise ValueError("max_issues must be positive")
     study = study.model_copy(deep=True)
     observation_subjects = dict()
+    reported = dict()
     for subject, record in subject_observations(study):
         observation_subjects[record.key] = subject
+        reported[record.key] = record
         count = subject.count if isinstance(subject, Group) else 1
         if record.statistics.count is None:
             record.statistics.count = count
@@ -530,20 +532,21 @@ def prepare_study(
             None,
             "sample mean",
         }:
-            if disagreeing := inconsistent_statistics(
-                candidate.statistics, subject.count
+            # Checked on the reported values, whose decimal places give the
+            # rounding uncertainty; the comparison does not depend on the unit.
+            if inconsistency := inconsistent_statistics(
+                reported[key].statistics, subject.count
             ):
-                fields = [field for family in disagreeing.values() for field in family]
-                # Located at the first statistic that disagrees, so a review item
-                # can acknowledge it at that column.
+                # Located at the field that disagrees with the most others, so
+                # a review item can acknowledge it at that column.
                 issue(
                     "inconsistent_statistics",
-                    f"Reported {', '.join(fields)} contradict each other by more than {RELATIVE_TOLERANCE:.0%}",
+                    inconsistency.message,
                     candidate,
                     severity="warning",
-                    field=fields[0],
+                    field=inconsistency.field,
                     expected={"relative_tolerance": RELATIVE_TOLERANCE},
-                    context=disagreeing,
+                    context=inconsistency.context,
                 )
             candidate.statistics = complete_statistics(
                 candidate.statistics, subject.count
