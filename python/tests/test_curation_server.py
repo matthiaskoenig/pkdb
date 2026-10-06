@@ -9,6 +9,7 @@ from unittest.mock import Mock
 import pytest
 
 from pkdb.curation import server as transport
+from pkdb.curation.engine import CurationEngine
 from pkdb.curation.launch import open_path
 
 
@@ -330,7 +331,7 @@ def test_curate_cli_explains_missing_workspace(tmp_path, capsys):
 
 
 def test_assignment_mapping_route_is_gone(local_server):
-    server, _ = local_server
+    server, engine = local_server
     headers = authenticate(server)
     status = request(
         server,
@@ -340,3 +341,5 @@ def test_assignment_mapping_route_is_gone(local_server):
         headers,
     )[0]
     assert status == 404
+    engine.map_assignment.assert_not_called()
+    assert not hasattr(CurationEngine, "map_assignment")
