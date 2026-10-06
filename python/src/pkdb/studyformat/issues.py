@@ -96,6 +96,13 @@ _GROUPS = {
         "reference_mismatch",
         "public_requires_release",
     ),
+    "workbook": (
+        "workbook_unreadable",
+        "workbook_newer",
+        "workbook_base_invalid",
+        "cell_too_long",
+        "illegal_character",
+    ),
     "review": (
         "approved_with_open_items",
         "unknown_review_target",
@@ -123,7 +130,7 @@ _GROUPS = {
     ),
 }
 CATEGORIES = {code: category for category, codes in _GROUPS.items() for code in codes}
-_PARSE = frozenset({"layout", "format", "schema"})
+_PARSE = frozenset({"layout", "format", "schema", "workbook"})
 
 
 # A single line, cell or JSON file reports at most this many issues of one

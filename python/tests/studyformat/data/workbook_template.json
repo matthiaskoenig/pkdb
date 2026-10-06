@@ -1,0 +1,910 @@
+{
+  "format": 1,
+  "sheets": {
+    "subjects": {
+      "header": [
+        "study",
+        "name",
+        "parent",
+        "count",
+        "source",
+        "comment"
+      ],
+      "columns": {
+        "study": {
+          "format": "@",
+          "comment": "Study name, written by `pkdb format` from the folder name. Do not edit.\nExample: Guo2016",
+          "dropdown": null
+        },
+        "name": {
+          "format": "@",
+          "comment": "Unique subject name. The root group is `all`.\nExample: all\nRequired",
+          "dropdown": null
+        },
+        "parent": {
+          "format": "@",
+          "comment": "Name of the parent group. Empty only for `all`.\nExample: all",
+          "dropdown": "subjects!name"
+        },
+        "count": {
+          "format": "General",
+          "comment": "Number of subjects. A count of 1 makes the row an individual; any other count, or an empty cell, makes it a group.\nExample: 12",
+          "dropdown": null
+        },
+        "source": {
+          "format": "@",
+          "comment": "Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist.\nExample: Tab1",
+          "dropdown": null
+        },
+        "comment": {
+          "format": "@",
+          "comment": "Free-text comment.",
+          "dropdown": null
+        }
+      }
+    },
+    "interventions": {
+      "header": [
+        "study",
+        "source",
+        "name",
+        "subjects",
+        "measurement",
+        "calculation",
+        "substance",
+        "tissue",
+        "method",
+        "choice",
+        "route",
+        "form",
+        "application",
+        "time",
+        "time_end",
+        "interval",
+        "doses",
+        "time_unit",
+        "count",
+        "mean",
+        "sd",
+        "se",
+        "cv",
+        "gmean",
+        "gsd",
+        "gcv",
+        "median",
+        "min",
+        "max",
+        "unit",
+        "error_bar",
+        "error_type",
+        "comment"
+      ],
+      "columns": {
+        "study": {
+          "format": "@",
+          "comment": "Study name, written by `pkdb format` from the folder name. Do not edit.\nExample: Guo2016",
+          "dropdown": null
+        },
+        "source": {
+          "format": "@",
+          "comment": "Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist.\nExample: Tab1",
+          "dropdown": null
+        },
+        "name": {
+          "format": "@",
+          "comment": "Unique intervention name, referenced from the `interventions` columns of other tables.\nExample: D1\nRequired",
+          "dropdown": null
+        },
+        "subjects": {
+          "format": "@",
+          "comment": "Subject that the dose statistics describe, for body-weight-adjusted doses with `sd`, `min` or `max`. Usually empty.\nExample: all",
+          "dropdown": "subjects!name"
+        },
+        "measurement": {
+          "format": "@",
+          "comment": "Kind of intervention from the vocabulary, such as `dosing`, `qualitative dosing` or `fasting`.\nExample: dosing\nRequired",
+          "dropdown": "_lists!measurements"
+        },
+        "calculation": {
+          "format": "@",
+          "comment": "How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`.\nExample: unspecified summary",
+          "dropdown": "_lists!calculation_types"
+        },
+        "substance": {
+          "format": "@",
+          "comment": "Substance from the vocabulary.\nExample: caffeine",
+          "dropdown": "_lists!substances"
+        },
+        "tissue": {
+          "format": "@",
+          "comment": "Tissue or matrix from the vocabulary.\nExample: plasma",
+          "dropdown": "_lists!tissues"
+        },
+        "method": {
+          "format": "@",
+          "comment": "Analytical method from the vocabulary.\nExample: HPLC",
+          "dropdown": "_lists!methods"
+        },
+        "choice": {
+          "format": "@",
+          "comment": "Categorical value of a categorical intervention, such as `Y` for `fasting`.\nExample: Y",
+          "dropdown": null
+        },
+        "route": {
+          "format": "@",
+          "comment": "Administration route from the vocabulary.\nExample: oral",
+          "dropdown": "_lists!routes"
+        },
+        "form": {
+          "format": "@",
+          "comment": "Administration form from the vocabulary.\nExample: tablet",
+          "dropdown": "_lists!forms"
+        },
+        "application": {
+          "format": "@",
+          "comment": "Application from the vocabulary, such as `single dose`.\nExample: single dose",
+          "dropdown": "_lists!applications"
+        },
+        "time": {
+          "format": "@",
+          "comment": "Time of the first administration in `time_unit`. An irregular schedule is a `;`-separated list such as `0;12;40`.\nExample: 0",
+          "dropdown": null
+        },
+        "time_end": {
+          "format": "General",
+          "comment": "End of a continuous administration in `time_unit`.\nExample: 2",
+          "dropdown": null
+        },
+        "interval": {
+          "format": "General",
+          "comment": "Dosing interval in `time_unit`.\nExample: 24",
+          "dropdown": null
+        },
+        "doses": {
+          "format": "General",
+          "comment": "Number of administrations.\nExample: 7",
+          "dropdown": null
+        },
+        "time_unit": {
+          "format": "@",
+          "comment": "Unit of `time`, `time_end` and `interval`, or `NR` when the publication does not report it.\nExample: h",
+          "dropdown": null
+        },
+        "count": {
+          "format": "General",
+          "comment": "Number of subjects the dose statistics describe. Usually empty.\nExample: 12",
+          "dropdown": null
+        },
+        "mean": {
+          "format": "General",
+          "comment": "Dose. A fixed dose is entered as its value, such as `100` with unit `mg`.\nExample: 100",
+          "dropdown": null
+        },
+        "sd": {
+          "format": "General",
+          "comment": "Standard deviation.\nExample: 0.7",
+          "dropdown": null
+        },
+        "se": {
+          "format": "General",
+          "comment": "Standard error of the mean.\nExample: 0.2",
+          "dropdown": null
+        },
+        "cv": {
+          "format": "General",
+          "comment": "Coefficient of variation in percent.\nExample: 24",
+          "dropdown": null
+        },
+        "gmean": {
+          "format": "General",
+          "comment": "Geometric mean.\nExample: 2.7",
+          "dropdown": null
+        },
+        "gsd": {
+          "format": "General",
+          "comment": "Geometric standard deviation as a dimensionless factor of at least 1.\nExample: 1.3",
+          "dropdown": null
+        },
+        "gcv": {
+          "format": "General",
+          "comment": "Geometric coefficient of variation in percent.\nExample: 26",
+          "dropdown": null
+        },
+        "median": {
+          "format": "General",
+          "comment": "Median.\nExample: 2.8",
+          "dropdown": null
+        },
+        "min": {
+          "format": "General",
+          "comment": "Minimum.\nExample: 1.9",
+          "dropdown": null
+        },
+        "max": {
+          "format": "General",
+          "comment": "Maximum.\nExample: 4.1",
+          "dropdown": null
+        },
+        "unit": {
+          "format": "@",
+          "comment": "Unit of `mean`, `sd`, `se`, `gmean`, `median`, `min`, `max` and `error_bar`.\nExample: mg/l",
+          "dropdown": null
+        },
+        "error_bar": {
+          "format": "General",
+          "comment": "Digitized end of an error bar on the value axis, in `unit`. The statistic named in `error_type` is derived from it.\nExample: 3.6",
+          "dropdown": null
+        },
+        "error_type": {
+          "format": "@",
+          "comment": "Statistic the error bar shows: `sd`, `se` or `gsd`.\nExample: sd",
+          "dropdown": "_lists!choice:error_type"
+        },
+        "comment": {
+          "format": "@",
+          "comment": "Free-text comment.",
+          "dropdown": null
+        }
+      }
+    },
+    "characteristica": {
+      "header": [
+        "study",
+        "source",
+        "subjects",
+        "measurement",
+        "calculation",
+        "substance",
+        "tissue",
+        "method",
+        "choice",
+        "time",
+        "time_unit",
+        "count",
+        "mean",
+        "sd",
+        "se",
+        "cv",
+        "gmean",
+        "gsd",
+        "gcv",
+        "median",
+        "min",
+        "max",
+        "unit",
+        "error_bar",
+        "error_type",
+        "comment"
+      ],
+      "columns": {
+        "study": {
+          "format": "@",
+          "comment": "Study name, written by `pkdb format` from the folder name. Do not edit.\nExample: Guo2016",
+          "dropdown": null
+        },
+        "source": {
+          "format": "@",
+          "comment": "Paper table or figure the row comes from, such as `Tab1` or `Fig2A`, or `Text` for the article text. Except for `Text`, the image `<study>_<source>.png` must exist.\nExample: Tab1\nRequired",
+          "dropdown": null
+        },
+        "subjects": {
+          "format": "@",
+          "comment": "Name of the subject in `subjects.tsv` that the row describes: a group, or an individual with count 1.\nExample: all\nRequired",
+          "dropdown": "subjects!name"
+        },
+        "measurement": {
+          "format": "@",
+          "comment": "Baseline quantity from the vocabulary, such as `age`, `weight` or `sex`.\nExample: age\nRequired",
+          "dropdown": "_lists!measurements"
+        },
+        "calculation": {
+          "format": "@",
+          "comment": "How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`.\nExample: unspecified summary",
+          "dropdown": "_lists!calculation_types"
+        },
+        "substance": {
+          "format": "@",
+          "comment": "Substance from the vocabulary.\nExample: caffeine",
+          "dropdown": "_lists!substances"
+        },
+        "tissue": {
+          "format": "@",
+          "comment": "Tissue or matrix from the vocabulary.\nExample: plasma",
+          "dropdown": "_lists!tissues"
+        },
+        "method": {
+          "format": "@",
+          "comment": "Analytical method from the vocabulary.\nExample: HPLC",
+          "dropdown": "_lists!methods"
+        },
+        "choice": {
+          "format": "@",
+          "comment": "Categorical value of a categorical measurement, such as `M` for `sex`.\nExample: M",
+          "dropdown": null
+        },
+        "time": {
+          "format": "General",
+          "comment": "Time point in `time_unit`, or `NR` when the publication does not report it.\nExample: 2",
+          "dropdown": null
+        },
+        "time_unit": {
+          "format": "@",
+          "comment": "Unit of `time`, or `NR` when the publication does not report it.\nExample: h",
+          "dropdown": null
+        },
+        "count": {
+          "format": "General",
+          "comment": "Number of subjects the row describes. Leave empty when it equals the count of the referenced subject. In a `choice` row, the number of subjects with that choice.\nExample: 12",
+          "dropdown": null
+        },
+        "mean": {
+          "format": "General",
+          "comment": "Arithmetic mean. For a single subject (count 1) and for `unspecified summary`, the reported value.\nExample: 2.9",
+          "dropdown": null
+        },
+        "sd": {
+          "format": "General",
+          "comment": "Standard deviation.\nExample: 0.7",
+          "dropdown": null
+        },
+        "se": {
+          "format": "General",
+          "comment": "Standard error of the mean.\nExample: 0.2",
+          "dropdown": null
+        },
+        "cv": {
+          "format": "General",
+          "comment": "Coefficient of variation in percent.\nExample: 24",
+          "dropdown": null
+        },
+        "gmean": {
+          "format": "General",
+          "comment": "Geometric mean.\nExample: 2.7",
+          "dropdown": null
+        },
+        "gsd": {
+          "format": "General",
+          "comment": "Geometric standard deviation as a dimensionless factor of at least 1.\nExample: 1.3",
+          "dropdown": null
+        },
+        "gcv": {
+          "format": "General",
+          "comment": "Geometric coefficient of variation in percent.\nExample: 26",
+          "dropdown": null
+        },
+        "median": {
+          "format": "General",
+          "comment": "Median.\nExample: 2.8",
+          "dropdown": null
+        },
+        "min": {
+          "format": "General",
+          "comment": "Minimum.\nExample: 1.9",
+          "dropdown": null
+        },
+        "max": {
+          "format": "General",
+          "comment": "Maximum.\nExample: 4.1",
+          "dropdown": null
+        },
+        "unit": {
+          "format": "@",
+          "comment": "Unit of `mean`, `sd`, `se`, `gmean`, `median`, `min`, `max` and `error_bar`.\nExample: mg/l",
+          "dropdown": null
+        },
+        "error_bar": {
+          "format": "General",
+          "comment": "Digitized end of an error bar on the value axis, in `unit`. The statistic named in `error_type` is derived from it.\nExample: 3.6",
+          "dropdown": null
+        },
+        "error_type": {
+          "format": "@",
+          "comment": "Statistic the error bar shows: `sd`, `se` or `gsd`.\nExample: sd",
+          "dropdown": "_lists!choice:error_type"
+        },
+        "comment": {
+          "format": "@",
+          "comment": "Free-text comment.",
+          "dropdown": null
+        }
+      }
+    },
+    "outputs_<source>": {
+      "header": [
+        "study",
+        "source",
+        "subjects",
+        "interventions",
+        "measurement",
+        "calculation",
+        "substance",
+        "tissue",
+        "method",
+        "choice",
+        "time",
+        "time_unit",
+        "count",
+        "mean",
+        "sd",
+        "se",
+        "cv",
+        "gmean",
+        "gsd",
+        "gcv",
+        "median",
+        "min",
+        "max",
+        "unit",
+        "error_bar",
+        "error_type",
+        "comment"
+      ],
+      "columns": {
+        "study": {
+          "format": "@",
+          "comment": "Study name, written by `pkdb format` from the folder name. Do not edit.\nExample: Guo2016",
+          "dropdown": null
+        },
+        "source": {
+          "format": "@",
+          "comment": "Paper table or figure of the row, written by `pkdb format` from the file name. Do not edit.\nExample: Tab1",
+          "dropdown": null
+        },
+        "subjects": {
+          "format": "@",
+          "comment": "Name of the subject in `subjects.tsv` that the row describes: a group, or an individual with count 1.\nExample: all\nRequired",
+          "dropdown": "subjects!name"
+        },
+        "interventions": {
+          "format": "@",
+          "comment": "Comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none.\nExample: D1",
+          "dropdown": "interventions!name"
+        },
+        "measurement": {
+          "format": "@",
+          "comment": "Measured quantity from the vocabulary, such as `cmax`, `auc_inf` or `thalf`.\nExample: cmax\nRequired",
+          "dropdown": "_lists!measurements"
+        },
+        "calculation": {
+          "format": "@",
+          "comment": "How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`.\nExample: unspecified summary",
+          "dropdown": "_lists!calculation_types"
+        },
+        "substance": {
+          "format": "@",
+          "comment": "Substance from the vocabulary.\nExample: caffeine",
+          "dropdown": "_lists!substances"
+        },
+        "tissue": {
+          "format": "@",
+          "comment": "Tissue or matrix from the vocabulary.\nExample: plasma",
+          "dropdown": "_lists!tissues"
+        },
+        "method": {
+          "format": "@",
+          "comment": "Analytical method from the vocabulary.\nExample: HPLC",
+          "dropdown": "_lists!methods"
+        },
+        "choice": {
+          "format": "@",
+          "comment": "Categorical value of a categorical measurement, such as `M` for `sex`.\nExample: M",
+          "dropdown": null
+        },
+        "time": {
+          "format": "General",
+          "comment": "Time point in `time_unit`, or `NR` when the publication does not report it.\nExample: 2",
+          "dropdown": null
+        },
+        "time_unit": {
+          "format": "@",
+          "comment": "Unit of `time`, or `NR` when the publication does not report it.\nExample: h",
+          "dropdown": null
+        },
+        "count": {
+          "format": "General",
+          "comment": "Number of subjects the row describes. Leave empty when it equals the count of the referenced subject. In a `choice` row, the number of subjects with that choice.\nExample: 12",
+          "dropdown": null
+        },
+        "mean": {
+          "format": "General",
+          "comment": "Arithmetic mean. For a single subject (count 1) and for `unspecified summary`, the reported value.\nExample: 2.9",
+          "dropdown": null
+        },
+        "sd": {
+          "format": "General",
+          "comment": "Standard deviation.\nExample: 0.7",
+          "dropdown": null
+        },
+        "se": {
+          "format": "General",
+          "comment": "Standard error of the mean.\nExample: 0.2",
+          "dropdown": null
+        },
+        "cv": {
+          "format": "General",
+          "comment": "Coefficient of variation in percent.\nExample: 24",
+          "dropdown": null
+        },
+        "gmean": {
+          "format": "General",
+          "comment": "Geometric mean.\nExample: 2.7",
+          "dropdown": null
+        },
+        "gsd": {
+          "format": "General",
+          "comment": "Geometric standard deviation as a dimensionless factor of at least 1.\nExample: 1.3",
+          "dropdown": null
+        },
+        "gcv": {
+          "format": "General",
+          "comment": "Geometric coefficient of variation in percent.\nExample: 26",
+          "dropdown": null
+        },
+        "median": {
+          "format": "General",
+          "comment": "Median.\nExample: 2.8",
+          "dropdown": null
+        },
+        "min": {
+          "format": "General",
+          "comment": "Minimum.\nExample: 1.9",
+          "dropdown": null
+        },
+        "max": {
+          "format": "General",
+          "comment": "Maximum.\nExample: 4.1",
+          "dropdown": null
+        },
+        "unit": {
+          "format": "@",
+          "comment": "Unit of `mean`, `sd`, `se`, `gmean`, `median`, `min`, `max` and `error_bar`.\nExample: mg/l",
+          "dropdown": null
+        },
+        "error_bar": {
+          "format": "General",
+          "comment": "Digitized end of an error bar on the value axis, in `unit`. The statistic named in `error_type` is derived from it.\nExample: 3.6",
+          "dropdown": null
+        },
+        "error_type": {
+          "format": "@",
+          "comment": "Statistic the error bar shows: `sd`, `se` or `gsd`.\nExample: sd",
+          "dropdown": "_lists!choice:error_type"
+        },
+        "comment": {
+          "format": "@",
+          "comment": "Free-text comment.",
+          "dropdown": null
+        }
+      }
+    },
+    "timecourses_<source>": {
+      "header": [
+        "study",
+        "source",
+        "label",
+        "subjects",
+        "interventions",
+        "measurement",
+        "calculation",
+        "substance",
+        "tissue",
+        "method",
+        "choice",
+        "time",
+        "time_unit",
+        "count",
+        "mean",
+        "sd",
+        "se",
+        "cv",
+        "gmean",
+        "gsd",
+        "gcv",
+        "median",
+        "min",
+        "max",
+        "unit",
+        "error_bar",
+        "error_type",
+        "comment"
+      ],
+      "columns": {
+        "study": {
+          "format": "@",
+          "comment": "Study name, written by `pkdb format` from the folder name. Do not edit.\nExample: Guo2016",
+          "dropdown": null
+        },
+        "source": {
+          "format": "@",
+          "comment": "Paper table or figure of the row, written by `pkdb format` from the file name. Do not edit.\nExample: Tab1",
+          "dropdown": null
+        },
+        "label": {
+          "format": "@",
+          "comment": "Name of the timecourse. Rows with the same label form one series; labels are unique across the study.\nExample: caffeine_plasma_D1\nRequired",
+          "dropdown": null
+        },
+        "subjects": {
+          "format": "@",
+          "comment": "Name of the subject in `subjects.tsv` that the row describes: a group, or an individual with count 1.\nExample: all\nRequired",
+          "dropdown": "subjects!name"
+        },
+        "interventions": {
+          "format": "@",
+          "comment": "Comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none.\nExample: D1",
+          "dropdown": "interventions!name"
+        },
+        "measurement": {
+          "format": "@",
+          "comment": "Measured quantity from the vocabulary, such as `concentration`.\nExample: concentration\nRequired",
+          "dropdown": "_lists!measurements"
+        },
+        "calculation": {
+          "format": "@",
+          "comment": "How the central value was obtained, from the vocabulary. `unspecified summary` marks a central value whose statistic the publication does not state; enter it in `mean`.\nExample: unspecified summary",
+          "dropdown": "_lists!calculation_types"
+        },
+        "substance": {
+          "format": "@",
+          "comment": "Substance from the vocabulary.\nExample: caffeine",
+          "dropdown": "_lists!substances"
+        },
+        "tissue": {
+          "format": "@",
+          "comment": "Tissue or matrix from the vocabulary.\nExample: plasma",
+          "dropdown": "_lists!tissues"
+        },
+        "method": {
+          "format": "@",
+          "comment": "Analytical method from the vocabulary.\nExample: HPLC",
+          "dropdown": "_lists!methods"
+        },
+        "choice": {
+          "format": "@",
+          "comment": "Categorical value of a categorical measurement, such as `M` for `sex`.\nExample: M",
+          "dropdown": null
+        },
+        "time": {
+          "format": "General",
+          "comment": "Time point in `time_unit`, or `NR` when the publication does not report it.\nExample: 2\nRequired",
+          "dropdown": null
+        },
+        "time_unit": {
+          "format": "@",
+          "comment": "Unit of `time`, or `NR` when the publication does not report it.\nExample: h\nRequired",
+          "dropdown": null
+        },
+        "count": {
+          "format": "General",
+          "comment": "Number of subjects the row describes. Leave empty when it equals the count of the referenced subject. In a `choice` row, the number of subjects with that choice.\nExample: 12",
+          "dropdown": null
+        },
+        "mean": {
+          "format": "General",
+          "comment": "Arithmetic mean. For a single subject (count 1) and for `unspecified summary`, the reported value.\nExample: 2.9",
+          "dropdown": null
+        },
+        "sd": {
+          "format": "General",
+          "comment": "Standard deviation.\nExample: 0.7",
+          "dropdown": null
+        },
+        "se": {
+          "format": "General",
+          "comment": "Standard error of the mean.\nExample: 0.2",
+          "dropdown": null
+        },
+        "cv": {
+          "format": "General",
+          "comment": "Coefficient of variation in percent.\nExample: 24",
+          "dropdown": null
+        },
+        "gmean": {
+          "format": "General",
+          "comment": "Geometric mean.\nExample: 2.7",
+          "dropdown": null
+        },
+        "gsd": {
+          "format": "General",
+          "comment": "Geometric standard deviation as a dimensionless factor of at least 1.\nExample: 1.3",
+          "dropdown": null
+        },
+        "gcv": {
+          "format": "General",
+          "comment": "Geometric coefficient of variation in percent.\nExample: 26",
+          "dropdown": null
+        },
+        "median": {
+          "format": "General",
+          "comment": "Median.\nExample: 2.8",
+          "dropdown": null
+        },
+        "min": {
+          "format": "General",
+          "comment": "Minimum.\nExample: 1.9",
+          "dropdown": null
+        },
+        "max": {
+          "format": "General",
+          "comment": "Maximum.\nExample: 4.1",
+          "dropdown": null
+        },
+        "unit": {
+          "format": "@",
+          "comment": "Unit of `mean`, `sd`, `se`, `gmean`, `median`, `min`, `max` and `error_bar`.\nExample: mg/l",
+          "dropdown": null
+        },
+        "error_bar": {
+          "format": "General",
+          "comment": "Digitized end of an error bar on the value axis, in `unit`. The statistic named in `error_type` is derived from it.\nExample: 3.6",
+          "dropdown": null
+        },
+        "error_type": {
+          "format": "@",
+          "comment": "Statistic the error bar shows: `sd`, `se` or `gsd`.\nExample: sd",
+          "dropdown": "_lists!choice:error_type"
+        },
+        "comment": {
+          "format": "@",
+          "comment": "Free-text comment.",
+          "dropdown": null
+        }
+      }
+    },
+    "scatters_<source>": {
+      "header": [
+        "study",
+        "source",
+        "name",
+        "subjects",
+        "x_interventions",
+        "x_measurement",
+        "x_substance",
+        "x_tissue",
+        "x_method",
+        "x_time",
+        "x_time_unit",
+        "x_mean",
+        "x_unit",
+        "y_interventions",
+        "y_measurement",
+        "y_substance",
+        "y_tissue",
+        "y_method",
+        "y_time",
+        "y_time_unit",
+        "y_mean",
+        "y_unit",
+        "comment"
+      ],
+      "columns": {
+        "study": {
+          "format": "@",
+          "comment": "Study name, written by `pkdb format` from the folder name. Do not edit.\nExample: Guo2016",
+          "dropdown": null
+        },
+        "source": {
+          "format": "@",
+          "comment": "Paper table or figure of the row, written by `pkdb format` from the file name. Do not edit.\nExample: Tab1",
+          "dropdown": null
+        },
+        "name": {
+          "format": "@",
+          "comment": "Name of the scatter dataset, unique across the study.\nExample: clearance_vs_crcl\nRequired",
+          "dropdown": null
+        },
+        "subjects": {
+          "format": "@",
+          "comment": "Subject of the point, usually an individual with count 1. The points of one scatter are all individuals or all groups.\nExample: all\nRequired",
+          "dropdown": "subjects!name"
+        },
+        "x_interventions": {
+          "format": "@",
+          "comment": "X axis: comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none.\nExample: D1",
+          "dropdown": "interventions!name"
+        },
+        "x_measurement": {
+          "format": "@",
+          "comment": "X axis: measured quantity from the vocabulary, such as `cmax`, `age` or `weight`.\nExample: cmax\nRequired",
+          "dropdown": "_lists!measurements"
+        },
+        "x_substance": {
+          "format": "@",
+          "comment": "X axis: substance from the vocabulary.\nExample: caffeine",
+          "dropdown": "_lists!substances"
+        },
+        "x_tissue": {
+          "format": "@",
+          "comment": "X axis: tissue or matrix from the vocabulary.\nExample: plasma",
+          "dropdown": "_lists!tissues"
+        },
+        "x_method": {
+          "format": "@",
+          "comment": "X axis: analytical method from the vocabulary.\nExample: HPLC",
+          "dropdown": "_lists!methods"
+        },
+        "x_time": {
+          "format": "General",
+          "comment": "X axis: time point in `x_time_unit`, or `NR` when the publication does not report it.\nExample: 2",
+          "dropdown": null
+        },
+        "x_time_unit": {
+          "format": "@",
+          "comment": "X axis: unit of `x_time`, or `NR` when the publication does not report it.\nExample: h",
+          "dropdown": null
+        },
+        "x_mean": {
+          "format": "General",
+          "comment": "X axis: value of the point.\nExample: 2.9\nRequired",
+          "dropdown": null
+        },
+        "x_unit": {
+          "format": "@",
+          "comment": "X axis: unit of the value.\nExample: mg/l",
+          "dropdown": null
+        },
+        "y_interventions": {
+          "format": "@",
+          "comment": "Y axis: comma-separated names of the interventions in `interventions.tsv` that the subjects received before the measurement. Empty for none.\nExample: D1",
+          "dropdown": "interventions!name"
+        },
+        "y_measurement": {
+          "format": "@",
+          "comment": "Y axis: measured quantity from the vocabulary, such as `cmax`, `age` or `weight`.\nExample: cmax\nRequired",
+          "dropdown": "_lists!measurements"
+        },
+        "y_substance": {
+          "format": "@",
+          "comment": "Y axis: substance from the vocabulary.\nExample: caffeine",
+          "dropdown": "_lists!substances"
+        },
+        "y_tissue": {
+          "format": "@",
+          "comment": "Y axis: tissue or matrix from the vocabulary.\nExample: plasma",
+          "dropdown": "_lists!tissues"
+        },
+        "y_method": {
+          "format": "@",
+          "comment": "Y axis: analytical method from the vocabulary.\nExample: HPLC",
+          "dropdown": "_lists!methods"
+        },
+        "y_time": {
+          "format": "General",
+          "comment": "Y axis: time point in `y_time_unit`, or `NR` when the publication does not report it.\nExample: 2",
+          "dropdown": null
+        },
+        "y_time_unit": {
+          "format": "@",
+          "comment": "Y axis: unit of `y_time`, or `NR` when the publication does not report it.\nExample: h",
+          "dropdown": null
+        },
+        "y_mean": {
+          "format": "General",
+          "comment": "Y axis: value of the point.\nExample: 2.9\nRequired",
+          "dropdown": null
+        },
+        "y_unit": {
+          "format": "@",
+          "comment": "Y axis: unit of the value.\nExample: mg/l",
+          "dropdown": null
+        },
+        "comment": {
+          "format": "@",
+          "comment": "Free-text comment.",
+          "dropdown": null
+        }
+      }
+    }
+  },
+  "lists": [
+    "measurements",
+    "calculation_types",
+    "substances",
+    "tissues",
+    "methods",
+    "routes",
+    "forms",
+    "applications",
+    "choice:error_type"
+  ]
+}
