@@ -349,3 +349,14 @@ def test_batch_uploads_and_resumes_by_substance_and_name(
     assert row["skipped"] and row["ok"]
     assert ("GET", b"/api/v2/studies/caffeine/Example/publication") in requests
     assert not any(method == "PUT" for method, _ in requests)
+
+
+def test_batch_identity_of_an_invalid_pubmed_id_is_unknown(study, tmp_path):
+    # Validation of the upload reports the PubMed ID; discovery must not fail.
+    from pkdb.batch import _identity
+
+    path = study / "study.json"
+    data = json.loads(path.read_text(encoding="utf-8"))
+    data["reference"] = {"pmid": "1" * 5000}
+    path.write_text(dump_json(data), encoding="utf-8", newline="")
+    assert _identity(study) == ("caffeine/Example", None)

@@ -79,6 +79,11 @@ FORMAT_2_ROUTE = (
     "and validate them at /api/v2/studies/{substance}/{name}/validate"
 )
 
+FORMAT_2_FILES = (
+    "Send study.json and reference.json of a study format 2 folder as files, "
+    "so the server checks their exact bytes"
+)
+
 
 def valid_location(location: tuple[str, str]) -> bool:
     """Whether a study format 2 location names a folder in a temporary folder."""
@@ -285,7 +290,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         try:
             async with request.form(
                 # Study format 2 sends study.json and reference.json as files too.
-                max_files=settings.upload_max_files + 2,
+                max_files=settings.upload_max_files
+                + (2 if location is not None else 0),
                 max_fields=2,
                 max_part_size=settings.upload_max_bytes,
             ) as form:
@@ -336,6 +342,10 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                     if isinstance(declared, dict) and version != FORMAT_VERSION:
                         fail("study_format_route", FORMAT_1_ROUTE)
                 else:
+                    if location is not None and not (
+                        isinstance(study_part, str) and isinstance(reference_part, str)
+                    ):
+                        fail("bundle_fields", FORMAT_2_FILES)
                     if not isinstance(study_part, str) or not isinstance(
                         reference_part, str
                     ):
@@ -347,11 +357,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                     if study.get("format") == FORMAT_VERSION:
                         if location is None:
                             fail("study_format_route", FORMAT_2_ROUTE)
-                        fail(
-                            "bundle_fields",
-                            "Send study.json and reference.json of a study format 2 "
-                            "folder as files, so the server checks their exact bytes",
-                        )
+                        fail("bundle_fields", FORMAT_2_FILES)
                     if location is not None:
                         fail("study_format_route", FORMAT_1_ROUTE)
                     request.state.upload_study = {

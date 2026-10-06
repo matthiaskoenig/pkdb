@@ -510,3 +510,42 @@ def test_upload_sends_created_reference(
     assert len(uploads) == 1
     assert b"A nested title" in uploads[0]
     assert (study_folder / "reference.json").exists()
+
+
+@pytest.mark.parametrize(
+    ("value", "expected"),
+    [
+        ("27129716", "27129716"),
+        (27129716, "27129716"),
+        (" 0027129716 ", "27129716"),
+        ("https://pubmed.ncbi.nlm.nih.gov/27129716/", "27129716"),
+        ("1" * 16, "1" * 16),
+    ],
+)
+def test_pubmed_ids_are_normalized(value, expected):
+    from pkdb.references import normalize_pmid
+
+    assert normalize_pmid(value) == expected
+
+
+@pytest.mark.parametrize(
+    "value",
+    ["", "0", "000", "-1", "12a", "١٢٣", "1" * 17, "1" * 5000, "0" * 5000 + "1" * 17],
+    ids=[
+        "empty",
+        "zero",
+        "zeros",
+        "negative",
+        "letter",
+        "arabic",
+        "17_digits",
+        "5000_digits",
+        "padded",
+    ],
+)
+def test_invalid_pubmed_ids_are_reference_errors(value):
+    # Text of any length is refused without converting it to int.
+    from pkdb.references import ReferenceError, normalize_pmid
+
+    with pytest.raises(ReferenceError):
+        normalize_pmid(value)

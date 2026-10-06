@@ -412,6 +412,77 @@ def test_format_1_doi_without_normalized_form_is_refused(
         )
 
 
+def test_format_1_pubmed_id_of_any_length_is_a_validation_error(
+    client, creator_headers, valid_bundle
+):
+    valid_bundle.reference["pmid"] = "1" * 5000
+    url = "/api/v2/studies/" + valid_bundle.study["sid"]
+    headers = {**creator_headers, "X-PKDB-Report-Version": "2"}
+    for method, path in (("post", "/api/v2/studies/validate"), ("put", url)):
+        response = getattr(client, method)(
+            path, headers=headers, **format_1(valid_bundle)
+        )
+        assert response.status_code == 422, response.text
+        [issue] = response.json()["report"]["issues"]
+        assert (issue["code"], issue["field"]) == (
+            "invalid_publication_identifier",
+            "pmid",
+        )
+
+
+def test_mixed_study_parts_are_bundle_fields(client, creator_headers, folder):
+    parts = multipart(folder)["files"]
+    parts[1] = ("reference", (None, (folder / "reference.json").read_text()))
+    response = client.put(URL, headers=creator_headers, files=parts)
+    assert response.status_code == 422
+    [issue] = response.json()["issues"]
+    assert issue["code"] == "bundle_fields"
+    assert "as files" in issue["message"]
+
+
+@pytest.fixture
+def limited_client(ingestion_context, session_factory):
+    """A server that accepts as many files as the study folder has attachments."""
+    from fastapi.testclient import TestClient
+
+    from pkdb_server.app import create_app
+    from pkdb_server.config import Settings
+
+    ingestion, _ = ingestion_context
+    settings = Settings(
+        database_url=session_factory.kw["bind"].url.render_as_string(
+            hide_password=False
+        ),
+        file_root=ingestion.file_store.root,
+        rate_limits_enabled=False,
+        upload_max_files=8,
+    )
+    with TestClient(create_app(settings)) as client:
+        yield client
+
+
+def test_file_limit_counts_attachments_only(
+    limited_client, creator_headers, folder, valid_bundle
+):
+    # study.json and reference.json of study format 2 are files but no attachments.
+    assert len(list(folder.iterdir())) - len(JSON_FILES) == 8
+    response = limited_client.put(URL, headers=creator_headers, **multipart(folder))
+    assert response.status_code == 201, response.text
+    # Study format 1 keeps its exact limit of attachment files.
+    url = "/api/v2/studies/" + valid_bundle.study["sid"]
+    for count, status in ((8, 201), (9, 422)):
+        parts = [
+            *format_1(valid_bundle)["files"].items(),
+            *(
+                ("files", (f"notes{index}.txt", b"note", "text/plain"))
+                for index in range(count)
+            ),
+        ]
+        response = limited_client.put(url, headers=creator_headers, files=parts)
+        assert response.status_code == status, response.text
+    assert response.json()["issues"][0]["code"] == "invalid_bundle"
+
+
 def test_long_file_names_are_refused(client, creator_headers, folder, valid_bundle):
     name = "A" * 252 + ".pdf"
     parts = format_1(valid_bundle)["files"]

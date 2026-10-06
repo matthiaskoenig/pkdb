@@ -48,12 +48,24 @@ class NotFound(ReferenceError):
     pass
 
 
+# PubMed IDs have eight digits today; the bound keeps untrusted input small.
+PMID_DIGITS = 16
+
+
 def normalize_pmid(value):
+    """The PubMed ID of a number, its text or a PubMed URL, without leading zeros.
+
+    Only ASCII digits are accepted, and no conversion to int happens, so
+    untrusted text of any length is refused with ReferenceError.
+    """
     value = str(value).strip()
     value = re.sub(r"^https?://pubmed\.ncbi\.nlm\.nih\.gov/", "", value).strip("/")
-    if not re.fullmatch(r"[0-9]+", value) or int(value) <= 0:
-        raise ReferenceError("PMID must be a positive integer or PubMed URL")
-    return str(int(value))
+    digits = value.lstrip("0")
+    if not re.fullmatch(r"[0-9]+", value) or not digits or len(digits) > PMID_DIGITS:
+        raise ReferenceError(
+            f"PMID must be a positive integer of at most {PMID_DIGITS} digits or a PubMed URL"
+        )
+    return digits
 
 
 def normalize_doi(value):
