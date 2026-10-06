@@ -16,7 +16,7 @@ A released study has a PKDB identifier in the `release` block of `study.json`. U
 
 ## Statistics and schedules
 
-There is no `value` column. `mean` is the arithmetic mean, the value of a single subject (count 1) or, with the calculation `unspecified summary`, the central value of a summary whose statistic the publication does not state. `cv` and `gcv` are entered in percent and are fractions in the prepared study and the API. A digitized `error_bar` with its `error_type` completes `sd`, `se` or `gsd`; missing `sd`, `se` and `cv` are derived from each other, and `gsd` and `gcv` as well, where the reported values allow it, and reported statistics that contradict each other are a warning that a review item can acknowledge. An intervention time is a number or a `;`-separated list of times, with `interval` and `doses` for a regular schedule.
+There is no `value` column. `mean` is the arithmetic mean, the value of a single subject (count 1) or, with the calculation `unspecified summary`, the central value of a summary whose statistic the publication does not state. `cv` and `gcv` are entered in percent and are fractions in the prepared study and the API. A digitized `error_bar` with its `error_type` completes `sd`, `se` or `gsd`; missing `sd`, `se` and `cv` are derived from each other, and `gsd` and `gcv` as well, where the reported values allow it, and reported statistics that contradict each other are a warning that a review item can acknowledge. An intervention `time` is a number, or a `;`-separated list for an irregular schedule; a regular schedule uses `interval` and `doses` instead.
 
 ## Tables
 

@@ -281,9 +281,8 @@ def test_frontend_multi_match_search_alias_filters_study_membership(
         assert response.json()["data"]["count"] == count
 
 
-def test_analysis_details_match_list_rows_and_enforce_saved_visibility(
-    client, creator_headers, valid_bundle, session_factory
-):
+def add_timecourse(valid_bundle, session_factory):
+    """Make the outputs of the bundle one timecourse; it needs the PK parameters."""
     from pkdb_server.db.models.vocabulary import VocabularyNode
 
     with session_factory.begin() as session:
@@ -323,6 +322,12 @@ def test_analysis_details_match_list_rows_and_enforce_saved_visibility(
         }
         for time in range(4)
     ]
+
+
+def test_analysis_details_match_list_rows_and_enforce_saved_visibility(
+    client, creator_headers, valid_bundle, session_factory
+):
+    add_timecourse(valid_bundle, session_factory)
     response = client.put(
         f"/api/v2/studies/{valid_bundle.study['sid']}",
         headers=creator_headers,
@@ -363,6 +368,55 @@ def test_analysis_details_match_list_rows_and_enforce_saved_visibility(
         ).status_code
         == 404
     )
+
+
+def test_analysis_rows_and_downloads_carry_the_count(
+    client, creator_headers, valid_bundle, session_factory
+):
+    import csv
+    from io import BytesIO, StringIO
+    from zipfile import ZipFile
+
+    add_timecourse(valid_bundle, session_factory)
+    valid_bundle.study["interventionset"]["interventions"][0]["count"] = 2
+    response = client.put(
+        f"/api/v2/studies/{valid_bundle.study['sid']}",
+        headers=creator_headers,
+        data={
+            "study": json.dumps(valid_bundle.study),
+            "reference": json.dumps(valid_bundle.reference),
+        },
+    )
+    assert response.status_code == 201, response.json()
+
+    def rows(entity):
+        response = client.get(f"/api/v1/pkdata/{entity}/", headers=creator_headers)
+        assert response.status_code == 200, response.text
+        return response.json()["data"]["data"]
+
+    # The group has 4 subjects; every point of the timecourse inherits it, whereas
+    # the pharmacokinetic parameters derived from the course state no count.
+    outputs = rows("outputs")
+    assert {row["count"] for row in outputs if not row["calculated"]} == {4}
+    assert any(row["calculated"] for row in outputs)
+    assert {row["count"] for row in outputs if row["calculated"]} == {None}
+    assert {row["count"] for row in rows("interventions")} == {2}
+    [course] = rows("timecourses")
+    assert course["count"] == [4, 4, 4, 4]
+    assert course["unit"] == "mg/l"
+    response = client.get(
+        "/api/v1/filter/", headers=creator_headers, params={"download": "true"}
+    )
+    assert response.status_code == 200
+    with ZipFile(BytesIO(response.content)) as archive:
+
+        def table(name):
+            return list(csv.DictReader(StringIO(archive.read(name).decode())))
+
+        counts = {row["calculated"]: row["count"] for row in table("outputs.csv")}
+        assert counts == {"False": "4", "True": ""}
+        assert {row["count"] for row in table("interventions.csv")} == {"2"}
+        assert [row["count"] for row in table("timecourses.csv")] == ["[4, 4, 4, 4]"]
 
 
 def test_authenticated_exports_have_no_concurrency_limit(client, ingestion_context):

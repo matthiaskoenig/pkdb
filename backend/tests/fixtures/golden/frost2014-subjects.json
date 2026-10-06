@@ -22981,6 +22981,7 @@
         "name": "apixaban",
         "label": "apixaban"
       },
+      "count": null,
       "mean": 0.0025,
       "median": null,
       "min": null,
@@ -23037,6 +23038,7 @@
         "name": "rivaroxaban",
         "label": "rivaroxaban"
       },
+      "count": null,
       "mean": 0.01,
       "median": null,
       "min": null,
@@ -23093,6 +23095,7 @@
         "name": "rivaroxaban",
         "label": "rivaroxaban"
       },
+      "count": null,
       "mean": 10.0,
       "median": null,
       "min": null,
@@ -23149,6 +23152,7 @@
         "name": "apixaban",
         "label": "apixaban"
       },
+      "count": null,
       "mean": 2.5,
       "median": null,
       "min": null,
@@ -23253,6 +23257,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.35,
             "median": null,
             "min": null,
@@ -23311,6 +23316,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.64,
             "median": null,
             "min": null,
@@ -23369,6 +23375,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.97,
             "median": null,
             "min": null,
@@ -23427,6 +23434,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.11,
             "median": null,
             "min": null,
@@ -23485,6 +23493,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.01,
             "median": null,
             "min": null,
@@ -23543,6 +23552,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.89,
             "median": null,
             "min": null,
@@ -23601,6 +23611,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.71,
             "median": null,
             "min": null,
@@ -23659,6 +23670,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.6,
             "median": null,
             "min": null,
@@ -23717,6 +23729,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.46,
             "median": null,
             "min": null,
@@ -23775,6 +23788,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.25,
             "median": null,
             "min": null,
@@ -23833,6 +23847,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.36,
             "median": null,
             "min": null,
@@ -23891,6 +23906,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.59,
             "median": null,
             "min": null,
@@ -23949,6 +23965,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.72,
             "median": null,
             "min": null,
@@ -24007,6 +24024,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.72,
             "median": null,
             "min": null,
@@ -24065,6 +24083,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.66,
             "median": null,
             "min": null,
@@ -24123,6 +24142,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.59,
             "median": null,
             "min": null,
@@ -24181,6 +24201,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.52,
             "median": null,
             "min": null,
@@ -24239,6 +24260,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.42,
             "median": null,
             "min": null,
@@ -24297,6 +24319,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.35,
             "median": null,
             "min": null,
@@ -24355,6 +24378,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.12,
             "median": null,
             "min": null,
@@ -24424,6 +24448,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.19,
             "median": null,
             "min": null,
@@ -24482,6 +24507,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.2,
             "median": null,
             "min": null,
@@ -24540,6 +24566,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 2.24,
             "median": null,
             "min": null,
@@ -24598,6 +24625,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 2.31,
             "median": null,
             "min": null,
@@ -24656,6 +24684,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 2.14,
             "median": null,
             "min": null,
@@ -24714,6 +24743,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.89,
             "median": null,
             "min": null,
@@ -24772,6 +24802,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.49,
             "median": null,
             "min": null,
@@ -24830,6 +24861,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.27,
             "median": null,
             "min": null,
@@ -24888,6 +24920,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.75,
             "median": null,
             "min": null,
@@ -24946,6 +24979,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.43,
             "median": null,
             "min": null,
@@ -25004,6 +25038,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.27,
             "median": null,
             "min": null,
@@ -25062,6 +25097,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.27,
             "median": null,
             "min": null,
@@ -25120,6 +25156,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.25,
             "median": null,
             "min": null,
@@ -25178,6 +25215,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.22,
             "median": null,
             "min": null,
@@ -25236,6 +25274,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.21,
             "median": null,
             "min": null,
@@ -25294,6 +25333,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.19,
             "median": null,
             "min": null,
@@ -25352,6 +25392,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.18,
             "median": null,
             "min": null,
@@ -25410,6 +25451,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.13,
             "median": null,
             "min": null,
@@ -25479,6 +25521,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.1070000000000002e-05,
             "median": null,
             "min": null,
@@ -25537,6 +25580,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 7.033000000000001e-05,
             "median": null,
             "min": null,
@@ -25595,6 +25639,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.00013334000000000002,
             "median": null,
             "min": null,
@@ -25653,6 +25698,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.00016658000000000005,
             "median": null,
             "min": null,
@@ -25711,6 +25757,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.00014303000000000002,
             "median": null,
             "min": null,
@@ -25769,6 +25816,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 0.00011616000000000001,
             "median": null,
             "min": null,
@@ -25827,6 +25875,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 8.924e-05,
             "median": null,
             "min": null,
@@ -25885,6 +25934,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 7.555000000000001e-05,
             "median": null,
             "min": null,
@@ -25943,6 +25993,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 5.124000000000001e-05,
             "median": null,
             "min": null,
@@ -26001,6 +26052,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 2.9850000000000007e-05,
             "median": null,
             "min": null,
@@ -26059,6 +26111,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 2.231e-05,
             "median": null,
             "min": null,
@@ -26117,6 +26170,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.8890000000000004e-05,
             "median": null,
             "min": null,
@@ -26175,6 +26229,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.7140000000000002e-05,
             "median": null,
             "min": null,
@@ -26233,6 +26288,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.6680000000000003e-05,
             "median": null,
             "min": null,
@@ -26291,6 +26347,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.5570000000000002e-05,
             "median": null,
             "min": null,
@@ -26349,6 +26406,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.3000000000000003e-05,
             "median": null,
             "min": null,
@@ -26407,6 +26465,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.0720000000000002e-05,
             "median": null,
             "min": null,
@@ -26465,6 +26524,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 2.9200000000000004e-06,
             "median": null,
             "min": null,
@@ -26534,6 +26594,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.1550000000000003e-05,
             "median": null,
             "min": null,
@@ -26592,6 +26653,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 2.515e-05,
             "median": null,
             "min": null,
@@ -26650,6 +26712,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 4.636000000000001e-05,
             "median": null,
             "min": null,
@@ -26708,6 +26771,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 8.429000000000002e-05,
             "median": null,
             "min": null,
@@ -26766,6 +26830,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 7.976000000000002e-05,
             "median": null,
             "min": null,
@@ -26824,6 +26889,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 7.340000000000002e-05,
             "median": null,
             "min": null,
@@ -26882,6 +26948,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 6.48e-05,
             "median": null,
             "min": null,
@@ -26940,6 +27007,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 5.119000000000001e-05,
             "median": null,
             "min": null,
@@ -26998,6 +27066,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 4.275000000000001e-05,
             "median": null,
             "min": null,
@@ -27056,6 +27125,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 3.151000000000001e-05,
             "median": null,
             "min": null,
@@ -27114,6 +27184,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 1.8350000000000006e-05,
             "median": null,
             "min": null,
@@ -27172,6 +27243,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 2.6340000000000005e-05,
             "median": null,
             "min": null,
@@ -27230,6 +27302,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 4.346000000000001e-05,
             "median": null,
             "min": null,
@@ -27288,6 +27361,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 5.136000000000001e-05,
             "median": null,
             "min": null,
@@ -27346,6 +27420,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 4.9970000000000004e-05,
             "median": null,
             "min": null,
@@ -27404,6 +27479,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 4.664000000000001e-05,
             "median": null,
             "min": null,
@@ -27462,6 +27538,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 4.117000000000001e-05,
             "median": null,
             "min": null,
@@ -27520,6 +27597,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 3.736000000000001e-05,
             "median": null,
             "min": null,
@@ -27578,6 +27656,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 3.0360000000000004e-05,
             "median": null,
             "min": null,
@@ -27636,6 +27715,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 2.4010000000000006e-05,
             "median": null,
             "min": null,
@@ -27694,6 +27774,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 6.440000000000002e-06,
             "median": null,
             "min": null,
@@ -27752,6 +27833,7 @@
               "pk": 1
             },
             "normed": true,
+            "count": 14,
             "mean": 3.3200000000000004e-06,
             "median": null,
             "min": null,

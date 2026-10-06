@@ -87,6 +87,55 @@ def test_responses_carry_mean_and_geometric_statistics_without_value(
         assert STATISTICS <= characteristic.keys()
 
 
+def count_rows(client, entity, **params):
+    response = client.get(f"/api/v1/pkdata/{entity}/", params=params)
+    assert response.status_code == 200, response.text
+    return response.json()["data"]["data"]
+
+
+def test_measurements_report_the_count_of_their_subject_by_default(
+    client, valid_bundle, admin_headers
+):
+    upload(client, valid_bundle, admin_headers)
+    measurements = client.get("/api/v2/measurements").json()["items"]
+    # The group has 4 subjects and the measurement does not state its own count:
+    # the reported and the normalized row both carry the inherited one.
+    assert {row["normed"] for row in measurements} == {False, True}
+    assert [row["count"] for row in measurements] == [4] * len(measurements)
+    rows = count_rows(client, "outputs")
+    assert [row["count"] for row in rows] == [4] * len(rows)
+    assert len(count_rows(client, "outputs", count=4)) == len(rows)
+    assert count_rows(client, "outputs", count=3) == []
+    # The dose does not state a count either; it is not taken from the subject.
+    doses = client.post(
+        "/api/v2/query", json={"entity": "interventions", "page_size": 100}
+    ).json()["items"]
+    assert doses and all(row["count"] is None for row in doses)
+    assert all(row["count"] is None for row in count_rows(client, "interventions"))
+
+
+def test_measurements_and_interventions_report_the_count_they_state(
+    client, valid_bundle, admin_headers
+):
+    valid_bundle.study["outputset"]["outputs"][0]["count"] = 3
+    valid_bundle.study["interventionset"]["interventions"][0]["count"] = 2
+    upload(client, valid_bundle, admin_headers)
+    measurements = client.get("/api/v2/measurements").json()["items"]
+    assert {row["normed"] for row in measurements} == {False, True}
+    assert [row["count"] for row in measurements] == [3] * len(measurements)
+    doses = client.post(
+        "/api/v2/query", json={"entity": "interventions", "page_size": 100}
+    ).json()["items"]
+    assert doses and [row["count"] for row in doses] == [2] * len(doses)
+    # The analysis rows and the filters see the same counts.
+    assert {row["count"] for row in count_rows(client, "outputs")} == {3}
+    assert {row["count"] for row in count_rows(client, "interventions")} == {2}
+    assert len(count_rows(client, "outputs", count=3)) == len(measurements)
+    assert count_rows(client, "outputs", count=4) == []
+    assert len(count_rows(client, "interventions", count=2)) == len(doses)
+    assert count_rows(client, "interventions", count=3) == []
+
+
 def test_responses_carry_the_context_of_characteristics_and_interventions(
     client, valid_bundle, admin_headers
 ):

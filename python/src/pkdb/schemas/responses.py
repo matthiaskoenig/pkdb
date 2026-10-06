@@ -47,6 +47,7 @@ class ScientificResponse(ResponseModel):
     gmean: float | None
     gsd: float | None
     gcv: float | None
+    count: int | None
     error_bar: float | None
     error_type: str | None
     unit: str | None
@@ -72,7 +73,6 @@ class CharacteristicResponse(ScientificResponse):
     method: NodeResponse | None
     time: float | None
     time_unit: str | None
-    count: int | None
     group_count: int | None
 
 
@@ -153,6 +153,7 @@ class ArrayOutput(ResponseModel):
     gmean: float | None
     gsd: float | None
     gcv: float | None
+    count: int | None
     error_bar: float | None
     error_type: str | None
     unit: str | None

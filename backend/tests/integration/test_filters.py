@@ -164,6 +164,7 @@ def test_public_output_contains_complete_scientific_fields(crossed_measurements)
         "gmean",
         "gsd",
         "gcv",
+        "count",
         "error_bar",
         "error_type",
         "unit",

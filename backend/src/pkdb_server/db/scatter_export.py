@@ -146,6 +146,7 @@ def rows(session, spec, principal):
                 "gmean",
                 "gsd",
                 "gcv",
+                "count",
                 "error_bar",
                 "error_type",
                 "unit",

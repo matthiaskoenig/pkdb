@@ -111,6 +111,7 @@ class AnalysisIntervention(ResponseModel):
     choice_label: str | None
     substance: str | None
     substance_label: str | None
+    count: int | None
     mean: float | None
     median: float | None
     min: float | None
@@ -151,6 +152,7 @@ class AnalysisOutput(ResponseModel):
     choice_label: str | None
     substance: str | None
     substance_label: str | None
+    count: int | None
     mean: float | None
     median: float | None
     min: float | None
@@ -189,6 +191,7 @@ class AnalysisTimecourse(ResponseModel):
     choice_label: str | None
     substance: str | None
     substance_label: str | None
+    count: list[int | None] | None
     mean: list[float | None] | None
     median: list[float | None] | None
     min: list[float | None] | None

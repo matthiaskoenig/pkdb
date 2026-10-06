@@ -51,6 +51,7 @@ VALUES = (
     "gmean",
     "gsd",
     "gcv",
+    "count",
     "error_bar",
     "error_type",
     "unit",

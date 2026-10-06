@@ -195,6 +195,7 @@ def fields_for(entity):
                     "gmean",
                     "gsd",
                     "gcv",
+                    "count",
                     "time",
                     "interval",
                     "doses",

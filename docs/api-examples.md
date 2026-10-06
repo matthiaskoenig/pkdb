@@ -39,7 +39,7 @@ List responses contain `items`, `total`, `page`, `page_size`, `next`, and `previ
 
 A study in study format 2 is identified by its substance and name, such as `caffeine/Harder1988`, instead of `PKDB01110`. Pass it as the study identifier (`--study-sid caffeine/Harder1988` or the second argument of the shell script) and the same requests read it: `GET /api/v2/studies/caffeine/Harder1988` has two path segments, and `GET /api/v2/measurements?study_sid=caffeine/Harder1988` and the groups query take the identifier as a value. The PKDB identifier of a released study redirects to it, so `GET /api/v2/studies/PKDB00198` answers `308` with the `Location` of the two-segment route. `curl --location` and the `pkdb` Python client follow it, but the example scripts do not, so give them the canonical identifier. See [study identifiers and redirects](api.md#study-identifiers-and-redirects).
 
-Measurement rows report their statistics in `mean`, `median`, `min`, `max`, `sd`, `se`, `cv`, `gmean`, `gsd`, `gcv`, `error_bar` and `error_type`, and the value of a single subject or an unspecified summary is in `mean`; there is no `value` field (see [statistics in responses](api.md#statistics-in-responses)).
+Measurement rows have no `value` field: the value of a single subject or an unspecified summary is in `mean` (see [statistics in responses](api.md#statistics-in-responses) for the statistics of a row).
 
 ## Verified fixture output
 
