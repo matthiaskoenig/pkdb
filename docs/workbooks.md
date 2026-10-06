@@ -56,13 +56,13 @@ The sync compares three versions of each table: the base (the tables the workboo
 | The workbook and the tables are equal | Nothing, they are in sync. |
 | Only the workbook changed | Writes the workbook content to the tables. The workbook itself is not rewritten, so its formatting and the formulas in its data sheets stay. |
 | Only the tables changed, for example by a pull | Regenerates the workbook from the tables. A workbook that is open is not replaced; close it and sync again. |
-| Both changed | Merges the tables line by line, as git does. A clean merge is written to the tables and the workbook is regenerated. Changes to the same or neighbouring rows that differ are conflicts. |
+| Both changed | Merges the tables line by line, as git does. A clean merge is written to the tables and the workbook is regenerated. Changes to the same or adjacent rows that differ are conflicts. |
 
-All files are written atomically. An error or an unresolved conflict found by the sync stops it before it writes anything, so the tables and the workbook stay as they were, and a sync never overwrites a workbook that holds changes that are not in the tables yet. The sync needs every table to load, but not the JSON files: problems of `study.json`, `review.json` and `reference.json` do not stop it, and `pkdb validate` reports them.
+All files are written atomically. An error or an unresolved conflict found by the sync stops it before it writes anything, so the tables and the workbook stay as they were. A sync never overwrites a workbook that holds changes that are not in the tables yet; only `--keep tables` discards the conflicting rows of the workbook. The sync needs every table to load, but not the JSON files: problems of `study.json`, `review.json` and `reference.json` do not stop it, and `pkdb validate` reports them.
 
 A workbook can lose its `_base` sheet, for example when another application saves it, and an invalid one counts as lost. The sync then warns (`workbook_base_missing` or `workbook_base_invalid`): it cannot tell which side changed a table, so a table that differs between the workbook and the tables conflicts as a whole. When the workbook and the tables are equal after the sync, it regenerates the closed workbook, which restores the base and keeps the scratch sheets; while the workbook is open, it reports `workbook_open`, and closing the workbook and syncing again restores the base. If the tables and the workbook differ, choose a side with `--keep workbook` or `--keep tables`, and the same sync restores the base.
 
-Next to the workbook, the sync keeps a hidden state file `.Harder1988.xlsx.pkdb-base`. It records the base of every table that was written from the workbook since the workbook was generated, so saving the workbook twice while it stays open never conflicts with the first sync. A regeneration starts afresh and removes the file. Do not edit it. If it is lost, the sync falls back to the `_base` sheet, and rows that you edited again after an earlier sync can conflict.
+Next to the workbook, the sync keeps a hidden state file `.Harder1988.xlsx.pkdb-base`. It records the workbook version of every table in which the workbook differs from the tables it was generated from, as the base of the next sync, so saving the workbook twice while it stays open never conflicts with the first sync. A regeneration starts afresh and removes the file. Do not edit it. If it is lost, the sync falls back to the `_base` sheet, and rows that you edited again after an earlier sync can conflict.
 
 ## Conflicts
 
@@ -85,7 +85,7 @@ Terminal output lists the first ten rows of each side. `--format json` lists all
 
 ## Open workbooks and lock files
 
-A workbook that is open in a spreadsheet application is never replaced. Excel marks an open workbook with the lock file `~$Harder1988.xlsx` and LibreOffice with `.~lock.Harder1988.xlsx#`. The sync still writes your saved workbook edits to the tables, and when the tables hold something the workbook lacks, it reports the warning `workbook_open` and leaves the workbook as it is. Close the workbook and sync again to update it. An application that crashed can leave a stale lock file behind; if the workbook is not open, delete the lock file that the message names.
+A workbook that is open in a spreadsheet application is never replaced. Excel marks an open workbook with a lock file named `~$` followed by the file name, `~$Harder1988.xlsx`, which Office may shorten by the first two characters of the file name to `~$rder1988.xlsx`, and LibreOffice with `.~lock.Harder1988.xlsx#`. The sync still writes your saved workbook edits to the tables, and when the tables hold something the workbook lacks, it reports the warning `workbook_open` and leaves the workbook as it is. Close the workbook and sync again to update it. An application that crashed can leave a stale lock file behind; if the workbook is not open, delete the lock file that the message names.
 
 A sync never creates a workbook while its lock file exists, because Excel on Windows renames the workbook while it saves it, so that it is missing for a moment; it reports `workbook_open` instead.
 
