@@ -94,6 +94,7 @@ def test_inconsistent_sd_and_se_are_reported_as_a_warning(valid_study, vocabular
     assert issue.context == {
         "reported": {"sd": 1.0, "se": 1.0},
         "implied_sd": {"sd": 1.0, "se": 2.0},
+        "implied_sigma_log": {},
         "disagreeing": [["sd", "se"]],
     }
     assert prepared.report.warning_count == 1

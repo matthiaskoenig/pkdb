@@ -1,5 +1,7 @@
 """Derived statistics checked against hand-calculated values."""
 
+import math
+
 import pytest
 
 from pkdb.domain.normalization import SCALED_FIELDS, normalize_record
@@ -192,6 +194,7 @@ def test_sd_and_se_that_disagree_are_inconsistent():
     assert result.context == {
         "reported": {"sd": 1.0, "se": 1.0},
         "implied_sd": {"sd": 1.0, "se": 2.0},
+        "implied_sigma_log": {},
         "disagreeing": [["sd", "se"]],
     }
     assert result.message == "sd is 1, but se 1 implies sd 2"
@@ -267,6 +270,7 @@ def test_error_bar_is_checked_against_reported_spreads():
     assert result.context == {
         "reported": {"se": 0.1, "error_bar": 12.0},
         "implied_sd": {"se": 0.2, "error_bar": 2.0},
+        "implied_sigma_log": {},
         "disagreeing": [["se", "error_bar"]],
     }
     # A reported value is still checked against the error bar of its own type.
@@ -346,12 +350,33 @@ def test_zero_spread_reported_twice_is_consistent():
 def test_gsd_and_gcv_that_disagree_are_inconsistent():
     result = inconsistent_statistics(Statistics(gsd=1.3, gcv=0.5))
     assert result is not None
-    # The geometric family compares the implied geometric standard deviations.
+    # The geometric family compares the standard deviation of the logarithms,
+    # sigma_log = ln(gsd); the message names the geometric SD.
     assert result.reported == {"gsd": 1.3, "gcv": 0.5}
-    assert result.implied_sd["gsd"] == 1.3
-    assert result.implied_sd["gcv"] == pytest.approx(1.6038, rel=1e-4)
+    assert result.implied_sd == {}
+    assert result.implied_sigma_log["gsd"] == pytest.approx(math.log(1.3))
+    assert result.implied_sigma_log["gcv"] == pytest.approx(math.sqrt(math.log1p(0.25)))
+    assert result.context["implied_sigma_log"] == result.implied_sigma_log
     assert result.message == "gsd is 1.3, but gcv 50% implies gsd 1.604"
     assert result.field == "gsd"
+
+
+def test_geometric_family_compares_the_logarithmic_spread():
+    # gsd 1.104 and gcv 11.55 % (gsd 1.122) differ by 1.6 percent as factors,
+    # but by 14 percent in sigma_log; the reported digits leave little room.
+    result = inconsistent_statistics(Statistics(gsd=1.104, gcv=0.1155))
+    assert result is not None
+    assert result.message == "gsd is 1.104, but gcv 11.55% implies gsd 1.122"
+    # gsd 1.1 means 1.05 to 1.15 (sigma_log 0.049 to 0.14), which gcv 11.5 %
+    # (sigma_log 0.115) meets.
+    assert inconsistent_statistics(Statistics(gsd=1.1, gcv=0.115)) is None
+    # A geometric error bar in log space: ln(2.6 / 2) is ln(1.3).
+    assert (
+        inconsistent_statistics(
+            Statistics(gmean=2.0, error_bar=2.6, error_type="gsd", gsd=1.3)
+        )
+        is None
+    )
 
 
 def test_gsd_and_gcv_that_agree_are_consistent():

@@ -196,16 +196,19 @@ class _Implied:
     label: str
 
 
-def _gsd_uncertainty(gcv: float, gsd: float) -> float:
-    # d gsd / d gcv of gsd = exp(sqrt(ln(1 + gcv^2))); it tends to gsd for gcv -> 0.
+def _sigma_log_uncertainty(gcv: float) -> float:
+    # d sigma_log / d gcv of sigma_log = sqrt(ln(1 + gcv^2)); it tends to 1 for
+    # gcv -> 0.
     if gcv == 0:
-        return gsd
-    return gsd * gcv / ((1 + gcv**2) * math.sqrt(math.log1p(gcv**2)))
+        return 1.0
+    return gcv / ((1 + gcv**2) * math.sqrt(math.log1p(gcv**2)))
 
 
 def _implied_spreads(statistics: Statistics, count: int | None) -> dict[str, _Implied]:
     # The standard deviation implied by each reported arithmetic field, or the
-    # geometric standard deviation implied by each geometric field.
+    # standard deviation of the logarithms, sigma_log = ln(gsd), implied by each
+    # geometric field. Near gsd 1 a relative tolerance on gsd itself would be
+    # far too lenient.
     implied: dict[str, _Implied] = {}
     sd, se, cv, mean = statistics.sd, statistics.se, statistics.cv, statistics.mean
     gsd, gcv, gmean = statistics.gsd, statistics.gcv, statistics.gmean
@@ -233,13 +236,13 @@ def _implied_spreads(statistics: Statistics, count: int | None) -> dict[str, _Im
             cv,
         )
     if gsd is not None and gsd >= 1:
-        add("gsd", "geometric", gsd, _half_unit(gsd), gsd)
-    if gcv is not None and (value := calculate_gsd(gcv)) is not None:
+        add("gsd", "geometric", math.log(gsd), _half_unit(gsd) / gsd, gsd)
+    if gcv is not None and gcv >= 0:
         add(
             "gcv",
             "geometric",
-            value,
-            _gsd_uncertainty(gcv, value) * _half_unit(gcv),
+            math.sqrt(math.log1p(gcv**2)),
+            _sigma_log_uncertainty(gcv) * _half_unit(gcv),
             gcv,
         )
     error_type, error_bar = statistics.error_type, statistics.error_bar
@@ -248,8 +251,9 @@ def _implied_spreads(statistics: Statistics, count: int | None) -> dict[str, _Im
         return implied
     label = f"error_bar {_text(error_bar)} ({error_type})"
     if error_type == "gsd" and gmean is not None:
-        relative = _half_unit(error_bar) / error_bar + _half_unit(gmean) / gmean
-        add("error_bar", "geometric", derived, derived * relative, error_bar, label)
+        # sigma_log = |ln(error_bar) - ln(gmean)|
+        uncertainty = _half_unit(error_bar) / error_bar + _half_unit(gmean) / gmean
+        add("error_bar", "geometric", math.log(derived), uncertainty, error_bar, label)
     elif mean is not None and (error_type == "sd" or count is not None):
         root = math.sqrt(count) if error_type == "se" and count is not None else 1.0
         uncertainty = (_half_unit(error_bar) + _half_unit(mean)) * root
@@ -273,9 +277,12 @@ class Inconsistency:
 
     # The reported value of each field that implies a spread.
     reported: dict[str, float]
-    # The standard deviation each field implies, or the geometric standard
-    # deviation for gsd, gcv and an error bar of type gsd.
+    # The standard deviation that each arithmetic field implies: sd, se, cv
+    # and an error bar of type sd or se.
     implied_sd: dict[str, float]
+    # The standard deviation of the logarithms, ln(gsd), that each geometric
+    # field implies: gsd, gcv and an error bar of type gsd.
+    implied_sigma_log: dict[str, float]
     # The pairs of fields whose implied spreads disagree.
     disagreeing: list[tuple[str, str]]
     # The field that disagrees with the most others, where the warning is placed.
@@ -287,6 +294,7 @@ class Inconsistency:
         return {
             "reported": self.reported,
             "implied_sd": self.implied_sd,
+            "implied_sigma_log": self.implied_sigma_log,
             "disagreeing": [list(pair) for pair in self.disagreeing],
         }
 
@@ -298,11 +306,12 @@ def inconsistent_statistics(
 
     Each reported sd, se (needs the count), cv (needs a nonzero mean) and
     error bar of type sd or se implies a standard deviation; each gsd, gcv and
-    error bar of type gsd implies a geometric standard deviation. Two implied
-    values of a family disagree when they differ by more than 2 percent of the
-    larger one and by more than the sum of their rounding uncertainties: half a
-    unit of the last decimal place of each reported value, propagated through
-    the conversion. The families are never compared with each other.
+    error bar of type gsd implies the standard deviation of the logarithms,
+    sigma_log = ln(gsd). Two implied values of a family disagree when they
+    differ by more than 2 percent of the larger one and by more than the sum of
+    their rounding uncertainties: half a unit of the last decimal place of each
+    reported value, propagated through the conversion. The families are never
+    compared with each other.
     """
     implied = _implied_spreads(statistics, _effective_count(statistics, count))
     fields = sorted(implied, key=_ORDER.index)
@@ -320,16 +329,26 @@ def inconsistent_statistics(
     outlier = "error_bar" if "error_bar" in tied else tied[0]
 
     def claim(field: str) -> str:
-        spread = "gsd" if implied[field].family == "geometric" else "sd"
+        # Geometric spreads read as the geometric SD they imply.
+        geometric = implied[field].family == "geometric"
+        spread = "gsd" if geometric else "sd"
         if field == spread:
             return f"{spread} is {_text(implied[field].reported)}"
-        return (
-            f"{implied[field].label} implies {spread} {_text(implied[field].value, 4)}"
-        )
+        value = implied[field].value
+        shown = _text(math.exp(value) if geometric else value, 4)
+        return f"{implied[field].label} implies {spread} {shown}"
+
+    def values(family: str) -> dict[str, float]:
+        return {
+            field: implied[field].value
+            for field in fields
+            if implied[field].family == family
+        }
 
     return Inconsistency(
         reported={field: implied[field].reported for field in fields},
-        implied_sd={field: implied[field].value for field in fields},
+        implied_sd=values("arithmetic"),
+        implied_sigma_log=values("geometric"),
         disagreeing=pairs,
         field=outlier,
         message="; ".join(
