@@ -1033,6 +1033,24 @@ def test_a_workbook_saved_by_libreoffice_is_in_step(
     assert snapshot(study) == before
 
 
+@pytest.mark.parametrize("text", ["#N/A", "#DIV/0!", "#REF!"])
+def test_text_that_looks_like_an_error_value_syncs(
+    study, workbook, sf_vocabulary, libreoffice_resave, text
+):
+    edit_table(study, TIMECOURSES, 2, comment=text)
+    assert sync_study(study, sf_vocabulary).workbook_action == "regenerated"
+    workbook.write_bytes(libreoffice_resave(workbook).read_bytes())
+    tables = tables_of(study)
+
+    result = sync_study(study, sf_vocabulary)
+
+    assert result.ok, result.issues
+    assert result.issues == ()
+    assert result.changes == ()
+    assert tables_of(study) == tables
+    assert cell(study, TIMECOURSES, 2, "comment") == text
+
+
 def test_a_formula_is_synced_as_its_saved_value(
     study, workbook, sf_vocabulary, libreoffice_resave
 ):

@@ -101,9 +101,11 @@ When the spreadsheet application converted what you typed, the sync reports an e
 | --- | --- | --- |
 | A date or a time | `cell_date` | Format the column as text and enter the value again. |
 | A percentage; `20%` is stored as `0.2` | `cell_percent` | Enter `20`. |
-| An error value such as `#DIV/0!` | `cell_error` | Correct the formula or enter the value. |
+| An error value such as `#DIV/0!`, also as the saved value of a formula | `cell_error` | Correct the formula or enter the value. |
 | A line break or a tab inside a cell | `cell_line_break` | Remove it. |
 | A value to the right of the last header column | `value_outside_table` | Move it into the table, or into a `_` sheet. |
+
+Text that looks like an error value, such as `#N/A` in a text column, is text and is written to the tables as it is.
 
 Numbers with more than 15 significant digits appear as text cells, because LibreOffice saves at most 15 significant digits. They are written back to the tables unchanged. Every other number is a number cell, so the tables come back unchanged from a round trip through the workbook.
 

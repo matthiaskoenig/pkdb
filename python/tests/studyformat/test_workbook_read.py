@@ -84,6 +84,16 @@ EDGE_ROWS = (
         "method": "a_x005F_b",
         "comment": "_x005F_x0041_",
     },
+    # Text that looks like an error value of a spreadsheet application.
+    {
+        "subjects": "S2",
+        "interventions": "D1",
+        "measurement": "cmax",
+        "time": "3",
+        "tissue": "#N/A",
+        "method": "#DIV/0!",
+        "comment": "#REF!",
+    },
 )
 
 
@@ -212,6 +222,8 @@ def edge_tables(make_study, valid_files, tsv):
         "\t=x\t",
         "\t_x0041_\ta_x005F_b\t",
         "\t_x005F_x0041_\n",
+        "\t#N/A\t#DIV/0!\t",
+        "\t#REF!\n",
     ):
         assert text in tables["outputs_Tab1.tsv"]
     return tables
@@ -377,18 +389,37 @@ def test_converted_cells_are_errors_at_their_cell(
     assert content.tables["outputs_Tab2.tsv"].text.count("\n") == 2
 
 
-def test_an_error_value_as_text_is_an_error(workbook):
-    cell = f"{letter('outputs', 'comment')}2"
-
+@pytest.mark.parametrize("text", ["#N/A", "#DIV/0!", " #REF!"])
+def test_text_that_looks_like_an_error_value_is_text(workbook, study_tables, text):
     def convert(book):
-        target = book["outputs_Tab2"][cell]
-        target.value = "#N/A"
+        target = book["outputs_Tab2"][f"{letter('outputs', 'comment')}2"]
+        target.value = text
         target.data_type = "s"
 
     content = read_workbook(edit(workbook, convert), STUDY)
 
-    assert codes(content) == ["cell_error"]
-    assert at(content.issues[0]) == ("outputs_Tab2", cell)
+    assert content.issues == []
+    [_, row] = lines(content.tables["outputs_Tab2.tsv"].text)
+    # The canonical text has no surrounding spaces.
+    assert row.split("\t")[TABLES["outputs"].names.index("comment")] == text.strip()
+
+
+def test_a_formula_error_in_a_date_formatted_cell_is_an_error(
+    workbook, libreoffice_resave
+):
+    cell = f"{letter('outputs', 'mean')}2"
+
+    def convert(book):
+        target = book["outputs_Tab2"][cell]
+        target.value = '="a"+1'
+        target.number_format = "yyyy-mm-dd"
+
+    content = read_workbook(libreoffice_resave(edit(workbook, convert)), STUDY)
+
+    issue = only(content, "cell_error")
+    assert "#VALUE!" in issue.message
+    assert at(issue) == ("outputs_Tab2", cell)
+    assert "cell_date" not in codes(content)
 
 
 @pytest.mark.parametrize(

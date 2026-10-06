@@ -31,19 +31,6 @@ from pkdb.studyformat.workbook.base import (
 from pkdb.studyformat.workbook.write import not_xml
 
 SUBJECTS = "subjects"
-# The texts of the error values of Excel and LibreOffice.
-ERROR_VALUES = frozenset(
-    {
-        "#NULL!",
-        "#DIV/0!",
-        "#VALUE!",
-        "#REF!",
-        "#NAME?",
-        "#NUM!",
-        "#N/A",
-        "#GETTING_DATA",
-    }
-)
 # The error value of a date-formatted number that openpyxl cannot convert.
 OUTSIDE_CALENDAR = "#VALUE!"
 # The OOXML escape of a character, such as `_x0041_` for A and `_x005F_` for _.
@@ -167,14 +154,24 @@ def _rows(sheet, *, values_only: bool = False) -> Iterator[tuple]:
         ) from error
 
 
-def _value_text(cell) -> tuple[str, Problem | None]:
-    """Text of a cell value, and the problem of a value the spreadsheet converted."""
+def _value_text(cell, *, formula: bool = False) -> tuple[str, Problem | None]:
+    """Text of a cell value, and the problem of a value the spreadsheet converted.
+
+    Only an error cell holds an error value, also as the saved value of a
+    formula; a text such as `#N/A` in a text cell is text. `formula` tells that
+    the cell holds the saved value of a formula.
+    """
     value = cell.value
     if value is None:
         return "", None
     if cell.data_type == "e":
-        if value == OUTSIDE_CALENDAR and is_date_format(cell.number_format):
-            # openpyxl reads a date serial beyond the calendar as this error.
+        if (
+            value == OUTSIDE_CALENDAR
+            and not formula
+            and is_date_format(cell.number_format)
+        ):
+            # openpyxl reads a date serial beyond the calendar as this error;
+            # a formula whose value is an error is reported as one.
             return "", (
                 "cell_date",
                 "The cell is formatted as a date, and its value is outside the "
@@ -184,8 +181,6 @@ def _value_text(cell) -> tuple[str, Problem | None]:
         return str(value), _error_value(str(value))
     if isinstance(value, str):
         value = _decoded(value)
-        if value.strip() in ERROR_VALUES:
-            return value, _error_value(value.strip())
         if (match := LINE_BREAK.search(value)) is not None:
             name = LINE_BREAKS[match.group()]
             return LINE_BREAK.sub(" ", value), (
@@ -248,7 +243,7 @@ def _cell_text(formula, value) -> tuple[str, Problem | None]:
             f"The formula{source} has no saved value",
             "Save the workbook in Excel or LibreOffice.",
         )
-    text, problem = _value_text(value)
+    text, problem = _value_text(value, formula=True)
     if problem is not None:
         return text, problem
     stored = f"its value {text}" if text else "an empty cell"
