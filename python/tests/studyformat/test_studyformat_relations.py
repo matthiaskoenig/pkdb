@@ -410,9 +410,12 @@ def test_names_of_one_cell_are_reported_a_bounded_number_of_times(
         assert found[-1].message.startswith(f"{total:,} names of this cell")
 
 
-def test_review_items_are_reported_a_bounded_number_of_times(make_study, valid_files):
+def test_every_review_item_with_an_unknown_target_is_reported(make_study, valid_files):
+    # Review items are curation targets of their own, like rows, so none is folded
+    # into a summary.
     from pkdb.studyformat.issues import REPEATED_ISSUES
 
+    count = REPEATED_ISSUES + 5
     review = {
         "status": "draft",
         "items": [
@@ -421,7 +424,7 @@ def test_review_items_are_reported_a_bounded_number_of_times(make_study, valid_f
                 "id": f"01JA2XK7Q8M3R5T6V9W0Y{i:05d}"[:26],
                 "target": {"file": f"missing{i}.tsv"},
             }
-            for i in range(5_000)
+            for i in range(count)
         ],
     }
     folder = make_study({**valid_files, "review.json": dump_json(review)})
@@ -430,7 +433,4 @@ def test_review_items_are_reported_a_bounded_number_of_times(make_study, valid_f
         for i in check_relations(load_study(folder))
         if i.code == "unknown_review_target"
     ]
-    assert len(found) == REPEATED_ISSUES + 1
-    assert found[-1].message == (
-        f"5,000 review items target unknown places; the first {REPEATED_ISSUES} are listed"
-    )
+    assert len(found) == count

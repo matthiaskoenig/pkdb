@@ -470,23 +470,6 @@ def _study_rules(study: LoadedStudy) -> Issues:
 
 
 def _review_rules(study: LoadedStudy) -> Issues:
-    # review.json may hold very many items: each code lists its first issues
-    # and counts all.
-    cap = IssueCap()
-    for issue in _review_items(study):
-        if issue.code == "approved_with_open_items" or cap.admit(issue.code):
-            yield issue
-    kinds = {
-        "unknown_review_target": "target unknown places",
-        "review_target_unmatched": "no longer match a row",
-    }
-    for code, total in cap.beyond():
-        yield make_issue(
-            code, f"{total:,} review items {kinds[code]}; {LISTED}", file=REVIEW_JSON
-        )
-
-
-def _review_items(study: LoadedStudy) -> Issues:
     review = study.review
     if review is None:
         return
