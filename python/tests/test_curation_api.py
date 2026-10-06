@@ -3,14 +3,18 @@
 import json
 import threading
 
+import openpyxl
 import pytest
 from curation_http import authenticate, request
 from digitize_fixtures import GOOD, png, project
 
+from pkdb.curation import studies
 from pkdb.curation.engine import CurationEngine
 from pkdb.curation.server import create_server
 from pkdb.studyformat.formatter import format_folder
+from pkdb.studyformat.sync import sync_study
 from pkdb.studyformat.ulid import new_ulid
+from pkdb.studyformat.workbook.base import workbook_path
 
 DETAIL = "/local/studies/caffeine/Example"
 
@@ -90,6 +94,92 @@ def test_invalid_documents_keep_their_revision(api):
     assert detail["review"]["value"] is None and detail["review"]["revision"]
     assert detail["review"]["issues"][0]["code"] == "invalid_review_json"
     assert detail["metadata"]["value"]["licence"] == "open"
+
+
+def test_symlinked_review_json_is_not_read(api, tmp_path_factory):
+    server, engine, folder = api
+    outside = tmp_path_factory.mktemp("outside") / "review.json"
+    outside.write_text('{"status": "in_review"}')
+    (folder / "review.json").unlink()
+    (folder / "review.json").symlink_to(outside)
+    status, _, data = request(server, "GET", DETAIL, headers=authenticate(server))
+    assert status == 200
+    review = json.loads(data)["review"]
+    assert review["value"] is None and review["revision"] is None
+    assert "symlink" in {issue["code"] for issue in review["issues"]}
+
+
+def test_directory_named_review_json_is_reported(api):
+    server, engine, folder = api
+    (folder / "review.json").unlink()
+    (folder / "review.json").mkdir()
+    status, _, data = request(server, "GET", DETAIL, headers=authenticate(server))
+    assert status == 200
+    detail = json.loads(data)
+    assert detail["review"]["value"] is None
+    assert {"unknown_directory", "missing_file"} <= {
+        issue["code"] for issue in detail["review"]["issues"]
+    }
+    assert detail["metadata"]["value"]["licence"] == "open"
+
+
+def test_missing_study_json_has_the_absent_revision(api):
+    server, engine, folder = api
+    (folder / "study.json").unlink()
+    detail = json.loads(request(server, "GET", DETAIL, headers=authenticate(server))[2])
+    assert detail["metadata"]["value"] is None
+    assert detail["metadata"]["revision"] == "absent"
+    assert detail["metadata"]["issues"][0]["code"] == "missing_file"
+
+
+@pytest.mark.parametrize(
+    ("limit", "value", "code"),
+    [("MAX_ROWS", 3, "row_limit"), ("MAX_FILES", 2, "file_limit")],
+)
+def test_upload_limits_bound_the_read_routes(api, monkeypatch, limit, value, code):
+    server, engine, folder = api
+    monkeypatch.setattr(studies, limit, value)
+    headers = authenticate(server)
+    status, _, data = request(server, "GET", DETAIL, headers=headers)
+    assert status == 200
+    detail = json.loads(data)
+    assert detail["metadata"]["value"]["licence"] == "open"
+    assert detail["review"]["value"]["status"] == "draft"
+    assert detail["problems"][0]["code"] == code
+    assert detail["sources"] == [] and detail["files"] == []
+    for path in (f"{DETAIL}/tables/timecourses_Fig1.tsv", f"{DETAIL}/sources/Fig1"):
+        status, _, data = request(server, "GET", path, headers=headers)
+        assert status == 413 and "more than" in json.loads(data)["error"]
+
+
+def test_detail_lists_sync_conflicts(api, sf_vocabulary, monkeypatch):
+    server, engine, folder = api
+    # The bundled vocabulary lacks the substance of the test study.
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    headers = authenticate(server)
+    assert (
+        json.loads(request(server, "GET", DETAIL, headers=headers)[2])["conflicts"]
+        == []
+    )
+    assert sync_study(folder, sf_vocabulary).ok
+    book = openpyxl.load_workbook(workbook_path(folder))
+    sheet = book["timecourses_Fig1"]
+    header = [cell.value for cell in sheet[1]]
+    sheet.cell(3, header.index("mean") + 1).value = 5
+    book.save(workbook_path(folder))
+    table = folder / "timecourses_Fig1.tsv"
+    lines = table.read_text().splitlines()
+    cells = lines[2].split("\t")
+    cells[lines[0].split("\t").index("mean")] = "7"
+    lines[2] = "\t".join(cells)
+    table.write_text("\n".join(lines) + "\n")
+    engine.scan()
+    detail = json.loads(request(server, "GET", DETAIL, headers=headers)[2])
+    assert detail["sync"]["status"] == "conflict"
+    [conflict] = detail["conflicts"]
+    assert conflict["file"] == "timecourses_Fig1.tsv"
+    assert conflict["workbook_rows"][0]["row"] == 3
+    assert conflict["table_lines"][0]["line"] == 3
 
 
 def test_acknowledged_warnings_are_listed_until_dismissed(api):
@@ -191,6 +281,36 @@ def test_tables_and_sources_answer_304(api, path):
     assert again[0] == 304 and again[2] == b""
 
 
+def test_a_table_304_does_not_load_the_study(api, monkeypatch):
+    server, engine, folder = api
+    headers = authenticate(server)
+    path = f"{DETAIL}/tables/timecourses_Fig1.tsv"
+    etag = request(server, "GET", path, headers=headers)[1]["ETag"]
+    loads = []
+    monkeypatch.setattr(
+        studies, "load_study", lambda *args, **kwargs: loads.append(args)
+    )
+    assert (
+        request(server, "GET", path, headers={**headers, "If-None-Match": etag})[0]
+        == 304
+    )
+    assert loads == []
+
+
+def test_table_etag_changes_with_the_table(api):
+    server, engine, folder = api
+    headers = authenticate(server)
+    path = f"{DETAIL}/tables/Example_Tab2.tsv"
+    etag = request(server, "GET", path, headers=headers)[1]["ETag"]
+    (folder / "Example_Tab2.tsv").write_text("cmax\t3.5 ± 0.5\n")
+    engine.scan()
+    status, response_headers, data = request(
+        server, "GET", path, headers={**headers, "If-None-Match": etag}
+    )
+    assert status == 200 and response_headers["ETag"] != etag
+    assert json.loads(data)["rows"][0]["cells"] == ["cmax", "3.5 ± 0.5"]
+
+
 @pytest.mark.parametrize(
     "path",
     [
@@ -238,12 +358,17 @@ def test_symlinked_image_is_refused(api, tmp_path):
 )
 def test_study_folder_replaced_by_a_symlink_is_refused(api, tmp_path_factory, path):
     server, engine, folder = api
+    headers = authenticate(server)
+    etag = request(server, "GET", path, headers=headers)[1].get("ETag")
     moved = tmp_path_factory.mktemp("outside") / "Example"
     folder.rename(moved)
     folder.symlink_to(moved, target_is_directory=True)
     # The scan skips a symlinked folder and keeps its row.
     engine.scan()
-    assert request(server, "GET", path, headers=authenticate(server))[0] == 404
+    assert request(server, "GET", path, headers=headers)[0] == 404
+    if etag:
+        cached = {**headers, "If-None-Match": etag}
+        assert request(server, "GET", path, headers=cached)[0] == 404
 
 
 def test_duplicate_identity_answers_409(api, valid_files):

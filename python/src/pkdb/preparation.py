@@ -32,6 +32,11 @@ from pkdb.studyformat.validation import (
 
 type Part = tuple[str, tuple[None, bytes] | tuple[str, bytes | BinaryIO, str]]
 
+# The limits of a prepared study: data rows of all tables, and files besides
+# study.json and reference.json. A server may allow less; the upload checks its limits.
+MAX_ROWS = 1_000_000
+MAX_FILES = 256
+
 
 def study_folders(path: str | Path) -> list[Path]:
     root = Path(path)
@@ -250,8 +255,8 @@ def prepare(
     folder: str | Path,
     *,
     vocabulary: Vocabulary | None = None,
-    max_rows: int = 1_000_000,
-    max_files: int = 256,
+    max_rows: int = MAX_ROWS,
+    max_files: int = MAX_FILES,
     progress: ProgressCallback | None = None,
 ) -> PreparedBundle:
     emit(progress, "read")

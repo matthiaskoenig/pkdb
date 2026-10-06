@@ -13,6 +13,7 @@ from urllib.parse import unquote, urlsplit
 from pkdb.curation.engine import WorkspaceError
 from pkdb.curation.studies import AmbiguousStudy
 from pkdb.references import ReferenceError
+from pkdb.schemas.validation import StudyValidationError
 
 MAX_BODY = 64 * 1024
 ASSETS = Path(__file__).parent / "static"
@@ -27,15 +28,27 @@ def _matches(received, expected):
 def _segments(path):
     """The segments of a URL path, each percent-decoded after splitting on `/`.
 
-    ValueError for an empty segment, `.`, `..`, or a segment with a separator or NUL.
+    LookupError for an empty segment, `.`, `..`, a segment with a separator or NUL, or one that
+    is not UTF-8.
     """
     segments = []
     for segment in path.split("/"):
-        value = unquote(segment, errors="strict")
+        try:
+            value = unquote(segment, errors="strict")
+        except UnicodeDecodeError:
+            raise LookupError("Invalid path segment") from None
         if value in {"", ".", ".."} or any(char in value for char in "/\\\0"):
-            raise ValueError("Invalid path segment")
+            raise LookupError("Invalid path segment")
         segments.append(value)
     return segments
+
+
+def _route_version(version, route):
+    """The version of a table or source route of a study from the version of the study.
+
+    The study version covers every file of the study, so it versions each table and source too.
+    """
+    return hashlib.sha256(json.dumps([version, *route]).encode()).hexdigest()
 
 
 class CurationServer(ThreadingHTTPServer):
@@ -123,9 +136,15 @@ class Handler(BaseHTTPRequestHandler):
                     lambda: engine.study_detail(identity),
                 )
             case ["tables", file]:
-                self._json(engine.study_table(identity, file))
+                self._versioned(
+                    _route_version(engine.study_version(identity), rest),
+                    lambda: engine.study_table(identity, file),
+                )
             case ["sources", source]:
-                self._json(engine.study_source(identity, source))
+                self._versioned(
+                    _route_version(engine.study_version(identity), rest),
+                    lambda: engine.study_source(identity, source),
+                )
             case ["files", file]:
                 data, media_type = engine.study_image(identity, file)
                 self._reply(200, data, content_type=media_type)
@@ -180,18 +199,23 @@ class Handler(BaseHTTPRequestHandler):
                         }
                     )
                 elif path.startswith("/local/reports/"):
-                    self._json(
-                        self.server.engine.report(
+                    try:
+                        report = self.server.engine.report(
                             unquote(path.removeprefix("/local/reports/"))
                         )
-                    )
+                    except ValueError, FileNotFoundError:
+                        raise LookupError(path) from None
+                    self._json(report)
                 elif path.startswith("/local/studies/"):
                     self._study(path)
                 else:
                     self._reply(404, {"error": "Unknown resource"})
             except AmbiguousStudy as error:
                 self._reply(409, {"error": str(error)})
-            except ValueError, LookupError, FileNotFoundError:
+            except StudyValidationError as error:
+                # The study is beyond the upload limits.
+                self._reply(413, {"error": str(error)})
+            except LookupError, FileNotFoundError:
                 self._reply(404, {"error": "Resource is not available"})
             except Exception:
                 self._reply(500, {"error": "Unable to read the local workspace state"})

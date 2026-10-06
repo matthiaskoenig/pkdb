@@ -11,23 +11,26 @@ import hashlib
 import json
 import os
 import stat
+from collections.abc import Callable
 from pathlib import Path
 from urllib.parse import quote
 
 from pydantic import ValidationError
 
 from pkdb.curation.state import EngineState
+from pkdb.preparation import MAX_FILES, MAX_ROWS
 from pkdb.schemas.review import Review
-from pkdb.schemas.validation import ValidationIssue
+from pkdb.schemas.validation import StudyValidationError, ValidationIssue
 from pkdb.studyformat.jsonio import JsonFileError, load_json
-from pkdb.studyformat.layout import scan_folder
-from pkdb.studyformat.load import load_study
-from pkdb.studyformat.metadata import MetadataError, read_metadata
+from pkdb.studyformat.layout import Layout, scan_folder
+from pkdb.studyformat.load import LoadedStudy, load_study
+from pkdb.studyformat.metadata import MetadataDocument, MetadataError, read_metadata
 from pkdb.studyformat.models import StudyMetadata
 from pkdb.studyformat.raw import raw_lines
 from pkdb.studyformat.review_edit import ReviewError, read_review
-from pkdb.studyformat.revision import read_revision
+from pkdb.studyformat.revision import read_revision, revision_of
 from pkdb.studyformat.sources import source_view, study_sources
+from pkdb.studyformat.sync import conflict_data, sync_study
 from pkdb.studyformat.tables import REVIEW_JSON, STUDY_JSON
 from pkdb.studyformat.text import natural_key
 
@@ -130,35 +133,44 @@ def study_summary(folder: Path) -> dict:
     }
 
 
-def _invalid(path: Path, issues: list[ValidationIssue]) -> dict:
-    # The revision lets the app replace an invalid file.
-    return {
-        "revision": read_revision(path)[1],
-        "value": None,
-        "issues": [issue.model_dump(mode="json") for issue in issues],
-    }
+def _issues(issues: list[ValidationIssue]) -> list[dict]:
+    return [issue.model_dump(mode="json") for issue in issues]
 
 
-def _metadata_document(folder: Path) -> dict:
+def _document(folder: Path, layout: Layout, name: str, read: Callable) -> dict:
+    """`study.json` or `review.json` as `{"revision", "value", "issues"}`; `value` None when invalid.
+
+    A file that the layout does not register, such as a symlink or a folder, is never read: it
+    gets the issues of the layout and no revision, or the `absent` revision when it is missing.
+    """
+    path = folder / name
+    if name not in layout.files:
+        return {
+            "revision": None if os.path.lexists(path) else revision_of(None),
+            "value": None,
+            "issues": _issues(
+                [
+                    issue
+                    for issue in layout.issues
+                    if issue.source and issue.source.file == name
+                ]
+            ),
+        }
     try:
-        document = read_metadata(folder)
-    except MetadataError as error:
-        return _invalid(folder / STUDY_JSON, error.issues)
+        document = read(folder)
+    except (MetadataError, ReviewError) as error:
+        # The revision lets the app replace an invalid file.
+        return {
+            "revision": read_revision(path)[1],
+            "value": None,
+            "issues": _issues(error.issues),
+        }
+    model = (
+        document.metadata if isinstance(document, MetadataDocument) else document.review
+    )
     return {
         "revision": document.revision,
-        "value": document.metadata.model_dump(mode="json", exclude_none=True),
-        "issues": [],
-    }
-
-
-def _review_document(folder: Path) -> dict:
-    try:
-        document = read_review(folder)
-    except ReviewError as error:
-        return _invalid(folder / REVIEW_JSON, error.issues)
-    return {
-        "revision": document.revision,
-        "value": document.review.model_dump(mode="json", exclude_none=True),
+        "value": model.model_dump(mode="json", exclude_none=True),
         "issues": [],
     }
 
@@ -187,6 +199,11 @@ def _unlinked(folder: Path, root: Path) -> Path:
     return folder
 
 
+def _bounded(folder: Path) -> LoadedStudy:
+    """The study within the upload limits; StudyValidationError beyond them."""
+    return load_study(folder, max_rows=MAX_ROWS, max_files=MAX_FILES)
+
+
 class StudiesMixin(EngineState):
     def _study_row(self, identity: str) -> dict:
         matches = [row for row in self.studies.values() if row["id"] == identity]
@@ -202,9 +219,14 @@ class StudiesMixin(EngineState):
         return _unlinked(folder, root)
 
     def study_version(self, identity: str) -> str:
-        """A key of everything the study page shows, cheap enough for every poll."""
+        """A key of everything the study page shows, cheap enough for every poll.
+
+        The fingerprint hashes every file of the study, so the key also versions its tables and
+        sources.
+        """
         with self.lock:
             row = self._study_row(identity)
+            folder, root = row["_folder"], self.root
             key = {
                 "fingerprint": row["_fingerprint"],
                 "status": row["status"],
@@ -215,12 +237,14 @@ class StudiesMixin(EngineState):
                 "jobs": [job for job in self.jobs if job["study_id"] == identity],
             }
             data = json.dumps(key, sort_keys=True, default=str).encode()
+        _unlinked(folder, root)
         return hashlib.sha256(data).hexdigest()
 
     def study_detail(self, identity: str) -> dict:
         with self.lock:
             row = self._study_row(identity)
             folder, root = row["_folder"], self.root
+            conflicted = row["sync"]["status"] == "conflict"
             # A copy, so that the files are read outside the lock.
             detail = json.loads(
                 json.dumps(
@@ -243,19 +267,45 @@ class StudiesMixin(EngineState):
                     }
                 )
             )
-        study = load_study(_unlinked(folder, root))
-        review = _review_document(folder)
+        _unlinked(folder, root)
+        try:
+            study = _bounded(folder)
+        except StudyValidationError as error:
+            # Beyond the upload limits: the documents, and the limit as the first problem.
+            layout = scan_folder(folder)
+            limits = _issues(error.report.issues)
+            detail["problems"] = [
+                *limits,
+                *(problem for problem in detail["problems"] if problem not in limits),
+            ]
+            sources, files = [], []
+        else:
+            layout = study.layout
+            sources = [dataclasses.asdict(source) for source in study_sources(study)]
+            files = sorted(layout.files, key=natural_key)
+        review = _document(folder, layout, REVIEW_JSON, read_review)
         return {
             **detail,
-            "metadata": _metadata_document(folder),
+            "metadata": _document(folder, layout, STUDY_JSON, read_metadata),
             "review": review,
             "acknowledged": _acknowledged(review["value"]),
-            "sources": [dataclasses.asdict(source) for source in study_sources(study)],
-            "files": sorted(study.layout.files, key=natural_key),
+            "conflicts": self._conflicts(folder) if conflicted else [],
+            "sources": sources,
+            "files": files,
         }
 
+    def _conflicts(self, folder: Path) -> list[dict]:
+        """The conflicting rows of the workbook and the tables, as the sync plans them."""
+        try:
+            result = sync_study(
+                folder, self._local_vocabulary(), check=True, max_rows=MAX_ROWS
+            )
+        except OSError, ValueError:
+            return []
+        return [conflict_data(conflict) for conflict in result.conflicts]
+
     def study_table(self, identity: str, file: str) -> dict:
-        study = load_study(self.study_folder(identity))
+        study = _bounded(self.study_folder(identity))
         if (table := study.table(file)) is not None:
             header = table.spec.names
             return {
@@ -282,7 +332,7 @@ class StudiesMixin(EngineState):
         raise LookupError(f"{file} is not a table of {identity}")
 
     def study_source(self, identity: str, source: str) -> dict:
-        view = source_view(load_study(self.study_folder(identity)), source)
+        view = source_view(_bounded(self.study_folder(identity)), source)
         image_url = None
         if view.image is not None:
             segments = (*identity.split("/"), "files", view.image)
