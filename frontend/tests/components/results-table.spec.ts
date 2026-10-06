@@ -66,9 +66,15 @@ it("shows unit before one value column and the study identifier", () => {
   ]);
   wrapper.unmount();
 });
-it("keeps a value on one line and sorts it by the value of the row", async () => {
+it("keeps a value and a unit on one line and sorts by the value of the row", async () => {
   const wrapper = table();
-  expect(wrapper.findAll("td.nowrap")).toHaveLength(2);
+  // Unit and value of both rows; a unit never wraps after an operator.
+  expect(wrapper.findAll("td.nowrap").map((cell) => cell.text())).toEqual([
+    "mg/l",
+    "2.5\u00a0±\u00a00.5\u00a0(SD)",
+    "-",
+    "-",
+  ]);
   const sort = wrapper
     .findAll("button.sort-button")
     .find((button) => button.text().startsWith("Value"));
@@ -88,6 +94,10 @@ it("keeps a study identifier whole and breaks only a very long one after its sla
   expect(cells[2]?.html()).toContain(
     `${"a".repeat(30)}/<wbr>${"b".repeat(30)}`,
   );
+  // Only an identifier of at most 40 characters is kept on one line, so the
+  // break after the slash of a longer one takes effect.
+  expect(cells[0]?.classes()).toContain("identifier");
+  expect(cells[2]?.classes()).not.toContain("identifier");
   wrapper.unmount();
 });
 it("shows a dash in every empty cell of an intervention without route and substance", () => {

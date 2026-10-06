@@ -3,7 +3,8 @@ export interface Column {
   key: string;
   title: string;
   order?: string;
-  // A value that reads as one unit, such as `2.5 ± 0.5 (SD)`, stays on one line.
+  // A value that reads as one unit, such as `2.5 ± 0.5 (SD)`, or a unit such
+  // as `gram * hour / liter`, stays on one line.
   nowrap?: boolean;
   // A study identifier `<substance>/<name>` stays on one line while the table
   // has room and breaks after the slash only as a fallback.
@@ -33,7 +34,7 @@ export const columns: Record<ResultTab, Column[]> = {
   interventions: [
     { key: "name", title: "Intervention", order: "name" },
     { key: "substance", title: "Substance", order: "substance" },
-    { key: "unit", title: "Unit", order: "unit" },
+    { key: "unit", title: "Unit", order: "unit", nowrap: true },
     { key: "statistics", title: "Value", order: "central_value", nowrap: true },
     { key: "route", title: "Route", order: "route" },
     { key: "schedule", title: "Schedule" },
@@ -46,7 +47,7 @@ export const columns: Record<ResultTab, Column[]> = {
       order: "measurement_type",
     },
     { key: "substance", title: "Substance", order: "substance" },
-    { key: "unit", title: "Unit", order: "unit" },
+    { key: "unit", title: "Unit", order: "unit", nowrap: true },
     { key: "statistics", title: "Value", order: "central_value", nowrap: true },
     { key: "subject", title: "Subject" },
     { key: "interventions", title: "Related interventions" },

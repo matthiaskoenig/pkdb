@@ -28,6 +28,15 @@ summary {
   outline: 3px solid rgb(var(--v-theme-primary));
   outline-offset: 3px;
 }
+/* A text field shows the focus ring around the whole field: around its input
+   the ring would cross the floating label. */
+.v-field input:focus-visible {
+  outline: none;
+}
+.v-field:has(input:focus-visible) {
+  outline: 3px solid rgb(var(--v-theme-primary));
+  outline-offset: 2px;
+}
 h1 {
   font-size: clamp(1.8rem, 3vw, 2.7rem);
   line-height: 1.18;
@@ -495,12 +504,15 @@ table {
   border-bottom-color: rgb(var(--v-theme-primary));
   background: rgba(var(--v-theme-primary), 0.05);
 }
+/* Header and button texts start where the other texts of their column start. */
 .sort-button {
   font-size: inherit;
   font-weight: 700;
+  padding: 0;
 }
 .detail-button {
   font-weight: 650;
+  padding: 0;
 }
 .science-table {
   min-width: 720px;

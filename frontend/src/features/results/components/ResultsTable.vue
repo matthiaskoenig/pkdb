@@ -25,9 +25,14 @@ function open(row: ApiRecord) {
   const id = identifier(row);
   if (id !== undefined) emit("detail", id);
 }
-// `<substance>/<name>`, as opposed to the name of a study format 1 study.
+// Longer identifiers may break after their slash.
+const KEPT_IDENTIFIER = 40;
+// `<substance>/<name>` of at most KEPT_IDENTIFIER characters, which stays on
+// one line, as opposed to the name of a study format 1 study.
 function isIdentifier(text: string): boolean {
-  return /^[^\s/]+\/[^\s/]+$/u.test(text);
+  return (
+    text.length <= KEPT_IDENTIFIER && /^[^\s/]+\/[^\s/]+$/u.test(text)
+  );
 }
 function sort(key: string) {
   emit("order", props.order === key ? `-${key}` : key);
@@ -104,7 +109,7 @@ function sort(key: string) {
             <HighlightText
               :text="cellText(row, column.key)"
               :query="query"
-              :keep-up-to="column.identifier ? 40 : 0"
+              :keep-up-to="column.identifier ? KEPT_IDENTIFIER : 0"
             />
           </td>
         </tr>
