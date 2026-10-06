@@ -562,11 +562,12 @@ def sync_study(
         done, failure = _write_tables(folder, plan.files, changes)
         # The workbook content is the common ancestor of its later saves and of
         # the new tables, whether they took it, merged it or kept the tables.
+        # This includes a table only the base holds, which both sides removed.
         # A table whose write failed keeps its base, so the sync is retried.
         pending = {change.file for change in changes[len(done) :]}
         recorded = {
             file: workbook.get(file)
-            for file in plan.files
+            for file in plan.files.keys() | base.keys()
             if file not in pending and workbook.get(file) != base.get(file)
         }
         if content.base is not None and recorded:

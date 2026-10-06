@@ -598,6 +598,34 @@ def test_keep_resolves_a_removed_sheet_whose_table_changed(
         assert_in_step(study, workbook)
 
 
+@pytest.mark.parametrize("restored", ["same", "changed"])
+def test_a_table_removed_on_both_sides_can_be_restored(
+    study, workbook, sf_vocabulary, restored
+):
+    original = (study / OUTPUTS).read_bytes()
+    edit(workbook, remove_sheet("outputs_Tab2"))
+    (study / OUTPUTS).unlink()
+
+    removed = sync_study(study, sf_vocabulary)
+
+    assert removed == SyncResult(study, workbook)
+    # The removal on both sides is the new base of the table.
+    assert read_state(workbook, generation_of(workbook)) == {OUTPUTS: None}
+
+    # Restored as git checkout would, or with an edit.
+    (study / OUTPUTS).write_bytes(original)
+    if restored == "changed":
+        edit_table(study, OUTPUTS, 2, mean="3.5")
+    expected = (study / OUTPUTS).read_bytes()
+
+    result = sync_study(study, sf_vocabulary)
+
+    assert result == SyncResult(study, workbook, workbook_action="regenerated")
+    assert (study / OUTPUTS).read_bytes() == expected
+    assert "outputs_Tab2" in content_of(workbook).sheets
+    assert_in_step(study, workbook)
+
+
 def test_a_table_deleted_while_its_sheet_changed_conflicts(
     study, workbook, sf_vocabulary
 ):
