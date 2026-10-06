@@ -35,7 +35,7 @@ def create_mcp(queries, session_factory):
         return DataPage[ScientificRecord].from_page(page, query).model_dump(mode="json")
 
     def get(principal, sid):
-        return read_study(sid, principal, session_factory, released=True).model_dump(
+        return read_study(sid, principal, session_factory, by_pkdb_id=True).model_dump(
             mode="json"
         )
 

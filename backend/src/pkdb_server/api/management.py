@@ -5,7 +5,7 @@ from typing import Literal
 
 from fastapi import APIRouter, HTTPException, Query, Request
 from pydantic import BaseModel, ConfigDict, Field
-from sqlalchemy import delete, select, text
+from sqlalchemy import delete, select
 
 from pkdb_server.api.identity import MOVED, study_redirect
 from pkdb_server.db.models.audit import AuditEvent
@@ -16,7 +16,7 @@ from pkdb_server.services.credentials import (
     require_admin_session,
     revoke_user_credentials,
 )
-from pkdb_server.services.ingestion import sid_lock
+from pkdb_server.services.ingestion import lock_publication
 from pkdb_server.services.profiles import public_profile
 
 router = APIRouter(prefix="/api/v1/admin")
@@ -174,34 +174,31 @@ def update_user(user_id: int, data: PatchUser, request: Request):
 LOCK_ATTEMPTS = 3
 
 
+class StudyNotFound(LookupError):
+    """No study is stored under the sid."""
+
+
 class StudyChanged(Exception):
     """The PKDB identifier of a study changed before its locks were taken."""
 
 
-def lock_publications(session, sid: str) -> set[str]:
+def lock_study(session, sid: str) -> None:
     """Take the advisory locks that every publication of the study takes.
 
-    A publication locks its sid and its PKDB identifier in sorted order, then
-    the uploader's account, then the study row. It replaces the study under
-    the same sid or takes it over by its PKDB identifier (a rename), so the
-    locks of both names exclude every publication of the study. With the sid
-    alone, a rename could hold the account row of a curator, which the grant
-    inserts wait for, while it waits for the study row: a deadlock. Returns
-    the locked names.
+    A publication locks its sid and its PKDB identifier, then the uploader's
+    account, then the study row. It replaces the study under the same sid or
+    takes it over by its PKDB identifier (a rename), so the locks of both
+    names exclude every publication of the study. With the sid alone, a rename
+    could hold the account row of a curator, which the grant inserts wait for,
+    while it waits for the study row: a deadlock. StudyChanged if the PKDB
+    identifier changed before the locks were taken; the caller has taken no
+    account or row lock yet and starts again.
     """
     pkdb_id = session.scalar(select(Study.pkdb_id).where(Study.sid == sid))
-    names = {sid, *([pkdb_id] if pkdb_id else [])}
-    for key in sorted(sid_lock(name) for name in names):
-        session.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": key})
-    return names
-
-
-def locked_study(session, sid: str, names: set[str]) -> Study | None:
-    """The study row, locked; StudyChanged if its PKDB identifier is not locked."""
-    study = session.scalar(select(Study).where(Study.sid == sid).with_for_update())
-    if study is not None and study.pkdb_id and study.pkdb_id not in names:
+    names = lock_publication(session, sid, pkdb_id)
+    current = session.scalar(select(Study.pkdb_id).where(Study.sid == sid))
+    if current is not None and current not in names:
         raise StudyChanged
-    return study
 
 
 @router.put("/studies/{sid}/access", responses=MOVED)
@@ -209,7 +206,7 @@ def study_access(sid: str, data: Access, request: Request):
     """Access of a study by its study format 1 sid; PKDB identifiers redirect."""
     try:
         return update_access(sid, data, request)
-    except LookupError:
+    except StudyNotFound:
         # Only the designated administrator gets here.
         if (redirect := study_redirect(request, sid)) is not None:
             return redirect
@@ -221,21 +218,23 @@ def located_study_access(substance: str, name: str, data: Access, request: Reque
     """Access of a study format 2 study by its sid `<substance>/<name>`."""
     try:
         return update_access(f"{substance}/{name}", data, request)
-    except LookupError:
+    except StudyNotFound:
         raise HTTPException(404, "Study not found") from None
 
 
 def update_access(sid: str, data: Access, request: Request):
-    """Set the access of a study; LookupError if there is no study `sid`."""
+    """Set the access of a study; StudyNotFound if there is no study `sid`."""
     for _ in range(LOCK_ATTEMPTS):
         try:
             with request.app.state.session_factory.begin() as session:
                 # The lock order of a publication: names, account, study row.
-                names = lock_publications(session, sid)
+                lock_study(session, sid)
                 administrator = actor(request, session)
-                study = locked_study(session, sid, names)
+                study = session.scalar(
+                    select(Study).where(Study.sid == sid).with_for_update()
+                )
                 if study is None:
-                    raise LookupError("Study not found")
+                    raise StudyNotFound(sid)
                 return set_access(session, administrator, study, data)
         except StudyChanged:
             continue
@@ -278,7 +277,7 @@ def read_access(sid: str, request: Request):
     """Access of a study by its study format 1 sid; PKDB identifiers redirect."""
     try:
         return access_grants(sid, request)
-    except LookupError:
+    except StudyNotFound:
         # Only the designated administrator gets here.
         if (redirect := study_redirect(request, sid)) is not None:
             return redirect
@@ -290,7 +289,7 @@ def read_located_access(substance: str, name: str, request: Request):
     """Access of a study format 2 study by its sid `<substance>/<name>`."""
     try:
         return access_grants(f"{substance}/{name}", request)
-    except LookupError:
+    except StudyNotFound:
         raise HTTPException(404, "Study not found") from None
 
 
@@ -299,7 +298,7 @@ def access_grants(sid: str, request: Request):
         actor(request, session)
         study = session.scalar(select(Study).where(Study.sid == sid))
         if study is None:
-            raise LookupError("Study not found")
+            raise StudyNotFound(sid)
         grants = list(
             session.scalars(select(StudyGrant).where(StudyGrant.study_id == study.id))
         )

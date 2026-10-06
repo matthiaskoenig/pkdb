@@ -5,6 +5,7 @@ import os
 from contextlib import ExitStack
 from pathlib import Path
 from tempfile import NamedTemporaryFile
+from urllib.parse import urljoin, urlsplit
 
 import httpx2
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
@@ -41,6 +42,9 @@ from pkdb.schemas.responses import (
 from pkdb.schemas.study import CanonicalStudy
 from pkdb.schemas.validation import ValidationReport, fail
 from pkdb.studyformat.validation import is_v2_folder, study_path
+
+# Permanent redirects that a read follows within the endpoint's origin.
+MAX_REDIRECTS = 5
 
 
 def _known_report(value: dict) -> dict:
@@ -308,6 +312,8 @@ class Client:
                     follow_redirects=False,
                     **kwargs,
                 )
+                if method == "GET":
+                    response = self._follow_moved(response, request_headers)
         except httpx2.RequestError:
             message = "PK-DB request failed"
             if not read_only:
@@ -326,6 +332,26 @@ class Client:
             if read_only:
                 error.persistence = "not_attempted"
             raise
+        return response
+
+    def _follow_moved(self, response, headers):
+        """Follow permanent redirects of a read within the endpoint's origin.
+
+        PK-DB answers 308 for the PKDB identifier of a study that moved to
+        `<substance>/<name>`. Other redirects, redirects to another origin and
+        more than MAX_REDIRECTS redirects are returned as they are.
+        """
+        origin = urlsplit(self.endpoint)[:2]
+        for _ in range(MAX_REDIRECTS):
+            location = response.headers.get("location")
+            if response.status_code != 308 or not location:
+                break
+            target = urljoin(str(response.url), location)
+            if urlsplit(target)[:2] != origin:
+                break
+            response = self._transport.request(
+                "GET", target, headers=headers, follow_redirects=False
+            )
         return response
 
     @staticmethod

@@ -18,16 +18,24 @@ from pkdb_server.files.store import study_access
 from pkdb_server.services.authorization import AuthorizationDenied, authorize
 
 
-def find_study(
-    session: Session, identifier: str, *, released: bool = False
+def released_study(
+    session: Session, identifier: str, principal: Principal
 ) -> s.Study | None:
-    """The study stored under the sid `identifier`.
+    """The study released as `identifier` and stored under another sid.
 
-    With `released`, a PKDB identifier names its released study as well.
+    A PKDB identifier is also the study format 1 sid of a released study that
+    is now stored as `<substance>/<name>`. Only readers of the study learn
+    which study it is; for anyone else there is no such study.
     """
-    root = session.scalar(select(s.Study).where(s.Study.sid == identifier))
-    if root is None and released:
-        root = session.scalar(select(s.Study).where(s.Study.pkdb_id == identifier))
+    root = session.scalar(
+        select(s.Study).where(s.Study.pkdb_id == identifier, s.Study.sid != identifier)
+    )
+    if root is None:
+        return None
+    try:
+        authorize(principal, "read", study_access(root, session))
+    except AuthorizationDenied:
+        return None
     return root
 
 
@@ -36,12 +44,14 @@ def read_study(
     principal: Principal,
     session_factory: sessionmaker[Session],
     *,
-    released: bool = False,
+    by_pkdb_id: bool = False,
 ) -> CanonicalStudy:
-    """The study stored under `sid`; with `released`, also by PKDB identifier."""
+    """The study stored under `sid`; with `by_pkdb_id`, else the study released as `sid`."""
     with session_factory() as session:
         session.connection(execution_options={"isolation_level": "REPEATABLE READ"})
-        root = find_study(session, sid, released=released)
+        root = session.scalar(select(s.Study).where(s.Study.sid == sid))
+        if root is None and by_pkdb_id:
+            root = released_study(session, sid, principal)
         if root is None:
             raise LookupError("Study not found")
         authorize(principal, "read", study_access(root, session))
@@ -51,25 +61,10 @@ def read_study(
 def moved_study(
     identifier: str, principal: Principal, session_factory: sessionmaker[Session]
 ) -> str | None:
-    """The sid of the study released as `identifier` and stored under another sid.
-
-    A PKDB identifier is also the study format 1 sid of a released study that
-    is now stored as `<substance>/<name>`. Only readers of the study learn its
-    sid; for anyone else there is no such study.
-    """
+    """The sid of the study released as `identifier` under another sid, if readable."""
     with session_factory() as session:
-        root = session.scalar(
-            select(s.Study).where(
-                s.Study.pkdb_id == identifier, s.Study.sid != identifier
-            )
-        )
-        if root is None:
-            return None
-        try:
-            authorize(principal, "read", study_access(root, session))
-        except AuthorizationDenied:
-            return None
-        return root.sid
+        root = released_study(session, identifier, principal)
+        return root.sid if root is not None else None
 
 
 def intervention_time(row: i.Intervention) -> float | list[float] | None:

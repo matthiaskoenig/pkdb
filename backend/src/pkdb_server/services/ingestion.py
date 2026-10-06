@@ -46,6 +46,19 @@ def sid_lock(sid: str) -> int:
     return int.from_bytes(hashlib.sha256(sid.encode()).digest()[:8], "big", signed=True)
 
 
+def lock_publication(session: Session, sid: str, pkdb_id: str | None) -> set[str]:
+    """Take the advisory locks of a publication of `sid` released as `pkdb_id`.
+
+    A release locks its PKDB identifier too, so a study format 1 upload under
+    that sid and a rename of the released study serialize. The locks are
+    taken in sorted order, which avoids deadlocks. Returns the locked names.
+    """
+    names = {sid, *([pkdb_id] if pkdb_id else [])}
+    for key in sorted(sid_lock(name) for name in names):
+        session.execute(text("SELECT pg_advisory_xact_lock(:key)"), {"key": key})
+    return names
+
+
 def stored_study(
     session: Session,
     study: CanonicalStudy,
@@ -315,15 +328,10 @@ class IngestionService:
                     text("SELECT pg_advisory_xact_lock_shared(:key)"),
                     {"key": VOCABULARY_LOCK},
                 )
-                # A release locks its PKDB identifier too: a format 1 upload
-                # under that sid and a rename of the released study serialize.
-                # A fixed order avoids deadlocks.
                 release = study.metadata.release
-                names = {study.sid, *([release.pkdb_id] if release else [])}
-                for key in sorted(sid_lock(name) for name in names):
-                    session.execute(
-                        text("SELECT pg_advisory_xact_lock(:key)"), {"key": key}
-                    )
+                lock_publication(
+                    session, study.sid, release.pkdb_id if release else None
+                )
                 self.check_compatibility(
                     expected_vocabulary_hash,
                     expected_processing_version,

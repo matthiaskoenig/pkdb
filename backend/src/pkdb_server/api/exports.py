@@ -2,6 +2,7 @@ import math
 
 from fastapi import APIRouter, HTTPException, Request
 
+from pkdb.schemas.security import Principal
 from pkdb_server.api.identity import MOVED, study_redirect
 from pkdb_server.api.reads import query_spec
 from pkdb_server.db.analysis import ENTITIES
@@ -77,7 +78,9 @@ def located_study_analysis(substance: str, name: str, request: Request):
     return record
 
 
-def analysis_record(entity, field, value, request, actor):
+def analysis_record(
+    entity: str, field: str, value: str | int, request: Request, actor: Principal
+) -> tuple[dict | None, Principal]:
     """The record whose `field` is `value`, and the principal of a saved selection."""
     from pkdb.schemas.queries import Predicate
 

@@ -3,13 +3,16 @@
 import json
 import threading
 import time
+from contextlib import contextmanager
 from datetime import date
 
 import pytest
-from sqlalchemy import text, update
+from sqlalchemy import select, text, update
 
+from pkdb import Client
 from pkdb.studyformat.jsonio import dump_json
 from pkdb_server.db.models.studies import Study
+from pkdb_server.db.models.users import User
 from pkdb_server.services.ingestion import sid_lock
 from tests.fixtures.study_folders import multipart, write_study
 
@@ -257,6 +260,16 @@ def test_reference_with_a_doi_is_served(client, creator_headers, tmp_path):
         assert (response.json()["sid"], response.json()["doi"]) == (doi, doi)
 
 
+@contextmanager
+def lock_holder(session_factory):
+    """A connection that takes locks; closing it releases them, also on failure."""
+    with session_factory.kw["bind"].connect() as connection:
+        try:
+            yield connection
+        finally:
+            connection.invalidate()
+
+
 def advisory(connection, operation, name):
     connection.execute(
         text(f"SELECT pg_advisory_{operation}(:key)"), {"key": sid_lock(name)}
@@ -300,7 +313,7 @@ def test_access_update_waits_for_publications_of_the_released_study(
     """
     url = f"/api/v1/admin/studies/{SID}/access"
     grants = client.get(url, headers=admin_headers).json()
-    with session_factory.kw["bind"].connect() as other:
+    with lock_holder(session_factory) as other:
         advisory(other, "lock", PKDB_ID)
         worker, responses = start_update(client, admin_headers, url, grants)
         wait_for_waiter(other, PKDB_ID)
@@ -321,7 +334,7 @@ def test_access_update_locks_a_pkdb_identifier_released_meanwhile(
     assert response.status_code == 201, response.text
     url = f"/api/v1/admin/studies/{SID}/access"
     grants = client.get(url, headers=admin_headers).json()
-    with session_factory.kw["bind"].connect() as other:
+    with lock_holder(session_factory) as other:
         advisory(other, "lock", SID)
         worker, responses = start_update(client, admin_headers, url, grants)
         wait_for_waiter(other, SID)
@@ -332,9 +345,13 @@ def test_access_update_locks_a_pkdb_identifier_released_meanwhile(
             .values(pkdb_id=PKDB_ID, release_date=date(2026, 9, 28))
         )
         other.commit()
+        # The update notices the change before it locks the account.
+        other.execute(
+            select(User.id).where(User.username == "mkoenig").with_for_update()
+        )
         advisory(other, "lock", PKDB_ID)
         advisory(other, "unlock", SID)
-        # The update starts again and locks the new PKDB identifier too.
+        # It starts again and locks the new PKDB identifier too.
         wait_for_waiter(other, PKDB_ID)
         assert not responses
         advisory(other, "unlock", PKDB_ID)
@@ -342,3 +359,36 @@ def test_access_update_locks_a_pkdb_identifier_released_meanwhile(
     worker.join(timeout=30)
     [response] = responses
     assert response.status_code == 200, response.text
+
+
+def test_access_update_gives_up_when_the_study_keeps_changing(
+    client, admin_headers, released, monkeypatch
+):
+    from pkdb_server.api import management
+
+    attempts = []
+
+    def without_pkdb_id(session, sid, pkdb_id):
+        # As if the PKDB identifier changed before every attempt took its locks.
+        attempts.append(sid)
+        return {sid}
+
+    monkeypatch.setattr(management, "lock_publication", without_pkdb_id)
+    url = f"/api/v1/admin/studies/{SID}/access"
+    grants = client.get(url, headers=admin_headers).json()
+    response = client.put(
+        url, headers=admin_headers, json={**grants, "access": "public"}
+    )
+    assert response.status_code == 409, response.text
+    assert attempts == [SID] * management.LOCK_ATTEMPTS
+    assert client.get(url, headers=admin_headers).json() == grants
+
+
+def test_client_reads_follow_the_redirect(client, creator_headers, released):
+    api = Client(
+        endpoint="http://testserver",
+        api_key=creator_headers["Authorization"].split(" ", 1)[1],
+        transport=client,
+    )
+    assert api.studies.get(PKDB_ID).sid == SID
+    assert api.publication(PKDB_ID).sid == SID

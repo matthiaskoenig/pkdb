@@ -64,10 +64,12 @@ async def test_read_tools_match_rest_and_removed_tools_cannot_write(
 
 @pytest.mark.anyio
 async def test_get_study_reads_substance_and_name_and_pkdb_identifiers(
-    mcp_http, mcp_connect, ingestion_context, tmp_path
+    mcp_http, mcp_connect, ingestion_context, tmp_path, session_factory
 ):
     import httpx2
 
+    from pkdb_server.db.models.users import User
+    from pkdb_server.services.authentication import issue_token
     from tests.fixtures.study_folders import write_study
 
     app, url, token = mcp_http
@@ -91,6 +93,20 @@ async def test_get_study_reads_substance_and_name_and_pkdb_identifiers(
             assert study.structured_content == expected
         for sid in ("PKDB00199", "caffeine/Missing"):
             assert (await client.call_tool("get_study", {"sid": sid})).is_error
+    with session_factory.begin() as session:
+        other = User(username="other", role="curator", active=True)
+        session.add(other)
+        session.flush()
+        other_token = issue_token(other, session)
+    # Like REST, a PKDB identifier names a private study only for its readers.
+    async with mcp_connect(url, other_token) as client:
+        for sid, message in (
+            ("PKDB00198", "Not found"),
+            ("caffeine/Example", "Action not permitted"),
+        ):
+            study = await client.call_tool("get_study", {"sid": sid})
+            assert study.is_error
+            assert [item.text for item in study.content] == [message]
 
 
 @pytest.mark.anyio
