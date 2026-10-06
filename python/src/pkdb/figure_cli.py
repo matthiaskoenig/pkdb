@@ -44,10 +44,15 @@ def register(commands) -> None:
     plot.add_argument("study", type=Path, help="Study folder")
     plot.add_argument(
         "--source",
-        help="Source to render (default: every Fig source with timecourses or scatters)",
+        help=(
+            "Source to render (default: every Fig source with a digitization, "
+            "timecourses or scatters)"
+        ),
     )
     plot.add_argument(
-        "--out", type=Path, help="Output directory (default: a new temporary directory)"
+        "--out",
+        type=Path,
+        help="Output directory outside the study folder (default: a new temporary directory)",
     )
     plot.add_argument(
         "--format",
@@ -72,6 +77,13 @@ def _plot(args) -> int:
     from pkdb.studyformat.sources import study_sources
 
     human = args.format == "human" or (args.format is None and sys.stdout.isatty())
+    if args.out is not None and args.out.resolve().is_relative_to(args.study.resolve()):
+        say(
+            f"Cannot plot {args.study}: pkdb plot writes into --out {args.out}, "
+            "never into the study folder",
+            file=sys.stderr,
+        )
+        return 1
     try:
         study = load_study(args.study)
         if args.source:
@@ -81,16 +93,19 @@ def _plot(args) -> int:
                 summary.source
                 for summary in study_sources(study)
                 if summary.source.startswith("Fig")
-                and any(
-                    table.kind in ("timecourses", "scatters")
-                    and (
-                        table.source == summary.source
-                        or any(
-                            row.cells.get("source") == summary.source
-                            for row in table.rows
+                and (
+                    summary.raw_kind == "digitization"
+                    or any(
+                        table.kind in ("timecourses", "scatters")
+                        and (
+                            table.source == summary.source
+                            or any(
+                                row.cells.get("source") == summary.source
+                                for row in table.rows
+                            )
                         )
+                        for table in study.tables
                     )
-                    for table in study.tables
                 )
             ]
         out = args.out or Path(tempfile.mkdtemp(prefix="pkdb-plot-"))
@@ -103,7 +118,8 @@ def _plot(args) -> int:
                 {
                     "source": source,
                     "file": str(file),
-                    "mode": "overlay" if result.points else "side_by_side",
+                    "mode": result.mode,
+                    "unmatched": list(result.unmatched),
                 }
             )
     except KeyError as error:
@@ -123,6 +139,8 @@ def _plot(args) -> int:
     label = study_label(args.study)
     for plot in plots:
         say(f"{label}: {plot['source']} ({plot['mode']}) {plot['file']}")
+        if plot["unmatched"]:
+            say(f"  series without dataset: {', '.join(plot['unmatched'])}")
     return 0
 
 

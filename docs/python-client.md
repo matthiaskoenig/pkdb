@@ -208,7 +208,7 @@ The curation commands read and edit a study folder with checked, atomic writes; 
 | `pkdb review status FOLDER draft\|in_review\|approved` | Set the review status; `approved` records `approved_by` and `approved`, and needs zero open items and zero validation errors |
 | `pkdb review acknowledge FOLDER CODE --file FILE --text TEXT` | Acknowledge a validation warning with a resolved item (`--line`, `--column`); one item covers the warnings of one location, such as several `unknown_dataset` warnings of a `.wpd.json` file |
 | `pkdb digitize import FOLDER SOURCE FILE` | Write `<study>_<source>.wpd.json` from a WebPlotDigitizer 4 `.json` or `.tar` project, after checking it against the figure image |
-| `pkdb plot FOLDER` | Render the figure image with its digitized points and mapped rows to `<out>/<study>_<source>.plot.png` (`--source`, `--out`) |
+| `pkdb plot FOLDER` | Render the figure image with its digitized points and mapped rows to `<out>/<study>_<source>.plot.png` (`--source`, `--out` outside the study folder); by default every figure with a digitization, timecourses or scatters, and lists the series without dataset |
 | `pkdb tables add FOLDER --raw Tab2` | Add the empty sheet of the raw table of a paper table |
 
 Review writes name the person with `--user` or `PKDB_USER`, or the AI agent with `--agent` or `PKDB_AGENT`. Agents may add, reply, resolve and dismiss items, but approving a study is refused for agents and needs a person. Approving an approved study changes nothing. While a study is approved, adding an open item or reopening an item is refused; set the status to `in_review` first. See [Study format](study-format.md) for the raw extraction files (`<study>_<source>.tsv`, `.wpd.json`) and the review file.
