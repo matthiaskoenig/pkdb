@@ -16,6 +16,7 @@ from pkdb_server.db.models.vocabulary import (
     VocabularyNode,
     VocabularyTerm,
 )
+from pkdb_server.db.read import intervention_time
 
 
 def observation_projection(model):
@@ -275,7 +276,6 @@ def subject_responses(session, rows, individual=False):
                 "method": vocabulary.node(record.method),
                 "time": record.time,
                 "time_unit": record.time_unit,
-                "count": record.count,
                 "group_count": groups[record.subject_id].count
                 if record.subject_id in groups
                 else None,
@@ -340,7 +340,7 @@ def intervention_responses(session, rows):
                 "application": vocabulary.node(row.application),
                 "tissue": vocabulary.node(row.tissue),
                 "method": vocabulary.node(row.method),
-                "time": row.time_list if row.time_list is not None else row.time,
+                "time": intervention_time(row),
                 "time_end": row.time_end,
                 "interval": row.interval,
                 "doses": row.doses,

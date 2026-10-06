@@ -308,7 +308,14 @@ def _serialize(session, entity, rows, principal):
                     **science(
                         row,
                         labels=True,
-                        fields=("route", "form", "application", "tissue", "method"),
+                        fields=(
+                            *NODES,
+                            "route",
+                            "form",
+                            "application",
+                            "tissue",
+                            "method",
+                        ),
                     ),
                     "time": row["time"],
                     "time_end": row["time_end"],
@@ -316,7 +323,6 @@ def _serialize(session, entity, rows, principal):
                     "doses": row["doses"],
                     "time_unit": row["time_unit"],
                     "subject_pk": model.subject_id,
-                    **science(row, labels=True),
                 }
             )
         return result
@@ -347,13 +353,14 @@ def _serialize(session, entity, rows, principal):
                     **study(model),
                     **prefix,
                     "characteristica_pk": characteristic.id,
-                    "count": characteristic.count,
                     **science(
-                        record, labels=False, names=True, fields=("tissue", "method")
+                        record,
+                        labels=False,
+                        names=True,
+                        fields=(*NODES, "tissue", "method"),
                     ),
                     "time": characteristic.time,
                     "time_unit": characteristic.time_unit,
-                    **science(record, labels=False, names=True),
                 }
             )
         return result
