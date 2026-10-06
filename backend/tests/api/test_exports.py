@@ -394,12 +394,12 @@ def test_analysis_rows_and_downloads_carry_the_count(
         assert response.status_code == 200, response.text
         return response.json()["data"]["data"]
 
-    # The group has 4 subjects; every point of the timecourse inherits it, whereas
-    # the pharmacokinetic parameters derived from the course state no count.
+    # The group has 4 subjects; every point of the timecourse inherits it, and
+    # the pharmacokinetic parameters derived from the course take its count.
     outputs = rows("outputs")
     assert {row["count"] for row in outputs if not row["calculated"]} == {4}
     assert any(row["calculated"] for row in outputs)
-    assert {row["count"] for row in outputs if row["calculated"]} == {None}
+    assert {row["count"] for row in outputs if row["calculated"]} == {4}
     assert {row["count"] for row in rows("interventions")} == {2}
     [course] = rows("timecourses")
     assert course["count"] == [4, 4, 4, 4]
@@ -414,7 +414,7 @@ def test_analysis_rows_and_downloads_carry_the_count(
             return list(csv.DictReader(StringIO(archive.read(name).decode())))
 
         counts = {row["calculated"]: row["count"] for row in table("outputs.csv")}
-        assert counts == {"False": "4", "True": ""}
+        assert counts == {"False": "4", "True": "4"}
         assert {row["count"] for row in table("interventions.csv")} == {"2"}
         assert [row["count"] for row in table("timecourses.csv")] == ["[4, 4, 4, 4]"]
 

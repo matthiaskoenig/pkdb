@@ -45,6 +45,24 @@ def test_terminal_half_life_and_zero_tmax_are_preserved(exponential_course):
     assert outputs["auc_end"].derived_from == "curve"
 
 
+@pytest.mark.parametrize(
+    ("counts", "expected"),
+    [
+        ((4,) * 7, 4),
+        ((12, 12, 12, 11, 11, 10, 10), 10),
+        ((4, None, 4, 4, 4, 4, 4), None),
+    ],
+)
+def test_derived_parameters_take_the_count_of_the_timecourse(
+    exponential_course, counts, expected
+):
+    for point, count in zip(exponential_course.points, counts, strict=True):
+        point.statistics.count = count
+    outputs = derive_pk(exponential_course)
+    assert outputs
+    assert {record.statistics.count for record in outputs} == {expected}
+
+
 def test_course_builder_sorts_time_without_mutating_input(exponential_course):
     points = list(reversed(exponential_course.points))
     courses = build_timecourses(points)
@@ -101,6 +119,8 @@ def test_preparation_derives_validated_pk_outputs(
     assert len(dataset.subsets[0].points) == 7
     calculated = [p for p in prepared.study.measurements if p.origin == "calculated"]
     assert any(p.measurement_type == "thalf" for p in calculated)
+    # The points of the course take the count of the group "all".
+    assert {p.statistics.count for p in calculated} == {4}
 
 
 def test_calculated_outputs_also_have_normalized_copies(

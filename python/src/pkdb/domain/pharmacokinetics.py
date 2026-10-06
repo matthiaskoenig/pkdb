@@ -222,6 +222,11 @@ def derive_pk(
             terminal=TerminalPhase(method=TerminalMethod.ALL_AFTER_TMAX),
         ),
     )
+    # The count of the timecourse: the smallest count of its points, or None
+    # when the count of a point is unknown.
+    counts = [point.statistics.count for point in points]
+    known = [count for count in counts if count is not None]
+    count = min(known) if len(known) == len(counts) else None
     results = []
     for name, measurement_type in PK_FIELDS.items():
         if name not in calculated:
@@ -241,7 +246,9 @@ def derive_pk(
         record.output_type = "output"
         record.measurement_type = measurement_type
         record.unit = parameter.attrs["units"]
-        record.statistics = Statistics.model_validate({statistic: value})
+        record.statistics = Statistics.model_validate(
+            {statistic: value, "count": count}
+        )
         record.time = max(times) if name == "auc_last" else None
         record.time_unit = first.time_unit if name == "auc_last" else None
         record.time_not_reported = False
