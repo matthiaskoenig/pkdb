@@ -526,6 +526,23 @@ def test_text_like_an_escape_is_escaped(sf_vocabulary, tmp_path, libreoffice_res
     assert "_x0042_" in texts and "_x005F_x0042_" not in texts
 
 
+def test_a_long_text_like_escapes_is_kept_whole(sf_vocabulary, tmp_path):
+    from pkdb.studyformat.workbook.read import read_workbook
+
+    # A full cell, whose escaped text is longer than a cell.
+    comment = "_x0041_" * (32_767 // 7)
+    tables = {"outputs_Tab1.tsv": outputs({"comment": comment})}
+    result = build(tables, sf_vocabulary)
+    assert result.issues == []
+    assert result.data is not None
+    path = tmp_path / "Example.xlsx"
+    path.write_bytes(result.data)
+
+    content = read_workbook(path, "Example")
+
+    assert content.tables["outputs_Tab1.tsv"].text == tables["outputs_Tab1.tsv"]
+
+
 def test_text_whose_escapes_share_an_underscore_is_a_warning(sf_vocabulary):
     result = build(
         {"outputs_Tab1.tsv": outputs({"comment": "a_x005F_x0041_b"})}, sf_vocabulary

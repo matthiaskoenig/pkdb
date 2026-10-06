@@ -208,7 +208,7 @@ def _numbers(word: str, numbers: Sequence[int]) -> str:
 
 
 def _region_conflict(
-    workbook: str,
+    workbook_name: str,
     file: str,
     rows: Sequence[int],
     conflict: Conflict,
@@ -217,7 +217,7 @@ def _region_conflict(
     """A conflicting region of a merge, and its issue unless `keep` resolved it.
 
     `rows` are the sheet rows of the canonical workbook lines. The issue is
-    located at the first row of the region in the sheet of the `workbook`, and
+    located at the first row of the region in the sheet of the workbook, and
     its message names the lines of the TSV file. A side without lines is
     located at the line before the region, or at the header.
     """
@@ -250,7 +250,7 @@ def _region_conflict(
         f"The workbook and the tables changed the same rows of {sheet} "
         f"differently since the last sync: {in_workbook} of the sheet, "
         f"{in_tables} of {file}",
-        file=workbook,
+        file=workbook_name,
         sheet=sheet,
         line=row,
         hint=KEEP_HINT,
