@@ -133,6 +133,7 @@ def main(argv=None, *, client=None) -> int:
         figure_cli,
         import_cli,
         reference_cli,
+        study_cli,
         studyformat_cli,
         tables_cli,
     )
@@ -141,6 +142,7 @@ def main(argv=None, *, client=None) -> int:
     import_cli.register(commands)
     studyformat_cli.register(commands)
     tables_cli.register(commands)
+    study_cli.register(commands)
     figure_cli.register(commands)
     update = commands.add_parser(
         "update",
@@ -160,6 +162,8 @@ def main(argv=None, *, client=None) -> int:
         return reference_cli.run(args, client=client)
     if args.command in {"format", "schema"}:
         return studyformat_cli.run(args)
+    if args.command in {"study", "review"}:
+        return study_cli.run(args)
     if args.command == "tables":
         return tables_cli.run(args)
     if args.command == "digitize":

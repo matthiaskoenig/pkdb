@@ -74,6 +74,22 @@ def say(text: str, *, file=None) -> None:
     print(safe_text(text), file=file)
 
 
+def study_folder(path: Path, command: str) -> Path | None:
+    """The folder of a study format 2 study, or None after an error naming `command`."""
+    from pkdb.studyformat import is_v2_folder
+
+    if not (path / "study.json").is_file():
+        say(f"{path} is not a study folder: it has no study.json", file=sys.stderr)
+        return None
+    if not is_v2_folder(path):
+        say(
+            f"{path} is a study of study format 1; pkdb {command} needs study format 2",
+            file=sys.stderr,
+        )
+        return None
+    return path
+
+
 def _location(source) -> str:
     """Where an issue is: a TSV file with its line or cell, or a workbook sheet with its cell or row."""
     if source is None:

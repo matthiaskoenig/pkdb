@@ -13,7 +13,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-from pkdb.studyformat_cli import print_issues, say
+from pkdb.studyformat_cli import print_issues, say, study_folder
 
 # Rows of each side of a conflict printed for people; JSON lists every row.
 LISTED_ROWS = 10
@@ -151,22 +151,6 @@ def _vocabulary(args):
     except (ValueError, OSError) as error:
         say(f"Cannot load the vocabulary: {error}", file=sys.stderr)
         return None
-
-
-def _study(path: Path) -> Path | None:
-    """The folder of a study format 2 study, or None after an error."""
-    from pkdb.studyformat import is_v2_folder
-
-    if not (path / "study.json").is_file():
-        say(f"{path} is not a study folder: it has no study.json", file=sys.stderr)
-        return None
-    if not is_v2_folder(path):
-        say(
-            f"{path} is a study of study format 1; pkdb tables needs study format 2",
-            file=sys.stderr,
-        )
-        return None
-    return path
 
 
 def _reason(error: OSError) -> str:
@@ -353,7 +337,7 @@ def _open(args) -> int:
     from pkdb.studyformat import study_label, sync_study
     from pkdb.studyformat.workbook.git import git_issues
 
-    folder = _study(args.study)
+    folder = study_folder(args.study, "tables")
     if folder is None:
         return 1
     vocabulary = _vocabulary(args)
@@ -387,7 +371,7 @@ def _open(args) -> int:
 def _add(args) -> int:
     from pkdb.studyformat import add_table, study_label
 
-    folder = _study(args.study)
+    folder = study_folder(args.study, "tables")
     if folder is None:
         return 1
     # The raw table is named after the study folder, also when it is given as `.`.

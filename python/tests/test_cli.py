@@ -219,7 +219,7 @@ def test_help_describes_every_command_with_curate_first(capsys):
     assert error.value.code == 0
     output = capsys.readouterr().out
     assert (
-        "{curate,prepare,validate,upload,vocabulary,reference,import,format,schema,tables,digitize,update}"
+        "{curate,prepare,validate,upload,vocabulary,reference,import,format,schema,tables,study,digitize,update}"
         in output
     )
     for command in (
@@ -231,6 +231,7 @@ def test_help_describes_every_command_with_curate_first(capsys):
         "format",
         "schema",
         "tables",
+        "study",
         "update",
     ):
         line = next(
