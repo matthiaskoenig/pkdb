@@ -4,39 +4,39 @@ import { scheduleText } from "../../src/features/details/schedule";
 describe("dosing schedules", () => {
   it("lists irregular administration times once with their unit", () => {
     expect(scheduleText({ time: [0, 12, 40], time_unit: "h" })).toBe(
-      "0, 12, 40 h",
+      "0, 12, 40\u00a0h",
     );
     expect(scheduleText({ time: [0.5, 1.5], time_unit: "min" })).toBe(
-      "0.5, 1.5 min",
+      "0.5, 1.5\u00a0min",
     );
   });
   it("describes regular schedules by interval, number of doses and start", () => {
     expect(
       scheduleText({ time: 0, interval: 24, doses: 7, time_unit: "h" }),
-    ).toBe("every 24 h, 7 doses from 0 h");
+    ).toBe("every 24\u00a0h, 7\u00a0doses from 0\u00a0h");
     expect(scheduleText({ time: 0, interval: 12, time_unit: "h" })).toBe(
-      "every 12 h from 0 h",
+      "every 12\u00a0h from 0\u00a0h",
     );
     expect(scheduleText({ interval: 24, doses: 7, time_unit: "h" })).toBe(
-      "every 24 h, 7 doses",
+      "every 24\u00a0h, 7\u00a0doses",
     );
     expect(
       scheduleText({ time: 0, interval: 12, doses: 1, time_unit: "h" }),
-    ).toBe("every 12 h, 1 dose from 0 h");
+    ).toBe("every 12\u00a0h, 1\u00a0dose from 0\u00a0h");
     expect(
       scheduleText({ time: 0, interval: 24, time_end: 168, time_unit: "h" }),
-    ).toBe("every 24 h from 0 h to 168 h");
+    ).toBe("every 24\u00a0h from 0\u00a0h to 168\u00a0h");
   });
   it("describes a continuous administration as a span", () => {
     expect(scheduleText({ time: 0, time_end: 24, time_unit: "h" })).toBe(
-      "from 0 h to 24 h",
+      "from 0\u00a0h to 24\u00a0h",
     );
   });
   it("keeps a single administration time and a zero start", () => {
-    expect(scheduleText({ time: 0, time_unit: "h" })).toBe("0 h");
-    expect(scheduleText({ time: [2], time_unit: "h" })).toBe("2 h");
+    expect(scheduleText({ time: 0, time_unit: "h" })).toBe("0\u00a0h");
+    expect(scheduleText({ time: [2], time_unit: "h" })).toBe("2\u00a0h");
     expect(scheduleText({ time: 0, interval: 24, doses: 3 })).toBe(
-      "every 24, 3 doses from 0",
+      "every 24, 3\u00a0doses from 0",
     );
   });
   it("reports nothing when no schedule is known", () => {
@@ -44,6 +44,6 @@ describe("dosing schedules", () => {
     expect(scheduleText({ time: null, time_unit: "h" })).toBeUndefined();
     expect(scheduleText({ time: [], interval: null })).toBeUndefined();
     expect(scheduleText(null)).toBeUndefined();
-    expect(scheduleText("0 h")).toBeUndefined();
+    expect(scheduleText("0\u00a0h")).toBeUndefined();
   });
 });

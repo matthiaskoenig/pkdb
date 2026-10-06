@@ -139,7 +139,11 @@ class Note(Identity, Base):
 
 
 Base.metadata.tables["studies"].append_constraint(
-    Index("ix_studies_search", vector([Study.sid, Study.name]), postgresql_using="gin")
+    Index(
+        "ix_studies_search",
+        vector([Study.sid, Study.name, Study.pkdb_id]),
+        postgresql_using="gin",
+    )
 )
 
 Base.metadata.tables["references"].append_constraint(

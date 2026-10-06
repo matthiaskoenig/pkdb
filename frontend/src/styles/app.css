@@ -372,7 +372,10 @@ table {
   padding: 14px 16px;
   border-bottom: 1px solid rgba(var(--v-border-color), 0.08);
   max-width: 300px;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
+}
+.science-table td.nowrap {
+  white-space: nowrap;
 }
 .science-table tbody tr:last-child td {
   border: 0;

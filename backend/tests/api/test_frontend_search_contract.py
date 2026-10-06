@@ -29,9 +29,14 @@ def vocabulary(vocabulary):
             ("tmax", "h"),
         ]
     )
-    return vocabulary.model_copy(
-        update={"measurements": vocabulary.measurements + derived}
+    # The vocabulary spells the choice of the species as the complete one does.
+    measurements = tuple(
+        rule.model_copy(update={"choices": ("homo sapiens",)})
+        if rule.name == "species"
+        else rule
+        for rule in vocabulary.measurements
     )
+    return vocabulary.model_copy(update={"measurements": measurements + derived})
 
 
 @pytest.fixture

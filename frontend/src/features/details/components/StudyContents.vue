@@ -4,6 +4,7 @@ import { VBtn, VSelect } from "vuetify/components";
 import { api, errorMessage } from "../../../api/client";
 import { useSessionStore } from "../../../stores/session";
 import { isRecord, text, type DetailRecord, type Relation } from "../types";
+import { formatNumber } from "../../results/format";
 import { centralValue } from "../../results/statistics";
 import { scheduleText } from "../schedule";
 const props = defineProps<{ sid: string }>();
@@ -36,8 +37,9 @@ function relation(row: DetailRecord): Relation | undefined {
 }
 function quantity(row: DetailRecord): string {
   const value = centralValue(row);
-  if (value === undefined || value === null) return "Not reported";
-  return row.unit ? `${text(value)} ${text(row.unit)}` : text(value);
+  if (value === undefined || value === null) return "-";
+  const shown = typeof value === "number" ? formatNumber(value) : text(value);
+  return row.unit ? `${shown} ${text(row.unit)}` : shown;
 }
 function summary(row: DetailRecord): string {
   const schedule =
@@ -121,8 +123,8 @@ onBeforeUnmount(() => {
       {{ failure }} <VBtn @click="load">Retry study records</VBtn>
     </div>
     <template v-else>
-      <p>{{ count }} records</p>
-      <ul>
+      <p>{{ count }} {{ count === 1 ? "record" : "records" }}</p>
+      <ul class="records">
         <li v-for="(row, index) in rows" :key="text(row.pk) + index">
           <VBtn
             v-if="relation(row)"
@@ -138,16 +140,44 @@ onBeforeUnmount(() => {
           >
         </li>
       </ul>
-      <VBtn :disabled="page === 1" @click="turn(-1)">Previous records</VBtn
-      ><span>Page {{ page }}</span
-      ><VBtn :disabled="page * 20 >= count" @click="turn(1)">
-        Next records
-      </VBtn>
+      <div class="pager">
+        <VBtn :disabled="page === 1" @click="turn(-1)">Previous records</VBtn>
+        <span>Page {{ page }}</span>
+        <VBtn :disabled="page * 20 >= count" @click="turn(1)">
+          Next records
+        </VBtn>
+      </div>
     </template>
   </section>
 </template>
 <style scoped>
+.records {
+  list-style: none;
+  padding: 0;
+}
+.records li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 0.5rem;
+}
+/* The record text lines up with the text around the list. */
+.records :deep(.v-btn) {
+  padding-inline: 0.5rem;
+  margin-inline-start: -0.5rem;
+  min-width: 0;
+}
+/* The summary reads like the record button next to it and wraps as a block. */
 .summary {
-  margin-inline-start: 0.5rem;
+  flex: 1 1 14rem;
+  min-width: 0;
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+.pager {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
 }
 </style>

@@ -3,6 +3,8 @@ export interface Column {
   key: string;
   title: string;
   order?: string;
+  // A value that reads as one unit, such as `2.5 ± 0.5 (SD)`, stays on one line.
+  nowrap?: boolean;
 }
 export const columns: Record<ResultTab, Column[]> = {
   studies: [
@@ -28,8 +30,8 @@ export const columns: Record<ResultTab, Column[]> = {
   interventions: [
     { key: "name", title: "Intervention", order: "name" },
     { key: "substance", title: "Substance", order: "substance" },
-    { key: "mean", title: "Mean", order: "mean" },
     { key: "unit", title: "Unit", order: "unit" },
+    { key: "statistics", title: "Value", order: "mean", nowrap: true },
     { key: "route", title: "Route", order: "route" },
     { key: "schedule", title: "Schedule" },
     { key: "study", title: "Study", order: "study_sid" },
@@ -41,15 +43,8 @@ export const columns: Record<ResultTab, Column[]> = {
       order: "measurement_type",
     },
     { key: "substance", title: "Substance", order: "substance" },
-    { key: "mean", title: "Mean", order: "mean" },
-    { key: "median", title: "Median", order: "median" },
-    { key: "sd", title: "SD", order: "sd" },
-    { key: "se", title: "SE", order: "se" },
-    { key: "cv", title: "CV", order: "cv" },
-    { key: "gmean", title: "Geometric mean", order: "gmean" },
-    { key: "gsd", title: "Geometric SD", order: "gsd" },
-    { key: "gcv", title: "Geometric CV", order: "gcv" },
     { key: "unit", title: "Unit", order: "unit" },
+    { key: "statistics", title: "Value", order: "mean", nowrap: true },
     { key: "subject", title: "Subject" },
     { key: "interventions", title: "Related interventions" },
     { key: "study", title: "Study", order: "study_sid" },

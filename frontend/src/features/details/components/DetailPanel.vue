@@ -73,6 +73,16 @@ const title = computed(() =>
 const reference = computed(() =>
   isRecord(data.value?.reference) ? data.value.reference : undefined,
 );
+// Journal and date, whichever of them the publication has.
+const published = computed(() =>
+  [reference.value?.journal, reference.value?.publication_date || reference.value?.date]
+    .filter((part) => part !== null && part !== undefined && part !== "")
+    .map(text)
+    .join(" · "),
+);
+const abstract = computed(() =>
+  reference.value?.abstract ? text(reference.value.abstract) : "",
+);
 const schedule = computed(() =>
   target.value.entity === "interventions"
     ? scheduleText(data.value)
@@ -86,7 +96,14 @@ const omitted = computed(() => [
   "provenance",
   "publication_id",
   ...(target.value.entity === "studies"
-    ? ["pkdb_id", "release_date", "issue", "review_status", "open_review_items"]
+    ? [
+        "sid",
+        "pkdb_id",
+        "release_date",
+        "issue",
+        "review_status",
+        "open_review_items",
+      ]
     : []),
   ...(schedule.value
     ? ["time", "time_end", "interval", "doses", "time_unit"]
@@ -201,8 +218,8 @@ onBeforeUnmount(() => {
       </section>
       <section v-if="reference" aria-label="Publication">
         <h3>{{ text(reference.title) }}</h3>
-        <p>{{ text(reference.journal) }} · {{ text(reference.publication_date || reference.date) }}</p>
-        <p>{{ text(reference.abstract) }}</p>
+        <p v-if="published">{{ published }}</p>
+        <p v-if="abstract">{{ abstract }}</p>
         <a
           v-if="
             typeof reference.pmid === 'string' ||
@@ -262,6 +279,10 @@ header {
 }
 header h2 {
   flex: 1;
+}
+/* The heading takes focus when a record opens; it is not a control. */
+header h2:focus {
+  outline: none;
 }
 nav {
   display: flex;

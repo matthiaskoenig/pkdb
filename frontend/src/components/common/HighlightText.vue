@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import BreakableText from "./BreakableText.vue";
 const props = defineProps<{ text: string; query?: string }>();
 const parts = computed(() => {
   const q = props.query?.trim();
@@ -24,8 +25,7 @@ const parts = computed(() => {
 <template>
   <span
     ><template v-for="(part, index) in parts" :key="index"
-      ><mark v-if="part.match">{{ part.text }}</mark
-      ><template v-else>{{ part.text }}</template></template
-    ></span
-  >
+      ><mark v-if="part.match"><BreakableText :text="part.text" /></mark
+      ><BreakableText v-else :text="part.text" /></template
+  ></span>
 </template>

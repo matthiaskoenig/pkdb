@@ -4,6 +4,7 @@ import json
 import threading
 import time
 from contextlib import contextmanager
+from copy import deepcopy
 from datetime import date
 
 import pytest
@@ -392,3 +393,57 @@ def test_client_reads_follow_the_redirect(client, creator_headers, released):
     )
     assert api.studies.get(PKDB_ID).sid == SID
     assert api.publication(PKDB_ID).sid == SID
+
+
+def listed_sids(client, headers, **params):
+    response = client.get("/api/v1/studies/", headers=headers, params=params)
+    assert response.status_code == 200, response.text
+    return sorted(row["sid"] for row in response.json()["data"]["data"])
+
+
+def test_study_search_finds_a_released_study_by_its_pkdb_identifier(
+    client, creator_headers, released
+):
+    for key in ("search", "search_multi_match"):
+        for term in (PKDB_ID, PKDB_ID.lower()):
+            assert listed_sids(client, creator_headers, **{key: term}) == [SID]
+    assert listed_sids(client, creator_headers, search="PKDB00199") == []
+    # The name and the sid keep working.
+    assert listed_sids(client, creator_headers, search="Example") == [SID]
+
+
+def test_pkdb_identifier_filter_matches_released_and_format_1_studies(
+    client, creator_headers, released, valid_bundle
+):
+    first = format_1(valid_bundle, "PKDB00057")
+    other = deepcopy(valid_bundle)
+    other.reference["sid"] = other.study["reference"] = "REF2"
+    second = format_1(other, "OTHER1")
+    for sid, parts in (("PKDB00057", first), ("OTHER1", second)):
+        response = client.put(
+            f"/api/v2/studies/{sid}", headers=creator_headers, **parts
+        )
+        assert response.status_code == 201, response.text
+    filtered = {
+        "PKDB00198": [SID],
+        "PKDB00057": ["PKDB00057"],
+        # A sid that is not a PKDB identifier is not mistaken for one.
+        "OTHER1": [],
+        SID: [],
+    }
+    for identifier, expected in filtered.items():
+        assert (
+            listed_sids(client, creator_headers, pkdb_id__in=identifier) == expected
+        ), identifier
+    assert listed_sids(
+        client, creator_headers, pkdb_id__in="PKDB00057__PKDB00198"
+    ) == sorted(["PKDB00057", SID])
+    # The research filter selects them the same way.
+    for identifier, expected in filtered.items():
+        response = client.get(
+            "/api/v1/filter/",
+            headers=creator_headers,
+            params={"format": "json", "studies__pkdb_id__in": identifier},
+        )
+        assert response.status_code == 200, response.text
+        assert response.json()["studies"] == len(expected), identifier

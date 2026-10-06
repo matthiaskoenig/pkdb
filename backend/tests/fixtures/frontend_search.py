@@ -56,7 +56,7 @@ def frontend_search_bundle(*, related=False, sid="FRONTEND_SCOPE"):
                         "name": "all",
                         "count": 4,
                         "characteristica": [
-                            {"measurement_type": "species", "choice": "Homo sapiens"},
+                            {"measurement_type": "species", "choice": "homo sapiens"},
                             {"measurement_type": "sex", "choice": "NR"},
                             {"measurement_type": "healthy", "choice": "Y"},
                         ],
@@ -261,7 +261,7 @@ def write_frontend_format2_study(root: Path) -> Path:
             *(
                 {"source": "Tab1", "subjects": "all", "measurement": m, "choice": c}
                 for m, c in (
-                    ("species", "Homo sapiens"),
+                    ("species", "homo sapiens"),
                     ("sex", "NR"),
                     ("healthy", "Y"),
                 )

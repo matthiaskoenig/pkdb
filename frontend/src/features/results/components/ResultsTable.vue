@@ -88,7 +88,11 @@ function sort(key: string) {
               View <span aria-hidden="true">↗</span>
             </button>
           </td>
-          <td v-for="column in headers" :key="column.key">
+          <td
+            v-for="column in headers"
+            :key="column.key"
+            :class="{ nowrap: column.nowrap }"
+          >
             <HighlightText :text="cellText(row, column.key)" :query="query" />
           </td>
         </tr>

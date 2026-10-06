@@ -101,10 +101,6 @@ def main():
                     user_id=creator.id, username=creator.username, role=creator.role
                 )
                 add_frontend_vocabulary(session)
-                from pkdb_server.db.models.vocabulary import VocabularyNode
-
-                species = session.get(VocabularyNode, "species")
-                species.definition = {**species.definition, "choices": ["Homo sapiens"]}
             ingestion = IngestionService(
                 factory,
                 FileStore(Path(settings.file_root), factory, settings.upload_max_bytes),

@@ -51,14 +51,17 @@ describe("scientific plot semantics", () => {
     expect(result.xLabel).toBe("mean [mg]");
   });
   it("retains CV without misrepresenting it as dimensional error", () => {
-    const result = plotModel([[point(1, { mean: 10, cv: 25 })]], "timecourse");
+    const result = plotModel(
+      [[point(1, { mean: 10, cv: 0.25 })]],
+      "timecourse",
+    );
     expect(result.traces[0]?.error_y).toBeUndefined();
-    expect(result.points[0]?.[0]?.cv).toBe(25);
+    expect(result.points[0]?.[0]?.cv).toBe(0.25);
     expect(result.notes.join(" ")).toContain(
       "not plotted as an absolute error",
     );
     const geometric = plotModel(
-      [[point(1, { gmean: 10, gcv: 25 })]],
+      [[point(1, { gmean: 10, gcv: 0.25 })]],
       "timecourse",
     );
     expect(geometric.traces[0]?.error_y).toBeUndefined();
@@ -113,7 +116,7 @@ describe("scientific plot semantics", () => {
       visible: true,
     });
     expect(result.notes.join(" ")).toContain(
-      "Y error bars: geometric SD, from the geometric mean divided and multiplied by it.",
+      "Y error bars: geometric mean divided and multiplied by the geometric SD.",
     );
   });
   it("draws no band for a geometric SD below 1 or without a geometric mean", () => {
@@ -142,13 +145,13 @@ describe("scientific plot semantics", () => {
   });
   it("keeps the series label with every point of the accessible table", () => {
     const result = plotModel(
-      [[point(1, { gmean: 2, gsd: 1.5, gcv: 40, label: "A" })]],
+      [[point(1, { gmean: 2, gsd: 1.5, gcv: 0.4, label: "A" })]],
       "timecourse",
     );
     expect(result.points[0]?.[0]).toMatchObject({
       gmean: 2,
       gsd: 1.5,
-      gcv: 40,
+      gcv: 0.4,
       label: "A",
     });
   });

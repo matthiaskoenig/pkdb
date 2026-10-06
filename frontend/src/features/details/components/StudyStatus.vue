@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import BreakableText from "../../../components/common/BreakableText.vue";
 import { externalUrl, type DetailRecord } from "../types";
 const props = defineProps<{ study: DetailRecord }>();
 const issueBase = "https://github.com/matthiaskoenig/pkdb_data/issues/";
@@ -11,6 +12,7 @@ const reviews: Record<string, string> = {
 function string(value: unknown): string | undefined {
   return typeof value === "string" && value ? value : undefined;
 }
+const identifier = computed(() => string(props.study.sid));
 const pkdbId = computed(() => string(props.study.pkdb_id));
 const released = computed(() => string(props.study.release_date));
 const issue = computed(() => {
@@ -31,12 +33,21 @@ const review = computed(() => {
   ].join(" · ");
 });
 const shown = computed(
-  () => pkdbId.value || released.value || issue.value || review.value,
+  () =>
+    identifier.value ||
+    pkdbId.value ||
+    released.value ||
+    issue.value ||
+    review.value,
 );
 </script>
 <template>
   <section v-if="shown" class="study-status" aria-label="Release and review">
     <dl>
+      <div v-if="identifier" class="wide">
+        <dt>Identifier</dt>
+        <dd><BreakableText :text="identifier" /></dd>
+      </div>
       <div v-if="pkdbId">
         <dt>PKDB identifier</dt>
         <dd>{{ pkdbId }}</dd>
@@ -57,7 +68,7 @@ const shown = computed(
           ><template v-else>#{{ issue.number }}</template>
         </dd>
       </div>
-      <div v-if="review">
+      <div v-if="review" class="wide">
         <dt>Review</dt>
         <dd>{{ review }}</dd>
       </div>
@@ -65,11 +76,15 @@ const shown = computed(
   </section>
 </template>
 <style scoped>
+/* Two aligned columns on a phone, one wrapping row from tablet width. */
 dl {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem 2rem;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem 1rem;
   margin: 0;
+}
+.wide {
+  grid-column: 1 / -1;
 }
 dt {
   font-size: 0.72rem;
@@ -82,5 +97,13 @@ dd {
   margin: 0;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
+  overflow-wrap: break-word;
+}
+@media (min-width: 700px) {
+  dl {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 2rem;
+  }
 }
 </style>

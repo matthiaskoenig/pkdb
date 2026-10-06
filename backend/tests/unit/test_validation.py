@@ -74,6 +74,16 @@ def test_invalid_choice_is_rejected(valid_study, vocabulary):
     assert "invalid_choice" in codes(error)
 
 
+def test_vocabulary_terms_must_match_the_vocabulary_spelling(valid_study, vocabulary):
+    # Choices are matched exactly like every other vocabulary term, so a choice
+    # is never stored in a spelling the vocabulary does not know.
+    valid_study.groups[0].characteristica[0].choice = "homo sapiens"
+    valid_study.measurements[0].tissue = "PLASMA"
+    with pytest.raises(StudyValidationError) as error:
+        prepare_study(valid_study, vocabulary)
+    assert {"invalid_choice", "unknown_tissue"} <= codes(error)
+
+
 def test_dimension_mismatch_is_rejected(valid_study, vocabulary):
     valid_study.measurements[0].unit = "kg"
     with pytest.raises(StudyValidationError) as error:

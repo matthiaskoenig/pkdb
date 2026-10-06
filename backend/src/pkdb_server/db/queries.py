@@ -27,9 +27,15 @@ from pkdb_server.db.textsearch import text_match
 from pkdb_server.db.vocabulary_search import relevance
 from pkdb_server.services.authorization import AuthorizationDenied
 
+# The PKDB identifier of a study: the one it was released as, or for a study
+# format 1 study (not renamed yet) its own sid, which is a PKDB identifier.
+PKDB_IDENTIFIER = case(
+    (Study.pkdb_id.is_not(None), Study.pkdb_id),
+    (Study.sid.op("~")("^PKDB[0-9]{5}$"), Study.sid),
+)
 STUDY_FIELDS = {
-    name: getattr(Study, name)
-    for name in ("sid", "name", "access", "licence", "pkdb_id")
+    **{name: getattr(Study, name) for name in ("sid", "name", "access", "licence")},
+    "pkdb_id": PKDB_IDENTIFIER,
 }
 OUTPUT_FIELDS = {
     name: getattr(Measurement, name)

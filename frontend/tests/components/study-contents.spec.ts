@@ -62,11 +62,12 @@ describe("whole-study contents", () => {
     await flushPromises();
     const items = wrapper.findAll("li").map((item) => item.text());
     expect(items[0]).toContain("10 mg");
-    expect(items[0]).toContain("every 24 h, 7 doses from 0 h");
+    expect(items[0]).toContain("every 24\u00a0h, 7\u00a0doses from 0\u00a0h");
     expect(items[1]).toContain("5 mg");
-    expect(items[1]).toContain("0, 12, 40 h");
+    expect(items[1]).toContain("0, 12, 40\u00a0h");
     expect(items[2]).toContain("fasted");
     expect(items[2]).not.toContain("Not reported");
+    expect(items[2]).not.toContain("-");
     wrapper.unmount();
   });
   it("lists the reported statistic of each measurement without value", async () => {
@@ -93,6 +94,26 @@ describe("whole-study contents", () => {
     const items = wrapper.findAll("li").map((item) => item.text());
     expect(items[0]).toMatch(/0 mg\/l$/);
     expect(items[1]).toMatch(/4\.5 mg\/l$/);
+    wrapper.unmount();
+  });
+  it("says one record in the singular and rounds values", async () => {
+    mocks.get.mockResolvedValue(
+      page([
+        {
+          pk: 1,
+          measurement_type: { name: "Concentration" },
+          mean: 0.009000000000000001,
+          unit: "mg/l",
+        },
+      ]),
+    );
+    const wrapper = mount(StudyContents, { props: { sid: "caffeine/X" } });
+    await flushPromises();
+    await wrapper.getComponent({ name: "VSelect" }).setValue("outputs");
+    await flushPromises();
+    expect(wrapper.text()).toContain("1 record");
+    expect(wrapper.text()).not.toContain("1 records");
+    expect(wrapper.get("li").text()).toMatch(/0\.009 mg\/l$/);
     wrapper.unmount();
   });
 });

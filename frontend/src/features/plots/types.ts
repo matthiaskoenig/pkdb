@@ -34,11 +34,24 @@ export interface Trace {
   error_y?: ErrorBars;
   connectgaps: false;
 }
+export interface PlotAxis {
+  title: { text: string };
+  type: "linear" | "log";
+  // Hover labels show at most four significant digits.
+  hoverformat: string;
+  gridcolor: string;
+  linecolor: string;
+  zerolinecolor: string;
+}
 export interface PlotLayout {
   autosize: boolean;
   height: number;
-  xaxis: { title: { text: string }; type: "linear" | "log" };
-  yaxis: { title: { text: string }; type: "linear" | "log" };
+  xaxis: PlotAxis;
+  yaxis: PlotAxis;
+  paper_bgcolor: string;
+  plot_bgcolor: string;
+  font: { color: string };
+  modebar: { bgcolor: string; color: string; activecolor: string };
   legend: {
     orientation: "h";
     x: number;
@@ -116,7 +129,7 @@ type ErrorName = "sd" | "se" | "gsd";
 const errorNotes: Record<ErrorName, string> = {
   sd: "SD",
   se: "SE",
-  gsd: "geometric SD, from the geometric mean divided and multiplied by it",
+  gsd: "geometric mean divided and multiplied by the geometric SD",
 };
 
 // The error of a series follows its central statistic: the geometric SD

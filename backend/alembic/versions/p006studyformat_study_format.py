@@ -37,6 +37,15 @@ OBSERVATION_TRIGGERS = (
     "dataset_member_delete_valid",
 )
 MAX_SCHEDULE_TIMES = 10_000
+# The study text search also finds a study by its PKDB identifier.
+SEARCH_INDEX = (
+    "CREATE INDEX ix_studies_search ON studies USING gin (to_tsvector('simple', {}))"
+)
+SEARCH_BEFORE = "(coalesce(sid, '') || ' ') || coalesce(name, '')"
+SEARCH_AFTER = (
+    "(((coalesce(sid, '') || ' ') || coalesce(name, '')) || ' ') "
+    "|| coalesce(pkdb_id, '')"
+)
 UNSIGNED = r"(?:[0-9]+(?:\.[0-9]*)?|\.[0-9]+)(?:[eE][-+]?[0-9]+)?"
 # The format 1 schedule grammar of pkdb.importers.folder.parse_schedule in SQL:
 # a|b|c, S<start>T<interval>R<doses> and |-lists mixing both (expanded). A lone
@@ -283,6 +292,8 @@ def upgrade():
     op.add_column("studies", sa.Column("review_status", sa.String(16), nullable=True))
     op.add_column("studies", sa.Column("review", postgresql.JSONB(), nullable=True))
     op.create_unique_constraint(op.f("uq_studies_pkdb_id"), "studies", ["pkdb_id"])
+    op.execute("DROP INDEX ix_studies_search")
+    op.execute(SEARCH_INDEX.format(SEARCH_AFTER))
     for name, condition in (
         ("pkdb_id", "pkdb_id ~ '^PKDB[0-9]{5}$'"),
         ("release", "(pkdb_id IS NULL) = (release_date IS NULL)"),
@@ -295,6 +306,8 @@ def upgrade():
 
 def downgrade():
     restore_values_and_schedule_text()
+    op.execute("DROP INDEX ix_studies_search")
+    op.execute(SEARCH_INDEX.format(SEARCH_BEFORE))
     for name in ("review", "review_status", "issue", "release", "pkdb_id"):
         op.drop_constraint(op.f(f"ck_studies_{name}"), "studies", type_="check")
     op.drop_constraint(op.f("uq_studies_pkdb_id"), "studies", type_="unique")

@@ -24,7 +24,7 @@ export const fields: readonly FilterField[] = [
     group: "Studies",
     endpoint: "studies",
     idKey: "pkdb_id",
-    help: "Choose released studies by their PKDB identifier. Suggestions are found by study name or identifier.",
+    help: "Choose studies by their PKDB identifier, which a released study keeps when it is renamed. Studies in the previous format are identified by their own identifier. Suggestions are found by study name or identifier.",
   },
   {
     key: "studies__reference_name__in",

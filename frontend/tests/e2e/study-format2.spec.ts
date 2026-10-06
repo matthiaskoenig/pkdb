@@ -44,6 +44,7 @@ test.describe("a curator reads the study format 2 study", () => {
       page.getByRole("heading", { name: "Format2Fixture", exact: true }),
     ).toBeVisible();
     const status = page.getByRole("region", { name: "Release and review" });
+    await expect(status).toContainText(sid);
     await expect(status).toContainText("PKDB identifier");
     await expect(status).toContainText("PKDB09901");
     await expect(status).toContainText("2026-09-28");
@@ -55,10 +56,19 @@ test.describe("a curator reads the study format 2 study", () => {
     );
     await expect(issue).toHaveAttribute("rel", /noopener/);
     const record = page.getByRole("region", { name: "Record details" });
+    // The heading takes focus without a ring across the page; the count agrees.
     await expect(
-      record.locator("dt", { hasText: /^Identifier$/ }).first(),
+      page.getByRole("heading", { name: "Format2Fixture", exact: true }),
+    ).toHaveCSS("outline-style", "none");
+    await expect(
+      page.getByRole("region", { name: "Whole-study data" }),
+    ).toContainText("1 record");
+    await expect(
+      page.getByRole("region", { name: "Whole-study data" }),
+    ).not.toContainText("1 records");
+    await expect(
+      record.getByRole("region", { name: "Release and review" }).getByText(sid),
     ).toBeVisible();
-    await expect(record.getByText(sid, { exact: true }).first()).toBeVisible();
     for (const raw of ["Pkdb id", "Release date", "Review status"])
       await expect(record.getByText(raw, { exact: true })).toHaveCount(0);
     const results = await new AxeBuilder({ page })
@@ -121,44 +131,58 @@ test.describe("a curator reads the study format 2 study", () => {
     await page.goto("/data");
     await expect(page.getByRole("tab", { name: /^Studies 2$/ })).toBeVisible();
     await page.getByRole("tab", { name: /^Measurements / }).click();
+    // One value column replaces the statistic columns; names match exactly.
+    await expect(page.getByRole("columnheader")).toHaveCount(8);
     for (const title of [
-      "Mean",
-      "Median",
-      "SD",
-      "SE",
-      "CV",
-      "Geometric mean",
-      "Geometric SD",
-      "Geometric CV",
+      "Explore",
+      "Measurement",
+      "Substance",
+      "Unit",
+      "Value",
+      "Subject",
+      "Related interventions",
+      "Study",
     ])
       await expect(
-        page.getByRole("columnheader", { name: title, exact: false }).first(),
-      ).toBeVisible();
-    await expect(
-      page.getByRole("columnheader", { name: /^Value/ }),
-    ).toHaveCount(0);
+        page.getByRole("columnheader", { name: title, exact: true }),
+      ).toHaveCount(1);
+    // Unit, subject and study are visible without scrolling the table.
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const scroll = page.locator(".table-scroll");
+    await expect(scroll).toBeVisible();
+    expect(
+      await scroll.evaluate(
+        (element) => element.scrollWidth <= element.clientWidth,
+      ),
+    ).toBe(true);
+    const table = page.getByRole("table");
+    const nb = "\u00a0";
+    await expect(table).toContainText(`0.004${nb}×/÷${nb}1.5${nb}(GSD)`);
+    await expect(table).toContainText(`0.009${nb}±${nb}0.001${nb}(SD)`);
+    await expect(table).toContainText("drug/Format2Fixture");
+    await expect(table).not.toContainText("Not reported");
     const sorted = page.waitForResponse(
       (response) =>
         response.url().includes("/api/v1/outputs/") &&
-        new URL(response.url()).searchParams.get("ordering") === "gmean",
+        new URL(response.url()).searchParams.get("ordering") === "mean",
     );
-    await page.getByRole("button", { name: /^Geometric mean/ }).click();
+    await page.getByRole("button", { name: "Value", exact: true }).click();
     expect((await sorted).status()).toBe(200);
     await expect(
-      page.getByRole("columnheader", { name: /^Geometric mean/ }),
+      page.getByRole("columnheader", { name: "Value", exact: true }),
     ).toHaveAttribute("aria-sort", "ascending");
     await page.getByRole("tab", { name: /^Interventions / }).click();
     await expect(
-      page.getByRole("columnheader", { name: "Schedule" }),
+      page.getByRole("columnheader", { name: "Schedule", exact: true }),
     ).toBeVisible();
     await expect(page.getByRole("table")).toContainText(
       "every 24 h, 7 doses from 0 h",
     );
     await expect(page.getByRole("table")).toContainText("0, 12, 40 h");
+    await page.getByRole("tab", { name: /^Groups / }).click();
+    await expect(page.getByRole("table")).toContainText("species homo sapiens");
     await page.getByRole("tab", { name: /^Studies / }).click();
-    await page
-      .getByLabel("Search table", { exact: true })
-      .fill("Format2Fixture");
+    await page.getByLabel("Search table", { exact: true }).fill("PKDB09901");
     await page
       .getByRole("button", { name: "Apply table search", exact: true })
       .click();
@@ -241,22 +265,53 @@ test.describe("a curator reads the study format 2 study", () => {
       "Plasma after 10 mg daily (geometric)",
     );
     await expect(
-      page.getByText("Y error bars: geometric SD", { exact: false }),
+      page.getByText(
+        "Y error bars: geometric mean divided and multiplied by the geometric SD.",
+        { exact: true },
+      ),
     ).toBeVisible();
+    // Hover labels show four significant digits; the chart follows the theme.
+    const layout = () =>
+      page.locator(".plot").evaluate((element) => {
+        const value: unknown = Reflect.get(element, "layout");
+        if (typeof value !== "object" || value === null)
+          throw new Error("Rendered layout is missing");
+        return JSON.parse(JSON.stringify(value));
+      });
+    const light = await layout();
+    expect(light.yaxis.hoverformat).toBe(".4~g");
+    expect(light.xaxis.hoverformat).toBe(".4~g");
+    expect(light.paper_bgcolor).toBe("#ffffff");
     await page.screenshot({
       path: test.info().outputPath("timecourse-geometric.png"),
     });
+    await page.getByRole("button", { name: "Toggle color theme" }).click();
+    await expect
+      .poll(async () => (await layout()).paper_bgcolor)
+      .toBe("#192b31");
+    expect((await layout()).font.color).not.toBe(light.font.color);
+    await page.screenshot({
+      path: test.info().outputPath("timecourse-geometric-dark.png"),
+    });
+    await page.getByRole("button", { name: "Toggle color theme" }).click();
+    await expect
+      .poll(async () => (await layout()).paper_bgcolor)
+      .toBe("#ffffff");
     await page
       .getByText("Accessible plot data and uncertainty", { exact: true })
       .click();
     const table = page.getByRole("table", {
-      name: "Reported point values; missing values are shown as -",
+      name: "Point values and their uncertainty; missing values are shown as -",
     });
     for (const title of ["Geometric mean", "Geometric SD", "Geometric CV"])
       await expect(
-        table.getByRole("columnheader", { name: title }),
+        table.getByRole("columnheader", { name: title, exact: true }),
       ).toBeVisible();
     await expect(table).toContainText("0.008");
+    // Coefficients of variation are fractions in the data, percent on screen.
+    await expect(table).toContainText("22.6 %");
+    await expect(table).toContainText("78.54 %");
+    await expect(table).not.toContainText("0.2259");
     await page.getByRole("button", { name: "Back to previous record" }).click();
     await category(page, "Timecourses");
     await page

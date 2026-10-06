@@ -1,5 +1,6 @@
 import { beforeEach, expect, it, vi } from "vitest";
 import { flushPromises, mount } from "@vue/test-utils";
+import { makeVuetify } from "../../src/plugins/vuetify";
 import ScientificPlot from "../../src/features/plots/components/ScientificPlot.vue";
 const engine = vi.hoisted(() => ({
   react: vi.fn(),
@@ -89,7 +90,7 @@ it("names the trace by the timecourse label and tabulates geometric statistics",
             unit: "mg/l",
             gmean: 8,
             gsd: 2,
-            gcv: 30,
+            gcv: 0.22595033203145737,
             label: "Plasma after 10 mg",
           },
         ],
@@ -129,7 +130,79 @@ it("names the trace by the timecourse label and tabulates geometric statistics",
     ]),
   );
   expect(headers).not.toContain("Value");
+  expect(wrapper.get("caption").text()).toBe(
+    "Point values and their uncertainty; missing values are shown as -",
+  );
   const cells = wrapper.findAll("tbody td").map((cell) => cell.text());
-  expect(cells).toEqual(expect.arrayContaining(["8", "2", "30"]));
+  expect(cells).toEqual(expect.arrayContaining(["8", "2", "22.6\u00a0%"]));
+  wrapper.unmount();
+});
+it("rounds the table and the hover to four significant digits", async () => {
+  const wrapper = mount(ScientificPlot, {
+    props: {
+      kind: "timecourse",
+      points: [
+        [
+          {
+            pk: 7,
+            time: 1,
+            time_unit: "h",
+            unit: "mg/l",
+            mean: 0.009000000000000001,
+            sd: 0.1111111111111111,
+            cv: 0.07,
+          },
+        ],
+      ],
+    },
+  });
+  await flushPromises();
+  const cells = wrapper.findAll("tbody td").map((cell) => cell.text());
+  expect(cells).toEqual(
+    expect.arrayContaining(["0.009", "0.1111", "7\u00a0%"]),
+  );
+  expect(engine.react).toHaveBeenCalledWith(
+    expect.any(HTMLElement),
+    expect.any(Array),
+    expect.objectContaining({
+      xaxis: expect.objectContaining({ hoverformat: ".4~g" }),
+      yaxis: expect.objectContaining({ hoverformat: ".4~g" }),
+    }),
+    expect.any(Object),
+  );
+  wrapper.unmount();
+});
+it("draws the chart on the surface of the light and the dark theme", async () => {
+  const vuetify = makeVuetify();
+  const wrapper = mount(ScientificPlot, {
+    props: { points, kind: "timecourse" },
+    global: { plugins: [vuetify] },
+  });
+  await flushPromises();
+  expect(engine.react).toHaveBeenLastCalledWith(
+    expect.any(HTMLElement),
+    [
+      expect.objectContaining({
+        line: { color: "#176b70" },
+        marker: { color: "#176b70" },
+      }),
+    ],
+    expect.objectContaining({
+      paper_bgcolor: "#ffffff",
+      plot_bgcolor: "#ffffff",
+      font: { color: "#000" },
+    }),
+    expect.any(Object),
+  );
+  vuetify.theme.change("dark");
+  await flushPromises();
+  const layout = engine.react.mock.lastCall?.[2];
+  expect(layout).toMatchObject({
+    paper_bgcolor: "#192b31",
+    plot_bgcolor: "#192b31",
+  });
+  expect(layout.font.color).not.toBe("#000");
+  expect(layout.yaxis.gridcolor).toMatch(/^rgba\(/);
+  expect(engine.react.mock.lastCall?.[1][0].line.color).toBe("#79d5d6");
   wrapper.unmount();
 });
