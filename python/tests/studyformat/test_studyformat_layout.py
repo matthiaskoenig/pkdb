@@ -149,7 +149,9 @@ def test_table_names_of_at_most_31_characters_fit_an_excel_sheet(
     exact = "timecourses_Fig1_plasma_conc_ab"
     assert len(exact) == 31
     folder = make_study({**valid_files, f"{exact}.tsv": "a\n"})
-    assert table_issues(scan_folder(folder), "table_name_too_long") == []
+    layout = scan_folder(folder)
+    assert table_issues(layout, "table_name_too_long") == []
+    assert f"{exact}.tsv" in [table.name for table in layout.tables]
 
 
 def test_long_table_names_are_reported(make_study, valid_files):
@@ -177,7 +179,10 @@ def test_table_names_equal_ignoring_case_are_duplicates(make_study, valid_files)
     assert (issue.severity, issue.category) == ("error", "layout")
     assert issue.source is not None
     assert issue.source.file == "outputs_Taba.tsv"
-    assert "outputs_TabA.tsv" in issue.message
+    # Both tables are named alike, as files.
+    assert issue.message.startswith(
+        "The table file 'outputs_Taba.tsv' equals 'outputs_TabA.tsv' ignoring case"
+    )
 
 
 def test_distinct_table_names_are_not_duplicates(make_study, valid_files):

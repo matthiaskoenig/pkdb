@@ -76,8 +76,8 @@ def table_name_issues(tables: list[TableFile]) -> list[ValidationIssue]:
             issues.append(
                 make_issue(
                     "duplicate_table_name",
-                    f"The table name {sheet!r} equals {first!r} ignoring case; "
-                    "Excel sheet names are case-insensitive",
+                    f"The table file {table.name!r} equals {first!r} ignoring "
+                    "case; Excel sheet names are case-insensitive",
                     file=table.name,
                     hint="Rename one of the files with a different source.",
                 )

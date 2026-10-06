@@ -55,12 +55,12 @@ def test_missing_pinned_snapshot_does_not_silently_fall_back(tmp_path, vocabular
         cache.load("https://example.test")
 
 
-def test_atomic_text_writes_lf(tmp_path):
+def test_atomic_text_writes_newlines_as_given(tmp_path):
     from pkdb.cache import atomic_text
 
     target = tmp_path / "a" / "table.tsv"
-    atomic_text(target, "x\ty\n1\t2\n")
-    assert target.read_bytes() == b"x\ty\n1\t2\n"
+    atomic_text(target, "x\ty\n1\t2\r\n")
+    assert target.read_bytes() == b"x\ty\n1\t2\r\n"
 
 
 @pytest.mark.skipif(os.name != "posix", reason="POSIX permissions")

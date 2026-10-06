@@ -99,7 +99,7 @@ def atomic_bytes(path: Path, data: bytes) -> None:
 
 
 def atomic_text(path: Path, text: str) -> None:
-    """Replace a file atomically with UTF-8 text; newlines are written as LF on every platform."""
+    """Replace a file atomically with UTF-8 text; newlines are written as given, never translated."""
     atomic_bytes(path, text.encode("utf-8"))
 
 
