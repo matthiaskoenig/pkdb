@@ -27,6 +27,7 @@ Run `pkdb update` to update immediately or `pkdb update --check` to only report 
 | `PKDB_ENDPOINT` | Server address (`--endpoint`, `Client(endpoint=...)`, curation connection settings) |
 | `PKDB_API_KEY` | Personal API key for authenticated reads and uploads |
 | `PKDB_USER` | Expected PK-DB username (`--user`, `Client(user=...)`); uploads and the curation app stop when the API key belongs to another account |
+| `PKDB_AGENT` | Name of the AI agent (`--agent`) that writes review items; an agent cannot approve a study |
 | `PKDB_NO_UPDATE` | Set to `1` to disable automatic updates |
 
 Explicit options and arguments always take precedence over the environment.
@@ -190,3 +191,24 @@ Study folders whose `study.json` contains `"format": 2` keep their data in fixed
 `pkdb tables open STUDY` creates and opens a workbook `<name>.xlsx` of the tables of a study format 2 folder, `pkdb tables sync FOLDER` keeps the workbook and the tables in step with a three-way merge (`--keep workbook|tables` resolves conflicts, `--check` only reports, `--format json` prints one JSON line per study), and `pkdb tables add STUDY outputs_Tab3` adds the empty sheet of a new table. Git ignores the workbook and only the tables are committed; see [Edit tables in a workbook](workbooks.md). `pkdb upload` syncs a study format 2 folder that has a workbook, then formats it, before preparing it, and stops without uploading on conflicts or sync errors. `pkdb validate` and `pkdb prepare` never write to the study folder; they report workbook changes that are not in the tables yet and name `pkdb tables sync`.
 
 In study format 2, `mean` is the arithmetic mean, the value of one subject, or the central value of an `unspecified summary`; `cv` and `gcv` are entered in percent and are fractions in the prepared study and the API; geometric summaries have their own columns (`gmean`, `gsd`, `gcv`); and a digitized `error_bar` with `error_type` completes `sd`, `se` or `gsd`. Interventions give `time` as a number, or as a `;`-separated list for an irregular schedule (`0;12;40`); a regular schedule uses `interval` and `doses` instead. The prepared study derives the missing statistics, reports contradicting ones as the warning `inconsistent_statistics` at the cell of the statistic that disagrees with the most others, and uses processing version 9. Study format 1 sources keep working: their `value` is read as `mean`, and schedule strings `0|12|40` and `S<start>T<interval>R<n>` (`R` counts administrations) become a time list or `time`, `interval` and `doses`; any other schedule text is `invalid_schedule`.
+
+The curation commands read and edit a study folder with checked, atomic writes; `--format json` prints one JSON object for agents (it is the default when the output is not a terminal), including the `revision` of the file. A write with `--revision` is refused when the file changed since that revision.
+
+| Command | Purpose |
+| --- | --- |
+| `pkdb study show FOLDER` | Print `study.json` with its revision |
+| `pkdb study patch FOLDER --json TEXT` or `--file FILE` | Apply a JSON merge patch to `study.json` |
+| `pkdb study reference FOLDER --pmid ID` or `--doi DOI` | Set the PubMed ID or DOI and refresh `reference.json` (`--offline`, `--cache-dir`) |
+| `pkdb review show FOLDER` | Print the review items with the revision |
+| `pkdb review add FOLDER --kind question\|uncertainty\|issue --text TEXT` | Add an item, optionally for `--file`, `--rows COL=VALUE ...`, `--column` or a warning `--acknowledges CODE` |
+| `pkdb review reply FOLDER ID --text TEXT` | Add a reply to the thread of an item |
+| `pkdb review resolve FOLDER ID` | Resolve an open item |
+| `pkdb review dismiss FOLDER ID` | Dismiss an open item; a dismissed item no longer acknowledges a warning |
+| `pkdb review reopen FOLDER ID` | Reopen a resolved or dismissed item |
+| `pkdb review status FOLDER draft\|in_review\|approved` | Set the review status; `approved` records `approved_by` and `approved`, and needs zero open items and zero validation errors |
+| `pkdb review acknowledge FOLDER CODE --file FILE --text TEXT` | Acknowledge a validation warning with a resolved item (`--line`, `--column`) |
+| `pkdb digitize import FOLDER SOURCE FILE` | Write `<study>_<source>.wpd.json` from a WebPlotDigitizer 4 `.json` or `.tar` project, after checking it against the figure image |
+| `pkdb plot FOLDER` | Render the figure image with its digitized points and mapped rows to `<out>/<study>_<source>.plot.png` (`--source`, `--out`) |
+| `pkdb tables add FOLDER --raw Tab2` | Add the empty sheet of the raw table of a paper table |
+
+Review writes name the person with `--user` or `PKDB_USER`, or the AI agent with `--agent` or `PKDB_AGENT`. Agents may add, reply, resolve and dismiss items, but approving a study is refused for agents and needs a person. See [Study format](study-format.md) for the raw extraction files (`<study>_<source>.tsv`, `.wpd.json`) and the review file.

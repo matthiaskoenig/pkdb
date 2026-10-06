@@ -46,6 +46,16 @@ pkdb tables add studies/caffeine/Harder1988 outputs_Tab3
 
 This syncs the study, then adds an empty sheet with the header of the table. The name is `<kind>_<source>` with the kind `outputs`, `timecourses` or `scatters` and a source that is `Text` or `Tab` or `Fig` followed by a label, such as `Tab3` or `Fig2A`, at most 31 characters, and not yet used by a file or a sheet, ignoring case. The TSV file appears when the sheet has a row and you sync. Validation needs an image `<study>_<source>.png` for every source except `Text`, and `add` warns when it is missing. It cannot add the sheet while the workbook is open; close it, or copy a sheet in the spreadsheet application and rename the copy to the table name. The sync checks the header of the new sheet, so keep the header row and replace the copied rows with your data.
 
+## Raw tables
+
+A paper table can keep its raw extraction, as printed, in the sheet `<study>_<source>`, such as `Harder1988_Tab2`; its file is `Harder1988_Tab2.tsv`. Raw sheets come after all data sheets, in natural source order, and have no header row: row 1 is the first printed row. Every cell is written as a text cell and the used columns plus a margin default to the text format, so typed values stay text. There are no dropdowns, comments, filters or frozen panes.
+
+```bash
+pkdb tables add studies/caffeine/Harder1988 --raw Tab2
+```
+
+This adds the empty text sheet of the raw table of `Tab2`; the TSV file appears when the sheet has a row and you sync. The sync never sorts the rows and never parses numbers: the rows keep their printed order, and the cells are stripped, the rows padded to the widest row, and trailing empty cells and rows removed. Converted cells (dates, percentages, errors, line breaks) are errors at their cell, as for data sheets. Conflicts are reported like those of data tables, with the sheet, the rows of the sheet and the lines of the TSV file, for example `conflict in sheet Harder1988_Tab2` with `workbook row 3` against `Harder1988_Tab2.tsv line 3`.
+
 ## How the sync works
 
 The sync compares three versions of each table: the base (the tables the workbook was generated from), the workbook and the tables.
