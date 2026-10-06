@@ -14,6 +14,7 @@ from pkdb.studyformat.issues import LISTED, IssueCap, make_issue
 from pkdb.studyformat.jsonio import JsonFileError, load_json
 from pkdb.studyformat.layout import Layout, scan_folder
 from pkdb.studyformat.models import ReferenceSnapshot, Review, StudyMetadata
+from pkdb.studyformat.raw import LoadedRaw, load_raw
 from pkdb.studyformat.tables import (
     REFERENCE_JSON,
     REVIEW_JSON,
@@ -103,6 +104,7 @@ class LoadedStudy:
 
     layout: Layout
     tables: list[LoadedTable] = field(default_factory=list)
+    raw_tables: list[LoadedRaw] = field(default_factory=list)
     # Table kinds that cannot be used: the file failed to load, or a required
     # table is missing. Nothing refers into them.
     broken: set[str] = field(default_factory=set)
@@ -121,6 +123,9 @@ class LoadedStudy:
 
     def table(self, file: str) -> LoadedTable | None:
         return next((table for table in self.tables if table.file == file), None)
+
+    def raw(self, file: str) -> LoadedRaw | None:
+        return next((raw for raw in self.raw_tables if raw.file == file), None)
 
     def of_kind(self, kind: str) -> list[LoadedTable]:
         return [table for table in self.tables if table.kind == kind]
@@ -436,6 +441,12 @@ def load_study(
             study.broken.add(table_file.spec.kind)
         else:
             study.tables.append(table)
+    for raw_file in layout.raw_tables:
+        with (layout.folder / raw_file.name).open("rb") as stream:
+            raw, issues = load_raw(raw_file.name, stream, raw_file.source, limit=limit)
+        study.issues.extend(issues)
+        if raw is not None:
+            study.raw_tables.append(raw)
     present = {table_file.spec.kind for table_file in layout.tables}
     study.broken.update(
         spec.kind

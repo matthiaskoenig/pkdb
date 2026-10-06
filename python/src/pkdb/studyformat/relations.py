@@ -426,6 +426,13 @@ def _images(study: LoadedStudy) -> Issues:
                     f"{image} is missing for source {source}",
                     "source",
                 )
+    for raw in study.raw_tables:
+        image = image_file(study.name, raw.source)
+        if raw.source not in reported and image not in study.layout.files:
+            reported.add(raw.source)
+            yield make_issue(
+                "missing_image", f"{image} is missing for {raw.file}", file=raw.file
+            )
 
 
 def _shell_path(folder: Path) -> str:

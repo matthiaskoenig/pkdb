@@ -11,6 +11,7 @@ from pkdb.studyformat.columns import Column, ColumnType
 from pkdb.studyformat.jsonio import dump_json
 from pkdb.studyformat.load import STRUCTURAL, LoadedStudy, LoadedTable, load_study
 from pkdb.studyformat.models import canonical_review_json, canonical_study_json
+from pkdb.studyformat.raw import render_raw
 from pkdb.studyformat.tables import (
     REFERENCE_JSON,
     REVIEW_JSON,
@@ -143,6 +144,7 @@ def planned_files(study: LoadedStudy) -> dict[str, str | None]:
     plan: dict[str, str | None] = {
         table.file: render_table(table, study.name, order) for table in study.tables
     }
+    plan.update({raw.file: render_raw(raw) for raw in study.raw_tables})
     if study.metadata is not None:
         plan[STUDY_JSON] = canonical_study_json(study.metadata)
     if study.review is not None:

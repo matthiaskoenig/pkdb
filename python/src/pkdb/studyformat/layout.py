@@ -1,17 +1,20 @@
 """Classify the files of a study format 2 folder."""
 
+from collections.abc import Sequence
 from dataclasses import dataclass, field
 from pathlib import Path
 
 from pkdb.schemas.validation import ValidationIssue
 from pkdb.source_files import ignored_source
 from pkdb.studyformat.issues import make_issue
+from pkdb.studyformat.raw import parse_raw_file
 from pkdb.studyformat.tables import (
     JSON_FILES,
     KIND_ORDER,
     REFERENCE_JSON,
     REVIEW_JSON,
     STUDY_JSON,
+    TABLES,
     TableSpec,
     parse_table_file,
 )
@@ -20,13 +23,22 @@ from pkdb.studyformat.workbook.base import SHEET_NAME_LIMIT
 
 DATA_SUFFIXES = frozenset({".tsv", ".json", ".csv", ".xls", ".xlsx"})
 # Study names that PK-DB URLs use after a study identifier, such as
-# /api/v2/studies/{sid}/publication, so `<substance>/publication` would be ambiguous.
-RESERVED_NAMES = frozenset({"publication", "validate"})
+# /api/v2/studies/{sid}/publication, so `<substance>/publication` would be ambiguous,
+# and the kinds of tables split by source, whose files `<kind>_<source>.tsv`
+# would also be the raw tables of a study named like the kind.
+RESERVED_NAMES = frozenset(
+    {
+        "publication",
+        "validate",
+        *(spec.kind for spec in TABLES.values() if spec.per_source),
+    }
+)
 REQUIRED_FILES = (STUDY_JSON, REFERENCE_JSON, REVIEW_JSON, "subjects.tsv")
 TABLE_NAMES = (
     "Table files are subjects.tsv, interventions.tsv, characteristica.tsv or "
     "<kind>_<source>.tsv with kind outputs, timecourses or scatters and a source "
-    "such as Tab1, Fig2A or Text."
+    "such as Tab1, Fig2A or Text. A raw table, the paper table as printed, is "
+    "<study>_<source>.tsv with a Tab source, such as Example_Tab2.tsv."
 )
 
 
@@ -39,6 +51,14 @@ class TableFile:
     source: str | None
 
 
+@dataclass(frozen=True)
+class RawFile:
+    """A raw extraction file of a study folder and the source it belongs to."""
+
+    name: str
+    source: str
+
+
 @dataclass
 class Layout:
     """Files of a study folder by role: tables, attachments and structural issues."""
@@ -48,11 +68,12 @@ class Layout:
     substance: str
     files: frozenset[str]
     tables: list[TableFile] = field(default_factory=list)
+    raw_tables: list[RawFile] = field(default_factory=list)
     attachments: list[str] = field(default_factory=list)
     issues: list[ValidationIssue] = field(default_factory=list)
 
 
-def table_name_issues(tables: list[TableFile]) -> list[ValidationIssue]:
+def table_name_issues(tables: Sequence[TableFile | RawFile]) -> list[ValidationIssue]:
     """Issues of table names that cannot be the sheets of one Excel workbook.
 
     A sheet name has at most 31 characters and Excel compares sheet names
@@ -90,12 +111,13 @@ def scan_folder(folder: Path) -> Layout:
     # The study and substance names come from the path, so make it absolute first.
     folder = Path(folder).resolve()
     study = folder.name
-    files, tables, attachments, issues = set(), [], [], []
+    files, tables, raw_tables, attachments, issues = set(), [], [], [], []
     if study in RESERVED_NAMES:
         issues.append(
             make_issue(
                 "reserved_name",
-                f"A study folder cannot be named {study!r}; PK-DB uses the name in study URLs",
+                f"A study folder cannot be named {study!r}; PK-DB uses the name in "
+                "study URLs, or table files of that kind would be ambiguous",
                 hint="Name the folder after the first author and the year, such as Smith2020.",
             )
         )
@@ -123,6 +145,9 @@ def scan_folder(folder: Path) -> Layout:
             continue
         if (table := parse_table_file(name)) is not None:
             tables.append(TableFile(name, *table))
+            continue
+        if (source := parse_raw_file(name, study)) is not None:
+            raw_tables.append(RawFile(name, source))
             continue
         suffix = path.suffix.lower()
         if name.startswith("."):
@@ -160,7 +185,15 @@ def scan_folder(folder: Path) -> Layout:
     tables.sort(
         key=lambda table: (KIND_ORDER[table.spec.kind], natural_key(table.source or ""))
     )
-    issues.extend(table_name_issues(tables))
+    raw_tables.sort(key=lambda raw: natural_key(raw.source))
+    issues.extend(table_name_issues([*tables, *raw_tables]))
     return Layout(
-        folder, study, folder.parent.name, frozenset(files), tables, attachments, issues
+        folder,
+        study,
+        folder.parent.name,
+        frozenset(files),
+        tables,
+        raw_tables,
+        attachments,
+        issues,
     )
