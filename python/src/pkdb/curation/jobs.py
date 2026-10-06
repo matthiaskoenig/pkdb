@@ -24,6 +24,7 @@ from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError, SourceChangedError
 from pkdb.preparation import prepare, source_hashes
 from pkdb.schemas.validation import StudyValidationError
+from pkdb.studyformat import is_v2_folder
 
 
 def now():
@@ -203,6 +204,17 @@ class JobsMixin(EngineState):
             row = self._row_of(job["study_id"])
             if row is None:
                 job.update(status="canceled", message="Study is not in this workspace")
+                self._save()
+                return
+            if not is_v2_folder(row["_folder"]):
+                job.update(
+                    status="canceled",
+                    message="The folder is no longer a study format 2 folder",
+                )
+                self._save()
+                return
+            if job["action"] == "upload" and row["duplicate"]:
+                job.update(status="canceled", message=duplicate_message(row["id"]))
                 self._save()
                 return
             if row["_blocked"]:

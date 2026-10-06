@@ -278,6 +278,8 @@ class WorkspaceMixin(EngineState):
         with self.lock:
             row = self._selected([study_id])[0]
             folder = row["_folder"]
+            if not is_v2_folder(folder):
+                raise ValueError("The folder is no longer a study format 2 folder")
             if file is None:
                 target = folder
             else:

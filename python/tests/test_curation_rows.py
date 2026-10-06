@@ -3,6 +3,7 @@ import json
 import pytest
 
 from pkdb.curation import engine as module
+from pkdb.curation import jobs
 from pkdb.studyformat.jsonio import dump_json
 
 
@@ -38,15 +39,54 @@ def test_rows_are_format_2_studies_by_identity(workspace):
     assert "sid" not in row and "metadata" not in row
 
 
-def test_format_1_folders_are_never_touched(workspace):
+def run_queue(engine):
+    while engine.queue:
+        identifier = next(iter(engine.queue))
+        job = engine.queue.pop(identifier)
+        engine.active = identifier
+        job["status"] = "running"
+        try:
+            engine.run_job(job)
+        finally:
+            engine.active = None
+
+
+def listing(folder):
+    return {
+        str(path.relative_to(folder)): path.read_bytes()
+        for path in folder.rglob("*")
+        if path.is_file()
+    }
+
+
+def test_format_1_folders_are_never_touched(workspace, sf_vocabulary, monkeypatch):
     engine, folder, legacy = workspace
-    before = {path.name: path.read_bytes() for path in legacy.iterdir()}
+    monkeypatch.setattr(jobs, "bundled_vocabulary", lambda: sf_vocabulary)
+    before = listing(legacy)
     engine.scan()
     for item in engine.studies.values():
         item["_changed_at"] -= 2
     engine.schedule_changes()
-    assert all(job["study_id"] != "caffeine/Legacy1990" for job in engine.jobs)
-    assert {path.name: path.read_bytes() for path in legacy.iterdir()} == before
+    assert set(engine.queue) == {"caffeine/Example"}
+    run_queue(engine)
+    assert [job["study_id"] for job in engine.jobs] == ["caffeine/Example"]
+    assert listing(legacy) == before
+
+
+def test_job_for_a_folder_that_became_format_1_is_canceled(workspace):
+    engine, folder, legacy = workspace
+    engine.enqueue(["caffeine/Example"], "validate")
+    for path in folder.iterdir():
+        path.unlink()
+    (folder / "study.json").write_text(json.dumps({"sid": "Example", "name": "x"}))
+    (folder / "Example.xlsx").write_bytes(b"not a workbook")
+    before = listing(folder)
+    run_queue(engine)
+    assert engine.jobs[-1]["status"] == "canceled"
+    assert "no longer" in engine.jobs[-1]["message"]
+    assert listing(folder) == before
+    with pytest.raises(ValueError, match="no longer"):
+        engine.resolve_file("caffeine/Example")
 
 
 def test_duplicate_identity_is_marked_and_refused(workspace, tmp_path, valid_files):
