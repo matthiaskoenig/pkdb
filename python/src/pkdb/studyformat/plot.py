@@ -19,6 +19,8 @@ class PlotResult:
 
     path: Path
     points: tuple[tuple[float, float], ...]
+    legend: tuple[str, ...] = ()
+    colors: tuple[tuple[str, str], ...] = ()
 
 
 def render_source(study: LoadedStudy, source: str, path: Path) -> PlotResult:
@@ -45,12 +47,25 @@ def _overlay(plt, study, view, path: Path) -> PlotResult:
         axes.set_xlim(0, width)
         axes.set_ylim(height, 0)
         axes.axis("off")
-        series = list(dict.fromkeys(p.series for p in view.overlay))
-        color = {name: COLORS[i % len(COLORS)] for i, name in enumerate(series)}
+        series = list(
+            dict.fromkeys(p.series.removesuffix(ERROR_BAR_SUFFIX) for p in view.overlay)
+        )
+        base = {name: COLORS[i % len(COLORS)] for i, name in enumerate(series)}
+        color = {
+            p.series: base[p.series.removesuffix(ERROR_BAR_SUFFIX)]
+            for p in view.overlay
+        }
         mapped = []
         for point in view.overlay:
             if point.role == "raw":
-                axes.scatter(point.px, point.py, s=12, color=color[point.series])
+                bar = point.series.endswith(ERROR_BAR_SUFFIX)
+                axes.scatter(
+                    point.px,
+                    point.py,
+                    s=40 if bar else 12,
+                    marker="_" if bar else "o",
+                    color=color[point.series],
+                )
                 continue
             mapped.append((point.px, point.py))
             axes.scatter(
@@ -68,15 +83,15 @@ def _overlay(plt, study, view, path: Path) -> PlotResult:
                     color=color[point.series],
                 )
         handles = [
-            plt.Line2D([], [], marker="o", linestyle="", color=color[name], label=name)
+            plt.Line2D([], [], marker="o", linestyle="", color=base[name], label=name)
             for name in series
         ]
         if handles:
-            axes.legend(handles=handles, loc="upper left")
+            axes.legend(handles=handles, loc="best", framealpha=0.8, fontsize="small")
         figure.savefig(path, dpi=100)
     finally:
         plt.close(figure)
-    return PlotResult(path, tuple(mapped))
+    return PlotResult(path, tuple(mapped), tuple(series), tuple(sorted(color.items())))
 
 
 def _units(study: LoadedStudy, view) -> dict[str, tuple[str, str]]:
