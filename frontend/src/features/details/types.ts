@@ -1,3 +1,5 @@
+import { studyApiPath } from "./studyPath";
+
 export type DetailRecord = Record<string, unknown>;
 
 export function isRecord(value: unknown): value is DetailRecord {
@@ -32,6 +34,12 @@ export function label(key: string): string {
     sd: "Standard deviation",
     se: "Standard error",
     cv: "Coefficient of variation",
+    gmean: "Geometric mean",
+    gsd: "Geometric SD",
+    gcv: "Geometric CV",
+    error_bar: "Error bar",
+    error_type: "Error bar type",
+    time_end: "End time",
     normed: "Normalized",
     characteristica: "Characteristics",
     output_count: "Whole-study measurement count",
@@ -89,6 +97,7 @@ export function detailPath(
   )
     throw new Error("Unsupported detail type.");
   if (!String(identifier)) throw new Error("A record identifier is required.");
+  if (resource === "studies") return studyApiPath(String(identifier));
   return `/api/v1/${resource}/${encodeURIComponent(identifier)}/`;
 }
 

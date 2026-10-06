@@ -47,4 +47,27 @@ describe("supported remote filter suggestions", () => {
     expect(result.map((r) => r.id)).toEqual(["researcher"]);
     expect(mocks.get.mock.calls[0]?.[0]).toBe("/api/v1/studies/?page_size=30");
   });
+  it("suggests released studies by their PKDB identifier and skips unreleased ones", async () => {
+    const field = fields.find((f) => f.key === "studies__pkdb_id__in");
+    if (!field) throw new Error("Missing field");
+    mocks.get.mockResolvedValue(
+      page([
+        {
+          sid: "caffeine/Harder1988",
+          name: "Harder1988",
+          pkdb_id: "PKDB00198",
+        },
+        { sid: "caffeine/Draft", name: "Draft", pkdb_id: null },
+        { sid: "PKDB00057", name: "Old" },
+      ]),
+    );
+    expect(
+      await suggestions(field, "harder", new AbortController().signal),
+    ).toEqual([
+      { id: "PKDB00198", title: "PKDB00198 · Harder1988", description: "" },
+    ]);
+    expect(String(mocks.get.mock.calls[0]?.[0])).toContain(
+      "/api/v1/studies/?search_multi_match=harder",
+    );
+  });
 });

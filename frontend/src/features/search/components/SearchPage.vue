@@ -11,6 +11,7 @@ import QuerySummary from "./QuerySummary.vue";
 import ResultsTable from "../../results/components/ResultsTable.vue";
 import DetailPanel from "../../details/components/DetailPanel.vue";
 import SearchExamples from "./SearchExamples.vue";
+import { studyLocation } from "../../details/studyPath";
 import { useSessionStore } from "../../../stores/session";
 import type { Criteria, ResultTab } from "../model";
 import {
@@ -63,7 +64,7 @@ async function openDetail(identifier: string | number) {
   if (search.view.tab === "studies") {
     const origin = rememberResultPosition(route.fullPath, session.epoch);
     await router.push({
-      path: `/data/${encodeURIComponent(String(identifier))}`,
+      path: studyLocation(String(identifier)),
       query: encodeLocation({ criteria: search.applied, view: search.view }),
       state: { [studyOriginKey]: { ...origin } },
     });

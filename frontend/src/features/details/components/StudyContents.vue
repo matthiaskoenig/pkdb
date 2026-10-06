@@ -4,6 +4,8 @@ import { VBtn, VSelect } from "vuetify/components";
 import { api, errorMessage } from "../../../api/client";
 import { useSessionStore } from "../../../stores/session";
 import { isRecord, text, type DetailRecord, type Relation } from "../types";
+import { centralValue } from "../../results/statistics";
+import { scheduleText } from "../schedule";
 const props = defineProps<{ sid: string }>();
 defineEmits<{ open: [relation: Relation] }>();
 const session = useSessionStore();
@@ -31,6 +33,16 @@ function relation(row: DetailRecord): Relation | undefined {
     identifier,
     title: text(row.name ?? row.measurement_type ?? identifier),
   };
+}
+function quantity(row: DetailRecord): string {
+  const value = centralValue(row);
+  if (value === undefined || value === null) return "Not reported";
+  return row.unit ? `${text(value)} ${text(row.unit)}` : text(value);
+}
+function summary(row: DetailRecord): string {
+  const schedule =
+    category.value === "interventions" ? scheduleText(row) : undefined;
+  return [quantity(row), schedule].filter(Boolean).join(" · ");
 }
 async function load() {
   controller?.abort();
@@ -119,9 +131,10 @@ onBeforeUnmount(() => {
           >
             {{ text(row.name ?? row.measurement_type ?? row.pk) }} ·
             {{ text(row.pk) }} </VBtn
-          ><span v-if="category === 'outputs'"
-            >{{ text(row.value ?? row.mean ?? row.median) }}
-            {{ text(row.unit) }}</span
+          ><span
+            v-if="['outputs', 'interventions'].includes(category)"
+            class="summary"
+            >{{ summary(row) }}</span
           >
         </li>
       </ul>
@@ -133,3 +146,8 @@ onBeforeUnmount(() => {
     </template>
   </section>
 </template>
+<style scoped>
+.summary {
+  margin-inline-start: 0.5rem;
+}
+</style>

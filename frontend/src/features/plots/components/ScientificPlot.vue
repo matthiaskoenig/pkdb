@@ -55,7 +55,20 @@ watch(
             title: { text: data.yLabel },
             type: logY.value ? "log" : "linear",
           },
-          margin: { l: 75, r: 25, t: 30, b: 65 },
+          // The timecourse label is the legend entry, above the plot area.
+          legend: {
+            orientation: "h",
+            x: 0,
+            xanchor: "left",
+            y: 1.02,
+            yanchor: "bottom",
+          },
+          margin: {
+            l: 75,
+            r: 25,
+            t: data.traces.some((trace) => trace.showlegend) ? 60 : 30,
+            b: 65,
+          },
           uirevision: JSON.stringify(data.points),
         };
         await loaded.react(element, data.traces, layout, {
@@ -135,12 +148,14 @@ onBeforeUnmount(() => {
                 <th>Axis</th>
                 <th>Time</th>
                 <th>Time unit</th>
-                <th>Value</th>
                 <th>Mean</th>
                 <th>Median</th>
                 <th>SD</th>
                 <th>SE</th>
                 <th>CV</th>
+                <th>Geometric mean</th>
+                <th>Geometric SD</th>
+                <th>Geometric CV</th>
                 <th>Unit</th>
               </tr>
             </thead>
@@ -156,12 +171,14 @@ onBeforeUnmount(() => {
                   </td>
                   <td>{{ point.time ?? "-" }}</td>
                   <td>{{ point.time_unit ?? "-" }}</td>
-                  <td>{{ point.value ?? "-" }}</td>
                   <td>{{ point.mean ?? "-" }}</td>
                   <td>{{ point.median ?? "-" }}</td>
                   <td>{{ point.sd ?? "-" }}</td>
                   <td>{{ point.se ?? "-" }}</td>
                   <td>{{ point.cv ?? "-" }}</td>
+                  <td>{{ point.gmean ?? "-" }}</td>
+                  <td>{{ point.gsd ?? "-" }}</td>
+                  <td>{{ point.gcv ?? "-" }}</td>
                   <td>{{ point.unit ?? "-" }}</td>
                 </tr>
               </template>

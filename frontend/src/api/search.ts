@@ -98,15 +98,18 @@ export async function suggestions(
   return items.flatMap((item) => {
     const id = item[field.idKey];
     if (typeof id !== "string") return [];
+    const name =
+      typeof item.name === "string"
+        ? item.name
+        : typeof item.label === "string"
+          ? item.label
+          : id;
     return [
       {
         id,
+        // A PKDB identifier alone does not say which study it is.
         title:
-          typeof item.name === "string"
-            ? item.name
-            : typeof item.label === "string"
-              ? item.label
-              : id,
+          field.idKey === "pkdb_id" && name !== id ? `${id} · ${name}` : name,
         description:
           typeof item.description === "string" ? item.description : "",
       },

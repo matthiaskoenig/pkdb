@@ -3,6 +3,7 @@ import { flushPromises, mount } from "@vue/test-utils";
 import { createPinia, setActivePinia } from "pinia";
 import { createMemoryHistory, createRouter } from "vue-router";
 import SearchPage from "../../src/features/search/components/SearchPage.vue";
+import ResultsTable from "../../src/features/results/components/ResultsTable.vue";
 import { useSearchStore } from "../../src/stores/search";
 const handlers = vi.hoisted(() => ({
   submit: vi.fn(),
@@ -35,7 +36,11 @@ beforeEach(() => {
 async function page() {
   const router = createRouter({
     history: createMemoryHistory(),
-    routes: [{ path: "/data", component: SearchPage }],
+    routes: [
+      { path: "/data", component: SearchPage },
+      { path: "/data/:substance/:name", component: SearchPage },
+      { path: "/data/:sid", component: SearchPage },
+    ],
   });
   await router.push("/data");
   await router.isReady();
@@ -93,5 +98,32 @@ it("loads an example into draft without touching the applied query or submitting
   expect(search.applied.filters.studies__sid__in).toEqual(["CURRENT"]);
   expect(handlers.submit).not.toHaveBeenCalled();
   expect(wrapper.text()).toContain("Example loaded into the draft");
+  wrapper.unmount();
+});
+it("opens a study from the results at its canonical address", async () => {
+  const wrapper = await page();
+  const search = useSearchStore();
+  const router = wrapper.vm.$router;
+  search.rows = {
+    status: "ready",
+    data: {
+      items: [{ sid: "caffeine/Harder1988" }, { sid: "PKDB00057" }],
+      count: 2,
+      page: 1,
+      lastPage: 1,
+    },
+  };
+  await flushPromises();
+  const table = wrapper.findComponent(ResultsTable);
+  table.vm.$emit("detail", "caffeine/Harder1988");
+  await vi.waitFor(() =>
+    expect(router.currentRoute.value.path).toBe("/data/caffeine/Harder1988"),
+  );
+  expect(router.currentRoute.value.query.tab).toBe("studies");
+  await router.push("/data");
+  table.vm.$emit("detail", "PKDB00057");
+  await vi.waitFor(() =>
+    expect(router.currentRoute.value.path).toBe("/data/PKDB00057"),
+  );
   wrapper.unmount();
 });

@@ -25,11 +25,13 @@ import { useDetailNavigation } from "../useDetailNavigation";
 import RecordFields from "./RecordFields.vue";
 import AttachmentCard from "./AttachmentCard.vue";
 import StudyContents from "./StudyContents.vue";
+import StudyStatus from "./StudyStatus.vue";
+import { scheduleText } from "../schedule";
 const ScientificPlot = defineAsyncComponent(
   () => import("../../plots/components/ScientificPlot.vue"),
 );
 const props = defineProps<{ entity: string; identifier: string | number }>();
-defineEmits<{ close: [] }>();
+const emit = defineEmits<{ close: []; loaded: [data: DetailRecord] }>();
 const session = useSessionStore();
 const { trail, open, back, reset } = useDetailNavigation();
 const target = computed(
@@ -71,12 +73,35 @@ const title = computed(() =>
 const reference = computed(() =>
   isRecord(data.value?.reference) ? data.value.reference : undefined,
 );
+const schedule = computed(() =>
+  target.value.entity === "interventions"
+    ? scheduleText(data.value)
+    : undefined,
+);
+// The schedule, the study status and the data source have their own sections.
+const omitted = computed(() => [
+  "files",
+  "array",
+  "reference",
+  "provenance",
+  "publication_id",
+  ...(target.value.entity === "studies"
+    ? ["pkdb_id", "release_date", "issue", "review_status", "open_review_items"]
+    : []),
+  ...(schedule.value
+    ? ["time", "time_end", "interval", "doses", "time_unit"]
+    : []),
+]);
+// The study whose page is open, as the server named it: a PKDB identifier is
+// answered with the study it identifies, which must not be loaded twice.
+let loadedStudy: { sid: string; epoch: number } | undefined;
 async function load() {
   controller?.abort();
   const current = ++generation;
   const epoch = session.epoch;
   controller = new AbortController();
   data.value = undefined;
+  loadedStudy = undefined;
   failure.value = "";
   loading.value = true;
   showPlot.value = false;
@@ -96,6 +121,9 @@ async function load() {
           "The server returned a detail record without an identifier.",
         );
       data.value = parsed;
+      if (target.value.entity === "studies" && typeof parsed.sid === "string")
+        loadedStudy = { sid: parsed.sid, epoch };
+      if (!trail.value.length) emit("loaded", parsed);
       await nextTick();
       if (current === generation) heading.value?.focus();
     }
@@ -110,6 +138,13 @@ watch(() => [props.entity, props.identifier], reset);
 watch(
   [target, () => session.epoch],
   () => {
+    const { entity, identifier } = target.value;
+    if (
+      entity === "studies" &&
+      loadedStudy?.sid === identifier &&
+      loadedStudy.epoch === session.epoch
+    )
+      return;
     void load();
   },
   { immediate: true },
@@ -131,6 +166,10 @@ onBeforeUnmount(() => {
         Back to previous record </VBtn
       ><VBtn variant="text" @click="$emit('close')">Close details</VBtn>
     </header>
+    <StudyStatus
+      v-if="target.entity === 'studies' && data"
+      :study="data"
+    />
     <p class="context-note">
       Record details show broader scientific context. Related records and
       whole-study counts may include data outside the applied search.
@@ -155,6 +194,10 @@ onBeforeUnmount(() => {
       <section v-if="target.entity === 'studies'" aria-label="Data source">
         <h3>Data source</h3>
         <p>{{ provenanceText(data.provenance) }}</p>
+      </section>
+      <section v-if="schedule" aria-label="Schedule">
+        <h3>Schedule</h3>
+        <p>{{ schedule }}</p>
       </section>
       <section v-if="reference" aria-label="Publication">
         <h3>{{ text(reference.title) }}</h3>
@@ -182,7 +225,7 @@ onBeforeUnmount(() => {
         :sid="data.sid"
         @open="open"
       />
-      <RecordFields :data="data" :omit="['files', 'array', 'reference', 'provenance', 'publication_id']" />
+      <RecordFields :data="data" :omit="omitted" />
       <details v-if="data.array">
         <summary>Complete subset measurements</summary>
         <RecordFields :data="{ measurements: data.array }" />
