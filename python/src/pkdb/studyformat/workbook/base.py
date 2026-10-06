@@ -208,4 +208,5 @@ def write_state(
 
 
 def remove_state(workbook: Path) -> None:
+    """Remove the sync state file of the workbook, if there is one; a regeneration starts afresh."""
     state_path(workbook).unlink(missing_ok=True)

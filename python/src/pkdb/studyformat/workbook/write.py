@@ -1,5 +1,6 @@
 """Generate the study workbook from the canonical TSV tables (spec 10.2 and 10.6)."""
 
+import re
 import uuid
 from collections.abc import Iterable, Mapping
 from copy import copy
@@ -11,10 +12,9 @@ from pathlib import Path
 from zipfile import ZIP_DEFLATED, ZipFile
 
 import openpyxl
-from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE, Cell
+from openpyxl.cell.cell import Cell
 from openpyxl.comments import Comment
 from openpyxl.styles.fonts import DEFAULT_FONT
-from openpyxl.utils.exceptions import IllegalCharacterError
 from openpyxl.workbook import Workbook
 from openpyxl.worksheet.datavalidation import DataValidation
 from openpyxl.worksheet.worksheet import Worksheet
@@ -32,7 +32,7 @@ from pkdb.studyformat.tables import (
     table_file,
 )
 from pkdb.studyformat.terms import vocabulary_terms
-from pkdb.studyformat.text import format_number, natural_key, parse_number, read_tsv
+from pkdb.studyformat.text import format_number, natural_key, parse_number
 from pkdb.studyformat.workbook.base import (
     BASE_SHEET,
     LISTS_SHEET,
@@ -47,8 +47,11 @@ TEXT_FORMAT = "@"
 GENERAL_FORMAT = "General"
 # Rows of a sheet in Excel and LibreOffice; dropdowns cover every data row.
 MAX_ROW = 1_048_576
-# Characters a spreadsheet cell holds.
+# Characters a spreadsheet cell holds, counted in UTF-16 code units like Excel.
 CELL_LIMIT = 32_767
+# Characters XML 1.0, and so a workbook, cannot hold: control characters other
+# than tab, line feed and carriage return, surrogates and U+FFFE and U+FFFF.
+NOT_XML = re.compile(r"[\x00-\x08\x0b\x0c\x0e-\x1f\ud800-\udfff\ufffe\uffff]")
 # LibreOffice saves numbers with at most 15 significant digits.
 NUMBER_DIGITS = 15
 NUMBER_TYPES = frozenset({ColumnType.NUMBER, ColumnType.INTEGER, ColumnType.TIME})
@@ -63,7 +66,7 @@ BOLD = copy(DEFAULT_FONT)
 BOLD.bold = True
 CELL_ISSUES = {
     "cell_too_long": "cells are longer than a spreadsheet cell",
-    "illegal_character": "cells contain control characters",
+    "illegal_character": "cells contain characters a workbook cannot hold",
 }
 
 
@@ -147,6 +150,22 @@ def _number(text: str) -> int | float | None:
     if len(mantissa.replace(".", "").strip("0")) > NUMBER_DIGITS:
         return None
     return value if any(mark in text for mark in ".eE") else int(text)
+
+
+def _not_xml(text: str) -> str | None:
+    """The first character of a text that a workbook cannot hold, described, or None."""
+    match = NOT_XML.search(text)
+    if match is None:
+        return None
+    code = ord(match.group())
+    kind = (
+        "control character"
+        if code < 0x20
+        else "surrogate"
+        if 0xD800 <= code <= 0xDFFF
+        else "noncharacter"
+    )
+    return f"the {kind} U+{code:04X}"
 
 
 def _put_text(cell: Cell, text: str) -> None:
@@ -253,20 +272,21 @@ def _write_table(
     cap = IssueCap()
     last = 1
     if plan.text is not None:
-        lines = read_tsv(BytesIO(plan.text.encode("utf-8")))
-        header = next(lines, None)
-        if header is None or header.cells != spec.names:
+        # Canonical text: LF line ends, a final newline and no blank lines. It is
+        # split as text, so that a text UTF-8 cannot encode becomes an issue.
+        lines = plan.text.removesuffix("\n").split("\n")
+        if tuple(lines[0].split("\t")) != spec.names:
             raise ValueError(f"{plan.file} is not in canonical form")
-        for line in lines:
-            last = line.number
+        for number, line in enumerate(lines[1:], start=2):
+            last = number
             for index, (column, text) in enumerate(
-                zip(spec.columns, line.cells, strict=True)
+                zip(spec.columns, line.split("\t"), strict=True)
             ):
                 if not text:
                     continue
-                if line.number <= WIDTH_ROWS + 1:
+                if number <= WIDTH_ROWS + 1:
                     widths[index] = max(widths[index], len(text) + CELL_PADDING)
-                problem = _write_cell(sheet.cell(line.number, index + 1), column, text)
+                problem = _write_cell(sheet.cell(number, index + 1), column, text)
                 if problem is not None and cap.admit(problem[0]):
                     code, message, hint = problem
                     issues.append(
@@ -274,7 +294,7 @@ def _write_table(
                             code,
                             message,
                             file=plan.file,
-                            line=line.number,
+                            line=number,
                             column=index,
                             header=column.name,
                             hint=hint,
@@ -308,27 +328,26 @@ def _write_table(
 
 def _write_cell(cell: Cell, column: Column, text: str) -> tuple[str, str, str] | None:
     """Write one cell; the code, message and hint of an issue, or None."""
-    if len(text) > CELL_LIMIT:
+    # A text has at most two UTF-16 code units per character.
+    if len(text) * 2 > CELL_LIMIT:
+        units = len(text.encode("utf-16-le", "surrogatepass")) // 2
+        if units > CELL_LIMIT:
+            return (
+                "cell_too_long",
+                f"The cell has {units:,} characters as Excel counts them; a "
+                f"spreadsheet cell holds at most {CELL_LIMIT:,}",
+                "Shorten the text.",
+            )
+    if (character := _not_xml(text)) is not None:
         return (
-            "cell_too_long",
-            f"The cell has {len(text):,} characters; a spreadsheet cell holds at "
-            f"most {CELL_LIMIT:,}",
-            "Shorten the text.",
+            "illegal_character",
+            f"The cell contains {character}, which a workbook cannot hold",
+            "Remove the character.",
         )
     if not _is_text(column) and (number := _number(text)) is not None:
         cell.value = number
-        return None
-    try:
+    else:
         _put_text(cell, text)
-    except IllegalCharacterError:
-        character = ILLEGAL_CHARACTERS_RE.search(text)
-        code = f"U+{ord(character.group()):04X}" if character else "a character"
-        return (
-            "illegal_character",
-            f"The cell contains the control character {code}, which a workbook "
-            "cannot hold",
-            "Remove the control character.",
-        )
     return None
 
 
@@ -338,16 +357,16 @@ def _write_lists(
     issues = []
     for index, (key, values) in enumerate(lists.items(), start=1):
         for row, value in enumerate((key, *values), start=1):
-            try:
-                _put_text(sheet.cell(row, index), value)
-            except IllegalCharacterError:
+            if (character := _not_xml(value)) is not None:
                 issues.append(
                     make_issue(
                         "illegal_character",
-                        f"The vocabulary term {value!r} of {key} contains a control "
-                        "character, which a workbook cannot hold",
+                        f"The vocabulary term {value!r} of {key} contains "
+                        f"{character}, which a workbook cannot hold",
                     )
                 )
+            else:
+                _put_text(sheet.cell(row, index), value)
     sheet.sheet_state = "hidden"
     return issues
 
@@ -414,9 +433,10 @@ def build_workbook(
             _write_table(workbook.create_sheet(sheet.name, index), sheet, lists)
         )
     issues.extend(_write_lists(workbook.create_sheet(LISTS_SHEET), lists))
-    _write_base(workbook.create_sheet(BASE_SHEET), base)
     if any(issue.severity == "error" for issue in issues):
         return WorkbookBuild(None, base, issues)
+    # Only now: the base encodes the texts as UTF-8.
+    _write_base(workbook.create_sheet(BASE_SHEET), base)
     workbook.active = 0
     for index, sheet in enumerate(workbook.worksheets):
         sheet.sheet_view.tabSelected = index == 0

@@ -159,8 +159,8 @@ def test_column_widths_are_clamped(sf_vocabulary):
     sheet = load(build(tables, sf_vocabulary))["outputs_Tab1"]
     assert sheet.column_dimensions[letter("outputs", "comment")].width == 60
     assert sheet.column_dimensions[letter("outputs", "sd")].width == 8
-    measurement = sheet.column_dimensions[letter("outputs", "interventions")].width
-    assert len("interventions") < measurement < 20
+    interventions = sheet.column_dimensions[letter("outputs", "interventions")].width
+    assert len("interventions") < interventions < 20
 
 
 def test_cell_types_follow_the_column_type(sf_vocabulary):
@@ -401,14 +401,57 @@ def test_a_cell_longer_than_a_spreadsheet_cell_is_an_issue(sf_vocabulary):
     assert result.base.files == tables
 
 
-def test_a_control_character_is_an_issue(sf_vocabulary):
-    tables = {"outputs_Tab1.tsv": outputs({"comment": f"a{chr(0x01)}b"})}
+def test_excel_counts_a_cell_in_utf16_code_units(sf_vocabulary):
+    # 20,000 characters outside the Basic Multilingual Plane are 40,000 units.
+    tables = {"outputs_Tab1.tsv": outputs({"comment": chr(0x1F600) * 20000})}
+    result = build(tables, sf_vocabulary)
+    assert result.data is None
+    [issue] = result.issues
+    assert issue.code == "cell_too_long"
+    assert "40,000" in issue.message
+
+
+# Characters that XML 1.0, and so a workbook, cannot hold: a control character,
+# the noncharacters U+FFFE and U+FFFF, and a lone surrogate.
+ILLEGAL = [0x01, 0x1F, 0xFFFE, 0xFFFF, 0xD800]
+
+
+@pytest.mark.parametrize("code", ILLEGAL)
+def test_a_character_xml_cannot_hold_is_an_issue(sf_vocabulary, code):
+    tables = {"outputs_Tab1.tsv": outputs({"comment": f"a{chr(code)}b"})}
     result = build(tables, sf_vocabulary)
     assert result.data is None
     [issue] = result.issues
     assert issue.code == "illegal_character"
+    assert f"U+{code:04X}" in issue.message
     assert issue.source.sheet == "outputs_Tab1"
     assert issue.source.cell == f"{letter('outputs', 'comment')}2"
+
+
+@pytest.mark.parametrize("code", ILLEGAL)
+def test_a_vocabulary_term_xml_cannot_hold_is_an_issue(sf_vocabulary, code):
+    vocabulary = sf_vocabulary.model_copy(
+        update={"tissues": ("plasma", f"bad{chr(code)}")}
+    )
+    result = build({}, vocabulary)
+    assert result.data is None
+    [issue] = result.issues
+    assert issue.code == "illegal_character"
+    assert issue.source is None
+    assert "tissues" in issue.message
+    assert f"U+{code:04X}" in issue.message
+
+
+def test_tabs_line_breaks_and_other_planes_are_kept(sf_vocabulary):
+    # A canonical cell holds no tab or line break, but a vocabulary term may.
+    vocabulary = sf_vocabulary.model_copy(update={"tissues": ("a\tb", "c\nd")})
+    comment = f"{chr(0x1F600)}{chr(0xFFFD)}{chr(0xE000)}{chr(0x10FFFF)}"
+    workbook = load(
+        build({"outputs_Tab1.tsv": outputs({"comment": comment})}, vocabulary)
+    )
+    sheet = workbook["outputs_Tab1"]
+    assert sheet[f"{letter('outputs', 'comment')}2"].value == comment
+    assert list_values(workbook, "tissues") == ["a\tb", "c\nd"]
 
 
 def test_repeated_cell_issues_are_capped(sf_vocabulary):
