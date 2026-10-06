@@ -25,6 +25,7 @@ WARNINGS = frozenset(
         "workbook_open",
         "workbook_changed",
         "workbook_not_ignored",
+        "workbook_tracked",
     }
 )
 _GROUPS = {
@@ -125,6 +126,7 @@ _GROUPS = {
         "workbook_open",
         "workbook_changed",
         "workbook_not_ignored",
+        "workbook_tracked",
         "sync_conflict",
         "sync_write_failed",
     ),

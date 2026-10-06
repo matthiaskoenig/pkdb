@@ -8,16 +8,12 @@ should ignore the workbook and its sync state file.
 
 import json
 import os
-import shutil
 import subprocess
 import sys
 from pathlib import Path
 
 from pkdb.studyformat_cli import print_issues, say
 
-# The .gitignore lines for the workbook and for its sync state file.
-GITIGNORE_WORKBOOK = "*.xlsx"
-GITIGNORE_STATE = ".*.pkdb-base"
 # Rows of each side of a conflict printed for people; JSON lists every row.
 LISTED_ROWS = 10
 # A file change and the workbook action in plain words: done, and planned (--check).
@@ -131,56 +127,6 @@ def run(args) -> int:
     """Run a `tables` action and return the exit code."""
     actions = {"open": _open, "sync": _sync, "add": _add}
     return actions[args.action](args)
-
-
-def ignored_by_git(path: Path) -> bool | None:
-    """Whether git ignores a path; None when git is missing or the path is outside a work tree."""
-    git = shutil.which("git")
-    if git is None:
-        return None
-    try:
-        completed = subprocess.run(
-            [git, "check-ignore", "-q", "--", path.name],
-            cwd=path.parent,
-            capture_output=True,
-            timeout=30,
-            check=False,
-        )
-    except OSError, subprocess.SubprocessError:
-        return None
-    # 1 means not ignored; 128 means no work tree or another error.
-    return {0: True, 1: False}.get(completed.returncode)
-
-
-def _git_issues(workbook: Path) -> list:
-    """A warning when the study is in a git work tree that does not ignore the workbook."""
-    from pkdb.studyformat.issues import make_issue
-    from pkdb.studyformat.workbook.base import state_path
-
-    workbook_ignored = ignored_by_git(workbook)
-    if workbook_ignored is None:
-        return []
-    state = state_path(workbook)
-    missing = [
-        (path, line)
-        for path, line, ignored in (
-            (workbook, GITIGNORE_WORKBOOK, workbook_ignored),
-            (state, GITIGNORE_STATE, ignored_by_git(state)),
-        )
-        if ignored is False
-    ]
-    if not missing:
-        return []
-    names = " and ".join(path.name for path, _ in missing)
-    return [
-        make_issue(
-            "workbook_not_ignored",
-            f"Git does not ignore {names}; commit only the TSV tables",
-            file=workbook.name,
-            hint="Add these lines to the .gitignore file of the repository:",
-            candidates=[line for _, line in missing],
-        )
-    ]
 
 
 def _vocabulary(args):
@@ -330,6 +276,7 @@ def _print_result(label: str, result, issues) -> None:
 def _sync(args) -> int:
     from pkdb.preparation import study_folders
     from pkdb.studyformat import is_v2_folder, study_label, sync_study
+    from pkdb.studyformat.workbook.git import git_issues
 
     human = args.output == "human" or (args.output is None and sys.stdout.isatty())
     try:
@@ -363,7 +310,7 @@ def _sync(args) -> int:
                     flush=True,
                 )
             continue
-        issues = [*result.issues, *_git_issues(result.workbook)]
+        issues = [*result.issues, *git_issues(result.workbook)]
         failed |= not result.ok or (args.check and _planned(result))
         if human:
             _print_result(label, result, issues)
@@ -375,6 +322,7 @@ def _sync(args) -> int:
 
 def _open(args) -> int:
     from pkdb.studyformat import study_label, sync_study
+    from pkdb.studyformat.workbook.git import git_issues
 
     folder = _study(args.study)
     if folder is None:
@@ -389,7 +337,7 @@ def _open(args) -> int:
         say(f"{label}: cannot sync: {_reason(error)}", file=sys.stderr)
         return 1
     # A sync that failed is reported, and the curator fixes it in the workbook.
-    _print_result(label, result, [*result.issues, *_git_issues(result.workbook)])
+    _print_result(label, result, [*result.issues, *git_issues(result.workbook)])
     if not args.no_open:
         if not result.workbook.is_file():
             # A failed sync said why it did not create the workbook.
