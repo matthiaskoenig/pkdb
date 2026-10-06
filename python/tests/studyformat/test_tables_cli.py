@@ -751,6 +751,10 @@ def test_a_missing_workbook_that_is_open_is_not_created(study, vocabulary, capsy
     assert tables("sync", study, "--format", "human", *vocabulary) == 0
 
     out = capsys.readouterr().out.splitlines()
+    assert out[0] == (
+        "caffeine/Example: tables synced, workbook not created (it is open; close "
+        "it and sync again)"
+    )
     assert out[1] == "  Example.xlsx: not created because it is open"
     assert any("[workbook_open]" in line for line in out)
     assert not workbook_path(study).exists()

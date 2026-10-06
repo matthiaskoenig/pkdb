@@ -236,6 +236,11 @@ def _print_result(label: str, result, issues) -> None:
         summary = f"cannot sync, resolve {problems} below"
     elif result.checked and _planned(result):
         summary = "out of sync"
+    elif result.workbook_action == "close_to_update" and not result.workbook.exists():
+        # A lock file without workbook: it is open while it is saved.
+        summary = (
+            "tables synced, workbook not created (it is open; close it and sync again)"
+        )
     elif result.workbook_action in SYNCED_WITHOUT_WORKBOOK:
         summary = SYNCED_WITHOUT_WORKBOOK[result.workbook_action]
     elif _planned(result):
