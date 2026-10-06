@@ -70,8 +70,23 @@ def unquote(cell: str) -> str:
     return cell
 
 
+# Far more cells than any table or spreadsheet (16,384 columns) has. A longer
+# line is not split, so that a single line cannot exhaust memory.
+MAX_CELLS = 1_000_000
+
+
 class TsvError(ValueError):
     """The bytes are not a UTF-8 text table."""
+
+
+class TooManyCells(TsvError):
+    """A line has more than MAX_CELLS cells."""
+
+    def __init__(self, number: int, width: int):
+        self.number, self.width = number, width
+        super().__init__(
+            f"Line {number} has {width:,} cells; a table has at most {MAX_CELLS:,}"
+        )
 
 
 @dataclass(frozen=True)
@@ -131,11 +146,13 @@ def read_tsv(chunks: Iterable[bytes]) -> Iterator[TsvLine]:
 
     `chunks` are the bytes of the file, split after each LF as a binary file
     yields them. The header comes first, followed by the data lines; blank
-    data lines are skipped. A line that is not UTF-8 raises TsvError when it
-    is reached.
+    data lines are skipped. A line that is not UTF-8 raises TsvError, and a
+    line of more than MAX_CELLS cells TooManyCells, when it is reached.
     """
     for number, text in enumerate(_text_lines(chunks), start=1):
         if number == 1 or text.strip():
+            if (width := text.count("\t") + 1) > MAX_CELLS:
+                raise TooManyCells(number, width)
             yield TsvLine(number, _cells(text), text.startswith(CONFLICT_MARKERS))
 
 

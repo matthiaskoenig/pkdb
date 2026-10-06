@@ -382,3 +382,55 @@ def test_scatter_with_as_many_groups_as_individuals_follows_its_first_row(
     study = load_study(make_study({**valid_files, "scatters_Fig2.tsv": scatter}))
     [issue] = [i for i in check_relations(study) if i.code == "mixed_scatter_subjects"]
     assert issue.source is not None and issue.source.row == 3
+
+
+def test_names_of_one_cell_are_reported_a_bounded_number_of_times(
+    make_study, valid_files, tsv
+):
+    from pkdb.studyformat.issues import REPEATED_ISSUES
+
+    unknown = ",".join(f"X{i}" for i in range(10_000))
+    repeated = ",".join(["D1"] * 10_000)
+    files = {
+        **valid_files,
+        "outputs_Tab2.tsv": tsv(
+            "outputs",
+            {**CMAX, "interventions": unknown},
+            {**CMAX, "mean": "3", "interventions": repeated},
+        ),
+    }
+    issues = check_relations(load_study(make_study(files)))
+    for code, total, row in (
+        ("unknown_reference", 10_000, 2),
+        ("duplicate_reference", 9_999, 3),
+    ):
+        found = [i for i in issues if i.code == code]
+        assert len(found) == REPEATED_ISSUES + 1, code
+        assert {i.source.row for i in found if i.source} == {row}
+        assert found[-1].message.startswith(f"{total:,} names of this cell")
+
+
+def test_review_items_are_reported_a_bounded_number_of_times(make_study, valid_files):
+    from pkdb.studyformat.issues import REPEATED_ISSUES
+
+    review = {
+        "status": "draft",
+        "items": [
+            {
+                **ITEM,
+                "id": f"01JA2XK7Q8M3R5T6V9W0Y{i:05d}"[:26],
+                "target": {"file": f"missing{i}.tsv"},
+            }
+            for i in range(5_000)
+        ],
+    }
+    folder = make_study({**valid_files, "review.json": dump_json(review)})
+    found = [
+        i
+        for i in check_relations(load_study(folder))
+        if i.code == "unknown_review_target"
+    ]
+    assert len(found) == REPEATED_ISSUES + 1
+    assert found[-1].message == (
+        f"5,000 review items target unknown places; the first {REPEATED_ISSUES} are listed"
+    )

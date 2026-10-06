@@ -10,7 +10,7 @@ from pydantic import BaseModel, ValidationError
 
 from pkdb.schemas.validation import ValidationIssue, fail
 from pkdb.studyformat.cells import canonical_cell, parse_cell
-from pkdb.studyformat.issues import make_issue
+from pkdb.studyformat.issues import LISTED, IssueCap, make_issue
 from pkdb.studyformat.jsonio import JsonFileError, load_json
 from pkdb.studyformat.layout import Layout, scan_folder
 from pkdb.studyformat.models import ReferenceSnapshot, Review, StudyMetadata
@@ -21,7 +21,7 @@ from pkdb.studyformat.tables import (
     TABLES,
     TableSpec,
 )
-from pkdb.studyformat.text import TsvError, TsvLine, read_tsv
+from pkdb.studyformat.text import TooManyCells, TsvError, TsvLine, read_tsv
 
 # Column names of study format 1 sheets and their format 2 replacement.
 LEGACY_COLUMNS = {
@@ -51,6 +51,7 @@ STRUCTURAL = frozenset(
         "unknown_column",
         "duplicate_column",
         "extra_cells",
+        "too_many_columns",
         "stray_text",
         "invalid_json",
         "duplicate_key",
@@ -158,12 +159,16 @@ def _header_issues(
     file: str, header: tuple[str, ...], spec: TableSpec, filled: set[int]
 ) -> tuple[dict[str, int], list[ValidationIssue]]:
     # Column positions and the issues of the header. An unnamed column is
-    # ignored unless a line has a value in it (`filled`).
+    # ignored unless a line has a value in it (`filled`). A header of very many
+    # columns lists the first of them and counts the rest.
     issues = []
+    cap = IssueCap()
     positions: dict[str, int] = {}
     for index, name in enumerate(header):
         if name in spec.names:
-            if name in positions:
+            if name not in positions:
+                positions[name] = index
+            elif cap.admit("duplicate_column"):
                 issues.append(
                     make_issue(
                         "duplicate_column",
@@ -174,9 +179,7 @@ def _header_issues(
                         header=name,
                     )
                 )
-            else:
-                positions[name] = index
-        elif name != "" or index in filled:
+        elif (name != "" or index in filled) and cap.admit("unknown_column"):
             issues.append(
                 make_issue(
                     "unknown_column",
@@ -188,6 +191,13 @@ def _header_issues(
                     candidates=_candidates(name, spec),
                 )
             )
+    kinds = {"duplicate_column": "repeat a column", "unknown_column": "are unknown"}
+    issues.extend(
+        make_issue(
+            code, f"{total:,} header columns {kinds[code]}; {LISTED}", file=file, line=1
+        )
+        for code, total in cap.beyond()
+    )
     return positions, issues
 
 
@@ -231,11 +241,13 @@ def load_table(
             if line.number == 1 or conflict is not None or not any(header):
                 # Only the encoding and the row limit still matter.
                 continue
-            filled.update(
-                index
-                for index in unnamed
-                if index < len(line.cells) and line.cells[index]
-            )
+            if unnamed:
+                # Linear in the cells of the line, however many columns are unnamed.
+                filled.update(
+                    index
+                    for index, cell in enumerate(line.cells)
+                    if cell and index in unnamed
+                )
             surplus = [
                 index
                 for index in range(len(header), len(line.cells))
@@ -260,6 +272,10 @@ def load_table(
                 rows.append(row)
             elif unexpected is not None:
                 stray.append(unexpected)
+    except TooManyCells as error:
+        return None, [
+            make_issue("too_many_columns", str(error), file=file, line=error.number)
+        ]
     except TsvError as error:
         return None, [make_issue("invalid_encoding", str(error), file=file)]
     if conflict is not None:
@@ -368,7 +384,10 @@ def _validate[M: BaseModel](
     try:
         return model.model_validate(data)
     except ValidationError as error:
+        cap = IssueCap()
         for detail in error.errors(include_url=False):
+            if not cap.admit(code):
+                continue
             path = ".".join(str(part) for part in detail["loc"])
             study.issues.append(
                 make_issue(
@@ -378,6 +397,12 @@ def _validate[M: BaseModel](
                     field=path or None,
                 )
             )
+        study.issues.extend(
+            make_issue(
+                code, f"{total:,} entries of {name} are invalid; {LISTED}", file=name
+            )
+            for code, total in cap.beyond()
+        )
         return None
 
 

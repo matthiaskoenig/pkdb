@@ -9,7 +9,7 @@ from functools import cache
 from pathlib import Path
 
 from pkdb.schemas.validation import ValidationIssue
-from pkdb.studyformat.issues import make_issue, row_issue
+from pkdb.studyformat.issues import LISTED, IssueCap, make_issue, row_issue
 from pkdb.studyformat.load import LoadedStudy, LoadedTable, Row
 from pkdb.studyformat.tables import (
     REFERENCE_JSON,
@@ -155,8 +155,10 @@ def _references(study: LoadedStudy) -> Issues:
             names = set(known[target])
             for row in table.rows:
                 seen: set[str] = set()
+                # A cell of very many names lists the first issues and counts all.
+                cap = IssueCap()
                 for name in _names(row.values[column.name]):
-                    if name in seen:
+                    if name in seen and cap.admit("duplicate_reference"):
                         yield row_issue(
                             table,
                             row,
@@ -165,7 +167,7 @@ def _references(study: LoadedStudy) -> Issues:
                             column.name,
                         )
                     seen.add(name)
-                    if name not in names:
+                    if name not in names and cap.admit("unknown_reference"):
                         yield row_issue(
                             table,
                             row,
@@ -175,6 +177,18 @@ def _references(study: LoadedStudy) -> Issues:
                             actual=name,
                             candidates=suggest(name, target),
                         )
+                kinds = {
+                    "duplicate_reference": "are listed twice",
+                    "unknown_reference": f"are not rows of {target}.tsv",
+                }
+                for code, total in cap.beyond():
+                    yield row_issue(
+                        table,
+                        row,
+                        code,
+                        f"{total:,} names of this cell {kinds[code]}; {LISTED}",
+                        column.name,
+                    )
 
 
 def _subject_tree(study: LoadedStudy) -> Issues:
@@ -456,6 +470,23 @@ def _study_rules(study: LoadedStudy) -> Issues:
 
 
 def _review_rules(study: LoadedStudy) -> Issues:
+    # review.json may hold very many items: each code lists its first issues
+    # and counts all.
+    cap = IssueCap()
+    for issue in _review_items(study):
+        if issue.code == "approved_with_open_items" or cap.admit(issue.code):
+            yield issue
+    kinds = {
+        "unknown_review_target": "target unknown places",
+        "review_target_unmatched": "no longer match a row",
+    }
+    for code, total in cap.beyond():
+        yield make_issue(
+            code, f"{total:,} review items {kinds[code]}; {LISTED}", file=REVIEW_JSON
+        )
+
+
+def _review_items(study: LoadedStudy) -> Issues:
     review = study.review
     if review is None:
         return

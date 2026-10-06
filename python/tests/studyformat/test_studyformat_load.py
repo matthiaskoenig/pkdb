@@ -1,12 +1,15 @@
 import itertools
+import json
 
 import pytest
 
 from pkdb.schemas.validation import StudyValidationError
 from pkdb.studyformat import load
+from pkdb.studyformat.issues import REPEATED_ISSUES
+from pkdb.studyformat.jsonio import dump_json
 from pkdb.studyformat.load import RowLimit, load_study, load_table
 from pkdb.studyformat.tables import TABLES
-from pkdb.studyformat.text import read_tsv
+from pkdb.studyformat.text import MAX_CELLS, read_tsv
 
 OUT = TABLES["outputs"]
 
@@ -348,3 +351,45 @@ def test_file_limit_counts_files_besides_study_and_reference_json(
     with pytest.raises(StudyValidationError) as error:
         load_study(folder, max_files=files - 1)
     assert codes(error.value.report.issues) == ["file_limit"]
+
+
+def test_unknown_header_columns_are_reported_a_bounded_number_of_times():
+    header = "\t".join(["subjects", "mean", *(f"x{i}" for i in range(100_000))])
+    data = f"{header}\nall\t1\n".encode()
+    table, issues = load_table("outputs_Tab1.tsv", data, OUT, "Tab1", study="Example")
+    assert table is None
+    assert codes(issues) == ["unknown_column"] * (REPEATED_ISSUES + 1)
+    assert issues[-1].message == (
+        f"100,000 header columns are unknown; the first {REPEATED_ISSUES} are listed"
+    )
+    # Repeated known columns are bounded the same way.
+    _, issues = load_table(
+        "outputs_Tab1.tsv", ("mean\t" * 50_000).encode(), OUT, "Tab1", study="Example"
+    )
+    assert codes(issues) == ["duplicate_column"] * (REPEATED_ISSUES + 1)
+    assert issues[-1].message.startswith("49,999 header columns repeat a column")
+
+
+def test_a_line_with_more_cells_than_any_table_is_not_split():
+    data = b"subjects\tmean\nall" + b"\t1" * MAX_CELLS + b"\n"
+    table, issues = load_table("outputs_Tab1.tsv", data, OUT, "Tab1", study="Example")
+    assert table is None
+    [issue] = issues
+    assert issue.code == "too_many_columns"
+    assert issue.source is not None and issue.source.row == 2
+    assert issue.message == (
+        f"Line 2 has {MAX_CELLS + 1:,} cells; a table has at most {MAX_CELLS:,}"
+    )
+
+
+def test_invalid_json_entries_are_reported_a_bounded_number_of_times(
+    make_study, valid_files
+):
+    study = json.loads(valid_files["study.json"])
+    study["curators"] = [{"user": "", "rating": 9}] * 10_000
+    folder = make_study({**valid_files, "study.json": dump_json(study)})
+    issues = [i for i in load_study(folder).issues if i.code == "invalid_study_json"]
+    assert len(issues) == REPEATED_ISSUES + 1
+    assert issues[-1].message.endswith(
+        f"entries of study.json are invalid; the first {REPEATED_ISSUES} are listed"
+    )
