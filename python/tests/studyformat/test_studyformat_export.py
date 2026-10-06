@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from pkdb.studyformat.export import column_reference, json_schemas
+from pkdb.studyformat.layout import RESERVED_NAMES
 from pkdb.studyformat.tables import TABLES
 
 DOCS = Path(__file__).resolve().parents[3] / "docs" / "study-format.md"
@@ -79,3 +80,10 @@ def test_column_reference_says_that_format_2_is_being_introduced():
 
 def test_committed_column_reference_is_current():
     assert DOCS.read_text(encoding="utf-8") == column_reference()
+
+
+def test_column_reference_names_every_reserved_study_name():
+    paragraph = next(
+        line for line in column_reference().splitlines() if "reserved" in line
+    )
+    assert all(f"`{name}`" in paragraph for name in RESERVED_NAMES)

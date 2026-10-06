@@ -247,7 +247,7 @@ Routes use hash history: `#/` and `#/studies/{substance}/{name}/{section}`.
 ## 11. Documentation
 
 - `docs/local-curation.md` is rewritten for format 2 with new screenshots rendered by a rewritten `tools/curation_docs/render.mjs`.
-- `pkdb schema docs` documents raw tables, WebPlotDigitizer projects with the dataset naming rule, and the review approval fields in `docs/study-format.md`; the JSON Schema export includes them.
+- `pkdb schema docs` documents raw tables, WebPlotDigitizer projects with the dataset naming rule, and the review approval fields in `docs/study-format.md`. The JSON Schema export includes the review approval fields; raw tables and WebPlotDigitizer projects are documented in the column reference, because raw tables are untyped grids and WebPlotDigitizer projects are a third-party format.
 - The CLI reference documents `pkdb study`, `pkdb review`, `pkdb digitize` and `pkdb plot`.
 
 ## 12. Implementation parts
