@@ -172,6 +172,8 @@ class WorkspaceMixin(EngineState):
             "_changed_at": time.monotonic(),
             "_pending": False,
             "_blocked": False,
+            # The action of a queued job that pausing canceled, queued again on resume.
+            "_resume_action": None,
         }
 
     def scan(self, initial=False):
@@ -271,6 +273,8 @@ class WorkspaceMixin(EngineState):
                         # An initial scan validates locally, never uploads a backlog.
                         row["_pending"] = True
                         row["_initial"] = initial or old is None
+                        # A new save follows the save action, not a paused job.
+                        row["_resume_action"] = None
                     if closed and behind and self.active != row["id"]:
                         # The workbook lacks the tables and is closed now: sync it. A
                         # running job handles a close itself when it ends.
@@ -341,6 +345,7 @@ class WorkspaceMixin(EngineState):
         )
         # Nothing to validate until then; a job now would only fail again.
         row["_pending"] = False
+        row["_resume_action"] = None
         # The next scan reads the folder again, also when its files return to the state of
         # the last scan; it queues a job once they can be read.
         row["_signature"] = None
@@ -426,13 +431,18 @@ class WorkspaceMixin(EngineState):
     def _automatic_action(self, row):
         """The action of the job that scheduling queues for a pending row.
 
-        None for a row that scheduling skips: blocked, a duplicate or with the save action
-        Off; "suspended" for an upload on save while no authorized account is connected.
-        Called with the engine lock held.
+        The action of a queued job that pausing canceled, else a validation for an initial
+        job, else the save action. None for a row that scheduling skips: blocked, a
+        duplicate, or with the save action Off and no canceled job; "suspended" for an
+        upload while no authorized account is connected. Called with the engine lock held.
         """
-        if row["_blocked"] or row["mode"] == "off" or row["duplicate"]:
+        if row["_blocked"] or row["duplicate"]:
             return None
-        action = "validate" if row.get("_initial") else row["mode"]
+        action = row["_resume_action"]
+        if action is None:
+            if row["mode"] == "off":
+                return None
+            action = "validate" if row.get("_initial") else row["mode"]
         if action == "upload" and (
             self.offline or not self.account or not self.can_upload
         ):

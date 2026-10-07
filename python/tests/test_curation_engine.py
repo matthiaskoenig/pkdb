@@ -265,6 +265,93 @@ def test_the_last_upload_survives_many_app_writes_and_a_restart(workspace, monke
         restarted.close()
 
 
+def upload_result():
+    return SimpleNamespace(
+        created=True,
+        url="https://pk-db.example/data/Example2020",
+        model_dump=lambda **_: {"created": True},
+    )
+
+
+def pause_and_resume(engine):
+    engine.set_paused(True)
+    assert not engine.queue
+    engine.set_paused(False)
+    settle(engine)
+    return [job["action"] for job in engine.queue.values()]
+
+
+def test_a_paused_initial_validation_resumes_as_a_validation(workspace, monkeypatch):
+    engine, _ = workspace
+    prepare_mock(monkeypatch)
+    client, _ = enable_upload(engine, monkeypatch, lambda _: upload_result())
+    client.last_upload_report = None
+    identity = row(engine)["id"]
+    settle(engine)
+    assert [job["action"] for job in engine.queue.values()] == ["validate"]
+    engine.set_mode([identity], "upload")
+    assert pause_and_resume(engine) == ["validate"]
+    assert run_next(engine)["status"] == "succeeded"
+    client.upload.assert_not_called()
+    settle(engine)
+    assert not engine.queue
+
+
+def test_a_paused_manual_validation_resumes_as_a_validation(workspace, monkeypatch):
+    engine, _ = workspace
+    enable_upload(engine, monkeypatch, lambda _: upload_result())
+    identity = row(engine)["id"]
+    engine.set_mode([identity], "upload")
+    engine.enqueue([identity], "validate")
+    assert pause_and_resume(engine) == ["validate"]
+
+
+def test_a_paused_upload_resumes_as_an_upload(workspace, monkeypatch):
+    engine, _ = workspace
+    prepare_mock(monkeypatch)
+    client, _ = enable_upload(engine, monkeypatch, lambda _: upload_result())
+    client.last_upload_report = None
+    engine.enqueue([row(engine)["id"]], "upload")
+    assert pause_and_resume(engine) == ["upload"]
+    job = run_next(engine)
+    assert job["status"] == "succeeded" and job["upload"]
+    client.upload.assert_called_once()
+
+
+def test_a_paused_job_of_a_study_with_save_action_off_resumes(workspace, monkeypatch):
+    engine, _ = workspace
+    identity = row(engine)["id"]
+    engine.set_mode([identity], "off")
+    engine.enqueue([identity], "validate")
+    assert pause_and_resume(engine) == ["validate"]
+
+
+def test_a_save_after_pausing_follows_the_save_action(workspace, monkeypatch):
+    engine, folder = workspace
+    enable_upload(engine, monkeypatch, lambda _: upload_result())
+    engine.enqueue([row(engine)["id"]], "upload")
+    engine.set_paused(True)
+    (folder / "notes.txt").write_text("a new save")
+    engine.scan()
+    engine.set_paused(False)
+    settle(engine)
+    assert [job["action"] for job in engine.queue.values()] == ["validate"]
+
+
+def test_a_used_resume_action_is_not_used_again(workspace, monkeypatch):
+    engine, folder = workspace
+    prepare_mock(monkeypatch)
+    client, _ = enable_upload(engine, monkeypatch, lambda _: upload_result())
+    client.last_upload_report = None
+    engine.enqueue([row(engine)["id"]], "upload")
+    assert pause_and_resume(engine) == ["upload"]
+    run_next(engine)
+    # A workbook closed later queues a validation, never the upload again.
+    engine._sync_later(row(engine))
+    settle(engine)
+    assert [job["action"] for job in engine.queue.values()] == ["validate"]
+
+
 def test_uploaded_study_link_survives_restart(workspace, tmp_path, monkeypatch):
     engine, _ = workspace
     prepare_mock(monkeypatch)

@@ -64,7 +64,7 @@ If you save again during an upload, the in-flight upload refers to its original 
 
 After a successful upload, the study overview, the detail panel, and the activity entry link to the uploaded study on the PK-DB website. The link remains available after restarting the app. The activity list lets you cancel queued jobs and clear finished history. Active and unknown-outcome jobs remain visible. **Resume suspended work** attempts reconciliation first. If an upload still has an unknown outcome, **Review unknown outcome** shows the previous server target; an explicit acknowledgment is required before retrying that study. A retry may replace data already saved by the earlier request.
 
-File watching continues while the local `pkdb curate` process runs, even if you close its browser tab. Stop the process to stop watching, or use the app's pause control to suspend automatic actions.
+File watching continues while the local `pkdb curate` process runs, even if you close its browser tab. Stop the process to stop watching, or use the app's pause control to suspend automatic actions. Pausing cancels the queued jobs, and resuming queues each of them again with its original action, so a queued validation stays a validation also when the study uploads on save; a save while paused follows the **On save** action instead.
 
 ## Vocabulary, credentials, and offline work
 

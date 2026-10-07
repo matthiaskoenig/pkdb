@@ -154,6 +154,7 @@ class JobsMixin(EngineState):
         self.queue[row["id"]] = job
         row["_pending"] = False
         row["_initial"] = False
+        row["_resume_action"] = None
         row["status"] = "queued"
         self._save()
         self.wakeup.set()
@@ -248,6 +249,7 @@ class JobsMixin(EngineState):
             for row in self._selected(ids):
                 row["mode"] = mode
                 row["_pending"] = False  # Mode changes are not saves.
+                row["_resume_action"] = None
                 self.modes.setdefault(self._context(), {})[row["id"]] = mode
             self._save()
         return self.snapshot()
@@ -261,9 +263,12 @@ class JobsMixin(EngineState):
         with self.lock:
             self.paused = bool(paused)
             if paused:
-                for identifier in self.queue:
+                for identifier, job in self.queue.items():
                     if row := self._row_of(identifier):
                         row["_pending"] = True
+                        # Resuming queues the canceled action again, not the save action:
+                        # an initial or manual validation never becomes an upload.
+                        row["_resume_action"] = job["action"]
                 self._cancel_pending()
             self._save()
         self.wakeup.set()
@@ -724,6 +729,7 @@ class JobsMixin(EngineState):
                     self.queue.pop(identifier)
                     if row := self._row_of(identifier):
                         row["_pending"] = False
+                        row["_resume_action"] = None
                         row["status"] = "changed"
             self._save()
         return self.snapshot()
