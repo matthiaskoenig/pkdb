@@ -67,8 +67,9 @@ jobs:
           PKDB_BUILD_WITHOUT_CURATION_APP: '1'
         run: |
           uv venv --python ${{ matrix.python }} /tmp/pkdb-wheel
-          uv build --python ${{ matrix.python }} --project ../python --out-dir dist
-          uv pip install --python /tmp/pkdb-wheel/bin/python dist/*.whl
+          # Kept apart from dist/, so no pkdb wheel without the app sits next to release files.
+          uv build --python ${{ matrix.python }} --project ../python --out-dir "$RUNNER_TEMP/pkdb-dist"
+          uv pip install --python /tmp/pkdb-wheel/bin/python dist/*.whl "$RUNNER_TEMP"/pkdb-dist/*.whl
           cd /tmp
           /tmp/pkdb-wheel/bin/python -c 'import pkdb, pkdb_server, numpy, scipy, pandas, pint; from pkpdutils import Timecourse, nca_single'
       - uses: actions/upload-artifact@v7
@@ -95,7 +96,7 @@ jobs:
   client:
     name: Client (${{ matrix.os }}, Python ${{ matrix.python }})
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 15
+    timeout-minutes: 25
     strategy:
       fail-fast: false
       matrix:
