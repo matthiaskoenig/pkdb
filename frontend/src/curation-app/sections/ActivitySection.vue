@@ -347,14 +347,16 @@ function retried(): void {
   gap: 4px;
   min-width: 0;
 }
-/* The status follows the text on its first line, at the end. */
+/* The status follows the text on its first line, at the end, or goes below a text that would
+   get too narrow beside it. */
 .activity-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 12px;
+  gap: 4px 12px;
 }
 .activity-text {
-  flex: 1 1 auto;
+  flex: 1 1 12rem;
   min-width: 0;
   margin: 0;
   font-size: 0.9375rem;
