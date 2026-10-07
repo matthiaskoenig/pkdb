@@ -211,7 +211,7 @@ describe("labels", () => {
 
   it("tells what a study does until its check is finished", () => {
     expect(activityLabel(row("a/b", { status: "queued" }))).toBe("Queued");
-    expect(activityLabel(row("a/b", { status: "discovered" }))).toBe("Not checked yet");
+    expect(activityLabel(row("a/b", { status: "discovered" }))).toBe("Not validated yet");
     expect(activityLabel(row("a/b", { status: "unknown" }))).toBe("Upload outcome unknown");
     expect(activityLabel(row("a/b", { status: "valid" }))).toBeNull();
     expect(activityLabel(row("a/b", { status: "invalid" }))).toBeNull();

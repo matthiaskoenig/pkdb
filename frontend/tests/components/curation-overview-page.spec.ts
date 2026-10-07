@@ -4,6 +4,7 @@ import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { VSelect } from "vuetify/components";
 import { ApiError } from "../../src/curation-app/api/client";
 import type { Job, Profile, Snapshot, SyncStatus } from "../../src/curation-app/api/types";
+import type { Router } from "vue-router";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
@@ -14,6 +15,8 @@ import { button, click, field, page, serve, setViewport } from "./curation-dom";
 enableAutoUnmount(afterEach);
 
 let pinia: Pinia;
+/** The router of the last mounted page. */
+let router: Router;
 
 const ISSUE_URL = "https://github.com/matthiaskoenig/pkdb_data/issues/2158";
 const UPLOAD_URL = "https://beta.pk-db.com/studies/caffeine/Harder1988";
@@ -70,7 +73,7 @@ const profiles: Profile[] = [
 async function mountPage(state: Snapshot, curators: Profile[] = profiles) {
   serve({ "/local/state": state, "/local/curators": { curators } });
   await useOverviewStore().refresh();
-  const router = makeRouter();
+  router = makeRouter();
   await router.push("/");
   await router.isReady();
   const wrapper = mount(OverviewPage, { attachTo: document.body, global: { plugins: [pinia, router] } });
@@ -219,20 +222,23 @@ describe("OverviewPage", () => {
     expect(curators.get('[role="img"][aria-label="curator"]').text()).toBe("C");
   });
 
-  it("counts the curators after the third avatar", async () => {
-    const many = studyRow({ summary: { ...example.summary, curators: ["a", "b", "c", "mkoenig", "janekg"] } });
-    await mountPage(snapshot({ studies: [many] }));
+  it("shows at most three circles of curators, the last one counting the others", async () => {
+    const many = studyRow({ summary: { ...example.summary, curators: ["a", "b", "curator", "mkoenig", "janekg"] } });
+    await mountPage(snapshot({ studies: [many, harder] }));
     const curators = rowOf("caffeine/Example").get(".cell-curators");
-    expect(curators.findAll(".curator")).toHaveLength(3);
+    expect(curators.findAll(".curator")).toHaveLength(2);
     const more = curators.get(".curator-more");
-    expect(more.text()).toBe("+2");
-    expect(more.attributes("aria-label")).toBe("And Matthias König, Jan Grzegorzewski");
+    expect(more.text()).toBe("+3");
+    expect(more.attributes("aria-label")).toBe("And curator, Matthias König, Jan Grzegorzewski");
+    // Three curators fit in three circles.
+    expect(rowOf("caffeine/Harder1988").findAll(".cell-curators .curator")).toHaveLength(3);
+    expect(rowOf("caffeine/Harder1988").find(".curator-more").exists()).toBe(false);
   });
 
   it("shows initials when the curator roster cannot be loaded", async () => {
     serve({ "/local/state": snapshot({ studies: [harder] }) });
     await useOverviewStore().refresh();
-    const router = makeRouter();
+    router = makeRouter();
     await router.push("/");
     mount(OverviewPage, { attachTo: document.body, global: { plugins: [pinia, router] } });
     await flushPromises();
@@ -242,15 +248,39 @@ describe("OverviewPage", () => {
 
   it("opens the study page when a row is clicked", async () => {
     await mountPage(snapshot());
-    expect(rowOf("caffeine/Example").get(".study-identity").attributes("href")).toBe("#/studies/caffeine/Example");
+    const identity = rowOf("caffeine/Example").get(".study-identity");
+    expect(identity.attributes("href")).toBe("#/studies/caffeine/Example");
+    // A long identity wraps after the slash rather than inside a name.
+    expect(identity.findAll("wbr")).toHaveLength(1);
     await rowOf("caffeine/Example").get(".cell-sync").trigger("click");
     await vi.waitFor(() => expect(window.location.hash).toBe("#/studies/caffeine/Example"));
   });
 
+  it("does not open the study for a click beside the checkbox or after selecting text", async () => {
+    await mountPage(snapshot());
+    const push = vi.spyOn(router, "push");
+    await rowOf("caffeine/Example").get("td.cell-select").trigger("click");
+    expect(push).not.toHaveBeenCalled();
+
+    // Dragging over the title selects its text; the click that ends the drag keeps the page.
+    const title = rowOf("caffeine/Example").get(".study-title").element;
+    const range = document.createRange();
+    range.selectNodeContents(title);
+    window.getSelection()?.addRange(range);
+    expect(window.getSelection()?.toString()).toBe("Caffeine pharmacokinetics");
+    await rowOf("caffeine/Example").get(".study-title").trigger("click");
+    expect(push).not.toHaveBeenCalled();
+
+    window.getSelection()?.removeAllRanges();
+    await rowOf("caffeine/Example").get(".study-title").trigger("click");
+    expect(push).toHaveBeenCalledOnce();
+  });
+
   it("shows a duplicate identity that cannot be selected or opened", async () => {
+    // The server never validates a duplicate, nor retries its uploads.
     const duplicates = [
-      studyRow({ duplicate: true }),
-      studyRow({ duplicate: true, path: "archive/caffeine/Example" }),
+      studyRow({ duplicate: true, status: "discovered" }),
+      studyRow({ duplicate: true, status: "unknown", path: "archive/caffeine/Example" }),
     ];
     await mountPage(snapshot({ studies: duplicates }));
     expect(rows()).toHaveLength(2);
@@ -258,14 +288,16 @@ describe("OverviewPage", () => {
       expect(row.text()).toContain("Duplicate identity");
       expect(row.find("a.study-identity").exists()).toBe(false);
       expect(row.get('input[type="checkbox"]').attributes("disabled")).toBeDefined();
+      expect(row.get(".cell-problems").text()).toBe("-");
+      expect(row.find(".retry-button").exists()).toBe(false);
     }
     expect(rows().map((row) => row.get(".study-path").text())).toEqual([
       "archive/caffeine/Example",
       "studies/caffeine/Example",
     ]);
+    const push = vi.spyOn(router, "push");
     await rows()[0]!.get(".cell-sync").trigger("click");
-    await flushPromises();
-    expect(window.location.hash).toBe("#/");
+    expect(push).not.toHaveBeenCalled();
   });
 
   it("validates the selected studies", async () => {
@@ -280,6 +312,20 @@ describe("OverviewPage", () => {
     expect(enqueue).toHaveBeenCalledWith(["caffeine/Example"], "validate");
     expect(page().get('[role="status"]').text()).toBe("Validation queued for 1 study.");
     await check("Select caffeine/Harder1988");
+    expect(page().get('[role="status"]').text()).toBe("");
+  });
+
+  it("drops the notice of a request when the selection changed while it ran", async () => {
+    let finish = () => {};
+    vi.spyOn(useOverviewStore(), "enqueue").mockImplementation(
+      () => new Promise<void>((resolve) => (finish = resolve)),
+    );
+    await mountPage(snapshot({ studies: [example, harder] }));
+    await check("Select caffeine/Example");
+    await button("Validate").trigger("click");
+    await check("Select caffeine/Harder1988");
+    finish();
+    await flushPromises();
     expect(page().get('[role="status"]').text()).toBe("");
   });
 
@@ -358,9 +404,9 @@ describe("OverviewPage", () => {
     expect(reason?.textContent?.trim()).toBe("Work offline is on. Turn it off in the settings to upload.");
 
     await page().get(".upload-action").trigger("mouseenter");
-    await new Promise((resolve) => setTimeout(resolve, 50));
-    await flushPromises();
-    expect(page().get(".v-tooltip").text()).toBe("Work offline is on. Turn it off in the settings to upload.");
+    await vi.waitFor(() =>
+      expect(page().find(".v-tooltip").text()).toBe("Work offline is on. Turn it off in the settings to upload."),
+    );
   });
 
   it("applies an On save action to the selected studies", async () => {
@@ -409,14 +455,14 @@ describe("OverviewPage", () => {
   it("counts the study format 1 folders that it does not list", async () => {
     await mountPage(snapshot({ format1_folders: 1412 }));
     expect(page().get(".overview-footer").text()).toBe(
-      "1,412 study format 1 folders are not listed. Convert them with pkdb migrate; until then they stay on the released app version.",
+      "1,412 study format 1 folders are not listed. They stay on the released app version until they are converted.",
     );
   });
 
   it("names a single study format 1 folder", async () => {
     await mountPage(snapshot({ format1_folders: 1 }));
     expect(page().get(".overview-footer").text()).toBe(
-      "1 study format 1 folder is not listed. Convert it with pkdb migrate; until then it stays on the released app version.",
+      "1 study format 1 folder is not listed. It stays on the released app version until it is converted.",
     );
   });
 
@@ -440,6 +486,8 @@ describe("OverviewPage", () => {
     );
     const row = rowOf("caffeine/Example");
     expect(row.get(".cell-problems").text()).toContain("Upload outcome unknown");
+    const action = button("Review uncertain upload of caffeine/Example");
+    expect(action.text()).toBe("Review");
     await click("Review uncertain upload of caffeine/Example");
     expect(dialog().get("h2").text()).toBe("Review uncertain upload");
     expect(dialog().text()).toContain("https://beta.pk-db.com");

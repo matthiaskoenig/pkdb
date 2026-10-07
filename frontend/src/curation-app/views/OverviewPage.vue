@@ -122,8 +122,12 @@ async function run(kind: "validate" | "mode", action: () => Promise<string>): Pr
   busy.value = kind;
   error.value = null;
   notice.value = "";
+  // Every change of the selection makes a new list.
+  const selection = selected.value;
   try {
-    notice.value = await action();
+    const text = await action();
+    // A notice about studies that are no longer the selection would mislead.
+    if (selected.value === selection) notice.value = text;
   } catch (caught) {
     error.value = messageOf(caught);
   } finally {
@@ -196,6 +200,12 @@ onMounted(() => {
 });
 
 const format1 = computed(() => snapshot.value?.format1_folders ?? 0);
+const format1Notice = computed(() =>
+  format1.value === 1
+    ? "1 study format 1 folder is not listed. It stays on the released app version until it is converted."
+    : `${plural(format1.value, "study format 1 folder")} are not listed. ` +
+      "They stay on the released app version until they are converted.",
+);
 </script>
 
 <template>
@@ -325,11 +335,7 @@ const format1 = computed(() => snapshot.value?.format1_folders ?? 0);
         </VBtn>
       </div>
 
-      <p v-if="format1 > 0" class="overview-footer">
-        {{ plural(format1, "study format 1 folder") }} {{ format1 === 1 ? "is" : "are" }} not listed. Convert
-        {{ format1 === 1 ? "it" : "them" }} with <code>pkdb migrate</code>; until then
-        {{ format1 === 1 ? "it stays" : "they stay" }} on the released app version.
-      </p>
+      <p v-if="format1 > 0" class="overview-footer">{{ format1Notice }}</p>
     </template>
 
     <div v-else-if="!stale" class="overview-loading">

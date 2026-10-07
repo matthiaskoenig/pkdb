@@ -17,8 +17,8 @@ import {
   type StudySort,
 } from "../overview";
 
-/** Avatars that a row shows before it counts the other curators. */
-const SHOWN_CURATORS = 3;
+/** The circles of the curators of a row: avatars, or avatars and a count of the others. */
+const CURATOR_SLOTS = 3;
 
 const props = defineProps<{
   rows: StudyRow[];
@@ -92,10 +92,14 @@ function studyRoute(row: StudyRow) {
   return { name: "Study", params: { substance: row.substance, name: row.name } };
 }
 
-/** A click on a row opens its study, unless it hits a control of the row. */
+/**
+ * A click on a row opens its study, unless it hits a control of the row or the cell of its
+ * checkbox, or ends a drag that selected text.
+ */
 function openRow(row: StudyRow, event: MouseEvent): void {
   if (row.duplicate) return;
-  if (event.target instanceof Element && event.target.closest("a, button, input, label, .v-selection-control")) return;
+  if (event.target instanceof Element && event.target.closest("a, button, input, label, .cell-select")) return;
+  if (window.getSelection()?.toString()) return;
   void router.push(studyRoute(row));
 }
 
@@ -122,8 +126,8 @@ function aiTitle(row: StudyRow): string {
 const items = computed(() =>
   props.rows.map((row) => {
     const people = (row.summary.curators ?? []).map(curator);
-    // A hidden remainder of one would take the room of its own avatar.
-    const cut = people.length > SHOWN_CURATORS + 1 ? SHOWN_CURATORS : people.length;
+    // Beyond the slots, the last slot counts the curators that it hides.
+    const cut = people.length > CURATOR_SLOTS ? CURATOR_SLOTS - 1 : people.length;
     const number = row.issue?.number ?? row.summary.issue ?? null;
     const url = issueUrl(row, props.repository);
     return {
@@ -191,8 +195,11 @@ const items = computed(() =>
         </td>
         <td class="cell-study">
           <div class="study-heading">
-            <span v-if="row.duplicate" class="study-identity">{{ row.id }}</span>
-            <RouterLink v-else :to="studyRoute(row)" class="study-identity">{{ row.id }}</RouterLink>
+            <!-- A long identity wraps after the slash rather than inside a name. -->
+            <span v-if="row.duplicate" class="study-identity">{{ row.substance }}/<wbr />{{ row.name }}</span>
+            <RouterLink v-else :to="studyRoute(row)" class="study-identity"
+              >{{ row.substance }}/<wbr />{{ row.name }}</RouterLink
+            >
             <VChip
               v-if="row.duplicate"
               size="x-small"
@@ -220,20 +227,14 @@ const items = computed(() =>
               {{ REVIEW_LABELS[row.summary.review_status] }}
             </VChip>
             <span v-else class="cell-empty">-</span>
-            <VChip
-              v-if="row.summary.ai"
-              size="small"
-              variant="outlined"
-              prepend-icon="fas fa-robot"
-              class="ai-marker"
-              :title="aiTitle(row)"
-            >
+            <VChip v-if="row.summary.ai" size="small" variant="outlined" class="ai-marker" :title="aiTitle(row)">
               AI
             </VChip>
           </div>
         </td>
         <td class="cell-open">{{ row.summary.open_items ?? 0 }}</td>
-        <td class="cell-problems">
+        <td v-if="row.duplicate" class="cell-problems"><span class="cell-empty">-</span></td>
+        <td v-else class="cell-problems">
           <div v-if="problems.length" class="cell-chips">
             <VChip
               v-for="problem in problems"
@@ -253,11 +254,12 @@ const items = computed(() =>
             size="small"
             variant="tonal"
             color="primary"
+            prepend-icon="fas fa-triangle-exclamation"
             class="retry-button"
             :aria-label="`Review uncertain upload of ${row.id}`"
             @click="emit('retry', row)"
           >
-            Review uncertain upload
+            Review
           </VBtn>
         </td>
         <td class="cell-sync">
@@ -331,7 +333,7 @@ const items = computed(() =>
 }
 .study-table th,
 .study-table td {
-  padding: 8px 10px;
+  padding: 8px;
   white-space: nowrap;
   vertical-align: top;
 }
@@ -390,7 +392,7 @@ th[aria-sort] .sort-icon {
 }
 .study-table .cell-study {
   width: auto;
-  min-width: 15rem;
+  min-width: 12rem;
 }
 .study-table td.cell-study {
   white-space: normal;
@@ -451,6 +453,16 @@ a.study-identity:hover {
 .study-table th.cell-open {
   text-align: end;
 }
+/* Problems wrap within a fixed measure: chips, notes and messages can be long. */
+.study-table .cell-problems {
+  width: 8.5rem;
+}
+.study-table td.cell-problems {
+  white-space: normal;
+}
+.cell-problems .cell-chips {
+  flex-wrap: wrap;
+}
 .cell-note,
 .cell-message {
   margin-top: 2px;
@@ -458,19 +470,19 @@ a.study-identity:hover {
   line-height: 1.35;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-/* A note without chips above it sits on the line of the other cells. */
+/* A note without chips above it starts on the 24px line of the other cells; when it wraps, its
+   lines keep the spacing of the note. */
 .cell-note:first-child {
   margin-top: 0;
-  line-height: 24px;
+  padding-top: 3px;
 }
 .cell-message {
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   line-clamp: 2;
-  max-width: 12rem;
   overflow: hidden;
-  white-space: normal;
+  overflow-wrap: anywhere;
 }
 .retry-button {
   margin-top: 6px;

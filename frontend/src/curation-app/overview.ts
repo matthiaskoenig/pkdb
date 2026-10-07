@@ -172,7 +172,8 @@ export const MODE_LABELS: Record<SaveMode, string> = { validate: "Validate", upl
 
 /** What a study does while its row status is not a finished check; null for a finished check. */
 const ACTIVITY_LABELS: Record<RowStatus, string | null> = {
-  discovered: "Not checked yet",
+  // Not "Not checked yet": the sync status of a row before the first scan says that.
+  discovered: "Not validated yet",
   queued: "Queued",
   validating: "Validating",
   uploading: "Uploading",
