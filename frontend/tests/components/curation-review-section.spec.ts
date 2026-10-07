@@ -16,7 +16,7 @@ import { formatTime } from "../../src/curation-app/overview";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
-import { json, reviewItem, roster, snapshot, studyDetail } from "../unit/curation-fixtures";
+import { json, reviewItem, roster, snapshot, sourceSummary, studyDetail } from "../unit/curation-fixtures";
 import {
   button,
   buttons,
@@ -124,6 +124,9 @@ const figure: SourceView = {
   mapped: [],
   overlay: [],
   unmatched: [],
+  layout: "overlay",
+  points: [],
+  series: [],
 };
 
 /** Task 9 builds the figure overlay; the section passes it the source view and the series to emphasize. */
@@ -168,13 +171,14 @@ function withReview(review: Partial<Review> = {}, revision = "review-7"): StudyD
       issues: [],
     },
     sources: [
-      {
+      sourceSummary({
         source: "Fig1",
+        kind: "figure",
         image: "Example_Fig1.png",
         raw: "Example_Fig1.wpd.json",
         raw_kind: "digitization",
         tables: ["timecourses_Fig1.tsv"],
-      },
+      }),
       ...base.sources.slice(1),
     ],
     files: [...base.files, "Example_Fig1.wpd.json"].sort(),

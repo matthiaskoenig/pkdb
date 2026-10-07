@@ -1,18 +1,10 @@
 /**
- * The sources of the study page: paper tables, figures and the text, the files that a source
- * lacks, the mapped rows that it lists and the problems of its files.
+ * The parts of the Sources section: the column letters of a raw table, the mapped rows that it
+ * lists and the problems of the files of a source. What a source is and which files it lacks
+ * come from the library, in the summaries of the study detail.
  */
 import type { MappedTable, SourceSummary, SourceView, TableRow, ValidationIssue } from "./api/types";
 import { shownColumns } from "./review";
-
-export type SourceKind = "table" | "figure" | "text";
-
-/** A paper table `Tab…`, a figure `Fig…` or the text. */
-export function sourceKind(source: string): SourceKind {
-  if (source.startsWith("Tab")) return "table";
-  if (source.startsWith("Fig")) return "figure";
-  return "text";
-}
 
 /** The letters of a column of a spreadsheet: A for the first, AA after Z. */
 export function columnLetters(index: number): string {
@@ -20,19 +12,6 @@ export function columnLetters(index: number): string {
   for (let rest = index + 1; rest > 0; rest = Math.floor((rest - 1) / 26))
     letters = String.fromCharCode(65 + ((rest - 1) % 26)) + letters;
   return letters;
-}
-
-/**
- * The files that a source lacks: the image `<name>_<source>.png`, and the raw extraction, which is
- * `<name>_<source>.tsv` of a paper table and the WebPlotDigitizer project `<name>_<source>.wpd.json`
- * of a figure. The text has neither.
- */
-export function missingFiles(name: string, view: SourceView): { image: string | null; raw: string | null } {
-  const kind = sourceKind(view.source);
-  if (kind === "text") return { image: null, raw: null };
-  const stem = `${name}_${view.source}`;
-  const raw = kind === "table" ? (view.raw_grid ? null : `${stem}.tsv`) : view.digitization ? null : `${stem}.wpd.json`;
-  return { image: view.image ? null : `${stem}.png`, raw };
 }
 
 /** The columns that a list of mapped rows leaves out: every row of a source has them alike. */
@@ -48,11 +27,8 @@ export function listedRows(
   return { rows, columns, total: table.rows.length };
 }
 
-/** The table of the rows of a single source, whose problems all belong to it. */
-const SOURCE_TABLE = /^(?:outputs|timecourses|scatters)_(.+)\.tsv$/;
-
 /**
- * The problems of the files of a source: its image, its raw extraction and its tables; of a
+ * The problems of the files of a source: its image, its raw extraction and its own tables; of a
  * table that several sources share, only the problems at a mapped row of the source.
  */
 export function sourceProblems(
@@ -60,13 +36,12 @@ export function sourceProblems(
   summary: SourceSummary,
   view: SourceView,
 ): ValidationIssue[] {
-  const own = new Set([summary.image, summary.raw]);
-  const whole = (file: string) => own.has(file) || SOURCE_TABLE.exec(file)?.[1] === summary.source;
+  const whole = new Set([summary.image, summary.raw, ...view.mapped.filter((t) => !t.shared).map((t) => t.file)]);
   const lines = new Map(view.mapped.map((table) => [table.file, new Set(table.rows.map(([line]) => line))]));
   return problems.filter((issue) => {
     const file = issue.source?.file;
     if (!file) return false;
-    if (whole(file)) return true;
+    if (whole.has(file)) return true;
     const row = issue.source?.row;
     return row != null && (lines.get(file)?.has(row) ?? false);
   });

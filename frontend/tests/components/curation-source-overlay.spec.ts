@@ -3,7 +3,6 @@ import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { afterEach } from "vitest";
 import type { SourceView } from "../../src/curation-app/api/types";
 import type SourceOverlayComponent from "../../src/curation-app/components/SourceOverlay.vue";
-import { SERIES_COLORS } from "../../src/curation-app/overlay";
 
 enableAutoUnmount(afterEach);
 
@@ -36,8 +35,9 @@ const view: SourceView = {
       header: ["label", "time", "time_unit", "mean", "unit"],
       rows: [
         [2, ["caf_plasma_D150", "0.5", "h", "2.419", "µg/ml"]],
-        [3, ["caf_plasma_D75", "0.5", "h", "1.2", "µg/ml"]],
+        [3, ["caf_plasma_D75", "0.5", "h", "1.20", "µg/ml"]],
       ],
+      shared: false,
     },
   ],
   overlay: [
@@ -51,6 +51,8 @@ const view: SourceView = {
       file: "Example_Fig1.wpd.json",
       line: null,
       error_px: null,
+      x_text: "0.5",
+      y_text: "2.42",
     },
     {
       series: "caf_plasma_D150",
@@ -62,9 +64,40 @@ const view: SourceView = {
       file: "timecourses_Fig1.tsv",
       line: 2,
       error_px: null,
+      x_text: "0.5",
+      y_text: "2.419",
     },
   ],
   unmatched: ["caf_plasma_D75"],
+  layout: "overlay",
+  points: [
+    {
+      series: "caf_plasma_D150",
+      kind: "timecourses",
+      file: "timecourses_Fig1.tsv",
+      line: 2,
+      x: 0.5,
+      y: 2.419,
+      error_bar: null,
+      x_text: "0.5",
+      y_text: "2.419",
+    },
+    {
+      series: "caf_plasma_D75",
+      kind: "timecourses",
+      file: "timecourses_Fig1.tsv",
+      line: 3,
+      x: 0.5,
+      y: 1.2,
+      error_bar: null,
+      x_text: "0.5",
+      y_text: "1.20",
+    },
+  ],
+  series: [
+    { name: "caf_plasma_D150", color: "#2a78d6", dark_color: "#3987e5", x_label: "time (h)", y_label: "c (µg/ml)" },
+    { name: "caf_plasma_D75", color: "#d65a24", dark_color: "#d95926", x_label: "time (h)", y_label: "c (µg/ml)" },
+  ],
 };
 
 beforeEach(async () => {
@@ -108,12 +141,17 @@ describe("SourceOverlay", () => {
     ]);
   });
 
-  it("reserves the size of the image before Plotly draws", () => {
-    loader.load.mockReturnValue(new Promise(() => undefined));
+  it("reserves the size of the image before Plotly draws, and shows the legend after", async () => {
+    let draw: ((value: typeof engine) => void) | undefined;
+    loader.load.mockReturnValue(new Promise((resolve) => (draw = resolve)));
     const wrapper = mount(SourceOverlay, { props: { view } });
-    const style = wrapper.get('[role="img"]').attributes("style") ?? "";
-    expect(style).toContain("aspect-ratio: 800 / 600");
-    expect(style).toContain("max-width: 800px");
+    expect(wrapper.get('[role="img"]').attributes("style")).toContain("aspect-ratio: 800 / 600");
+    // The frame and the image without the overlay are at most as wide as the image.
+    expect(wrapper.get(".source-overlay").attributes("style")).toContain("--figure-width: 800px");
+    expect(wrapper.find(".overlay-legend").exists()).toBe(false);
+    draw?.(engine);
+    await flushPromises();
+    expect(wrapper.find(".overlay-legend").exists()).toBe(true);
   });
 
   it("emits the file and line of a clicked mapped point, also through the digitized point on it", async () => {
@@ -176,28 +214,45 @@ describe("SourceOverlay", () => {
     expect(wrapper.get(".overlay-legend li").classes()).toContain("overlay-legend-item--emphasized");
   });
 
-  it("shows a failed import of Plotly and imports it again on Retry", async () => {
+  it("shows a failed import of Plotly with Retry and Reload, and imports it again on Retry", async () => {
     loader.load.mockRejectedValueOnce(new TypeError("Failed to fetch dynamically imported module"));
     const wrapper = mount(SourceOverlay, { props: { view } });
     await flushPromises();
     expect(wrapper.text()).toContain("The plot could not be loaded.");
+    // Chrome keeps a failed import until the page reloads, so a reload is offered at once.
+    expect(wrapper.findAll("button").map((button) => button.text())).toEqual(["Retry", "Reload the page"]);
     expect(engine.react).not.toHaveBeenCalled();
-    await wrapper.get("button").trigger("click");
+    await wrapper.findAll("button")[0]!.trigger("click");
     await flushPromises();
     expect(loader.load).toHaveBeenCalledTimes(2);
     expect(engine.react).toHaveBeenCalledTimes(1);
     expect(wrapper.text()).not.toContain("could not be loaded");
+    expect(wrapper.get(".overlay-frame").isVisible()).toBe(true);
+  });
+
+  it("shows the image of the figure instead of an empty frame while the plot cannot be drawn", async () => {
+    loader.load.mockRejectedValue(new TypeError("Failed to fetch dynamically imported module"));
+    const wrapper = mount(SourceOverlay, { props: { view }, attachTo: document.body });
+    await flushPromises();
+    expect(wrapper.get(".overlay-frame").isVisible()).toBe(false);
+    const image = wrapper.get(".overlay-fallback img");
+    expect(image.attributes("src")).toBe(`${EXAMPLE}/files/Example_Fig1.png`);
+    expect(image.attributes("alt")).toBe("Image of Fig1");
+    for (const part of [".overlay-legend", ".overlay-key"]) expect(wrapper.find(part).exists()).toBe(false);
+    expect(wrapper.text()).not.toContain("Click a cross");
+    // The data stay readable.
+    expect(wrapper.findAll("details tbody tr")).toHaveLength(2);
   });
 
   it("suggests a reload when the import fails again, as Chrome keeps a failed import until a reload", async () => {
     loader.load.mockRejectedValue(new TypeError("Failed to fetch dynamically imported module"));
     const wrapper = mount(SourceOverlay, { props: { view } });
     await flushPromises();
-    expect(wrapper.text()).not.toContain("Reload the page");
-    await wrapper.get("button").trigger("click");
+    expect(wrapper.text()).not.toContain("Reload the page to try again");
+    await wrapper.findAll("button")[0]!.trigger("click");
     await flushPromises();
-    expect(wrapper.text()).toContain("The plot could not be loaded. Reload the page to try again.");
-    expect(wrapper.findAll("button").map((button) => button.text())).toEqual(["Reload the page"]);
+    expect(wrapper.text()).toContain("The plot could not be loaded again. Reload the page to try again.");
+    expect(wrapper.findAll("button").map((button) => button.text())).toEqual(["Retry", "Reload the page"]);
   });
 
   it("draws every plot that waits for Plotly after one Retry", async () => {
@@ -207,7 +262,7 @@ describe("SourceOverlay", () => {
     await flushPromises();
     expect(overlay.text()).toContain("The plot could not be loaded.");
     expect(plot.text()).toContain("The plot could not be loaded.");
-    await overlay.get("button").trigger("click");
+    await overlay.findAll("button")[0]!.trigger("click");
     await flushPromises();
     expect(engine.react).toHaveBeenCalledTimes(2);
     expect(plot.text()).not.toContain("could not be loaded");
@@ -222,15 +277,16 @@ describe("SourceOverlay", () => {
     expect(wrapper.get('[role="img"]').attributes("aria-label")).toBe(
       "Plot of 1 mapped row of Fig1 of the series caf_plasma_D75",
     );
+    // The color of the source view; jsdom writes colors as rgb().
     expect(wrapper.get(".overlay-legend .overlay-swatch").attributes("style")).toContain(
-      // jsdom writes colors as rgb().
-      "background-color: rgb(235, 104, 52)",
+      "background-color: rgb(214, 90, 36)",
     );
-    expect(SERIES_COLORS.light[1]).toBe("#eb6834");
   });
 
-  it("draws the plot beside the image when the figure is not calibrated", async () => {
-    const wrapper = mount(SourceOverlay, { props: { view: { ...view, digitization: null, overlay: [] } } });
+  it("draws the plot when the source view puts the image and the plot side by side", async () => {
+    const wrapper = mount(SourceOverlay, {
+      props: { view: { ...view, digitization: null, overlay: [], layout: "side_by_side" } },
+    });
     await flushPromises();
     const [, , layout] = engine.react.mock.calls[0]!;
     expect(layout).not.toHaveProperty("images");

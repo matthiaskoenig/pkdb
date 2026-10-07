@@ -209,6 +209,9 @@ describe("useStudyStore", () => {
       mapped: [],
       overlay: [],
       unmatched: [],
+      layout: "overlay",
+      points: [],
+      series: [],
       image_url: "/local/studies/caffeine/Example/files/Example_Fig2.png",
     };
     const requests = server((_method, url) => {

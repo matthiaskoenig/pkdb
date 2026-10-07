@@ -1,16 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { MappedTable, SourceSummary, SourceView, ValidationIssue } from "../../src/curation-app/api/types";
-import { columnLetters, listedRows, missingFiles, sourceKind, sourceProblems } from "../../src/curation-app/sources";
-
-describe("sourceKind", () => {
-  it("tells paper tables, figures and the text apart", () => {
-    expect(sourceKind("Tab2")).toBe("table");
-    expect(sourceKind("TabS1")).toBe("table");
-    expect(sourceKind("Fig1")).toBe("figure");
-    expect(sourceKind("Fig2A")).toBe("figure");
-    expect(sourceKind("Text")).toBe("text");
-  });
-});
+import { columnLetters, listedRows, sourceProblems } from "../../src/curation-app/sources";
 
 describe("columnLetters", () => {
   it("names columns as a spreadsheet does", () => {
@@ -28,44 +18,11 @@ describe("columnLetters", () => {
   });
 });
 
-describe("missingFiles", () => {
-  const view: SourceView = {
-    source: "Tab3",
-    image: null,
-    image_url: null,
-    image_size: null,
-    raw_grid: null,
-    digitization: null,
-    mapped: [],
-    overlay: [],
-    unmatched: [],
-  };
-
-  it("names the image and the raw extraction that a paper table lacks", () => {
-    expect(missingFiles("Example", view)).toEqual({ image: "Example_Tab3.png", raw: "Example_Tab3.tsv" });
-    expect(missingFiles("Example", { ...view, raw_grid: [["a"]], image: "Example_Tab3.png" })).toEqual({
-      image: null,
-      raw: null,
-    });
-  });
-
-  it("names the WebPlotDigitizer project of a figure", () => {
-    expect(missingFiles("Example", { ...view, source: "Fig2" })).toEqual({
-      image: "Example_Fig2.png",
-      raw: "Example_Fig2.wpd.json",
-    });
-    expect(missingFiles("Example", { ...view, source: "Fig2", digitization: "Example_Fig2.wpd.json" }).raw).toBeNull();
-  });
-
-  it("names nothing for the text, which has neither", () => {
-    expect(missingFiles("Example", { ...view, source: "Text" })).toEqual({ image: null, raw: null });
-  });
-});
-
 describe("listedRows", () => {
   const table: MappedTable = {
     file: "outputs_Tab2.tsv",
     kind: "outputs",
+    shared: false,
     header: ["study", "source", "label", "mean", "sd", "comment"],
     rows: [
       [2, ["Example", "Tab2", "caf_cl", "1.2", "", ""]],
@@ -96,10 +53,13 @@ describe("listedRows", () => {
 describe("sourceProblems", () => {
   const summary: SourceSummary = {
     source: "Tab2",
+    kind: "table",
     image: "Example_Tab2.png",
     raw: "Example_Tab2.tsv",
     raw_kind: "table",
     tables: ["outputs_Tab2.tsv", "subjects.tsv"],
+    missing_image: null,
+    missing_raw: null,
   };
   const view: SourceView = {
     source: "Tab2",
@@ -109,11 +69,15 @@ describe("sourceProblems", () => {
     raw_grid: [["a"]],
     digitization: null,
     mapped: [
-      { file: "outputs_Tab2.tsv", kind: "outputs", header: ["label"], rows: [[2, ["a"]]] },
-      { file: "subjects.tsv", kind: "subjects", header: ["name"], rows: [[4, ["all"]]] },
+      // A table of the source has its problems at any line; a shared one only at the lines of the source.
+      { file: "outputs_Tab2.tsv", kind: "outputs", header: ["label"], rows: [[2, ["a"]]], shared: false },
+      { file: "subjects.tsv", kind: "subjects", header: ["name"], rows: [[4, ["all"]]], shared: true },
     ],
     overlay: [],
     unmatched: [],
+    layout: "side_by_side",
+    points: [],
+    series: [],
   };
   function issue(file: string, row: number | null = null): ValidationIssue {
     return { code: "c", severity: "warning", message: `${file} ${row}`, source: { file, row } };

@@ -1,17 +1,17 @@
 import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import type { MappedTable, OverlayPoint, SourceView } from "../../src/curation-app/api/types";
+import type { OverlayPoint, SourcePoint, SourceSeries, SourceView } from "../../src/curation-app/api/types";
 import {
   baseSeries,
   dataRows,
-  isCalibrated,
+  drawsOnImage,
   legendEntries,
-  mappedPoints,
   overlayTraces,
   plotTraces,
   plottedSeries,
+  POINT_RING,
   rowAt,
-  SERIES_COLORS,
   type OverlayTrace,
 } from "../../src/curation-app/overlay";
 
@@ -23,24 +23,37 @@ const TIMECOURSES = "timecourses_Fig1.tsv";
 const PROJECT = "Example_Fig1.wpd.json";
 
 function point(changes: Partial<OverlayPoint> & Pick<OverlayPoint, "series" | "role">): OverlayPoint {
-  return { px: 0, py: 0, x: 0, y: 0, file: PROJECT, line: null, error_px: null, ...changes };
+  return {
+    px: 0,
+    py: 0,
+    x: 0,
+    y: 0,
+    file: PROJECT,
+    line: null,
+    error_px: null,
+    x_text: String(changes.x ?? 0),
+    y_text: String(changes.y ?? 0),
+    ...changes,
+  };
 }
 
-const HEADER = ["study", "source", "label", "time", "time_unit", "measurement", "mean", "median", "unit", "error_bar"];
-const timecourses: MappedTable = {
-  file: TIMECOURSES,
-  kind: "timecourses",
-  header: HEADER,
-  rows: [
-    [2, ["Example", "Fig1", "drug_plasma", "1", "h", "concentration", "5", "", "mg/l", "6"]],
-    [3, ["Example", "Fig1", "drug_urine", "2", "h", "concentration", "7", "", "mg/l", ""]],
-    [4, ["Example", "Fig1", "drug_feces", "0", "h", "concentration", "1", "", "mg/l", "1.5"]],
-    // Not reported: not a point, as in the library.
-    [5, ["Example", "Fig1", "drug_feces", "NR", "h", "concentration", "2", "", "mg/l", ""]],
-    // The median when there is no mean.
-    [6, ["Example", "Fig1", "drug_feces", "1", "h", "concentration", "", "3.25", "mg/l", "2.5"]],
-  ],
-};
+function mapped(changes: Partial<SourcePoint> & Pick<SourcePoint, "series" | "line" | "x" | "y">): SourcePoint {
+  return {
+    kind: "timecourses",
+    file: TIMECOURSES,
+    error_bar: null,
+    x_text: String(changes.x),
+    y_text: String(changes.y),
+    ...changes,
+  };
+}
+
+/** The series of the source view with colors that only the view knows. */
+const SERIES: SourceSeries[] = [
+  { name: "drug_plasma", color: "#1a2b3c", dark_color: "#4d5e6f", x_label: "time (h)", y_label: "concentration (mg/l)" },
+  { name: "drug_urine", color: "#2b3c4d", dark_color: "#5e6f70", x_label: "time (h)", y_label: "amount (mg)" },
+  { name: "drug_feces", color: "#3c4d5e", dark_color: "#6f7081", x_label: "time (h)", y_label: "amount (mg)" },
+];
 
 /** A digitized figure of 100 x 100 pixels with two series, an error bar and a series without dataset. */
 function figure(changes: Partial<SourceView> = {}): SourceView {
@@ -51,10 +64,10 @@ function figure(changes: Partial<SourceView> = {}): SourceView {
     image_size: [100, 100],
     raw_grid: null,
     digitization: PROJECT,
-    mapped: [timecourses],
+    mapped: [],
     overlay: [
       point({ series: "drug_plasma", role: "raw", px: 10, py: 90, x: 0, y: 0.1 }),
-      point({ series: "drug_plasma", role: "raw", px: 20, py: 50, x: 1, y: 5.000004 }),
+      point({ series: "drug_plasma", role: "raw", px: 20, py: 50, x: 1, y: 5.000004, y_text: "5" }),
       point({ series: "drug_plasma;error_bar", role: "raw", px: 20, py: 40, x: 1, y: 6 }),
       point({ series: "drug_urine", role: "raw", px: 60, py: 31, x: 2, y: 7 }),
       point({
@@ -67,10 +80,19 @@ function figure(changes: Partial<SourceView> = {}): SourceView {
         file: TIMECOURSES,
         line: 2,
         error_px: [20, 40],
+        y_text: "5.00",
       }),
       point({ series: "drug_urine", role: "mapped", px: 60, py: 30, x: 2, y: 7, file: TIMECOURSES, line: 3 }),
     ],
     unmatched: ["drug_feces"],
+    layout: "overlay",
+    points: [
+      mapped({ series: "drug_plasma", line: 2, x: 1, y: 5, error_bar: 6, y_text: "5.00" }),
+      mapped({ series: "drug_urine", line: 3, x: 2, y: 7 }),
+      mapped({ series: "drug_feces", line: 4, x: 0, y: 1, error_bar: 1.5 }),
+      mapped({ series: "drug_feces", line: 6, x: 1, y: 3.25, error_bar: 2.5 }),
+    ],
+    series: SERIES,
     ...changes,
   };
 }
@@ -80,6 +102,13 @@ function trace(traces: OverlayTrace[], meta: string): OverlayTrace {
   if (!found) throw new Error(`No trace ${meta} in ${traces.map((entry) => entry.meta).join(", ")}`);
   return found;
 }
+
+/** A file of the repository next to this test; jsdom's URL is not Node's, so `fs` takes its path. */
+function repositoryFile(relative: string): string {
+  return readFileSync(fileURLToPath(new URL(relative, import.meta.url).href), "utf8");
+}
+
+const DARK = { surface: "#192b31", text: "#ffffff", muted: "#aaaaaa", grid: "#333333", primary: "#79d5d6" };
 
 describe("overlayTraces", () => {
   it("draws on the image in pixel space with hidden, fixed axes", () => {
@@ -108,9 +137,11 @@ describe("overlayTraces", () => {
     const raw = trace(traces, "raw drug_plasma");
     expect(raw).toEqual(expect.objectContaining({ mode: "markers", x: [10, 20], y: [90, 50] }));
     expect(raw.marker?.symbol).toBe("circle");
-    const mapped = trace(traces, "mapped drug_plasma");
-    expect(mapped).toEqual(expect.objectContaining({ mode: "markers", x: [20], y: [50] }));
-    expect(mapped.marker?.symbol).toBe("x-thin-open");
+    // A ring with contrast against the paper.
+    expect(raw.marker?.line).toEqual({ width: 1, color: POINT_RING });
+    const crosses = trace(traces, "mapped drug_plasma");
+    expect(crosses).toEqual(expect.objectContaining({ mode: "markers", x: [20], y: [50] }));
+    expect(crosses.marker?.symbol).toBe("x-thin-open");
     expect(trace(traces, "mapped drug_urine")).toEqual(expect.objectContaining({ x: [60], y: [30] }));
     expect(trace(traces, "raw drug_plasma;error_bar")).toEqual(expect.objectContaining({ x: [20], y: [40] }));
     expect(traces.map((entry) => entry.meta)).not.toContain("mapped drug_feces");
@@ -140,24 +171,34 @@ describe("overlayTraces", () => {
     expect(traces.map((entry) => entry.meta)).not.toContain("error drug_urine");
   });
 
-  it("colors a series and its error bars alike, in the fixed order of the series", () => {
+  it("colors a series and its error bars alike, in the colors of the source view", () => {
     const { traces } = overlayTraces(figure());
-    const plasma = SERIES_COLORS.light[0];
-    const urine = SERIES_COLORS.light[1];
-    expect(trace(traces, "raw drug_plasma").marker?.color).toBe(plasma);
-    expect(trace(traces, "mapped drug_plasma").marker?.line?.color).toBe(plasma);
-    expect(trace(traces, "raw drug_plasma;error_bar").marker?.color).toBe(plasma);
-    expect(trace(traces, "error drug_plasma").line?.color).toBe(plasma);
-    expect(trace(traces, "raw drug_urine").marker?.color).toBe(urine);
+    expect(trace(traces, "raw drug_plasma").marker?.color).toBe("#1a2b3c");
+    expect(trace(traces, "mapped drug_plasma").marker?.line?.color).toBe("#1a2b3c");
+    expect(trace(traces, "raw drug_plasma;error_bar").marker?.color).toBe("#1a2b3c");
+    expect(trace(traces, "error drug_plasma").line?.color).toBe("#1a2b3c");
+    expect(trace(traces, "raw drug_urine").marker?.color).toBe("#2b3c4d");
   });
 
-  it("fades the other series when a series is emphasized", () => {
+  it("keeps the colors for paper in the dark theme, as the marks sit on the image", () => {
+    const { layout, traces } = overlayTraces(figure(), null, { dark: true, colors: DARK });
+    expect(trace(traces, "raw drug_plasma").marker?.color).toBe("#1a2b3c");
+    expect(layout.hoverlabel).toEqual(
+      expect.objectContaining({ bgcolor: "#192b31", font: expect.objectContaining({ color: "#ffffff" }) }),
+    );
+    expect(trace(traces, "mapped drug_plasma").hoverlabel).toEqual(
+      expect.objectContaining({ bgcolor: "#192b31", bordercolor: "#1a2b3c" }),
+    );
+  });
+
+  it("fades the other series when a series is emphasized, and draws it on top", () => {
     const plain = overlayTraces(figure()).traces;
     expect(plain.every((entry) => entry.opacity === 1)).toBe(true);
     const { traces } = overlayTraces(figure(), "drug_plasma");
     for (const meta of ["raw drug_plasma", "raw drug_plasma;error_bar", "mapped drug_plasma", "error drug_plasma"])
       expect(trace(traces, meta).opacity).toBe(1);
     for (const meta of ["raw drug_urine", "mapped drug_urine"]) expect(trace(traces, meta).opacity).toBe(0.2);
+    expect(traces.at(-1)?.meta).toBe("mapped drug_plasma");
   });
 
   it("does not fade anything for a series that the overlay does not draw", () => {
@@ -165,15 +206,14 @@ describe("overlayTraces", () => {
     expect(traces.every((entry) => entry.opacity === 1)).toBe(true);
   });
 
-  it("names the file, line, series and values of a point on hover", () => {
+  it("names the file, line, series and values as printed on hover", () => {
     const { traces } = overlayTraces(figure());
-    const mapped = trace(traces, "mapped drug_plasma");
-    expect(mapped.customdata).toEqual([[TIMECOURSES, 2, "drug_plasma", "1", "5"]]);
-    expect(mapped.hovertemplate).toBe(
+    const crosses = trace(traces, "mapped drug_plasma");
+    expect(crosses.customdata).toEqual([[TIMECOURSES, 2, "drug_plasma", "1", "5.00"]]);
+    expect(crosses.hovertemplate).toBe(
       "%{customdata[0]} line %{customdata[1]}<br>%{customdata[2]}<br>x %{customdata[3]} · y %{customdata[4]}<extra></extra>",
     );
     const raw = trace(traces, "raw drug_plasma");
-    // Digitized values have six significant digits, as in the canonical project.
     expect(raw.customdata).toEqual([
       [PROJECT, null, "drug_plasma", "0", "0.1"],
       [PROJECT, null, "drug_plasma", "1", "5"],
@@ -187,56 +227,17 @@ describe("overlayTraces", () => {
     const view = figure({ overlay: [point({ series: "a<b>&c", role: "raw", px: 1, py: 1 })] });
     expect(trace(overlayTraces(view).traces, "raw a<b>&c").customdata?.[0]?.[2]).toBe("a&lt;b&gt;&amp;c");
   });
-
-  it("reads the hover label in the theme colors", () => {
-    const colors = { surface: "#192b31", text: "#ffffff", muted: "#aaaaaa", grid: "#333333", primary: "#79d5d6" };
-    const { layout, traces } = overlayTraces(figure(), null, { dark: true, colors });
-    expect(layout.hoverlabel).toEqual(
-      expect.objectContaining({ bgcolor: "#192b31", font: expect.objectContaining({ color: "#ffffff" }) }),
-    );
-    expect(trace(traces, "mapped drug_plasma").hoverlabel).toEqual(
-      expect.objectContaining({ bgcolor: "#192b31", bordercolor: SERIES_COLORS.light[0] }),
-    );
-    // The marks sit on the image, which keeps its colors in the dark theme.
-    expect(trace(traces, "raw drug_plasma").marker?.color).toBe(SERIES_COLORS.light[0]);
-  });
-});
-
-describe("mappedPoints", () => {
-  it("reads timecourse rows as the library does: time and the central value, and the error bar end", () => {
-    expect(mappedPoints(timecourses)).toEqual([
-      { series: "drug_plasma", kind: "timecourses", file: TIMECOURSES, line: 2, x: 1, y: 5, error: 6 },
-      { series: "drug_urine", kind: "timecourses", file: TIMECOURSES, line: 3, x: 2, y: 7, error: null },
-      { series: "drug_feces", kind: "timecourses", file: TIMECOURSES, line: 4, x: 0, y: 1, error: 1.5 },
-      { series: "drug_feces", kind: "timecourses", file: TIMECOURSES, line: 6, x: 1, y: 3.25, error: 2.5 },
-    ]);
-  });
-
-  it("reads scatter rows by name with x_mean and y_mean", () => {
-    const scatters: MappedTable = {
-      file: "scatters_Fig2.tsv",
-      kind: "scatters",
-      header: ["study", "source", "name", "x_mean", "x_unit", "y_mean", "y_unit"],
-      rows: [
-        [2, ["Example", "Fig2", "age_vs_cmax", "30", "yr", "2", "mg/l"]],
-        [3, ["Example", "Fig2", "age_vs_cmax", "40", "yr", "1,5", "mg/l"]],
-        [4, ["Example", "Fig2", "", "50", "yr", "3", "mg/l"]],
-      ],
-    };
-    expect(mappedPoints(scatters)).toEqual([
-      { series: "age_vs_cmax", kind: "scatters", file: "scatters_Fig2.tsv", line: 2, x: 30, y: 2, error: null },
-    ]);
-  });
-
-  it("has no points for other tables", () => {
-    expect(mappedPoints({ file: "outputs_Fig1.tsv", kind: "outputs", header: ["mean"], rows: [[2, ["1"]]] })).toEqual([]);
-  });
 });
 
 describe("plotTraces", () => {
-  const plain = figure({ digitization: null, overlay: [], unmatched: ["drug_plasma", "drug_urine", "drug_feces"] });
+  const plain = figure({
+    digitization: null,
+    overlay: [],
+    layout: "side_by_side",
+    unmatched: ["drug_plasma", "drug_urine", "drug_feces"],
+  });
 
-  it("plots the mapped rows of each series in data units, with error bars to the error bar end", () => {
+  it("plots the points of each series in table units, with error bars to the error bar end", () => {
     const { traces, layout } = plotTraces(plain);
     expect(traces.map((entry) => entry.meta)).toEqual(["plot drug_plasma", "plot drug_urine", "plot drug_feces"]);
     const feces = trace(traces, "plot drug_feces");
@@ -247,21 +248,23 @@ describe("plotTraces", () => {
       [TIMECOURSES, 4, "drug_feces", "0", "1"],
       [TIMECOURSES, 6, "drug_feces", "1", "3.25"],
     ]);
-    expect(feces.marker?.color).toBe(SERIES_COLORS.light[2]);
+    expect(trace(traces, "plot drug_plasma").customdata?.[0]?.[4]).toBe("5.00");
+    expect(feces.marker?.color).toBe("#3c4d5e");
+    // The axes of the first series, from the source view.
     expect(layout.xaxis).toEqual(expect.objectContaining({ title: { text: "time (h)" }, fixedrange: true }));
     expect(layout.yaxis).toEqual(expect.objectContaining({ title: { text: "concentration (mg/l)" }, fixedrange: true }));
   });
 
-  it("plots only the series without a dataset of a digitized figure, in the colors of the overlay", () => {
-    const { traces } = plotTraces(figure());
+  it("plots only the series without a dataset of a digitized figure, with their labels", () => {
+    const { traces, layout } = plotTraces(figure());
     expect(traces.map((entry) => entry.meta)).toEqual(["plot drug_feces"]);
-    expect(trace(traces, "plot drug_feces").marker?.color).toBe(SERIES_COLORS.light[2]);
+    expect(trace(traces, "plot drug_feces").marker?.color).toBe("#3c4d5e");
+    expect(layout.yaxis.title).toEqual({ text: "amount (mg)" });
   });
 
-  it("uses the dark steps of the palette on the dark surface", () => {
-    const colors = { surface: "#192b31", text: "#ffffff", muted: "#aaaaaa", grid: "#333333", primary: "#79d5d6" };
-    const { traces, layout } = plotTraces(plain, null, { dark: true, colors });
-    expect(trace(traces, "plot drug_plasma").marker?.color).toBe(SERIES_COLORS.dark[0]);
+  it("uses the dark steps of the colors on the dark surface", () => {
+    const { traces, layout } = plotTraces(plain, null, { dark: true, colors: DARK });
+    expect(trace(traces, "plot drug_plasma").marker?.color).toBe("#4d5e6f");
     expect(layout.paper_bgcolor).toBe("#192b31");
     expect(layout.font).toEqual(expect.objectContaining({ color: "#ffffff" }));
   });
@@ -271,7 +274,6 @@ describe("plotTraces", () => {
     expect(trace(traces, "plot drug_urine").opacity).toBe(1);
     expect(trace(traces, "plot drug_plasma").opacity).toBe(0.2);
     expect(trace(traces, "plot drug_feces").opacity).toBe(0.2);
-    // The emphasized series is drawn on top.
     expect(traces.at(-1)?.meta).toBe("plot drug_urine");
   });
 
@@ -280,18 +282,13 @@ describe("plotTraces", () => {
       source: "Fig2",
       digitization: null,
       overlay: [],
+      layout: "side_by_side",
       unmatched: ["age_vs_cmax"],
-      mapped: [
-        {
-          file: "scatters_Fig2.tsv",
-          kind: "scatters",
-          header: ["name", "x_measurement", "x_mean", "x_unit", "y_measurement", "y_mean", "y_unit"],
-          rows: [
-            [2, ["age_vs_cmax", "age", "30", "yr", "cmax", "2", "mg/l"]],
-            [3, ["age_vs_cmax", "age", "40", "yr", "cmax", "3", "mg/l"]],
-          ],
-        },
+      points: [
+        mapped({ series: "age_vs_cmax", kind: "scatters", file: "scatters_Fig2.tsv", line: 2, x: 30, y: 2 }),
+        mapped({ series: "age_vs_cmax", kind: "scatters", file: "scatters_Fig2.tsv", line: 3, x: 40, y: 3 }),
       ],
+      series: [{ name: "age_vs_cmax", color: "#123456", dark_color: "#654321", x_label: "age (yr)", y_label: "cmax (mg/l)" }],
     });
     const { traces, layout } = plotTraces(view);
     expect(trace(traces, "plot age_vs_cmax")).toEqual(expect.objectContaining({ mode: "markers", x: [30, 40], y: [2, 3] }));
@@ -310,7 +307,7 @@ describe("rowAt", () => {
     });
   });
 
-  it("selects the mapped row of a digitized point within 2 pixels, which Plotly prefers on hover", () => {
+  it("selects the mapped row under a digitized point, which Plotly prefers on hover", () => {
     expect(rowAt(figure(), { customdata: PLASMA, x: 20, y: 50 })).toEqual({ file: TIMECOURSES, line: 2 });
     expect(rowAt(figure(), { customdata: [PROJECT, null, "drug_urine", "2", "7"], x: 60, y: 31 })).toEqual({
       file: TIMECOURSES,
@@ -318,7 +315,7 @@ describe("rowAt", () => {
     });
   });
 
-  it("selects nothing for a digitized point without a mapped row nearby", () => {
+  it("selects nothing for a digitized point without a mapped row under it", () => {
     expect(rowAt(figure(), { customdata: PLASMA, x: 10, y: 90 })).toBeNull();
     // A mapped point of another series does not count.
     expect(rowAt(figure(), { customdata: [PROJECT, null, "drug_urine", "1", "5"], x: 20, y: 50 })).toBeNull();
@@ -344,39 +341,44 @@ describe("the parts around the plot", () => {
     expect(baseSeries("drug_plasma")).toBe("drug_plasma");
   });
 
-  it("knows a figure that the overlay can draw on: a digitization on an image of known size", () => {
-    expect(isCalibrated(figure())).toBe(true);
-    expect(isCalibrated(figure({ digitization: null }))).toBe(false);
-    expect(isCalibrated(figure({ image: null, image_url: null, image_size: null }))).toBe(false);
-    expect(isCalibrated(figure({ image_size: null }))).toBe(false);
+  it("draws on the image when the source view says so and the image is known", () => {
+    expect(drawsOnImage(figure())).toBe(true);
+    expect(drawsOnImage(figure({ layout: "side_by_side" }))).toBe(false);
+    expect(drawsOnImage(figure({ image: null, image_url: null, image_size: null }))).toBe(false);
   });
 
-  it("plots every series of a figure that the overlay cannot draw", () => {
+  it("plots every series of the points beside an image that the overlay does not draw on", () => {
     expect(plottedSeries(figure())).toEqual(["drug_feces"]);
-    expect(plottedSeries(figure({ image_size: null }))).toEqual(["drug_plasma", "drug_urine", "drug_feces"]);
+    expect(plottedSeries(figure({ layout: "side_by_side" }))).toEqual(["drug_plasma", "drug_urine", "drug_feces"]);
   });
 
   it("lists the series of the legend with their colors", () => {
     expect(legendEntries(figure(), "overlay", false)).toEqual([
-      { series: "drug_plasma", color: SERIES_COLORS.light[0] },
-      { series: "drug_urine", color: SERIES_COLORS.light[1] },
+      { series: "drug_plasma", color: "#1a2b3c" },
+      { series: "drug_urine", color: "#2b3c4d" },
     ]);
-    expect(legendEntries(figure(), "plot", true)).toEqual([{ series: "drug_feces", color: SERIES_COLORS.dark[2] }]);
+    expect(legendEntries(figure(), "overlay", true)[0]?.color).toBe("#1a2b3c");
+    expect(legendEntries(figure(), "plot", true)).toEqual([{ series: "drug_feces", color: "#6f7081" }]);
   });
 
-  it("tabulates the points of the overlay and of the plot", () => {
+  it("tabulates the points of the overlay and of the plot as printed", () => {
     expect(dataRows(figure(), "overlay")).toEqual([
       { series: "drug_plasma", kind: "Digitized", x: "0", y: "0.1", file: PROJECT, line: null },
       { series: "drug_plasma", kind: "Digitized", x: "1", y: "5", file: PROJECT, line: null },
       { series: "drug_plasma;error_bar", kind: "Digitized", x: "1", y: "6", file: PROJECT, line: null },
       { series: "drug_urine", kind: "Digitized", x: "2", y: "7", file: PROJECT, line: null },
-      { series: "drug_plasma", kind: "Mapped", x: "1", y: "5", file: TIMECOURSES, line: 2 },
+      { series: "drug_plasma", kind: "Mapped", x: "1", y: "5.00", file: TIMECOURSES, line: 2 },
       { series: "drug_urine", kind: "Mapped", x: "2", y: "7", file: TIMECOURSES, line: 3 },
     ]);
     expect(dataRows(figure(), "plot")).toEqual([
       { series: "drug_feces", kind: "Mapped", x: "0", y: "1", file: TIMECOURSES, line: 4 },
       { series: "drug_feces", kind: "Mapped", x: "1", y: "3.25", file: TIMECOURSES, line: 6 },
     ]);
+  });
+
+  it("rings digitized points as pkdb plot does", () => {
+    const colors = repositoryFile("../../../python/src/pkdb/studyformat/colors.py");
+    expect(colors).toContain(`POINT_RING = "${POINT_RING}"`);
   });
 });
 
@@ -437,8 +439,12 @@ describe("loadNoncedPlotly", () => {
 
   it("knows every style element that the bundled Plotly creates", async () => {
     // A new version of Plotly may create another one, which the CSP would refuse.
-    const bundle = readFileSync("node_modules/plotly.js-dist-min/plotly.min.js", "utf8");
+    const bundle = repositoryFile("../../node_modules/plotly.js-dist-min/plotly.min.js");
     expect(bundle.match(/createElement\("style"\)/g)).toHaveLength(2);
+    // Style attributes, which the CSP refuses, are set only by traces that the app does not draw:
+    // the two fills of a color bar, the CSS test of image traces, and the fast rendering and the
+    // flipped axes of heatmap and image traces.
+    expect(bundle.match(/\.attr\("style"/g)).toHaveLength(5);
     expect(bundle).toContain('"plotly.js-style-"+');
     const { PLOTLY_STYLES } = await import("../../src/curation-app/plotly");
     for (const id of PLOTLY_STYLES.slice(1)) expect(bundle).toContain(`document.getElementById("${id}")`);

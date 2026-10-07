@@ -2,16 +2,16 @@
 import { computed, useId } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { VAlert, VBtn, VProgressLinear, VTab, VTabs } from "vuetify/components";
-import type { SourceView } from "../api/types";
+import type { SourceSummary, SourceView } from "../api/types";
 import MappedRows from "../components/MappedRows.vue";
 import RawGrid from "../components/RawGrid.vue";
 import SourceOverlay from "../components/SourceOverlay.vue";
 import { useLoaded } from "../composables/useLoaded";
-import { isCalibrated, plottedSeries } from "../overlay";
+import { drawsOnImage, plottedSeries } from "../overlay";
 import { location, SEVERITY_LABELS, tableQuery } from "../problems";
-import { missingFiles, sourceKind, sourceProblems, type SourceKind } from "../sources";
+import { sourceProblems } from "../sources";
 import { useStudyStore } from "../stores/study";
-import { sectionRoute, studyName, tableFiles } from "../study";
+import { sectionRoute, tableFiles } from "../study";
 
 /**
  * One tab per source of the study. A paper table shows its image beside its raw extraction as
@@ -27,7 +27,7 @@ const route = useRoute();
 const router = useRouter();
 const id = useId();
 
-const ICONS: Record<SourceKind, string> = {
+const ICONS: Record<SourceSummary["kind"], string> = {
   table: "fas fa-table",
   figure: "fas fa-chart-line",
   text: "fas fa-align-left",
@@ -60,12 +60,11 @@ const { data, error, loading, reload } = useLoaded<SourceView>(
 );
 /** The view of the chosen source; null while another one is shown or it loads. */
 const view = computed(() => (data.value && data.value.key === selected.value?.source ? data.value.content : null));
-const kind = computed<SourceKind | null>(() => (selected.value ? sourceKind(selected.value.source) : null));
-const calibrated = computed(() => (view.value ? isCalibrated(view.value) : false));
+const kind = computed(() => selected.value?.kind ?? null);
+const calibrated = computed(() => (view.value ? drawsOnImage(view.value) : false));
 const plotted = computed(() => (view.value ? plottedSeries(view.value) : []));
-const missing = computed(() =>
-  view.value && detail.value ? missingFiles(studyName(detail.value), view.value) : { image: null, raw: null },
-);
+/** The width of the image of a digitized figure, which the plot beside the overlay does not exceed. */
+const figureWidth = computed(() => (view.value?.image_size ? { "--figure-width": `${view.value.image_size[0]}px` } : {}));
 /** Why the series without a dataset are plotted on their own. */
 const unmatchedNote = computed(() => {
   const one = view.value?.unmatched.length === 1;
@@ -99,7 +98,7 @@ function showRow(row: { file: string; line: number }): void {
           :id="tabId(entry.source)"
           :key="entry.source"
           :value="entry.source"
-          :prepend-icon="ICONS[sourceKind(entry.source)]"
+          :prepend-icon="ICONS[entry.kind]"
           :aria-controls="entry.source === selected?.source ? panelId : undefined"
           class="sources-tab"
         >
@@ -107,7 +106,16 @@ function showRow(row: { file: string; line: number }): void {
         </VTab>
       </VTabs>
 
-      <div v-if="selected" :id="panelId" role="tabpanel" :aria-labelledby="tabId(selected.source)" class="source-panel">
+      <!-- The panel takes the focus after its tab, as its first content is no control. -->
+      <div
+        v-if="selected"
+        :id="panelId"
+        role="tabpanel"
+        tabindex="0"
+        :aria-labelledby="tabId(selected.source)"
+        class="source-panel"
+        :style="figureWidth"
+      >
         <VProgressLinear v-if="loading" indeterminate color="primary" :aria-label="`Loading ${selected.source}`" />
         <VAlert v-else-if="error" type="error" variant="tonal" density="compact" class="status-alert">
           {{ selected.source }} could not be loaded. {{ error }}
@@ -135,7 +143,7 @@ function showRow(row: { file: string; line: number }): void {
           <div v-if="!calibrated && kind !== 'text'" class="source-columns">
             <section class="source-block" :aria-labelledby="`${id}-image`">
               <h3 :id="`${id}-image`" class="source-heading">Image</h3>
-              <div v-if="view.image_url" class="source-image">
+              <div v-if="view.image_url" class="figure-frame figure-frame--paper source-image">
                 <img
                   :src="view.image_url"
                   :alt="alt"
@@ -146,7 +154,7 @@ function showRow(row: { file: string; line: number }): void {
               <div v-else class="source-missing">
                 <i class="fas fa-file-circle-plus source-missing-icon" aria-hidden="true"></i>
                 <div>
-                  <p class="source-missing-name">No image: add {{ missing.image }}</p>
+                  <p class="source-missing-name">No image: add {{ selected.missing_image }}</p>
                   <p class="source-missing-hint">Save the {{ kind }} from the paper as a PNG image in the study folder.</p>
                 </div>
               </div>
@@ -158,8 +166,8 @@ function showRow(row: { file: string; line: number }): void {
               <div v-else class="source-missing">
                 <i class="fas fa-file-circle-plus source-missing-icon" aria-hidden="true"></i>
                 <div>
-                  <p class="source-missing-name">No raw extraction: add {{ missing.raw }}</p>
-                  <p class="source-missing-hint">Add table in the study menu adds it as a sheet of the workbook.</p>
+                  <p class="source-missing-name">No raw extraction: add {{ selected.missing_raw }}</p>
+                  <p class="source-missing-hint">Use Add table in the study menu to add it as a sheet of the workbook.</p>
                 </div>
               </div>
             </section>
@@ -171,10 +179,10 @@ function showRow(row: { file: string; line: number }): void {
             </section>
           </div>
 
-          <div v-if="kind === 'figure' && missing.raw" class="source-missing">
+          <div v-if="kind === 'figure' && selected.missing_raw" class="source-missing">
             <i class="fas fa-file-circle-plus source-missing-icon" aria-hidden="true"></i>
             <div>
-              <p class="source-missing-name">No raw extraction: add {{ missing.raw }}</p>
+              <p class="source-missing-name">No raw extraction: add {{ selected.missing_raw }}</p>
               <p class="source-missing-hint">Digitize the figure in WebPlotDigitizer and import the project with pkdb digitize import.</p>
             </div>
           </div>
@@ -248,27 +256,29 @@ function showRow(row: { file: string; line: number }): void {
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
-/* The image beside the raw extraction or the plot; below it in a narrow column. */
+/* The image beside the raw extraction or the plot in two equal columns, below it in a narrow
+   window. The frames and tables fill their column, so that their edges line up with the column
+   and with the mapped rows below, which span the panel. */
 .source-columns {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 26rem), 1fr));
   gap: 24px;
   align-items: start;
 }
+/* The image keeps its size in its frame, centered on the paper; a larger image shrinks. */
 .source-image {
+  display: flex;
+  justify-content: center;
   min-width: 0;
-}
-/* A plot of a few series reads best at about the width of a figure. */
-.source-unmatched {
-  max-width: 56rem;
 }
 .source-image img {
   display: block;
   max-width: 100%;
   height: auto;
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 4px;
-  background-color: #fff;
+}
+/* The plot of the series without a dataset is as wide as the overlay above it. */
+.source-unmatched {
+  max-width: calc(var(--figure-width) + 2px);
 }
 .source-missing {
   display: flex;

@@ -12,7 +12,7 @@ const SCROLL_ROWS = 12;
 
 /**
  * The rows that tables map from a source, by table, with the line of each row in its file. A
- * line opens the row in the Tables section.
+ * line opens the row in the Tables section, and stays in view while wide rows scroll.
  */
 const props = defineProps<{
   tables: MappedTable[];
@@ -47,13 +47,13 @@ function lineRoute(file: string, line: number) {
       </p>
       <div
         v-if="entry.rows.length"
-        class="rows-scroll rows-scroll--fit"
+        class="rows-scroll rows-scroll--sticky-line"
         :class="{ 'rows-scroll--tall': entry.rows.length > SCROLL_ROWS }"
         tabindex="0"
         role="region"
         :aria-label="`Rows of ${entry.table.file}`"
       >
-        <table class="rows-table">
+        <table class="rows-table rows-table--packed">
           <thead>
             <tr>
               <th scope="col" class="rows-line">Line</th>

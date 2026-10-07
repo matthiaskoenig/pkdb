@@ -3,26 +3,25 @@
  * on the image of the figure, in the pixels of the image, and the data plot of mapped rows that
  * have no digitized dataset.
  *
- * The overlay mirrors `pkdb plot` (python/src/pkdb/studyformat/plot.py): the points of
- * `source_view` in image pixels, the series in the order of the overlay, a series and its
- * `;error_bar` dataset in one color.
+ * Everything that the library knows comes from the source view (`source_view` of
+ * python/src/pkdb/studyformat/sources.py), which `pkdb plot` draws too: the pixels, the points
+ * in table units, the values as printed, and the series in one order with their colors and axis
+ * labels. This module only lays them out for Plotly.
  */
-import type { MappedTable, SourceView } from "./api/types";
+import type { SourceSeries, SourceView } from "./api/types";
 import { plotColors, type PlotColors } from "../features/plots/theme";
 
 /** The suffix of the dataset with the ends of the error bars of a series. */
 export const ERROR_BAR_SUFFIX = ";error_bar";
 
 /**
- * The categorical colors of the series in a fixed order, validated for color vision deficiency
- * on the light and the dark surface. The overlay always uses the light steps, because its marks
- * sit on the image of the paper. Past eight series the colors repeat; the legend, the hover
- * label and the data table name each series.
+ * The ring around a digitized point, which has contrast against the paper of the figure. The
+ * same as `POINT_RING` of python/src/pkdb/studyformat/colors.py, which a test compares.
  */
-export const SERIES_COLORS = {
-  light: ["#2a78d6", "#eb6834", "#1baf7a", "#eda100", "#e87ba4", "#008300", "#4a3aa7", "#e34948"],
-  dark: ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181", "#008300", "#9085e9", "#e66767"],
-} as const;
+export const POINT_RING = "#1f1f1f";
+
+/** The color of a series that the source view does not list, which does not happen in a valid view. */
+const UNKNOWN_COLOR = "#757575";
 
 /** The opacity of the series beside an emphasized series. */
 export const FADED = 0.2;
@@ -123,112 +122,37 @@ export function baseSeries(series: string): string {
   return series.endsWith(ERROR_BAR_SUFFIX) ? series.slice(0, -ERROR_BAR_SUFFIX.length) : series;
 }
 
-/** Whether the overlay can draw on the figure: a digitization on an image of known size. */
-export function isCalibrated(
-  view: SourceView,
-): view is SourceView & { digitization: string; image_url: string; image_size: [number, number] } {
-  return view.digitization !== null && view.image_url !== null && view.image_size !== null;
+/** Whether the overlay draws on the image of the figure: the source view says so. */
+export function drawsOnImage(view: SourceView): boolean {
+  return view.layout === "overlay" && view.image_url !== null && view.image_size !== null;
 }
-
-// Mapped rows as points, as `mapped_points` of the library reads them
-
-/** A decimal number written with a decimal point, as `parse_number` of the library reads it. */
-const NUMBER = /^[+-]?(?:[0-9]+\.?[0-9]*|\.[0-9]+)(?:[eE][+-]?[0-9]+)?$/;
-const CENTRAL = ["mean", "median", "gmean"] as const;
-
-function parseNumber(text: string | undefined): number | null {
-  if (text === undefined || !NUMBER.test(text)) return null;
-  const value = Number(text);
-  return Number.isFinite(value) ? value : null;
-}
-
-/** A mapped row of a timecourse or scatter table as a point of its series, in the units of its table. */
-export interface MappedPoint {
-  series: string;
-  kind: "timecourses" | "scatters";
-  file: string;
-  line: number;
-  x: number;
-  y: number;
-  /** The end of the error bar of a timecourse row. */
-  error: number | null;
-}
-
-/** The rows of a timecourse or scatter table as points; none for other tables. */
-export function mappedPoints(table: MappedTable): MappedPoint[] {
-  const cell = (cells: string[], name: string) => {
-    const index = table.header.indexOf(name);
-    return index < 0 ? undefined : cells[index];
-  };
-  const points: MappedPoint[] = [];
-  for (const [line, cells] of table.rows) {
-    if (table.kind === "timecourses") {
-      const series = cell(cells, "label") ?? "";
-      const x = parseNumber(cell(cells, "time"));
-      const y = CENTRAL.map((name) => parseNumber(cell(cells, name))).find((value) => value !== null) ?? null;
-      if (series && x !== null && y !== null)
-        points.push({
-          series,
-          kind: "timecourses",
-          file: table.file,
-          line,
-          x,
-          y,
-          error: parseNumber(cell(cells, "error_bar")),
-        });
-    } else if (table.kind === "scatters") {
-      const series = cell(cells, "name") ?? "";
-      const x = parseNumber(cell(cells, "x_mean"));
-      const y = parseNumber(cell(cells, "y_mean"));
-      if (series && x !== null && y !== null)
-        points.push({ series, kind: "scatters", file: table.file, line, x, y, error: null });
-    }
-  }
-  return points;
-}
-
-function allMappedPoints(view: SourceView): MappedPoint[] {
-  return view.mapped.flatMap(mappedPoints);
-}
-
-/**
- * The series that the data plot draws: those without a dataset beside the overlay, and every
- * series of the mapped rows when the overlay cannot draw on the figure.
- */
-export function plottedSeries(view: SourceView): string[] {
-  if (isCalibrated(view)) return [...view.unmatched];
-  return unique(allMappedPoints(view).map((point) => point.series));
-}
-
-function plottedPoints(view: SourceView): MappedPoint[] {
-  const series = new Set(plottedSeries(view));
-  return allMappedPoints(view).filter((point) => series.has(point.series));
-}
-
-// Colors, text and the parts around the plot
 
 function unique(values: readonly string[]): string[] {
   return [...new Set(values)];
 }
 
-/** The series of the source in the order of their colors: the overlay first, then the others. */
-function colorOrder(view: SourceView): string[] {
-  return unique([
-    ...view.overlay.map((point) => baseSeries(point.series)),
-    ...view.unmatched,
-    ...allMappedPoints(view).map((point) => point.series),
-  ]);
+/**
+ * The series that the data plot draws: those without a dataset beside the overlay, and every
+ * series of the points when the image and the plot go side by side.
+ */
+export function plottedSeries(view: SourceView): string[] {
+  return drawsOnImage(view) ? [...view.unmatched] : unique(view.points.map((point) => point.series));
 }
 
-function colorOf(order: readonly string[], series: string, dark: boolean): string {
-  const palette = dark ? SERIES_COLORS.dark : SERIES_COLORS.light;
-  const index = Math.max(order.indexOf(baseSeries(series)), 0);
-  return palette[index % palette.length]!;
+function plottedPoints(view: SourceView) {
+  const series = new Set(plottedSeries(view));
+  return view.points.filter((point) => series.has(point.series));
 }
 
-/** A value with the six significant digits of a canonical digitization. */
-export function formatValue(value: number): string {
-  return String(Number(value.toPrecision(6)));
+/** The series of the source view by name. */
+function seriesStyles(view: SourceView): Map<string, SourceSeries> {
+  return new Map(view.series.map((series) => [series.name, series]));
+}
+
+/** The color of a series, or of the error bars of a series: its light step on paper, else the step of the theme. */
+function colorOf(styles: Map<string, SourceSeries>, series: string, dark: boolean): string {
+  const style = styles.get(baseSeries(series));
+  return (dark ? style?.dark_color : style?.color) ?? UNKNOWN_COLOR;
 }
 
 /** Plotly reads tags and entities in hover text; names from the files are text. */
@@ -236,8 +160,8 @@ function escapeMarkup(text: string): string {
   return text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 }
 
-function customdata(file: string, line: number | null, series: string, x: number, y: number): Customdata {
-  return [escapeMarkup(file), line, escapeMarkup(series), formatValue(x), formatValue(y)];
+function customdata(point: { file: string; line: number | null; series: string; x_text: string; y_text: string }): Customdata {
+  return [escapeMarkup(point.file), point.line, escapeMarkup(point.series), escapeMarkup(point.x_text), escapeMarkup(point.y_text)];
 }
 
 const VALUES = "<br>%{customdata[2]}<br>x %{customdata[3]} · y %{customdata[4]}<extra></extra>";
@@ -293,10 +217,11 @@ export function overlayTraces(
   const [width, height] = view.image_size ?? [0, 0];
   const marks = Math.min(1, Math.max(MIN_MARK_SCALE, scale));
   const stroke = marks < 0.8 ? 1.5 : 2;
-  const order = colorOrder(view);
+  const styles = seriesStyles(view);
   const series = unique(view.overlay.map((point) => point.series));
   const opacity = opacities(series, highlight);
-  const color = (name: string) => colorOf(order, name, false);
+  // The marks sit on the image of the paper, which keeps its colors in the dark theme.
+  const color = (name: string) => colorOf(styles, name, false);
   const traces: OverlayTrace[] = [];
 
   for (const name of series.filter((entry) => !entry.endsWith(ERROR_BAR_SUFFIX))) {
@@ -323,8 +248,8 @@ export function overlayTraces(
       if (!points.length) continue;
       const marker =
         role === "raw"
-          ? // A ring in the color of the paper keeps a dot apart from the printed symbol below it.
-            { symbol: "circle", size: 7 * marks, color: color(name), line: { width: 1, color: "#ffffff" } }
+          ? // A dark ring keeps a dot apart from the paper and from a mark of another color below it.
+            { symbol: "circle", size: 7 * marks, color: color(name), line: { width: 1, color: POINT_RING } }
           : { symbol: "x-thin-open", size: 11 * marks, color: color(name), line: { width: stroke, color: color(name) } };
       traces.push({
         type: "scatter",
@@ -336,7 +261,7 @@ export function overlayTraces(
         opacity: opacity(name),
         showlegend: false,
         marker,
-        customdata: points.map((point) => customdata(point.file, point.line, point.series, point.x, point.y)),
+        customdata: points.map(customdata),
         hovertemplate: role === "raw" ? RAW_HOVER : MAPPED_HOVER,
         hoverlabel: hoverLabel(theme.colors, color(name)),
       });
@@ -372,40 +297,20 @@ export function overlayTraces(
   };
 }
 
-/** `time (h)`, `concentration (mg/l)`: the measurement and the unit of an axis, as far as known. */
-function axisTitle(name: string, unit: string): string {
-  if (name && unit) return `${name} (${unit})`;
-  return name || unit;
-}
-
-/** The axis titles of the first plotted series, as `pkdb plot` labels its axes. */
-function axisTitles(view: SourceView, first: MappedPoint | undefined): [string, string] {
-  const table = first && view.mapped.find((entry) => entry.file === first.file);
-  const cells = table?.rows.find(([line]) => line === first?.line)?.[1];
-  if (!table || !cells || !first) return ["x", "y"];
-  const cell = (name: string) => cells[table.header.indexOf(name)] ?? "";
-  return first.kind === "timecourses"
-    ? [axisTitle("time", cell("time_unit")), axisTitle(cell("measurement"), cell("unit")) || "value"]
-    : [
-        axisTitle(cell("x_measurement"), cell("x_unit")) || "x",
-        axisTitle(cell("y_measurement"), cell("y_unit")) || "y",
-      ];
-}
-
 /**
  * The data plot of the mapped rows of `plottedSeries` in the units of their tables: timecourses
  * as lines with error bars to the error bar end, scatters as points. With `highlight`, the other
  * series fade.
  */
 export function plotTraces(view: SourceView, highlight: string | null = null, theme: PlotTheme = LIGHT): OverlayPlot {
-  const order = colorOrder(view);
+  const styles = seriesStyles(view);
   const points = plottedPoints(view);
   const series = unique(points.map((point) => point.series));
   const opacity = opacities(series, highlight);
   const traces = series.map((name): OverlayTrace => {
     const rows = points.filter((point) => point.series === name);
-    const color = colorOf(order, name, theme.dark);
-    const errors = rows.map((point) => (point.error === null ? null : Math.abs(point.error - point.y)));
+    const color = colorOf(styles, name, theme.dark);
+    const errors = rows.map((point) => (point.error_bar === null ? null : Math.abs(point.error_bar - point.y)));
     return {
       type: "scatter",
       meta: `plot ${name}`,
@@ -420,12 +325,14 @@ export function plotTraces(view: SourceView, highlight: string | null = null, th
       ...(errors.some((error) => error !== null)
         ? { error_y: { type: "data", array: errors, visible: true, color, thickness: 1.5, width: 4 } as const }
         : {}),
-      customdata: rows.map((point) => customdata(point.file, point.line, point.series, point.x, point.y)),
+      customdata: rows.map(customdata),
       hovertemplate: MAPPED_HOVER,
       hoverlabel: hoverLabel(theme.colors, color),
     };
   });
-  const [xTitle, yTitle] = axisTitles(view, points[0]);
+  // The axes of the first series, as `pkdb plot` labels them.
+  const first = styles.get(series[0] ?? "");
+  const [xTitle, yTitle] = [first?.x_label ?? "x", first?.y_label ?? "y"];
   const axis = (text: string): OverlayAxis => ({
     title: { text },
     visible: true,
@@ -451,11 +358,11 @@ export function plotTraces(view: SourceView, highlight: string | null = null, th
 
 /** The series of the legend with the colors of their marks. */
 export function legendEntries(view: SourceView, mode: OverlayMode, dark: boolean): { series: string; color: string }[] {
-  const order = colorOrder(view);
+  const styles = seriesStyles(view);
   const series =
     mode === "overlay" ? unique(view.overlay.map((point) => baseSeries(point.series))) : plottedSeries(view);
   // The overlay marks sit on the image, which keeps its light colors.
-  return series.map((name) => ({ series: name, color: colorOf(order, name, mode === "plot" && dark) }));
+  return series.map((name) => ({ series: name, color: colorOf(styles, name, mode === "plot" && dark) }));
 }
 
 /** A point of the data table of the plot. */
@@ -474,16 +381,16 @@ export function dataRows(view: SourceView, mode: OverlayMode): DataRow[] {
     return view.overlay.map((point) => ({
       series: point.series,
       kind: point.role === "raw" ? "Digitized" : "Mapped",
-      x: formatValue(point.x),
-      y: formatValue(point.y),
+      x: point.x_text,
+      y: point.y_text,
       file: point.file,
       line: point.line,
     }));
   return plottedPoints(view).map((point) => ({
     series: point.series,
     kind: "Mapped",
-    x: formatValue(point.x),
-    y: formatValue(point.y),
+    x: point.x_text,
+    y: point.y_text,
     file: point.file,
     line: point.line,
   }));
@@ -493,8 +400,11 @@ function unescapeMarkup(text: string): string {
   return text.replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll("&amp;", "&");
 }
 
-/** How far a mapped row may lie from its digitized point, as `digitized_mismatch` of the library allows. */
-const MATCH_PIXELS = 2;
+/**
+ * How close, in image pixels, a mapped row must lie to a clicked digitized point for the click
+ * to select it: within the radius of the dot at the size of the image.
+ */
+const CLICK_PIXELS = 3;
 
 /** A point of a Plotly hover or click event: its customdata and its position in the plot. */
 export interface EventPoint {
@@ -505,8 +415,8 @@ export interface EventPoint {
 
 /**
  * The row that a click on a point selects: the row of a mapped point, or the mapped row of its
- * series within 2 pixels of a digitized point. Plotly prefers the small dot of a digitized point
- * to the cross of the mapped row below it, so the dot stands for its row.
+ * series under a digitized point (`CLICK_PIXELS`). Plotly prefers the small dot of a digitized
+ * point to the cross of the mapped row below it, so the dot stands for its row.
  */
 export function rowAt(view: SourceView, point: EventPoint): { file: string; line: number } | null {
   if (!Array.isArray(point.customdata)) return null;
@@ -519,7 +429,7 @@ export function rowAt(view: SourceView, point: EventPoint): { file: string; line
   for (const mapped of view.overlay) {
     if (mapped.role !== "mapped" || mapped.series !== name || mapped.line === null) continue;
     const distance = Math.hypot(mapped.px - x, mapped.py - y);
-    if (distance <= MATCH_PIXELS && (best === null || distance < best.distance))
+    if (distance <= CLICK_PIXELS && (best === null || distance < best.distance))
       best = { file: mapped.file, line: mapped.line, distance };
   }
   return best && { file: best.file, line: best.line };

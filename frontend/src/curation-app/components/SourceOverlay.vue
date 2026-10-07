@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";
 import { useTheme } from "vuetify";
 import { VAlert, VBtn, VProgressLinear } from "vuetify/components";
 import type { SourceView } from "../api/types";
 import { plural } from "../overview";
 import {
   dataRows,
-  isCalibrated,
+  drawsOnImage,
   legendEntries,
   overlayTraces,
   plotTraces,
@@ -36,7 +36,7 @@ const SCROLL_ROWS = 12;
 const theme = useTheme();
 const host = ref<HTMLElement | null>(null);
 
-const shown = computed<OverlayMode>(() => props.mode ?? (isCalibrated(props.view) ? "overlay" : "plot"));
+const shown = computed<OverlayMode>(() => props.mode ?? (drawsOnImage(props.view) ? "overlay" : "plot"));
 /** The width of the plot on the screen, which the observer below follows. */
 const hostWidth = ref(0);
 /** The size of the image on the screen in steps of 5 %, for the size of the marks of the overlay. */
@@ -83,10 +83,15 @@ const caption = computed(() =>
     : `Mapped rows of ${props.view.source} without a digitization`,
 );
 
-/** The overlay keeps the proportions of the image, at most at its own size. */
+/** The overlay keeps the proportions of the image. */
 const hostStyle = computed(() => {
   const size = props.view.image_size;
-  return shown.value === "overlay" && size ? { aspectRatio: `${size[0]} / ${size[1]}`, maxWidth: `${size[0]}px` } : {};
+  return shown.value === "overlay" && size ? { aspectRatio: `${size[0]} / ${size[1]}` } : {};
+});
+/** The width of the image, which the frame of the overlay and the image without it do not exceed. */
+const frameStyle = computed(() => {
+  const size = props.view.image_size;
+  return shown.value === "overlay" && size ? { "--figure-width": `${size[0]}px` } : {};
 });
 
 // Drawing
@@ -95,11 +100,12 @@ const loading = ref(false);
 /** What went wrong with the last drawing; the import of Plotly or the plot. */
 const failure = ref<{ kind: "import" | "draw"; message: string } | null>(null);
 
+/** Whether Plotly has drawn into the element: the legend and the hints describe the drawing. */
+const drawn = ref(false);
+
 let generation = 0;
 let engine: Awaited<ReturnType<typeof loadNoncedPlotly>> | undefined;
 let observer: ResizeObserver | undefined;
-/** Whether Plotly has drawn into the element, which it then resizes with the element. */
-let drawn = false;
 let disposed = false;
 let rendering = Promise.resolve();
 const listening = new WeakSet<HTMLElement>();
@@ -129,6 +135,11 @@ watch(
       if (disposed || generation !== current) return;
       let phase: "import" | "draw" = "import";
       try {
+        // A retry shows the frame again, which Plotly then measures.
+        if (failure.value) {
+          failure.value = null;
+          await nextTick();
+        }
         const loaded = await loadNoncedPlotly();
         if (disposed || generation !== current) return;
         engine = loaded;
@@ -152,7 +163,7 @@ watch(
           listening.add(plotted);
         }
         failure.value = null;
-        drawn = true;
+        drawn.value = true;
       } catch (caught) {
         if (generation === current) failure.value = { kind: phase, message: messageOf(caught) };
       } finally {
@@ -171,7 +182,7 @@ watch(host, (element) => {
   if (!element) return;
   observer = new ResizeObserver(([entry]) => {
     if (entry) hostWidth.value = entry.contentRect.width;
-    if (drawn) void engine?.Plots.resize(element).catch(() => undefined);
+    if (drawn.value) void engine?.Plots.resize(element).catch(() => undefined);
   });
   observer.observe(element);
 });
@@ -189,81 +200,91 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="source-overlay">
+  <div class="source-overlay" :style="frameStyle">
     <VAlert v-if="failure" type="error" variant="tonal" density="compact" class="status-alert overlay-failure">
       <p class="overlay-failure-text">
         <template v-if="failure.kind === 'draw'">The plot could not be drawn.</template>
         <template v-else-if="plotlyImport.state === 'failed again'">
-          The plot could not be loaded. Reload the page to try again.
+          The plot could not be loaded again. Reload the page to try again.
         </template>
         <template v-else>The plot could not be loaded.</template>
       </p>
       <p class="overlay-failure-detail">{{ failure.message }}</p>
-      <template #append>
-        <VBtn
-          v-if="failure.kind === 'import' && plotlyImport.state === 'failed again'"
-          variant="text"
-          size="small"
-          @click="reload"
-        >
-          Reload the page
-        </VBtn>
-        <VBtn v-else variant="text" size="small" @click="retryPlotly">Retry</VBtn>
-      </template>
+      <!-- Chrome keeps a failed import of a module until the page reloads, so both are offered. -->
+      <div class="overlay-failure-actions">
+        <VBtn variant="tonal" size="small" @click="retryPlotly">Retry</VBtn>
+        <VBtn v-if="failure.kind === 'import'" variant="text" size="small" @click="reload">Reload the page</VBtn>
+      </div>
     </VAlert>
+    <!-- Without the plot, the image of the figure stands for it. -->
+    <div v-if="failure && shown === 'overlay' && view.image_url" class="figure-frame figure-frame--paper overlay-fallback">
+      <img
+        :src="view.image_url"
+        :alt="`Image of ${view.source}`"
+        :width="view.image_size?.[0]"
+        :height="view.image_size?.[1]"
+      />
+    </div>
     <VProgressLinear v-if="loading" indeterminate color="primary" aria-label="Loading the plot" />
     <!-- Plotly adds classes to its element, which a class binding would replace: the classes that
-         change go on the frame around it. -->
-    <div class="overlay-frame" :class="[`overlay-frame--${shown}`, { 'overlay-frame--pointer': pointer }]">
+         change go on the frame around it. The frame stays in the page while it is hidden, so that
+         Plotly can draw into it after a retry. -->
+    <div
+      v-show="!failure"
+      class="figure-frame overlay-frame"
+      :class="[`overlay-frame--${shown}`, { 'overlay-frame--pointer': pointer }]"
+    >
       <div ref="host" class="overlay-host" role="img" :aria-label="name" :style="hostStyle" />
     </div>
-    <p v-if="notDigitized" class="field-note">{{ highlight }} is not digitized.</p>
+    <template v-if="drawn && !failure">
+      <p v-if="notDigitized" class="field-note">{{ highlight }} is not digitized.</p>
 
-    <ul v-if="legend.length" class="overlay-legend" aria-label="Series">
-      <li
-        v-for="entry in legend"
-        :key="entry.series"
-        class="overlay-legend-item"
-        :class="{
-          'overlay-legend-item--emphasized': entry.series === emphasized,
-          'overlay-legend-item--faded': emphasized !== null && entry.series !== emphasized,
-        }"
-      >
-        <span class="overlay-swatch" :style="{ backgroundColor: entry.color }" aria-hidden="true"></span>
-        {{ entry.series }}<span v-if="entry.series === emphasized" class="d-sr-only">, emphasized</span>
-      </li>
-    </ul>
-    <p v-if="shown === 'overlay'" class="overlay-key" aria-hidden="true">
-      <span class="overlay-key-item">
-        <svg viewBox="0 0 12 12" class="overlay-glyph"><circle cx="6" cy="6" r="3.5" /></svg>
-        Digitized point
-      </span>
-      <span class="overlay-key-item">
-        <svg viewBox="0 0 12 12" class="overlay-glyph overlay-glyph--line">
-          <path d="M2 2 L10 10 M10 2 L2 10" />
-        </svg>
-        Mapped row
-      </span>
-      <span class="overlay-key-item">
-        <svg viewBox="0 0 12 12" class="overlay-glyph overlay-glyph--line"><path d="M6 1 L6 11" /></svg>
-        Error bar of a mapped row
-      </span>
-    </p>
+      <ul v-if="legend.length" class="overlay-legend" aria-label="Series">
+        <li
+          v-for="entry in legend"
+          :key="entry.series"
+          class="overlay-legend-item"
+          :class="{
+            'overlay-legend-item--emphasized': entry.series === emphasized,
+            'overlay-legend-item--faded': emphasized !== null && entry.series !== emphasized,
+          }"
+        >
+          <span class="overlay-swatch" :style="{ backgroundColor: entry.color }" aria-hidden="true"></span>
+          {{ entry.series }}<span v-if="entry.series === emphasized" class="d-sr-only">, emphasized</span>
+        </li>
+      </ul>
+      <p v-if="shown === 'overlay'" class="overlay-key" aria-hidden="true">
+        <span class="overlay-key-item">
+          <svg viewBox="0 0 12 12" class="overlay-glyph"><circle cx="6" cy="6" r="3.5" /></svg>
+          Digitized point
+        </span>
+        <span class="overlay-key-item">
+          <svg viewBox="0 0 12 12" class="overlay-glyph overlay-glyph--line">
+            <path d="M2 2 L10 10 M10 2 L2 10" />
+          </svg>
+          Mapped row
+        </span>
+        <span class="overlay-key-item">
+          <svg viewBox="0 0 12 12" class="overlay-glyph overlay-glyph--line"><path d="M6 1 L6 11" /></svg>
+          Error bar of a mapped row
+        </span>
+      </p>
 
-    <p v-if="selectable" class="overlay-key">
-      Click a {{ shown === "overlay" ? "cross" : "point" }} to show its row in the Tables section.
-    </p>
+      <p v-if="selectable" class="overlay-key">
+        Click a {{ shown === "overlay" ? "cross" : "point" }} to show its row in the Tables section.
+      </p>
+    </template>
 
     <details v-if="rows.length" class="overlay-data">
       <summary>Data of the plot</summary>
       <div
-        class="rows-scroll rows-scroll--fit"
+        class="rows-scroll"
         :class="{ 'rows-scroll--tall': rows.length > SCROLL_ROWS }"
         tabindex="0"
         role="region"
         :aria-label="caption"
       >
-        <table class="rows-table">
+        <table class="rows-table rows-table--packed">
           <caption class="d-sr-only">{{ caption }}</caption>
           <thead>
             <tr>
@@ -306,20 +327,33 @@ onBeforeUnmount(() => {
   font-size: 0.8125rem;
   overflow-wrap: anywhere;
 }
-/* The overlay has the proportions of the image; Plotly fits it after a resize, so that the box
-   never takes the height of the previous plot. */
+/* The overlay has the proportions of the image and is at most as wide as it, plus the frame.
+   Plotly fits it after a resize, so that the box never takes the height of the previous plot. */
+.overlay-frame--overlay {
+  max-width: calc(var(--figure-width) + 2px);
+}
 .overlay-host {
   width: 100%;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
 }
-/* A frame that takes no room, so that the plot has the size of the image. */
-.overlay-frame--overlay .overlay-host {
-  box-shadow: 0 0 0 1px rgba(var(--v-border-color), var(--v-border-opacity));
-}
 .overlay-frame--plot .overlay-host {
   height: 360px;
+}
+.overlay-fallback {
+  max-width: calc(var(--figure-width) + 2px);
+}
+.overlay-fallback img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.overlay-failure-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
 }
 /* Plotly shows a pointer over the whole plot when it does not zoom; only a point that selects a
    row takes one. These rules are more specific than those of Plotly. */
@@ -381,6 +415,10 @@ onBeforeUnmount(() => {
   fill: none;
   stroke: currentColor;
   stroke-width: 1.75;
+}
+/* The data of an overlay is as wide as the figure above it. */
+.overlay-data {
+  max-width: calc(var(--figure-width, 100%) + 2px);
 }
 .overlay-data summary {
   width: fit-content;

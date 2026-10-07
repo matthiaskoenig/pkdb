@@ -3,6 +3,7 @@ import type {
   Profile,
   ReviewItem,
   Snapshot,
+  SourceSummary,
   StudyDetail,
   StudyMetadata,
   StudyRow,
@@ -197,14 +198,20 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
     acknowledged: [],
     conflicts: [],
     sources: [
-      { source: "Fig1", image: "Example_Fig1.png", raw: null, raw_kind: null, tables: ["timecourses_Fig1.tsv"] },
-      {
+      sourceSummary({
+        source: "Fig1",
+        kind: "figure",
+        image: "Example_Fig1.png",
+        tables: ["timecourses_Fig1.tsv"],
+        missing_raw: "Example_Fig1.wpd.json",
+      }),
+      sourceSummary({
         source: "Tab2",
         image: "Example_Tab2.png",
         raw: "Example_Tab2.tsv",
         raw_kind: "table",
         tables: ["outputs_Tab2.tsv"],
-      },
+      }),
     ],
     files: [
       "characteristica.tsv",
@@ -220,6 +227,20 @@ export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
       "subjects.tsv",
       "timecourses_Fig1.tsv",
     ],
+    ...changes,
+  };
+}
+
+/** A source of `GET /local/studies/<id>`: a paper table with its image and raw extraction unless `changes` say otherwise. */
+export function sourceSummary(changes: Partial<SourceSummary> & Pick<SourceSummary, "source">): SourceSummary {
+  return {
+    kind: "table",
+    image: null,
+    raw: null,
+    raw_kind: null,
+    tables: [],
+    missing_image: null,
+    missing_raw: null,
     ...changes,
   };
 }

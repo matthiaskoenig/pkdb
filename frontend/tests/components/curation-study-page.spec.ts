@@ -17,7 +17,7 @@ import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import StudyPage from "../../src/curation-app/views/StudyPage.vue";
-import { json, snapshot, studyDetail, studyMetadata, studyRow } from "../unit/curation-fixtures";
+import { json, snapshot, sourceSummary, studyDetail, studyMetadata, studyRow } from "../unit/curation-fixtures";
 import {
   button,
   buttons,
@@ -88,8 +88,8 @@ const harder: StudyDetail = studyDetail({
     issues: [],
   },
   sources: [
-    { source: "Fig1", image: "Harder1988_Fig1.png", raw: null, raw_kind: null, tables: ["timecourses_Fig1.tsv"] },
-    { source: "Tab2", image: "Harder1988_Tab2.png", raw: null, raw_kind: null, tables: ["outputs_Tab2.tsv"] },
+    sourceSummary({ source: "Fig1", kind: "figure", image: "Harder1988_Fig1.png", tables: ["timecourses_Fig1.tsv"] }),
+    sourceSummary({ source: "Tab2", image: "Harder1988_Tab2.png", tables: ["outputs_Tab2.tsv"] }),
   ],
   files: [
     "characteristica.tsv",

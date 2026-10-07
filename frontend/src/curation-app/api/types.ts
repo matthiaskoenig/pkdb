@@ -469,10 +469,16 @@ export interface ConflictData {
 
 export interface SourceSummary {
   source: string;
+  /** A paper table `Tab…`, a figure `Fig…` or the text. */
+  kind: "table" | "figure" | "text";
   image: string | null;
   raw: string | null;
   raw_kind: "table" | "digitization" | null;
   tables: string[];
+  /** The image `<name>_<source>.png` that the source lacks. */
+  missing_image: string | null;
+  /** The raw extraction that the source lacks: `<name>_<source>.tsv` or `<name>_<source>.wpd.json`. */
+  missing_raw: string | null;
 }
 
 export interface StudyDetail {
@@ -518,6 +524,8 @@ export interface MappedTable {
   header: string[];
   /** The TSV line and the cells in header order. */
   rows: [number, string[]][];
+  /** Whether the table names the source of each row, as subjects.tsv does; else all its rows belong to the source. */
+  shared: boolean;
 }
 
 export interface OverlayPoint {
@@ -530,6 +538,35 @@ export interface OverlayPoint {
   file: string;
   line: number | null;
   error_px: [number, number] | null;
+  /** The values as printed: the cells of a mapped row, six significant digits of a digitized point. */
+  x_text: string;
+  y_text: string;
+}
+
+/** A mapped row of a timecourse or scatter table in the units of its table. */
+export interface SourcePoint {
+  series: string;
+  kind: "timecourses" | "scatters";
+  file: string;
+  line: number;
+  x: number;
+  y: number;
+  /** The end of the error bar of a timecourse row. */
+  error_bar: number | null;
+  /** The cells as printed. */
+  x_text: string;
+  y_text: string;
+}
+
+/** A series of a figure in the order of its colors, which `pkdb plot` shares. */
+export interface SourceSeries {
+  name: string;
+  /** On paper and the light surface. */
+  color: string;
+  /** On the dark surface. */
+  dark_color: string;
+  x_label: string | null;
+  y_label: string | null;
 }
 
 export interface SourceView {
@@ -542,6 +579,10 @@ export interface SourceView {
   mapped: MappedTable[];
   overlay: OverlayPoint[];
   unmatched: string[];
+  /** `overlay` when the overlay draws on the image; else the image and a plot of `points` go side by side. */
+  layout: "overlay" | "side_by_side";
+  points: SourcePoint[];
+  series: SourceSeries[];
 }
 
 // Folder browser
@@ -664,6 +705,9 @@ export const isSourceView = hasKeys<SourceView>(
   "mapped",
   "overlay",
   "unmatched",
+  "layout",
+  "points",
+  "series",
 );
 
 export const isCurators = hasKeys<{ curators: Profile[] }>("curators");

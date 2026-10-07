@@ -3,10 +3,10 @@ import { DOMWrapper, enableAutoUnmount, flushPromises, mount } from "@vue/test-u
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { defineComponent, h, type PropType } from "vue";
 import { RouterView, type Router } from "vue-router";
-import type { SourceView, StudyDetail, ValidationIssue } from "../../src/curation-app/api/types";
+import type { SourcePoint, SourceView, StudyDetail, ValidationIssue } from "../../src/curation-app/api/types";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
-import { json, snapshot, studyDetail } from "../unit/curation-fixtures";
+import { json, snapshot, sourceSummary, studyDetail } from "../unit/curation-fixtures";
 import { button, click, page, serveApi, setViewport, type Handler, type ServedRequest } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
@@ -37,16 +37,21 @@ const table: SourceView = {
         [2, ["Example", "Tab2", "caf_cl", "clearance", "1.2", "0.3", "ml/min/kg", ""]],
         [3, ["Example", "Tab2", "caf_thalf", "thalf", "4.8", "", "h", ""]],
       ],
+      shared: false,
     },
     {
       file: "subjects.tsv",
       kind: "subjects",
       header: ["study", "source", "name", "count"],
       rows: [[4, ["Example", "Tab2", "all", "8"]]],
+      shared: true,
     },
   ],
   overlay: [],
   unmatched: [],
+  layout: "side_by_side",
+  points: [],
+  series: [],
 };
 
 const timecourses = {
@@ -57,7 +62,21 @@ const timecourses = {
     [2, ["Example", "Fig1", "caf_plasma_D150", "0.5", "h", "2.419", "µg/ml", "3.051"]],
     [3, ["Example", "Fig1", "caf_plasma_D75", "0.5", "h", "1.2", "µg/ml", ""]],
   ],
+  shared: false,
 } satisfies SourceView["mapped"][number];
+
+function points(file: string): SourcePoint[] {
+  const base = { kind: "timecourses", file, x: 0.5, x_text: "0.5" } as const;
+  return [
+    { ...base, series: "caf_plasma_D150", line: 2, y: 2.419, y_text: "2.419", error_bar: 3.051 },
+    { ...base, series: "caf_plasma_D75", line: 3, y: 1.2, y_text: "1.2", error_bar: null },
+  ];
+}
+
+const SERIES: SourceView["series"] = [
+  { name: "caf_plasma_D150", color: "#2a78d6", dark_color: "#3987e5", x_label: "time (h)", y_label: "c (µg/ml)" },
+  { name: "caf_plasma_D75", color: "#d65a24", dark_color: "#d95926", x_label: "time (h)", y_label: "c (µg/ml)" },
+];
 
 const digitized: SourceView = {
   source: "Fig1",
@@ -78,6 +97,8 @@ const digitized: SourceView = {
       file: "Example_Fig1.wpd.json",
       line: null,
       error_px: null,
+      x_text: "0.5",
+      y_text: "2.42",
     },
     {
       series: "caf_plasma_D150",
@@ -89,9 +110,14 @@ const digitized: SourceView = {
       file: "timecourses_Fig1.tsv",
       line: 2,
       error_px: [120, 250],
+      x_text: "0.5",
+      y_text: "2.419",
     },
   ],
   unmatched: ["caf_plasma_D75"],
+  layout: "overlay",
+  points: points("timecourses_Fig1.tsv"),
+  series: SERIES,
 };
 
 const plain: SourceView = {
@@ -104,6 +130,9 @@ const plain: SourceView = {
   mapped: [{ ...timecourses, file: "timecourses_Fig2.tsv" }],
   overlay: [],
   unmatched: ["caf_plasma_D150", "caf_plasma_D75"],
+  layout: "side_by_side",
+  points: points("timecourses_Fig2.tsv"),
+  series: SERIES,
 };
 
 const missing: SourceView = {
@@ -116,6 +145,9 @@ const missing: SourceView = {
   mapped: [],
   overlay: [],
   unmatched: [],
+  layout: "side_by_side",
+  points: [],
+  series: [],
 };
 
 /** The study with a digitized figure, a figure without digitization and two paper tables. */
@@ -123,22 +155,30 @@ function detail(changes: Partial<StudyDetail> = {}): StudyDetail {
   const base = studyDetail();
   return studyDetail({
     sources: [
-      {
+      sourceSummary({
         source: "Fig1",
+        kind: "figure",
         image: "Example_Fig1.png",
         raw: "Example_Fig1.wpd.json",
         raw_kind: "digitization",
         tables: ["timecourses_Fig1.tsv"],
-      },
-      { source: "Fig2", image: "Example_Fig2.png", raw: null, raw_kind: null, tables: ["timecourses_Fig2.tsv"] },
-      {
+      }),
+      sourceSummary({
+        source: "Fig2",
+        kind: "figure",
+        image: "Example_Fig2.png",
+        tables: ["timecourses_Fig2.tsv"],
+        missing_raw: "Example_Fig2.wpd.json",
+      }),
+      sourceSummary({
         source: "Tab2",
         image: "Example_Tab2.png",
         raw: "Example_Tab2.tsv",
         raw_kind: "table",
         tables: ["outputs_Tab2.tsv", "subjects.tsv"],
-      },
-      { source: "Tab3", image: null, raw: null, raw_kind: null, tables: [] },
+      }),
+      // The library names the files that a source lacks.
+      sourceSummary({ source: "Tab3", missing_image: "Example_Tab3.png", missing_raw: "Example_Tab3.tsv" }),
     ],
     files: [...base.files, "Example_Fig1.wpd.json", "Example_Fig2.png", "timecourses_Fig2.tsv"].sort(),
     ...changes,
@@ -250,6 +290,11 @@ describe("tabs", () => {
     expect(fetched(`${EXAMPLE}/sources/Fig1`)).toBe(0);
   });
 
+  it("lets the keyboard reach the panel, whose first content is no control", async () => {
+    await mountSection();
+    expect(panel().attributes("tabindex")).toBe("0");
+  });
+
   it("opens the first source for a source that the study does not have", async () => {
     await mountSection(detail(), {}, `${SECTION}?source=Fig9`);
     expect(tabs()[0]?.attributes("aria-selected")).toBe("true");
@@ -320,6 +365,7 @@ describe("table sources", () => {
     await mountSection(detail(), {}, `${SECTION}?source=Tab3`);
     expect(panel().text()).toContain("No image: add Example_Tab3.png");
     expect(panel().text()).toContain("No raw extraction: add Example_Tab3.tsv");
+    expect(panel().text()).toContain("Use Add table in the study menu to add it as a sheet of the workbook.");
     expect(panel().text()).toContain("No rows of the tables name Tab3 as their source.");
     expect(panel().find("img").exists()).toBe(false);
   });
@@ -359,7 +405,11 @@ describe("figure sources", () => {
 
   it("names the missing image of a figure", async () => {
     const view: SourceView = { ...plain, image: null, image_url: null, image_size: null };
-    await mountSection(detail(), { [`GET ${EXAMPLE}/sources/Fig2`]: view }, `${SECTION}?source=Fig2`);
+    const base = detail();
+    const sources = base.sources.map((entry) =>
+      entry.source === "Fig2" ? { ...entry, image: null, missing_image: "Example_Fig2.png" } : entry,
+    );
+    await mountSection({ ...base, sources }, { [`GET ${EXAMPLE}/sources/Fig2`]: view }, `${SECTION}?source=Fig2`);
     expect(panel().text()).toContain("No image: add Example_Fig2.png");
     expect(panel().find("img").exists()).toBe(false);
   });

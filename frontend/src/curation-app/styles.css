@@ -256,6 +256,20 @@ a.brand {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
+/* The frame of a figure, a plot or the image of a source: the line and the corners of the tables
+   beside them. It sits inside the box, so that frames and tables line up. */
+.figure-frame {
+  box-sizing: border-box;
+  overflow: hidden;
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 8px;
+  background-color: rgb(var(--v-theme-surface));
+}
+/* An image of the paper keeps a white background in the dark theme. */
+.figure-frame--paper {
+  background-color: #fff;
+}
+
 /* Rows of a table in a region of their own, such as the rows of a review target or of a source.
    At most about twelve rows show at once. A shadow at a side shows that more columns are there:
    the shadows stay at the edges, and covers in the surface color that scroll with the rows hide
@@ -304,13 +318,42 @@ a.brand {
   z-index: 1;
   background-color: rgb(var(--v-theme-surface));
 }
-/* A table that is only as wide as its columns, such as a few mapped rows or a raw extraction. */
-.rows-scroll--fit {
-  width: fit-content;
-  max-width: 100%;
+/* A table that spans its region with its columns as narrow as their cells: the last column takes
+   the rest of the width, so that a few columns stay together at the start. */
+.rows-table--packed {
+  width: 100%;
 }
-.rows-scroll--fit .rows-table {
-  min-width: 0;
+.rows-table--packed :is(th, td) {
+  width: 1px;
+}
+.rows-table--packed :is(th, td):last-child {
+  width: auto;
+}
+/* The line column stays in view while wide rows scroll. It covers the start of the region, so the
+   shadow and the cover of the start move to its right edge. */
+.rows-scroll--sticky-line {
+  --line-width: 4rem;
+  background:
+    linear-gradient(to right, var(--cover) 30%, var(--cover-clear)) var(--line-width) center / 40px 100% no-repeat
+      local,
+    linear-gradient(to left, var(--cover) 30%, var(--cover-clear)) right center / 40px 100% no-repeat local,
+    linear-gradient(to right, var(--shade), var(--cover-clear)) var(--line-width) center / 14px 100% no-repeat scroll,
+    linear-gradient(to left, var(--shade), var(--cover-clear)) right center / 14px 100% no-repeat scroll,
+    var(--cover);
+}
+.rows-scroll--sticky-line .rows-table .rows-line {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  box-sizing: border-box;
+  width: var(--line-width);
+  min-width: var(--line-width);
+  max-width: var(--line-width);
+  border-inline-end: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  background-color: rgb(var(--v-theme-surface));
+}
+.rows-scroll--sticky-line .rows-table thead .rows-line {
+  z-index: 2;
 }
 /* The line of a row in its file. */
 .rows-table .rows-line {
