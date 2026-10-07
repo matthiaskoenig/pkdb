@@ -93,6 +93,14 @@ describe("WorkspaceDialog", () => {
     expect(path.text()).toBe("/work/a-long-name/pkdb_data");
   });
 
+  it("tells what the folder holds in its own element after the path", async () => {
+    vi.spyOn(useOverviewStore(), "listDirectories").mockResolvedValue(directories());
+    await openDialog();
+    const current = dialog().get(".folder-current");
+    expect(current.get(".folder-summary").text()).toBe("3 subfolders");
+    expect(current.get(".folder-path-text").text()).toBe("/work");
+  });
+
   it("browses into a folder, up and home", async () => {
     const list = vi
       .spyOn(useOverviewStore(), "listDirectories")

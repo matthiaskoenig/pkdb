@@ -156,7 +156,7 @@ watch(
         <template v-if="listing">
           <p class="folder-current">
             <FolderPath :path="listing.path" class="folder-current-path" />
-            <span class="panel-note">{{ summary }}</span>
+            <span v-if="summary" class="folder-summary">{{ summary }}</span>
           </p>
           <ul class="folder-list" aria-label="Subfolders">
             <li v-for="entry in listing.entries" :key="entry.path" class="folder-row">
@@ -229,17 +229,23 @@ watch(
   gap: 4px;
   margin: 8px 0 4px -16px;
 }
-/* The shown folder in caption size: its path, then what it holds. */
+/* The shown folder in caption size: its path, then what it holds. When the summary wraps
+   below the path, its gap and weight keep it apart from the path. */
 .folder-current {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 2px 12px;
-  margin: 12px 0 6px;
+  gap: 8px 16px;
+  margin: 12px 0 8px;
   font-size: 0.8125rem;
   line-height: 1.4;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.folder-summary {
+  font-weight: 600;
+  white-space: nowrap;
+  color: rgba(var(--v-theme-on-surface), var(--v-high-emphasis-opacity));
 }
 .folder-list {
   max-height: 320px;
