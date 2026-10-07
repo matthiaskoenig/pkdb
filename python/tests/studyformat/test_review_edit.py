@@ -103,6 +103,28 @@ def test_approval_refused_with_validation_errors(valid_study, sf_vocabulary):
         set_status(valid_study, PERSON, "approved", vocabulary=sf_vocabulary, now=NOW)
 
 
+def _refusal(folder, vocabulary) -> str:
+    with pytest.raises(ApprovalRefused) as refused:
+        set_status(folder, PERSON, "approved", vocabulary=vocabulary, now=NOW)
+    return str(refused.value)
+
+
+def test_approval_refusal_counts_the_open_items(valid_study, sf_vocabulary):
+    _, revision = add_item(valid_study, PERSON, kind="question", text="One?", now=NOW)
+    assert _refusal(valid_study, sf_vocabulary) == "1 review item is open"
+    add_item(
+        valid_study, PERSON, kind="question", text="Two?", revision=revision, now=NOW
+    )
+    assert _refusal(valid_study, sf_vocabulary) == "2 review items are open"
+
+
+def test_approval_refusal_counts_the_validation_errors(valid_study, sf_vocabulary):
+    (valid_study / "Example_Fig1.png").unlink()  # missing_image of timecourses_Fig1.tsv
+    assert _refusal(valid_study, sf_vocabulary) == "Validation has 1 error"
+    (valid_study / "Example_Fig2.png").unlink()  # missing_image of scatters_Fig2.tsv
+    assert _refusal(valid_study, sf_vocabulary) == "Validation has 2 errors"
+
+
 def _outside_range(folder, vocabulary):
     """Make the mean of the timecourse row at time 1 lie outside its range; the warning."""
     timecourses = folder / "timecourses_Fig1.tsv"
