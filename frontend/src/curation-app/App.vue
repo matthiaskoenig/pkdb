@@ -1,17 +1,24 @@
 <script setup lang="ts">
-import { VApp, VAppBar, VMain } from "vuetify/components";
-import logo from "./assets/pkdb_logo.png";
+import { onBeforeUnmount, onMounted } from "vue";
+import { VApp, VMain } from "vuetify/components";
+import AppHeader from "./components/AppHeader.vue";
+import StatusBanner from "./components/StatusBanner.vue";
+import { useColorTheme } from "./composables/useColorTheme";
+import { useOverviewStore } from "./stores/overview";
+
+const overview = useOverviewStore();
+useColorTheme().restore();
+
+// The header of every page shows the state of the local server, so the app polls it on every page.
+onMounted(() => void overview.start());
+onBeforeUnmount(() => overview.stop());
 </script>
 
 <template>
   <VApp>
-    <VAppBar elevation="0" class="app-header">
-      <RouterLink to="/" class="brand">
-        <img class="brand-logo" :src="logo" alt="PK-DB" width="40" height="40" />
-        <span>Local curation</span>
-      </RouterLink>
-    </VAppBar>
+    <AppHeader />
     <VMain>
+      <StatusBanner />
       <RouterView />
     </VMain>
   </VApp>

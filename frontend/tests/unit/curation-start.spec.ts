@@ -29,9 +29,9 @@ describe("start", () => {
         }),
     );
     app = await start(target);
-    expect(fetch).toHaveBeenCalledTimes(1);
-    const [input, init] = fetch.mock.calls[0] ?? [];
-    expect(String(input)).toBe("/local/session");
+    // The session comes first; then the app starts polling the state of the local server.
+    expect(fetch.mock.calls.map(([input]) => String(input))).toEqual(["/local/session", "/local/state"]);
+    const [, init] = fetch.mock.calls[0] ?? [];
     expect(JSON.parse(String(init?.body))).toEqual({ token: "launch-token" });
     expect(csrfToken()).toBe("csrf-from-session");
     expect(window.location.hash).toBe("#/");
@@ -53,12 +53,13 @@ describe("start", () => {
       app = await start(target);
       const router = app.config.globalProperties.$router;
       await router.isReady();
-      expect(calls).toEqual([]);
+      // The app polls the state of the local server from the start.
+      expect(calls).toEqual([["GET /local/state", "", "#/studies/caffeine/Example"]]);
 
       window.location.hash = hash;
       await vi.waitFor(() => expect(window.location.hash).toBe("#/"));
-      await vi.waitFor(() => expect(calls).toHaveLength(2));
-      expect(calls).toEqual([
+      await vi.waitFor(() => expect(calls.length).toBeGreaterThanOrEqual(3));
+      expect(calls.slice(1, 3)).toEqual([
         ["POST /local/session", '{"token":"pasted"}', ""],
         ["GET /local/state", "", ""],
       ]);

@@ -19,3 +19,117 @@ h1 {
 a.brand {
   color: rgb(var(--v-theme-on-surface));
 }
+/* The status colors of the theme are too light for text on a light surface: tinted chips and
+   alerts keep the color for their tint and icon and show their text in the surface color. */
+.status-chip .v-chip__content,
+.status-alert .v-alert__content {
+  color: rgb(var(--v-theme-on-surface));
+}
+/* A path that does not fit loses its start, so that the folder names at its end stay visible. */
+.path-text {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  direction: rtl;
+  text-align: left;
+}
+
+/* Header */
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  margin-inline-end: 8px;
+}
+.header-control .v-btn__content {
+  min-width: 0;
+}
+.header-control-label {
+  margin-inline-end: 8px;
+}
+.header-workspace {
+  flex-shrink: 1;
+  min-width: 7rem;
+  max-width: 30rem;
+}
+@media (max-width: 1279.98px) {
+  .header-controls .header-control-label {
+    display: none;
+  }
+}
+
+/* Menus of the header and the collapsed header. */
+.header-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: min(380px, calc(100vw - 24px));
+  max-height: calc(100vh - 80px);
+  overflow-y: auto;
+  padding: 16px;
+}
+.header-menu h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.header-menu p {
+  margin: 0;
+  font-size: 0.875rem;
+  line-height: 1.45;
+}
+.panel-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.panel-note {
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.panel-path {
+  overflow-wrap: anywhere;
+}
+.panel-facts {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 16px;
+  margin: 0;
+  font-size: 0.875rem;
+}
+.panel-facts dt {
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.panel-facts dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.panel-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.header-panel {
+  gap: 4px;
+  padding: 8px;
+}
+.header-panel .header-control {
+  justify-content: flex-start;
+  width: 100%;
+}
+.header-panel .header-control .v-btn__content {
+  flex: 1 1 auto;
+  justify-content: space-between;
+}
+.header-panel .v-divider {
+  margin: 4px 0;
+}
+
+/* Dialogs: the actions keep the side padding of the dialog content. */
+.dialog-actions {
+  padding: 0 24px 24px;
+}
