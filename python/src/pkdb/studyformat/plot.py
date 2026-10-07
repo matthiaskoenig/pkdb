@@ -9,11 +9,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
-from pkdb.studyformat.digitize import ERROR_BAR_SUFFIX, mapped_points
+from pkdb.studyformat.colors import POINT_RING
+from pkdb.studyformat.digitize import ERROR_BAR_SUFFIX
 from pkdb.studyformat.load import LoadedStudy
-from pkdb.studyformat.sources import source_view
-
-COLORS = ("#0e9aa7", "#e8710a", "#7b5ea7", "#2e7d32", "#c2185b", "#5d4037")
+from pkdb.studyformat.sources import SourceView, source_view
 
 
 @dataclass(frozen=True)
@@ -31,7 +30,7 @@ class PlotResult:
 def render_source(study: LoadedStudy, source: str, path: Path) -> PlotResult:
     """Write the plot of a figure source to `path`; raises KeyError for an unknown source."""
     view = source_view(study, source)
-    if view.digitization and view.image and view.image_size:
+    if view.layout == "overlay":
         return _overlay(study, view, path)
     return _side_by_side(study, view, path)
 
@@ -55,10 +54,10 @@ def _overlay(study, view, path: Path) -> PlotResult:
     axes.set_xlim(0, width)
     axes.set_ylim(height, 0)
     axes.axis("off")
-    series = list(
-        dict.fromkeys(p.series.removesuffix(ERROR_BAR_SUFFIX) for p in view.overlay)
-    )
-    base = {name: COLORS[i % len(COLORS)] for i, name in enumerate(series)}
+    # The colors and their order of the source view, which the curation app draws alike.
+    base = {series.name: series.color for series in view.series}
+    drawn = {p.series.removesuffix(ERROR_BAR_SUFFIX) for p in view.overlay}
+    series = [name for name in base if name in drawn]
     color = {
         p.series: base[p.series.removesuffix(ERROR_BAR_SUFFIX)] for p in view.overlay
     }
@@ -69,9 +68,11 @@ def _overlay(study, view, path: Path) -> PlotResult:
             axes.scatter(
                 point.px,
                 point.py,
-                s=40 if bar else 12,
+                s=40 if bar else 16,
                 marker="_" if bar else "o",
                 color=color[point.series],
+                edgecolors=None if bar else POINT_RING,
+                linewidths=None if bar else 0.75,
             )
             continue
         mapped.append((point.px, point.py))
@@ -106,44 +107,13 @@ def _overlay(study, view, path: Path) -> PlotResult:
     )
 
 
-def _units(study: LoadedStudy, view) -> dict[str, tuple[str, str]]:
-    """Per series name the axis units: time and value of timecourses, x and y of scatters."""
-    units: dict[str, tuple[str, str]] = {}
-    for table in study.tables:
-        if table.source != view.source:
-            continue
-        for row in table.rows:
-            cells = row.cells
-            if table.kind == "timecourses" and cells.get("label"):
-                units.setdefault(
-                    cells["label"], (cells.get("time_unit", ""), cells.get("unit", ""))
-                )
-            elif table.kind == "scatters" and cells.get("name"):
-                units.setdefault(
-                    cells["name"], (cells.get("x_unit", ""), cells.get("y_unit", ""))
-                )
-    return units
-
-
-def _side_by_side(study, view, path: Path) -> PlotResult:
+def _side_by_side(study: LoadedStudy, view: SourceView, path: Path) -> PlotResult:
     from matplotlib.figure import Figure
 
-    points = [
-        point
-        for table in study.tables
-        if table.source == view.source and table.kind in ("timecourses", "scatters")
-        for point in mapped_points(table)
-    ]
-    bars = {
-        (p.file, p.line, p.dataset): p.y
-        for p in points
-        if p.dataset.endswith(ERROR_BAR_SUFFIX)
-    }
     series: dict[str, list] = {}
-    for point in points:
-        if not point.dataset.endswith(ERROR_BAR_SUFFIX):
-            series.setdefault(point.dataset, []).append(point)
-    units = _units(study, view)
+    for point in view.points:
+        series.setdefault(point.series, []).append(point)
+    styles = {entry.name: entry for entry in view.series}
     figure = Figure(figsize=(12, 5))
     left, right = figure.subplots(1, 2)
     if view.image and view.image_size:
@@ -151,28 +121,30 @@ def _side_by_side(study, view, path: Path) -> PlotResult:
 
         left.imshow(imread(study.folder / view.image))
     left.axis("off")
-    for i, (name, rows) in enumerate(series.items()):
+    for name, rows in series.items():
         error = [
-            abs(bars[key] - p.y)
-            if (key := (p.file, p.line, name + ERROR_BAR_SUFFIX)) in bars
-            else 0.0
-            for p in rows
+            abs(p.error_bar - p.y) if p.error_bar is not None else 0.0 for p in rows
         ]
         right.errorbar(
             [p.x for p in rows],
             [p.y for p in rows],
             yerr=error if any(error) else None,
             marker="o",
-            linestyle="-" if rows[0].column != "y_mean" else "",
-            color=COLORS[i % len(COLORS)],
+            linestyle="-" if rows[0].kind == "timecourses" else "",
+            color=styles[name].color,
             label=name,
         )
-    if units:
-        x_unit, y_unit = next(iter(units.values()))
-        right.set_xlabel(x_unit)
-        right.set_ylabel(y_unit)
     if series:
+        first = styles[next(iter(series))]
+        right.set_xlabel(first.x_label or "")
+        right.set_ylabel(first.y_label or "")
         right.legend()
     figure.tight_layout()
     _save(figure, path)
-    return PlotResult(path, "side_by_side", unmatched=view.unmatched)
+    return PlotResult(
+        path,
+        "side_by_side",
+        legend=tuple(series),
+        colors=tuple(sorted((entry.name, entry.color) for entry in view.series)),
+        unmatched=view.unmatched,
+    )

@@ -358,7 +358,7 @@ PROJECT_MEMBER = "wpd.json"
 
 @dataclass(frozen=True)
 class MappedPoint:
-    """A mapped row as a point of a dataset, in axis units."""
+    """A mapped row as a point of a dataset, in axis units, with its cells as printed."""
 
     dataset: str
     file: str
@@ -366,6 +366,8 @@ class MappedPoint:
     column: str
     x: float
     y: float
+    x_text: str
+    y_text: str
 
 
 def central_column(row: Row) -> str | None:
@@ -387,7 +389,19 @@ def mapped_points(table: LoadedTable) -> list[MappedPoint]:
                 continue
             value = values[column]
             assert isinstance(value, float)
-            points.append(MappedPoint(label, table.file, row.line, column, time, value))
+            cells = row.cells
+            points.append(
+                MappedPoint(
+                    label,
+                    table.file,
+                    row.line,
+                    column,
+                    time,
+                    value,
+                    cells["time"],
+                    cells[column],
+                )
+            )
             if isinstance(bar := values.get("error_bar"), float):
                 points.append(
                     MappedPoint(
@@ -397,13 +411,26 @@ def mapped_points(table: LoadedTable) -> list[MappedPoint]:
                         "error_bar",
                         time,
                         bar,
+                        cells["time"],
+                        cells["error_bar"],
                     )
                 )
         elif table.kind == "scatters":
             x, y = values.get("x_mean"), values.get("y_mean")
             name = row.cells.get("name", "")
             if isinstance(x, float) and isinstance(y, float) and name:
-                points.append(MappedPoint(name, table.file, row.line, "y_mean", x, y))
+                points.append(
+                    MappedPoint(
+                        name,
+                        table.file,
+                        row.line,
+                        "y_mean",
+                        x,
+                        y,
+                        row.cells["x_mean"],
+                        row.cells["y_mean"],
+                    )
+                )
     return points
 
 

@@ -92,7 +92,7 @@ def _plot(args) -> int:
             sources = [
                 summary.source
                 for summary in study_sources(study)
-                if summary.source.startswith("Fig")
+                if summary.kind == "figure"
                 and (
                     summary.raw_kind == "digitization"
                     or any(

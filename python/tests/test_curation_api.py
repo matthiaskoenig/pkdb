@@ -61,6 +61,9 @@ def test_study_detail(api):
     assert detail["metadata"]["revision"] and detail["metadata"]["issues"] == []
     assert detail["review"]["value"]["status"] == "draft"
     assert {s["source"] for s in detail["sources"]} >= {"Fig1", "Tab2"}
+    tab2 = next(s for s in detail["sources"] if s["source"] == "Tab2")
+    assert (tab2["kind"], tab2["missing_image"]) == ("table", None)
+    assert "missing_raw" in tab2
     assert "Example_Fig1.wpd.json" in detail["files"]
     etag = response_headers["ETag"]
     again = request(server, "GET", DETAIL, headers={**headers, "If-None-Match": etag})
@@ -261,7 +264,13 @@ def test_tables_sources_and_images(api):
         request(server, "GET", f"{DETAIL}/sources/Fig1", headers=headers)[2]
     )
     assert source["image_url"] == f"{DETAIL}/files/Example_Fig1.png"
-    assert source["overlay"]
+    assert source["overlay"] and source["layout"] == "overlay"
+    # The points, the series with their colors, and the texts of the hover pass through.
+    assert source["points"][0]["series"] == "drug_plasma"
+    assert {"x_text", "y_text", "error_bar"} <= set(source["points"][0])
+    assert source["series"][0]["name"] == "drug_plasma"
+    assert {"color", "dark_color", "x_label", "y_label"} <= set(source["series"][0])
+    assert {"x_text", "y_text"} <= set(source["overlay"][0])
     status, image_headers, data = request(
         server, "GET", source["image_url"], headers=headers
     )
