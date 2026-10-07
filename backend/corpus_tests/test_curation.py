@@ -16,6 +16,7 @@ from pkdb.curation.engine import CurationEngine
 from pkdb.preparation import source_hashes, study_folders
 from pkdb.schemas.queries import QuerySpec
 from pkdb.schemas.validation import StudyValidationError
+from pkdb.studyformat import is_v2_folder
 from pkdb_server.app import create_app
 from pkdb_server.commands.admin import create_admin
 from pkdb_server.commands.bootstrap import bootstrap, bootstrap_study
@@ -29,6 +30,11 @@ def test_curation_apixaban_roundtrip(session_factory, tmp_path, monkeypatch):
     if not value:
         pytest.skip("Set PKDB_CURATION_CORPUS to the read-only apixaban directory")
     source = Path(value).resolve()
+    if not any(is_v2_folder(folder) for folder in study_folders(source)):
+        pytest.skip(
+            "The corpus has no study format 2 folders; run it after the migration "
+            "(sub-project 5)"
+        )
     before = source_hashes(source)
     # Jobs sync and format the study folders; work on a copy so the read-only
     # corpus never changes. The copy keeps the substance directory, so the engine
@@ -52,6 +58,7 @@ def test_curation_apixaban_roundtrip(session_factory, tmp_path, monkeypatch):
     )
     assert report["ok"], report
     for folder in study_folders(corpus):
+        # bootstrap_study reads format 1 folders until the migration (sub-project 5).
         try:
             bootstrap_study(folder, session_factory)
         except StudyValidationError:
