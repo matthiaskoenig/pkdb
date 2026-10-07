@@ -5,6 +5,7 @@ together with a tables change, which merges the table and regenerates the
 workbook, takes CPU time linear in the rows of the study, up to 20,000 rows.
 """
 
+import itertools
 import warnings
 from pathlib import Path
 
@@ -1310,23 +1311,26 @@ def test_keep_must_name_a_side(study, sf_vocabulary):
 
 
 def test_the_cpu_time_check_tells_linear_from_quadratic_work(linear_cpu_time):
+    # The smaller steps take about 0.1 CPU seconds, well above timer noise.
     def linear(count):
-        return lambda: sum(range(count * 5_000))
+        return lambda: sum(range(count * 25_000))
 
     def quadratic(count):
         return lambda: sum(1 for _ in range(count) for _ in range(count))
 
-    assert linear_cpu_time(linear, 1_000) == sum(range(20_000_000))
+    terms = 4 * 1_000 * 25_000
+    assert linear_cpu_time(linear, 1_000) == terms * (terms - 1) // 2
     with pytest.raises(AssertionError, match="times the CPU time"):
-        linear_cpu_time(quadratic, 1_000)
+        linear_cpu_time(quadratic, 3_000)
 
 
 def test_a_large_study_syncs_quickly(
     make_study, valid_files, tsv, sf_vocabulary, linear_cpu_time
 ):
-    folders, edited = {}, {}
+    folders, edited, studies = {}, {}, itertools.count()
 
     def prepare(count):
+        # A fresh study for every measurement, since the sync changes it.
         rows = [
             {
                 "subjects": "all",
@@ -1345,7 +1349,7 @@ def test_a_large_study_syncs_quickly(
         ]
         folder = folders[count] = make_study(
             {**valid_files, "outputs_Tab1.tsv": tsv("outputs", *rows)},
-            substance=f"rows{count}",
+            substance=f"rows{count}_{next(studies)}",
         )
         assert format_folder(folder).ok
         assert sync_study(folder, sf_vocabulary).workbook_action == "created"
