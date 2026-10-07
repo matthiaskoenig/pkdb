@@ -81,12 +81,10 @@ def conflict_entries(pipeline: PipelineResult) -> list[dict]:
 
 
 def stop_message(pipeline: PipelineResult) -> str:
-    """Why a sync stopped the pipeline before validation."""
+    """Why a sync stopped the pipeline before validation, with conflicts or a later save."""
     if pipeline.stopped == "saved_again":
         return "The workbook was saved during the sync; its last save is not in the tables yet"
-    if pipeline.syncs[-1].conflicts:
-        return "Resolve the conflict between the workbook and the tables"
-    return "The workbook and the tables cannot be synced; see the report"
+    return "Resolve the conflict between the workbook and the tables"
 
 
 class JobsMixin(EngineState):
@@ -361,8 +359,18 @@ class JobsMixin(EngineState):
             ]
             if tables := describe(pipeline):
                 outcome["tables_updated"] = tables
+            if pipeline.stopped == "sync" and not pipeline.syncs[-1].conflicts:
+                # Tables that do not load or a workbook that cannot be read are reported
+                # like validation problems.
+                raise StudyValidationError(
+                    ValidationReport(issues=list(pipeline.issues))
+                )
             if pipeline.stopped in {"sync", "saved_again"}:
                 outcome["conflicts"] = conflict_entries(pipeline)
+                # The conflicts count as problems of the study, as the sync reports them.
+                outcome["report"] = ValidationReport(
+                    issues=list(pipeline.issues)
+                ).model_dump(mode="json")
                 job.update(status="conflict", message=stop_message(pipeline))
                 row.update(status="conflict", stale=True)
                 return  # The finally block writes the report.

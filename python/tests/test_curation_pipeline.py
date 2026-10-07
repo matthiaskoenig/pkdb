@@ -111,6 +111,28 @@ def test_conflict_stops_before_validation(workspace, sf_vocabulary, monkeypatch)
     )
     assert report["conflicts"][0]["workbook_rows"][0]["row"] == 3
     assert any(issue["code"] == "sync_conflict" for issue in report["pipeline_issues"])
+    # The overview and the study page show the conflict as a problem.
+    assert "sync_conflict" in {problem["code"] for problem in row(engine)["problems"]}
+    assert row(engine)["counts"]["errors"] >= 1
+
+
+def test_tables_that_cannot_be_synced_make_the_study_invalid(workspace, sf_vocabulary):
+    engine, folder = workspace
+    assert format_folder(folder).ok
+    assert sync_study(folder, sf_vocabulary).ok
+    table = folder / "timecourses_Fig1.tsv"
+    header, *lines = table.read_text().splitlines()
+    table.write_text(
+        "\n".join([f"{header}\tcolour", *(f"{line}\tred" for line in lines)]) + "\n"
+    )
+    engine.scan()
+    settle(engine)
+    job = run_next(engine)
+    assert job["status"] == "failed", job["message"]
+    current = row(engine)
+    assert current["status"] == "invalid"
+    assert current["counts"]["errors"] >= 1
+    assert "unknown_column" in {problem["code"] for problem in current["problems"]}
 
 
 def test_pipeline_runs_under_the_folder_lock(workspace, monkeypatch):
