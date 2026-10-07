@@ -279,14 +279,16 @@ def set_status(
             return review
         open_items = [item for item in review.items if item.state == "open"]
         if open_items:
-            raise ApprovalRefused(f"{len(open_items)} review items are open")
+            items = "review item is" if len(open_items) == 1 else "review items are"
+            raise ApprovalRefused(f"{len(open_items)} {items} open")
         errors = [
             issue
             for issue in validate_folder(folder, vocabulary).issues
             if issue.severity == "error"
         ]
         if errors:
-            raise ApprovalRefused(f"Validation has {len(errors)} errors", errors)
+            noun = "error" if len(errors) == 1 else "errors"
+            raise ApprovalRefused(f"Validation has {len(errors)} {noun}", errors)
         reviewers = review.reviewers
         if author.user not in reviewers:
             reviewers = [*reviewers, author.user]
