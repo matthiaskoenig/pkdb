@@ -103,3 +103,26 @@ def reference_summary(folder: Path) -> dict | None:
             if name
         ],
     }
+
+
+def reference_match(study: dict | None, reference: dict | None) -> bool | None:
+    """Whether `reference.json` has the PubMed ID and DOI that `study.json` names.
+
+    None when `study.json` names neither or is invalid. DOIs compare case-insensitively, as
+    validation compares them.
+    """
+    identifiers = {
+        name: value
+        for name, value in ((study or {}).get("reference") or {}).items()
+        if name in {"pmid", "doi"} and value
+    }
+    if not identifiers:
+        return None
+    if not reference or "error" in reference:
+        return False
+    return all(
+        (reference.get(name) or "").lower() == value.lower()
+        if name == "doi"
+        else reference.get(name) == value
+        for name, value in identifiers.items()
+    )

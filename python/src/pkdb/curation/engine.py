@@ -88,6 +88,8 @@ class CurationEngine(
         self.cache = VocabularyCache(self.state_dir / "vocabulary")
         self.studies = {}
         self.format1_folders = 0
+        # The format of each study folder, by its study.json and its format 2 files.
+        self._formats = {}
         self.reference_previews = {}
         self.jobs = saved.get("jobs", [])
         for job in self.jobs:
@@ -132,20 +134,27 @@ class CurationEngine(
                 thread.start()
 
     def _save(self):
-        atomic_json(
-            self.state_dir / "state.json",
-            {
-                "workspace": str(self.root),
-                "endpoint": self.endpoint,
-                "user": self.user,
-                "github_user": self.github_user,
-                "repository": self.repository,
-                "github": self.github.data,
-                "modes": self.modes,
-                "recent_workspaces": self.recent_workspaces,
-                "jobs": self.jobs,
-            },
-        )
+        path = self.state_dir / "state.json"
+        state = {
+            "workspace": str(self.root),
+            "endpoint": self.endpoint,
+            "user": self.user,
+            "github_user": self.github_user,
+            "repository": self.repository,
+            "github": self.github.data,
+            "modes": self.modes,
+            "recent_workspaces": self.recent_workspaces,
+            "jobs": self.jobs,
+        }
+        # The released format 1 app shares the default state directory: keep what it
+        # saved and this version does not know, such as its issue mappings.
+        try:
+            saved = json.loads(path.read_text())
+        except OSError, ValueError:
+            saved = {}
+        if isinstance(saved, dict):
+            state = {**saved, **state}
+        atomic_json(path, state)
 
     def snapshot(self):
         with self.lock:

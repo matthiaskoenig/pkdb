@@ -7,6 +7,7 @@ import pytest
 
 from pkdb.curation import engine as module
 from pkdb.curation import jobs
+from pkdb.curation import workspace as workspace_module
 from pkdb.studyformat import pipeline as pipeline_module
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.sync import sync_study
@@ -513,3 +514,109 @@ def test_a_workbook_closed_during_a_failed_job_is_regenerated(
     assert [job["action"] for job in run_all(engine)] == ["validate"]
     assert workbook_mean(folder, "timecourses_Fig1") == 6
     assert row(engine)["sync"]["status"] == "in_sync"
+
+
+def test_workbooks_are_planned_by_the_jobs_not_by_the_initial_scan(
+    tmp_path_factory, make_study, valid_files, sf_vocabulary, monkeypatch
+):
+    folder = make_study(valid_files)
+    assert format_folder(folder).ok
+    assert sync_study(folder, sf_vocabulary).ok
+    plans = []
+    real_check = workspace_module.workbook_check
+
+    def check(path, vocabulary):
+        plans.append(path)
+        return real_check(path, vocabulary)
+
+    monkeypatch.setattr(workspace_module, "workbook_check", check)
+    engine = module.CurationEngine(
+        folder.parent.parent,
+        state_dir=tmp_path_factory.mktemp("state"),
+        offline=True,
+        start=False,
+    )
+    try:
+        monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+        assert row(engine)["sync"]["status"] == "unknown"
+        settle(engine)
+        assert run_next(engine)["status"] == "succeeded"
+        # The job knows the state of the workbook from its sync.
+        assert row(engine)["sync"] == {
+            "status": "in_sync",
+            "changes": 0,
+            "conflicts": 0,
+        }
+        assert plans == []
+        set_workbook_mean(folder, "timecourses_Fig1", 5)
+        engine.scan()
+        assert row(engine)["sync"]["status"] == "changed" and len(plans) == 1
+    finally:
+        engine.close()
+
+
+def test_the_rescan_of_a_job_plans_no_workbook_under_the_engine_lock(
+    workspace, sf_vocabulary, monkeypatch
+):
+    engine, folder = workspace
+    assert sync_study(folder, sf_vocabulary).ok
+    set_mean(folder, "timecourses_Fig1.tsv", "6")  # the job writes the workbook
+    engine.scan()
+    held = []
+    real_check = workspace_module.workbook_check
+
+    def check(path, vocabulary):
+        held.append(engine.lock._is_owned())
+        return real_check(path, vocabulary)
+
+    monkeypatch.setattr(workspace_module, "workbook_check", check)
+    (folder / "timecourses_Fig1.tsv").write_text(
+        (folder / "timecourses_Fig1.tsv").read_text() + "\n"
+    )  # not canonical: the job formats it and scans again
+    settle(engine)
+    assert run_next(engine)["status"] == "succeeded"
+    assert held and not any(held)
+
+
+def test_a_failing_workbook_plan_never_leaves_the_row_syncing(
+    workspace, sf_vocabulary, monkeypatch
+):
+    engine, folder = workspace
+    assert sync_study(folder, sf_vocabulary).ok
+
+    def broken(path, vocabulary):
+        raise RuntimeError("unexpected")
+
+    def failing(path, vocabulary, **kwargs):
+        raise OSError("disk unavailable")
+
+    monkeypatch.setattr(workspace_module, "workbook_check", broken)
+    set_mean(folder, "timecourses_Fig1.tsv", "6")
+    engine.scan()
+    assert row(engine)["sync"]["status"] == "unknown"
+    monkeypatch.setattr(jobs, "sync_and_format", failing)
+    settle(engine)
+    assert run_next(engine)["status"] == "failed"
+    assert row(engine)["sync"]["status"] == "unknown"
+
+
+def test_a_symlink_in_the_study_waits_without_requeueing(workspace):
+    engine, folder = workspace
+    settle(engine)
+    assert engine.queue
+    # The symlink appears after the job was queued.
+    (folder / "Example_Fig3.png").symlink_to(folder / "Example_Fig1.png")
+    job = run_next(engine)
+    assert job["status"] == "failed"
+    waiting = engine.studies["caffeine/Example"]
+    assert waiting["status"] == "waiting" and "Symlink" in waiting["message"]
+    for _ in range(3):
+        engine.scan()
+        settle(engine)
+        assert not engine.queue
+    assert row(engine)["status"] == "waiting"
+    (folder / "Example_Fig3.png").unlink()
+    engine.scan()
+    settle(engine)
+    assert run_next(engine)["status"] == "succeeded"
+    assert "message" not in engine.studies["caffeine/Example"]

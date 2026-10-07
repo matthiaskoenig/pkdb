@@ -20,7 +20,7 @@ from urllib.parse import quote
 from pydantic import ValidationError
 
 from pkdb.curation.launch import open_path
-from pkdb.curation.metadata import people
+from pkdb.curation.metadata import people, reference_match, reference_summary
 from pkdb.curation.state import EngineState
 from pkdb.identity import Author
 from pkdb.preparation import MAX_FILES, MAX_ROWS
@@ -47,6 +47,7 @@ from pkdb.studyformat.sync import SyncResult, add_table, conflict_data, sync_stu
 from pkdb.studyformat.tables import REVIEW_JSON, STUDY_JSON
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import validate_folder
+from pkdb.studyformat.workbook.base import workbook_path
 
 IMAGE_TYPES = {
     ".png": "image/png",
@@ -54,6 +55,10 @@ IMAGE_TYPES = {
     ".jpeg": "image/jpeg",
     ".webp": "image/webp",
 }
+
+
+class UnsafeFile(ValueError):
+    """A file of the study that the app refuses to open or write, such as a symlink."""
 
 
 class AmbiguousStudy(ValueError):
@@ -335,6 +340,8 @@ class StudiesMixin(EngineState):
                 "report_id": row["report_id"],
                 "sync": row["sync"],
                 "issue": self._issue_for(row["summary"].get("issue")),
+                "message": row.get("message"),
+                "last_upload": row["last_upload"],
                 "jobs": [job for job in self.jobs if job["study_id"] == identity],
             }
             data = json.dumps(key, sort_keys=True, default=str).encode()
@@ -359,6 +366,8 @@ class StudiesMixin(EngineState):
                         "summary": row["summary"],
                         "issue": self._issue_for(row["summary"].get("issue")),
                         "problems": row["problems"],
+                        "message": row.get("message"),
+                        "last_upload": row["last_upload"],
                         "jobs": [
                             job
                             for job in reversed(self.jobs)
@@ -386,9 +395,12 @@ class StudiesMixin(EngineState):
             files = sorted(layout.files, key=natural_key)
         review = _document(folder, layout, REVIEW_JSON, read_review)
         metadata = _document(folder, layout, STUDY_JSON, read_metadata)
+        reference = reference_summary(folder)
         return {
             **detail,
             "metadata": metadata,
+            "reference": reference,
+            "reference_match": reference_match(metadata["value"], reference),
             # The study page shows the people without a second request for the roster.
             "people": people(metadata["value"], detail["summary"]),
             "review": review,
@@ -474,7 +486,8 @@ class StudiesMixin(EngineState):
         """
         try:
             self.scan()
-        except OSError, ValueError:
+        except Exception:
+            # Nothing is logged, since errors can carry paths and settings.
             pass
 
     def write_metadata(self, identity: str, revision: str, metadata: dict) -> dict:
@@ -634,6 +647,12 @@ class StudiesMixin(EngineState):
         # The workbook and the tables record no author, but writes need a user (spec 7.4).
         self.author()
         folder = self.study_folder(identity)
+        workbook = workbook_path(folder)
+        if workbook.is_symlink():
+            # Opening, reading or replacing it would reach outside the study folder.
+            raise UnsafeFile(
+                f"{workbook.name} is a symlink; replace it with the workbook itself"
+            )
         action = payload.get("action")
         if action == "add":
             table, raw = (

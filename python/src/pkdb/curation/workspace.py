@@ -1,7 +1,7 @@
 """Workspace selection, scanning and file resolution for the curation engine.
 
 Reads and writes engine attributes: lock, scan_lock, root, studies, modes, recent_workspaces,
-reference_previews, paused, queue, stop, wakeup, state_dir. Uses engine methods _save,
+reference_previews, paused, queue, stop, wakeup, state_dir, _formats. Uses engine methods _save,
 _enqueue_one, snapshot, _local_vocabulary and _sync_later.
 """
 
@@ -21,10 +21,13 @@ from pkdb.schemas.validation import StudyValidationError
 from pkdb.source_files import ignored_source
 from pkdb.studyformat import is_v2_folder
 from pkdb.studyformat.sync import workbook_check
+from pkdb.studyformat.tables import STUDY_JSON
+from pkdb.studyformat.validation import _FORMAT_2_FILES as FORMAT_2_FILES
 from pkdb.studyformat.workbook.base import open_lock, workbook_path
 
 RECENT_LIMIT = 10
 DIRECTORY_LIMIT = 2000
+UNKNOWN_SYNC = {"status": "unknown", "changes": 0, "conflicts": 0}
 
 
 class WorkspaceError(ValueError):
@@ -59,6 +62,7 @@ class WorkspaceMixin(EngineState):
                 self._cancel_pending()
                 self.root = root
                 self.studies = {}
+            self._formats = {}
             self._scan(initial=True)
         with self.lock:
             self.recent_workspaces = [
@@ -193,7 +197,7 @@ class WorkspaceMixin(EngineState):
             try:
                 if folder.is_symlink() or not folder.resolve().is_relative_to(root):
                     continue
-                if not is_v2_folder(folder):
+                if not self._is_v2(folder):
                     with self.lock:
                         if self.root is not root:
                             return
@@ -226,11 +230,14 @@ class WorkspaceMixin(EngineState):
                 hashes = source_hashes(folder)
                 digest = fingerprint(hashes)
                 summary = study_summary(folder)
-                sync = self._sync_state(folder)
+                # The initial job of each study syncs it and records the state of its
+                # workbook; planning every workbook here would delay each workspace switch.
+                sync = dict(UNKNOWN_SYNC) if initial else self._sync_state(folder)
                 with self.lock:
                     if self.root is not root:
                         return
                     old = row["_fingerprint"]
+                    waited = row["status"] == "waiting"
                     was_open = row["_signature"] is not None and row["_signature"][1]
                     closed = was_open and not signature[1]
                     behind = (
@@ -242,12 +249,14 @@ class WorkspaceMixin(EngineState):
                         summary=summary,
                         reference=reference_summary(folder),
                     )
+                    # Set again below or by the next scheduling while it still applies.
+                    row.pop("message", None)
                     # A running job records the state after its sync itself.
                     if row["sync"]["status"] != "syncing":
                         row["sync"] = sync
                     row["_signature"] = signature
                     row["_fingerprint"] = digest
-                    if old != digest:
+                    if old != digest or waited:
                         row["_changed_at"] = time.monotonic()
                         row["stale"] = True
                         if not row["_blocked"]:
@@ -274,30 +283,66 @@ class WorkspaceMixin(EngineState):
                     if self.root is not root:
                         return
                     row = self.studies.setdefault(key, self._row(folder, root))
-                    row["status"] = "waiting"
-                    row["stale"] = True
-                    row["message"] = (
-                        "Waiting for readable source files"
-                        if isinstance(error, OSError)
-                        else "Symlinked source files are not accepted"
-                    )
+                    self._wait(row, error)
         with self.lock:
             if self.root is not root:
                 return
             self.format1_folders = format1
+            self._formats = {
+                folder: self._formats[folder]
+                for folder in folders
+                if folder in self._formats
+            }
             counts = Counter(r["id"] for r in self.studies.values())
             for row in self.studies.values():
                 row["duplicate"] = counts[row["id"]] > 1
 
-    def _sync_state(self, folder):
-        """Whether the workbook and the tables of a folder are in step, as the row shows it."""
-        state = {"status": "no_workbook", "changes": 0, "conflicts": 0}
-        if not workbook_path(folder).exists():
-            return state
+    def _is_v2(self, folder):
+        """`is_v2_folder`, decided again only when study.json or a format 2 file changed.
+
+        Only scans call it, one at a time, so the remembered decisions need no lock.
+        """
         try:
+            stat = (folder / STUDY_JSON).stat()
+        except OSError:
+            return is_v2_folder(folder)
+        key = (
+            stat.st_size,
+            stat.st_mtime_ns,
+            *(os.path.lexists(folder / name) for name in FORMAT_2_FILES),
+        )
+        remembered = self._formats.get(folder)
+        if remembered is None or remembered[0] != key:
+            remembered = self._formats[folder] = (key, is_v2_folder(folder))
+        return remembered[1]
+
+    def _wait(self, row, error):
+        """Wait for readable source files; the next change of a file queues a job again.
+
+        Called with the engine lock held.
+        """
+        row["status"] = "waiting"
+        row["stale"] = True
+        row["message"] = (
+            "Waiting for readable source files"
+            if isinstance(error, OSError)
+            else "Symlinked source files are not accepted"
+        )
+        # Nothing to validate until then; a job now would only fail again.
+        row["_pending"] = False
+
+    def _sync_state(self, folder):
+        """Whether the workbook and the tables of a folder are in step, as the row shows it.
+
+        Never raises: a workbook that cannot be planned has the status `unknown`.
+        """
+        state = {"status": "no_workbook", "changes": 0, "conflicts": 0}
+        try:
+            if not workbook_path(folder).exists():
+                return state
             check = workbook_check(folder, self._local_vocabulary())
-        except OSError, ValueError:
-            return {**state, "status": "unknown"}
+        except Exception:
+            return dict(UNKNOWN_SYNC)
         if check is None:
             return state
         changes, conflicts = len(check["changes"]), check["conflicts"]
@@ -320,7 +365,9 @@ class WorkspaceMixin(EngineState):
             try:
                 self.scan()
                 self.schedule_changes()
-            except OSError, ValueError:
+            except Exception:
+                # The watcher retries every second and must outlive any failure; nothing
+                # is logged, since errors can carry paths and settings.
                 continue
 
     def schedule_changes(self):

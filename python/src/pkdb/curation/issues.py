@@ -19,15 +19,14 @@ class IssuesMixin(EngineState):
     def _issue_for(self, number):
         if number is None:
             return None
-        for issue in self.github.data.get("issues", []):
-            if issue.get("number") == number:
-                return {
-                    "number": number,
-                    "state": issue.get("state"),
-                    "labels": issue.get("labels", []),
-                    "assignees": issue.get("assignees", []),
-                    "url": issue.get("html_url"),
-                }
+        if (issue := self.github.issue(number)) is not None:
+            return {
+                "number": number,
+                "state": issue.get("state"),
+                "labels": issue.get("labels", []),
+                "assignees": issue.get("assignees", []),
+                "url": issue.get("html_url"),
+            }
         return {
             "number": number,
             "state": None,

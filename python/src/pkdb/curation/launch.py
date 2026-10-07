@@ -14,7 +14,8 @@ def open_path(path: Path, *, reveal=False):
         path = path.parent
     if command := os.environ.get("PKDB_OPEN_COMMAND"):
         subprocess.run(
-            [*shlex.split(command), str(path)],
+            # Windows paths keep their backslashes.
+            [*shlex.split(command, posix=os.name != "nt"), str(path)],
             check=True,
             timeout=15,
             capture_output=True,

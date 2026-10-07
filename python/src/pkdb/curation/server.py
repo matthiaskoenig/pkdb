@@ -12,7 +12,7 @@ from urllib.parse import unquote, urlsplit
 
 from pkdb.curation.engine import WorkspaceError
 from pkdb.curation.metadata import roster
-from pkdb.curation.studies import AmbiguousStudy
+from pkdb.curation.studies import AmbiguousStudy, UnsafeFile
 from pkdb.identity import IdentityError, UserMismatch
 from pkdb.references import ReferenceError
 from pkdb.schemas.validation import StudyValidationError
@@ -329,7 +329,7 @@ class Handler(BaseHTTPRequestHandler):
             self._reply(403, {"error": "no_user", "message": str(error)})
         except AmbiguousStudy as error:
             self._reply(409, {"error": str(error)})
-        except (ReferenceError, WorkspaceError) as error:
+        except (ReferenceError, WorkspaceError, UnsafeFile) as error:
             self._reply(400, {"error": str(error)})
         except LookupError:
             self._reply(404, {"error": "Unknown resource or study"})

@@ -225,6 +225,52 @@ def test_issue_comes_from_the_number_in_study_json(workspace):
     assert engine.snapshot()["studies"][0]["issue"]["state"] is None
 
 
+def test_the_format_is_read_again_only_after_study_json_changes(workspace, monkeypatch):
+    engine, folder, legacy = workspace
+    decisions = []
+    real = workspace_module.is_v2_folder
+
+    def is_v2(path):
+        decisions.append(path.name)
+        return real(path)
+
+    monkeypatch.setattr(workspace_module, "is_v2_folder", is_v2)
+    engine.scan()
+    engine.scan()
+    assert decisions == []
+    (legacy / "study.json").write_text(json.dumps({"sid": "Legacy1990", "name": "L"}))
+    engine.scan()
+    engine.scan()
+    assert decisions == ["Legacy1990"]
+    assert engine.snapshot()["format1_folders"] == 1
+    (legacy / "review.json").write_text(dump_json({"status": "draft"}))
+    engine.scan()
+    assert decisions == ["Legacy1990", "Legacy1990"]
+    assert engine.snapshot()["format1_folders"] == 0
+
+
+def test_state_of_other_app_versions_is_kept(tmp_path, tmp_path_factory):
+    state = tmp_path_factory.mktemp("state")
+    (state / "state.json").write_text(
+        json.dumps({"mappings": {"a#1": ["/x"]}, "future": {"key": 1}, "user": "old"})
+    )
+    engine = module.CurationEngine(tmp_path, state_dir=state, offline=True, start=False)
+    try:
+        engine.user = "curator"
+        engine._save()
+        saved = json.loads((state / "state.json").read_text())
+        assert saved["mappings"] == {"a#1": ["/x"]}
+        assert saved["future"] == {"key": 1}
+        assert saved["user"] == "curator"
+        # A key written meanwhile by the other version survives the next save, too.
+        (state / "state.json").write_text(json.dumps({**saved, "mappings": {}}))
+        engine._save()
+        assert json.loads((state / "state.json").read_text())["mappings"] == {}
+    finally:
+        engine.close()
+    assert json.loads((state / "state.json").read_text())["future"] == {"key": 1}
+
+
 def test_old_state_with_mappings_loads(tmp_path, tmp_path_factory):
     state = tmp_path_factory.mktemp("state")
     (state / "state.json").write_text(json.dumps({"mappings": {"a#1": ["/x"]}}))

@@ -6,6 +6,7 @@ import shlex
 import sys
 import threading
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import Mock
 
 import pytest
@@ -373,3 +374,26 @@ def test_assignment_mapping_route_is_gone(local_server):
     assert status == 404
     engine.map_assignment.assert_not_called()
     assert not hasattr(CurationEngine, "map_assignment")
+
+
+@pytest.mark.parametrize(
+    ("platform", "command", "expected"),
+    [
+        ("posix", "'/opt/my tools/rec' --flag", ["/opt/my tools/rec", "--flag"]),
+        # Windows paths keep their backslashes.
+        ("nt", r"C:\Tools\rec.exe --flag", [r"C:\Tools\rec.exe", "--flag"]),
+    ],
+)
+def test_open_command_is_split_for_the_platform(
+    tmp_path, monkeypatch, platform, command, expected
+):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    runner = Mock()
+    monkeypatch.setattr(
+        "pkdb.curation.launch.os",
+        SimpleNamespace(name=platform, environ={"PKDB_OPEN_COMMAND": command}),
+    )
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.run", runner)
+    open_path(file)
+    assert runner.call_args.args[0] == [*expected, str(file)]

@@ -1063,3 +1063,94 @@ def test_app_writes_are_listed_in_the_activity(api, sf_vocabulary, monkeypatch):
     assert [job["message"] for job in saved if job["action"] == "write"][0] == (
         "Saved study.json"
     )
+
+
+def test_detail_has_the_reference_and_the_state_of_the_row(api):
+    server, engine, folder = api
+    headers = authenticate(server)
+    detail = _detail(server, headers)
+    assert detail["reference"]["title"] == "Example study"
+    assert detail["reference"]["pmid"] == "123"
+    assert detail["reference_match"] is True
+    assert detail["message"] is None and detail["last_upload"] is None
+    reference = json.loads((folder / "reference.json").read_text())
+    (folder / "reference.json").write_text(
+        dump_json({**reference, "pmid": "456", "doi": "10.1000/ABC"})
+    )
+    engine.scan()
+    assert _detail(server, headers)["reference_match"] is False
+    study = json.loads((folder / "study.json").read_text())
+    (folder / "study.json").write_text(
+        dump_json({**study, "reference": {"doi": "10.1000/abc"}})
+    )
+    engine.scan()
+    assert _detail(server, headers)["reference_match"] is True
+    del study["reference"]
+    (folder / "study.json").write_text(dump_json(study))
+    engine.scan()
+    assert _detail(server, headers)["reference_match"] is None
+    etag = request(server, "GET", DETAIL, headers=headers)[1]["ETag"]
+    upload = {"persistence": "created", "at": "2026-10-07T10:00:00+00:00"}
+    with engine.lock:
+        row = engine.studies["caffeine/Example"]
+        row["message"] = "Upload on save suspended: connect an authorized account"
+        row["last_upload"] = upload
+    status, _, data = request(
+        server, "GET", DETAIL, headers={**headers, "If-None-Match": etag}
+    )
+    assert status == 200
+    detail = json.loads(data)
+    assert detail["message"].startswith("Upload on save suspended")
+    assert detail["last_upload"] == upload
+
+
+def test_tables_refuse_a_symlinked_workbook(api, tmp_path_factory, monkeypatch):
+    server, engine, folder = api
+    opened = []
+    monkeypatch.setattr(
+        "pkdb.curation.studies.open_path", lambda path, **kw: opened.append(path)
+    )
+    outside = tmp_path_factory.mktemp("outside") / "Example.xlsx"
+    outside.write_bytes(b"not for the app")
+    workbook_path(folder).symlink_to(outside)
+    headers = authenticate(server)
+    for body in [
+        {"action": "open"},
+        {"action": "sync"},
+        {"action": "resolve", "keep": "tables"},
+        {"action": "add", "raw": "Tab3"},
+    ]:
+        status, _, data = request(
+            server,
+            "POST",
+            "/local/studies/tables",
+            {"study": "caffeine/Example", **body},
+            headers,
+        )
+        assert status == 400, body
+        assert "Example.xlsx is a symlink" in json.loads(data)["error"]
+    assert opened == [] and outside.read_bytes() == b"not for the app"
+
+
+def test_a_write_succeeds_when_the_rescan_fails(api, monkeypatch):
+    server, engine, folder = api
+
+    def broken():
+        raise RuntimeError("unexpected")
+
+    monkeypatch.setattr(engine, "scan", broken)
+    headers = authenticate(server)
+    detail = _detail(server, headers)
+    status, _, _ = request(
+        server,
+        "POST",
+        "/local/studies/metadata",
+        {
+            "study": "caffeine/Example",
+            "revision": detail["metadata"]["revision"],
+            "metadata": {**detail["metadata"]["value"], "licence": "closed"},
+        },
+        headers,
+    )
+    assert status == 200
+    assert json.loads((folder / "study.json").read_text())["licence"] == "closed"

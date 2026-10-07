@@ -2,6 +2,7 @@
 
 import json
 import shutil
+import threading
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import Mock
@@ -342,8 +343,6 @@ def test_save_during_failed_validation_keeps_diagnostics_stale(workspace, monkey
 def test_old_connection_cannot_restore_account_after_endpoint_change(
     workspace, monkeypatch
 ):
-    import threading
-
     engine, _ = workspace
     engine.offline = False
     engine.endpoint = "https://old.test"
@@ -624,6 +623,29 @@ def test_a_key_of_another_account_refuses_writes_until_it_matches(
     engine.connect()
     assert engine.author().user == "curator"
     assert engine.snapshot()["author"] == {"user": "curator", "reason": None}
+
+
+def test_the_watcher_survives_an_unexpected_scan_failure(workspace, monkeypatch):
+    engine, _ = workspace
+
+    class Ticks(threading.Event):
+        """A stop event whose wait returns at once."""
+
+        def wait(self, timeout=None):
+            return self.is_set()
+
+    engine.stop = Ticks()
+    scans = []
+
+    def scan():
+        scans.append(len(scans))
+        if len(scans) == 1:
+            raise RuntimeError("unexpected")
+        engine.stop.set()
+
+    monkeypatch.setattr(engine, "scan", scan)
+    engine._watch()
+    assert scans == [0, 1]
 
 
 def test_connection_checks_expected_user(workspace, monkeypatch):

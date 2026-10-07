@@ -2,7 +2,7 @@
 
 Reads and writes engine attributes: lock, jobs, queue, active, studies, modes, paused, stop,
 wakeup, api_key, account, can_upload, offline, endpoint, cache, vocabulary, root. Uses engine
-methods _save, snapshot, _context, _connection_status, connect and _sync_state.
+methods _save, snapshot, _context, _connection_status, connect, scan, _sync_state and _wait.
 """
 
 import hashlib
@@ -11,6 +11,7 @@ import os
 import time
 from contextlib import ExitStack
 from datetime import UTC, datetime
+from pathlib import Path
 from uuid import uuid4
 
 from pkdb.cache import (
@@ -78,6 +79,40 @@ def issue_counts(report: dict) -> dict:
 def conflict_entries(pipeline: PipelineResult) -> list[dict]:
     """The conflicts of the last sync, as pkdb tables sync lists them."""
     return [conflict_data(conflict) for conflict in pipeline.syncs[-1].conflicts]
+
+
+def stamp(path: Path) -> tuple[int, int] | None:
+    """The size and modification time of a file, which a save changes; None when missing."""
+    try:
+        status = path.stat()
+    except OSError:
+        return None
+    return status.st_size, status.st_mtime_ns
+
+
+def sync_state(pipeline: PipelineResult) -> dict:
+    """The sync status of a row after the pipeline, from its last sync.
+
+    It is the status that a plan of the workbook would give right after the sync, without
+    reading the workbook again.
+    """
+    if not pipeline.syncs:
+        return {"status": "no_workbook", "changes": 0, "conflicts": 0}
+    last = pipeline.syncs[-1]
+    conflicts = len(last.conflicts)
+    if conflicts:
+        status = "conflict"
+    elif last.workbook_action == "close_to_update":
+        # Also when replacing the workbook failed although no lock file shows it open.
+        status = "workbook_open"
+    elif last.workbook_action == "sync_again":
+        # The tables lack the save of the workbook during the sync.
+        status = "changed"
+    elif not last.ok:
+        status = "unknown"
+    else:
+        status = "in_sync"
+    return {"status": status, "changes": 0, "conflicts": conflicts}
 
 
 def stop_message(pipeline: PipelineResult) -> str:
@@ -353,29 +388,35 @@ class JobsMixin(EngineState):
             local = self._local_vocabulary()
             with self.lock:
                 row["sync"] = {**row["sync"], "status": "syncing"}
+            stamps = {}
+
+            def stage(name):
+                if name == "format":
+                    # The workbook as the sync left it; a later save is not in the tables.
+                    stamps["format"] = stamp(workbook)
+
+            pipeline, saved_after_sync = None, False
             try:
                 # App writes take the same lock, so the formatter never overwrites one.
                 with folder_lock(row["_folder"]):
-                    pipeline = sync_and_format(row["_folder"], local)
+                    pipeline = sync_and_format(row["_folder"], local, on_stage=stage)
                     # The source this job validates; any later save belongs to the next job.
                     synced_source = fingerprint(source_hashes(row["_folder"]))
+                    saved_after_sync = (
+                        "format" in stamps and stamp(workbook) != stamps["format"]
+                    )
             finally:
-                synced = self._sync_state(row["_folder"])
+                # The last sync tells the state of the workbook, unless the pipeline failed
+                # or the workbook was saved after the sync; then a plan, which never raises.
+                synced = (
+                    sync_state(pipeline)
+                    if pipeline is not None and not saved_after_sync
+                    else self._sync_state(row["_folder"])
+                )
                 with self.lock:
                     row["sync"] = synced
             last = pipeline.syncs[-1] if pipeline.syncs else None
             was_open = was_open or (last is not None and last.lock is not None)
-            if (
-                last is not None
-                and last.workbook_action == "close_to_update"
-                and last.lock is None
-                and synced["status"] == "changed"
-                and not synced["changes"]
-            ):
-                # Replacing the workbook failed although no lock file shows it open.
-                synced = {**synced, "status": "workbook_open"}
-                with self.lock:
-                    row["sync"] = synced
             outcome["pipeline_issues"] = [
                 issue.model_dump(mode="json") for issue in pipeline.issues
             ]
@@ -406,8 +447,9 @@ class JobsMixin(EngineState):
                         _pending=row["_fingerprint"] != synced_source,
                     )
                 expected = synced_source
-            if synced["changes"] or synced["conflicts"]:
-                # The workbook was saved after the sync read it, so the tables are stale.
+            if saved_after_sync:
+                # The workbook was saved after the sync read it, so the tables are stale. A
+                # save after the folder lock changes the source that the checks below expect.
                 raise SourceChangedError("A workbook save superseded this validation")
             if reference_error is not None:
                 raise reference_error
@@ -525,18 +567,28 @@ class JobsMixin(EngineState):
             outcome["report"] = error.report.model_dump(mode="json")
             try:
                 current = fingerprint(source_hashes(row["_folder"])) == expected
-            except OSError, StudyValidationError:
-                current = False
-            job.update(
-                status="failed" if current else "canceled",
-                message="Validation found problems"
-                if current
-                else "Source changed; diagnostics belong to a previous save",
-            )
-            row.update(status="invalid" if current else "changed", stale=not current)
-            if not current:
-                row["_pending"] = True
-                row["_changed_at"] = time.monotonic()
+            except (OSError, StudyValidationError) as unreadable:
+                # A symlink or an unreadable file: the next change of a file queues a
+                # job again, instead of a new job every second.
+                job.update(
+                    status="failed",
+                    message="Could not read the source files; see the study",
+                )
+                with self.lock:
+                    self._wait(row, unreadable)
+            else:
+                job.update(
+                    status="failed" if current else "canceled",
+                    message="Validation found problems"
+                    if current
+                    else "Source changed; diagnostics belong to a previous save",
+                )
+                row.update(
+                    status="invalid" if current else "changed", stale=not current
+                )
+                if not current:
+                    row["_pending"] = True
+                    row["_changed_at"] = time.monotonic()
         except ReferenceError as error:
             job.update(status="failed", message=self._safe(str(error)))
             row.update(status="failed", stale=True)
