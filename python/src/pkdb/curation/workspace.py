@@ -27,7 +27,13 @@ from pkdb.studyformat.workbook.base import open_lock, workbook_path
 
 RECENT_LIMIT = 10
 DIRECTORY_LIMIT = 2000
+# A workbook that cannot be planned, or tables that do not load.
 UNKNOWN_SYNC = {"status": "unknown", "changes": 0, "conflicts": 0}
+# A workbook that neither a job nor a plan checked yet.
+NOT_CHECKED_SYNC = {"status": "not_checked", "changes": 0, "conflicts": 0}
+# The workbooks that the watcher plans in one tick for rows that no job checks; a few per
+# tick keep the start of a large workspace fast.
+CHECK_LIMIT = 5
 
 
 class WorkspaceError(ValueError):
@@ -158,7 +164,7 @@ class WorkspaceMixin(EngineState):
             "report_id": None,
             "summary": {},
             "reference": None,
-            "sync": {"status": "unknown", "changes": 0, "conflicts": 0},
+            "sync": dict(NOT_CHECKED_SYNC),
             "counts": {"errors": 0, "warnings": 0},
             "_folder": folder,
             "_fingerprint": None,
@@ -231,8 +237,9 @@ class WorkspaceMixin(EngineState):
                 digest = fingerprint(hashes)
                 summary = study_summary(folder)
                 # The initial job of each study syncs it and records the state of its
-                # workbook; planning every workbook here would delay each workspace switch.
-                sync = dict(UNKNOWN_SYNC) if initial else self._sync_state(folder)
+                # workbook, and the watcher plans the workbooks of the other rows; planning
+                # every workbook here would delay each workspace switch.
+                sync = dict(NOT_CHECKED_SYNC) if initial else self._sync_state(folder)
                 with self.lock:
                     if self.root is not root:
                         return
@@ -368,10 +375,65 @@ class WorkspaceMixin(EngineState):
             try:
                 self.scan()
                 self.schedule_changes()
+                self._check_workbooks()
             except Exception:
                 # The watcher retries every second and must outlive any failure; nothing
                 # is logged, since errors can carry paths and settings.
                 continue
+
+    def _check_workbooks(self, limit=CHECK_LIMIT):
+        """Plan the workbooks of rows that are not checked and that no job will check.
+
+        Rows without an initial job, such as rows with the save action Off, duplicates and
+        blocked rows, show the state of their workbook this way. The plans run outside the
+        engine lock and the folder lock, and a row that a job or a scan checked meanwhile
+        keeps the state that they recorded.
+        """
+        with self.lock:
+            root = self.root
+            rows = [
+                (key, row)
+                for key, row in self.studies.items()
+                if row["sync"]["status"] == "not_checked" and not self._job_ahead(row)
+            ][:limit]
+        for key, row in rows:
+            sync = self._sync_state(row["_folder"])
+            with self.lock:
+                if (
+                    self.root is root
+                    and self.studies.get(key) is row
+                    and row["sync"]["status"] == "not_checked"
+                ):
+                    row["sync"] = sync
+
+    def _job_ahead(self, row):
+        """Whether a job of the row is queued or running, or will be once it settles.
+
+        Called with the engine lock held.
+        """
+        if row["id"] in self.queue or self.active == row["id"]:
+            return True
+        return (
+            row["_pending"]
+            and not self.paused
+            and self._automatic_action(row) not in {None, "suspended"}
+        )
+
+    def _automatic_action(self, row):
+        """The action of the job that scheduling queues for a pending row.
+
+        None for a row that scheduling skips: blocked, a duplicate or with the save action
+        Off; "suspended" for an upload on save while no authorized account is connected.
+        Called with the engine lock held.
+        """
+        if row["_blocked"] or row["mode"] == "off" or row["duplicate"]:
+            return None
+        action = "validate" if row.get("_initial") else row["mode"]
+        if action == "upload" and (
+            self.offline or not self.account or not self.can_upload
+        ):
+            return "suspended"
+        return action
 
     def schedule_changes(self):
         with self.lock:
@@ -380,17 +442,12 @@ class WorkspaceMixin(EngineState):
             for row in self.studies.values():
                 if not row["_pending"] or time.monotonic() - row["_changed_at"] < 1:
                     continue
-                if row["_blocked"] or row["mode"] == "off" or row["duplicate"]:
-                    continue
-                action = "validate" if row.get("_initial") else row["mode"]
-                if action == "upload" and (
-                    self.offline or not self.account or not self.can_upload
-                ):
+                action = self._automatic_action(row)
+                if action == "suspended":
                     row["message"] = (
                         "Upload on save suspended: connect an authorized account"
                     )
-                    continue
-                if self.active == row["id"]:
+                if action in {None, "suspended"} or self.active == row["id"]:
                     continue
                 row["_pending"] = False
                 row["_initial"] = False

@@ -648,6 +648,43 @@ def test_the_watcher_survives_an_unexpected_scan_failure(workspace, monkeypatch)
     assert scans == [0, 1]
 
 
+def test_the_watcher_plans_the_workbook_of_a_row_without_a_job(workspace, monkeypatch):
+    engine, _ = workspace
+    engine.set_mode([row(engine)["id"]], "off")
+    assert row(engine)["sync"]["status"] == "not_checked"
+
+    class Ticks(threading.Event):
+        """A stop event whose wait returns at once."""
+
+        def wait(self, timeout=None):
+            return self.is_set()
+
+    engine.stop = Ticks()
+    monkeypatch.setattr(engine, "scan", engine.stop.set)
+    engine._watch()
+    assert row(engine)["sync"]["status"] == "no_workbook"
+
+
+def test_rows_that_scheduling_skips_get_their_workbook_planned(workspace):
+    engine, _ = workspace
+    item = row(engine)
+    # An upload on save without an authorized account waits for the account.
+    item.update(mode="upload", _initial=False)
+    assert item["_pending"] is True
+    engine._check_workbooks()
+    assert item["sync"]["status"] == "no_workbook"
+    settle(engine)
+    assert not engine.queue and item["message"].startswith("Upload on save suspended")
+
+
+def test_a_paused_engine_plans_the_workbooks_of_pending_rows(workspace):
+    engine, _ = workspace
+    engine.set_paused(True)
+    assert row(engine)["_pending"] is True
+    engine._check_workbooks()
+    assert row(engine)["sync"]["status"] == "no_workbook"
+
+
 def test_connection_checks_expected_user(workspace, monkeypatch):
     engine, _ = workspace
     _, factory = connection_engine(engine, monkeypatch)

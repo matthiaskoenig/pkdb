@@ -51,6 +51,15 @@ def row(engine):
     return engine.snapshot()["studies"][0]
 
 
+def row_list(engine):
+    return engine.snapshot()["studies"]
+
+
+def owned(lock):
+    """Whether the current thread holds the engine lock."""
+    return lock._is_owned()
+
+
 def set_mean(folder, table, value):
     """Set the mean of the second data row of a table file."""
     path = folder / table
@@ -571,7 +580,7 @@ def test_workbooks_are_planned_by_the_jobs_not_by_the_initial_scan(
     )
     try:
         monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
-        assert row(engine)["sync"]["status"] == "unknown"
+        assert row(engine)["sync"]["status"] == "not_checked"
         settle(engine)
         assert run_next(engine)["status"] == "succeeded"
         # The job knows the state of the workbook from its sync.
@@ -588,6 +597,77 @@ def test_workbooks_are_planned_by_the_jobs_not_by_the_initial_scan(
         engine.close()
 
 
+def test_rows_that_no_job_checks_are_planned_a_few_per_tick(
+    tmp_path_factory, make_study, valid_files, sf_vocabulary, monkeypatch
+):
+    folders = [make_study(valid_files, name=f"Example{index}") for index in range(7)]
+    for folder in folders:
+        assert format_folder(folder).ok
+        assert sync_study(folder, sf_vocabulary).ok
+    held = []
+    real_check = workspace_module.workbook_check
+    engine = module.CurationEngine(
+        folders[0].parent.parent,
+        state_dir=tmp_path_factory.mktemp("state"),
+        offline=True,
+        start=False,
+    )
+
+    def check(path, vocabulary):
+        held.append((path.name, owned(engine.lock)))
+        return real_check(path, vocabulary)
+
+    def statuses():
+        return {item["id"]: item["sync"]["status"] for item in row_list(engine)}
+
+    try:
+        monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+        monkeypatch.setattr(workspace_module, "workbook_check", check)
+        assert set(statuses().values()) == {"not_checked"}
+        # Rows whose initial job is pending, queued or running are left to the job.
+        engine._check_workbooks()
+        settle(engine)
+        engine._check_workbooks()
+        assert held == [] and len(engine.queue) == 7
+        engine.cancel_jobs([job["id"] for job in engine.queue.values()])
+        engine.set_mode([f"caffeine/Example{index}" for index in range(6)], "off")
+        engine.enqueue(["caffeine/Example6"], "validate")
+        engine._check_workbooks()
+        assert len(held) == 5 and not any(owned for _, owned in held)
+        assert list(statuses().values()).count("in_sync") == 5
+        engine._check_workbooks()
+        assert len(held) == 6
+        assert statuses() == {
+            **{f"caffeine/Example{index}": "in_sync" for index in range(6)},
+            "caffeine/Example6": "not_checked",
+        }
+        engine._check_workbooks()
+        assert len(held) == 6
+    finally:
+        engine.close()
+
+
+def test_a_plan_of_a_row_that_a_job_checked_meanwhile_is_dropped(
+    workspace, sf_vocabulary, monkeypatch
+):
+    engine, folder = workspace
+    engine.set_mode(["caffeine/Example"], "off")
+    real_state = engine._sync_state
+
+    def sync_state(path):
+        # A job records the state of the workbook while the watcher plans it.
+        engine.studies["caffeine/Example"]["sync"] = {
+            "status": "syncing",
+            "changes": 0,
+            "conflicts": 0,
+        }
+        return real_state(path)
+
+    monkeypatch.setattr(engine, "_sync_state", sync_state)
+    engine._check_workbooks()
+    assert row(engine)["sync"]["status"] == "syncing"
+
+
 def test_the_rescan_of_a_job_plans_no_workbook_under_the_engine_lock(
     workspace, sf_vocabulary, monkeypatch
 ):
@@ -599,7 +679,7 @@ def test_the_rescan_of_a_job_plans_no_workbook_under_the_engine_lock(
     real_check = workspace_module.workbook_check
 
     def check(path, vocabulary):
-        held.append(engine.lock._is_owned())
+        held.append(owned(engine.lock))
         return real_check(path, vocabulary)
 
     monkeypatch.setattr(workspace_module, "workbook_check", check)
