@@ -121,6 +121,8 @@ export function makeVuetify(options: { cspNonce?: string | undefined } = {}) {
             primary: "#79d5d6",
             background: "#101e23",
             surface: "#192b31",
+            // The thumb of switches; Vuetify's default is lavender.
+            "surface-bright": "#dcefef",
           },
         },
       },
