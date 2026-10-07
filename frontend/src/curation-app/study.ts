@@ -1,9 +1,10 @@
 /**
  * The sections of the study page, the section it opens on, the counts of its rail, the labels
- * of its header, the profiles of its people and the names of a new table.
+ * of its header, failed actions, the profiles of its people and the names of a new table.
  */
+import type { RouteLocationRaw } from "vue-router";
 import type { ApiError } from "./api/client";
-import type { IssueState, People, Profile, Release, StudyDetail, StudySummary } from "./api/types";
+import type { IssueState, People, Profile, Release, StudyDetail, StudySummary, TablesResult } from "./api/types";
 
 /** The sections of the study page in the order of the rail. */
 export const SECTIONS = ["metadata", "review", "problems", "sources", "tables", "activity"] as const;
@@ -39,6 +40,12 @@ export function defaultSection(detail: StudyDetail): Section {
 /** The name of a study folder: the second part of its identity `<substance>/<name>`. */
 export function studyName(detail: Pick<StudyDetail, "id">): string {
   return detail.id.slice(detail.id.indexOf("/") + 1);
+}
+
+/** The route of a section of the study `id`, such as `#/studies/caffeine/Example/review?item=<id>`. */
+export function sectionRoute(id: string, section: Section, query: Record<string, string> = {}): RouteLocationRaw {
+  const params = { substance: id.slice(0, id.indexOf("/")), name: studyName({ id }), section };
+  return Object.keys(query).length ? { name: "Study", params, query } : { name: "Study", params };
 }
 
 /** A paper table, a figure or the text, as `SOURCE_PATTERN` of the library accepts it. */
@@ -112,6 +119,43 @@ export function messageOf(caught: unknown): string {
 /** What to do about a write that was refused without a user (`isNoUser`). */
 export function userHint(error: ApiError): string {
   return error.body.error === "no_user" ? "Set your PK-DB user in Connection settings." : error.message;
+}
+
+/** At most this many issues of a failed action are listed; the section of the link has all of them. */
+export const LISTED_ISSUES = 3;
+
+/** What went wrong in an action: some of the issues of the API, and the section with all of them. */
+export interface ActionFailure {
+  text: string;
+  issues: string[];
+  /** The issues beyond the listed ones. */
+  more: number;
+  link: { section: Section; label: string } | null;
+}
+
+/** A failure that lists at most `LISTED_ISSUES` of `messages`. */
+export function actionFailure(
+  text: string,
+  messages: string[] = [],
+  link: ActionFailure["link"] = null,
+): ActionFailure {
+  return {
+    text,
+    issues: messages.slice(0, LISTED_ISSUES),
+    more: Math.max(0, messages.length - LISTED_ISSUES),
+    link,
+  };
+}
+
+/** What the curator should know after Open tables: nothing for a clean sync. */
+export function tablesOutcome(result: TablesResult): ActionFailure | null {
+  const issues = result.issues.map((item) => item.message);
+  const unresolved = result.conflicts.filter((conflict) => conflict.kept === null).length;
+  const link: ActionFailure["link"] = unresolved ? { section: "tables", label: "Show the conflicts" } : null;
+  if (unresolved === 1) issues.unshift("A sheet conflicts with its table.");
+  if (unresolved > 1) issues.unshift(`${unresolved} sheets conflict with their tables.`);
+  if (!result.opened) return actionFailure("The workbook could not be opened.", issues, link);
+  return issues.length ? actionFailure("The workbook opened, but the sync found problems.", issues, link) : null;
 }
 
 // People

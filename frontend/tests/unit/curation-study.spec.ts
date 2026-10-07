@@ -1,7 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { ApiError } from "../../src/curation-app/api/client";
-import type { ReviewItem, StudyDetail } from "../../src/curation-app/api/types";
+import type { ConflictData, ReviewItem, StudyDetail, TablesResult } from "../../src/curation-app/api/types";
 import {
+  actionFailure,
   approvalRefusal,
   defaultSection,
   duplicateFolders,
@@ -17,8 +18,10 @@ import {
   provenanceLabel,
   railCounts,
   releaseLabel,
+  sectionRoute,
   SECTIONS,
   tableFiles,
+  tablesOutcome,
   userHint,
 } from "../../src/curation-app/study";
 import { profile, roster, studyDetail } from "./curation-fixtures";
@@ -57,6 +60,18 @@ describe("sections", () => {
     expect(defaultSection(detail([item("resolved"), item("dismissed")], { errors: 2, warnings: 1 }))).toBe("problems");
     expect(defaultSection(detail([item("resolved")], { errors: 0, warnings: 3 }))).toBe("metadata");
     expect(defaultSection(studyDetail())).toBe("metadata");
+  });
+
+  it("routes to a section of a study, with a query when given", () => {
+    expect(sectionRoute("caffeine/Example", "problems")).toEqual({
+      name: "Study",
+      params: { substance: "caffeine", name: "Example", section: "problems" },
+    });
+    expect(sectionRoute("caffeine/Example", "review", { item: "01JA" })).toEqual({
+      name: "Study",
+      params: { substance: "caffeine", name: "Example", section: "review" },
+      query: { item: "01JA" },
+    });
   });
 
   it("counts open items from the summary when review.json is invalid", () => {
@@ -253,6 +268,43 @@ describe("failures", () => {
     );
     expect(userHint(new ApiError(403, { error: "user_mismatch", message: "The key is of janekg." }))).toBe(
       "The key is of janekg.",
+    );
+  });
+
+  it("lists three issues of a failed action and counts the others", () => {
+    expect(actionFailure("Refused.", ["a", "b", "c", "d", "e"])).toEqual({
+      text: "Refused.",
+      issues: ["a", "b", "c"],
+      more: 2,
+      link: null,
+    });
+  });
+
+  it("says what Open tables found: nothing for a clean sync, else the issues and the conflicts", () => {
+    const result: TablesResult = {
+      ok: true,
+      workbook_action: "unchanged",
+      changes: [],
+      conflicts: [],
+      issues: [],
+      opened: true,
+    };
+    expect(tablesOutcome(result)).toBeNull();
+    expect(tablesOutcome({ ...result, opened: false })).toEqual(actionFailure("The workbook could not be opened."));
+    const conflict: ConflictData = {
+      file: "outputs_Tab2.tsv",
+      sheet: "outputs_Tab2",
+      workbook_rows: [],
+      table_lines: [],
+      base_lines: [],
+      kept: null,
+    };
+    const conflicts = [conflict, conflict, { ...conflict, kept: "tables" as const }];
+    expect(tablesOutcome({ ...result, ok: false, conflicts })).toEqual(
+      actionFailure("The workbook opened, but the sync found problems.", ["2 sheets conflict with their tables."], {
+        section: "tables",
+        label: "Show the conflicts",
+      }),
     );
   });
 });

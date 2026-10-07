@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, useId } from "vue";
-import { VAlert, VBtn, VCard, VChip, VMenu, VProgressLinear, VSelect, VTooltip } from "vuetify/components";
+import { VBtn, VCard, VChip, VMenu, VProgressLinear, VSelect, VTooltip } from "vuetify/components";
 import { isNoUser, isRevisionConflict, isValidationError } from "../api/client";
-import type { ReviewStatus, StudyDetail, TablesResult } from "../api/types";
+import type { ReviewStatus, StudyDetail } from "../api/types";
 import { useNotice } from "../composables/useNotice";
 import {
   activityLabel,
@@ -19,6 +19,7 @@ import { useDialogStore } from "../stores/dialogs";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import {
+  actionFailure,
   approvalRefusal,
   folderPath,
   issueLabel,
@@ -27,8 +28,10 @@ import {
   provenanceLabel,
   releaseLabel,
   studyName,
-  type Section,
+  tablesOutcome,
+  type ActionFailure,
 } from "../study";
+import ActionFailureAlert from "./ActionFailureAlert.vue";
 import AddTableDialog from "./AddTableDialog.vue";
 import UploadDialog from "./UploadDialog.vue";
 
@@ -43,35 +46,13 @@ const overview = useOverviewStore();
 const dialogs = useDialogStore();
 const reasonId = useId();
 
-/** At most this many issues of a failure are listed; the section of the link has all of them. */
-const LISTED_ISSUES = 3;
-
 type Action = "status" | "tables" | "validate" | "folder" | "pdf" | "copy";
-
-/** What went wrong in the last action: some of the issues of the API, and the section with all of them. */
-interface Failure {
-  text: string;
-  issues: string[];
-  /** The issues beyond the listed ones. */
-  more: number;
-  link: { section: Section; label: string } | null;
-}
-
-/** A failure that lists at most `LISTED_ISSUES` of `messages`. */
-function failureOf(text: string, messages: string[] = [], link: Failure["link"] = null): Failure {
-  return {
-    text,
-    issues: messages.slice(0, LISTED_ISSUES),
-    more: Math.max(0, messages.length - LISTED_ISSUES),
-    link,
-  };
-}
 
 /** The running action. One action runs at a time, so that feedback and revisions never mix. */
 const busy = ref<Action | null>(null);
 const working = computed(() => busy.value !== null);
 /** The failure of the last action; it stays until it is dismissed or the next action starts. */
-const failure = ref<Failure | null>(null);
+const failure = ref<ActionFailure | null>(null);
 /** The notice of the last action that succeeded; it disappears after a few seconds. */
 const { notice, announce } = useNotice();
 const menu = ref(false);
@@ -128,15 +109,11 @@ const uploadReason = computed(() => {
 });
 const canUpload = computed(() => row.value !== null && uploadReason.value === null && !props.stale);
 
-function sectionRoute(section: Section) {
-  return { name: "Study", params: { substance: substance.value, name: name.value, section } };
-}
-
 /** Run an action unless one runs already; a write that needs a user opens the settings. */
 async function run(
   action: Action,
   work: () => Promise<string | void>,
-  explain: (caught: unknown) => Failure = (caught) => failureOf(messageOf(caught)),
+  explain: (caught: unknown) => ActionFailure = (caught) => actionFailure(messageOf(caught)),
 ): Promise<void> {
   if (busy.value !== null) return;
   busy.value = action;
@@ -153,19 +130,19 @@ async function run(
 }
 
 /** Why the status was not set: approval explains its rule and lists the errors that block it. */
-function statusFailure(caught: unknown): Failure {
+function statusFailure(caught: unknown): ActionFailure {
   if (isValidationError(caught) && caught.body.code === "approval_refused") {
     const errors = caught.body.issues.map((item) => item.message);
-    const link: Failure["link"] = errors.length
+    const link: ActionFailure["link"] = errors.length
       ? { section: "problems", label: "Show the problems" }
       : openItems(props.detail) > 0
         ? { section: "review", label: "Show the open items" }
         : null;
-    return failureOf(approvalRefusal(caught.message), errors, link);
+    return actionFailure(approvalRefusal(caught.message), errors, link);
   }
   if (isRevisionConflict(caught))
-    return failureOf("review.json changed on disk, so the status was not set. Check the review and set it again.");
-  return failureOf(messageOf(caught));
+    return actionFailure("review.json changed on disk, so the status was not set. Check the review and set it again.");
+  return actionFailure(messageOf(caught));
 }
 
 function setStatus(value: ReviewStatus | null): Promise<void> | void {
@@ -183,17 +160,6 @@ function setStatus(value: ReviewStatus | null): Promise<void> | void {
   ).finally(() => {
     pendingStatus.value = null;
   });
-}
-
-/** What the curator should know after Open tables: nothing for a clean sync. */
-function tablesOutcome(result: TablesResult): Failure | null {
-  const issues = result.issues.map((item) => item.message);
-  const unresolved = result.conflicts.filter((conflict) => conflict.kept === null).length;
-  const link: Failure["link"] = unresolved ? { section: "tables", label: "Show the conflicts" } : null;
-  if (unresolved === 1) issues.unshift("A sheet conflicts with its table.");
-  if (unresolved > 1) issues.unshift(`${unresolved} sheets conflict with their tables.`);
-  if (!result.opened) return failureOf("The workbook could not be opened.", issues, link);
-  return issues.length ? failureOf("The workbook opened, but the sync found problems.", issues, link) : null;
 }
 
 function openTables(): Promise<void> {
@@ -233,7 +199,7 @@ function copyPath(): Promise<void> {
       await navigator.clipboard.writeText(path);
       return "Path copied.";
     },
-    () => failureOf(`The path could not be copied: ${path}`),
+    () => actionFailure(`The path could not be copied: ${path}`),
   );
 }
 
@@ -445,24 +411,13 @@ function added(table: string): void {
       </li>
     </ul>
 
-    <VAlert
+    <ActionFailureAlert
       v-if="failure"
-      type="error"
-      variant="tonal"
-      density="compact"
-      closable
-      class="status-alert study-alert"
-      @click:close="failure = null"
-    >
-      <p class="study-alert-text">{{ failure.text }}</p>
-      <ul v-if="failure.issues.length" class="study-alert-issues">
-        <li v-for="(message, index) in failure.issues" :key="index">{{ message }}</li>
-        <li v-if="failure.more">and {{ failure.more }} more</li>
-      </ul>
-      <RouterLink v-if="failure.link" :to="sectionRoute(failure.link.section)" class="study-alert-link">
-        {{ failure.link.label }}
-      </RouterLink>
-    </VAlert>
+      :failure="failure"
+      :study="detail.id"
+      class="study-alert"
+      @close="failure = null"
+    />
     <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
     <span role="status" aria-live="polite" class="study-notice">{{ notice }}</span>
 
@@ -587,17 +542,6 @@ function added(table: string): void {
 .fact-name,
 .fact-activity {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.study-alert-text {
-  margin: 0;
-}
-.study-alert-issues {
-  margin: 4px 0 0;
-  padding-inline-start: 20px;
-}
-.study-alert-link {
-  display: inline-block;
-  margin-top: 4px;
 }
 .study-notice {
   font-size: 0.875rem;

@@ -341,7 +341,7 @@ describe("StudyPage", () => {
     const status = select(wrapper, "Review status");
     await status.setValue("approved");
     await flushPromises();
-    expect(page().get(".study-alert .study-alert-text").text()).toBe(
+    expect(page().get(".study-alert .action-failure-text").text()).toBe(
       "Approved needs zero open review items and zero validation errors. 1 review item is open.",
     );
     const link = page().get(".study-alert a");
@@ -361,7 +361,7 @@ describe("StudyPage", () => {
     await select(wrapper, "Review status").setValue("approved");
     await flushPromises();
     const alert = page().get(".study-alert");
-    expect(alert.get(".study-alert-text").text()).toBe(
+    expect(alert.get(".action-failure-text").text()).toBe(
       "Approved needs zero open review items and zero validation errors. Validation has 4 errors.",
     );
     expect(alert.findAll("li").map((item) => item.text())).toEqual([
