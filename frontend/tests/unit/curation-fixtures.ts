@@ -70,6 +70,7 @@ export function snapshot(changes: Partial<Snapshot> = {}): Snapshot {
     studies: [studyRow()],
     format1_folders: 0,
     jobs: [],
+    clearable_jobs: 0,
     recent_workspaces: [{ path: "/work/pkdb_data", exists: true }],
     ...changes,
   };

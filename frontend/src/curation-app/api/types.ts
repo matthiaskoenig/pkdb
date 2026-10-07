@@ -337,6 +337,8 @@ export type JobStatus =
   | "queued"
   | "running"
   | "succeeded"
+  /** The validation ran and found problems; `failed` is a job that could not run. */
+  | "invalid"
   | "failed"
   | "canceled"
   | "conflict"
@@ -347,6 +349,8 @@ export interface Job {
   id: string;
   study_id: string;
   study_name: string;
+  /** The workspace of the job; jobs saved by an earlier version have none. */
+  workspace?: string;
   action: JobAction;
   status: JobStatus;
   stage?: string;
@@ -436,6 +440,8 @@ export interface Snapshot {
   studies: StudyRow[];
   format1_folders: number;
   jobs: Job[];
+  /** The finished jobs of the workspace that Clear finished history removes. */
+  clearable_jobs: number;
   recent_workspaces: { path: string; exists: boolean }[];
   /** Only in `GET /local/state`, not in the snapshots that actions return. */
   csrf_token?: string;
@@ -675,6 +681,7 @@ export const isSnapshot = hasKeys<Snapshot>(
   "studies",
   "format1_folders",
   "jobs",
+  "clearable_jobs",
   "recent_workspaces",
 );
 

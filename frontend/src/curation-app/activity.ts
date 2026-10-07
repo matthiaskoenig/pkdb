@@ -1,9 +1,10 @@
 /**
  * The activity of a study: labels of its jobs (validations and uploads of the local server, and
- * writes of the app), whether clearing the history removes any, and saving a report.
+ * writes of the app), the review items that their messages name, and saving a report.
  */
-import type { Job, JobAction, JobStatus } from "./api/types";
+import type { Job, JobAction, JobStatus, ReviewItem } from "./api/types";
 import type { Tone } from "./overview";
+import { KIND_LABELS } from "./review";
 
 export const ACTION_LABELS: Record<JobAction, string> = {
   validate: "Validation",
@@ -12,9 +13,9 @@ export const ACTION_LABELS: Record<JobAction, string> = {
   write: "Change in the app",
 };
 
-/** The Font Awesome icon of each action; validations and uploads have those of the study header. */
+/** The Font Awesome icon of each action; neutral, as the status says how it ended. */
 export const ACTION_ICONS: Record<JobAction, string> = {
-  validate: "fas fa-circle-check",
+  validate: "fas fa-clipboard-list",
   validate_remote: "fas fa-server",
   upload: "fas fa-cloud-arrow-up",
   write: "fas fa-pen",
@@ -24,6 +25,7 @@ export const JOB_STATUS_LABELS: Record<JobStatus, string> = {
   queued: "Queued",
   running: "Running",
   succeeded: "Succeeded",
+  invalid: "Problems found",
   failed: "Failed",
   canceled: "Canceled",
   conflict: "Conflict",
@@ -36,6 +38,8 @@ export const JOB_STATUS_TONES: Record<JobStatus, Tone> = {
   queued: undefined,
   running: "info",
   succeeded: "success",
+  // As the problem chips of the overview show errors.
+  invalid: "error",
   failed: "error",
   canceled: undefined,
   // As the sync status shows a conflict.
@@ -73,14 +77,63 @@ const STAGE_LABELS: Partial<Record<string, string>> = {
   complete: "Finishing",
 };
 
+/** The message of a queued job, which a running job keeps until it ends. */
+const QUEUED_MESSAGE = "Queued";
+
 /**
  * What a job does or did: a queued or running job keeps the message "Queued" of the server
- * until it ends, so its status and stage say what it does.
+ * until it ends, so its status and stage say what it does. Earlier versions also kept it when
+ * they canceled a queued job.
  */
 export function jobText(job: Job): string {
   if (job.status === "queued") return "Waiting to start";
   if (job.status === "running") return (job.stage && STAGE_LABELS[job.stage]) || "Running";
+  if (job.status === "canceled" && job.message === QUEUED_MESSAGE) return "Canceled before it started";
   return job.message;
+}
+
+/** A part of the text of a job: text, or the reference to a review item, linked to the item `item`. */
+export type MessagePart = { text: string; item?: string };
+
+/** How a write of the app names a review item: "Added review item <id>" (`_review_message` in studies.py). */
+const REVIEW_ITEM = /review item (\S+)/g;
+
+/** The characters of an item text that a reference quotes. */
+const QUOTE_LENGTH = 40;
+
+/** The start of a text, cut after a word, in one line. */
+function quote(text: string): string {
+  const line = text.replace(/\s+/g, " ").trim();
+  if (line.length <= QUOTE_LENGTH) return line;
+  const cut = line.slice(0, QUOTE_LENGTH + 1);
+  const space = cut.lastIndexOf(" ");
+  return `${(space > 0 ? cut.slice(0, space) : line.slice(0, QUOTE_LENGTH)).replace(/[\s,;:.]+$/, "")}…`;
+}
+
+/**
+ * The text of a job with readable references to the review items of `items` that it names: the
+ * kind of the item and the start of its text, instead of its id. An item that no longer exists is
+ * "a review item".
+ */
+export function messageParts(message: string, items: readonly ReviewItem[]): MessagePart[] {
+  const parts: MessagePart[] = [];
+  let text = "";
+  let last = 0;
+  for (const match of message.matchAll(REVIEW_ITEM)) {
+    text += message.slice(last, match.index);
+    last = match.index + match[0].length;
+    const item = items.find((candidate) => candidate.id === match[1]);
+    if (!item) {
+      text += "a review item";
+      continue;
+    }
+    parts.push({ text: `${text}the ` });
+    parts.push({ text: `${KIND_LABELS[item.kind].toLowerCase()} “${quote(item.text)}”`, item: item.id });
+    text = "";
+  }
+  text += message.slice(last);
+  if (text) parts.push({ text });
+  return parts;
 }
 
 /** The name of the downloaded report of the job `id`. */
@@ -106,21 +159,6 @@ export function uploadUrl(job: Job): string | null {
 export function datetime(iso: string): string {
   const date = new Date(iso);
   return Number.isNaN(date.getTime()) ? iso : date.toISOString();
-}
-
-/** The statuses of the jobs that clearing the history keeps. */
-const KEPT_STATUSES: ReadonlySet<JobStatus> = new Set(["queued", "running", "unknown"]);
-
-/**
- * Whether clearing the history removes a job of `jobs`, the jobs of the workspace in the order of
- * the server (oldest first). It keeps queued and running jobs, uploads with an unknown outcome and
- * the last upload of each study (`_kept` in jobs.py).
- */
-export function clearable(jobs: readonly Job[]): boolean {
-  const uploads = new Map<string, Job>();
-  for (const job of jobs) if (job.upload) uploads.set(job.study_id, job);
-  const latest = new Set(uploads.values());
-  return jobs.some((job) => !KEPT_STATUSES.has(job.status) && !latest.has(job));
 }
 
 /**

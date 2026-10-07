@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useId } from "vue";
+import { computed, nextTick, ref, useId } from "vue";
 import {
   VBtn,
   VCard,
@@ -14,11 +14,11 @@ import {
 import {
   ACTION_ICONS,
   ACTION_LABELS,
-  clearable,
   datetime,
   JOB_STATUS_LABELS,
   JOB_STATUS_TONES,
   jobText,
+  messageParts,
   persistenceLabel,
   reportFileName,
   saveFile,
@@ -29,21 +29,23 @@ import type { Job } from "../api/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import RetryDialog from "../components/RetryDialog.vue";
 import { useNotice } from "../composables/useNotice";
-import { formatTime } from "../overview";
+import { formatTime, plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { actionFailure, messageOf, type ActionFailure } from "../study";
+import { actionFailure, messageOf, sectionRoute, type ActionFailure } from "../study";
 
 /**
- * The jobs of the study, newest first: validations and uploads of the local server and the
- * writes of the app. A finished job offers its report, a queued one Cancel, and an upload with
- * an unknown outcome the review of the overview. Clear finished history clears the history of
- * the whole workspace.
+ * The jobs of the study in the current workspace, newest first: validations and uploads of the
+ * local server and the writes of the app. A finished job offers its report, a queued one Cancel,
+ * and an upload with an unknown outcome the review of the overview. Clear finished history
+ * clears the finished jobs of the whole workspace.
  */
 const study = useStudyStore();
 const overview = useOverviewStore();
 const { notice, announce } = useNotice();
 const id = useId();
+
+const root = ref<HTMLElement | null>(null);
 
 const detail = computed(() => study.detail);
 const identity = computed(() => detail.value?.id ?? "");
@@ -53,7 +55,8 @@ const entries = computed(() =>
     job,
     textId: `${id}-${job.id}-text`,
     metaId: `${id}-${job.id}-meta`,
-    text: jobText(job),
+    // Writes name review items by id; the parts name them by kind and text.
+    parts: messageParts(jobText(job), detail.value?.review.value?.items ?? []),
     persistence: persistenceLabel(job),
     url: uploadUrl(job),
     cancelable: job.status === "queued",
@@ -67,8 +70,14 @@ const row = computed(
     overview.snapshot?.studies.find((candidate) => candidate.id === identity.value && !candidate.duplicate) ??
     null,
 );
-/** Whether clearing would remove a job; the history is the history of the workspace. */
-const canClear = computed(() => clearable(overview.snapshot?.jobs ?? []));
+/** The finished jobs of the workspace that clearing removes, as the server counts them. */
+const clearableJobs = computed(() => overview.snapshot?.clearable_jobs ?? 0);
+const clearText = computed(
+  () =>
+    `This removes ${plural(clearableJobs.value, "finished job")} of this workspace from the activity and deletes ` +
+    `${clearableJobs.value === 1 ? "its report" : "their reports"}. Queued and running jobs, uploads with an ` +
+    "unknown outcome, and the last upload and the current report of each study stay.",
+);
 
 /** The running action. One action runs at a time, so that feedback never mixes. */
 const busy = ref<string | null>(null);
@@ -94,6 +103,15 @@ async function run(
   } finally {
     busy.value = null;
   }
+}
+
+/**
+ * Keep the keyboard focus in the section when the control that had it goes away: on the element
+ * of `selector`, after the next render.
+ */
+async function focusOn(selector: string): Promise<void> {
+  await nextTick();
+  root.value?.querySelector<HTMLElement>(selector)?.focus();
 }
 
 /** The name of an action in a sentence, such as "server validation". */
@@ -126,6 +144,8 @@ function cancel(job: Job): Promise<void> {
     await study.refresh();
     // The server cancels only a job that has not started yet; its answer has the jobs after the cancel.
     const current = state.jobs.find((entry) => entry.id === job.id);
+    // Cancel is gone with the queued job: the focus goes to the job.
+    await focusOn(`[data-job="${job.id}"]`);
     if (current && current.status !== "canceled") {
       failure.value = actionFailure(`The ${named(job)} started before it could be canceled.`);
       return "";
@@ -139,6 +159,8 @@ function clear(): Promise<void> {
   return run("clear", async () => {
     await overview.clearHistory();
     await study.refresh();
+    // Clear is disabled now that nothing is left to clear: the focus goes to the activity.
+    await focusOn(".activity-list, .activity-empty");
     return "Cleared the finished history.";
   });
 }
@@ -150,9 +172,9 @@ function retried(): void {
 </script>
 
 <template>
-  <div class="activity">
+  <div ref="root" class="activity">
     <div class="activity-toolbar">
-      <p class="activity-caption">Newest first. The app keeps the last 100 finished jobs of the workspace.</p>
+      <p class="activity-caption">Newest first. The app keeps the last 100 finished jobs.</p>
       <VDialog v-model="confirming" max-width="480" :aria-labelledby="`${id}-clear`">
         <template #activator="{ props: activator }">
           <VBtn
@@ -160,7 +182,7 @@ function retried(): void {
             variant="text"
             color="primary"
             prepend-icon="fas fa-broom"
-            :disabled="!canClear || working"
+            :disabled="clearableJobs === 0 || (working && busy !== 'clear')"
             :loading="busy === 'clear'"
             class="activity-clear"
           >
@@ -171,10 +193,7 @@ function retried(): void {
           <VCardItem>
             <VCardTitle :id="`${id}-clear`" tag="h2">Clear finished history?</VCardTitle>
           </VCardItem>
-          <VCardText class="clear-text">
-            This removes the finished jobs of all studies in the workspace and deletes their reports. Queued and
-            running jobs, uploads with an unknown outcome and the last upload of each study stay.
-          </VCardText>
+          <VCardText class="clear-text">{{ clearText }}</VCardText>
           <VCardActions class="dialog-actions">
             <VSpacer />
             <VBtn variant="text" @click="confirming = false">Keep history</VBtn>
@@ -188,15 +207,27 @@ function retried(): void {
     <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
     <span role="status" aria-live="polite" class="activity-notice">{{ notice }}</span>
 
-    <p v-if="!entries.length" class="activity-empty">
+    <!-- The list and the empty text take the focus after a clear, and an entry after Cancel. -->
+    <p v-if="!entries.length" tabindex="-1" class="activity-empty">
       No activity yet. Validations, uploads and changes in the app appear here.
     </p>
-    <ol v-else class="activity-list">
-      <li v-for="entry in entries" :key="entry.job.id" class="activity-entry">
+    <ol v-else tabindex="-1" class="activity-list">
+      <li v-for="entry in entries" :key="entry.job.id" :data-job="entry.job.id" tabindex="-1" class="activity-entry">
         <i :class="[ACTION_ICONS[entry.job.action], 'activity-icon']" aria-hidden="true"></i>
         <div class="activity-body">
           <div class="activity-head">
-            <p :id="entry.textId" class="activity-text">{{ entry.text }}</p>
+            <p :id="entry.textId" class="activity-text">
+              <template v-for="(part, index) in entry.parts" :key="index">
+                <RouterLink
+                  v-if="part.item"
+                  :to="sectionRoute(identity, 'review', { item: part.item })"
+                  class="activity-item"
+                >
+                  {{ part.text }}
+                </RouterLink>
+                <template v-else>{{ part.text }}</template>
+              </template>
+            </p>
             <VChip
               size="small"
               variant="tonal"
@@ -237,7 +268,7 @@ function retried(): void {
               density="compact"
               color="primary"
               prepend-icon="fas fa-xmark"
-              :disabled="working"
+              :disabled="working && busy !== `cancel:${entry.job.id}`"
               :loading="busy === `cancel:${entry.job.id}`"
               :aria-label="`Cancel queued ${named(entry.job)}`"
               @click="cancel(entry.job)"
@@ -253,6 +284,7 @@ function retried(): void {
               density="compact"
               color="primary"
               prepend-icon="fas fa-arrow-up-right-from-square"
+              :aria-describedby="`${entry.textId} ${entry.metaId}`"
               class="activity-link"
             >
               Open on PK-DB
@@ -263,7 +295,7 @@ function retried(): void {
               density="compact"
               color="primary"
               prepend-icon="fas fa-download"
-              :disabled="working"
+              :disabled="working && busy !== `report:${entry.job.id}`"
               :loading="busy === `report:${entry.job.id}`"
               :aria-describedby="`${entry.textId} ${entry.metaId}`"
               @click="download(entry.job)"
@@ -336,6 +368,10 @@ function retried(): void {
 }
 .activity-entry + .activity-entry {
   border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+/* The list clips what overflows it, so a focused entry has its ring inside. */
+.activity-entry:focus-visible {
+  outline-offset: -3px;
 }
 .activity-icon {
   font-size: 0.875rem;

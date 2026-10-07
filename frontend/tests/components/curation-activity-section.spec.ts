@@ -6,7 +6,7 @@ import type { Job, JobReport, Snapshot, StudyDetail, Upload } from "../../src/cu
 import { formatTime } from "../../src/curation-app/overview";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
-import { json, snapshot, studyDetail, studyRow } from "../unit/curation-fixtures";
+import { json, reviewItem, snapshot, studyDetail, studyRow } from "../unit/curation-fixtures";
 import { button, buttons, page, serveApi, setViewport, type Handler, type ServedRequest } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
@@ -88,13 +88,29 @@ let requests: ServedRequest[];
 let served: StudyDetail;
 let state: Snapshot;
 
-/** The workspace state with the jobs of the history, oldest first, as the server lists them. */
+/** Jobs that clearing the history keeps whatever their age. */
+const ACTIVE: readonly Job["status"][] = ["queued", "running", "unknown"];
+
+/**
+ * The workspace state with the jobs of the history, oldest first, as the server lists them; by
+ * default a clear would remove the jobs that have ended.
+ */
 function workspace(jobs: Job[], changes: Partial<Snapshot> = {}): Snapshot {
-  return snapshot({ studies: [studyRow()], jobs: [...jobs].reverse(), ...changes });
+  return snapshot({
+    studies: [studyRow()],
+    jobs: [...jobs].reverse(),
+    clearable_jobs: jobs.filter((entry) => !ACTIVE.includes(entry.status)).length,
+    ...changes,
+  });
 }
 
-async function mountSection(jobs: Job[] = HISTORY, routes: Record<string, unknown> = {}, changes: Partial<Snapshot> = {}) {
-  served = studyDetail({ jobs });
+async function mountSection(
+  jobs: Job[] = HISTORY,
+  routes: Record<string, unknown> = {},
+  changes: Partial<Snapshot> = {},
+  study: Partial<StudyDetail> = {},
+) {
+  served = studyDetail({ jobs, ...study });
   state = workspace(jobs, changes);
   requests = serveApi({
     "GET /local/state": (() => json(state)) satisfies Handler,
@@ -113,9 +129,9 @@ async function mountSection(jobs: Job[] = HISTORY, routes: Record<string, unknow
 }
 
 /** Changes the jobs that the server lists for the study and the workspace. */
-function serveJobs(jobs: Job[]): void {
+function serveJobs(jobs: Job[], clearable = jobs.filter((entry) => !ACTIVE.includes(entry.status)).length): void {
   served = { ...served, jobs };
-  state = { ...state, jobs: [...jobs].reverse() };
+  state = { ...state, jobs: [...jobs].reverse(), clearable_jobs: clearable };
 }
 
 function entries(): DOMWrapper<Element>[] {
@@ -172,7 +188,8 @@ describe("the activity of a study", () => {
   it("lists the jobs newest first with the action, the text, the local time and the status", async () => {
     await mountSection();
     expect(entries().map((element) => element.get(".activity-text").text())).toEqual([
-      "Added review item 01K6Y4ZJ6Q8D3W6B6V5N1S2T3X",
+      // The review item is no longer in review.json.
+      "Added a review item",
       "Uploaded",
       "Validation found problems",
       "Saved study.json",
@@ -185,11 +202,12 @@ describe("the activity of a study", () => {
     // A validation that the local server started, after a save or at the first scan, says so.
     expect(textOf(entry("Validation passed").get(".activity-meta"))).toBe(`Validation · automatic · ${formatTime(at(0))}`);
     expect(textOf(entry("Saved study.json").get(".activity-meta"))).toBe(`Change in the app · ${formatTime(at(10))}`);
-    expect(page().get(".activity-caption").text()).toBe("Newest first. The app keeps the last 100 finished jobs of the workspace.");
+    expect(page().get(".activity-caption").text()).toBe("Newest first. The app keeps the last 100 finished jobs.");
   });
 
   it.each([
-    ["validate", "Validation", "fa-circle-check"],
+    // Neutral: the status says whether it passed.
+    ["validate", "Validation", "fa-clipboard-list"],
     ["validate_remote", "Server validation", "fa-server"],
     ["upload", "Upload", "fa-cloud-arrow-up"],
     ["write", "Change in the app", "fa-pen"],
@@ -206,6 +224,7 @@ describe("the activity of a study", () => {
     ["running", "Running"],
     ["succeeded", "Succeeded"],
     ["failed", "Failed"],
+    ["invalid", "Problems found"],
     ["canceled", "Canceled"],
     ["conflict", "Conflict"],
     ["unknown", "Outcome unknown"],
@@ -216,6 +235,52 @@ describe("the activity of a study", () => {
     expect(chip.text()).toBe(label);
     // Tinted chips keep the text in the surface color, as the status colors fail contrast as text.
     expect(chip.classes()).toContain("status-chip");
+  });
+
+  it("tells problems found from a job that failed, in the tone of the problem chips", async () => {
+    await mountSection([
+      job("failed-1", { status: "failed", message: "Could not read the source files; see the study", created_at: at(5) }),
+      job("invalid-1", { status: "invalid", message: "Validation found problems" }),
+    ]);
+    const problems = entry("Validation found problems").get(".activity-status");
+    expect(problems.text()).toBe("Problems found");
+    expect(problems.classes()).toContain("text-error");
+    expect(entry("Could not read the source files; see the study").get(".activity-status").text()).toBe("Failed");
+  });
+
+  it("says why a job was canceled, also for jobs that an earlier version canceled", async () => {
+    await mountSection([
+      job("replaced-1", { status: "canceled", message: "Replaced by a newer validation", report_id: null, created_at: at(5) }),
+      job("legacy-1", { status: "canceled", message: "Queued", report_id: null }),
+    ]);
+    expect(entries().map((element) => element.get(".activity-text").text())).toEqual([
+      "Replaced by a newer validation",
+      "Canceled before it started",
+    ]);
+  });
+
+  it("names review items by kind and text, linked to the item", async () => {
+    const item = reviewItem({
+      id: "01K6Y4ZJ6Q8D3W6B6V5N1S2T3X",
+      text: "Is the dose of 150 mg the caffeine base or the citrate salt?",
+    });
+    await mountSection(
+      [
+        write("write-2", "Resolved review item 01K6Y4ZJ6Q8D3W6B6V5N1S2T3Y", at(20)),
+        write("write-1", `Added review item ${item.id}`, at(10)),
+      ],
+      {},
+      {},
+      { review: { revision: "review-2", value: { status: "draft", reviewers: [], items: [item] }, issues: [] } },
+    );
+    const added = entries()[1]!.get(".activity-text");
+    expect(textOf(added)).toBe("Added the question “Is the dose of 150 mg the caffeine base…”");
+    const link = added.get("a");
+    expect(link.text()).toBe("question “Is the dose of 150 mg the caffeine base…”");
+    expect(link.attributes("href")).toBe(`#/studies/caffeine/Example/review?item=${item.id}`);
+    // An item that is no longer in review.json.
+    expect(textOf(entries()[0]!.get(".activity-text"))).toBe("Resolved a review item");
+    expect(entries()[0]!.find(".activity-text a").exists()).toBe(false);
   });
 
   it("says what a queued or running job does instead of the message of the server", async () => {
@@ -263,13 +328,14 @@ describe("the activity of a study", () => {
     expect(actionsOf(entry("Validation found problems"))).toEqual(["Download report"]);
     expect(entry("Saved study.json").find(".activity-actions").exists()).toBe(false);
     expect(button("Cancel queued validation").text()).toBe("Cancel");
-    // Each Download report is described by the text and the time of its job.
-    const download = entry("Uploaded").get("button");
-    const described = (download.attributes("aria-describedby") ?? "").split(" ");
-    expect(described.map((id) => document.getElementById(id)?.textContent?.replace(/\s+/g, " ").trim())).toEqual([
-      "Uploaded",
-      `Upload · created · ${formatTime(at(30))}`,
-    ]);
+    // Each Download report and Open on PK-DB is described by the text and the time of its job.
+    for (const control of [entry("Uploaded").get("button"), entry("Uploaded").get("a.activity-link")]) {
+      const described = (control.attributes("aria-describedby") ?? "").split(" ");
+      expect(described.map((id) => document.getElementById(id)?.textContent?.replace(/\s+/g, " ").trim())).toEqual([
+        "Uploaded",
+        `Upload · created · ${formatTime(at(30))}`,
+      ]);
+    }
   });
 
   it("says so when the study has no activity yet", async () => {
@@ -346,6 +412,8 @@ describe("cancel", () => {
     expect(entries()[0]!.get(".activity-status").text()).toBe("Canceled");
     expect(notice()).toBe("Canceled the queued validation.");
     expect(buttons("Cancel queued validation")).toHaveLength(0);
+    // The button is gone; the keyboard focus goes to the job instead of the page.
+    expect(document.activeElement).toBe(entries()[0]!.element);
   });
 
   it("explains a job that started before it could be canceled", async () => {
@@ -388,12 +456,13 @@ describe("clear finished history", () => {
   });
 
   it("says what it clears and asks first", async () => {
-    await mountSection([queued, unknown, ...HISTORY]);
+    await mountSection([queued, unknown, ...HISTORY], {}, { clearable_jobs: 42 });
     await press(button("Clear finished history"));
     expect(dialog().get("h2").text()).toBe("Clear finished history?");
     expect(textOf(dialog().get(".clear-text"))).toBe(
-      "This removes the finished jobs of all studies in the workspace and deletes their reports. " +
-        "Queued and running jobs, uploads with an unknown outcome and the last upload of each study stay.",
+      "This removes 42 finished jobs of this workspace from the activity and deletes their reports. " +
+        "Queued and running jobs, uploads with an unknown outcome, and the last upload and the current report " +
+        "of each study stay.",
     );
     await press(button("Keep history"));
     expect(dialogOpen()).toBe(false);
@@ -402,7 +471,8 @@ describe("clear finished history", () => {
 
   it("clears the finished jobs and keeps the jobs that the server keeps", async () => {
     const clear: Handler = () => {
-      serveJobs([queued, unknown, HISTORY[1]!]);
+      // The last upload stays.
+      serveJobs([queued, unknown, HISTORY[1]!], 0);
       return json(state);
     };
     await mountSection([queued, unknown, ...HISTORY], { [`POST ${CLEAR}`]: clear });
@@ -416,13 +486,28 @@ describe("clear finished history", () => {
       "Uploaded",
     ]);
     expect(notice()).toBe("Cleared the finished history.");
-    // Only what clearing keeps is left.
+    // Only what clearing keeps is left, and the keyboard focus goes to the list.
     expect(button("Clear finished history").attributes("disabled")).toBeDefined();
+    expect(document.activeElement).toBe(page().get(".activity-list").element);
   });
 
-  it("is available while other studies have finished jobs", async () => {
-    const other = job("other-1", { study_id: "caffeine/Other", study_name: "Other" });
-    await mountSection([queued], {}, { jobs: [other, queued] });
+  it("names a single job, and moves the focus to the empty activity", async () => {
+    const clear: Handler = () => {
+      serveJobs([]);
+      return json(state);
+    };
+    await mountSection([HISTORY[3]!], { [`POST ${CLEAR}`]: clear });
+    await press(button("Clear finished history"));
+    expect(textOf(dialog().get(".clear-text"))).toMatch(
+      /^This removes 1 finished job of this workspace from the activity and deletes its report\. /,
+    );
+    await press(button("Clear history"));
+    expect(document.activeElement).toBe(page().get(".activity-empty").element);
+  });
+
+  it("is available when the server says that a clear removes jobs", async () => {
+    // Jobs of other studies of the workspace, which the server counts.
+    await mountSection([queued], {}, { clearable_jobs: 3 });
     expect(button("Clear finished history").attributes("disabled")).toBeUndefined();
   });
 });

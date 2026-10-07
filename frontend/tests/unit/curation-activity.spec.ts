@@ -1,15 +1,15 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
-  clearable,
   datetime,
   jobText,
+  messageParts,
   persistenceLabel,
   REVOKE_MS,
   reportFileName,
   saveFile,
   uploadUrl,
 } from "../../src/curation-app/activity";
-import type { Job } from "../../src/curation-app/api/types";
+import type { Job, ReviewItem } from "../../src/curation-app/api/types";
 
 function job(changes: Partial<Job> = {}): Job {
   return {
@@ -42,7 +42,12 @@ describe("jobText", () => {
     const unstaged = job({ status: "running", message: "Queued" });
     delete unstaged.stage;
     expect(jobText(unstaged)).toBe("Running");
-    expect(jobText(job({ status: "failed", message: "Validation found problems" }))).toBe("Validation found problems");
+    expect(jobText(job({ status: "invalid", message: "Validation found problems" }))).toBe("Validation found problems");
+    // Saved by an earlier version, which kept the message of a queued job when it canceled it.
+    expect(jobText(job({ status: "canceled", message: "Queued" }))).toBe("Canceled before it started");
+    expect(jobText(job({ status: "canceled", message: "Replaced by a newer validation" }))).toBe(
+      "Replaced by a newer validation",
+    );
   });
 });
 
@@ -90,27 +95,32 @@ describe("uploadUrl", () => {
   });
 });
 
-describe("clearable", () => {
-  it("is true when the history has a job that clearing removes", () => {
-    expect(clearable([job({ status: "queued" }), job({ id: "job-2", status: "failed" })])).toBe(true);
-    expect(clearable([job({ action: "write", status: "succeeded" })])).toBe(true);
+describe("messageParts", () => {
+  const ID = "01K6Y4ZJ6Q8D3W6B6V5N1S2T3X";
+  const question: ReviewItem = {
+    id: ID,
+    kind: "question",
+    state: "open",
+    author: "curator",
+    created: "2026-10-07T12:00:00Z",
+    text: "Is the dose of 150 mg the caffeine base or the citrate salt of caffeine?",
+    thread: [],
+  };
+
+  it("names a review item by its kind and a short quote of its text, linked to it", () => {
+    expect(messageParts(`Added review item ${ID}`, [question])).toEqual([
+      { text: "Added the " },
+      { text: "question “Is the dose of 150 mg the caffeine base…”", item: ID },
+    ]);
+    expect(messageParts(`Acknowledged warning unknown_unit with review item ${ID}`, [{ ...question, kind: "issue", text: "Unit  as\nprinted" }])).toEqual([
+      { text: "Acknowledged warning unknown_unit with the " },
+      { text: "issue “Unit as printed”", item: ID },
+    ]);
   });
 
-  it("is false when only active jobs, uncertain uploads and the last upload of each study remain", () => {
-    const upload = { persistence: "created", at: "2026-10-07T12:00:00+00:00", endpoint: "", url: null };
-    const last = job({ id: "upload-2", action: "upload", upload });
-    expect(clearable([])).toBe(false);
-    expect(
-      clearable([
-        job({ status: "queued" }),
-        job({ id: "job-2", status: "running" }),
-        job({ id: "job-3", action: "upload", status: "unknown" }),
-        last,
-        job({ id: "upload-3", study_id: "caffeine/Other", action: "upload", upload }),
-      ]),
-    ).toBe(false);
-    // An earlier upload of the same study goes.
-    expect(clearable([job({ id: "upload-1", action: "upload", upload }), last])).toBe(true);
+  it("says a review item when the item no longer exists, and keeps other messages", () => {
+    expect(messageParts(`Resolved review item ${ID}`, [])).toEqual([{ text: "Resolved a review item" }]);
+    expect(messageParts("Saved study.json", [question])).toEqual([{ text: "Saved study.json" }]);
   });
 });
 
