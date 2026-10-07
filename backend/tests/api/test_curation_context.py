@@ -1,7 +1,6 @@
-import json
-
 from pkdb import Client
 from pkdb.curation.engine import CurationEngine
+from tests.fixtures.study_folders import write_study
 
 
 def test_context_requires_identity_and_returns_only_own_assignments(
@@ -20,21 +19,23 @@ def test_context_requires_identity_and_returns_only_own_assignments(
 def test_local_engine_validates_uploads_and_observes_saves(
     client,
     creator_headers,
-    valid_bundle,
     tmp_path,
     monkeypatch,
 ):
-    folder = tmp_path / valid_bundle.study["name"]
-    folder.mkdir()
-    (folder / "study.json").write_text(json.dumps(valid_bundle.study))
-    (folder / "reference.json").write_text(json.dumps(valid_bundle.reference))
+    workspace = tmp_path / "workspace"
+    folder = write_study(workspace)
     (folder / "notes.txt").write_text("Original attachment")
-    monkeypatch.setattr(
-        "pkdb.curation.engine.Client",
-        lambda *args, **kwargs: Client(*args, transport=client, **kwargs),
-    )
+    identity = "caffeine/Example"
+    url = f"/api/v2/studies/{identity}"
+
+    def bound(*args, **kwargs):
+        return Client(*args, transport=client, **kwargs)
+
+    # Jobs and the connection check each open their own client.
+    monkeypatch.setattr("pkdb.curation.jobs.Client", bound)
+    monkeypatch.setattr("pkdb.curation.connection.Client", bound)
     engine = CurationEngine(
-        folder,
+        workspace,
         endpoint="http://testserver",
         api_key=creator_headers["Authorization"].split()[1],
         state_dir=tmp_path / "app-state",
@@ -43,51 +44,51 @@ def test_local_engine_validates_uploads_and_observes_saves(
     try:
         engine.connect()
         assert engine.account
-        identifier = next(iter(engine.studies))
-        validation = engine.enqueue([identifier], "validate_remote")[0]
+        assert [row["id"] for row in engine.studies.values()] == [identity]
+        validation = engine.enqueue([identity], "validate_remote")[0]
         engine.queue.clear()
         engine.run_job(validation)
         assert validation["status"] == "succeeded", engine.report(
             validation["report_id"]
         )
         assert validation["persistence"] == "not_attempted"
-        assert (
-            client.get(
-                f"/api/v2/studies/{valid_bundle.study['sid']}", headers=creator_headers
-            ).status_code
-            == 404
+        # The server validated the folder under its identity and stored nothing.
+        server = engine.report(validation["report_id"])["server_report"]
+        assert (server["operation"], server["status"], server["study"]["sid"]) == (
+            "validate",
+            "succeeded",
+            identity,
         )
-        engine.set_mode([identifier], "upload")
-        job = engine.enqueue([identifier], "upload")[0]
+        assert client.get(url, headers=creator_headers).status_code == 404
+        engine.set_mode([identity], "upload")
+        job = engine.enqueue([identity], "upload")[0]
         engine.queue.clear()
         engine.run_job(job)
         assert job["status"] == "succeeded", engine.report(job["report_id"])
         assert job["persistence"] == "created"
-        assert (
-            client.get(
-                f"/api/v2/studies/{valid_bundle.study['sid']}", headers=creator_headers
-            ).status_code
-            == 200
-        )
+        assert client.get(url, headers=creator_headers).status_code == 200
         # A real external edit becomes one pending upload of the newest snapshot.
         (folder / "notes.txt").write_text("Saved externally")
         engine.scan()
-        engine.studies[identifier]["_changed_at"] -= 2
+        engine._row_of(identity)["_changed_at"] -= 2
         engine.schedule_changes()
-        job = engine.queue.pop(identifier)
+        job = engine.queue.pop(identity)
         assert job["automatic"] and job["action"] == "upload"
         engine.run_job(job)
         assert job["persistence"] == "replaced", engine.report(job["report_id"])
         # Invalid saved JSON is diagnosed and cannot replace the uploaded study.
         (folder / "study.json").write_text("{")
         engine.scan()
-        engine.studies[identifier]["_changed_at"] -= 2
+        engine._row_of(identity)["_changed_at"] -= 2
         engine.schedule_changes()
-        job = engine.queue.pop(identifier)
+        job = engine.queue.pop(identity)
         engine.run_job(job)
         assert job["status"] == "failed"
         assert job["persistence"] == "not_attempted"
-        assert engine.studies[identifier]["problems"]
+        problems = engine._row_of(identity)["problems"]
+        assert [(issue["code"], issue["source"]["file"]) for issue in problems] == [
+            ("invalid_json", "study.json")
+        ]
     finally:
         engine.close()
 
