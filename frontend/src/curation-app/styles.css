@@ -25,6 +25,11 @@ a.brand {
 .status-alert .v-alert__content {
   color: rgb(var(--v-theme-on-surface));
 }
+/* In the dark theme the light error color tints a chip at the default opacity almost like a
+   neutral chip: it gets a stronger tint, under which the text keeps more than 7:1. */
+.v-theme--dark .status-chip.text-error > .v-chip__underlay {
+  opacity: 0.24;
+}
 /* Filter chips with the count of what each one shows. The group adds its own margins around
    the chips; the gap of the filters is enough. */
 .filter-chips .v-slide-group__content {
