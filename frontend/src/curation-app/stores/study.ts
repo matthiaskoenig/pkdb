@@ -1,4 +1,4 @@
-import { computed, ref, watch } from "vue";
+import { computed, ref, shallowRef, watch } from "vue";
 import { defineStore } from "pinia";
 import { getJson, postJson, studyPath } from "../api/client";
 import {
@@ -59,6 +59,8 @@ export const useStudyStore = defineStore("curation-study", () => {
    * them again while the validation that leaves them out has not run.
    */
   const acknowledging = ref<Record<string, AcknowledgedMark[]>>({});
+  /** The result of the last sync of the open study from the app: Open tables, Sync or a resolved conflict. */
+  const lastSync = shallowRef<TablesResult | null>(null);
 
   // A report of a job queued after an acknowledgement ends its mark.
   watch(
@@ -109,6 +111,7 @@ export const useStudyStore = defineStore("curation-study", () => {
     requests.abort();
     requests = new AbortController();
     identity.value = null;
+    lastSync.value = null;
     tables.clear();
     sources.clear();
   }
@@ -182,9 +185,13 @@ export const useStudyStore = defineStore("curation-study", () => {
     return write("/local/studies/review", { ...payload, revision, action }, isReviewWrite);
   }
 
-  /** Open the workbook, sync it, resolve its conflicts or add a sheet. */
-  function tablesAction(action: TablesAction, payload: Record<string, unknown> = {}): Promise<TablesResult> {
-    return write("/local/studies/tables", { ...payload, action }, isTablesResult);
+  /** Open the workbook, sync it, resolve its conflicts or add a sheet; all but `add` sync. */
+  async function tablesAction(action: TablesAction, payload: Record<string, unknown> = {}): Promise<TablesResult> {
+    const study = opened();
+    const result = await write("/local/studies/tables", { ...payload, action }, isTablesResult);
+    // Not for another study that opened meanwhile.
+    if (action !== "add" && identity.value === study) lastSync.value = result;
+    return result;
   }
 
   /** `reference.json` of the open study; empty when there is none. */
@@ -225,6 +232,7 @@ export const useStudyStore = defineStore("curation-study", () => {
     identity: computed(() => identity.value),
     detail: computed(() => polling.data.value),
     error: computed(() => polling.error.value),
+    lastSync: computed(() => lastSync.value),
     open,
     close,
     refresh,

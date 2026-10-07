@@ -10,6 +10,7 @@ import ProblemsSection from "../sections/ProblemsSection.vue";
 import ReviewSection from "../sections/ReviewSection.vue";
 import SectionPlaceholder from "../sections/SectionPlaceholder.vue";
 import SourcesSection from "../sections/SourcesSection.vue";
+import TablesSection from "../sections/TablesSection.vue";
 import { useStudyStore } from "../stores/study";
 import {
   defaultSection,
@@ -31,6 +32,7 @@ const SECTION_VIEWS: Partial<Record<Section, Component>> = {
   review: ReviewSection,
   problems: ProblemsSection,
   sources: SourcesSection,
+  tables: TablesSection,
 };
 
 const route = useRoute();

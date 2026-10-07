@@ -271,14 +271,14 @@ a.brand {
 }
 
 /* Rows of a table in a region of their own, such as the rows of a review target or of a source.
-   At most about twelve rows show at once. A shadow at a side shows that more columns are there:
+   At most about twelve rows show at once, unless `--rows-max-height` allows more. A shadow at a side shows that more columns are there:
    the shadows stay at the edges, and covers in the surface color that scroll with the rows hide
    them at the start and the end. */
 .rows-scroll {
   --cover: rgb(var(--v-theme-surface));
   --cover-clear: rgba(var(--v-theme-surface), 0);
   --shade: rgba(var(--v-theme-on-surface), 0.2);
-  max-height: 420px;
+  max-height: var(--rows-max-height, 420px);
   overflow: auto;
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   border-radius: 8px;

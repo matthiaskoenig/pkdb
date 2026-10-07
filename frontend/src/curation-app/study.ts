@@ -67,6 +67,11 @@ export function tableFiles(detail: Pick<StudyDetail, "id" | "files">): string[] 
   });
 }
 
+/** Whether a file of `tableFiles` is a raw table: neither a data table nor a table of a source. */
+export function isRawTable(file: string): boolean {
+  return !DATA_TABLE.test(file) && !SOURCE_TABLE.test(file);
+}
+
 /** The counts of the rail: open items, errors plus warnings, sources, and table and raw table files. */
 export function railCounts(detail: StudyDetail): Partial<Record<Section, number>> {
   return {
