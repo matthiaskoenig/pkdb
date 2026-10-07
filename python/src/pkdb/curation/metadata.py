@@ -30,6 +30,38 @@ def profile(username: str) -> dict:
     }
 
 
+def roster() -> list[dict]:
+    """The profiles of the bundled curator roster, ordered by username."""
+    return [profile(item["username"]) for item in _curators().values()]
+
+
+def people(study: dict | None, summary: dict) -> dict:
+    """The creator, the curators with their ratings and the collaborators, with profiles.
+
+    `study` is the valid `study.json`; without it, the names that the row summary could read.
+    """
+    if study is None:
+        creator = summary.get("creator")
+        curators = [{"user": user} for user in summary.get("curators", [])]
+        collaborators = []
+    else:
+        creator = study.get("creator")
+        curators = study.get("curators", [])
+        collaborators = study.get("collaborators", [])
+    return {
+        "creator": profile(creator) if creator else None,
+        "curators": [
+            {
+                "user": curator["user"],
+                "rating": curator.get("rating"),
+                "profile": profile(curator["user"]),
+            }
+            for curator in curators
+        ],
+        "collaborators": [profile(name) for name in collaborators],
+    }
+
+
 def _text(value) -> str | None:
     if isinstance(value, bool) or not isinstance(value, str | int | float):
         return None

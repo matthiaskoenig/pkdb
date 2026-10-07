@@ -927,3 +927,139 @@ def test_writes_refuse_a_symlinked_document(api, tmp_path_factory, file, path, b
     assert "symlink" in {issue["code"] for issue in refused["issues"]}
     assert "content" not in refused
     assert (folder / file).is_symlink() and outside.read_bytes() == original
+
+
+def test_curator_roster(api):
+    server, engine, folder = api
+    headers = authenticate(server)
+    status, response_headers, data = request(
+        server, "GET", "/local/curators", headers=headers
+    )
+    assert status == 200
+    curators = {
+        curator["username"]: curator for curator in json.loads(data)["curators"]
+    }
+    assert curators["mkoenig"]["display_name"] == "Matthias König"
+    assert curators["mkoenig"]["avatar_url"] == "/avatars/matthias_koenig.webp"
+    assert curators["Ahmed-fub"]["avatar_url"] is None
+    assert all(
+        {"username", "display_name", "avatar_url"} <= set(curator)
+        for curator in curators.values()
+    )
+    again = request(
+        server,
+        "GET",
+        "/local/curators",
+        headers={**headers, "If-None-Match": response_headers["ETag"]},
+    )
+    assert again[0] == 304
+    assert request(server, "GET", "/local/curators")[0] == 401
+
+
+def test_detail_has_the_people_with_their_profiles(api):
+    server, engine, folder = api
+    study = json.loads((folder / "study.json").read_text())
+    (folder / "study.json").write_text(
+        dump_json(
+            {
+                **study,
+                "creator": "mkoenig",
+                "curators": [{"user": "mkoenig", "rating": 4.5}, {"user": "curator"}],
+                "collaborators": ["Jane Doe"],
+            }
+        )
+    )
+    engine.scan()
+    people = _detail(server, authenticate(server))["people"]
+    assert people["creator"]["display_name"] == "Matthias König"
+    assert people["creator"]["avatar_url"] == "/avatars/matthias_koenig.webp"
+    assert [(c["user"], c["rating"]) for c in people["curators"]] == [
+        ("mkoenig", 4.5),
+        ("curator", 0),
+    ]
+    assert people["curators"][0]["profile"]["username"] == "mkoenig"
+    assert people["curators"][1]["profile"]["display_name"] == "curator"
+    assert [c["display_name"] for c in people["collaborators"]] == ["Jane Doe"]
+
+
+def test_app_writes_are_listed_in_the_activity(api, sf_vocabulary, monkeypatch):
+    server, engine, folder = api
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    monkeypatch.setattr("pkdb.curation.studies.open_path", lambda path, **kw: None)
+    headers = authenticate(server)
+    detail = _detail(server, headers)
+    request(
+        server,
+        "POST",
+        "/local/studies/metadata",
+        {
+            "study": "caffeine/Example",
+            "revision": detail["metadata"]["revision"],
+            "metadata": {**detail["metadata"]["value"], "licence": "closed"},
+        },
+        headers,
+    )
+    added = json.loads(
+        request(
+            server,
+            "POST",
+            "/local/studies/review",
+            {
+                "study": "caffeine/Example",
+                "revision": detail["review"]["revision"],
+                "action": "add",
+                "kind": "question",
+                "text": "Why?",
+            },
+            headers,
+        )[2]
+    )
+    item = added["item"]["id"]
+    request(
+        server,
+        "POST",
+        "/local/studies/review",
+        {
+            "study": "caffeine/Example",
+            "revision": added["revision"],
+            "action": "resolve",
+            "item": item,
+        },
+        headers,
+    )
+    for body in [
+        {"action": "open"},
+        {"action": "sync"},
+        {"action": "add", "raw": "Tab3"},
+    ]:
+        request(
+            server,
+            "POST",
+            "/local/studies/tables",
+            {"study": "caffeine/Example", **body},
+            headers,
+        )
+    # Recording a write starts nothing; the watcher validates the changed files.
+    assert engine.queue == {}
+    writes = [
+        job for job in _detail(server, headers)["jobs"] if job["action"] == "write"
+    ]
+    assert [job["message"] for job in writes] == [
+        "Added raw table Example_Tab3",
+        "Synced the workbook and the tables",
+        "Opened the workbook",
+        f"Resolved review item {item}",
+        f"Added review item {item}",
+        "Saved study.json",
+    ]
+    assert {job["status"] for job in writes} == {"succeeded"}
+    assert all(
+        job["study_id"] == "caffeine/Example"
+        and job["study_name"] == "Example"
+        and job["created_at"]
+        for job in writes
+    )
+    saved = json.loads((engine.state_dir / "state.json").read_text())["jobs"]
+    assert [job["message"] for job in saved if job["action"] == "write"][0] == (
+        "Saved study.json"
+    )

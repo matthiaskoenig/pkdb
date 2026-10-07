@@ -11,6 +11,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlsplit
 
 from pkdb.curation.engine import WorkspaceError
+from pkdb.curation.metadata import roster
 from pkdb.curation.studies import AmbiguousStudy
 from pkdb.identity import IdentityError, UserMismatch
 from pkdb.references import ReferenceError
@@ -221,6 +222,8 @@ class Handler(BaseHTTPRequestHandler):
                     self._json(report)
                 elif path.startswith("/local/studies/"):
                     self._study(path)
+                elif path == "/local/curators":
+                    self._json({"curators": roster()})
                 else:
                     self._reply(404, {"error": "Unknown resource"})
             except AmbiguousStudy as error:

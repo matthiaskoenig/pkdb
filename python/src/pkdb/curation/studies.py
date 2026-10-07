@@ -2,7 +2,7 @@
 
 `study_summary` reads leniently: a file that does not parse gives None or empty values, never an
 exception. `StudiesMixin` reads engine attributes lock, root, studies, jobs and offline, and uses
-engine methods _issue_for, _local_vocabulary, author and scan. It serves only files that the study
+engine methods _issue_for, _local_vocabulary, _record_write, author and scan. It serves only files that the study
 registers: no symlink, nothing outside the study folder. Its writes go through the library, which
 takes `folder_lock`; anything that takes the engine lock runs before it.
 """
@@ -20,6 +20,7 @@ from urllib.parse import quote
 from pydantic import ValidationError
 
 from pkdb.curation.launch import open_path
+from pkdb.curation.metadata import people
 from pkdb.curation.state import EngineState
 from pkdb.identity import Author
 from pkdb.preparation import MAX_FILES, MAX_ROWS
@@ -278,6 +279,32 @@ def _sync_result(result: SyncResult) -> dict:
     }
 
 
+def _review_message(payload: dict, result: dict) -> str:
+    """A review action as the activity of the study lists it."""
+    item = result["item"]["id"] if "item" in result else payload.get("item")
+    match payload["action"]:
+        case "add":
+            return f"Added review item {item}"
+        case "reply":
+            return f"Replied to review item {item}"
+        case "status":
+            return f"Set the review status to {payload['status']}"
+        case "acknowledge":
+            return f"Acknowledged warning {payload['code']} with review item {item}"
+        case action:
+            done = {"resolve": "Resolved", "dismiss": "Dismissed", "reopen": "Reopened"}
+            return f"{done[action]} review item {item}"
+
+
+def _sync_activity(done: str, sync: SyncResult) -> tuple[str, str]:
+    """The message and status of a workbook action for the activity of the study."""
+    if sync.ok:
+        return done, "succeeded"
+    if unresolved := sum(conflict.kept is None for conflict in sync.conflicts):
+        return f"{done}; {unresolved} conflicts remain", "conflict"
+    return f"{done}; the sync found errors", "failed"
+
+
 class StudiesMixin(EngineState):
     def _study_row(self, identity: str) -> dict:
         matches = [row for row in self.studies.values() if row["id"] == identity]
@@ -358,9 +385,12 @@ class StudiesMixin(EngineState):
             sources = [dataclasses.asdict(source) for source in study_sources(study)]
             files = sorted(layout.files, key=natural_key)
         review = _document(folder, layout, REVIEW_JSON, read_review)
+        metadata = _document(folder, layout, STUDY_JSON, read_metadata)
         return {
             **detail,
-            "metadata": _document(folder, layout, STUDY_JSON, read_metadata),
+            "metadata": metadata,
+            # The study page shows the people without a second request for the roster.
+            "people": people(metadata["value"], detail["summary"]),
             "review": review,
             "acknowledged": _acknowledged(review["value"]),
             "conflicts": self._conflicts(folder) if conflicted else [],
@@ -467,6 +497,7 @@ class StudiesMixin(EngineState):
         written = study_metadata.write_metadata(
             folder, model, revision, resolver=ReferenceResolver(offline=self.offline)
         )
+        self._record_write(identity, "Saved study.json")
         self._rescan()
         return {
             "revision": written.revision,
@@ -490,6 +521,7 @@ class StudiesMixin(EngineState):
             raise _review_error(
                 validation_issues(error, REVIEW_JSON, review_edit.CODE)
             ) from None
+        self._record_write(identity, _review_message(payload, result))
         self._rescan()
         return result
 
@@ -623,6 +655,14 @@ class StudiesMixin(EngineState):
                 else {"workbook_action": "unchanged", "changes": [], "conflicts": []}
             )
             issues = [*(added.sync.issues if added.sync else ()), *added.issues]
+            kind = "table" if table is not None else "raw table"
+            self._record_write(
+                identity,
+                f"Added {kind} {added.table or name}"
+                if added.ok
+                else f"Could not add {kind} {name}",
+                "succeeded" if added.ok else "failed",
+            )
             return {
                 **synced,
                 "table": added.table,
@@ -643,4 +683,10 @@ class StudiesMixin(EngineState):
             result["opened"] = sync.workbook.is_file()
             if result["opened"]:
                 open_path(sync.workbook)
+        done = {
+            "open": "Opened the workbook",
+            "sync": "Synced the workbook and the tables",
+            "resolve": f"Resolved the sync conflicts, keeping the {keep}",
+        }[action]
+        self._record_write(identity, *_sync_activity(done, sync))
         return result

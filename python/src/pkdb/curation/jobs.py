@@ -115,12 +115,7 @@ class JobsMixin(EngineState):
             "persistence": "not_attempted",
             "report_id": None,
         }
-        self.jobs.append(job)
-        protected = [
-            j for j in self.jobs if j["status"] in {"queued", "running", "unknown"}
-        ]
-        finished = [j for j in self.jobs if j not in protected][-100:]
-        self.jobs = sorted(protected + finished, key=lambda j: j["created_at"])
+        self._remember(job)
         self.queue[row["id"]] = job
         row["_pending"] = False
         row["_initial"] = False
@@ -128,6 +123,33 @@ class JobsMixin(EngineState):
         self._save()
         self.wakeup.set()
         return job
+
+    def _remember(self, job):
+        """Add a job to the history, which keeps the last 100 finished jobs."""
+        self.jobs.append(job)
+        protected = [
+            j for j in self.jobs if j["status"] in {"queued", "running", "unknown"}
+        ]
+        finished = [j for j in self.jobs if j not in protected][-100:]
+        self.jobs = sorted(protected + finished, key=lambda j: j["created_at"])
+
+    def _record_write(self, identity, message, status="succeeded"):
+        """List a write of the app in the activity of the study; it starts nothing."""
+        with self.lock:
+            self._remember(
+                {
+                    "id": uuid4().hex,
+                    "study_id": identity,
+                    "study_name": identity.rsplit("/", 1)[-1],
+                    "action": "write",
+                    "status": status,
+                    "created_at": now(),
+                    "message": message,
+                    "automatic": False,
+                    "report_id": None,
+                }
+            )
+            self._save()
 
     def enqueue(self, ids, action):
         if action not in {"validate", "validate_remote", "upload"}:
