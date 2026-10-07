@@ -364,7 +364,7 @@ describe("AppHeader", () => {
   });
 
   it("follows a dark system again when the curator switches to dark", async () => {
-    // tests/setup.ts mocks matchMedia for all tests: this test replaces it and puts it back.
+    // tests/setup-media.ts mocks matchMedia for all tests: this test replaces it and puts it back.
     const original = window.matchMedia;
     onTestFinished(() => {
       window.matchMedia = original;
