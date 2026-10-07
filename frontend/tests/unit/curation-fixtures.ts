@@ -1,5 +1,12 @@
 /** Responses of the local API of `pkdb curate` for the tests of the curation app. */
-import type { Profile, Snapshot, StudyDetail, StudyMetadata, StudyRow } from "../../src/curation-app/api/types";
+import type {
+  Profile,
+  ReviewItem,
+  Snapshot,
+  StudyDetail,
+  StudyMetadata,
+  StudyRow,
+} from "../../src/curation-app/api/types";
 
 /** The overview row of the valid study `caffeine/Example`. */
 export function studyRow(changes: Partial<StudyRow> = {}): StudyRow {
@@ -136,6 +143,25 @@ export function roster(): Profile[] {
     profile("mkoenig", "Matthias König"),
     profile("curator", "Curator", false),
   ];
+}
+
+/**
+ * An open question of `curator` about the whole study, without replies; a resolved or dismissed
+ * item gets `resolved_by` and `resolved` unless `changes` sets them.
+ */
+export function reviewItem(changes: Partial<ReviewItem> = {}): ReviewItem {
+  const closed = changes.state !== undefined && changes.state !== "open";
+  return {
+    id: "01JA2XK7Q8M3R5T6V9W0Y1Z2AB",
+    kind: "question",
+    state: "open",
+    text: "Is the mean read from the table?",
+    author: "curator",
+    created: "2026-10-05T10:12:00Z",
+    thread: [],
+    ...(closed ? { resolved_by: "mkoenig", resolved: "2026-10-06T09:00:00Z" } : {}),
+    ...changes,
+  };
 }
 
 /**

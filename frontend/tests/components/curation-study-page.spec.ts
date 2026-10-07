@@ -202,14 +202,16 @@ describe("StudyPage", () => {
     });
     await flushPromises();
     expect(page().find(".study-header").exists()).toBe(true);
+    const studyRequests = () => requests.filter(({ path }) => path.startsWith("/local/studies/"));
+    // The detail, and the table that the selected review item targets.
+    const opened = studyRequests().length;
+    expect(studyRequests().filter(({ path }) => path === HARDER)).toHaveLength(1);
 
     await router.push("/");
     await flushPromises();
     await new Promise((resolve) => setTimeout(resolve, 50));
     expect(router.currentRoute.value.name).toBe("Overview");
-    expect(requests.filter(({ path }) => path.startsWith("/local/studies/")).map(({ path }) => path)).toEqual([
-      HARDER,
-    ]);
+    expect(studyRequests().slice(opened)).toEqual([]);
   });
 
   it("redirects a study without a section to its default section", async () => {
