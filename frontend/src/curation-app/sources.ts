@@ -3,7 +3,7 @@
  * lists and the problems of the files of a source. What a source is and which files it lacks
  * come from the library, in the summaries of the study detail.
  */
-import type { MappedTable, SourceSummary, SourceView, TableRow, ValidationIssue } from "./api/types";
+import type { MappedTable, SourceSummary, SourceView, TableResponse, ValidationIssue } from "./api/types";
 import { shownColumns } from "./review";
 
 /** The letters of a column of a spreadsheet: A for the first, AA after Z. */
@@ -17,14 +17,11 @@ export function columnLetters(index: number): string {
 /** The columns that a list of mapped rows leaves out: every row of a source has them alike. */
 const IMPLIED_COLUMNS = new Set(["study", "source"]);
 
-/** The first `limit` mapped rows of a table, with the columns that have a value in one of them. */
-export function listedRows(
-  table: MappedTable,
-  limit: number,
-): { rows: TableRow[]; columns: number[]; total: number } {
-  const rows = table.rows.slice(0, limit).map(([line, cells]) => ({ line, cells }));
+/** The mapped rows of a table as a table grid, and the columns that have a value in one of them. */
+export function mappedGrid(table: MappedTable): { grid: TableResponse; columns: number[] } {
+  const rows = table.rows.map(([line, cells]) => ({ line, cells }));
   const columns = shownColumns(table.header, rows, []).filter((index) => !IMPLIED_COLUMNS.has(table.header[index]!));
-  return { rows, columns, total: table.rows.length };
+  return { grid: { file: table.file, kind: "table", header: table.header, rows }, columns };
 }
 
 /**

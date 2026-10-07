@@ -4,9 +4,10 @@ import { useRoute, useRouter } from "vue-router";
 import { VAlert, VBtn, VProgressLinear, VTab, VTabs } from "vuetify/components";
 import type { SourceSummary, SourceView } from "../api/types";
 import MappedRows from "../components/MappedRows.vue";
-import RawGrid from "../components/RawGrid.vue";
 import SourceOverlay from "../components/SourceOverlay.vue";
+import TableGrid from "../components/TableGrid.vue";
 import { useLoaded } from "../composables/useLoaded";
+import { rawTable } from "../grid";
 import { drawsOnImage, plottedSeries } from "../overlay";
 import { location, SEVERITY_LABELS, tableQuery } from "../problems";
 import { sourceProblems } from "../sources";
@@ -61,6 +62,10 @@ const { data, error, loading, reload } = useLoaded<SourceView>(
 /** The view of the chosen source; null while another one is shown or it loads. */
 const view = computed(() => (data.value && data.value.key === selected.value?.source ? data.value.content : null));
 const kind = computed(() => selected.value?.kind ?? null);
+/** The raw extraction of a paper table with the lines of its rows. */
+const raw = computed(() =>
+  view.value?.raw_grid && selected.value?.raw ? rawTable(selected.value.raw, view.value.raw_grid) : null,
+);
 const calibrated = computed(() => (view.value ? drawsOnImage(view.value) : false));
 const plotted = computed(() => (view.value ? plottedSeries(view.value) : []));
 /** The width of the image of a digitized figure, which the plot beside the overlay does not exceed. */
@@ -162,7 +167,7 @@ function showRow(row: { file: string; line: number }): void {
 
             <section v-if="kind === 'table'" class="source-block" :aria-labelledby="`${id}-raw`">
               <h3 :id="`${id}-raw`" class="source-heading">Raw extraction</h3>
-              <RawGrid v-if="view.raw_grid" :grid="view.raw_grid" :label="`Raw extraction ${selected.raw}`" />
+              <TableGrid v-if="raw" :table="raw" :label="`Raw extraction ${raw.file}`" />
               <div v-else class="source-missing">
                 <i class="fas fa-file-circle-plus source-missing-icon" aria-hidden="true"></i>
                 <div>

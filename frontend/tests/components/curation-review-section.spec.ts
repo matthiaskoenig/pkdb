@@ -704,9 +704,19 @@ describe("target", () => {
     expect(target().text()).toContain("outputs_Tab2.tsv · column mean");
     expect(targetLines()).toEqual(["2", "3"]);
     expect(target().text()).toContain("The table has 2 rows.");
-    expect(target().get("thead .target-column").text()).toContain("mean");
-    expect(target().findAll("tbody .target-column").map((cell) => cell.text())).toEqual(["1.2", "4.8"]);
+    expect(target().get("thead .grid-cell--marked").text()).toBe("mean, the column of the item");
+    expect(target().findAll("tbody .grid-cell--marked").map((cell) => cell.text())).toEqual(["1.2", "4.8"]);
     expect(target().find(".overlay-stub").exists()).toBe(false);
+  });
+
+  it("links the target and each of its rows to the Tables section", async () => {
+    await mountSection();
+    const link = target()
+      .findAll("a")
+      .find((candidate) => candidate.text() === "Show in table");
+    expect(link?.attributes("href")).toBe("#/studies/caffeine/Example/tables?file=outputs_Tab2.tsv&line=2&column=mean");
+    const line = target().get('a[aria-label="Show line 3 of outputs_Tab2.tsv in the Tables section"]');
+    expect(line.attributes("href")).toBe("#/studies/caffeine/Example/tables?file=outputs_Tab2.tsv&line=3&column=mean");
   });
 
   it("lists the matching rows and shows the overlay of a digitized series with the series emphasized", async () => {

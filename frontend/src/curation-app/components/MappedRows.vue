@@ -2,17 +2,13 @@
 import { computed, useId } from "vue";
 import type { MappedTable } from "../api/types";
 import { plural } from "../overview";
-import { listedRows } from "../sources";
+import { mappedGrid } from "../sources";
 import { sectionRoute } from "../study";
-
-/** At most this many rows are listed per table; the Tables section has all of them. */
-const LISTED_ROWS = 100;
-/** Beyond this many rows, the rows scroll below a header that stays in view. */
-const SCROLL_ROWS = 12;
+import TableGrid from "./TableGrid.vue";
 
 /**
  * The rows that tables map from a source, by table, with the line of each row in its file. A
- * line opens the row in the Tables section, and stays in view while wide rows scroll.
+ * line opens the row in the Tables section.
  */
 const props = defineProps<{
   tables: MappedTable[];
@@ -21,9 +17,7 @@ const props = defineProps<{
 }>();
 
 const id = useId();
-const listed = computed(() =>
-  props.tables.map((table) => ({ table, ...listedRows(table, LISTED_ROWS) })),
-);
+const listed = computed(() => props.tables.map((table) => ({ table, ...mappedGrid(table) })));
 
 function lineRoute(file: string, line: number) {
   return sectionRoute(props.study, "tables", { file, line: String(line) });
@@ -40,41 +34,18 @@ function lineRoute(file: string, line: number) {
     >
       <div class="mapped-head">
         <h4 :id="`${id}-${index}`" class="mapped-file">{{ entry.table.file }}</h4>
-        <span class="mapped-count">{{ plural(entry.total, "row") }}</span>
+        <span class="mapped-count">{{ plural(entry.grid.rows.length, "row") }}</span>
       </div>
-      <p v-if="entry.total > entry.rows.length" class="field-note">
-        The first {{ entry.rows.length }} rows are listed. The Tables section has all of them.
-      </p>
-      <div
-        v-if="entry.rows.length"
-        class="rows-scroll rows-scroll--sticky-line"
-        :class="{ 'rows-scroll--tall': entry.rows.length > SCROLL_ROWS }"
-        tabindex="0"
-        role="region"
-        :aria-label="`Rows of ${entry.table.file}`"
-      >
-        <table class="rows-table rows-table--packed">
-          <thead>
-            <tr>
-              <th scope="col" class="rows-line">Line</th>
-              <th v-for="column in entry.columns" :key="column" scope="col">{{ entry.table.header[column] }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in entry.rows" :key="row.line">
-              <th scope="row" class="rows-line">
-                <RouterLink
-                  :to="lineRoute(entry.table.file, row.line)"
-                  :aria-label="`Show line ${row.line} of ${entry.table.file} in the Tables section`"
-                >
-                  {{ row.line }}
-                </RouterLink>
-              </th>
-              <td v-for="column in entry.columns" :key="column">{{ row.cells[column] ?? "" }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <TableGrid v-if="entry.grid.rows.length" :table="entry.grid" :columns="entry.columns">
+        <template #line="{ line }">
+          <RouterLink
+            :to="lineRoute(entry.table.file, line)"
+            :aria-label="`Show line ${line} of ${entry.table.file} in the Tables section`"
+          >
+            {{ line }}
+          </RouterLink>
+        </template>
+      </TableGrid>
     </section>
   </div>
 </template>

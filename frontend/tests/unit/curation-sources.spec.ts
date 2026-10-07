@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { MappedTable, SourceSummary, SourceView, ValidationIssue } from "../../src/curation-app/api/types";
-import { columnLetters, listedRows, sourceProblems } from "../../src/curation-app/sources";
+import { columnLetters, mappedGrid, sourceProblems } from "../../src/curation-app/sources";
 
 describe("columnLetters", () => {
   it("names columns as a spreadsheet does", () => {
@@ -18,7 +18,7 @@ describe("columnLetters", () => {
   });
 });
 
-describe("listedRows", () => {
+describe("mappedGrid", () => {
   const table: MappedTable = {
     file: "outputs_Tab2.tsv",
     kind: "outputs",
@@ -31,22 +31,25 @@ describe("listedRows", () => {
     ],
   };
 
-  it("leaves out the study and source columns and empty columns", () => {
-    const listed = listedRows(table, 100);
-    expect(listed.columns.map((index) => table.header[index])).toEqual(["label", "mean", "sd"]);
-    expect(listed.rows.map((row) => row.line)).toEqual([2, 3, 4]);
-    expect(listed.total).toBe(3);
+  it("makes the mapped rows a table and leaves out the study and source columns and empty columns", () => {
+    const { grid, columns } = mappedGrid(table);
+    expect(grid).toEqual({
+      file: "outputs_Tab2.tsv",
+      kind: "table",
+      header: table.header,
+      rows: table.rows.map(([line, cells]) => ({ line, cells })),
+    });
+    expect(columns.map((index) => table.header[index])).toEqual(["label", "mean", "sd"]);
   });
 
-  it("lists at most the first rows", () => {
-    const listed = listedRows(table, 2);
-    expect(listed.rows.map((row) => row.line)).toEqual([2, 3]);
-    expect(listed.total).toBe(3);
-    // The columns follow the listed rows.
-    expect(listedRows({ ...table, rows: table.rows.slice(0, 1) }, 2).columns.map((i) => table.header[i])).toEqual([
-      "label",
-      "mean",
+  it("keeps every row: the grid renders many rows as they scroll into view", () => {
+    const rows: MappedTable["rows"] = Array.from({ length: 700 }, (_, index) => [
+      index + 2,
+      ["Example", "Tab2", `r${index}`, "", "", ""],
     ]);
+    const { grid, columns } = mappedGrid({ ...table, rows });
+    expect(grid.rows).toHaveLength(700);
+    expect(columns.map((index) => table.header[index])).toEqual(["label"]);
   });
 });
 

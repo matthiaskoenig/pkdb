@@ -9,16 +9,12 @@ import { matchingRows, matchText, seriesOfTarget, shownColumns, targetText } fro
 import { useStudyStore } from "../stores/study";
 import { sectionRoute, tableFiles } from "../study";
 import SourceOverlay from "./SourceOverlay.vue";
-
-/** At most this many rows are listed; the Tables section has all of them. */
-const LISTED_ROWS = 100;
-/** Beyond this many rows, the rows scroll below a header that stays in view. */
-const SCROLL_ROWS = 12;
+import TableGrid from "./TableGrid.vue";
 
 /**
  * What a review item is about: the rows of its table that match its row filters, with its column
  * marked, and for a digitized series the figure overlay with that series emphasized. Nothing
- * shows for the whole study or a file that is no table.
+ * shows for the whole study or a file that is no table. The rows link to the Tables section.
  */
 const props = defineProps<{ target: ReviewTarget | undefined }>();
 
@@ -73,15 +69,24 @@ const rows = computed(() => {
   // The column of the item comes first, so that it is in view in a wide table.
   const marked = column === null ? -1 : loaded.header.indexOf(column);
   return {
-    header: loaded.header,
+    table: { ...loaded, rows: matched },
     columns: marked < 0 ? kept : [marked, ...kept.filter((index) => index !== marked)],
-    marked,
+    column: marked < 0 ? null : column,
     matched: matched.length,
     total: loaded.rows.length,
-    listed: matched.slice(0, LISTED_ROWS),
     hidden: matched.length > 0 && kept.length < loaded.header.length,
   };
 });
+
+/** The Tables section at the target, or at its row `line`, with the column of the item. */
+function tableRoute(line?: number) {
+  const column = rows.value?.column;
+  return sectionRoute(study.detail?.id ?? "", "tables", {
+    file: tableFile.value ?? "",
+    ...(line === undefined ? {} : { line: String(line) }),
+    ...(column ? { column } : {}),
+  });
+}
 const rawTable = computed(() => table.value?.content.kind === "raw");
 const shown = computed(() => tableFile.value !== null || series.value !== null);
 </script>
@@ -99,56 +104,34 @@ const shown = computed(() => tableFile.value !== null || series.value !== null);
         <p v-else-if="tableError" class="field-error">
           The rows of {{ tableFile }} could not be loaded. {{ tableError }}
         </p>
-        <p v-else-if="rawTable" class="field-note">The Sources section shows this raw table.</p>
+        <p v-else-if="rawTable" class="field-note">
+          This is a raw table. <RouterLink :to="tableRoute()">Show in table</RouterLink>
+        </p>
         <template v-else-if="rows">
           <p class="target-caption">
             {{ filtered ? matchText(rows.matched, rows.total) : `The table has ${plural(rows.total, "row")}.` }}
             <template v-if="filtered && rows.matched === 0">
               The rows may have changed since the item was written.
             </template>
-            <template v-if="rows.matched > rows.listed.length">
-              The first {{ rows.listed.length }} are listed.
-            </template>
             <template v-if="rows.hidden">Empty columns are hidden.</template>
+            <RouterLink :to="tableRoute(rows.table.rows[0]?.line)" class="target-link">Show in table</RouterLink>
           </p>
-          <!-- The rows scroll inside their region, which takes the focus so that a keyboard can scroll it. -->
-          <div
-            v-if="rows.listed.length"
-            class="rows-scroll"
-            :class="{ 'rows-scroll--tall': rows.listed.length > SCROLL_ROWS }"
-            tabindex="0"
-            role="region"
-            :aria-label="`Rows of ${tableFile}`"
+          <TableGrid
+            v-if="rows.matched"
+            :table="rows.table"
+            :columns="rows.columns"
+            :mark-column="rows.column"
+            mark-text="the column of the item"
           >
-            <table class="rows-table">
-              <thead>
-                <tr>
-                  <th scope="col" class="rows-line">Line</th>
-                  <th
-                    v-for="index in rows.columns"
-                    :key="index"
-                    scope="col"
-                    :class="{ 'target-column': index === rows.marked }"
-                  >
-                    {{ rows.header[index]
-                    }}<span v-if="index === rows.marked" class="d-sr-only">, the column of the item</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="row in rows.listed" :key="row.line">
-                  <th scope="row" class="rows-line">{{ row.line }}</th>
-                  <td
-                    v-for="index in rows.columns"
-                    :key="index"
-                    :class="{ 'target-column': index === rows.marked }"
-                  >
-                    {{ row.cells[index] ?? "" }}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+            <template #line="{ line }">
+              <RouterLink
+                :to="tableRoute(line)"
+                :aria-label="`Show line ${line} of ${tableFile} in the Tables section`"
+              >
+                {{ line }}
+              </RouterLink>
+            </template>
+          </TableGrid>
         </template>
       </div>
 
@@ -209,8 +192,8 @@ const shown = computed(() => tableFile.value !== null || series.value !== null);
   font-size: 0.875rem;
   line-height: 1.45;
 }
-/* A tint over the cell, so that the sticky header keeps its surface color below it. */
-.rows-table .target-column {
-  background-image: linear-gradient(rgba(var(--v-theme-primary), 0.1), rgba(var(--v-theme-primary), 0.1));
+.target-link {
+  margin-inline-start: 4px;
+  white-space: nowrap;
 }
 </style>
