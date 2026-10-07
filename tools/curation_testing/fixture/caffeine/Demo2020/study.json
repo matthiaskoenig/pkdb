@@ -1,0 +1,18 @@
+{
+  "format": 2,
+  "reference": {
+    "doi": "10.5555/pkdb.demo.2020"
+  },
+  "creator": "curator",
+  "curators": [
+    {
+      "user": "curator",
+      "rating": 4
+    }
+  ],
+  "licence": "closed",
+  "access": "private",
+  "descriptions": [
+    "This is a synthetic test study of the PK-DB curation app. Its values are made up, and it describes no real publication."
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "sid": "10.5555/pkdb.demo.2020",
+  "name": "Demo2020",
+  "doi": "10.5555/pkdb.demo.2020",
+  "title": "Caffeine in plasma after two oral doses in a synthetic test study",
+  "journal": "Journal of Example Data",
+  "date": "2020-03-01",
+  "publication_date": "2020-03-01",
+  "authors": [
+    {
+      "first_name": "Ada",
+      "last_name": "Example"
+    },
+    {
+      "first_name": "Ben",
+      "last_name": "Sample"
+    }
+  ]
+}

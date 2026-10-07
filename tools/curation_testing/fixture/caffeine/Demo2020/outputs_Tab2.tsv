@@ -1,0 +1,9 @@
+study	source	subjects	interventions	measurement	calculation	substance	tissue	method	choice	time	time_unit	count	mean	sd	se	cv	gmean	gsd	gcv	median	min	max	unit	error_bar	error_type	comment
+Demo2020	Tab2	all	D100	auc_inf		caffeine	plasma					12	17.6	4.2									mg/l*hr			
+Demo2020	Tab2	all	D100	cmax		caffeine	plasma					12	2.1	0.4									mg/l			
+Demo2020	Tab2	all	D100	thalf		caffeine	plasma					12	5	1.1									hr			
+Demo2020	Tab2	all	D100	tmax		caffeine	plasma					12	0.8	0.3									hr			
+Demo2020	Tab2	all	D200	auc_inf		caffeine	plasma					12	36.1	8.5									mg/l*hr			
+Demo2020	Tab2	all	D200	cmax		caffeine	plasma					12	4.2	0.8									mg/l			
+Demo2020	Tab2	all	D200	thalf		caffeine	plasma					12	5.2	1.2									hr			
+Demo2020	Tab2	all	D200	tmax		caffeine	plasma					12	0.9	0.3									hr			

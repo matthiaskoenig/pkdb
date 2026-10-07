@@ -1,0 +1,3 @@
+study	source	subjects	interventions	measurement	calculation	substance	tissue	method	choice	time	time_unit	count	mean	sd	se	cv	gmean	gsd	gcv	median	min	max	unit	error_bar	error_type	comment
+Draft2021	Tab1	all	D150	cmax		caffeine	plasma					8	3.1	0.6									mg/l			
+Draft2021	Tab1	all	D150	tmax		cafeine	plasma					8	1.1	0.4									hr			
