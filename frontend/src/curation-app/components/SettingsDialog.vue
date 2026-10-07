@@ -140,12 +140,13 @@ watch(
             spellcheck="false"
             :hint="keyHint"
             persistent-hint
+            class="settings-key"
           >
             <template v-if="overview.snapshot?.authenticated" #details>
               <VBtn
                 variant="text"
                 size="small"
-                density="comfortable"
+                density="compact"
                 color="primary"
                 class="settings-key-remove"
                 :loading="removing"
@@ -181,10 +182,16 @@ watch(
 .settings-fields :deep(.v-messages__message) {
   line-height: 1.35;
 }
-/* Beside the hint of the key field: centered on its line, the text ending where the field
-   content ends. */
+/* Remove key shares the baseline of the hint, and its box ends with the field. The row lets
+   the focus ring of the button show. */
+.settings-key :deep(.v-input__details) {
+  align-items: baseline;
+  overflow: visible;
+}
 .settings-key-remove {
-  margin: -6px -12px -2px 0;
+  flex: none;
+  margin-inline-end: -16px;
+  padding-inline: 8px;
 }
 .settings-note {
   margin: 0;

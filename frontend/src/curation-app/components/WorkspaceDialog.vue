@@ -16,6 +16,7 @@ import {
 } from "vuetify/components";
 import type { Directories } from "../api/types";
 import { useOverviewStore } from "../stores/overview";
+import FolderPath from "./FolderPath.vue";
 import RecentWorkspaces from "./RecentWorkspaces.vue";
 
 const open = defineModel<boolean>({ default: false });
@@ -154,7 +155,7 @@ watch(
         <VAlert v-if="error" type="error" variant="tonal" density="compact" class="status-alert">{{ error }}</VAlert>
         <template v-if="listing">
           <p class="folder-current">
-            <span class="panel-path">{{ listing.path }}</span>
+            <FolderPath :path="listing.path" class="folder-current-path" />
             <span class="panel-note">{{ summary }}</span>
           </p>
           <ul class="folder-list" aria-label="Subfolders">
@@ -228,18 +229,17 @@ watch(
   gap: 4px;
   margin: 8px 0 4px -16px;
 }
+/* The shown folder in caption size: its path, then what it holds. */
 .folder-current {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
   justify-content: space-between;
-  gap: 4px 12px;
-  margin: 12px 0 4px;
-  font-weight: 500;
-}
-.folder-current .panel-note {
-  font-size: 0.875rem;
-  font-weight: 400;
+  gap: 2px 12px;
+  margin: 12px 0 6px;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .folder-list {
   max-height: 320px;

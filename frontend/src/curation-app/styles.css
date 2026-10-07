@@ -80,9 +80,6 @@ a.brand {
 .panel-note {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-.panel-path {
-  overflow-wrap: anywhere;
-}
 .panel-facts {
   display: grid;
   grid-template-columns: max-content minmax(0, 1fr);

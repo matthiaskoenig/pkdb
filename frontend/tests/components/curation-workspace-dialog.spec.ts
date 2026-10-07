@@ -79,6 +79,20 @@ describe("WorkspaceDialog", () => {
     expect(field("Folder on this computer").element.value).toBe("/work");
   });
 
+  it("shows the folder with line breaks only after its separators", async () => {
+    vi.spyOn(useOverviewStore(), "listDirectories").mockResolvedValue(directories("/work/a-long-name/pkdb_data"));
+    await openDialog();
+    const path = dialog().get(".folder-current .folder-path-text");
+    expect(path.findAll(".folder-path-segment").map((segment) => segment.text())).toEqual([
+      "/",
+      "work/",
+      "a-long-name/",
+      "pkdb_data",
+    ]);
+    expect(path.findAll("wbr")).toHaveLength(3);
+    expect(path.text()).toBe("/work/a-long-name/pkdb_data");
+  });
+
   it("browses into a folder, up and home", async () => {
     const list = vi
       .spyOn(useOverviewStore(), "listDirectories")

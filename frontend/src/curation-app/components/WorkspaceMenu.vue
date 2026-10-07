@@ -4,6 +4,7 @@ import { VAlert, VBtn, VCard, VMenu } from "vuetify/components";
 import type { Snapshot } from "../api/types";
 import { splitPath } from "../paths";
 import { useOverviewStore } from "../stores/overview";
+import FolderPath from "./FolderPath.vue";
 import RecentWorkspaces from "./RecentWorkspaces.vue";
 
 type Anchor = "bottom start" | "bottom";
@@ -60,7 +61,7 @@ function choose(): void {
     </template>
     <VCard elevation="6" border class="header-menu workspace-panel">
       <h2>Workspace</h2>
-      <p class="panel-path">{{ snapshot.workspace }}</p>
+      <p><FolderPath :path="snapshot.workspace" /></p>
       <p v-if="stale" class="panel-note">The local server does not answer. This is the last known state.</p>
       <VAlert v-if="error" type="error" variant="tonal" density="compact" class="status-alert">{{ error }}</VAlert>
       <div class="panel-actions">

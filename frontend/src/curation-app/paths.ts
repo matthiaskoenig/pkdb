@@ -10,3 +10,8 @@ export function splitPath(path: string): { name: string; parent: string } {
   // The parent of `/work` is the root `/`.
   return { name, parent: trimmed.slice(0, cut) || trimmed.slice(0, cut + 1) };
 }
+
+/** The parts of a path, each ending after its separator, where a long path may wrap. */
+export function pathSegments(path: string): string[] {
+  return path.split(/(?<=[\\/])/).filter(Boolean);
+}

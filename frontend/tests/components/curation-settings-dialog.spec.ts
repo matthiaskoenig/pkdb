@@ -101,6 +101,8 @@ describe("SettingsDialog", () => {
       });
     const wrapper = await openDialog();
     expect(page().get('[role="dialog"]').text()).toContain("A key is set.");
+    // The action sits on the hint row of the key field.
+    expect(button("Remove key").element.closest(".v-input__details")).not.toBeNull();
     await click("Remove key");
     expect(configure).toHaveBeenCalledWith({ api_key: "" });
     expect(buttons("Remove key")).toHaveLength(0);
