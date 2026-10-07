@@ -269,7 +269,7 @@ test.describe("a curator reads the study format 2 study", () => {
     await expect(page).toHaveURL(/\/data\?/);
   });
 
-  test("a focused text field shows its ring around the whole field", async () => {
+  test("a focused text field shows a thick primary border around its label", async () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("/data");
     const box = page.getByRole("combobox", {
@@ -280,13 +280,17 @@ test.describe("a curator reads the study format 2 study", () => {
     await page.keyboard.press("Shift+Tab");
     await page.keyboard.press("Tab");
     await expect(box).toBeFocused();
-    // Around the input, the ring would cross the floating label.
+    // A ring around the input or the field would cross the floating label; the
+    // notched border of the field leaves it clear.
     await expect(box).toHaveCSS("outline-style", "none");
-    await expect(
-      box.locator(
-        "xpath=ancestor::div[contains(concat(' ', normalize-space(@class), ' '), ' v-field ')][1]",
-      ),
-    ).toHaveCSS("outline-style", "solid");
+    const field = box.locator(
+      "xpath=ancestor::div[contains(concat(' ', normalize-space(@class), ' '), ' v-field ')][1]",
+    );
+    await expect(field).toHaveCSS("outline-style", "none");
+    const border = field.locator(".v-field__outline__start");
+    await expect(border).toHaveCSS("border-top-width", "3px");
+    await expect(border).toHaveCSS("border-top-color", "rgb(23, 107, 112)");
+    await expect(border).toHaveCSS("opacity", "1");
     await page.keyboard.press("Escape");
   });
 

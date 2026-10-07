@@ -29,14 +29,23 @@ summary {
   outline: 3px solid rgb(var(--v-theme-primary));
   outline-offset: 3px;
 }
-/* A text field shows the focus ring around the whole field: around its input
-   the ring would cross the floating label. */
-.v-field input:focus-visible {
+/* A focused text field shows a thick primary border instead of a ring: the notch of
+   the border keeps the floating label clear. An error field keeps its error color. */
+.v-field :is(input, textarea):focus-visible {
   outline: none;
 }
-.v-field:has(input:focus-visible) {
-  outline: 3px solid rgb(var(--v-theme-primary));
-  outline-offset: 2px;
+.v-field:has(:is(input, textarea):focus-visible) .v-field__outline {
+  --v-field-border-width: 3px;
+  --v-field-border-opacity: 1;
+}
+.v-field:not(.v-field--error):has(:is(input, textarea):focus-visible) .v-field__outline {
+  color: rgb(var(--v-theme-primary));
+}
+/* Vuetify shows placeholders at the disabled opacity, below 4.5:1. They still stay hidden
+   while the label of an empty, unfocused field sits in their place. */
+.v-field:is(.v-field--active, .v-field--no-label) :is(input, textarea)::placeholder {
+  color: rgba(var(--v-theme-on-surface), 0.58);
+  opacity: 1;
 }
 /* Vuetify dims field labels and hints below the contrast of WCAG AA in the light theme. */
 .v-field-label {
