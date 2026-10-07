@@ -104,6 +104,8 @@ class CurationEngine(
                     job["persistence"] = "unknown"
                 job["message"] = (
                     "Interrupted by previous shutdown; inspect before retrying"
+                    if job["status"] == "unknown"
+                    else "Canceled when pkdb curate stopped"
                 )
             elif (
                 job.get("status") == "failed"

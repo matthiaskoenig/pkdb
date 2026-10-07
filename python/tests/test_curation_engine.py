@@ -439,9 +439,26 @@ def test_canceled_jobs_say_why(workspace, tmp_path_factory):
     engine.set_paused(False)
     engine.enqueue([identity], "validate")
     switched = engine.queue[identity]
+    first = engine.root
     engine.select_workspace(tmp_path_factory.mktemp("other"))
     assert switched["status"] == "canceled"
     assert switched["message"] == "Canceled when the workspace changed"
+    # A job still queued when pkdb curate ended without closing the engine.
+    engine.select_workspace(first)
+    engine.enqueue([identity], "validate")
+    stopped = engine.queue[identity]["id"]
+    engine._save()
+    restarted = module.CurationEngine(
+        engine.root, state_dir=engine.state_dir, offline=True, start=False
+    )
+    try:
+        job = next(job for job in restarted.jobs if job["id"] == stopped)
+        assert (job["status"], job["message"]) == (
+            "canceled",
+            "Canceled when pkdb curate stopped",
+        )
+    finally:
+        restarted.close()
 
 
 def test_problems_found_are_no_failure_of_the_job(workspace, monkeypatch):
