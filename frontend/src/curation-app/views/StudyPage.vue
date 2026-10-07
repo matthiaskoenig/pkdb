@@ -5,10 +5,10 @@ import { VAlert, VContainer, VProgressLinear } from "vuetify/components";
 import { ApiError, ServerStopped, SessionMissing } from "../api/client";
 import SectionRail from "../components/SectionRail.vue";
 import StudyHeader from "../components/StudyHeader.vue";
+import ActivitySection from "../sections/ActivitySection.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
 import ProblemsSection from "../sections/ProblemsSection.vue";
 import ReviewSection from "../sections/ReviewSection.vue";
-import SectionPlaceholder from "../sections/SectionPlaceholder.vue";
 import SourcesSection from "../sections/SourcesSection.vue";
 import TablesSection from "../sections/TablesSection.vue";
 import { useStudyStore } from "../stores/study";
@@ -23,16 +23,16 @@ import {
 } from "../study";
 
 /**
- * The component of each section; a section without one shows a placeholder. A section gets the
- * open study from the study store, and a section with a form emits `unsaved` with whether it has
- * unsaved changes, which the rail marks.
+ * The component of each section. A section gets the open study from the study store, and a
+ * section with a form emits `unsaved` with whether it has unsaved changes, which the rail marks.
  */
-const SECTION_VIEWS: Partial<Record<Section, Component>> = {
+const SECTION_VIEWS: Record<Section, Component> = {
   metadata: MetadataSection,
   review: ReviewSection,
   problems: ProblemsSection,
   sources: SourcesSection,
   tables: TablesSection,
+  activity: ActivitySection,
 };
 
 const route = useRoute();
@@ -130,8 +130,7 @@ watch(
           />
           <section v-if="section" class="study-section" :aria-labelledby="headingId">
             <h2 :id="headingId" class="study-section-heading">{{ SECTION_LABELS[section] }}</h2>
-            <component :is="SECTION_VIEWS[section]" v-if="SECTION_VIEWS[section]" @unsaved="markUnsaved" />
-            <SectionPlaceholder v-else />
+            <component :is="SECTION_VIEWS[section]" @unsaved="markUnsaved" />
           </section>
         </div>
       </template>

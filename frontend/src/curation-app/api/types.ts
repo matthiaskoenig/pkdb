@@ -361,6 +361,16 @@ export interface Job {
   source_digest?: string;
 }
 
+/**
+ * The report of a finished job, `GET /local/reports/{id}`: the job, its validation report and
+ * what the server saved, with more outcome fields that differ by action.
+ */
+export interface JobReport {
+  job: Job;
+  persistence: string;
+  report: Record<string, Json>;
+}
+
 // Snapshot of GET /local/state
 
 export type ConnectionStatus =
@@ -692,6 +702,8 @@ export const isStudyDetail = hasKeys<StudyDetail>(
   "sources",
   "files",
 );
+
+export const isJobReport = hasKeys<JobReport>("job", "persistence", "report");
 
 export const isTableResponse = hasKeys<TableResponse>("file", "kind", "rows");
 

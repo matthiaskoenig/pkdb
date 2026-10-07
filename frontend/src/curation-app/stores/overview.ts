@@ -1,14 +1,16 @@
 import { computed } from "vue";
 import { defineStore } from "pinia";
-import { getJson, postJson } from "../api/client";
+import { getJson, postJson, UnexpectedResponse } from "../api/client";
 import {
   isDirectories,
   isGitHubAssignments,
+  isJobReport,
   isRecord,
   isSnapshot,
   type Directories,
   type GitHubAssignments,
   type Guard,
+  type JobReport,
   type SaveMode,
   type Snapshot,
 } from "../api/types";
@@ -75,8 +77,17 @@ export const useOverviewStore = defineStore("curation-overview", () => {
     return act("/local/jobs/cancel", { ids }, isSnapshot);
   }
 
+  /** Remove the finished jobs of the workspace and their reports, except those that the history always keeps. */
   function clearHistory(): Promise<Snapshot> {
     return act("/local/history/clear", {}, isSnapshot);
+  }
+
+  /** The report of the finished job `id`. */
+  async function report(id: string): Promise<JobReport> {
+    const result = await getJson(`/local/reports/${encodeURIComponent(id)}`, isJobReport);
+    // Without an ETag, only a new answer is expected.
+    if (result.status !== 200) throw new UnexpectedResponse(result.status);
+    return result.data;
   }
 
   /**
@@ -123,6 +134,7 @@ export const useOverviewStore = defineStore("curation-overview", () => {
     enqueue,
     cancelJobs,
     clearHistory,
+    report,
     retry,
     pause,
     resume,
