@@ -18,7 +18,18 @@ import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import StudyPage from "../../src/curation-app/views/StudyPage.vue";
 import { json, snapshot, studyDetail, studyMetadata, studyRow } from "../unit/curation-fixtures";
-import { button, buttons, click, field, page, serveApi, setViewport, type ServedRequest } from "./curation-dom";
+import {
+  button,
+  buttons,
+  click,
+  field,
+  labeled,
+  page,
+  radio,
+  serveApi,
+  setViewport,
+  type ServedRequest,
+} from "./curation-dom";
 
 enableAutoUnmount(afterEach);
 
@@ -133,19 +144,7 @@ function posted(path: string): (Record<string, unknown> | null)[] {
 }
 
 function select(wrapper: ReturnType<typeof mount>, label: string) {
-  const found = wrapper.findAllComponents(VSelect).find((candidate) => candidate.props("label") === label);
-  if (!found) throw new Error(`No select "${label}"`);
-  return found;
-}
-
-/** The radio button with the label `label`. */
-function radio(label: string) {
-  const element = [...document.body.querySelectorAll("label")].find(
-    (candidate) => candidate.htmlFor && candidate.textContent?.trim() === label,
-  );
-  const input = element?.htmlFor ? document.getElementById(element.htmlFor) : null;
-  if (!(input instanceof HTMLInputElement) || input.type !== "radio") throw new Error(`No radio "${label}"`);
-  return input;
+  return labeled(wrapper, VSelect, label);
 }
 
 function dialog() {

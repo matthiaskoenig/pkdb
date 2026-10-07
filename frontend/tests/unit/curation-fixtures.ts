@@ -1,5 +1,5 @@
 /** Responses of the local API of `pkdb curate` for the tests of the curation app. */
-import type { Snapshot, StudyDetail, StudyMetadata, StudyRow } from "../../src/curation-app/api/types";
+import type { Profile, Snapshot, StudyDetail, StudyMetadata, StudyRow } from "../../src/curation-app/api/types";
 
 /** The overview row of the valid study `caffeine/Example`. */
 export function studyRow(changes: Partial<StudyRow> = {}): StudyRow {
@@ -80,6 +80,62 @@ export function studyMetadata(changes: Partial<StudyMetadata> = {}): StudyMetada
     notes: {},
     ...changes,
   };
+}
+
+/**
+ * A `study.json` with every field: an AI curation with two curators, a collaborator, an issue,
+ * a release, descriptions, comments and notes of two table kinds.
+ */
+export function fullStudyMetadata(changes: Partial<StudyMetadata> = {}): StudyMetadata {
+  return {
+    format: 2,
+    reference: { pmid: "2895442", doi: "10.1007/BF00637675" },
+    creator: "curator",
+    curators: [
+      { user: "mkoenig", rating: 3 },
+      { user: "janekg", rating: 4.5 },
+    ],
+    collaborators: ["Jane Doe"],
+    licence: "closed",
+    access: "public",
+    provenance: {
+      kind: "automatic_curation",
+      source_key: "pkdb.ai",
+      method: "claude-opus-5-5",
+      version: "2026-10",
+      assets: [{ url: "https://example.org/Harder1988.pdf", sha256: "a".repeat(64) }],
+      run_id: "run-2026-10-07-01",
+    },
+    issue: 2158,
+    release: { pkdb_id: "PKDB00198", date: "2026-09-28" },
+    descriptions: ["Plasma levels in µg/l."],
+    comments: [{ user: "mkoenig", text: "Checked against the PDF." }],
+    notes: {
+      outputs: { descriptions: ["Clearance from Table 2."], comments: [{ user: "janekg", text: "AUC rounded." }] },
+      timecourses: { descriptions: ["Digitized from Figure 1."], comments: [] },
+    },
+    ...changes,
+  };
+}
+
+/** The profile of a curator of the roster, with an avatar unless `avatar` is false. */
+export function profile(username: string, display_name: string, avatar = true): Profile {
+  return {
+    username,
+    display_name,
+    title: null,
+    affiliation: null,
+    avatar_url: avatar ? `/avatars/${username}.webp` : null,
+  };
+}
+
+/** The bundled curator roster of `GET /local/curators`. */
+export function roster(): Profile[] {
+  return [
+    profile("janekg", "Jan Grzegorzewski"),
+    profile("mkoenig", "Matthias König"),
+    profile("curator", "Curator", false),
+  ];
 }
 
 /**

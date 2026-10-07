@@ -12,6 +12,8 @@ const props = defineProps<{
   /** The section on the screen; null before the study loaded. */
   active: Section | null;
   counts: Partial<Record<Section, number>>;
+  /** The sections with unsaved changes. */
+  unsaved: readonly Section[];
 }>();
 
 const router = useRouter();
@@ -35,14 +37,15 @@ const items = computed(() =>
       label: SECTION_LABELS[section],
       count,
       meaning: count === undefined || !nouns ? null : plural(count, nouns[0], nouns[1]),
+      unsaved: props.unsaved.includes(section),
       to: { name: "Study", params: { substance: props.substance, name: props.name, section } },
     };
   }),
 );
 
 const selectItems = computed(() =>
-  items.value.map(({ section, label, count }) => ({
-    title: count === undefined ? label : `${label} (${count})`,
+  items.value.map(({ section, label, count, unsaved }) => ({
+    title: `${count === undefined ? label : `${label} (${count})`}${unsaved ? ", unsaved changes" : ""}`,
     value: section,
   })),
 );
@@ -73,8 +76,10 @@ function show(section: Section | null): void {
         >
           <!-- Screen readers hear what the count means, such as "Review, 1 open item". -->
           <span class="rail-label"
-            >{{ item.label }}<span v-if="item.meaning" class="d-sr-only">, {{ item.meaning }}</span></span
+            >{{ item.label }}<span v-if="item.meaning" class="d-sr-only">, {{ item.meaning }}</span
+            ><span v-if="item.unsaved" class="d-sr-only">, unsaved changes</span></span
           >
+          <span v-if="item.unsaved" class="rail-unsaved" title="Unsaved changes" aria-hidden="true"></span>
           <span v-if="item.count !== undefined" class="rail-count" aria-hidden="true">{{ item.count }}</span>
         </RouterLink>
       </li>
@@ -114,6 +119,14 @@ function show(section: Section | null): void {
 /* The focus ring stays inside the column of the rail. */
 .rail-link:focus-visible {
   outline-offset: -3px;
+}
+/* A dot after the label marks unsaved changes, as an editor marks a changed file. */
+.rail-unsaved {
+  width: 8px;
+  height: 8px;
+  margin-inline-end: auto;
+  border-radius: 50%;
+  background: rgb(var(--v-theme-primary));
 }
 .rail-count {
   min-width: 24px;

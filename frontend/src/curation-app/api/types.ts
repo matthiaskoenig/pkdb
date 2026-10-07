@@ -143,6 +143,39 @@ export interface StudyMetadata {
   notes: Partial<Record<TableKind, Notes>>;
 }
 
+// reference.json
+
+export interface ReferenceAuthor {
+  first_name?: string;
+  last_name?: string;
+  organization?: string | null;
+}
+
+/** `reference.json`, the reference of a preview, or a candidate of a citation search. */
+export interface ReferenceRecord {
+  sid?: string;
+  name?: string;
+  pmid?: string | null;
+  doi?: string | null;
+  url?: string | null;
+  title?: string | null;
+  abstract?: string | null;
+  journal?: string | null;
+  date?: string | null;
+  publication_date?: string | null;
+  authors?: ReferenceAuthor[];
+  /** Input, overrides and sources of the lookup, and its `warnings`. */
+  provenance?: Record<string, Json>;
+}
+
+/** The answer of `POST /local/reference/preview`: the reference to save with `token`. */
+export interface ReferencePreview {
+  reference: ReferenceRecord;
+  changes: Record<string, { before: Json; after: Json }>;
+  revision: string;
+  token: string;
+}
+
 // review.json
 
 export type ReviewStatus = "draft" | "in_review" | "approved";
@@ -644,3 +677,11 @@ export const isMetadataWrite = hasKeys<MetadataWrite>("revision", "reference", "
 export const isReviewWrite = hasKeys<ReviewWrite>("revision");
 
 export const isTablesResult = hasKeys<TablesResult>("ok", "workbook_action", "changes", "conflicts", "issues");
+
+export const isReferenceRead = hasKeys<{ reference: ReferenceRecord }>("reference");
+
+export const isReferenceCandidates = hasKeys<{ candidates: ReferenceRecord[] }>("candidates");
+
+export const isReferencePreview = hasKeys<ReferencePreview>("reference", "changes", "revision", "token");
+
+export const isReferenceSaved = hasKeys<{ ok: boolean }>("ok");

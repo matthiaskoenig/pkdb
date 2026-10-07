@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, useId, watch, type Component } from "vue";
+import { computed, onBeforeUnmount, ref, useId, watch, type Component } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { VAlert, VContainer, VProgressLinear } from "vuetify/components";
 import { ApiError, ServerStopped, SessionMissing } from "../api/client";
 import SectionRail from "../components/SectionRail.vue";
 import StudyHeader from "../components/StudyHeader.vue";
+import MetadataSection from "../sections/MetadataSection.vue";
 import SectionPlaceholder from "../sections/SectionPlaceholder.vue";
 import { useStudyStore } from "../stores/study";
 import {
@@ -19,9 +20,10 @@ import {
 
 /**
  * The component of each section; a section without one shows a placeholder. A section gets the
- * open study from the study store.
+ * open study from the study store, and a section with a form emits `unsaved` with whether it has
+ * unsaved changes, which the rail marks.
  */
-const SECTION_VIEWS: Partial<Record<Section, Component>> = {};
+const SECTION_VIEWS: Partial<Record<Section, Component>> = { metadata: MetadataSection };
 
 const route = useRoute();
 const router = useRouter();
@@ -61,6 +63,15 @@ const loadError = computed(() => {
 });
 const counts = computed(() => (detail.value ? railCounts(detail.value) : {}));
 
+/** The section on the screen when it has unsaved changes; only that section can have any. */
+const unsaved = ref<Section | null>(null);
+const unsavedSections = computed(() => (unsaved.value ? [unsaved.value] : []));
+watch([section, identity], () => (unsaved.value = null));
+
+function markUnsaved(value: boolean): void {
+  unsaved.value = value ? section.value : null;
+}
+
 // Without a valid section, the page shows the section that the study needs first.
 watch(
   [detail, section],
@@ -99,10 +110,17 @@ watch(
       <template v-if="detail">
         <StudyHeader :detail="detail" :stale="study.error !== null" />
         <div class="study-body">
-          <SectionRail :substance="substance" :name="name" :active="section" :counts="counts" class="study-rail" />
+          <SectionRail
+            :substance="substance"
+            :name="name"
+            :active="section"
+            :counts="counts"
+            :unsaved="unsavedSections"
+            class="study-rail"
+          />
           <section v-if="section" class="study-section" :aria-labelledby="headingId">
             <h2 :id="headingId" class="study-section-heading">{{ SECTION_LABELS[section] }}</h2>
-            <component :is="SECTION_VIEWS[section]" v-if="SECTION_VIEWS[section]" />
+            <component :is="SECTION_VIEWS[section]" v-if="SECTION_VIEWS[section]" @unsaved="markUnsaved" />
             <SectionPlaceholder v-else />
           </section>
         </div>

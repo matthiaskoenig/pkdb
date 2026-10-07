@@ -130,3 +130,69 @@ a.brand {
 .dialog-actions {
   padding: 0 24px 24px;
 }
+
+/* Metadata form: lists of rows with a heading, and the marks of a reload. */
+.field-block {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+/* A list that changed on disk at the last reload has a bar at its start. */
+.field-block--disk,
+.field-block--conflict {
+  padding-inline-start: 12px;
+  border-inline-start: 3px solid rgb(var(--v-theme-info));
+}
+.field-block--conflict {
+  border-inline-start-color: rgb(var(--v-theme-warning));
+}
+.field-heading {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.field-mark,
+.field-mark-inline,
+.field-note,
+.field-empty,
+.field-error {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+.field-mark,
+.field-mark-inline {
+  font-weight: 600;
+}
+.field-mark-inline {
+  margin-inline-start: 8px;
+}
+.field-note,
+.field-empty {
+  color: rgba(var(--v-theme-on-surface), 0.78);
+}
+.field-error {
+  color: rgb(var(--v-theme-error));
+}
+.row-add {
+  align-self: flex-start;
+}
+/* A text area grows with its text up to ten lines, where browsers size fields by content; the
+   others keep the rows of the field and a resize handle. CSS rather than Vuetify's auto-grow,
+   which measures the field on every change. */
+@supports (field-sizing: content) {
+  .grow-textarea textarea {
+    resize: none;
+  }
+}
+.grow-textarea textarea {
+  field-sizing: content;
+  min-height: calc(2lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px));
+  max-height: calc(10lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px));
+}
+/* Messages of fields that wrap keep their lines apart. */
+.v-input .v-messages__message {
+  line-height: 1.35;
+}
+

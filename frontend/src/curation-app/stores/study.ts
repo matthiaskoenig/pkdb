@@ -4,6 +4,10 @@ import { getJson, postJson, studyPath } from "../api/client";
 import {
   isCurators,
   isMetadataWrite,
+  isReferenceCandidates,
+  isReferencePreview,
+  isReferenceRead,
+  isReferenceSaved,
   isReviewWrite,
   isSourceView,
   isStudyDetail,
@@ -12,6 +16,9 @@ import {
   type Guard,
   type MetadataWrite,
   type Profile,
+  type ReferenceAuthor,
+  type ReferencePreview,
+  type ReferenceRecord,
   type ReviewWrite,
   type SourceView,
   type StudyDetail,
@@ -143,6 +150,40 @@ export const useStudyStore = defineStore("curation-study", () => {
     return write("/local/studies/tables", { ...payload, action }, isTablesResult);
   }
 
+  /** `reference.json` of the open study; empty when there is none. */
+  async function readReference(): Promise<ReferenceRecord> {
+    return (await postJson("/local/reference/read", { id: opened() }, isReferenceRead)).reference;
+  }
+
+  /** Publications that match a citation, from Crossref. */
+  async function searchReference(citation: string): Promise<ReferenceRecord[]> {
+    return (await postJson("/local/reference/search", { id: opened(), citation }, isReferenceCandidates)).candidates;
+  }
+
+  /**
+   * The reference that saving `input` would write; `input` holds the fields to correct.
+   * `refetch` asks the providers again; `resetOverrides` drops the saved corrections.
+   */
+  function previewReference(
+    input: Partial<Record<"title" | "journal" | "publication_date", string | null>> & { authors?: ReferenceAuthor[] },
+    { refetch = false, resetOverrides = false }: { refetch?: boolean; resetOverrides?: boolean } = {},
+  ): Promise<ReferencePreview> {
+    return postJson(
+      "/local/reference/preview",
+      { id: opened(), input, refresh: refetch, reset_overrides: resetOverrides },
+      isReferencePreview,
+    );
+  }
+
+  /** Write the reference of the preview `token` to `reference.json`, then load the detail that it changed. */
+  async function saveReference(token: string): Promise<void> {
+    try {
+      await postJson("/local/reference/save", { id: opened(), token }, isReferenceSaved);
+    } finally {
+      await refresh();
+    }
+  }
+
   return {
     identity: computed(() => identity.value),
     detail: computed(() => polling.data.value),
@@ -156,5 +197,9 @@ export const useStudyStore = defineStore("curation-study", () => {
     saveMetadata,
     reviewAction,
     tablesAction,
+    readReference,
+    searchReference,
+    previewReference,
+    saveReference,
   };
 });
