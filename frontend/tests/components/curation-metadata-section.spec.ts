@@ -293,9 +293,7 @@ describe("descriptions, comments and notes", () => {
     });
   });
 
-  // Typing in a field deep in a panel takes jsdom a second or two: the label animation of the
-  // field reads inherited custom properties, which jsdom resolves through every ancestor.
-  it("keeps notes per table kind", { timeout: 20_000 }, async () => {
+  it("keeps notes per table kind", async () => {
     await mountSection(withMetadata(fullStudyMetadata()));
     const notes = card("Notes per table");
     expect(notes.findAll(".v-expansion-panel-title").map((title) => title.text())).toEqual([

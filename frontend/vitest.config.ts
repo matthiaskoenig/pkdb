@@ -7,7 +7,8 @@ export default defineConfig((env) =>
       test: {
         environment: "jsdom",
         server: { deps: { inline: ["vuetify"] } },
-        setupFiles: ["./tests/setup.ts"],
+        // setup-media.ts first: Vuetify, which setup.ts imports, looks for matchMedia on import.
+        setupFiles: ["./tests/setup-media.ts", "./tests/setup.ts"],
         include: ["tests/unit/**/*.spec.ts", "tests/components/**/*.spec.ts"],
         restoreMocks: true,
         // Keep the test output to results: the performance hints suggest
