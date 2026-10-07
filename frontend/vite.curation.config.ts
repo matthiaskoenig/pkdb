@@ -3,7 +3,8 @@ import vue from "@vitejs/plugin-vue";
 import { defineConfig, type Plugin, type ProxyOptions } from "vite";
 
 const entry = "curation-app.html";
-const target = process.env.PKDB_CURATION_URL ?? "http://127.0.0.1:43117";
+// The origin of a running `pkdb curate`; a full launch URL works too.
+const target = new URL(process.env.PKDB_CURATION_URL ?? "http://127.0.0.1:43117").origin;
 
 function local(): ProxyOptions {
   return {
@@ -39,7 +40,7 @@ function servedAsIndex(): Plugin {
 export default defineConfig({
   plugins: [vue(), servedAsIndex()],
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
-  base: "/",
+  base: "./",
   // frontend/public holds the website's files.
   publicDir: false,
   // The local server replaces the placeholder with a fresh nonce per response.
