@@ -41,7 +41,7 @@ def test_release_builds_pass_with_the_assets(hatch_build, tmp_path, target):
     _hook(hatch_build, tmp_path, target).initialize("standard", {})
 
 
-def test_editable_installs_never_need_the_assets(hatch_build, tmp_path):
+def test_editable_installs_skip_the_check_at_build_time(hatch_build, tmp_path):
     _hook(hatch_build, tmp_path, "wheel").initialize("editable", {})
 
 

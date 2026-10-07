@@ -13,7 +13,8 @@ OPT_OUT = "PKDB_BUILD_WITHOUT_CURATION_APP"
 def check_assets(root: Path, target: str, version: str) -> None:
     """Raise RuntimeError when a wheel or sdist would ship without the curation app.
 
-    Editable installs serve the assets from the source folder, so they never need them.
+    Editable installs skip the check at build time: they serve the assets from the source
+    folder, which still needs the built app at run time (`pkdb curate` exits without it).
     """
     if target in {"wheel", "sdist"} and version == "standard":
         if not (root / INDEX).is_file():
