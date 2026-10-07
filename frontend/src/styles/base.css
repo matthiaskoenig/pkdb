@@ -38,6 +38,15 @@ summary {
   outline: 3px solid rgb(var(--v-theme-primary));
   outline-offset: 2px;
 }
+/* Vuetify dims field labels and hints below the contrast of WCAG AA in the light theme. */
+.v-field-label {
+  opacity: 1 !important;
+  color: rgba(var(--v-theme-on-surface), 0.78);
+}
+.v-input:not(.v-input--error, .v-input--disabled) .v-messages {
+  opacity: 1;
+  color: rgba(var(--v-theme-on-surface), 0.78);
+}
 .app-header {
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
 }

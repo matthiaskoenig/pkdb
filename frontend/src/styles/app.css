@@ -374,10 +374,6 @@ table {
   white-space: nowrap;
   border: 0;
 }
-.v-field-label {
-  opacity: 1 !important;
-  color: rgba(var(--v-theme-on-surface), 0.78);
-}
 .query-summary {
   padding: 20px 24px;
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
