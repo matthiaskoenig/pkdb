@@ -600,6 +600,24 @@ def test_a_failing_workbook_plan_never_leaves_the_row_syncing(
     assert row(engine)["sync"]["status"] == "unknown"
 
 
+def test_a_waiting_row_recovers_when_its_files_return_to_the_last_scan(workspace):
+    engine, folder = workspace
+    assert format_folder(folder).ok
+    engine.scan()
+    (folder / "Example_Fig3.png").symlink_to(folder / "Example_Fig1.png")
+    engine.scan()
+    assert row(engine)["status"] == "waiting"
+    settle(engine)
+    assert not engine.queue
+    # The files are as the scan before the symlink saw them.
+    (folder / "Example_Fig3.png").unlink()
+    engine.scan()
+    assert row(engine)["status"] != "waiting"
+    assert engine.studies["caffeine/Example"]["_pending"] is True
+    settle(engine)
+    assert list(engine.queue) == ["caffeine/Example"]
+
+
 def test_a_symlink_in_the_study_waits_without_requeueing(workspace):
     engine, folder = workspace
     settle(engine)

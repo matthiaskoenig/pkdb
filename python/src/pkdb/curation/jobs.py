@@ -568,8 +568,8 @@ class JobsMixin(EngineState):
             try:
                 current = fingerprint(source_hashes(row["_folder"])) == expected
             except (OSError, StudyValidationError) as unreadable:
-                # A symlink or an unreadable file: the next change of a file queues a
-                # job again, instead of a new job every second.
+                # A symlink or an unreadable file: the first scan that reads the files
+                # queues a job again, instead of a new job every second.
                 job.update(
                     status="failed",
                     message="Could not read the source files; see the study",

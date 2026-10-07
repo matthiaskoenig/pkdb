@@ -317,7 +317,7 @@ class WorkspaceMixin(EngineState):
         return remembered[1]
 
     def _wait(self, row, error):
-        """Wait for readable source files; the next change of a file queues a job again.
+        """Wait for readable source files; the first scan that reads them queues a job again.
 
         Called with the engine lock held.
         """
@@ -330,6 +330,9 @@ class WorkspaceMixin(EngineState):
         )
         # Nothing to validate until then; a job now would only fail again.
         row["_pending"] = False
+        # The next scan reads the folder again, also when its files return to the state of
+        # the last scan; it queues a job once they can be read.
+        row["_signature"] = None
 
     def _sync_state(self, folder):
         """Whether the workbook and the tables of a folder are in step, as the row shows it.
