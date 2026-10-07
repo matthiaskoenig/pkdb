@@ -20,7 +20,7 @@ dependencies = [
   "fastmcp>=4.0.5,<5",
   # FastMCP state storage needs the Python 3.15 typing compatibility fix.
   "beartype>=0.23.0rc1,<1; python_version >= '3.15'",
-  "mcp==2.2.0",
+  "mcp==2.3.0",
   "httpx2>=2.13.0,<3",
   "pillow>=12.3.0,<13",
 ]
@@ -30,8 +30,8 @@ pkdb-server = "pkdb_server.cli:main"
 
 [dependency-groups]
 vocabulary = [
-    "pymetadata==0.6.6",
-    "python-slugify==9.1.1",
+    "pymetadata==0.7.0",
+    "python-slugify==9.1.2",
 ]
 dev = [
     {include-group = "vocabulary"},
