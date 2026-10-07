@@ -26,6 +26,8 @@ uv run --project python pytest python/tests -q
 
 `uv sync` installs the local package in editable mode and includes its development dependencies. For an existing virtual environment, use `python -m pip install -e /absolute/path/to/pkdb/python`. To use this checkout as a standalone CLI, run `uv tool install --editable ./python`; to add it to another uv project, run `uv add --editable /absolute/path/to/pkdb/python` from that project.
 
+`pkdb curate` serves the local curation app from `python/src/pkdb/curation/static/`. Build it with `npm ci` and `npm run build:curation` in `frontend/` (Node **24.21.0** and npm **12.1.0**); `npm run dev:curation` serves it with live reload and forwards API requests to the `pkdb curate` origin in `PKDB_CURATION_URL`. Building a wheel or source distribution of `python/` fails without the built app.
+
 The backend is a separate source package. From the repository root:
 
 ```bash

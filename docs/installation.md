@@ -124,6 +124,7 @@ npm run typecheck
 npm run lint
 npm run test:unit -- --run
 npm run build
+npm run build:curation
 npx playwright install --with-deps
 npm run test:e2e
 ```

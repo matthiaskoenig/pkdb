@@ -139,6 +139,24 @@ def test_open_default_app_uses_argument_array(tmp_path, monkeypatch):
     assert runner.call_args.args[0] == ["xdg-open", str(tmp_path)]
 
 
+def test_curate_exits_with_an_instruction_without_built_assets(
+    tmp_path, monkeypatch, capsys
+):
+    from pkdb.curation import launch
+
+    monkeypatch.setattr(transport, "ASSETS", tmp_path / "static")
+    engine = Mock(side_effect=AssertionError("The engine must not start"))
+    monkeypatch.setattr("pkdb.curation.engine.CurationEngine", engine)
+    assert launch.run(tmp_path, offline=True, no_browser=True) == 1
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert captured.err == (
+        "The curation app is not built. "
+        "Run npm ci and npm run build:curation in frontend/.\n"
+    )
+    engine.assert_not_called()
+
+
 def test_curate_cli_routes_options(monkeypatch):
     from pkdb.cli import main
 

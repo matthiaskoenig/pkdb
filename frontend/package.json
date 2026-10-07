@@ -12,6 +12,8 @@
     "dev": "vite --host 0.0.0.0 --port 8080",
     "serve": "npm run dev",
     "build": "vite build",
+    "dev:curation": "vite --config vite.curation.config.ts",
+    "build:curation": "vite build --config vite.curation.config.ts",
     "preview": "vite preview --host 0.0.0.0 --port 8080",
     "typecheck": "vue-tsc --noEmit -p tsconfig.json",
     "lint": "eslint .",

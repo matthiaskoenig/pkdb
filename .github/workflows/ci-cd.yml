@@ -62,6 +62,9 @@ jobs:
       - run: uv run --python ${{ matrix.python }} --locked ty check --python-version ${{ matrix.python }}
       - run: uv build --python ${{ matrix.python }}
       - name: Install wheel in clean environment
+        env:
+          # The server environment does not ship the curation app; the client job builds it.
+          PKDB_BUILD_WITHOUT_CURATION_APP: '1'
         run: |
           uv venv --python ${{ matrix.python }} /tmp/pkdb-wheel
           uv build --python ${{ matrix.python }} --project ../python --out-dir dist
@@ -123,6 +126,18 @@ jobs:
       - run: uv run --python ${{ matrix.python }} --locked ruff check .
       - run: uv run --python ${{ matrix.python }} --locked ruff format --check .
       - run: uv run --python ${{ matrix.python }} --locked ty check --python-version ${{ matrix.python }}
+      # The wheel ships the curation app, which is built from frontend/.
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24.21.0
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm install --global npm@12.1.0
+      - run: test "$(node --version)" = v24.21.0 && test "$(npm --version)" = 12.1.0
+      - run: npm ci
+        working-directory: frontend
+      - run: npm run build:curation
+        working-directory: frontend
       - run: uv build --python ${{ matrix.python }}
       - name: Verify isolated public wheel and CLI
         run: |
@@ -136,6 +151,7 @@ jobs:
           fi
           uv pip install --python "$PYTHON_BIN" dist/*.whl
           "$PYTHON_BIN" -c 'import pkdb, importlib.util; from pkdb.domain.validation import prepare_study; from pkdb.cache import bundled_vocabulary; assert bundled_vocabulary().substances; assert importlib.util.find_spec("pkdb_server") is None; assert importlib.util.find_spec("sqlalchemy") is None'
+          "$PYTHON_BIN" -c "import importlib.resources as r; assert (r.files('pkdb.curation') / 'static' / 'index.html').is_file()"
           "$PKDB_BIN" --help
       - uses: actions/upload-artifact@v7
         if: runner.os == 'Linux' && matrix.python == '3.14'

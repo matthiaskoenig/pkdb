@@ -2,12 +2,6 @@
 
 Install the frontend development dependencies and Playwright Chromium to run developer browser tooling. These tools are not required by curators; the Python package bundles the local app.
 
-```bash
-node tools/curation_docs/smoke.mjs
-```
-
-The smoke test loads the actual bundled assets with isolated local API fixtures. It verifies the launch handshake, CSRF requests, validation, diagnostic rendering, default-app file requests, upload review, automatic problem selection, study selection, password clearing, queued-job cancellation, history clearing, explicit unknown-outcome retry review, and responsive layout.
-
 To regenerate screenshots, launch the current package against a local workspace using `--no-browser`. Let the renderer consume the fresh launch URL; it validates the selected studies itself. The committed images show real offline validation of the apixaban workspace on 2026-09-24. They are examples of that source revision, not fixed scientific acceptance counts.
 
 ```bash

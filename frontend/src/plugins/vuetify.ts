@@ -51,7 +51,8 @@ import {
 } from "vuetify/components";
 import { Ripple } from "vuetify/directives";
 import { aliases, fa } from "vuetify/iconsets/fa";
-export function makeVuetify() {
+/** The website theme; `cspNonce` lets a page with a strict CSP keep Vuetify's runtime styles. */
+export function makeVuetify(options: { cspNonce?: string | undefined } = {}) {
   return createVuetify({
     components: {
       VAlert,
@@ -102,6 +103,8 @@ export function makeVuetify() {
     directives: { Ripple },
     icons: { defaultSet: "fa", aliases, sets: { fa } },
     theme: {
+      // exactOptionalPropertyTypes: Vuetify accepts no explicit undefined.
+      ...(options.cspNonce ? { cspNonce: options.cspNonce } : {}),
       defaultTheme: "light",
       themes: {
         light: {

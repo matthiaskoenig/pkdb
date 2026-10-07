@@ -72,9 +72,10 @@ export PKDB_API_KEY
 
 ## Install the package, validate, and upload
 
-Install the `pkdb` package from the same checkout as the server so their processing versions match. uv supplies Python 3.14 if needed:
+Install the `pkdb` package from the same checkout as the server so their processing versions match. The package includes the local curation app, so build it first with Node **24.21.0** and npm **12.1.0** (see [native frontend](installation.md#native-frontend-and-frontend-checks)). uv supplies Python 3.14 if needed:
 
 ```bash
+(cd frontend && npm ci && npm run build:curation)
 uv tool install --python 3.14 ./python
 export PKDB_ENDPOINT=http://localhost:18083
 
