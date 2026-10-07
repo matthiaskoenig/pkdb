@@ -136,6 +136,39 @@ def test_tables_that_cannot_be_synced_make_the_study_invalid(workspace, sf_vocab
     assert "unknown_column" in {problem["code"] for problem in current["problems"]}
 
 
+def test_a_sync_stop_after_a_reference_update_is_invalid_in_the_same_job(
+    workspace, sf_vocabulary, monkeypatch
+):
+    from pkdb import references
+
+    engine, folder = workspace
+    assert format_folder(folder).ok
+    assert sync_study(folder, sf_vocabulary).ok
+    table = folder / "timecourses_Fig1.tsv"
+    header, *lines = table.read_text().splitlines()
+    table.write_text(
+        "\n".join([f"{header}\tcolour", *(f"{line}\tred" for line in lines)]) + "\n"
+    )
+    engine.scan()
+
+    def refresh(path, resolver):
+        reference = path / "reference.json"
+        reference.write_text(reference.read_text().replace("Example study", "Study"))
+        return "Updated reference.json"
+
+    monkeypatch.setattr(references, "sync_reference", refresh)
+    settle(engine)
+    job = run_next(engine)
+    assert job["status"] == "failed", job["message"]
+    current = engine.studies["caffeine/Example"]
+    assert current["status"] == "invalid" and current["stale"] is False
+    assert current["_pending"] is False
+    assert "unknown_column" in {problem["code"] for problem in current["problems"]}
+    assert engine.report(job["report_id"])["reference_updated"] == (
+        "Updated reference.json"
+    )
+
+
 def test_pipeline_runs_under_the_folder_lock(workspace, monkeypatch):
     engine, folder = workspace
     held = []

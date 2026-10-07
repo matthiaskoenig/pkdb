@@ -422,13 +422,10 @@ class JobsMixin(EngineState):
             ]
             if tables := describe(pipeline):
                 outcome["tables_updated"] = tables
-            if pipeline.stopped == "sync" and not pipeline.syncs[-1].conflicts:
-                # Tables that do not load or a workbook that cannot be read are reported
-                # like validation problems.
-                raise StudyValidationError(
-                    ValidationReport(issues=list(pipeline.issues))
-                )
-            if pipeline.stopped in {"sync", "saved_again"}:
+            sync_failed = (
+                pipeline.stopped == "sync" and not pipeline.syncs[-1].conflicts
+            )
+            if pipeline.stopped in {"sync", "saved_again"} and not sync_failed:
                 outcome["conflicts"] = conflict_entries(pipeline)
                 # The conflicts count as problems of the study, as the sync reports them.
                 outcome["report"] = ValidationReport(
@@ -447,6 +444,12 @@ class JobsMixin(EngineState):
                         _pending=row["_fingerprint"] != synced_source,
                     )
                 expected = synced_source
+            if sync_failed:
+                # Tables that do not load or a workbook that cannot be read are reported
+                # like validation problems, also when this job wrote files before the stop.
+                raise StudyValidationError(
+                    ValidationReport(issues=list(pipeline.issues))
+                )
             if saved_after_sync:
                 # The workbook was saved after the sync read it, so the tables are stale. A
                 # save after the folder lock changes the source that the checks below expect.
