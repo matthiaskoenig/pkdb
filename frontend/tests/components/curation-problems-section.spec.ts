@@ -4,6 +4,7 @@ import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { RouterView, type Router } from "vue-router";
 import type {
   AcknowledgedWarning,
+  Job,
   Snapshot,
   StudyDetail,
   TablesResult,
@@ -125,6 +126,24 @@ let requests: ServedRequest[];
 let served: StudyDetail;
 
 /** Acknowledges as the local server would: a resolved review item; the warning stays until the next validation. */
+/** A job of the activity of caffeine/Example, queued at `created` (the server's ISO format). */
+function job(id: string, action: Job["action"], created: string): Job {
+  return {
+    id,
+    study_id: "caffeine/Example",
+    study_name: "Example",
+    action,
+    status: "succeeded",
+    created_at: created,
+    message: action === "write" ? "Acknowledged a warning" : "Validated",
+    automatic: action !== "write",
+    report_id: action === "write" ? null : id,
+  };
+}
+
+/** The time at which the local server records each acknowledgement in the activity. */
+const WRITTEN = "2026-10-07T12:00:00.500000+00:00";
+
 const acknowledge: Handler = (body) => {
   const item = reviewItem({
     id: ADDED,
@@ -139,6 +158,8 @@ const acknowledge: Handler = (body) => {
   served = {
     ...served,
     review: { ...served.review, revision: "review-8" },
+    // The server lists the write in the activity of the study, newest first.
+    jobs: [job(`write-${served.jobs.length}`, "write", WRITTEN), ...served.jobs],
     acknowledged: [
       ...served.acknowledged,
       {
@@ -543,8 +564,9 @@ describe("acknowledgements", () => {
     );
   });
 
-  it("keeps the mark when the section opens again, until a new report", async () => {
-    await mountSection();
+  it("keeps the mark when the section opens again, until a report of a job queued after the write", async () => {
+    const before = job("job-1", "validate", "2026-10-07T11:59:58.000000+00:00");
+    await mountSection(withProblems({ jobs: [before], report_id: "job-1" }));
     await acknowledgeWarning("unused_intervention");
     await router.push("/studies/caffeine/Example/review");
     await flushPromises();
@@ -553,8 +575,17 @@ describe("acknowledgements", () => {
     expect(controls(problem("unused_intervention"), "Acknowledge")).toHaveLength(0);
     expect(problem("unused_intervention").find(".problem-acknowledged").exists()).toBe(true);
 
-    // A new report replaces the one that listed the warning.
-    served = { ...served, report_id: "job-2" };
+    // A validation that was queued before the write, and ran during it, reports the warning still.
+    const running = job("job-2", "validate", "2026-10-07T12:00:00+00:00");
+    served = { ...served, jobs: [running, ...served.jobs], report_id: "job-2" };
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(problem("unused_intervention").find(".problem-acknowledged").exists()).toBe(true);
+    expect(controls(problem("unused_intervention"), "Acknowledge")).toHaveLength(0);
+
+    // The report of a job queued after the write ends the mark.
+    const after = job("job-3", "validate", "2026-10-07T12:00:02.250000+00:00");
+    served = { ...served, jobs: [after, ...served.jobs], report_id: "job-3" };
     await useStudyStore().refresh();
     await flushPromises();
     expect(problem("unused_intervention").find(".problem-acknowledged").exists()).toBe(false);

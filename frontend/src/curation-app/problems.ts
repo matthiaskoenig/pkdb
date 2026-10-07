@@ -3,7 +3,7 @@
  * suggestions, links to the tables and the acknowledgements of warnings.
  */
 import { isValidationError } from "./api/client";
-import type { Json, SaveMode, Snapshot, Suggestion, ValidationIssue } from "./api/types";
+import type { Job, Json, SaveMode, Snapshot, StudyDetail, Suggestion, ValidationIssue } from "./api/types";
 import { plural } from "./overview";
 import { reviewFailure, type ReviewFailure } from "./review";
 
@@ -194,4 +194,31 @@ export function validatesAfterWrite(
 export function locationKey(issue: ValidationIssue): string {
   const source = issue.source;
   return JSON.stringify([issue.code, source?.file ?? null, source?.row ?? null, source?.header ?? null]);
+}
+
+/**
+ * A warning acknowledged in the app: its location key, the time of the write in the activity of
+ * the study, and the report of the study at that time.
+ */
+export interface AcknowledgedMark {
+  key: string;
+  since: string | null;
+  report: string | null;
+}
+
+/** The time of the newest write of the app in the activity of a study (newest first), such as an acknowledgement. */
+export function lastWrite(jobs: readonly Job[]): string | null {
+  return jobs.find((job) => job.action === "write")?.created_at ?? null;
+}
+
+/**
+ * Whether the report of a study comes from a job queued after the acknowledgement was written:
+ * only such a job validated the acknowledgement. A job that was queued or running during the
+ * write can still list the warning. The times are the server's, in one ISO format, so they
+ * compare as text. Without the job of the report, any other report counts.
+ */
+export function reportAfter(detail: Pick<StudyDetail, "jobs" | "report_id">, mark: AcknowledgedMark): boolean {
+  const job = detail.jobs.find((entry) => entry.id === detail.report_id);
+  if (job && mark.since !== null) return job.created_at > mark.since;
+  return detail.report_id !== mark.report;
 }

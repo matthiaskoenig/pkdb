@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { ApiError } from "../../src/curation-app/api/client";
-import type { SourceLocation, ValidationIssue } from "../../src/curation-app/api/types";
+import type { Job, SourceLocation, ValidationIssue } from "../../src/curation-app/api/types";
 import {
   acknowledgeFailure,
   acknowledgement,
@@ -11,8 +11,10 @@ import {
   isLimitIssue,
   location,
   locationKey,
+  lastWrite,
   NO_SUCH_WARNING,
   noIssuesText,
+  reportAfter,
   severityCounts,
   SPELLING_HINT,
   suggestionView,
@@ -210,5 +212,34 @@ describe("links and acknowledgements", () => {
     expect(locationKey(mean)).toBe(locationKey({ ...mean, message: "Another message" }));
     expect(locationKey(mean)).not.toBe(locationKey(unused));
     expect(locationKey(mean)).not.toBe(locationKey({ ...mean, source: { ...mean.source!, header: "sd" } }));
+  });
+
+  it("ends a mark only with the report of a job queued after the write", () => {
+    const at = (id: string, action: Job["action"], created: string): Job => ({
+      id,
+      study_id: "caffeine/Example",
+      study_name: "Example",
+      action,
+      status: "succeeded",
+      created_at: created,
+      message: "",
+      automatic: true,
+      report_id: null,
+    });
+    const earlier = at("job-1", "validate", "2026-10-07T11:59:59.900000+00:00");
+    const write = at("write-1", "write", "2026-10-07T12:00:00+00:00");
+    const later = at("job-2", "validate", "2026-10-07T12:00:00.000001+00:00");
+    expect(lastWrite([later, write, earlier])).toBe("2026-10-07T12:00:00+00:00");
+    expect(lastWrite([earlier])).toBeNull();
+    const mark = { key: "k", since: lastWrite([write, earlier]), report: "job-1" };
+    expect(reportAfter({ jobs: [write, earlier], report_id: "job-1" }, mark)).toBe(false);
+    expect(reportAfter({ jobs: [later, write, earlier], report_id: "job-2" }, mark)).toBe(true);
+    // A job queued before the write that reports after it does not end the mark.
+    const running = at("job-3", "validate", "2026-10-07T11:59:59.950000+00:00");
+    expect(reportAfter({ jobs: [write, running, earlier], report_id: "job-3" }, mark)).toBe(false);
+    // Without the job of the report or the time of the write, another report ends the mark.
+    expect(reportAfter({ jobs: [], report_id: "job-9" }, mark)).toBe(true);
+    expect(reportAfter({ jobs: [], report_id: "job-1" }, mark)).toBe(false);
+    expect(reportAfter({ jobs: [later], report_id: "job-2" }, { ...mark, since: null })).toBe(true);
   });
 });

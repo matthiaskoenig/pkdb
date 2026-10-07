@@ -27,6 +27,7 @@ import {
   type TablesResult,
 } from "../api/types";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
+import { lastWrite, reportAfter, type AcknowledgedMark } from "../problems";
 
 export type ReviewAction = "add" | "reply" | "resolve" | "dismiss" | "reopen" | "status" | "acknowledge";
 
@@ -38,11 +39,6 @@ interface Cached<T> {
   data: T;
 }
 
-/** Warnings acknowledged in the app: their location keys, and the report that still lists them. */
-interface Acknowledging {
-  report: string | null;
-  keys: string[];
-}
 
 /** The study that the study page shows, polled while it is open. */
 export const useStudyStore = defineStore("curation-study", () => {
@@ -58,38 +54,39 @@ export const useStudyStore = defineStore("curation-study", () => {
   let requests = new AbortController();
   let roster: Promise<Profile[]> | undefined;
   /**
-   * The warnings acknowledged in the app by study, until a new report of the study arrives.
-   * They outlive the study page, so that the Problems section does not offer them again
-   * while the validation that leaves them out has not run.
+   * The warnings acknowledged in the app by study, until a report of a job queued after the
+   * write arrives. They outlive the study page, so that the Problems section does not offer
+   * them again while the validation that leaves them out has not run.
    */
-  const acknowledging = ref<Record<string, Acknowledging>>({});
+  const acknowledging = ref<Record<string, AcknowledgedMark[]>>({});
 
-  // A new report of a study replaces the one that listed its acknowledged warnings.
+  // A report of a job queued after an acknowledgement ends its mark.
   watch(
     () => polling.data.value,
     (detail) => {
-      const entry = detail ? acknowledging.value[detail.id] : undefined;
-      if (!detail || !entry || entry.report === detail.report_id) return;
-      const rest = { ...acknowledging.value };
-      delete rest[detail.id];
-      acknowledging.value = rest;
+      const marks = detail ? acknowledging.value[detail.id] : undefined;
+      if (!detail || !marks) return;
+      const kept = marks.filter((mark) => !reportAfter(detail, mark));
+      if (kept.length !== marks.length) acknowledging.value = { ...acknowledging.value, [detail.id]: kept };
     },
   );
 
-  /** Mark the warnings of the location `key` as acknowledged in the open study, until its next report. */
+  /**
+   * Mark the warnings of the location `key` as acknowledged in the open study. Called after the
+   * write, when the detail lists the write in the activity of the study.
+   */
   function markAcknowledged(key: string): void {
     const detail = polling.data.value;
     if (!detail || detail.id !== identity.value) return;
-    const entry = acknowledging.value[detail.id];
-    const keys = entry?.report === detail.report_id ? entry.keys : [];
-    acknowledging.value = { ...acknowledging.value, [detail.id]: { report: detail.report_id, keys: [...keys, key] } };
+    const mark: AcknowledgedMark = { key, since: lastWrite(detail.jobs), report: detail.report_id };
+    acknowledging.value = { ...acknowledging.value, [detail.id]: [...(acknowledging.value[detail.id] ?? []), mark] };
   }
 
-  /** The location keys of the warnings acknowledged in the app that the report of the open study still lists. */
+  /** The location keys of the warnings acknowledged in the app that no later report has checked yet. */
   const acknowledgedKeys = computed<string[]>(() => {
     const detail = polling.data.value;
-    const entry = detail ? acknowledging.value[detail.id] : undefined;
-    return detail && entry?.report === detail.report_id ? entry.keys : [];
+    const marks = detail ? (acknowledging.value[detail.id] ?? []) : [];
+    return detail ? marks.filter((mark) => !reportAfter(detail, mark)).map((mark) => mark.key) : [];
   });
 
   function opened(): string {
