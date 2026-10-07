@@ -96,17 +96,20 @@ export function targetText(target: ReviewTarget | null | undefined): string {
   return [target.file, rows, target.column ? `column ${target.column}` : ""].filter(Boolean).join(" · ");
 }
 
-/** A timecourse table of a figure, `timecourses_<Fig>.tsv`. */
-const FIGURE_TIMECOURSES = /^timecourses_(Fig[A-Za-z0-9_-]+)\.tsv$/;
+/** A timecourse or scatter table of a figure, `timecourses_<Fig>.tsv` or `scatters_<Fig>.tsv`. */
+const FIGURE_TABLE = /^(timecourses|scatters)_(Fig[A-Za-z0-9_-]+)\.tsv$/;
+
+/** The column that names the series of a figure table, as the datasets of its digitization. */
+const SERIES_COLUMNS: Record<string, string> = { timecourses: "label", scatters: "name" };
 
 /**
  * The digitized series that a target names: the `label` rows of the timecourse table of a figure
- * are the series `label` of the figure; null for any other target.
+ * and the `name` rows of its scatter table are series of the figure; null for any other target.
  */
 export function seriesOfTarget(target: ReviewTarget | null | undefined): { source: string; series: string } | null {
-  const source = target?.file ? FIGURE_TIMECOURSES.exec(target.file)?.[1] : undefined;
-  const series = target?.rows?.label;
-  return source && series ? { source, series } : null;
+  const match = target?.file ? FIGURE_TABLE.exec(target.file) : null;
+  const series = match ? target?.rows?.[SERIES_COLUMNS[match[1]!]!] : undefined;
+  return match && series ? { source: match[2]!, series } : null;
 }
 
 /** The rows whose cells, as printed in the TSV file, have every value of `filters`. */

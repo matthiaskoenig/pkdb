@@ -89,6 +89,17 @@ describe("seriesOfTarget", () => {
     ).toEqual({ source: "Fig2A", series: "caf_plasma" });
   });
 
+  it("maps the name rows of a scatter table to the series of its figure", () => {
+    expect(seriesOfTarget({ file: "scatters_Fig2.tsv", rows: { name: "age_vs_cmax" } })).toEqual({
+      source: "Fig2",
+      series: "age_vs_cmax",
+    });
+    expect(seriesOfTarget({ file: "scatters_Fig2.tsv", rows: { name: "age_vs_cmax", subjects: "S1" } })).toEqual({
+      source: "Fig2",
+      series: "age_vs_cmax",
+    });
+  });
+
   it("is null for other targets", () => {
     expect(seriesOfTarget(undefined)).toBeNull();
     expect(seriesOfTarget({})).toBeNull();
@@ -97,6 +108,11 @@ describe("seriesOfTarget", () => {
     expect(seriesOfTarget({ file: "timecourses_Fig1.tsv", rows: { label: "" } })).toBeNull();
     expect(seriesOfTarget({ file: "outputs_Tab2.tsv", rows: { label: "clearance" } })).toBeNull();
     expect(seriesOfTarget({ file: "timecourses_Tab2.tsv", rows: { label: "caf_plasma" } })).toBeNull();
+    // A scatter series is named by `name`, a timecourse series by `label`.
+    expect(seriesOfTarget({ file: "scatters_Fig2.tsv", rows: { label: "age_vs_cmax" } })).toBeNull();
+    expect(seriesOfTarget({ file: "timecourses_Fig1.tsv", rows: { name: "caf_plasma" } })).toBeNull();
+    expect(seriesOfTarget({ file: "scatters_Fig2.tsv", rows: { name: "" } })).toBeNull();
+    expect(seriesOfTarget({ file: "scatters_Tab2.tsv", rows: { name: "age_vs_cmax" } })).toBeNull();
   });
 });
 
