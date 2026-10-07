@@ -16,13 +16,19 @@ function card(page: Page, text: string | RegExp): Locator {
 }
 
 /**
- * Choose `option` in the Vuetify select labelled `label` as a keyboard does: typing the start of
- * an item selects it, also one that the virtual list of the menu has not rendered.
+ * Choose `option` in the Vuetify select labelled `label` as a keyboard does: in the open menu,
+ * typing the start of an item selects and focuses it, also one that the virtual list had not
+ * rendered yet; Escape then closes the menu.
  */
-async function choose(scope: Locator | Page, label: string, option: string): Promise<void> {
+async function choose(page: Page, scope: Locator | Page, label: string, option: string): Promise<void> {
   const select = scope.getByRole("combobox", { name: label, exact: true });
   await select.focus();
-  await select.pressSequentially(option);
+  await select.press("ArrowDown");
+  await expect(select).toHaveAttribute("aria-expanded", "true");
+  await page.keyboard.type(option);
+  await expect(page.getByRole("option", { name: option, exact: true })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(select).toHaveAttribute("aria-expanded", "false");
 }
 
 test.beforeEach(async ({ app }) => {
@@ -61,15 +67,16 @@ test("adds an item about a row and a column of a table", async ({ app, page }) =
   const dialog = page.getByRole("dialog", { name: "New review item" });
   await dialog.getByRole("radio", { name: "Issue" }).check();
   await dialog.getByRole("textbox", { name: "Text" }).fill(ISSUE);
-  await choose(dialog, "File", "timecourses_Fig1.tsv");
+  await choose(page, dialog, "File", "timecourses_Fig1.tsv");
+  await expect(dialog.getByRole("combobox", { name: "File", exact: true })).toHaveValue("timecourses_Fig1.tsv");
   await dialog.getByRole("button", { name: "Add row filter" }).click();
-  await choose(dialog, "Column 1", "label");
+  await choose(page, dialog, "Column 1", "label");
   await dialog.getByRole("combobox", { name: "Value 1" }).fill("caf_plasma_100mg");
   await dialog.getByRole("button", { name: "Add row filter" }).click();
-  await choose(dialog, "Column 2", "time");
+  await choose(page, dialog, "Column 2", "time");
   await dialog.getByRole("combobox", { name: "Value 2" }).fill("4");
   await expect(dialog.getByRole("status")).toHaveText("Matches 1 of 18 rows.");
-  await choose(dialog, "Column", "mean");
+  await choose(page, dialog, "Column", "mean");
   await dialog.getByRole("button", { name: "Add", exact: true }).click();
 
   await expect(dialog).toBeHidden();
@@ -87,11 +94,17 @@ test("adds an item about a row and a column of a table", async ({ app, page }) =
 
 test("refuses Approved while review items are open", async ({ app, page }) => {
   app.allowFailedRequest("/local/studies/review", 422);
-  await choose(page, "Review status", "Approved");
+  // Choosing an item sets the status at once and disables the select, so the item is clicked.
+  const status = page.getByRole("combobox", { name: "Review status" });
+  await status.focus();
+  await status.press("ArrowDown");
+  await page.getByRole("option", { name: "Approved", exact: true }).click();
   const refusal = page.getByText("Approved needs zero open review items and zero validation errors.");
   await expect(refusal).toHaveText(
     /^Approved needs zero open review items and zero validation errors\. \d+ review items? (is|are) open\.$/,
   );
   await expect(page.getByRole("link", { name: "Show the open items" })).toBeVisible();
+  // The select shows the saved status again.
+  await expect(page.getByRole("combobox", { name: "Review status" })).toHaveValue("In review");
   expect(onDisk(app.server.workspace).status).toBe("in_review");
 });

@@ -82,6 +82,8 @@ for (const theme of ["light", "dark"] as const) {
     test(`${screen.name} in the ${theme} theme is accessible and fits a narrow window`, async ({ app, page }, testInfo) => {
       await page.emulateMedia({ colorScheme: theme });
       await app.open(screen.hash);
+      // The app follows the theme of the system until the curator chooses one.
+      await expect(page.locator(".v-application")).toHaveClass(new RegExp(`(^| )v-theme--${theme}( |$)`));
       await screen.ready(page);
       await expectAccessible(page);
       await attachScreenshot(page, testInfo, `${screen.name}-${theme}-wide.png`);
