@@ -1,22 +1,11 @@
 import { describe, expect, it } from "vitest";
-import type {
-  ConflictData,
-  SourceLocation,
-  TableResponse,
-  TablesResult,
-  ValidationIssue,
-} from "../../src/curation-app/api/types";
+import type { SourceLocation, TableResponse, ValidationIssue } from "../../src/curation-app/api/types";
 import {
   columnName,
-  conflictGrids,
   issueCells,
   itemsWithoutRows,
-  listText,
   rawTable,
   ROW,
-  syncAlert,
-  syncSummary,
-  tableOrder,
   targetLines,
   visibleColumns,
 } from "../../src/curation-app/grid";
@@ -142,33 +131,6 @@ describe("issueCells", () => {
   });
 });
 
-describe("tableOrder", () => {
-  it("orders the tables as the sheets of the workbook, the raw tables last", () => {
-    const files = [
-      "characteristica.tsv",
-      "Example_Tab10.tsv",
-      "Example_Tab2.tsv",
-      "interventions.tsv",
-      "outputs_Tab10.tsv",
-      "outputs_Tab2.tsv",
-      "scatters_Fig2.tsv",
-      "subjects.tsv",
-      "timecourses_Fig1.tsv",
-    ];
-    expect(tableOrder(files)).toEqual([
-      "subjects.tsv",
-      "interventions.tsv",
-      "characteristica.tsv",
-      "outputs_Tab2.tsv",
-      "outputs_Tab10.tsv",
-      "timecourses_Fig1.tsv",
-      "scatters_Fig2.tsv",
-      "Example_Tab2.tsv",
-      "Example_Tab10.tsv",
-    ]);
-  });
-});
-
 describe("rawTable", () => {
   it("makes the grid of a raw extraction a raw table with the lines of its rows", () => {
     expect(rawTable("Example_Tab2.tsv", [["a"], ["b", "c"]])).toEqual({
@@ -179,129 +141,5 @@ describe("rawTable", () => {
         { line: 2, cells: ["b", "c"] },
       ],
     });
-  });
-});
-
-describe("listText", () => {
-  it("joins names as a sentence does", () => {
-    expect(listText(["a.tsv"])).toBe("a.tsv");
-    expect(listText(["a.tsv", "b.tsv"])).toBe("a.tsv and b.tsv");
-    expect(listText(["a.tsv", "b.tsv", "c.tsv"])).toBe("a.tsv, b.tsv and c.tsv");
-  });
-});
-
-describe("syncAlert", () => {
-  const conflict: ConflictData = {
-    file: "outputs_Tab2.tsv",
-    sheet: "outputs_Tab2",
-    workbook_rows: [],
-    table_lines: [],
-    base_lines: [],
-    kept: null,
-  };
-
-  it("says what each sync status means, with the tone of its chip", () => {
-    const state = (status: Parameters<typeof syncAlert>[0]["status"], changes = 0) => ({
-      status,
-      changes,
-      conflicts: 0,
-    });
-    expect(syncAlert(state("in_sync"), [])).toEqual({ tone: "success", text: "In sync" });
-    expect(syncAlert(state("workbook_open"), [])).toEqual({ tone: "info", text: "Workbook open: close it to sync" });
-    expect(syncAlert(state("syncing"), [])).toEqual({ tone: "info", text: "Syncing" });
-    expect(syncAlert(state("changed", 2), [])).toEqual({
-      tone: "warning",
-      text: "Changed: the next sync writes 2 files",
-    });
-    expect(syncAlert(state("changed", 1), []).text).toBe("Changed: the next sync writes 1 file");
-    expect(syncAlert(state("changed", 0), []).text).toBe("Changed: the next sync updates the workbook");
-    expect(syncAlert(state("no_workbook"), [])).toEqual({
-      tone: undefined,
-      text: "No workbook yet: Open tables creates it",
-    });
-    expect(syncAlert(state("not_checked"), [])).toEqual({ tone: undefined, text: "Not checked yet" });
-    expect(syncAlert(state("unknown"), [])).toEqual({
-      tone: undefined,
-      text: "Unknown: the workbook or the tables cannot be read",
-    });
-  });
-
-  it("names the files of the unresolved conflicts", () => {
-    const state = { status: "conflict" as const, changes: 0, conflicts: 2 };
-    expect(syncAlert(state, [conflict])).toEqual({ tone: "error", text: "Conflict in outputs_Tab2.tsv" });
-    const conflicts: ConflictData[] = [
-      conflict,
-      { ...conflict, file: "subjects.tsv" },
-      { ...conflict, file: "a.tsv", kept: "tables" },
-    ];
-    expect(syncAlert(state, conflicts).text).toBe("Conflict in outputs_Tab2.tsv and subjects.tsv");
-    expect(syncAlert(state, []).text).toBe("Conflict between the workbook and the tables");
-  });
-});
-
-describe("syncSummary", () => {
-  const result: TablesResult = { ok: true, workbook_action: "unchanged", changes: [], conflicts: [], issues: [] };
-
-  it("says which files the last sync wrote and removed and what it did to the workbook", () => {
-    expect(syncSummary(result)).toBe("The last sync in the app changed no files.");
-    expect(
-      syncSummary({
-        ...result,
-        workbook_action: "regenerated",
-        changes: [
-          { file: "outputs_Tab2.tsv", action: "write" },
-          { file: "subjects.tsv", action: "write" },
-          { file: "scatters_Fig2.tsv", action: "delete" },
-        ],
-      }),
-    ).toBe(
-      "The last sync in the app wrote outputs_Tab2.tsv and subjects.tsv, removed scatters_Fig2.tsv and updated the " +
-        "workbook.",
-    );
-    expect(
-      syncSummary({
-        ...result,
-        workbook_action: "created",
-        changes: ["a", "b", "c", "d"].map((name) => ({ file: `${name}.tsv`, action: "write" as const })),
-      }),
-    ).toBe("The last sync in the app wrote 4 files and created the workbook.");
-  });
-});
-
-describe("conflictGrids", () => {
-  const conflict: ConflictData = {
-    file: "outputs_Tab2.tsv",
-    sheet: "outputs_Tab2",
-    workbook_rows: [{ row: 3, text: "Example\tTab2\tcaf_cl\t1.25\t\t" }],
-    table_lines: [{ line: 3, text: "Example\tTab2\tcaf_cl\t1.3\t0.2\t" }],
-    base_lines: ["Example\tTab2\tcaf_cl\t1.2\t\t"],
-    kept: null,
-  };
-
-  it("splits the rows of both sides and the last sync into the cells of the table header", () => {
-    const grids = conflictGrids(conflict, outputs.kind === "table" ? outputs.header : []);
-    expect(grids.workbook).toEqual({
-      file: "outputs_Tab2.tsv",
-      kind: "table",
-      header: outputs.kind === "table" ? outputs.header : [],
-      rows: [{ line: 3, cells: ["Example", "Tab2", "caf_cl", "1.25", "", ""] }],
-    });
-    expect(grids.tables.rows).toEqual([{ line: 3, cells: ["Example", "Tab2", "caf_cl", "1.3", "0.2", ""] }]);
-    expect(grids.base.rows).toEqual([{ line: 1, cells: ["Example", "Tab2", "caf_cl", "1.2", "", ""] }]);
-    // The columns with a value on a side, the same for all three; the ones that differ first.
-    expect(grids.changed).toEqual([3, 4]);
-    expect(grids.columns).toEqual([3, 4, 0, 1, 2]);
-  });
-
-  it("finds no changed columns when a side removed the table", () => {
-    const grids = conflictGrids({ ...conflict, workbook_rows: [] }, null);
-    expect(grids.changed).toEqual([]);
-    expect(grids.columns).toEqual([0, 1, 2, 3, 4]);
-  });
-
-  it("names the cells by their column letter without a header", () => {
-    const grids = conflictGrids({ ...conflict, file: "Example_Tab2.tsv", sheet: "Example_Tab2" }, null);
-    expect(grids.workbook.kind).toBe("raw");
-    expect(grids.columns.map((index) => columnName(grids.workbook, index))).toEqual(["D", "E", "A", "B", "C"]);
   });
 });

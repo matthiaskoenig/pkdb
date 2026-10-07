@@ -1,5 +1,6 @@
 /** Responses of the local API of `pkdb curate` for the tests of the curation app. */
 import type {
+  ConflictData,
   Profile,
   ReviewItem,
   Snapshot,
@@ -7,6 +8,8 @@ import type {
   StudyDetail,
   StudyMetadata,
   StudyRow,
+  TablesResult,
+  ValidationIssue,
 } from "../../src/curation-app/api/types";
 
 /** The overview row of the valid study `caffeine/Example`. */
@@ -251,4 +254,158 @@ export function json(body: unknown, { status = 200, etag }: { status?: number; e
     status,
     headers: { "Content-Type": "application/json", ...(etag ? { ETag: etag } : {}) },
   });
+}
+
+// Sync conflicts, as `pkdb tables sync --format json` and `POST /local/studies/tables` report them:
+// real answers for caffeine/Approved2001 and two copies of it, with the study renamed to Example.
+
+/** The columns of `outputs_<source>.tsv` as the library writes them. */
+export const OUTPUTS_COLUMNS = [
+  ...["study", "source", "subjects", "interventions", "measurement", "calculation", "substance", "tissue"],
+  ...["method", "choice", "time", "time_unit", "count", "mean", "sd", "se", "cv", "gmean", "gsd", "gcv"],
+  ...["median", "min", "max", "unit", "error_bar", "error_type", "comment"],
+];
+
+/** The columns of `subjects.tsv`. */
+export const SUBJECTS_COLUMNS = ["study", "name", "parent", "count", "source", "comment"];
+
+/** The columns of `scatters_<source>.tsv`. */
+export const SCATTERS_COLUMNS = [
+  ...["study", "source", "name", "subjects", "x_interventions", "x_measurement", "x_substance", "x_tissue"],
+  ...["x_method", "x_time", "x_time_unit", "x_mean", "x_unit", "y_interventions", "y_measurement"],
+  ...["y_substance", "y_tissue", "y_method", "y_time", "y_time_unit", "y_mean", "y_unit", "comment"],
+];
+
+/** A canonical TSV line: the cells of `columns` from `cells`, empty otherwise. */
+function tsvLine(columns: string[], cells: Record<string, string>): string {
+  return columns.map((column) => cells[column] ?? "").join("\t");
+}
+
+function outputsLine(mean: string): string {
+  return tsvLine(OUTPUTS_COLUMNS, {
+    study: "Example",
+    source: "Tab2",
+    subjects: "all",
+    interventions: "D1",
+    measurement: "cmax",
+    substance: "caffeine",
+    tissue: "plasma",
+    mean,
+    sd: "0.5",
+    unit: "mg/l",
+  });
+}
+
+function scattersLine(subjects: string, x: string, y: string): string {
+  return tsvLine(SCATTERS_COLUMNS, {
+    study: "Example",
+    source: "Fig2",
+    name: "age_vs_cmax",
+    subjects,
+    x_measurement: "age",
+    x_mean: x,
+    x_unit: "yr",
+    y_interventions: "D1",
+    y_measurement: "cmax",
+    y_substance: "caffeine",
+    y_tissue: "plasma",
+    y_mean: y,
+    y_unit: "mg/l",
+  });
+}
+
+/** The `sync_conflict` error of a conflict, located at the sheet in the workbook. */
+function syncConflict(sheet: string, row: number | null, message: string): ValidationIssue {
+  return {
+    code: "sync_conflict",
+    severity: "error",
+    message,
+    source: { file: "Example.xlsx", sheet, row, column: null, path: [] },
+    category: "workbook",
+    stage: "parse",
+    field: null,
+    expected: {},
+    context: {},
+    related_sources: [],
+    suggestions: [
+      {
+        kind: "fix",
+        message:
+          "Keep one side with pkdb tables sync --keep workbook or --keep tables, or edit the workbook so that the " +
+          "conflicting rows equal the tables.",
+        candidates: [],
+        command: null,
+      },
+    ],
+    documentation_url: null,
+  };
+}
+
+/** The workbook and the table changed the mean of the same row differently. */
+export const REGION_CONFLICT: ConflictData = {
+  file: "outputs_Tab2.tsv",
+  sheet: "outputs_Tab2",
+  workbook_rows: [{ row: 2, text: outputsLine("6.1") }],
+  table_lines: [{ line: 2, text: outputsLine("6.3") }],
+  base_lines: [outputsLine("5.9")],
+  kept: null,
+};
+
+export const REGION_ISSUE = syncConflict(
+  "outputs_Tab2",
+  2,
+  "The workbook and the tables changed the same rows of outputs_Tab2 differently since the last sync: row 2 of the " +
+    "sheet, line 2 of outputs_Tab2.tsv",
+);
+
+/** The workbook removed a row that the table changed. */
+export const ROWS_REMOVED_CONFLICT: ConflictData = {
+  file: "subjects.tsv",
+  sheet: "subjects",
+  workbook_rows: [],
+  table_lines: [{ line: 3, text: "Example\tS1\tall\t2\tTabA\t" }],
+  base_lines: ["Example\tS1\tall\t1\tTabA\t"],
+  kept: null,
+};
+
+export const ROWS_REMOVED_ISSUE = syncConflict(
+  "subjects",
+  2,
+  "The workbook and the tables changed the same rows of subjects differently since the last sync: rows removed " +
+    "after row 2 of the sheet, line 3 of subjects.tsv",
+);
+
+/** The table file was deleted while its sheet changed: the sides list the whole table from its header. */
+export const FILE_DELETED_CONFLICT: ConflictData = {
+  file: "scatters_Fig2.tsv",
+  sheet: "scatters_Fig2",
+  workbook_rows: [
+    { row: 1, text: SCATTERS_COLUMNS.join("\t") },
+    { row: 2, text: scattersLine("S1", "31", "2") },
+    { row: 3, text: scattersLine("S2", "40", "3") },
+  ],
+  table_lines: [],
+  base_lines: [SCATTERS_COLUMNS.join("\t"), scattersLine("S1", "30", "2"), scattersLine("S2", "40", "3")],
+  kept: null,
+};
+
+export const FILE_DELETED_ISSUE = syncConflict(
+  "scatters_Fig2",
+  1,
+  "scatters_Fig2.tsv was deleted, but the scatters_Fig2 sheet changed since the last sync",
+);
+
+/** A sync that found conflicts: not ok, with the conflicts and their `sync_conflict` errors. */
+export function conflictAnswer(
+  conflicts: [ConflictData, ValidationIssue][],
+  changes: Partial<TablesResult> = {},
+): TablesResult {
+  return {
+    ok: false,
+    workbook_action: "unchanged",
+    changes: [],
+    conflicts: conflicts.map(([conflict]) => conflict),
+    issues: conflicts.map(([, issue]) => issue),
+    ...changes,
+  };
 }

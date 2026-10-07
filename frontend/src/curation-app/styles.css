@@ -221,6 +221,24 @@ a.brand {
   line-height: 1.35;
 }
 
+/* Tabs that scroll: a tab cut at an edge with more tabs beyond fades out, so that it reads as a
+   hint of the tabs beyond, not as a broken tab. */
+.scroll-tabs:has(.v-slide-group__prev:not(.v-slide-group__prev--disabled)) {
+  --tabs-fade-start: transparent;
+}
+.scroll-tabs:has(.v-slide-group__next:not(.v-slide-group__next--disabled)) {
+  --tabs-fade-end: transparent;
+}
+.scroll-tabs .v-slide-group__container {
+  mask-image: linear-gradient(
+    to right,
+    var(--tabs-fade-start, #000),
+    #000 24px,
+    #000 calc(100% - 24px),
+    var(--tabs-fade-end, #000)
+  );
+}
+
 /* Problems: the parts of an issue and of an acknowledged warning. */
 .problem-head {
   display: flex;
@@ -280,6 +298,8 @@ a.brand {
   --shade: rgba(var(--v-theme-on-surface), 0.2);
   max-height: var(--rows-max-height, 420px);
   overflow: auto;
+  /* A region scrolled into view stays clear of the app bar, or of more with --rows-scroll-margin. */
+  scroll-margin-top: var(--rows-scroll-margin, 80px);
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   border-radius: 8px;
   background:
@@ -311,8 +331,10 @@ a.brand {
 }
 /* Rows that scroll pass below the header, which needs the surface color then; the shadows of the
    sides show in the rows below it. The cells have no background, so that the shadows show
-   through. */
-.rows-scroll--tall .rows-table thead th {
+   through. A tall region has the sticky header from the start, a table grid once its rows have
+   scrolled below the header. */
+.rows-scroll--tall .rows-table thead th,
+.rows-scroll--stuck .rows-table thead th {
   position: sticky;
   top: 0;
   z-index: 1;
@@ -332,7 +354,7 @@ a.brand {
 /* The line column stays in view while wide rows scroll. It covers the start of the region, so the
    shadow and the cover of the start move to its right edge. */
 .rows-scroll--sticky-line {
-  --line-width: 4rem;
+  --line-width: var(--rows-line-width, 4rem);
   background:
     linear-gradient(to right, var(--cover) 30%, var(--cover-clear)) var(--line-width) center / 40px 100% no-repeat
       local,

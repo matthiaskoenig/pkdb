@@ -97,7 +97,15 @@ function showRow(row: { file: string; line: number }): void {
   <div class="sources">
     <p v-if="!sources.length" class="sources-empty">The study has no sources yet.</p>
     <template v-else>
-      <VTabs v-model="tab" show-arrows color="primary" density="compact" aria-label="Sources" class="sources-tabs">
+      <VTabs
+        v-model="tab"
+        show-arrows
+        center-active
+        color="primary"
+        density="compact"
+        aria-label="Sources"
+        class="sources-tabs scroll-tabs"
+      >
         <VTab
           v-for="entry in sources"
           :id="tabId(entry.source)"

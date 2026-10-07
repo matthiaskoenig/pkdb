@@ -38,14 +38,9 @@ let scrolled: Element[];
 beforeEach(() => {
   scrolled = [];
   // jsdom has no layout: scrolling an element into view records it.
-  Element.prototype.scrollIntoView = vi.fn(function (this: Element) {
+  vi.spyOn(Element.prototype, "scrollIntoView").mockImplementation(function (this: Element) {
     scrolled.push(this);
   });
-});
-
-afterEach(() => {
-  // @ts-expect-error jsdom has no scrollIntoView; the stub goes again.
-  delete Element.prototype.scrollIntoView;
 });
 
 function lines(wrapper: VueWrapper): string[] {
@@ -208,6 +203,12 @@ describe("TableGrid with many rows", () => {
     // Spacers keep the height of the rows that are not rendered.
     const spacers = wrapper.findAll("tbody tr[aria-hidden]");
     expect(spacers).toHaveLength(2);
+    // The rows pass below the header, which stays in view with its background.
+    expect(element.classList).toContain("rows-scroll--stuck");
+    element.scrollTop = 0;
+    element.dispatchEvent(new Event("scroll"));
+    await flushPromises();
+    expect(element.classList).not.toContain("rows-scroll--stuck");
   });
 
   it("renders every row up to 500 rows", () => {
@@ -227,7 +228,8 @@ describe("TableGrid with many rows", () => {
     expect(cell.text()).toBe("399.9");
     expect(cell.classes()).toContain("grid-cell--focus");
     expect(document.activeElement).toBe(cell.element);
-    expect(scrolled).toContain(cell.element);
+    // The cell scrolls within the region, and the page brings the region into view, clear of the app bar.
+    expect(scrolled).toEqual([region(wrapper)]);
   });
 
   it("marks the line of a focused line without a column", async () => {

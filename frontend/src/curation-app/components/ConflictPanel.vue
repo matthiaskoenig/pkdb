@@ -2,16 +2,17 @@
 import { computed, shallowRef, useId, watch } from "vue";
 import { VBtn, VProgressLinear } from "vuetify/components";
 import type { ConflictData } from "../api/types";
-import { columnName, conflictGrids, type Side } from "../grid";
-import { plural } from "../overview";
 import { useStudyStore } from "../stores/study";
+import { isRawTable } from "../study";
+import { conflictView, type Side } from "../tables";
 import TableGrid from "./TableGrid.vue";
 
 /**
  * The rows that the workbook and the tables changed differently since the last sync, per
- * conflicting file: the rows at the last sync, the rows of the sheet and the lines of the file
- * side by side, split into the cells of the table header. Keep workbook and Keep tables resolve
- * every conflict of the study; Open workbook opens it to make the rows equal.
+ * conflicting file in one grid: a row per version (the last sync, the rows of the sheet, the
+ * lines of the file) under the table header, the changed columns first and marked. Keep workbook
+ * and Keep tables resolve every conflict of the study, also when its rows cannot be read; Open
+ * workbook opens it to combine the rows.
  */
 const props = defineProps<{
   conflicts: ConflictData[];
@@ -28,11 +29,13 @@ const id = useId();
 const unresolved = computed(() => props.conflicts.filter((conflict) => conflict.kept === null));
 const files = computed(() => [...new Set(unresolved.value.map((conflict) => conflict.file))]);
 
-/** The header of each conflicting table, null for a raw table or a table that does not load. */
+/** The header of each conflicting table; null for a raw table, or a table that is deleted or does not load. */
 const headers = shallowRef(new Map<string, string[] | null>());
 let request = 0;
 
 async function header(file: string): Promise<string[] | null> {
+  // A deleted table takes its header from its sheet.
+  if (isRawTable(file) || !study.detail?.files.includes(file)) return null;
   try {
     const table = await study.table(file);
     return table.kind === "table" ? table.header : null;
@@ -53,10 +56,10 @@ watch(
 
 const loading = computed(() => files.value.some((file) => !headers.value.has(file)));
 const shown = computed(() =>
-  unresolved.value.map((conflict) => {
-    const grids = conflictGrids(conflict, headers.value.get(conflict.file) ?? null);
-    return { conflict, grids, changed: grids.changed.map((index) => columnName(grids.tables, index)) };
-  }),
+  unresolved.value.map((conflict) => ({
+    conflict,
+    view: conflictView(conflict, headers.value.get(conflict.file) ?? null),
+  })),
 );
 const many = computed(() => files.value.length > 1);
 </script>
@@ -65,11 +68,14 @@ const many = computed(() => files.value.length > 1);
   <section class="conflict-panel" :aria-labelledby="`${id}-heading`">
     <div class="conflict-intro">
       <h3 :id="`${id}-heading`" class="conflict-heading">Conflicting rows</h3>
-      <p class="conflict-note">
+      <p class="conflict-text">
         The workbook and the tables changed the same rows since the last sync. Keep one side. To combine both, edit
         the rows in the workbook, save it, and then keep the workbook.
-        The columns that differ come first and are marked.
+        <template v-if="unresolved.length">The columns that differ come first and are marked.</template>
         <template v-if="many">Keep workbook and Keep tables resolve all conflicts.</template>
+      </p>
+      <p v-if="!unresolved.length" class="conflict-text">
+        The conflicting rows could not be read. Open the workbook to see them, or keep one side.
       </p>
     </div>
     <div class="conflict-actions">
@@ -106,7 +112,7 @@ const many = computed(() => files.value.length > 1);
     <VProgressLinear v-if="loading" indeterminate color="primary" aria-label="Loading the conflicting rows" />
     <template v-else>
       <section
-        v-for="({ conflict, grids, changed }, index) in shown"
+        v-for="({ conflict, view }, index) in shown"
         :key="`${conflict.file}-${index}`"
         class="conflict-file"
         :aria-labelledby="`${id}-${index}`"
@@ -115,55 +121,18 @@ const many = computed(() => files.value.length > 1);
           <span class="conflict-file-name">{{ conflict.file }}</span>
           <span class="conflict-sheet">sheet {{ conflict.sheet }}</span>
         </h4>
-        <div class="conflict-sides">
-          <section class="conflict-side" :aria-labelledby="`${id}-${index}-base`">
-            <div class="conflict-side-head">
-              <h5 :id="`${id}-${index}-base`" class="conflict-side-name">Last sync</h5>
-              <span class="conflict-count">{{ plural(grids.base.rows.length, "row") }}</span>
-            </div>
-            <TableGrid
-              v-if="grids.base.rows.length"
-              :table="grids.base"
-              :columns="grids.columns"
-              :mark-column="changed"
-              mark-text="changed"
-              :line-header="null"
-              :label="`${conflict.file} at the last sync`"
-            />
-            <p v-else class="field-note">Both sides added these rows.</p>
-          </section>
-          <section class="conflict-side" :aria-labelledby="`${id}-${index}-workbook`">
-            <div class="conflict-side-head">
-              <h5 :id="`${id}-${index}-workbook`" class="conflict-side-name">Workbook</h5>
-              <span class="conflict-count">{{ plural(grids.workbook.rows.length, "row") }}</span>
-            </div>
-            <TableGrid
-              v-if="grids.workbook.rows.length"
-              :table="grids.workbook"
-              :columns="grids.columns"
-              :mark-column="changed"
-              mark-text="changed"
-              line-header="Row"
-              :label="`Rows of the sheet ${conflict.sheet}`"
-            />
-            <p v-else class="field-note">The workbook removed the sheet.</p>
-          </section>
-          <section class="conflict-side" :aria-labelledby="`${id}-${index}-tables`">
-            <div class="conflict-side-head">
-              <h5 :id="`${id}-${index}-tables`" class="conflict-side-name">Tables</h5>
-              <span class="conflict-count">{{ plural(grids.tables.rows.length, "row") }}</span>
-            </div>
-            <TableGrid
-              v-if="grids.tables.rows.length"
-              :table="grids.tables"
-              :columns="grids.columns"
-              :mark-column="changed"
-              mark-text="changed"
-              :label="`Lines of ${conflict.file}`"
-            />
-            <p v-else class="field-note">The tables removed the file.</p>
-          </section>
-        </div>
+        <p v-if="view.note" class="field-note conflict-note">{{ view.note }}</p>
+        <TableGrid
+          :table="view.table"
+          :columns="view.columns"
+          :mark-column="view.changed"
+          mark-text="changed"
+          line-header="Version"
+          :label="`Conflicting rows of ${conflict.file}`"
+          class="conflict-grid"
+        >
+          <template #line="{ line }">{{ view.labels.get(line) }}</template>
+        </TableGrid>
       </section>
     </template>
   </section>
@@ -192,7 +161,7 @@ const many = computed(() => files.value.length > 1);
   font-weight: 600;
   line-height: 1.5;
 }
-.conflict-note {
+.conflict-text {
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.45;
@@ -226,32 +195,8 @@ const many = computed(() => files.value.length > 1);
   font-weight: 400;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-/* Side by side when they fit, below each other in a narrow window. */
-.conflict-sides {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
-  gap: 16px;
-  align-items: start;
-}
-.conflict-side {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  min-width: 0;
-}
-.conflict-side-head {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-}
-.conflict-side-name {
-  margin: 0;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1.5;
-}
-.conflict-count {
-  font-size: 0.8125rem;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+/* The version of a row, such as Workbook row 12, needs a wider line column. */
+.conflict-grid {
+  --rows-line-width: 8.5rem;
 }
 </style>

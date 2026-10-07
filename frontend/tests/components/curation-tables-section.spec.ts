@@ -3,7 +3,6 @@ import { DOMWrapper, enableAutoUnmount, flushPromises, mount } from "@vue/test-u
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { RouterView, type Router } from "vue-router";
 import type {
-  ConflictData,
   StudyDetail,
   SyncState,
   TableResponse,
@@ -12,7 +11,19 @@ import type {
 } from "../../src/curation-app/api/types";
 import { makeRouter } from "../../src/curation-app/router";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
-import { json, reviewItem, snapshot, studyDetail } from "../unit/curation-fixtures";
+import {
+  conflictAnswer,
+  FILE_DELETED_CONFLICT,
+  json,
+  OUTPUTS_COLUMNS,
+  REGION_CONFLICT,
+  REGION_ISSUE,
+  reviewItem,
+  ROWS_REMOVED_CONFLICT,
+  snapshot,
+  studyDetail,
+  SUBJECTS_COLUMNS,
+} from "../unit/curation-fixtures";
 import { button, page, serveApi, setViewport, type Handler, type ServedRequest } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
@@ -52,14 +63,6 @@ function empty(file: string): TableResponse {
   return { file, kind: "table", header: ["study", "source", "label"], rows: [] };
 }
 
-const conflict: ConflictData = {
-  file: "outputs_Tab2.tsv",
-  sheet: "outputs_Tab2",
-  workbook_rows: [{ row: 4, text: "Example\tTab2\tcaf_thalf\tthalf\t4.9\t\th\t" }],
-  table_lines: [{ line: 3, text: "Example\tTab2\tcaf_thalf\tthalf\t5.1\t\th\t" }],
-  base_lines: ["Example\tTab2\tcaf_thalf\tthalf\t4.8\t\th\t"],
-  kept: null,
-};
 
 const synced: TablesResult = { ok: true, workbook_action: "unchanged", changes: [], conflicts: [], issues: [] };
 
@@ -96,6 +99,17 @@ function detail(changes: Partial<StudyDetail> = {}): StudyDetail {
     ...changes,
   });
 }
+
+/** The tables of the real conflicts, whose rows have the columns that the library writes. */
+const CONFLICT_TABLES = {
+  [`GET ${EXAMPLE}/tables/outputs_Tab2.tsv`]: {
+    file: "outputs_Tab2.tsv",
+    kind: "table",
+    header: OUTPUTS_COLUMNS,
+    rows: [],
+  },
+  [`GET ${EXAMPLE}/tables/subjects.tsv`]: { file: "subjects.tsv", kind: "table", header: SUBJECTS_COLUMNS, rows: [] },
+} satisfies Record<string, TableResponse>;
 
 function sync(status: SyncState["status"], changes = 0): Pick<StudyDetail, "sync"> {
   return { sync: { status, changes, conflicts: status === "conflict" ? 1 : 0 } };
@@ -168,13 +182,10 @@ beforeEach(() => {
   setViewport(1440);
   pinia = createPinia();
   setActivePinia(pinia);
-  Element.prototype.scrollIntoView = vi.fn();
 });
 
 afterEach(() => {
   disposePinia(pinia);
-  // @ts-expect-error jsdom has no scrollIntoView; the stub goes again.
-  delete Element.prototype.scrollIntoView;
 });
 
 describe("sync status", () => {
@@ -182,7 +193,7 @@ describe("sync status", () => {
     ["in_sync", 0, "In sync"],
     ["workbook_open", 0, "Workbook open: close it to sync"],
     ["syncing", 0, "Syncing"],
-    ["changed", 3, "Changed: the next sync writes 3 files"],
+    ["changed", 3, "Changed: the next sync changes 3 files"],
     ["no_workbook", 0, "No workbook yet: Open tables creates it"],
     ["not_checked", 0, "Not checked yet"],
   ] as const)("says %s first", async (status, changes, text) => {
@@ -194,8 +205,9 @@ describe("sync status", () => {
   });
 
   it("names the conflicting file", async () => {
-    await mountSection(detail({ ...sync("conflict"), conflicts: [conflict] }));
+    await mountSection(detail({ ...sync("conflict"), conflicts: [REGION_CONFLICT] }), CONFLICT_TABLES);
     expect(alertText()).toBe("Conflict in outputs_Tab2.tsv");
+    expect(page().get(".tables-sync").attributes("role")).toBe("status");
   });
 
   it("syncs, and then says what the sync did", async () => {
@@ -228,48 +240,126 @@ describe("sync status", () => {
     expect(page().find(".action-failure").exists()).toBe(false);
   });
 
-  it("opens the workbook with Open tables", async () => {
-    await mountSection(detail(sync("no_workbook")), {
-      [`POST ${TABLES}`]: { ...synced, workbook_action: "created", opened: true },
+  it("leaves Open tables to the study header, and shows the progress on the running button only", async () => {
+    let finish: (response: Response) => void = () => undefined;
+    await mountSection(detail(sync("changed", 1)), {
+      [`POST ${TABLES}`]: (() => new Promise<Response>((resolve) => (finish = resolve))) satisfies Handler,
     });
-    await press("Open tables");
-    expect(posted()).toEqual([{ action: "open", study: "caffeine/Example" }]);
-    expect(page().get(".tables-notice").text()).toBe("The workbook opened.");
+    const names = () =>
+      page()
+        .get(".tables")
+        .findAll("button")
+        .map((button) => button.text().trim());
+    expect(names()).not.toContain("Open tables");
+    expect(names()).toEqual(expect.arrayContaining(["Sync", "Add table"]));
+    void press("Sync");
+    await flushPromises();
+    const loading = page()
+      .get(".tables")
+      .findAll(".v-btn--loading")
+      .map((button) => button.text().trim());
+    expect(loading).toEqual(["Sync"]);
+    finish(json(synced));
+    await flushPromises();
   });
 });
 
 describe("conflicts", () => {
-  it("shows the last sync, the workbook and the tables side by side in the cells of the table", async () => {
-    await mountSection(detail({ ...sync("conflict"), conflicts: [conflict] }));
+  /** The rows of the conflict grid: the version of each row and the cells of its first columns. */
+  function conflictRows(): string[][] {
+    return page()
+      .get(".conflict-panel")
+      .findAll("tbody tr")
+      .map((row) => [row.get("th").text(), ...row.findAll("td").map((cell) => cell.text())]);
+  }
+
+  it("shows the last sync, the workbook and the tables in one grid, the changed columns first", async () => {
+    await mountSection(detail({ ...sync("conflict"), conflicts: [REGION_CONFLICT] }), CONFLICT_TABLES);
     const panelElement = page().get(".conflict-panel");
     expect(panelElement.get(".conflict-file-name").text()).toBe("outputs_Tab2.tsv");
-    const sides = panelElement.findAll(".conflict-side");
-    expect(sides.map((side) => side.get("h5").text())).toEqual(["Last sync", "Workbook", "Tables"]);
-    // The columns with a value, under the header of the table; the column that differs first.
-    expect(sides[1]!.findAll("thead th").map((cell) => cell.text())).toEqual([
-      "Row",
+    expect(panelElement.findAll('[role="region"]')).toHaveLength(1);
+    expect(panelElement.findAll("thead th").map((cell) => cell.text())).toEqual([
+      "Version",
       "mean, changed",
       "study",
       "source",
-      "label",
+      "subjects",
+      "interventions",
       "measurement",
+      "substance",
+      "tissue",
+      "sd",
       "unit",
     ]);
-    expect(sides[0]!.findAll("thead th")[0]?.text()).toBe("mean, changed");
-    expect(sides[1]!.get("tbody th").text()).toBe("4");
-    expect(sides[2]!.get("tbody th").text()).toBe("3");
-    expect(sides.map((side) => side.findAll("tbody td")[0]?.text())).toEqual(["4.8", "4.9", "5.1"]);
+    expect(conflictRows().map((row) => row.slice(0, 2))).toEqual([
+      ["Last sync", "5.9"],
+      ["Workbook row 2", "6.1"],
+      ["Tables line 2", "6.3"],
+    ]);
+  });
+
+  it("syncs during a conflict without a second alert: the panel explains the conflict", async () => {
+    await mountSection(detail({ ...sync("conflict"), conflicts: [REGION_CONFLICT] }), {
+      ...CONFLICT_TABLES,
+      [`POST ${TABLES}`]: conflictAnswer([[REGION_CONFLICT, REGION_ISSUE]]),
+    });
+    await press("Sync");
+    expect(posted()).toEqual([{ action: "sync", study: "caffeine/Example" }]);
+    expect(page().find(".action-failure").exists()).toBe(false);
+    expect(page().get(".tables-notice").text()).toBe("The workbook and the tables conflict.");
+    expect(page().find(".conflict-panel").exists()).toBe(true);
+  });
+
+  it("says that the workbook removed the rows that the table changed", async () => {
+    await mountSection(detail({ ...sync("conflict"), conflicts: [ROWS_REMOVED_CONFLICT] }), CONFLICT_TABLES);
+    expect(page().get(".conflict-note").text()).toBe("The workbook removed these rows, and the tables changed them.");
+    expect(conflictRows().map((row) => row.slice(0, 2))).toEqual([
+      ["Last sync", "1"],
+      ["Tables line 3", "2"],
+    ]);
+  });
+
+  it("shows a deleted table without its header as a row", async () => {
+    // The file is gone: its rows have the header of the sheet.
+    await mountSection(detail({ ...sync("conflict"), conflicts: [FILE_DELETED_CONFLICT] }), CONFLICT_TABLES);
+    expect(page().get(".conflict-note").text()).toBe(
+      "scatters_Fig2.tsv was deleted, but its sheet changed since the last sync.",
+    );
+    expect(conflictRows().map((row) => row.slice(0, 2))).toEqual([
+      ["Last sync", "30"],
+      ["Last sync", "40"],
+      ["Workbook row 2", "31"],
+      ["Workbook row 3", "40"],
+    ]);
+    expect(page().get(".conflict-panel thead th:nth-child(2)").text()).toBe("x_mean, changed");
+    // A deleted table is not requested.
+    expect(requests.some((request) => request.path.endsWith("/scatters_Fig2.tsv"))).toBe(false);
+  });
+
+  it("offers to keep a side when the conflicting rows cannot be read", async () => {
+    await mountSection(detail({ ...sync("conflict"), conflicts: [] }), {
+      [`POST ${TABLES}`]: (() => {
+        served = detail(sync("in_sync"));
+        return json({ ...synced, workbook_action: "regenerated" });
+      }) satisfies Handler,
+    });
+    expect(alertText()).toBe("Conflict between the workbook and the tables");
+    expect(page().get(".conflict-panel").text()).toContain("The conflicting rows could not be read.");
+    await press("Keep tables");
+    expect(posted()).toEqual([{ action: "resolve", keep: "tables", study: "caffeine/Example" }]);
+    expect(page().find(".conflict-panel").exists()).toBe(false);
   });
 
   it("keeps the workbook and lists the problems of the sync that follows", async () => {
-    await mountSection(detail({ ...sync("conflict"), conflicts: [conflict] }), {
+    await mountSection(detail({ ...sync("conflict"), conflicts: [REGION_CONFLICT] }), {
+      ...CONFLICT_TABLES,
       [`POST ${TABLES}`]: (() => {
         served = detail(sync("unknown"));
         return json({
           ...synced,
           ok: false,
-          conflicts: [{ ...conflict, kept: "workbook" }],
-          issues: [{ code: "invalid_number", severity: "error", message: "The mean on row 4 is not a number." }],
+          conflicts: [{ ...REGION_CONFLICT, kept: "workbook" }],
+          issues: [{ code: "invalid_number", severity: "error", message: "The mean on row 2 is not a number." }],
         });
       }) satisfies Handler,
     });
@@ -277,15 +367,16 @@ describe("conflicts", () => {
     expect(posted()).toEqual([{ action: "resolve", keep: "workbook", study: "caffeine/Example" }]);
     const failure = page().get(".action-failure").text();
     expect(failure).toContain("Kept the workbook rows, but the sync found problems.");
-    expect(failure).toContain("The mean on row 4 is not a number.");
+    expect(failure).toContain("The mean on row 2 is not a number.");
     expect(page().find(".conflict-panel").exists()).toBe(false);
   });
 
   it("keeps the tables", async () => {
-    await mountSection(detail({ ...sync("conflict"), conflicts: [conflict] }), {
+    await mountSection(detail({ ...sync("conflict"), conflicts: [REGION_CONFLICT] }), {
+      ...CONFLICT_TABLES,
       [`POST ${TABLES}`]: (() => {
         served = detail(sync("in_sync"));
-        return json({ ...synced, workbook_action: "regenerated", conflicts: [{ ...conflict, kept: "tables" }] });
+        return json({ ...synced, workbook_action: "regenerated", conflicts: [{ ...REGION_CONFLICT, kept: "tables" }] });
       }) satisfies Handler,
     });
     await press("Keep tables");
@@ -294,8 +385,9 @@ describe("conflicts", () => {
   });
 
   it("opens the workbook to edit the conflicting rows", async () => {
-    await mountSection(detail({ ...sync("conflict"), conflicts: [conflict] }), {
-      [`POST ${TABLES}`]: { ...synced, ok: false, conflicts: [conflict], opened: true },
+    await mountSection(detail({ ...sync("conflict"), conflicts: [REGION_CONFLICT] }), {
+      ...CONFLICT_TABLES,
+      [`POST ${TABLES}`]: conflictAnswer([[REGION_CONFLICT, REGION_ISSUE]], { opened: true }),
     });
     await press("Open workbook");
     expect(posted()).toEqual([{ action: "open", study: "caffeine/Example" }]);
@@ -334,7 +426,7 @@ describe("tabs", () => {
     expect(rows[1]!.findAll("td")[4]!.classes()).toContain("grid-cell--error");
     expect(rows[2]!.findAll("td")[6]!.classes()).toContain("grid-cell--warning");
     expect(panel().get(".tables-caption").text()).toBe(
-      "3 rows. Open review items target 1 row. 2 cells have problems.",
+      "3 rows. Open review items target 1 row. 2 problems are outlined.",
     );
   });
 
@@ -389,6 +481,13 @@ describe("tabs", () => {
     expect(tabs()[3]?.attributes("aria-selected")).toBe("true");
     const cell = panel().findAll("tbody tr")[1]!.findAll("td")[4]!;
     expect(cell.classes()).toContain("grid-cell--focus");
+    expect(document.activeElement).toBe(cell.element);
+  });
+
+  it("focuses the cell of a raw table by its column letter", async () => {
+    await mountSection(detail(), {}, `${SECTION}?file=Example_Tab2.tsv&line=2&column=B`);
+    const cell = panel().findAll("tbody tr")[1]!.findAll("td")[1]!;
+    expect(cell.text()).toBe("1.20 ± 0.3");
     expect(document.activeElement).toBe(cell.element);
   });
 

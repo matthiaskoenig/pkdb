@@ -11,21 +11,10 @@ import TableGrid from "../components/TableGrid.vue";
 import UserHint from "../components/UserHint.vue";
 import { useLoaded } from "../composables/useLoaded";
 import { useNotice } from "../composables/useNotice";
-import {
-  columnCount,
-  issueCells,
-  itemsWithoutRows,
-  keptColumns,
-  syncAlert,
-  syncOutcome,
-  syncSummary,
-  tableOrder,
-  targetLines,
-  visibleColumns,
-  type Side,
-} from "../grid";
+import { columnCount, issueCells, itemsWithoutRows, keptColumns, targetLines, visibleColumns } from "../grid";
 import { plural } from "../overview";
 import { useStudyStore } from "../stores/study";
+import { syncAlert, syncOutcome, syncSummary, tableOrder, withoutConflicts, type Side } from "../tables";
 import {
   actionFailure,
   isRawTable,
@@ -40,7 +29,8 @@ import {
  * The sync status of the workbook first, with the conflict panel while the workbook and the
  * tables conflict; then one tab per table and raw table with its rows, read only. Rows that open
  * review items target are amber and cells with problems are outlined. Tables are edited in the
- * workbook: Open tables opens it, Sync syncs it, and Add table adds a sheet.
+ * workbook, which Open tables of the study header opens: Sync syncs it, and Add table adds a
+ * sheet.
  *
  * The chosen table is the `file` of the route, and its `line` and `column` focus a cell, so that
  * the Problems, Review and Sources sections can link to a row.
@@ -63,9 +53,8 @@ const alertLook = computed(() => (alert.value?.tone ? { type: alert.value.tone }
 const summary = computed(() =>
   detail.value?.sync.status === "in_sync" && study.lastSync?.ok ? syncSummary(study.lastSync) : null,
 );
-const conflicts = computed(() =>
-  detail.value?.sync.status === "conflict" ? detail.value.conflicts.filter((entry) => entry.kept === null) : [],
-);
+/** Whether the workbook and the tables conflict; the panel offers to keep a side even without the rows. */
+const conflicted = computed(() => detail.value?.sync.status === "conflict");
 
 type Action = "open" | "sync" | Side;
 
@@ -94,11 +83,11 @@ async function run(action: Action, work: () => Promise<string>): Promise<void> {
   }
 }
 
-function openTables(): Promise<void> {
+/** Open workbook of the conflict panel, which explains the conflicts. */
+function openWorkbook(): Promise<void> {
   return run("open", async () => {
     const result = await study.tablesAction("open");
-    // The conflict panel of this section shows the conflicts.
-    failure.value = tablesOutcome({ ...result, conflicts: [] });
+    failure.value = tablesOutcome(withoutConflicts(result));
     return result.opened ? "The workbook opened." : "";
   });
 }
@@ -195,8 +184,12 @@ const caption = computed(() => {
   if (whole > 1) parts.push(`${whole} open review items are about the whole table.`);
   if (unmatched)
     parts.push(unmatched === 1 ? "1 open review item matches no row." : `${unmatched} open review items match no row.`);
-  const cells = [...issues.value.values()].reduce((sum, line) => sum + line.size, 0);
-  if (cells) parts.push(cells === 1 ? "1 cell has problems." : `${cells.toLocaleString("en-US")} cells have problems.`);
+  // A problem outlines its cell, the line of its row, or a header cell.
+  const outlined = (detail.value?.problems ?? []).filter(
+    (issue) => issue.source?.file === shown.file && issue.source.row != null,
+  ).length;
+  if (outlined === 1) parts.push("1 problem is outlined.");
+  if (outlined > 1) parts.push(`${outlined.toLocaleString("en-US")} problems are outlined.`);
   if (hideEmpty.value) {
     const hidden =
       columnCount(shown) - visibleColumns(shown, true, keptColumns(issues.value, focus.value?.column)).length;
@@ -229,25 +222,15 @@ const missingLine = computed(() => {
     </VAlert>
 
     <ConflictPanel
-      v-if="conflicts.length"
-      :conflicts="conflicts"
+      v-if="conflicted && detail"
+      :conflicts="detail.conflicts"
       :busy="busy === 'sync' ? null : busy"
       :disabled="working"
       @keep="keep"
-      @open="openTables"
+      @open="openWorkbook"
     />
 
     <div class="tables-toolbar">
-      <VBtn
-        variant="tonal"
-        color="primary"
-        prepend-icon="fas fa-table"
-        :disabled="working"
-        :loading="busy === 'open' && !conflicts.length"
-        @click="openTables"
-      >
-        Open tables
-      </VBtn>
       <VBtn
         variant="tonal"
         color="primary"
@@ -279,7 +262,7 @@ const missingLine = computed(() => {
         color="primary"
         density="compact"
         aria-label="Tables"
-        class="tables-tabs"
+        class="tables-tabs scroll-tabs"
       >
         <VTab
           v-for="file in files"
@@ -417,8 +400,17 @@ const missingLine = computed(() => {
 .tables-hide {
   flex: 0 0 auto;
 }
-/* The rows fill the window below the app bar when the page scrolls to them. */
+/* The rows fill the window when the page scrolls to them, with the actions, the tabs and the
+   caption above them in view below the app bar. */
 .tables-grid {
-  --rows-max-height: max(420px, calc(100dvh - 160px));
+  --rows-scroll-margin: 236px;
+  --rows-max-height: max(420px, calc(100dvh - 252px));
+}
+/* The caption and the switch take more lines in a narrow window. */
+@media (max-width: 599.98px) {
+  .tables-grid {
+    --rows-scroll-margin: 300px;
+    --rows-max-height: max(320px, calc(100dvh - 316px));
+  }
 }
 </style>

@@ -234,7 +234,11 @@ function described(...ids: (string | undefined | false)[]): string | undefined {
   return ids.filter(Boolean).join(" ") || undefined;
 }
 
-/** Scroll the focused line into view, then focus its cell, without scrolling again. */
+/**
+ * Scroll the focused cell to the middle of the region, bring the region into the page view, then
+ * focus the cell without scrolling again. Only the region scrolls to the cell, so that the page
+ * keeps what is above the region in view (its margin: `--rows-scroll-margin`).
+ */
 async function reveal(): Promise<void> {
   const element = region.value;
   const index = focusLine.value === null ? -1 : props.table.rows.findIndex((row) => row.line === focusLine.value);
@@ -248,8 +252,16 @@ async function reveal(): Promise<void> {
   }
   const cell = element.querySelector<HTMLElement>(".grid-cell--focus");
   if (!cell) return;
-  // The sticky header and line column keep a margin: see the styles.
-  if (typeof cell.scrollIntoView === "function") cell.scrollIntoView({ block: "center", inline: "center" });
+  // The middle of the rows below the header, and of the columns right of the line column.
+  const box = element.getBoundingClientRect();
+  const target = cell.getBoundingClientRect();
+  const top = headerHeight.value;
+  element.scrollTop += target.top - box.top - top - (element.clientHeight - top - target.height) / 2;
+  if (cell.tagName === "TD") {
+    const start = lines.value ? (element.querySelector("thead .rows-line")?.getBoundingClientRect().width ?? 0) : 0;
+    element.scrollLeft += target.left - box.left - start - (element.clientWidth - start - target.width) / 2;
+  }
+  element.scrollIntoView({ block: "nearest" });
   cell.focus({ preventScroll: true });
 }
 
@@ -267,7 +279,7 @@ watch(
     <div
       ref="region"
       class="rows-scroll"
-      :class="{ 'rows-scroll--sticky-line': lines, 'rows-scroll--tall': scrolled }"
+      :class="{ 'rows-scroll--sticky-line': lines, 'rows-scroll--stuck': scrolled }"
       tabindex="0"
       role="region"
       :aria-label="label ?? `Rows of ${table.file}`"
@@ -389,13 +401,6 @@ watch(
 .rows-table :is(td, th):focus-visible {
   outline: 3px solid rgb(var(--v-theme-primary));
   outline-offset: -5px;
-}
-/* A cell scrolled into view stays clear of the header and the line column. */
-.rows-table tbody :is(td, th) {
-  scroll-margin-block-start: 40px;
-}
-.rows-scroll--sticky-line .rows-table tbody td {
-  scroll-margin-inline-start: var(--line-width);
 }
 /* Raw tables: lines between the columns, as in a spreadsheet; the line column has its own.
    Cells keep their spaces as printed. */

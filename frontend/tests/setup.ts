@@ -18,3 +18,5 @@ vi.stubGlobal(
     disconnect() {}
   },
 );
+// jsdom has no layout: scrolling an element into view does nothing.
+Element.prototype.scrollIntoView = () => undefined;
