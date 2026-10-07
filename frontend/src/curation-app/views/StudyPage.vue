@@ -6,6 +6,7 @@ import { ApiError, ServerStopped, SessionMissing } from "../api/client";
 import SectionRail from "../components/SectionRail.vue";
 import StudyHeader from "../components/StudyHeader.vue";
 import MetadataSection from "../sections/MetadataSection.vue";
+import ProblemsSection from "../sections/ProblemsSection.vue";
 import ReviewSection from "../sections/ReviewSection.vue";
 import SectionPlaceholder from "../sections/SectionPlaceholder.vue";
 import { useStudyStore } from "../stores/study";
@@ -24,7 +25,11 @@ import {
  * open study from the study store, and a section with a form emits `unsaved` with whether it has
  * unsaved changes, which the rail marks.
  */
-const SECTION_VIEWS: Partial<Record<Section, Component>> = { metadata: MetadataSection, review: ReviewSection };
+const SECTION_VIEWS: Partial<Record<Section, Component>> = {
+  metadata: MetadataSection,
+  review: ReviewSection,
+  problems: ProblemsSection,
+};
 
 const route = useRoute();
 const router = useRouter();
