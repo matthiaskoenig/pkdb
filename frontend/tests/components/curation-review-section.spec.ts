@@ -83,6 +83,18 @@ const acknowledgement = reviewItem({
   resolved: "2026-10-05T16:20:00Z",
 });
 
+/** An acknowledgement as `pkdb review acknowledge` writes it: resolved at once. */
+const RESOLVED_ACKNOWLEDGEMENT = "01JA33A1B2C3D4E5F6G7H8J9K0";
+const resolvedAcknowledgement = reviewItem({
+  id: RESOLVED_ACKNOWLEDGEMENT,
+  kind: "issue",
+  state: "resolved",
+  acknowledges: "digitized_mismatch",
+  target: { file: "timecourses_Fig1.tsv", rows: { label: "caf_plasma_D150", time: "0.5" }, column: "mean" },
+  text: "The 0.5 h point is rounded in the figure.",
+  author: "mkoenig",
+});
+
 const timecourses: TableResponse = {
   file: "timecourses_Fig1.tsv",
   kind: "table",
@@ -423,22 +435,64 @@ describe("selected item", () => {
     expect(button("Reply").attributes("disabled")).toBeDefined();
   });
 
-  it("offers only Reopen for a resolved item", async () => {
+  it("offers a reply box, Reply, Reopen and Dismiss for a resolved item", async () => {
     await mountSection();
     await chip("Resolved").trigger("click");
     await flushPromises();
     expect(detail().text()).toContain("The dose unit was missing.");
-    expect(detail().text()).toContain(`Resolved by Matthias König on ${formatTime("2026-10-06T09:00:00Z")}`);
-    expect(() => textArea("Reply", detail().element)).toThrow();
+    expect(detail().text()).toContain(`Resolved by Matthias König on ${formatTime("2026-10-06T09:00:00Z")}.`);
+    expect(messagesOf(textArea("Reply", detail().element))).toBe("Dismiss and Reopen add it to the thread too.");
+    expect(buttons("Reply")).toHaveLength(1);
     expect(buttons("Resolve")).toHaveLength(0);
-    expect(buttons("Dismiss")).toHaveLength(0);
     expect(buttons("Reopen")).toHaveLength(1);
+    expect(buttons("Dismiss")).toHaveLength(1);
+  });
+
+  it("dismisses a resolved acknowledgement with the reply, so that its warning comes back", async () => {
+    await mountSection(withReview({ items: [question, resolvedAcknowledgement] }), {}, `${SECTION}?item=${RESOLVED_ACKNOWLEDGEMENT}`);
+    expect(detail().text()).toContain(
+      "Acknowledges the warning digitized_mismatch. Dismissing the item brings the warning back.",
+    );
+    await textArea("Reply", detail().element).setValue("  The point is not rounded after all.  ");
+    await click("Dismiss");
+    expect(posted()).toEqual([
+      {
+        study: "caffeine/Example",
+        revision: "review-7",
+        action: "dismiss",
+        item: RESOLVED_ACKNOWLEDGEMENT,
+        text: "The point is not rounded after all.",
+      },
+    ]);
+    expect(notice()).toBe("Item dismissed. Its warning digitized_mismatch is no longer acknowledged.");
+    expect(detail().get(".review-detail-state").text()).toBe("Dismissed");
+    expect(() => textArea("Reply", detail().element)).toThrow();
+    expect(buttons("Reopen")).toHaveLength(1);
+    expect(buttons("Dismiss")).toHaveLength(0);
+  });
+
+  it("reopens a resolved item with the reply as its text", async () => {
+    await mountSection();
+    await chip("Resolved").trigger("click");
+    await flushPromises();
+    await textArea("Reply", detail().element).setValue("The unit is still missing in one row.");
+    await click("Reopen");
+    expect(posted()).toEqual([
+      {
+        study: "caffeine/Example",
+        revision: "review-7",
+        action: "reopen",
+        item: RESOLVED,
+        text: "The unit is still missing in one row.",
+      },
+    ]);
+    expect(notice()).toBe("Item reopened.");
   });
 
   it("posts a reply and empties the box", async () => {
     await mountSection();
     await select("The error bars");
-    await textArea("Reply", detail().element).setValue("SD, see the legend of Figure 1.");
+    await textArea("Reply", detail().element).setValue("SD, see the legend of Figure 1.\n");
     await click("Reply");
     expect(posted()).toEqual([
       { study: "caffeine/Example", revision: "review-7", action: "reply", item: AGENT, text: "SD, see the legend of Figure 1." },
@@ -503,6 +557,9 @@ describe("selected item", () => {
     );
     expect(button("New item").attributes("disabled")).toBeDefined();
     expect(button("Reopen").attributes("disabled")).toBeDefined();
+    // The local server dismisses and replies on an approved study, but reopens nothing.
+    expect(button("Dismiss").attributes("disabled")).toBeUndefined();
+    expect(textArea("Reply", detail().element).element.disabled).toBe(false);
   });
 
   it("shows the issues of an invalid review.json instead of the items", async () => {
@@ -531,7 +588,7 @@ describe("new item", () => {
     expect(button("Add").attributes("disabled")).toBeDefined();
 
     radio("Issue").click();
-    await textArea("Text").setValue("The subjects table lacks the smokers.");
+    await textArea("Text").setValue("The subjects table lacks the smokers. ");
     await click("Add");
     expect(posted()).toEqual([
       {
@@ -596,12 +653,35 @@ describe("new item", () => {
     await labeled(wrapper, VCombobox, "Value 1").setValue("caf_plasma_D75");
     await flushPromises();
     expect(dialog().get(".new-item-matches").text()).toBe("Matches none of 3 rows.");
+    expect(dialog().get(".new-item-matches").attributes("role")).toBe("status");
 
     await labeled(wrapper, VSelect, "File").setValue("Example.pdf");
     await flushPromises();
     expect(buttons("Add row filter")).toHaveLength(0);
     expect(() => labeled(wrapper, VSelect, "Column")).toThrow();
     expect(dialog().text()).toContain("Rows and a column narrow only a table.");
+  });
+});
+
+describe("new item filters", () => {
+  it("keeps the values of a filter when a filter above it is removed", async () => {
+    const wrapper = await mountSection();
+    await click("New item");
+    await labeled(wrapper, VSelect, "File").setValue("timecourses_Fig1.tsv");
+    await flushPromises();
+    await click("Add row filter");
+    await labeled(wrapper, VSelect, "Column 1").setValue("label");
+    await labeled(wrapper, VCombobox, "Value 1").setValue("caf_plasma_D150");
+    await click("Add row filter");
+    await labeled(wrapper, VSelect, "Column 2").setValue("time");
+    await labeled(wrapper, VCombobox, "Value 2").setValue("0");
+    await flushPromises();
+    expect(dialog().get(".new-item-matches").text()).toBe("Matches 1 of 3 rows.");
+
+    await click("Remove row filter 1");
+    expect(labeled(wrapper, VSelect, "Column 1").props("modelValue")).toBe("time");
+    expect(labeled(wrapper, VCombobox, "Value 1").props("modelValue")).toBe("0");
+    expect(dialog().get(".new-item-matches").text()).toBe("Matches 2 of 3 rows.");
   });
 });
 
@@ -666,7 +746,7 @@ describe("failures", () => {
     expect(useDialogStore().settings).toBe(true);
   });
 
-  it("says why the local server refused an action", async () => {
+  it("says why the local server refused an action, until another item is selected", async () => {
     await mountSection(withReview(), {
       [`POST ${REVIEW}`]: () =>
         json({ error: `Review item ${QUESTION} is resolved, not open`, issues: [] }, { status: 422 }),
@@ -675,5 +755,34 @@ describe("failures", () => {
     expect(page().get(".review-failure").text()).toContain(
       `The item was not resolved. Review item ${QUESTION} is resolved, not open`,
     );
+    await select("The error bars");
+    expect(page().find(".review-failure").exists()).toBe(false);
+  });
+
+  it("waits with New item while an item changes, and with the items while a new one is added", async () => {
+    let finish = () => undefined as void;
+    await mountSection(withReview(), {
+      [`POST ${REVIEW}`]: ((body) =>
+        new Promise<Response>((resolve) => {
+          finish = () => resolve(write(body));
+        })) satisfies Handler,
+    });
+    await button("Resolve").trigger("click");
+    await flushPromises();
+    expect(button("New item").attributes("disabled")).toBeDefined();
+    finish();
+    await flushPromises();
+    expect(button("New item").attributes("disabled")).toBeUndefined();
+
+    await click("New item");
+    await textArea("Text").setValue("Check the doses.");
+    await button("Add").trigger("click");
+    await flushPromises();
+    // The actions of the selected item wait behind the dialog.
+    expect(button("Dismiss").attributes("disabled")).toBeDefined();
+    expect(button("Reopen").attributes("disabled")).toBeDefined();
+    finish();
+    await flushPromises();
+    expect(button("Dismiss").attributes("disabled")).toBeUndefined();
   });
 });

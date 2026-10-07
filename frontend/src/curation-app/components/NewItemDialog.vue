@@ -34,6 +34,8 @@ const OFFERED_VALUES = 200;
  * Cancel and are emptied after the item was added.
  */
 const open = defineModel<boolean>({ default: false });
+/** Whether the new item is being written; the section waits with the actions on items meanwhile. */
+const busy = defineModel<boolean>("busy", { default: false });
 const emit = defineEmits<{ added: [item: ReviewItem | null] }>();
 
 const study = useStudyStore();
@@ -42,9 +44,13 @@ const targetId = useId();
 const autoGrow = !sizesFieldsByContent();
 
 interface RowFilter {
+  /** Keys the fields of the filter, which stay with it when a filter above is removed. */
+  id: number;
   column: string | null;
   value: string | null;
 }
+
+let filterIds = 0;
 
 const kind = ref<ItemKind>("question");
 const text = ref("");
@@ -55,7 +61,6 @@ const column = ref<string | null>(null);
 const table = shallowRef<{ header: string[]; rows: TableRow[] } | null>(null);
 const loading = ref(false);
 const tableError = ref<string | null>(null);
-const busy = ref(false);
 const failure = ref<ReviewFailure | null>(null);
 
 const files = computed(() => study.detail?.files ?? []);
@@ -154,7 +159,7 @@ async function add(): Promise<void> {
   try {
     const result = await study.reviewAction(revision, "add", {
       kind: kind.value,
-      text: text.value,
+      text: text.value.trim(),
       ...(target.value ? { target: target.value } : {}),
     });
     reset();
@@ -204,7 +209,7 @@ async function add(): Promise<void> {
                 <h4 class="field-heading">Rows</h4>
                 <p class="field-note">The item is about the rows that have all of these values.</p>
               </div>
-              <div v-for="(filter, index) in filters" :key="index" class="filter-row">
+              <div v-for="(filter, index) in filters" :key="filter.id" class="filter-row">
                 <VSelect
                   :model-value="filter.column"
                   :items="columnsFor(index)"
@@ -233,19 +238,18 @@ async function add(): Promise<void> {
                   @click="filters.splice(index, 1)"
                 />
               </div>
+              <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
               <p
-                v-if="matches"
+                role="status"
                 class="new-item-matches"
-                :class="{ 'new-item-matches--none': matches.matched === 0 }"
-              >
-                {{ matches.text }}
-              </p>
+                :class="{ 'new-item-matches--none': matches?.matched === 0 }"
+              >{{ matches?.text ?? "" }}</p>
               <VBtn
                 variant="text"
                 color="primary"
                 prepend-icon="fas fa-plus"
                 class="row-add"
-                @click="filters.push({ column: null, value: null })"
+                @click="filters.push({ id: ++filterIds, column: null, value: null })"
               >
                 Add row filter
               </VBtn>
@@ -329,6 +333,10 @@ async function add(): Promise<void> {
 }
 .new-item-matches--none {
   font-weight: 600;
+}
+/* Empty, it stays in the page for screen readers but takes no gap. */
+.new-item-matches:empty {
+  position: absolute;
 }
 .new-item-issues {
   margin: 4px 0 0;

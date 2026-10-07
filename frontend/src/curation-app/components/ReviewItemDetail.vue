@@ -10,7 +10,8 @@ import PersonAvatar from "./PersonAvatar.vue";
 
 /**
  * The selected review item: its text, author, target, thread and the actions on it. An open item
- * has a reply box, whose text Resolve and Dismiss post too; a closed item can be reopened.
+ * can be resolved or dismissed, a resolved one dismissed or reopened, and a dismissed one reopened.
+ * Open and resolved items have a reply box, whose text these actions post too.
  */
 const draft = defineModel<string>("draft", { required: true });
 const props = defineProps<{
@@ -21,6 +22,8 @@ const props = defineProps<{
   busy: ItemAction | null;
   /** Whether review.json can be written. */
   writable: boolean;
+  /** Another write of review.json runs, such as a new item. */
+  blocked: boolean;
   /** Whether a closed item can be reopened; not while the study is approved. */
   canReopen: boolean;
 }>();
@@ -32,13 +35,19 @@ const autoGrow = !sizesFieldsByContent();
 
 const author = computed(() => profileOf(props.profiles, props.item.author));
 const open = computed(() => props.item.state === "open");
-const working = computed(() => props.busy !== null);
+/** A dismissed item has no reply box: it can only be reopened. */
+const replyable = computed(() => props.item.state !== "dismissed");
+/** No action while review.json cannot be written or another write runs. */
+const locked = computed(() => !props.writable || props.blocked || props.busy !== null);
 const hasDraft = computed(() => draft.value.trim() !== "");
+const replyHint = computed(() =>
+  open.value ? "Resolve and Dismiss add it to the thread too." : "Dismiss and Reopen add it to the thread too.",
+);
 const closed = computed(() => {
   const { resolved_by: by, resolved: at, state } = props.item;
   if (state === "open" || !by) return null;
   const verb = state === "resolved" ? "Resolved" : "Dismissed";
-  return `${verb} by ${profileOf(props.profiles, by).display_name}${at ? ` on ${formatTime(at)}` : ""}`;
+  return `${verb} by ${profileOf(props.profiles, by).display_name}${at ? ` on ${formatTime(at)}` : ""}.`;
 });
 const acknowledgement = computed(() => {
   const code = props.item.acknowledges;
@@ -110,7 +119,7 @@ const acknowledgement = computed(() => {
         <p v-else class="field-empty">No replies yet.</p>
       </section>
 
-      <div v-if="open" class="review-reply">
+      <div v-if="replyable" class="review-reply">
         <VTextarea
           v-model="draft"
           label="Reply"
@@ -119,35 +128,49 @@ const acknowledgement = computed(() => {
           :max-rows="GROW_ROWS"
           variant="outlined"
           density="compact"
-          hint="Resolve and Dismiss add it to the thread too."
+          :hint="replyHint"
           persistent-hint
           :disabled="!writable"
           class="grow-textarea"
         />
         <div class="review-actions">
+          <!-- Tonal while there is nothing to post, so that it does not outweigh the actions beside it. -->
           <VBtn
+            :variant="hasDraft ? 'flat' : 'tonal'"
             color="primary"
             prepend-icon="fas fa-reply"
-            :disabled="!writable || !hasDraft || working"
+            :disabled="locked || !hasDraft"
             :loading="busy === 'reply'"
             @click="emit('act', 'reply')"
           >
             Reply
           </VBtn>
           <VBtn
+            v-if="open"
             variant="tonal"
             color="primary"
             prepend-icon="fas fa-check"
-            :disabled="!writable || working"
+            :disabled="locked"
             :loading="busy === 'resolve'"
             @click="emit('act', 'resolve')"
           >
             Resolve
           </VBtn>
           <VBtn
+            v-else
+            variant="tonal"
+            color="primary"
+            prepend-icon="fas fa-rotate-left"
+            :disabled="locked || !canReopen"
+            :loading="busy === 'reopen'"
+            @click="emit('act', 'reopen')"
+          >
+            Reopen
+          </VBtn>
+          <VBtn
             variant="text"
             prepend-icon="fas fa-ban"
-            :disabled="!writable || working"
+            :disabled="locked"
             :loading="busy === 'dismiss'"
             @click="emit('act', 'dismiss')"
           >
@@ -160,7 +183,7 @@ const acknowledgement = computed(() => {
           variant="tonal"
           color="primary"
           prepend-icon="fas fa-rotate-left"
-          :disabled="!writable || working || !canReopen"
+          :disabled="locked || !canReopen"
           :loading="busy === 'reopen'"
           @click="emit('act', 'reopen')"
         >

@@ -112,19 +112,30 @@ watch([state, kind], () => {
   if (chosen.value !== null && !isShown(chosen.value)) select(null);
 });
 
+const listColumn = ref<HTMLElement | null>(null);
 const detailColumn = ref<HTMLElement | null>(null);
 
-/** Select an item from its card; the item comes into view where it is beside or below the cards. */
+/**
+ * Select an item from its card. Beside the cards, the item stays in view in its sticky column,
+ * which starts at the top again. Below the cards, the page scrolls to the item when it is out of
+ * view.
+ */
 async function choose(id: string): Promise<void> {
   select(id);
   await nextTick();
-  const element = detailColumn.value;
-  if (!element) return;
+  const list = listColumn.value;
+  const detail = detailColumn.value;
+  if (!list || !detail) return;
+  const below = detail.getBoundingClientRect().left === list.getBoundingClientRect().left;
+  if (!below) {
+    detail.scrollTop = 0;
+    return;
+  }
   // Below the app bar, and with the start of the item in view.
-  const top = element.getBoundingClientRect().top;
+  const top = detail.getBoundingClientRect().top;
   if (top < 64 || top > window.innerHeight - 160) {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    element.scrollIntoView?.({ block: "start", behavior: reduced ? "auto" : "smooth" });
+    detail.scrollIntoView?.({ block: "start", behavior: reduced ? "auto" : "smooth" });
   }
 }
 
@@ -139,11 +150,21 @@ const draft = computed({
   },
 });
 
-/** The action that runs; one at a time, so that feedback and revisions never mix. */
+/** The action on an item that runs; one write at a time, so that feedback and revisions never mix. */
 const busy = ref<ItemAction | null>(null);
-/** The failure of the last action; it stays until it is dismissed or the next action starts. */
-const failure = ref<ReviewFailure | null>(null);
+/** Whether the New item dialog writes a new item. */
 const adding = ref(false);
+/**
+ * The failure of the last action; it stays until it is dismissed, the next action starts or
+ * another item is selected.
+ */
+const failure = ref<ReviewFailure | null>(null);
+const newItem = ref(false);
+
+watch(
+  () => selected.value?.id,
+  () => (failure.value = null),
+);
 
 const REFUSED: Record<ItemAction, string> = {
   reply: "The reply was not posted.",
@@ -172,19 +193,18 @@ function doneText(action: ItemAction, item: ReviewItem): string {
 async function act(action: ItemAction): Promise<void> {
   const item = selected.value;
   const revision = review.value?.revision;
-  if (!item || revision == null || busy.value !== null) return;
-  const text = drafts.value[item.id] ?? "";
-  if (action === "reply" && !text.trim()) return;
+  if (!item || revision == null || busy.value !== null || adding.value) return;
+  // A dismissed item has no reply box, so a draft left from before is not posted.
+  const text = item.state === "dismissed" ? "" : (drafts.value[item.id] ?? "").trim();
+  if (action === "reply" && !text) return;
   busy.value = action;
   failure.value = null;
   announce("");
   try {
     // The item stays selected after the write, also when the filters hide it then.
     select(item.id);
-    const payload =
-      action === "reopen" ? { item: item.id } : { item: item.id, ...(text.trim() ? { text } : {}) };
-    await study.reviewAction(revision, action, payload);
-    if (action !== "reopen") drafts.value = { ...drafts.value, [item.id]: "" };
+    await study.reviewAction(revision, action, { item: item.id, ...(text ? { text } : {}) });
+    drafts.value = { ...drafts.value, [item.id]: "" };
     announce(doneText(action, item));
   } catch (caught) {
     failure.value = reviewFailure(caught, REFUSED[action]);
@@ -246,9 +266,9 @@ function added(item: ReviewItem | null): void {
           <VBtn
             color="primary"
             prepend-icon="fas fa-plus"
-            :disabled="!writable || approved"
+            :disabled="!writable || approved || busy !== null"
             class="review-new"
-            @click="adding = true"
+            @click="newItem = true"
           >
             New item
           </VBtn>
@@ -259,7 +279,7 @@ function added(item: ReviewItem | null): void {
       </p>
 
       <div class="review-body">
-        <div class="review-list-column">
+        <div ref="listColumn" class="review-list-column">
           <ul v-if="shown.length" class="review-list" aria-label="Review items">
             <li v-for="item in shown" :key="item.id">
               <ReviewItemCard
@@ -281,6 +301,7 @@ function added(item: ReviewItem | null): void {
             :profiles="profiles"
             :busy="busy"
             :writable="writable"
+            :blocked="adding"
             :can-reopen="!approved"
             @act="act"
           />
@@ -317,7 +338,7 @@ function added(item: ReviewItem | null): void {
       </div>
     </template>
 
-    <NewItemDialog v-model="adding" @added="added" />
+    <NewItemDialog v-model="newItem" v-model:busy="adding" @added="added" />
   </div>
 </template>
 
@@ -372,10 +393,22 @@ function added(item: ReviewItem | null): void {
   align-items: start;
   gap: 16px;
 }
-/* The cards beside the selected item where the section is wide enough for both. */
+/* The cards beside the selected item where the section is wide enough for both. The item stays
+   in view below the app bar while the cards scroll, and scrolls on its own when it is taller
+   than the window. */
 @container (min-width: 760px) {
   .review-body {
     grid-template-columns: minmax(17rem, 2fr) minmax(0, 3fr);
+  }
+  .review-selected {
+    position: sticky;
+    top: 80px;
+    max-height: calc(100vh - 96px);
+    overflow-y: auto;
+  }
+  /* The cards keep their height in the limited column, which scrolls instead. */
+  .review-selected > * {
+    flex-shrink: 0;
   }
 }
 .review-list {

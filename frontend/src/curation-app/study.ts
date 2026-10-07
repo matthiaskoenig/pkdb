@@ -111,7 +111,7 @@ export function messageOf(caught: unknown): string {
 
 /** What to do about a write that was refused without a user (`isNoUser`). */
 export function userHint(error: ApiError): string {
-  return error.body.error === "no_user" ? "Set your PK-DB user in Connection settings" : error.message;
+  return error.body.error === "no_user" ? "Set your PK-DB user in Connection settings." : error.message;
 }
 
 // People

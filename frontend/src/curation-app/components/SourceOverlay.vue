@@ -6,30 +6,27 @@ import type { SourceView } from "../api/types";
  * The figure overlay of a source: the raw points and the mapped rows on its image, with the
  * series `highlight` emphasized and the others faded.
  *
- * A placeholder until the Sources section brings the plot: it names the source and the series.
+ * A placeholder until the Sources section brings the plot: it names the digitization and the
+ * emphasized series.
  */
 const props = defineProps<{ view: SourceView; highlight?: string | null }>();
 
-const series = computed(() => [...new Set(props.view.overlay.map((point) => point.series))]);
+const text = computed(() =>
+  [
+    props.view.digitization ? `Digitized in ${props.view.digitization}.` : "",
+    props.highlight ? `Emphasized series: ${props.highlight}.` : "",
+  ]
+    .filter(Boolean)
+    .join(" "),
+);
 </script>
 
 <template>
-  <div class="source-overlay">
-    <p class="source-overlay-text">
-      Figure {{ view.source }}<template v-if="view.digitization">, digitized in {{ view.digitization }}</template>.
-    </p>
-    <p v-if="highlight" class="source-overlay-text">Emphasized series: {{ highlight }}</p>
-    <p v-if="series.length" class="source-overlay-text">Series: {{ series.join(", ") }}</p>
-  </div>
+  <p class="source-overlay">{{ text }}</p>
 </template>
 
 <style scoped>
 .source-overlay {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-.source-overlay-text {
   margin: 0;
   font-size: 0.875rem;
   overflow-wrap: anywhere;

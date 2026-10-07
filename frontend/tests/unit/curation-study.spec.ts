@@ -249,7 +249,7 @@ describe("failures", () => {
     expect(messageOf(new Error("Disk full"))).toBe("Disk full");
     expect(messageOf("refused")).toBe("refused");
     expect(userHint(new ApiError(403, { error: "no_user", message: "Set a user." }))).toBe(
-      "Set your PK-DB user in Connection settings",
+      "Set your PK-DB user in Connection settings.",
     );
     expect(userHint(new ApiError(403, { error: "user_mismatch", message: "The key is of janekg." }))).toBe(
       "The key is of janekg.",

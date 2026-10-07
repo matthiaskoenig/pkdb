@@ -11,6 +11,8 @@ import SourceOverlay from "./SourceOverlay.vue";
 
 /** At most this many rows are listed; the Tables section has all of them. */
 const LISTED_ROWS = 100;
+/** Beyond this many rows, the rows scroll below a header that stays in view. */
+const SCROLL_ROWS = 12;
 
 /**
  * What a review item is about: the rows of its table that match its row filters, with its column
@@ -134,6 +136,7 @@ const shown = computed(() => tableFile.value !== null || series.value !== null);
           <div
             v-if="rows.listed.length"
             class="target-scroll"
+            :class="{ 'target-scroll--tall': rows.listed.length > SCROLL_ROWS }"
             tabindex="0"
             role="region"
             :aria-label="`Rows of ${tableFile}`"
@@ -226,12 +229,23 @@ const shown = computed(() => tableFile.value !== null || series.value !== null);
   font-size: 0.875rem;
   line-height: 1.45;
 }
-/* At most about twelve rows show at once; the header and the line stay in view while the rows scroll. */
+/* At most about twelve rows show at once. A shadow at a side shows that more columns are there:
+   the shadows stay at the edges, and covers in the surface color that scroll with the rows hide
+   them at the start and the end. */
 .target-scroll {
+  --cover: rgb(var(--v-theme-surface));
+  --cover-clear: rgba(var(--v-theme-surface), 0);
+  --shade: rgba(var(--v-theme-on-surface), 0.2);
   max-height: 420px;
   overflow: auto;
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   border-radius: 8px;
+  background:
+    linear-gradient(to right, var(--cover) 30%, var(--cover-clear)) left center / 40px 100% no-repeat local,
+    linear-gradient(to left, var(--cover) 30%, var(--cover-clear)) right center / 40px 100% no-repeat local,
+    linear-gradient(to right, var(--shade), var(--cover-clear)) left center / 14px 100% no-repeat scroll,
+    linear-gradient(to left, var(--shade), var(--cover-clear)) right center / 14px 100% no-repeat scroll,
+    var(--cover);
 }
 .target-rows {
   min-width: 100%;
@@ -251,27 +265,25 @@ const shown = computed(() => tableFile.value !== null || series.value !== null);
   border-bottom: 0;
 }
 .target-rows thead th {
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  background: rgb(var(--v-theme-surface));
   font-weight: 600;
 }
-.target-rows .target-line {
+/* Rows that scroll pass below the header, which needs the surface color then; the shadows of the
+   sides show in the rows below it. */
+.target-scroll--tall .target-rows thead th {
   position: sticky;
-  left: 0;
+  top: 0;
   z-index: 1;
-  background: rgb(var(--v-theme-surface));
-  font-variant-numeric: tabular-nums;
+  background-color: rgb(var(--v-theme-surface));
 }
-.target-rows thead .target-line {
-  z-index: 3;
+/* The cells have no background, so that the shadows of the sides show through. */
+.target-rows .target-line {
+  font-variant-numeric: tabular-nums;
 }
 .target-rows tbody .target-line {
   font-weight: 400;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
-/* The tint sits over the surface, so that the sticky header stays opaque. */
+/* A tint over the cell, so that the sticky header keeps its surface color below it. */
 .target-rows .target-column {
   background-image: linear-gradient(rgba(var(--v-theme-primary), 0.1), rgba(var(--v-theme-primary), 0.1));
 }
