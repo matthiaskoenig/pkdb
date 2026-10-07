@@ -27,7 +27,11 @@ const emit = defineEmits<{ settings: [] }>();
   gap: 8px;
   padding-inline: 8px;
 }
+/* As the labels of the buttons beside it. */
 .author-name {
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.0071428571em;
   max-width: 10rem;
   overflow: hidden;
   text-overflow: ellipsis;
