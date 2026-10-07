@@ -131,6 +131,15 @@ npm run test:e2e
 
 Browser tests use a separate disposable Compose project. See [isolated frontend browser checks](local-upload-testing.md#isolated-frontend-browser-checks).
 
+The curation app has its own browser tests in Chromium against the real `pkdb curate`, without Docker: every spec file starts a server from the `python/` environment, which `uv run --project python` prepares, on a fresh copy of the synthetic fixture workspace in `tools/curation_testing/fixture`. Run them from `frontend/`:
+
+```bash
+npx playwright install --with-deps chromium
+npm run build:curation && npm run test:curation-e2e
+```
+
+`tools/curation_testing/make_fixture.py` draws the figure, the table images and the WebPlotDigitizer project of that fixture from its tables; run `uv run --project python python tools/curation_testing/make_fixture.py` from the repository root after changing them.
+
 ## Native backend server
 
 Use this workflow when you need automatic backend reloads. Stop the Compose backend first so port `18083` is free; this native workflow uses a separate development database and file directory:
