@@ -65,7 +65,7 @@ class WorkspaceMixin(EngineState):
                     raise WorkspaceError(
                         "Wait for the current job before changing workspace"
                     )
-                self._cancel_pending()
+                self._cancel_pending("Canceled when the workspace changed")
                 self.root = root
                 self.studies = {}
             self._formats = {}

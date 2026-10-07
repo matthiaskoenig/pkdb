@@ -18,6 +18,7 @@ from pkdb.errors import ClientError, CompatibilityError
 from pkdb.identity import UserMismatch
 from pkdb.preparation import source_hashes
 from pkdb.progress import ProgressEvent
+from pkdb.schemas.validation import ValidationIssue, ValidationReport
 from pkdb.studyformat import format_folder
 
 
@@ -291,7 +292,29 @@ def test_the_last_upload_survives_many_app_writes_and_a_restart(workspace, monke
         restarted.close()
 
 
-def test_clearing_the_history_keeps_active_jobs_and_the_last_upload(
+def job_entry(identifier, status="succeeded", **changes):
+    """A finished job of caffeine/Example as an earlier version of the engine saved it."""
+    return {
+        "id": identifier,
+        "study_id": "caffeine/Example",
+        "study_name": "Example",
+        "action": "validate",
+        "status": status,
+        "created_at": jobs.now(),
+        "message": "Validation passed",
+        "automatic": False,
+        "endpoint": "",
+        "persistence": "not_attempted",
+        "report_id": None,
+        **changes,
+    }
+
+
+def reports_of(engine):
+    return {path.stem for path in (engine.state_dir / "reports").glob("*.json")}
+
+
+def test_clearing_the_history_keeps_active_jobs_uploads_and_current_reports(
     workspace, monkeypatch
 ):
     engine, _ = workspace
@@ -304,29 +327,186 @@ def test_clearing_the_history_keeps_active_jobs_and_the_last_upload(
     client.last_upload_report = None
     identity = row(engine)["id"]
     engine.enqueue([identity], "upload")
+    earlier = run_next(engine)
+    engine.enqueue([identity], "upload")
     upload = run_next(engine)
     engine.enqueue([identity], "validate")
     validation = run_next(engine)
     engine._record_write(identity, "Saved study.json")
+    # A running validation and the one queued behind it.
+    engine.enqueue([identity], "validate")
+    running = engine.queue.pop(identity)
+    running["status"] = "running"
     engine.enqueue([identity], "validate")
     queued = engine.queue[identity]
-    reports = engine.state_dir / "reports"
-    assert {path.stem for path in reports.glob("*.json")} == {
-        upload["id"],
-        validation["id"],
-    }
+    unknown = job_entry(
+        "unknown", "unknown", action="upload", workspace=str(engine.root)
+    )
+    engine.jobs.append(unknown)
+    assert row(engine)["report_id"] == validation["id"]
+    assert engine.snapshot()["clearable_jobs"] == 2
 
     engine.clear_history()
 
-    assert engine.jobs == [upload, queued]
-    assert {path.stem for path in reports.glob("*.json")} == {upload["id"]}
-    assert row(engine)["report_id"] is None
+    # The earlier upload and the write go; the report of the study stays downloadable.
+    assert [job["id"] for job in engine.jobs] == [
+        job["id"] for job in [upload, validation, running, queued, unknown]
+    ]
+    assert reports_of(engine) == {upload["id"], validation["id"]}
+    assert row(engine)["report_id"] == validation["id"]
+    assert engine.report(validation["id"])["job"]["id"] == validation["id"]
+    assert engine.snapshot()["clearable_jobs"] == 0
+    assert earlier["id"] not in reports_of(engine)
     engine.close()
     restarted = module.CurationEngine(
         engine.root, state_dir=engine.state_dir, offline=True, start=False
     )
     try:
         assert row(restarted)["last_upload"]["url"] == url
+    finally:
+        restarted.close()
+
+
+def test_clearing_the_history_removes_the_finished_jobs_of_this_workspace_only(
+    workspace, tmp_path_factory, monkeypatch
+):
+    engine, folder = workspace
+    prepare_mock(monkeypatch)
+    identity = row(engine)["id"]
+    first = engine.root
+    engine.enqueue([identity], "validate")
+    first_old = run_next(engine)
+    engine.enqueue([identity], "validate")
+    first_current = run_next(engine)
+    engine._record_write(identity, "Saved study.json")
+    first_write = engine.jobs[-1]
+    # Saved by an earlier version without its workspace: it cannot be placed and stays.
+    legacy = job_entry("legacy", action="write", message="Saved study.json")
+    engine.jobs.insert(0, legacy)
+    # A second workspace with a study of the same identity.
+    second = tmp_path_factory.mktemp("second")
+    shutil.copytree(folder, second / "caffeine" / "Example")
+    engine.select_workspace(second)
+    engine.enqueue([identity], "validate")
+    second_old = run_next(engine)
+    engine.enqueue([identity], "validate")
+    second_current = run_next(engine)
+    engine._record_write(identity, "Saved study.json")
+    second_write = engine.jobs[-1]
+    detail = engine.study_detail(identity)
+    assert [job["id"] for job in detail["jobs"]] == [
+        second_write["id"],
+        second_current["id"],
+        second_old["id"],
+        "legacy",
+    ]
+    assert engine.snapshot()["clearable_jobs"] == 2
+
+    engine.clear_history()
+
+    remaining = [job["id"] for job in engine.jobs]
+    assert second_old["id"] not in remaining and second_write["id"] not in remaining
+    assert {first_old["id"], first_current["id"], first_write["id"], "legacy"} <= set(
+        remaining
+    )
+    assert second_current["id"] in remaining
+    assert first_old["id"] in reports_of(engine)
+    assert second_old["id"] not in reports_of(engine)
+
+    # The rows of a workspace that opens again have no report yet, so its last one goes too.
+    engine.select_workspace(first)
+    assert engine.snapshot()["clearable_jobs"] == 3
+    engine.clear_history()
+    remaining = [job["id"] for job in engine.jobs]
+    assert not {first_old["id"], first_current["id"], first_write["id"]} & set(
+        remaining
+    )
+    assert {"legacy", second_current["id"]} <= set(remaining)
+
+
+def test_canceled_jobs_say_why(workspace, tmp_path_factory):
+    engine, _ = workspace
+    identity = row(engine)["id"]
+    engine.enqueue([identity], "validate")
+    replaced = engine.queue[identity]
+    engine.enqueue([identity], "validate")
+    assert replaced["status"] == "canceled"
+    assert replaced["message"] == "Replaced by a newer validation"
+    paused = engine.queue[identity]
+    engine.set_paused(True)
+    assert paused["status"] == "canceled"
+    assert paused["message"] == "Canceled when automatic actions were paused"
+    engine.set_paused(False)
+    engine.enqueue([identity], "validate")
+    switched = engine.queue[identity]
+    engine.select_workspace(tmp_path_factory.mktemp("other"))
+    assert switched["status"] == "canceled"
+    assert switched["message"] == "Canceled when the workspace changed"
+
+
+def test_problems_found_are_no_failure_of_the_job(workspace, monkeypatch):
+    engine, folder = workspace
+    identity = row(engine)["id"]
+    path = folder / "interventions.tsv"
+    path.write_text(path.read_text().replace("oral", "rectal"))
+    engine.scan()
+    engine.enqueue([identity], "validate")
+    job = run_next(engine)
+    assert (job["status"], job["message"]) == ("invalid", "Validation found problems")
+    assert row(engine)["status"] == "invalid"
+
+
+def test_a_refusal_of_the_server_validation_with_a_report_is_problems_found(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+    prepare_mock(monkeypatch)
+    enable_upload(engine, monkeypatch, lambda _: upload_result())
+    identity = row(engine)["id"]
+    report = ValidationReport(
+        issues=[ValidationIssue(code="unknown_unit", message="Unknown unit")]
+    )
+    refusals = [
+        ClientError(
+            "The server found problems",
+            status_code=422,
+            report=report,
+            persistence="not_saved",
+        ),
+        ClientError("The server failed", status_code=500, persistence="unknown"),
+    ]
+
+    def refuse(client, prepared):
+        raise refusals.pop(0)
+
+    monkeypatch.setattr(engine, "_server_validate", refuse)
+    engine.enqueue([identity], "validate_remote")
+    job = run_next(engine)
+    assert job["status"] == "invalid"
+    assert row(engine)["status"] == "invalid"
+    assert engine.paused is False
+    # Without a report the job failed, and the engine pauses as before.
+    engine.enqueue([identity], "validate_remote")
+    job = run_next(engine)
+    assert job["status"] == "failed"
+    assert engine.paused is True
+
+
+def test_saved_problems_found_load_with_their_own_status(workspace):
+    engine, _ = workspace
+    engine.jobs.extend(
+        [
+            job_entry("problems", "failed", message="Validation found problems"),
+            job_entry("broken", "failed", message="Could not read the source files"),
+        ]
+    )
+    engine.close()
+    restarted = module.CurationEngine(
+        engine.root, state_dir=engine.state_dir, offline=True, start=False
+    )
+    try:
+        statuses = {job["id"]: job["status"] for job in restarted.jobs}
+        assert statuses == {"problems": "invalid", "broken": "failed"}
     finally:
         restarted.close()
 
@@ -482,7 +662,7 @@ def test_real_scientific_validation_and_external_edit(
     path.write_text(path.read_text().replace("oral", "rectal"))
     engine.scan()
     settle(engine)
-    assert run_next(engine)["status"] == "failed"
+    assert run_next(engine)["status"] == "invalid"
     assert row(engine)["problems"]
 
 

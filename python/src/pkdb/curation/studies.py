@@ -331,6 +331,17 @@ class StudiesMixin(EngineState):
             raise AmbiguousStudy(identity, [row["path"] for row in matches])
         return matches[0]
 
+    def _study_jobs(self, identity: str) -> list[dict]:
+        """The jobs of a study of the current workspace, oldest first, with those saved without
+        their workspace by an earlier version. Called with the engine lock held."""
+        workspace = str(self.root)
+        return [
+            job
+            for job in self.jobs
+            if job["study_id"] == identity
+            and job.get("workspace", workspace) == workspace
+        ]
+
     def study_folder(self, identity: str) -> Path:
         with self.lock:
             folder, root = self._study_row(identity)["_folder"], self.root
@@ -354,7 +365,7 @@ class StudiesMixin(EngineState):
                 "issue": self._issue_for(row["summary"].get("issue")),
                 "message": row.get("message"),
                 "last_upload": row["last_upload"],
-                "jobs": [job for job in self.jobs if job["study_id"] == identity],
+                "jobs": self._study_jobs(identity),
             }
             data = json.dumps(key, sort_keys=True, default=str).encode()
         _unlinked(folder, root)
@@ -380,11 +391,7 @@ class StudiesMixin(EngineState):
                         "problems": row["problems"],
                         "message": row.get("message"),
                         "last_upload": row["last_upload"],
-                        "jobs": [
-                            job
-                            for job in reversed(self.jobs)
-                            if job["study_id"] == identity
-                        ],
+                        "jobs": self._study_jobs(identity)[::-1],
                         "report_id": row["report_id"],
                     }
                 )

@@ -105,6 +105,12 @@ class CurationEngine(
                 job["message"] = (
                     "Interrupted by previous shutdown; inspect before retrying"
                 )
+            elif (
+                job.get("status") == "failed"
+                and job.get("message") == "Validation found problems"
+            ):
+                # Saved before problems found had a status of their own.
+                job["status"] = "invalid"
         self.modes = saved.get("modes", {})
         self.recent_workspaces = [
             item for item in saved.get("recent_workspaces", []) if isinstance(item, str)
@@ -206,6 +212,8 @@ class CurationEngine(
                         ],
                         "format1_folders": self.format1_folders,
                         "jobs": self.jobs,
+                        # What Clear finished history would remove.
+                        "clearable_jobs": len(self._clearable()),
                         "recent_workspaces": recent,
                     }
                 )
@@ -215,7 +223,7 @@ class CurationEngine(
         self.stop.set()
         self.wakeup.set()
         with self.lock:
-            self._cancel_pending()
+            self._cancel_pending("Canceled when pkdb curate stopped")
             self._save()
         for thread in self.threads:
             thread.join(timeout=2)

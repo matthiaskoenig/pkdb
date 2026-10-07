@@ -146,7 +146,7 @@ class ConnectionMixin(EngineState):
                 raise ValueError("Select a user from the available GitHub users")
             if changed:
                 self._connection_generation += 1
-                self._cancel_pending()
+                self._cancel_pending("Canceled when the connection settings changed")
                 self.account = None
                 self.can_upload = False
                 self.connection_error = None
