@@ -1,6 +1,7 @@
 """The pkdb study command: show and edit the metadata of a study format 2 folder."""
 
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -59,10 +60,12 @@ def register(commands) -> None:
     reference.add_argument("--doi")
     # A patch that changes the PubMed ID or DOI refreshes reference.json as well.
     for action in (patch, reference):
+        action.add_argument("--user", help="PK-DB user (default: PKDB_USER)")
         action.add_argument(
             "--offline",
             action="store_true",
-            help="Refresh reference.json from cached metadata only",
+            help="Refresh reference.json from cached metadata only and write without "
+            "checking the account of PKDB_API_KEY",
         )
         action.add_argument(
             "--cache-dir", type=Path, help="Cache folder of reference metadata"
@@ -146,6 +149,13 @@ def register_review(commands) -> None:
                 "--revision",
                 help="Refuse the write unless review.json is at this revision",
             )
+        if action not in (show, status, acknowledge):
+            # The vocabulary options of status and acknowledge have --offline already.
+            action.add_argument(
+                "--offline",
+                action="store_true",
+                help="Write without checking the account of PKDB_API_KEY",
+            )
 
 
 def run(args) -> int:
@@ -155,8 +165,46 @@ def run(args) -> int:
         return 1
     if args.command == "review":
         return _review(args, folder)
+    if args.action != "show":
+        from pkdb.identity import IdentityError
+
+        # study.json records no author, but writes need a user, as in the curation app.
+        try:
+            _author(args)
+        except IdentityError as error:
+            return _identity_failure(args, folder, error)
     actions = {"show": _show, "patch": _patch, "reference": _reference}
     return actions[args.action](args, folder)
+
+
+def _author(args):
+    """The author of a write, resolved as the curation app resolves it (design D5).
+
+    The account of PKDB_API_KEY is checked with the server of --endpoint or PKDB_ENDPOINT,
+    unless --offline.
+    """
+    from pkdb.identity import resolve_author
+
+    return resolve_author(
+        args.user,
+        getattr(args, "agent", None),
+        endpoint=getattr(args, "endpoint", None) or os.environ.get("PKDB_ENDPOINT"),
+        api_key=os.environ.get("PKDB_API_KEY"),
+        offline=args.offline,
+    )
+
+
+def _identity_failure(args, folder: Path, error) -> int:
+    """Refuse a write without a user (`no_user`) or with a key of another account."""
+    from pkdb.identity import UserMismatch
+
+    code = UserMismatch.code if isinstance(error, UserMismatch) else "no_user"
+    message = str(error)
+    return fail(
+        args,
+        {"path": str(folder), "ok": False, "error": code, "message": message},
+        lambda: say(message, file=sys.stderr),
+    )
 
 
 def _show(args, folder: Path) -> int:
@@ -314,7 +362,7 @@ def _invalid(args, folder: Path, error) -> int:
 
 def _review(args, folder: Path) -> int:
     """Run a `review` action; errors are reported as `pkdb study` does."""
-    from pkdb.identity import IdentityError, author_from
+    from pkdb.identity import IdentityError
     from pkdb.studyformat.review_edit import ApprovalRefused, ReviewError
     from pkdb.studyformat.revision import RevisionConflict
 
@@ -329,10 +377,10 @@ def _review(args, folder: Path) -> int:
     try:
         if args.action == "show":
             return _review_show(args, folder)
-        author = author_from(args.user, args.agent)
+        author = _author(args)
         return _REVIEW_ACTIONS[args.action](args, folder, author)
     except IdentityError as error:
-        return failure("no_user", str(error))
+        return _identity_failure(args, folder, error)
     except ApprovalRefused as error:
         return _review_error(args, folder, "approval_refused", error)
     except ReviewError as error:

@@ -627,18 +627,60 @@ def test_the_author_is_the_account_of_a_checked_key(api):
     server, engine, folder = api
     assert engine.author() == Author("curator")
     assert engine.author("claude-opus-5-5") == Author("curator", "claude-opus-5-5")
+    assert engine.snapshot()["author"] == {"user": "curator", "reason": None}
+    engine.offline, engine.endpoint = False, "https://pk-db.test"
     engine.api_key, engine.account, engine.checked_at = "key", "account", "now"
     assert engine.author() == Author("account")
     engine.connection_error = "The server rejected the API key."
     assert engine.author() == Author("curator")
-    engine.connection_error, engine.api_key = None, None
+    # The last check found that the key belongs to another account than the user.
+    engine.connection_error = engine.user_mismatch = (
+        "The API key belongs to PK-DB user 'other', not the expected user 'curator'"
+    )
+    with pytest.raises(IdentityError, match="belongs to PK-DB user 'other'"):
+        engine.author()
+    assert engine.snapshot()["author"] == {
+        "user": None,
+        "reason": engine.user_mismatch,
+    }
+    engine.connection_error = engine.user_mismatch = None
+    engine.api_key = None
     assert engine.author() == Author("curator")
     engine.user = ""
-    with pytest.raises(IdentityError, match="Set your PK-DB user"):
+    with pytest.raises(IdentityError, match="PK-DB user name is required"):
         engine.author()
+    assert engine.snapshot()["author"]["user"] is None
+    assert "Connection settings" in engine.snapshot()["author"]["reason"]
     engine.user = "two words"
     with pytest.raises(IdentityError, match="not a PK-DB user name"):
         engine.author()
+
+
+def test_writes_with_a_key_of_another_account_are_refused(api):
+    server, engine, folder = api
+    engine.offline, engine.endpoint, engine.api_key = False, "https://pk-db.test", "key"
+    engine.user_mismatch = "The API key belongs to PK-DB user 'other'"
+    headers = authenticate(server)
+    review = _detail(server, headers)["review"]
+    response = request(
+        server,
+        "POST",
+        "/local/studies/review",
+        {
+            "study": "caffeine/Example",
+            "revision": review["revision"],
+            "action": "add",
+            "kind": "question",
+            "text": "?",
+        },
+        headers,
+    )
+    assert response[0] == 403
+    assert json.loads(response[2]) == {
+        "error": "user_mismatch",
+        "message": "The API key belongs to PK-DB user 'other'",
+    }
+    assert read_review(folder).review.items == []
 
 
 def test_write_after_the_job_formatted_the_file_conflicts(api):

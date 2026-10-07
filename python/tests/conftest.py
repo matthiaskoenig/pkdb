@@ -2,6 +2,7 @@
 
 import json
 from pathlib import Path
+from types import SimpleNamespace
 
 import openpyxl
 import pytest
@@ -17,6 +18,37 @@ def isolated_environment(tmp_path_factory, monkeypatch):
     """Keep the user's cache and PK-DB identity out of every test."""
     monkeypatch.setenv("PKDB_CACHE_DIR", str(tmp_path_factory.mktemp("cache")))
     monkeypatch.delenv("PKDB_USER", raising=False)
+
+
+@pytest.fixture
+def account_server(monkeypatch):
+    """A fake PK-DB server whose API key belongs to `server.username`.
+
+    It replaces `pkdb.client.Client`. `server.failure`, when set, is raised by the identity
+    check instead, and `server.calls` records the endpoint, key, user and transport of each
+    client.
+    """
+    from pkdb import client as client_module
+
+    server = SimpleNamespace(calls=[], username="curator", failure=None)
+
+    class Client:
+        def __init__(self, endpoint, api_key=None, *, user=None, transport=None, **_):
+            server.calls.append((endpoint, api_key, user, transport))
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return False
+
+        def identity(self):
+            if server.failure is not None:
+                raise server.failure
+            return SimpleNamespace(username=server.username, can_upload=True)
+
+    monkeypatch.setattr(client_module, "Client", Client)
+    return server
 
 
 @pytest.fixture

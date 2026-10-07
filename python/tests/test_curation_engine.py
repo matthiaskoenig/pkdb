@@ -14,6 +14,7 @@ from pkdb.curation import workspace as workspace_module
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError
+from pkdb.identity import UserMismatch
 from pkdb.preparation import source_hashes
 from pkdb.progress import ProgressEvent
 from pkdb.studyformat import format_folder
@@ -594,6 +595,35 @@ def test_connection_failures_are_classified(
     assert message in state["connection_error"]
     assert state["account"] is None
     assert state["can_upload"] is False
+
+
+def test_a_key_of_another_account_refuses_writes_until_it_matches(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+    engine.user = "curator"
+    mismatch = ClientError(
+        "The API key belongs to PK-DB user 'other', not the expected user 'curator'",
+        code="user_mismatch",
+    )
+    connection_engine(engine, monkeypatch, failure=mismatch)
+    engine.connect()
+    with pytest.raises(UserMismatch, match="'other'"):
+        engine.author()
+    connection_engine(
+        engine,
+        monkeypatch,
+        failure=ClientError("PK-DB request failed", code="unreachable"),
+    )
+    engine.connect()
+    # An unreachable server cannot check the key: the configured user writes.
+    assert engine.author().user == "curator"
+    connection_engine(engine, monkeypatch, failure=mismatch)
+    engine.connect()
+    connection_engine(engine, monkeypatch)
+    engine.connect()
+    assert engine.author().user == "curator"
+    assert engine.snapshot()["author"] == {"user": "curator", "reason": None}
 
 
 def test_connection_checks_expected_user(workspace, monkeypatch):

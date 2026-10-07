@@ -23,6 +23,7 @@ from pkdb.curation.workspace import (
     WorkspaceMixin,
     folder_kind,
 )
+from pkdb.identity import IdentityError
 from pkdb.update import newer
 
 __all__ = ["CurationEngine", "WorkspaceError", "fingerprint", "folder_kind", "now"]
@@ -78,6 +79,8 @@ class CurationEngine(
         self.can_upload = False
         self.connection_error = None
         self.connection_problem = None
+        # The refusal of the last connection check when the key is of another account.
+        self.user_mismatch = None
         self.connecting = False
         self.checked_at = None
         self.server_version = None
@@ -147,6 +150,10 @@ class CurationEngine(
     def snapshot(self):
         with self.lock:
             recent = list(self.recent_workspaces)
+        try:
+            author = {"user": self.author().user, "reason": None}
+        except IdentityError as error:
+            author = {"user": None, "reason": str(error)}
         # Existence checks may touch slow mounts, so they run outside the lock.
         recent = [{"path": path, "exists": Path(path).is_dir()} for path in recent]
         with self.lock:
@@ -156,6 +163,8 @@ class CurationEngine(
                         "workspace": str(self.root),
                         "endpoint": self.endpoint,
                         "user": self.user,
+                        # Who writes study files, or why writes are refused.
+                        "author": author,
                         "authenticated": bool(self.api_key),
                         "account": self.account,
                         "can_upload": self.can_upload,

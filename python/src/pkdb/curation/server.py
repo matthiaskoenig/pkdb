@@ -12,7 +12,7 @@ from urllib.parse import unquote, urlsplit
 
 from pkdb.curation.engine import WorkspaceError
 from pkdb.curation.studies import AmbiguousStudy
-from pkdb.identity import IdentityError
+from pkdb.identity import IdentityError, UserMismatch
 from pkdb.references import ReferenceError
 from pkdb.schemas.validation import StudyValidationError
 from pkdb.studyformat.metadata import MetadataError
@@ -320,6 +320,8 @@ class Handler(BaseHTTPRequestHandler):
                     **refused,
                 },
             )
+        except UserMismatch as error:
+            self._reply(403, {"error": UserMismatch.code, "message": str(error)})
         except IdentityError as error:
             self._reply(403, {"error": "no_user", "message": str(error)})
         except AmbiguousStudy as error:

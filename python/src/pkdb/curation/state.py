@@ -30,6 +30,7 @@ class EngineState:
     can_upload: bool
     connection_error: Any
     connection_problem: Any
+    user_mismatch: str | None
     connecting: bool
     checked_at: Any
     server_version: Any

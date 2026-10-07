@@ -1,7 +1,7 @@
 """Server connection state and checks for the curation engine.
 
 Reads and writes engine attributes: lock, endpoint, api_key, user, account, can_upload,
-connection_error, connection_problem, connecting, checked_at, server_version, vocabulary, cache,
+connection_error, connection_problem, user_mismatch, connecting, checked_at, server_version, vocabulary, cache,
 offline, github, github_user, repository, stop, wakeup, _connection_generation. Uses engine
 methods _save, snapshot and scan.
 """
@@ -18,7 +18,7 @@ from pkdb.curation.state import EngineState
 from pkdb.domain.validation import PROCESSING_VERSION
 from pkdb.domain.vocabulary import vocabulary_hash
 from pkdb.errors import ClientError, CompatibilityError
-from pkdb.identity import USER_PATTERN, Author, IdentityError
+from pkdb.identity import Author, UserMismatch, resolve_author
 
 HEARTBEAT_SECONDS = 30
 INCOMPATIBLE = {"processing_version_mismatch", "unsupported_protocol"}
@@ -70,10 +70,11 @@ class ConnectionMixin(EngineState):
         return f"{self.root}|{self.endpoint}|{self.account or ''}"
 
     def author(self, agent: str | None = None) -> Author:
-        """Who writes study files from the app (spec 7.4).
+        """Who writes study files from the app (spec 7.4), resolved as the CLI resolves it.
 
         The authenticated account when an API key is configured and the last connection check
-        succeeded, otherwise the configured user. IdentityError without a usable user.
+        succeeded, otherwise the configured user. UserMismatch when the last check found that
+        the key belongs to another account; IdentityError without a usable user.
         """
         with self.lock:
             checked = (
@@ -82,14 +83,27 @@ class ConnectionMixin(EngineState):
                 and self.checked_at is not None
                 and not self.connection_error
             )
-            user = self.account if checked else self.user
-        if not user:
-            raise IdentityError("Set your PK-DB user in Connection settings")
-        if not USER_PATTERN.fullmatch(user):
-            raise IdentityError(
-                f"{user!r} is not a PK-DB user name; change it in Connection settings"
-            )
-        return Author(user, agent)
+            account = self.account if checked else None
+            mismatch = self.user_mismatch
+            user, endpoint, api_key = self.user, self.endpoint, self.api_key
+            offline = self.offline
+
+        def last_check(*_):
+            # The heartbeat checks the key; a write never waits for the server.
+            if mismatch:
+                raise UserMismatch(mismatch)
+            return account
+
+        return resolve_author(
+            user,
+            agent,
+            endpoint=endpoint,
+            api_key=api_key,
+            offline=offline,
+            environ={},
+            check=last_check,
+            hint="set it in Connection settings",
+        )
 
     def configure(
         self,
@@ -137,6 +151,7 @@ class ConnectionMixin(EngineState):
                 self.can_upload = False
                 self.connection_error = None
                 self.connection_problem = None
+                self.user_mismatch = None
                 self.checked_at = None
                 self.server_version = None
                 self.vocabulary = {"status": "not_checked"}
@@ -181,7 +196,7 @@ class ConnectionMixin(EngineState):
                 self.connecting = False
                 return
             self.connecting = True
-        account, can_upload, problem = None, False, None
+        account, can_upload, problem, mismatch = None, False, None, None
         try:
             with Client(
                 endpoint, api_key=api_key, user=user, cache=self.cache
@@ -195,6 +210,8 @@ class ConnectionMixin(EngineState):
                     account, can_upload = identity.username, identity.can_upload
         except ClientError as failure:
             problem = _connection_problem(failure, endpoint)
+            if failure.code == UserMismatch.code:
+                mismatch = str(failure)
         except ValueError, KeyError, OSError:
             problem = ("error", CONNECTION_FAILED)
         finally:
@@ -206,6 +223,7 @@ class ConnectionMixin(EngineState):
                 return
             self.account, self.can_upload = account, can_upload
             self.connection_problem, self.connection_error = problem or (None, None)
+            self.user_mismatch = mismatch
             self.checked_at = now()
             for row in self.studies.values():
                 row["mode"] = self.modes.get(self._context(), {}).get(
