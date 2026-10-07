@@ -10,6 +10,9 @@ export default defineConfig((env) =>
         setupFiles: ["./tests/setup.ts"],
         include: ["tests/unit/**/*.spec.ts", "tests/components/**/*.spec.ts"],
         restoreMocks: true,
+        // Keep the test output to results: the performance hints suggest
+        // shared environments, which would drop the per-file isolation.
+        experimental: { diagnostics: false },
       },
     }),
   ),

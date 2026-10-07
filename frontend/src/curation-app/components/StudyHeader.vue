@@ -484,7 +484,7 @@ function added(table: string): void {
       v-model="upload"
       :studies="[row]"
       action="upload"
-      @done="notice = 'Upload queued.'"
+      @done="announce('Upload queued.')"
     />
   </header>
 </template>
