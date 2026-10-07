@@ -805,18 +805,33 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
     }
     status, _, data = request(server, "POST", "/local/studies/review", body, headers)
     assert status == 422
-    assert json.loads(data)["error"] == (
-        "2 warnings [outside_range] match in timecourses_Fig1.tsv at line 3 column "
-        "mean, line 4 column mean; give the line and column of one"
-    )
+    # A line and a column that are left out match every line and column.
+    assert json.loads(data) == {
+        "error": "2 warnings [outside_range] match in timecourses_Fig1.tsv at line 3 "
+        "column mean, line 4 column mean; give the line and column of one",
+        "issues": [],
+    }
     missing = {**body, "code": "missing_image"}
     status, _, data = request(server, "POST", "/local/studies/review", missing, headers)
     assert status == 422
-    assert json.loads(data)["error"] == (
-        "No warning [missing_image] in timecourses_Fig1.tsv matches"
-    )
+    assert json.loads(data) == {
+        "error": "No warning [missing_image] in timecourses_Fig1.tsv matches",
+        "issues": [],
+        "code": "no_such_warning",
+    }
+    # A null line or column matches only warnings without one.
+    for exact in ({"line": None}, {"column": None}, {"line": 4, "column": None}):
+        status, _, data = request(
+            server, "POST", "/local/studies/review", {**body, **exact}, headers
+        )
+        assert status == 422 and json.loads(data)["code"] == "no_such_warning"
+    assert read_review(folder).review.items == []
     status, _, data = request(
-        server, "POST", "/local/studies/review", {**body, "line": 4}, headers
+        server,
+        "POST",
+        "/local/studies/review",
+        {**body, "line": 4, "column": "mean"},
+        headers,
     )
     assert status == 200
     item = json.loads(data)["item"]

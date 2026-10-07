@@ -37,6 +37,8 @@ from pkdb.studyformat.metadata import MetadataDocument, MetadataError, read_meta
 from pkdb.studyformat.models import StudyMetadata
 from pkdb.studyformat.raw import raw_lines
 from pkdb.studyformat.review_edit import (
+    ANY,
+    NoSuchWarning,
     ReviewError,
     matching_warnings,
     read_review,
@@ -628,15 +630,21 @@ class StudiesMixin(EngineState):
     def _acknowledge(
         self, folder: Path, author: Author, revision: str, payload: dict
     ) -> dict:
-        """Acknowledge the warnings of one location, as `pkdb review acknowledge` does."""
+        """Acknowledge the warnings of one location, as `pkdb review acknowledge` does.
+
+        A `line` or `column` of null matches only warnings without one; a left out one
+        matches every line or column, as an option left out of the command does.
+        """
         code, file, text = (_text(payload, name) for name in ("code", "file", "text"))
         matches = matching_warnings(
             validate_folder(folder, self._local_vocabulary()).issues,
             code,
             file,
-            _line(payload),
-            _optional_text(payload, "column"),
+            _line(payload) if "line" in payload else ANY,
+            _optional_text(payload, "column") if "column" in payload else ANY,
         )
+        if not matches:
+            raise NoSuchWarning(f"No warning [{code}] in {file} matches")
         locations = warning_locations(matches)
         if len(locations) != 1:
             named = ", ".join(
@@ -648,8 +656,6 @@ class StudiesMixin(EngineState):
             raise ReviewError(
                 f"{len(matches)} warnings [{code}] match in {file} at {named}; give "
                 "the line and column of one"
-                if matches
-                else f"No warning [{code}] in {file} matches"
             )
         item, revision = review_edit.acknowledge(
             folder, author, matches[0], text, revision=revision

@@ -18,7 +18,7 @@ from pkdb.identity import IdentityError, UserMismatch
 from pkdb.references import ReferenceError
 from pkdb.schemas.validation import StudyValidationError
 from pkdb.studyformat.metadata import MetadataError
-from pkdb.studyformat.review_edit import ApprovalRefused, ReviewError
+from pkdb.studyformat.review_edit import ReviewError
 from pkdb.studyformat.revision import RevisionConflict
 
 MAX_BODY = 1024 * 1024
@@ -312,8 +312,8 @@ class Handler(BaseHTTPRequestHandler):
             )
         except (MetadataError, ReviewError) as error:
             refused = (
-                {"code": "approval_refused"}
-                if isinstance(error, ApprovalRefused)
+                {"code": error.code}
+                if isinstance(error, ReviewError) and error.code
                 else {}
             )
             self._reply(

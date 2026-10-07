@@ -7,6 +7,7 @@ from pkdb.schemas.review import ReviewTarget
 from pkdb.studyformat.issues import make_issue, row_issue
 from pkdb.studyformat.load import load_study
 from pkdb.studyformat.review_edit import (
+    ANY,
     ApprovalRefused,
     ReviewError,
     acknowledge,
@@ -344,3 +345,21 @@ def test_matching_warnings_and_their_locations():
     file_level = matching_warnings(issues, "unknown_dataset", "Example_Fig1.wpd.json")
     assert file_level == project
     assert warning_locations(file_level) == {(None, None)}
+
+
+def test_matching_warnings_without_a_line_or_column():
+    table = "outputs_Tab2.tsv"
+    whole = make_issue("outside_range", "Whole.", file=table, severity="warning")
+    row = make_issue("outside_range", "Row.", file=table, line=3, severity="warning")
+    cell = make_issue(
+        "outside_range", "Cell.", file=table, line=3, header="mean", severity="warning"
+    )
+    issues = [whole, row, cell]
+    # None is exact: no line, or no column.
+    assert matching_warnings(issues, "outside_range", table, None, None) == [whole]
+    assert matching_warnings(issues, "outside_range", table, 3, None) == [row]
+    assert matching_warnings(issues, "outside_range", table, None, ANY) == [whole]
+    # ANY, the default, matches every line or column.
+    assert matching_warnings(issues, "outside_range", table, 3, ANY) == [row, cell]
+    assert matching_warnings(issues, "outside_range", table) == issues
+    assert matching_warnings(issues, "outside_range", table, ANY, None) == [whole, row]
