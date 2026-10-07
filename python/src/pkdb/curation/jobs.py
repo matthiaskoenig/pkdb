@@ -160,13 +160,23 @@ class JobsMixin(EngineState):
         return job
 
     def _remember(self, job):
-        """Add a job to the history, which keeps the last 100 finished jobs."""
+        """Add a job to the history, which keeps the last 100 finished jobs.
+
+        Queued, running and unknown jobs are kept besides them, and so is the latest upload
+        of each study, from which its row shows the last upload after a restart.
+        """
         self.jobs.append(job)
-        protected = [
-            j for j in self.jobs if j["status"] in {"queued", "running", "unknown"}
-        ]
-        finished = [j for j in self.jobs if j not in protected][-100:]
-        self.jobs = sorted(protected + finished, key=lambda j: j["created_at"])
+        uploads = {j["study_id"]: j for j in self.jobs if j.get("upload")}
+        protected, finished = [], []
+        for entry in self.jobs:
+            if (
+                entry["status"] in {"queued", "running", "unknown"}
+                or uploads.get(entry["study_id"]) is entry
+            ):
+                protected.append(entry)
+            else:
+                finished.append(entry)
+        self.jobs = sorted(protected + finished[-100:], key=lambda j: j["created_at"])
 
     def _record_write(self, identity, message, status="succeeded"):
         """List a write of the app in the activity of the study; it starts nothing."""

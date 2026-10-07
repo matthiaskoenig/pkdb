@@ -236,6 +236,35 @@ def test_reports_redact_server_echoed_credentials(workspace, monkeypatch):
     assert report["server_report"]["message"] == "echoed [redacted]"
 
 
+def test_the_last_upload_survives_many_app_writes_and_a_restart(workspace, monkeypatch):
+    engine, _ = workspace
+    prepare_mock(monkeypatch)
+    url = "https://pk-db.example/data/Example2020"
+    result = SimpleNamespace(
+        created=True, url=url, model_dump=lambda **_: {"created": True}
+    )
+    client, _ = enable_upload(engine, monkeypatch, lambda _: result)
+    client.last_upload_report = None
+    identity = row(engine)["id"]
+    engine.enqueue([identity], "upload")
+    job = run_next(engine)
+    assert job["status"] == "succeeded", job["message"]
+    for index in range(150):
+        engine._record_write(identity, f"Saved study.json {index}")
+    writes = [entry for entry in engine.jobs if entry["action"] == "write"]
+    assert len(writes) == 100
+    assert job in engine.jobs
+    engine.close()
+    restarted = module.CurationEngine(
+        engine.root, state_dir=engine.state_dir, offline=True, start=False
+    )
+    try:
+        assert row(restarted)["last_upload"] == job["upload"]
+        assert restarted.snapshot()["studies"][0]["last_upload"]["url"] == url
+    finally:
+        restarted.close()
+
+
 def test_uploaded_study_link_survives_restart(workspace, tmp_path, monkeypatch):
     engine, _ = workspace
     prepare_mock(monkeypatch)
