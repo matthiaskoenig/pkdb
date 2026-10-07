@@ -14,8 +14,8 @@ import {
 } from "vuetify/components";
 import type { ValidationIssue } from "../api/types";
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
-import { acknowledgement, location, locationKey } from "../problems";
-import { reviewFailure, type ReviewFailure } from "../review";
+import { acknowledgeFailure, acknowledgement, location, locationKey } from "../problems";
+import type { ReviewFailure } from "../review";
 import { useStudyStore } from "../stores/study";
 import UserHint from "./UserHint.vue";
 
@@ -25,6 +25,8 @@ import UserHint from "./UserHint.vue";
  */
 const props = defineProps<{ issue: ValidationIssue | null }>();
 const open = defineModel<boolean>({ default: false });
+/** Whether the acknowledgement is being written; the section waits with its actions meanwhile. */
+const busy = defineModel<boolean>("busy", { default: false });
 const emit = defineEmits<{ acknowledged: [issue: ValidationIssue] }>();
 
 const study = useStudyStore();
@@ -32,7 +34,6 @@ const titleId = useId();
 const autoGrow = !sizesFieldsByContent();
 
 const reason = ref("");
-const busy = ref(false);
 const failure = ref<ReviewFailure | null>(null);
 
 const payload = computed(() => (props.issue ? acknowledgement(props.issue) : null));
@@ -63,7 +64,7 @@ async function submit(): Promise<void> {
     open.value = false;
     emit("acknowledged", issue);
   } catch (caught) {
-    failure.value = reviewFailure(caught, "The warning was not acknowledged.");
+    failure.value = acknowledgeFailure(caught);
   } finally {
     busy.value = false;
   }

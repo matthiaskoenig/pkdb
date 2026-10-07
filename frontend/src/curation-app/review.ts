@@ -87,9 +87,9 @@ export function emptyText(state: StateFilter, kind: KindFilter): string {
   return state === "all" ? `No ${noun}.` : `No ${STATE_LABELS[state].toLowerCase()} ${noun}.`;
 }
 
-/** `timecourses_Fig1.tsv · label = caf_plasma_D150 · column error_type`, or `whole study` without a file. */
+/** `timecourses_Fig1.tsv · label = caf_plasma_D150 · column error_type`, or `Whole study` without a file. */
 export function targetText(target: ReviewTarget | null | undefined): string {
-  if (!target?.file) return "whole study";
+  if (!target?.file) return "Whole study";
   const rows = Object.entries(target.rows ?? {})
     .map(([column, value]) => `${column} = ${value}`)
     .join(", ");

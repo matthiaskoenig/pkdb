@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
+import { ApiError } from "../../src/curation-app/api/client";
 import type { SourceLocation, ValidationIssue } from "../../src/curation-app/api/types";
 import {
+  acknowledgeFailure,
   acknowledgement,
   DID_YOU_MEAN,
   filterIssues,
@@ -9,10 +11,13 @@ import {
   isLimitIssue,
   location,
   locationKey,
+  NO_SUCH_WARNING,
   noIssuesText,
   severityCounts,
-  suggestionText,
+  SPELLING_HINT,
+  suggestionView,
   tableQuery,
+  validatesAfterWrite,
 } from "../../src/curation-app/problems";
 
 function issue(
@@ -113,23 +118,33 @@ describe("severity", () => {
   });
 });
 
-describe("suggestionText", () => {
-  it("offers the candidates of a spelling suggestion as Did you mean", () => {
-    expect(suggestionText({ kind: "fix", message: DID_YOU_MEAN, candidates: ["all", "smokers"] })).toEqual({
-      text: "Did you mean: all, smokers",
-      candidates: [],
+describe("suggestionView", () => {
+  it("offers the candidates of a spelling suggestion after Did you mean", () => {
+    expect(suggestionView({ kind: "fix", message: DID_YOU_MEAN, candidates: ["all", "smokers"] })).toEqual({
+      lead: "Did you mean:",
+      candidates: ["all", "smokers"],
+      note: null,
     });
   });
 
-  it("shows a hint with its candidates, as the command line does", () => {
+  it("offers term suggestions after Did you mean, with their caveat", () => {
+    expect(
+      suggestionView({ kind: "fix", message: SPELLING_HINT, candidates: ["plasma", "saliva/plasma"] }),
+    ).toEqual({ lead: "Did you mean:", candidates: ["plasma", "saliva/plasma"], note: SPELLING_HINT });
+    expect(SPELLING_HINT).toBe("Candidates are spelling suggestions, not equivalent terms.");
+  });
+
+  it("shows another hint before its candidates", () => {
     const hint = "Units of cmax; amounts convert with the molar mass.";
-    expect(suggestionText({ kind: "fix", message: hint, candidates: ["g/l", 1] })).toEqual({
-      text: hint,
+    expect(suggestionView({ kind: "fix", message: hint, candidates: ["g/l", 1] })).toEqual({
+      lead: hint,
       candidates: ["g/l", "1"],
+      note: null,
     });
-    expect(suggestionText({ kind: "fix", message: "Close the workbook first." })).toEqual({
-      text: "Close the workbook first.",
+    expect(suggestionView({ kind: "fix", message: "Close the workbook first." })).toEqual({
+      lead: "Close the workbook first.",
       candidates: [],
+      note: null,
     });
   });
 });
@@ -141,15 +156,49 @@ describe("links and acknowledgements", () => {
     expect(tableQuery(limit)).toBeNull();
   });
 
-  it("acknowledges a warning at its file, line and column", () => {
+  it("acknowledges a warning at exactly its file, line and column", () => {
     expect(acknowledgement(mean)).toEqual({
       code: "outside_range",
       file: "timecourses_Fig1.tsv",
       line: 6,
       column: "mean",
     });
+    // A null line or column matches only warnings without one, never every line.
     const whole = issue("digitized_mismatch", "warning", { file: "Example_Fig1.wpd.json", path: [] });
-    expect(acknowledgement(whole)).toEqual({ code: "digitized_mismatch", file: "Example_Fig1.wpd.json" });
+    expect(acknowledgement(whole)).toEqual({
+      code: "digitized_mismatch",
+      file: "Example_Fig1.wpd.json",
+      line: null,
+      column: null,
+    });
+    const row = issue("duplicate_observation", "warning", { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 4 });
+    expect(acknowledgement(row)).toMatchObject({ line: 4, column: null });
+  });
+
+  it("says plainly that a warning is no longer in the files", () => {
+    const gone = new ApiError(422, { error: "No warning [x] in a.tsv matches", issues: [], code: "no_such_warning" });
+    expect(acknowledgeFailure(gone)).toEqual({ kind: "error", text: NO_SUCH_WARNING, issues: [] });
+    expect(NO_SUCH_WARNING).toBe("This warning is not in the current files. Validate the study and try again.");
+    const ambiguous = new ApiError(422, { error: "2 warnings [x] match in a.tsv at line 3, line 4", issues: [] });
+    expect(acknowledgeFailure(ambiguous)).toEqual({
+      kind: "error",
+      text: "The warning was not acknowledged. 2 warnings [x] match in a.tsv at line 3, line 4",
+      issues: [],
+    });
+  });
+
+  it("knows when the local server validates after a write", () => {
+    const state = { paused: false, offline: false, account: "mkoenig", can_upload: true };
+    expect(validatesAfterWrite("validate", state)).toBe(true);
+    expect(validatesAfterWrite("upload", state)).toBe(true);
+    expect(validatesAfterWrite("off", state)).toBe(false);
+    expect(validatesAfterWrite("validate", { ...state, paused: true })).toBe(false);
+    expect(validatesAfterWrite("upload", { ...state, offline: true })).toBe(false);
+    expect(validatesAfterWrite("upload", { ...state, account: null })).toBe(false);
+    expect(validatesAfterWrite("upload", { ...state, can_upload: false })).toBe(false);
+    expect(validatesAfterWrite("validate", { ...state, offline: true, can_upload: false })).toBe(true);
+    expect(validatesAfterWrite("validate", null)).toBe(true);
+    expect(validatesAfterWrite("off", null)).toBe(false);
   });
 
   it("acknowledges no error and no warning without a file", () => {

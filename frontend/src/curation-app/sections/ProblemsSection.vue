@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, useId, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 import { VAlert, VBtn, VChip, VChipGroup } from "vuetify/components";
 import { isNoUser } from "../api/client";
 import type { AcknowledgedWarning, Profile, ValidationIssue } from "../api/types";
 import AcknowledgeDialog from "../components/AcknowledgeDialog.vue";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
+import ProblemItem from "../components/ProblemItem.vue";
 import UserHint from "../components/UserHint.vue";
 import { useNotice } from "../composables/useNotice";
 import { formatTime, plural } from "../overview";
@@ -14,14 +15,11 @@ import {
   groupByFile,
   groupCounts,
   isLimitIssue,
-  location,
   locationKey,
   noIssuesText,
   SEVERITY_CHIPS,
-  SEVERITY_LABELS,
   severityCounts,
-  suggestionText,
-  tableQuery,
+  validatesAfterWrite,
   type SeverityFilter,
 } from "../problems";
 import { targetText } from "../review";
@@ -48,6 +46,7 @@ const study = useStudyStore();
 const overview = useOverviewStore();
 const { notice, announce } = useNotice();
 const id = useId();
+const section = ref<HTMLElement | null>(null);
 
 const detail = computed(() => study.detail);
 const identity = computed(() => detail.value?.id ?? "");
@@ -59,6 +58,43 @@ const listed = computed(() => problems.value.filter((issue) => !isLimitIssue(iss
 const severity = ref<SeverityFilter>("all");
 const counts = computed(() => severityCounts(listed.value));
 const groups = computed(() => groupByFile(filterIssues(listed.value, severity.value)));
+
+/**
+ * The issues that render at once. A long list renders in steps of this many issues, one step
+ * per frame, so that the first issues show at once and the page never freezes: a report lists
+ * up to 1,000 issues.
+ */
+const STEP = 100;
+const limit = ref(STEP);
+let frame = 0;
+
+/** Render the next step of issues in the next frame, until all of them show. */
+function grow(): void {
+  cancelAnimationFrame(frame);
+  const total = groups.value.reduce((sum, group) => sum + group.issues.length, 0);
+  if (limit.value < total)
+    frame = requestAnimationFrame(() => {
+      limit.value += STEP;
+      grow();
+    });
+}
+
+// Another severity starts with the first step again; new data of the study keeps the issues that
+// show, so that the page keeps its scroll position.
+watch(severity, () => (limit.value = STEP));
+watch(groups, grow, { immediate: true });
+onBeforeUnmount(() => cancelAnimationFrame(frame));
+
+/** The groups with the issues that render so far; `all` holds every issue of the file. */
+const rendered = computed(() => {
+  let budget = limit.value;
+  return groups.value.flatMap((group) => {
+    if (budget <= 0) return [];
+    const issues = group.issues.slice(0, budget);
+    budget -= issues.length;
+    return [{ file: group.file, issues, all: group.issues }];
+  });
+});
 
 /** The issues that the last validation counted but did not list: it lists at most a thousand. */
 const omitted = computed(() => {
@@ -80,10 +116,6 @@ function showable(issue: ValidationIssue): boolean {
   return tables.value.has(issue.source?.file ?? "");
 }
 
-function tableRoute(issue: ValidationIssue) {
-  return sectionRoute(identity.value, "tables", tableQuery(issue) ?? {});
-}
-
 /** A file of the study that opens with the system; tables open in the workbook instead. */
 function openable(file: string | null): file is string {
   return file !== null && !tables.value.has(file) && (detail.value?.files.includes(file) ?? false);
@@ -102,11 +134,8 @@ const profiles = computed(() => knownProfiles(roster.value, detail.value?.people
 
 const acknowledged = computed<AcknowledgedWarning[]>(() => detail.value?.acknowledged ?? []);
 
-function acknowledgedBy(entry: AcknowledgedWarning): string {
-  const name = profileOf(profiles.value, entry.author).display_name;
-  return entry.resolved
-    ? `Acknowledged by ${name} on ${formatTime(entry.resolved)}.`
-    : `Acknowledged by ${name}. The review item is open.`;
+function authorName(entry: AcknowledgedWarning): string {
+  return profileOf(profiles.value, entry.author).display_name;
 }
 
 // Acknowledgements
@@ -124,45 +153,74 @@ const blocked = computed(() => {
 const acknowledgeable = computed(() => listed.value.some((issue) => acknowledgement(issue) !== null));
 
 /**
- * The locations of the warnings acknowledged here, until a validation leaves them out: the
- * watcher validates the study again after the write.
+ * Whether a warning was acknowledged in the app and the report of the study still lists it: the
+ * study store keeps it until the next report, which leaves it out.
  */
-const pending = ref<string[]>([]);
-watch(problems, (issues) => {
-  const keys = new Set(issues.map(locationKey));
-  pending.value = pending.value.filter((key) => keys.has(key));
-});
-
 function isPending(issue: ValidationIssue): boolean {
-  return pending.value.includes(locationKey(issue));
+  return study.acknowledgedKeys.includes(locationKey(issue));
 }
+
+/** Whether the local server validates the study after the acknowledgement, or the curator does. */
+const automatic = computed(() =>
+  detail.value ? validatesAfterWrite(detail.value.mode, overview.snapshot ?? null) : true,
+);
 
 const chosen = ref<ValidationIssue | null>(null);
 const dialog = ref(false);
+/** Whether the dialog writes an acknowledgement; the other actions wait meanwhile. */
+const acknowledging = ref(false);
+/** The shown issues, in order, when the dialog opened: the place to move the focus to afterwards. */
+let order: string[] = [];
 
 function acknowledge(issue: ValidationIssue): void {
+  if (working.value) return;
   chosen.value = issue;
+  order = groups.value.flatMap((group) => group.issues.map(locationKey));
   dialog.value = true;
 }
 
-function acknowledgedWarning(issue: ValidationIssue): void {
+async function acknowledgedWarning(issue: ValidationIssue): Promise<void> {
   const key = locationKey(issue);
   // A validation that left the warning out already needs no mark.
-  if (problems.value.some((entry) => locationKey(entry) === key)) pending.value = [...pending.value, key];
+  if (problems.value.some((entry) => locationKey(entry) === key)) study.markAcknowledged(key);
   announce(`Warning ${issue.code} acknowledged.`);
+  await nextTick();
+  focusAfter(key, issue.source?.file ?? null);
+}
+
+/**
+ * The Acknowledge button of the issue went away: focus the Acknowledge button of the next
+ * warning, else the heading of the file of the issue, else the acknowledged warnings.
+ */
+function focusAfter(key: string, file: string | null): void {
+  const root = section.value;
+  if (!root) return;
+  const items = [...root.querySelectorAll<HTMLElement>(".problem")];
+  const button = (item: HTMLElement | undefined) =>
+    item?.querySelector<HTMLButtonElement>(".problem-acknowledge:not([disabled])") ?? null;
+  const next = order
+    .slice(order.indexOf(key) + 1)
+    .map((later) => button(items.find((item) => item.dataset.key === later)))
+    .find((found) => found !== null);
+  const heading = [...root.querySelectorAll<HTMLElement>(".problem-group")]
+    .find((group) => group.dataset.file === (file ?? ""))
+    ?.querySelector<HTMLElement>(".problem-file");
+  (next ?? heading ?? root.querySelector<HTMLElement>(".problems-heading"))?.focus();
 }
 
 // Open tables and files
 
-/** The action that runs, `tables` or the file that opens; one at a time. */
+/** The action that runs: `tables`, `validate` or the file that opens; one at a time. */
 const busy = ref<string | null>(null);
+/** Whether an action runs or an acknowledgement is written; one write at a time. */
+const working = computed(() => busy.value !== null || acknowledging.value);
 /** The failure of the last action; it stays until it is dismissed or the next action starts. */
 const failure = ref<ActionFailure | null>(null);
 /** What to do when the last action needed a user. */
 const userText = ref<string | null>(null);
 
 async function run(action: string, work: () => Promise<string>): Promise<void> {
-  if (busy.value !== null) return;
+  if (working.value) return;
   busy.value = action;
   failure.value = null;
   userText.value = null;
@@ -185,6 +243,13 @@ function openTables(): Promise<void> {
   });
 }
 
+function validate(): Promise<void> {
+  return run("validate", async () => {
+    await overview.enqueue([identity.value], "validate");
+    return "Validation queued.";
+  });
+}
+
 function openFile(file: string): Promise<void> {
   return run(file, async () => {
     await overview.openFile(identity.value, file);
@@ -192,15 +257,10 @@ function openFile(file: string): Promise<void> {
   });
 }
 
-/** The ids of the message and the location of an issue, which describe its actions. */
-function describedBy(groupIndex: number, index: number, issue: ValidationIssue): string {
-  const base = `${id}-${groupIndex}-${index}`;
-  return location(issue, { file: false }) ? `${base}-message ${base}-location` : `${base}-message`;
-}
 </script>
 
 <template>
-  <div class="problems">
+  <div ref="section" class="problems">
     <VAlert v-if="limits.length" type="error" variant="tonal" density="compact" class="status-alert problems-limit">
       <p class="problems-alert-text">
         This study is beyond the upload limits. The app cannot show its tables and sources, and the study cannot be
@@ -240,7 +300,7 @@ function describedBy(groupIndex: number, index: number, issue: ValidationIssue):
           variant="tonal"
           color="primary"
           prepend-icon="fas fa-table"
-          :disabled="busy !== null"
+          :disabled="working"
           :loading="busy === 'tables'"
           class="problems-open-tables"
           @click="openTables"
@@ -265,15 +325,16 @@ function describedBy(groupIndex: number, index: number, issue: ValidationIssue):
 
     <div v-if="groups.length" class="problems-groups">
       <section
-        v-for="(group, groupIndex) in groups"
+        v-for="(group, groupIndex) in rendered"
         :key="group.file ?? ''"
         class="problem-group"
+        :data-file="group.file ?? ''"
         :aria-labelledby="`${id}-${groupIndex}`"
       >
         <div class="problem-group-head">
           <div class="problem-group-title">
-            <h3 :id="`${id}-${groupIndex}`" class="problem-file">{{ group.file ?? "Whole study" }}</h3>
-            <span class="problem-group-counts">{{ groupCounts(group.issues) }}</span>
+            <h3 :id="`${id}-${groupIndex}`" tabindex="-1" class="problem-file">{{ group.file ?? "Whole study" }}</h3>
+            <span class="problem-group-counts">{{ groupCounts(group.all) }}</span>
           </div>
           <VBtn
             v-if="openable(group.file)"
@@ -281,7 +342,7 @@ function describedBy(groupIndex: number, index: number, issue: ValidationIssue):
             size="small"
             color="primary"
             prepend-icon="fas fa-arrow-up-right-from-square"
-            :disabled="busy !== null"
+            :disabled="working"
             :loading="busy === group.file"
             :aria-label="`Open ${group.file}`"
             class="problem-open"
@@ -291,74 +352,20 @@ function describedBy(groupIndex: number, index: number, issue: ValidationIssue):
           </VBtn>
         </div>
         <ul class="problem-list">
-          <li v-for="(issue, index) in group.issues" :key="index" class="problem">
-            <div class="problem-head">
-              <VChip
-                size="small"
-                variant="tonal"
-                :color="issue.severity"
-                :prepend-icon="issue.severity === 'error' ? 'fas fa-circle-xmark' : 'fas fa-triangle-exclamation'"
-                class="status-chip problem-severity"
-              >
-                {{ SEVERITY_LABELS[issue.severity] }}
-              </VChip>
-              <code class="problem-code">{{ issue.code }}</code>
-            </div>
-            <p :id="`${id}-${groupIndex}-${index}-message`" class="problem-message">{{ issue.message }}</p>
-            <p
-              v-if="location(issue, { file: false })"
-              :id="`${id}-${groupIndex}-${index}-location`"
-              class="problem-fact problem-location"
-            >
-              <i class="fas fa-crosshairs problem-icon" aria-hidden="true"></i>
-              <span>{{ location(issue, { file: false }) }}</span>
-            </p>
-            <div v-if="issue.suggestions?.length" class="problem-fact problem-suggestions">
-              <i class="fas fa-lightbulb problem-icon" aria-hidden="true"></i>
-              <div class="problem-suggestion-list">
-                <div v-for="(suggestion, number) in issue.suggestions" :key="number">
-                  <p class="problem-suggestion">{{ suggestionText(suggestion).text }}</p>
-                  <ul v-if="suggestionText(suggestion).candidates.length" class="problem-candidates">
-                    <li v-for="(candidate, place) in suggestionText(suggestion).candidates" :key="place">
-                      <code>{{ candidate }}</code>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <p v-if="isPending(issue)" class="problem-fact problem-acknowledged">
-              <i class="fas fa-check problem-icon" aria-hidden="true"></i>
-              <span>Acknowledged. It leaves this list after the next validation.</span>
-            </p>
-            <div
-              v-if="showable(issue) || (acknowledgement(issue) && !isPending(issue))"
-              class="problem-actions"
-            >
-              <VBtn
-                v-if="showable(issue)"
-                :to="tableRoute(issue)"
-                variant="text"
-                density="compact"
-                color="primary"
-                prepend-icon="fas fa-table-cells"
-                :aria-describedby="describedBy(groupIndex, index, issue)"
-              >
-                Show in table
-              </VBtn>
-              <VBtn
-                v-if="acknowledgement(issue) && !isPending(issue)"
-                variant="text"
-                density="compact"
-                color="primary"
-                prepend-icon="fas fa-check"
-                :disabled="blocked !== null"
-                :aria-describedby="describedBy(groupIndex, index, issue)"
-                @click="acknowledge(issue)"
-              >
-                Acknowledge
-              </VBtn>
-            </div>
-          </li>
+          <ProblemItem
+            v-for="(issue, index) in group.issues"
+            :key="index"
+            :issue="issue"
+            :study="identity"
+            :id-base="`${id}-${groupIndex}-${index}`"
+            :showable="showable(issue)"
+            :pending="isPending(issue)"
+            :automatic="automatic"
+            :disabled="blocked !== null || working"
+            :validating="busy === 'validate'"
+            @acknowledge="acknowledge(issue)"
+            @validate="validate"
+          />
         </ul>
       </section>
     </div>
@@ -366,7 +373,9 @@ function describedBy(groupIndex: number, index: number, issue: ValidationIssue):
     <p v-else-if="!limits.length" class="problems-empty">{{ emptyText }}</p>
 
     <section v-if="acknowledged.length" class="problems-acknowledged" :aria-labelledby="`${id}-acknowledged`">
-      <h3 :id="`${id}-acknowledged`" class="problems-heading">Acknowledged warnings ({{ acknowledged.length }})</h3>
+      <h3 :id="`${id}-acknowledged`" tabindex="-1" class="problems-heading">
+        Acknowledged warnings ({{ acknowledged.length }})
+      </h3>
       <ul class="problem-group problem-list acknowledged-list">
         <li v-for="entry in acknowledged" :key="entry.id" class="acknowledged">
           <div class="problem-head">
@@ -378,14 +387,23 @@ function describedBy(groupIndex: number, index: number, issue: ValidationIssue):
           </p>
           <p class="problem-message">{{ entry.text }}</p>
           <p class="acknowledged-meta">
-            <span>{{ acknowledgedBy(entry) }}</span>
+            <span v-if="entry.resolved">
+              Acknowledged by {{ authorName(entry) }} on
+              <span class="acknowledged-time">{{ formatTime(entry.resolved) }}</span>.
+            </span>
+            <span v-else>Acknowledged by {{ authorName(entry) }}. The review item is open.</span>
             <RouterLink :to="sectionRoute(identity, 'review', { item: entry.id })">Show the review item</RouterLink>
           </p>
         </li>
       </ul>
     </section>
 
-    <AcknowledgeDialog v-model="dialog" :issue="chosen" @acknowledged="acknowledgedWarning" />
+    <AcknowledgeDialog
+      v-model="dialog"
+      v-model:busy="acknowledging"
+      :issue="chosen"
+      @acknowledged="acknowledgedWarning"
+    />
   </div>
 </template>
 
@@ -480,78 +498,14 @@ function describedBy(groupIndex: number, index: number, issue: ValidationIssue):
   padding: 0;
   list-style: none;
 }
-.problem,
 .acknowledged {
   display: flex;
   flex-direction: column;
   gap: 6px;
   padding: 12px;
 }
-.problem + .problem,
 .acknowledged + .acknowledged {
   border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-.problem-head {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 4px 10px;
-}
-.problem-code {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  overflow-wrap: anywhere;
-}
-.problem-message {
-  margin: 0;
-  font-size: 0.9375rem;
-  line-height: 1.45;
-  overflow-wrap: anywhere;
-}
-.problem-fact {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  margin: 0;
-  font-size: 0.8125rem;
-  line-height: 1.45;
-  overflow-wrap: anywhere;
-}
-.problem-icon {
-  width: 1rem;
-  flex: 0 0 auto;
-  text-align: center;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.problem-location {
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.problem-suggestion-list {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-.problem-suggestion {
-  margin: 0;
-}
-.problem-candidates {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 12px;
-  margin: 2px 0 0;
-  padding: 0;
-  list-style: none;
-}
-.problem-acknowledged .problem-icon {
-  color: rgb(var(--v-theme-success));
-}
-/* The text of the first button lines up with the text above it. */
-.problem-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px 8px;
-  margin-inline-start: -8px;
 }
 .problems-acknowledged {
   display: flex;
@@ -573,5 +527,9 @@ function describedBy(groupIndex: number, index: number, issue: ValidationIssue):
   font-size: 0.8125rem;
   line-height: 1.45;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+/* The time stays with its date. */
+.acknowledged-time {
+  white-space: nowrap;
 }
 </style>

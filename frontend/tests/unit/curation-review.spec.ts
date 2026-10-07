@@ -57,10 +57,10 @@ describe("emptyText", () => {
 
 describe("targetText", () => {
   it("names the whole study without a file", () => {
-    expect(targetText(undefined)).toBe("whole study");
-    expect(targetText(null)).toBe("whole study");
-    expect(targetText({})).toBe("whole study");
-    expect(targetText({ rows: {} })).toBe("whole study");
+    expect(targetText(undefined)).toBe("Whole study");
+    expect(targetText(null)).toBe("Whole study");
+    expect(targetText({})).toBe("Whole study");
+    expect(targetText({ rows: {} })).toBe("Whole study");
   });
 
   it("names the file, the rows and the column", () => {

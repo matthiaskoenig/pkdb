@@ -1,4 +1,4 @@
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { defineStore } from "pinia";
 import { getJson, postJson, studyPath } from "../api/client";
 import {
@@ -38,6 +38,12 @@ interface Cached<T> {
   data: T;
 }
 
+/** Warnings acknowledged in the app: their location keys, and the report that still lists them. */
+interface Acknowledging {
+  report: string | null;
+  keys: string[];
+}
+
 /** The study that the study page shows, polled while it is open. */
 export const useStudyStore = defineStore("curation-study", () => {
   const identity = ref<string | null>(null);
@@ -51,6 +57,40 @@ export const useStudyStore = defineStore("curation-study", () => {
   // Aborts the table and source requests of the open study when it closes.
   let requests = new AbortController();
   let roster: Promise<Profile[]> | undefined;
+  /**
+   * The warnings acknowledged in the app by study, until a new report of the study arrives.
+   * They outlive the study page, so that the Problems section does not offer them again
+   * while the validation that leaves them out has not run.
+   */
+  const acknowledging = ref<Record<string, Acknowledging>>({});
+
+  // A new report of a study replaces the one that listed its acknowledged warnings.
+  watch(
+    () => polling.data.value,
+    (detail) => {
+      const entry = detail ? acknowledging.value[detail.id] : undefined;
+      if (!detail || !entry || entry.report === detail.report_id) return;
+      const rest = { ...acknowledging.value };
+      delete rest[detail.id];
+      acknowledging.value = rest;
+    },
+  );
+
+  /** Mark the warnings of the location `key` as acknowledged in the open study, until its next report. */
+  function markAcknowledged(key: string): void {
+    const detail = polling.data.value;
+    if (!detail || detail.id !== identity.value) return;
+    const entry = acknowledging.value[detail.id];
+    const keys = entry?.report === detail.report_id ? entry.keys : [];
+    acknowledging.value = { ...acknowledging.value, [detail.id]: { report: detail.report_id, keys: [...keys, key] } };
+  }
+
+  /** The location keys of the warnings acknowledged in the app that the report of the open study still lists. */
+  const acknowledgedKeys = computed<string[]>(() => {
+    const detail = polling.data.value;
+    const entry = detail ? acknowledging.value[detail.id] : undefined;
+    return detail && entry?.report === detail.report_id ? entry.keys : [];
+  });
 
   function opened(): string {
     if (identity.value === null) throw new Error("No study is open");
@@ -201,5 +241,7 @@ export const useStudyStore = defineStore("curation-study", () => {
     searchReference,
     previewReference,
     saveReference,
+    markAcknowledged,
+    acknowledgedKeys,
   };
 });

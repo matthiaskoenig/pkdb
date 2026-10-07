@@ -221,3 +221,37 @@ a.brand {
   line-height: 1.35;
 }
 
+/* Problems: the parts of an issue and of an acknowledged warning. */
+.problem-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 10px;
+}
+.problem-code {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.problem-message {
+  margin: 0;
+  font-size: 0.9375rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+/* A fact has an icon in a 1rem column and its text 8 px after it. */
+.problem-fact {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+.problem-icon {
+  width: 1rem;
+  flex: 0 0 auto;
+  text-align: center;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}

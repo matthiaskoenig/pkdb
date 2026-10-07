@@ -2,7 +2,13 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DOMWrapper, enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { RouterView, type Router } from "vue-router";
-import type { AcknowledgedWarning, StudyDetail, TablesResult, ValidationIssue } from "../../src/curation-app/api/types";
+import type {
+  AcknowledgedWarning,
+  Snapshot,
+  StudyDetail,
+  TablesResult,
+  ValidationIssue,
+} from "../../src/curation-app/api/types";
 import { formatTime } from "../../src/curation-app/overview";
 import { DID_YOU_MEAN } from "../../src/curation-app/problems";
 import { makeRouter } from "../../src/curation-app/router";
@@ -154,10 +160,14 @@ function tablesResult(changes: Partial<TablesResult> = {}): TablesResult {
 }
 
 /** The problems section inside the app's router view, with `routes` besides the defaults. */
-async function mountSection(detail: StudyDetail = withProblems(), routes: Record<string, unknown> = {}) {
+async function mountSection(
+  detail: StudyDetail = withProblems(),
+  routes: Record<string, unknown> = {},
+  state: Snapshot = snapshot(),
+) {
   served = detail;
   requests = serveApi({
-    "GET /local/state": snapshot(),
+    "GET /local/state": state,
     [`GET ${EXAMPLE}`]: (() => json(served)) satisfies Handler,
     "GET /local/curators": { curators: roster() },
     [`POST ${REVIEW}`]: acknowledge,
@@ -248,6 +258,14 @@ async function openAcknowledge(code: string): Promise<void> {
   await flushPromises();
 }
 
+/** Acknowledges the warning `code` with a reason in the dialog. */
+async function acknowledgeWarning(code: string): Promise<void> {
+  await openAcknowledge(code);
+  await textArea("Reason", dialog().element).setValue("Expected in this study.");
+  await control(dialog(), "Acknowledge").trigger("click");
+  await flushPromises();
+}
+
 function notice(): string {
   return section().get(".problems-notice").text();
 }
@@ -306,10 +324,12 @@ describe("issues", () => {
     expect(group.get(".problem-severity").text()).toBe("Error");
     expect(group.get(".problem-message").text()).toBe("subjects.tsv has no row named 'smoker'");
     expect(group.get(".problem-location").text()).toBe("line 3 · group · sheet cell outputs_Tab2!E3");
-    expect(group.get(".problem-suggestions").text()).toBe("Did you mean: smokers, all");
+    // Each candidate is a chip of its own.
+    expect(group.get(".problem-suggestion-lead").text()).toBe("Did you mean:");
+    expect(group.findAll(".problem-candidate").map((item) => item.text())).toEqual(["smokers", "all"]);
 
     const unit = problem("unit_dimension");
-    expect(unit.get(".problem-suggestions").text()).toContain(
+    expect(unit.get(".problem-suggestion-lead").text()).toBe(
       "Units of cmax; amounts of a substance convert with its molar mass.",
     );
     expect(unit.findAll(".problem-candidates li").map((item) => item.text())).toEqual(["g/l", "mol/l"]);
@@ -317,6 +337,19 @@ describe("issues", () => {
     expect(problem("outside_range").get(".problem-severity").text()).toBe("Warning");
     // An issue of a whole file names no location below the file.
     expect(problem("digitized_mismatch").find(".problem-location").exists()).toBe(false);
+  });
+
+  it("renders a long list in steps, so that the first issues show at once", async () => {
+    const many: ValidationIssue[] = Array.from({ length: 250 }, (_, index) => ({
+      ...outsideRange,
+      message: `mean ${index} lies outside [min, max]`,
+      source: { ...outsideRange.source!, row: index + 2, cell: `O${index + 2}` },
+    }));
+    await mountSection(withProblems({ problems: many, counts: { errors: 0, warnings: 250 } }));
+    expect(codes().length).toBeLessThan(250);
+    expect(codes().length).toBeGreaterThanOrEqual(100);
+    expect(section().get(".problem-group-counts").text()).toBe("250 warnings");
+    await vi.waitFor(() => expect(codes()).toHaveLength(250));
   });
 
   it("says how many problems the last validation left out", async () => {
@@ -491,6 +524,111 @@ describe("acknowledgements", () => {
     expect(controls(problem("outside_range"), "Acknowledge")).toHaveLength(1);
   });
 
+  it("asks to validate when no automatic validation will leave the warning out", async () => {
+    await mountSection(withProblems({ mode: "off" }), { "POST /local/jobs": { ok: true } });
+    await acknowledgeWarning("unused_intervention");
+    const pending = problem("unused_intervention");
+    expect(pending.get(".problem-acknowledged").text()).toBe("Acknowledged. Validate the study to update this list.");
+    await control(pending, "Validate").trigger("click");
+    await flushPromises();
+    expect(posted("/local/jobs")).toEqual([{ ids: ["caffeine/Example"], action: "validate" }]);
+    expect(notice()).toBe("Validation queued.");
+  });
+
+  it("asks to validate while file watching is paused", async () => {
+    await mountSection(withProblems(), {}, snapshot({ paused: true }));
+    await acknowledgeWarning("unused_intervention");
+    expect(problem("unused_intervention").get(".problem-acknowledged").text()).toBe(
+      "Acknowledged. Validate the study to update this list.",
+    );
+  });
+
+  it("keeps the mark when the section opens again, until a new report", async () => {
+    await mountSection();
+    await acknowledgeWarning("unused_intervention");
+    await router.push("/studies/caffeine/Example/review");
+    await flushPromises();
+    await router.push(SECTION);
+    await flushPromises();
+    expect(controls(problem("unused_intervention"), "Acknowledge")).toHaveLength(0);
+    expect(problem("unused_intervention").find(".problem-acknowledged").exists()).toBe(true);
+
+    // A new report replaces the one that listed the warning.
+    served = { ...served, report_id: "job-2" };
+    await useStudyStore().refresh();
+    await flushPromises();
+    expect(problem("unused_intervention").find(".problem-acknowledged").exists()).toBe(false);
+    expect(controls(problem("unused_intervention"), "Acknowledge")).toHaveLength(1);
+  });
+
+  it("moves the focus to the next warning after an acknowledgement, else to the heading of the file", async () => {
+    await mountSection();
+    await acknowledgeWarning("outside_range");
+    expect(document.activeElement).toBe(control(problem("unused_intervention"), "Acknowledge").element);
+
+    // The last warning of the list leaves the heading of its file.
+    await acknowledgeWarning("digitized_mismatch");
+    const heading = section()
+      .findAll(".problem-file")
+      .find((candidate) => candidate.text() === "Example_Fig1.wpd.json");
+    expect(document.activeElement).toBe(heading?.element);
+  });
+
+  it("acknowledges nothing while Open tables runs, and opens nothing while it acknowledges", async () => {
+    let answer: (response: Response) => void = () => undefined;
+    await mountSection(withProblems(), {
+      [`POST ${TABLES}`]: () => new Promise<Response>((resolve) => (answer = resolve)),
+    });
+    await control(section(), "Open tables").trigger("click");
+    await flushPromises();
+    for (const code of ["outside_range", "unused_intervention", "digitized_mismatch"])
+      expect(control(problem(code), "Acknowledge").attributes("disabled")).toBeDefined();
+    answer(json(tablesResult()));
+    await flushPromises();
+    expect(control(problem("outside_range"), "Acknowledge").attributes("disabled")).toBeUndefined();
+
+    let written: (response: Response) => void = () => undefined;
+    requests = serveApi({
+      [`GET ${EXAMPLE}`]: (() => json(served)) satisfies Handler,
+      "GET /local/curators": { curators: roster() },
+      [`POST ${REVIEW}`]: () => new Promise<Response>((resolve) => (written = resolve)),
+      [`POST ${TABLES}`]: tablesResult(),
+    });
+    await openAcknowledge("outside_range");
+    await textArea("Reason", dialog().element).setValue("Read from the figure as printed.");
+    await control(dialog(), "Acknowledge").trigger("click");
+    await flushPromises();
+    expect(control(section(), "Open tables").attributes("disabled")).toBeDefined();
+    expect(button("Open study.json").attributes("disabled")).toBeDefined();
+    await control(section(), "Open tables").trigger("click");
+    await flushPromises();
+    expect(posted(TABLES)).toEqual([]);
+    written(json({ revision: "review-8" }));
+    await flushPromises();
+    expect(control(section(), "Open tables").attributes("disabled")).toBeUndefined();
+  });
+
+  it("says plainly that a warning is no longer in the files", async () => {
+    await mountSection(withProblems(), {
+      [`POST ${REVIEW}`]: () =>
+        json(
+          {
+            error: "No warning [outside_range] in timecourses_Fig1.tsv matches",
+            issues: [],
+            code: "no_such_warning",
+          },
+          { status: 422 },
+        ),
+    });
+    await openAcknowledge("outside_range");
+    await textArea("Reason", dialog().element).setValue("Read from the figure as printed.");
+    await control(dialog(), "Acknowledge").trigger("click");
+    await flushPromises();
+    expect(dialog().get(".acknowledge-failure").text()).toBe(
+      "This warning is not in the current files. Validate the study and try again.",
+    );
+  });
+
   it("acknowledges a warning of a whole file without a line or column", async () => {
     await mountSection();
     await openAcknowledge("digitized_mismatch");
@@ -504,6 +642,9 @@ describe("acknowledgements", () => {
         action: "acknowledge",
         code: "digitized_mismatch",
         file: "Example_Fig1.wpd.json",
+        // Null is exact: only the warnings of the file without a line or column.
+        line: null,
+        column: null,
         text: "The point lies on the axis.",
       },
     ]);
@@ -597,7 +738,9 @@ describe("acknowledgements", () => {
     expect(control(entries[0]!, "Show the review item").attributes("href")).toBe(
       `#/studies/caffeine/Example/review?item=${ROUNDED}`,
     );
-    expect(entries[1]!.text()).toContain("whole study");
+    expect(entries[1]!.text()).toContain("Whole study");
+    // The time stays with its date.
+    expect(entries[0]!.get(".acknowledged-time").text()).toBe(formatTime("2026-10-06T09:00:00Z"));
     expect(entries[1]!.text()).toContain("Acknowledged by Jan Grzegorzewski. The review item is open.");
     expect(control(entries[1]!, "Show the review item").attributes("href")).toBe(
       `#/studies/caffeine/Example/review?item=${SMOKERS}`,

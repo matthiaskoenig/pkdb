@@ -399,7 +399,7 @@ describe("item cards", () => {
     const acknowledged = card("The digitized points");
     expect(acknowledged.get(".review-card-state").text()).toBe("Dismissed");
     expect(acknowledged.get(".review-card-code").text()).toContain("digitized_mismatch");
-    expect(card("The dose unit was missing.").get(".review-card-target").text()).toBe("whole study");
+    expect(card("The dose unit was missing.").get(".review-card-target").text()).toBe("Whole study");
   });
 });
 
