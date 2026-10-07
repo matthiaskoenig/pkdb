@@ -359,6 +359,17 @@ def test_folder_browsing_and_recent_workspace_actions(local_server):
     assert request(server, "POST", "/local/directories", {"path": 3}, headers)[0] == 400
 
 
+def test_a_refused_resume_reports_its_reason(local_server):
+    from pkdb.curation.jobs import ResumeRefused
+
+    server, engine = local_server
+    reason = "The upload of caffeine/Example has an unknown outcome."
+    engine.resume.side_effect = ResumeRefused(reason)
+    status, _, body = request(server, "POST", "/local/resume", {}, authenticate(server))
+    assert status == 400
+    assert json.loads(body)["error"] == reason
+
+
 def test_curate_cli_explains_missing_workspace(tmp_path, capsys):
     from pkdb.cli import main
 

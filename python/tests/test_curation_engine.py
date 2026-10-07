@@ -164,6 +164,32 @@ def test_unknown_upload_blocks_new_jobs_and_redacts_key(workspace, monkeypatch):
     client.upload.assert_called_once()
 
 
+def test_resume_says_why_an_unknown_upload_cannot_be_reconciled(workspace, monkeypatch):
+    engine, _ = workspace
+    prepare_mock(monkeypatch)
+    client, _ = enable_upload(
+        engine, monkeypatch, ClientError("lost", persistence="unknown")
+    )
+    identifier = row(engine)["id"]
+    engine.enqueue([identifier], "upload")
+    run_next(engine)
+    engine.endpoint = "https://other.test"
+    with pytest.raises(
+        jobs.ResumeRefused, match="went to https://example.test. Connect to that"
+    ):
+        engine.resume()
+    engine.endpoint = "https://example.test"
+    client.publication.return_value.model_dump.return_value = {"digest": "other"}
+    with pytest.raises(jobs.ResumeRefused, match="another version of caffeine/"):
+        engine.resume()
+    assert row(engine)["_blocked"] is True
+    client.publication.return_value.model_dump.return_value = {"digest": "snapshot"}
+    engine.resume()
+    assert row(engine)["_blocked"] is False
+    assert engine.paused is False
+    assert identifier.startswith("caffeine/")
+
+
 def test_restart_marks_transferring_job_unknown(workspace):
     engine, folder = workspace
     engine.offline = False
@@ -183,7 +209,7 @@ def test_restart_marks_transferring_job_unknown(workspace):
         assert row(replacement)["_blocked"] is True
         settle(replacement)
         assert not replacement.queue
-        with pytest.raises(ValueError):
+        with pytest.raises(jobs.ResumeRefused, match="Turn off offline mode"):
             replacement.resume()
     finally:
         replacement.close()

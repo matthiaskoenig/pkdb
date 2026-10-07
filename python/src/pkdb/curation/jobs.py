@@ -122,6 +122,10 @@ def stop_message(pipeline: PipelineResult) -> str:
     return "Resolve the conflict between the workbook and the tables"
 
 
+class ResumeRefused(ValueError):
+    """Resuming cannot establish the outcome of an upload; the message says what to do."""
+
+
 class JobsMixin(EngineState):
     def _enqueue_one(self, row, action, automatic=False):
         if row["_blocked"]:
@@ -696,19 +700,30 @@ class JobsMixin(EngineState):
                 for j in reversed(self.jobs)
                 if j["study_id"] == row["id"] and j["status"] == "unknown"
             )
-            if (
-                self.offline
-                or job["endpoint"] != self.endpoint
-                or not job.get("source_digest")
-            ):
-                raise ValueError(
-                    "Inspect the original server before retrying the unknown upload"
+            name = row["id"]
+            review = "review the uncertain upload in the overview"
+            if self.offline:
+                raise ResumeRefused(
+                    f"The upload of {name} has an unknown outcome. Turn off offline "
+                    f"mode so that Resume can check it on the server, or {review}."
+                )
+            if job["endpoint"] != self.endpoint:
+                raise ResumeRefused(
+                    f"The upload of {name} with an unknown outcome went to "
+                    f"{job['endpoint']}. Connect to that server so that Resume can "
+                    f"check it, or {review}."
+                )
+            if not job.get("source_digest"):
+                raise ResumeRefused(
+                    f"The outcome of the upload of {name} cannot be checked "
+                    f"automatically. Please {review}."
                 )
             with Client(self.endpoint, api_key=self.api_key) as client:
                 publication = client.publication(job["sid"]).model_dump()
             if publication.get("digest") != job["source_digest"]:
-                raise ValueError(
-                    "Server publication differs; outcome cannot be established automatically"
+                raise ResumeRefused(
+                    f"The server has another version of {name} than the upload sent, "
+                    f"so its outcome is unknown. Please {review}."
                 )
             job.update(
                 status="succeeded",
