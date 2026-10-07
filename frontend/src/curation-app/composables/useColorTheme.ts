@@ -16,6 +16,20 @@ function storedChoice(): Choice | null {
   }
 }
 
+/** Keep `choice`, or forget the choice when it is null; without storage it lasts until a reload. */
+function store(choice: Choice | null): void {
+  try {
+    if (choice === null) localStorage.removeItem(THEME_STORAGE_KEY);
+    else localStorage.setItem(THEME_STORAGE_KEY, choice);
+  } catch {
+    // The choice then lasts until the page is reloaded.
+  }
+}
+
+function systemTheme(): Choice {
+  return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
 /** The light or dark theme: it follows the system until the curator switches it in the header. */
 export function useColorTheme() {
   const theme = useTheme();
@@ -25,15 +39,15 @@ export function useColorTheme() {
     void theme.change(storedChoice() ?? "system");
   }
 
-  /** Switch between light and dark and keep the choice for the next visits. */
+  /**
+   * Switch between light and dark. A choice other than the system theme is kept for the next
+   * visits; switching back to the system theme follows the system again.
+   */
   function toggle(): void {
     const next: Choice = theme.global.current.value.dark ? "light" : "dark";
-    void theme.change(next);
-    try {
-      localStorage.setItem(THEME_STORAGE_KEY, next);
-    } catch {
-      // The choice then lasts until the page is reloaded.
-    }
+    const followSystem = next === systemTheme();
+    void theme.change(followSystem ? "system" : next);
+    store(followSystem ? null : next);
   }
 
   return { restore, toggle };

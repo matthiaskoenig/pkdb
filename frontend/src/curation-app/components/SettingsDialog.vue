@@ -25,6 +25,7 @@ const form = reactive({ endpoint: "", user: "", offline: false });
 // Write-only: the key never comes from the server and leaves this field on submit and on close.
 const apiKey = ref("");
 const busy = ref(false);
+const removing = ref(false);
 const error = ref<string | null>(null);
 
 const keyHint = computed(() =>
@@ -48,8 +49,23 @@ function changes(): Settings {
   if (endpoint !== initial.endpoint) settings.endpoint = endpoint;
   if (user !== initial.user) settings.user = user;
   if (form.offline !== initial.offline) settings.offline = form.offline;
-  if (apiKey.value) settings.api_key = apiKey.value;
+  const key = apiKey.value.trim();
+  if (key) settings.api_key = key;
   return settings;
+}
+
+/** Remove the API key from pkdb curate; the dialog stays open with the other settings. */
+async function removeKey(): Promise<void> {
+  removing.value = true;
+  error.value = null;
+  try {
+    await overview.configure({ api_key: "" });
+    apiKey.value = "";
+  } catch (caught) {
+    error.value = caught instanceof Error ? caught.message : String(caught);
+  } finally {
+    removing.value = false;
+  }
 }
 
 async function submit(): Promise<void> {
@@ -124,7 +140,21 @@ watch(
             spellcheck="false"
             :hint="keyHint"
             persistent-hint
-          />
+          >
+            <template v-if="overview.snapshot?.authenticated" #details>
+              <VBtn
+                variant="text"
+                size="small"
+                density="comfortable"
+                color="primary"
+                class="settings-key-remove"
+                :loading="removing"
+                @click="removeKey"
+              >
+                Remove key
+              </VBtn>
+            </template>
+          </VTextField>
           <VSwitch v-model="form.offline" label="Work offline" color="primary" hide-details inset />
           <p class="settings-note">
             Offline, pkdb curate sends no network requests. It keeps the API key in memory only, and the browser
@@ -150,6 +180,11 @@ watch(
 }
 .settings-fields :deep(.v-messages__message) {
   line-height: 1.35;
+}
+/* Beside the hint of the key field: centered on its line, the text ending where the field
+   content ends. */
+.settings-key-remove {
+  margin: -6px -12px -2px 0;
 }
 .settings-note {
   margin: 0;

@@ -43,10 +43,17 @@ const emit = defineEmits<{ settings: [] }>();
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
-/* A narrower header keeps the warning and its button; the settings dialog shows the reason. */
+/* A narrower header shows the warning and its button; the reason stays for screen readers,
+   and the settings dialog shows it. */
 @media (max-width: 1279.98px) {
   .header-controls .author-reason {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }
 /* In the collapsed header the row lines up with the icons and labels of the buttons above, and

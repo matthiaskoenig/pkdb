@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useDisplay } from "vuetify";
 import { VAppBar, VBtn, VCard, VDivider, VMenu, VSpacer } from "vuetify/components";
 import logo from "../assets/pkdb_logo.png";
@@ -22,6 +22,11 @@ const theme = useColorTheme();
 const { width } = useDisplay();
 const wide = computed(() => width.value >= COLLAPSE_BELOW);
 const panel = ref(false);
+// The collapsed menu closes when the header becomes wide, so that it does not open again by
+// itself when the window becomes narrow.
+watch(wide, () => {
+  panel.value = false;
+});
 const snapshot = computed(() => overview.snapshot);
 
 /** Open a dialog from the collapsed menu, which closes first. */

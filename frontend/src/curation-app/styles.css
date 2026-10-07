@@ -25,17 +25,6 @@ a.brand {
 .status-alert .v-alert__content {
   color: rgb(var(--v-theme-on-surface));
 }
-/* A path that does not fit loses its start, so that the folder names at its end stay visible. */
-.path-text {
-  display: block;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  direction: rtl;
-  text-align: left;
-}
-
 /* Header */
 .header-controls {
   display: flex;
@@ -50,10 +39,10 @@ a.brand {
 .header-control-label {
   margin-inline-end: 8px;
 }
+/* Buttons keep their width; the folder name of the workspace shrinks when the header is full. */
 .header-workspace {
   flex-shrink: 1;
-  min-width: 7rem;
-  max-width: 30rem;
+  max-width: 20rem;
 }
 @media (max-width: 1279.98px) {
   .header-controls .header-control-label {

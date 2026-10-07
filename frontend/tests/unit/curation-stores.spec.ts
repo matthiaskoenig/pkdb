@@ -8,9 +8,10 @@ import {
   isRevisionConflict,
   setCsrfToken,
 } from "../../src/curation-app/api/client";
-import type { Snapshot, StudyDetail, StudyMetadata, StudyRow } from "../../src/curation-app/api/types";
+import type { StudyDetail, StudyMetadata, StudyRow } from "../../src/curation-app/api/types";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
+import { json, snapshot, studyRow } from "./curation-fixtures";
 
 const metadata: StudyMetadata = {
   format: 2,
@@ -26,63 +27,8 @@ const metadata: StudyMetadata = {
   notes: {},
 };
 
-const row: StudyRow = {
-  id: "caffeine/Example",
-  name: "Example",
-  path: "studies/caffeine/Example",
-  duplicate: false,
-  substance: "caffeine",
-  mode: "validate",
-  status: "valid",
-  stale: false,
-  files: [{ id: "study.json", path: "study.json" }],
-  problems: [],
-  last_upload: null,
-  progress: null,
-  report_id: null,
-  summary: {
-    title: "Caffeine pharmacokinetics",
-    review_status: "draft",
-    open_items: 0,
-    curators: ["curator"],
-    creator: "curator",
-    release: null,
-    issue: null,
-    provenance: { kind: "manual_curation" },
-    ai: false,
-  },
-  reference: null,
-  sync: { status: "in_sync", changes: 0, conflicts: 0 },
-  counts: { errors: 0, warnings: 0 },
-  issue: null,
-};
+const row: StudyRow = studyRow();
 
-function snapshot(changes: Partial<Snapshot> = {}): Snapshot {
-  return {
-    workspace: "/work/pkdb_data",
-    endpoint: "",
-    user: "curator",
-    author: { user: "curator", reason: null },
-    authenticated: false,
-    account: null,
-    can_upload: false,
-    connection: "offline",
-    connection_error: null,
-    checked_at: null,
-    client_version: "0.11.1",
-    server_version: null,
-    update_required: false,
-    offline: true,
-    paused: false,
-    vocabulary: { status: "offline" },
-    github: { users: [], issues: [], status: "not_loaded", user: "", repository: "matthiaskoenig/pkdb_data" },
-    studies: [row],
-    format1_folders: 0,
-    jobs: [],
-    recent_workspaces: [{ path: "/work/pkdb_data", exists: true }],
-    ...changes,
-  };
-}
 
 function detail(revision: string, id = "caffeine/Example"): StudyDetail {
   return {
@@ -115,12 +61,6 @@ function detail(revision: string, id = "caffeine/Example"): StudyDetail {
   };
 }
 
-function json(body: unknown, { status = 200, etag }: { status?: number; etag?: string } = {}): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "Content-Type": "application/json", ...(etag ? { ETag: etag } : {}) },
-  });
-}
 
 /** Records the requests that the stores send: method, URL, If-None-Match, JSON body and signal. */
 function server(answer: (method: string, url: string) => Response | Promise<Response>) {

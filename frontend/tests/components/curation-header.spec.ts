@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { defineComponent, h, type PropType } from "vue";
@@ -10,19 +10,10 @@ import AppHeader from "../../src/curation-app/components/AppHeader.vue";
 import StatusBanner from "../../src/curation-app/components/StatusBanner.vue";
 import { useColorTheme } from "../../src/curation-app/composables/useColorTheme";
 import type { ConnectionStatus } from "../../src/curation-app/api/types";
+import { ApiError } from "../../src/curation-app/api/client";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
-import {
-  afterMenuClosed,
-  button,
-  buttons,
-  click,
-  json,
-  loadSnapshot,
-  page,
-  setViewport,
-  snapshot,
-  studyRow,
-} from "./curation-fixtures";
+import { json, snapshot, studyRow } from "../unit/curation-fixtures";
+import { afterMenuClosed, button, buttons, click, loadSnapshot, page, setViewport } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
 
@@ -53,6 +44,27 @@ const Probe = defineComponent({
   },
 });
 
+/** A media query list of a browser whose system theme matches `matches`. */
+function mediaQuery(media: string, matches: boolean): MediaQueryList {
+  return {
+    matches,
+    media,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(() => false),
+  };
+}
+
+/** Whether the shared Vuetify theme follows the system. */
+function followsSystem(): boolean {
+  let system = false;
+  mount(Probe, { props: { use: () => (system = useTheme().isSystem.value) } }).unmount();
+  return system;
+}
+
 /** The theme class of the app: `v-theme--light` or `v-theme--dark`. */
 function themeOf(wrapper: ReturnType<typeof mountHeader>): string | undefined {
   return wrapper.get(".v-application").classes().find((name) => name.startsWith("v-theme--"));
@@ -73,13 +85,18 @@ afterEach(() => {
 });
 
 describe("AppHeader", () => {
-  it("shows the logo, the app name and the workspace path", async () => {
+  it("shows the logo, the app name and the workspace folder", async () => {
     await loadSnapshot(snapshot());
     const wrapper = mountHeader();
     await flushPromises();
     expect(wrapper.get("img").attributes("alt")).toBe("PK-DB");
     expect(wrapper.text()).toContain("Local curation");
-    expect(wrapper.text()).toContain("/work/pkdb_data");
+    // The header shows the folder name; the title, the accessible name and the menu the path.
+    const workspace = button("Workspace: /work/pkdb_data");
+    expect(workspace.text()).toBe("pkdb_data");
+    expect(workspace.attributes("title")).toBe("/work/pkdb_data");
+    await click("Workspace: /work/pkdb_data");
+    expect(page().get(".workspace-panel").text()).toContain("/work/pkdb_data");
   });
 
   it.each<[ConnectionStatus, string]>([
@@ -121,7 +138,20 @@ describe("AppHeader", () => {
     expect(menu.text()).toContain("curator");
     expect(menu.text()).toContain("Current");
     expect(menu.text()).toContain("Client 0.11.1 · server 0.12.0");
+    expect(menu.get(".v-alert").text()).toContain("The server needs pkdb 0.12.0 or newer");
     expect(menu.get("code").text()).toBe("pkdb update");
+    expect(menu.text()).toContain("The server runs pkdb 0.12.0. Stop pkdb curate, run pkdb update");
+  });
+
+  it("asks for pkdb update without naming an unknown server version", async () => {
+    await loadSnapshot(snapshot({ connection: "incompatible", server_version: null, update_required: true }));
+    mountHeader();
+    await flushPromises();
+    await click("Connection: Update pkdb");
+    const menu = page().get(".connection-panel");
+    expect(menu.text()).toContain("Stop pkdb curate, run pkdb update and start pkdb curate again.");
+    expect(menu.text()).not.toContain("The server runs pkdb");
+    expect(menu.find(".v-alert").exists()).toBe(false);
   });
 
   it("opens the settings from the connection menu", async () => {
@@ -181,6 +211,17 @@ describe("AppHeader", () => {
     expect(resume).toHaveBeenCalledWith();
   });
 
+  it("shows why the server refused to resume", async () => {
+    const reason = "The upload of caffeine/Example has an unknown outcome. Turn off offline mode.";
+    await loadSnapshot(snapshot({ paused: true }));
+    vi.spyOn(useOverviewStore(), "resume").mockRejectedValue(new ApiError(400, { error: reason }));
+    mountHeader();
+    await flushPromises();
+    await click("File watching: Paused");
+    await click("Resume automatic actions");
+    expect(page().get(".watching-panel .v-alert").text()).toBe(reason);
+  });
+
   it("tells that Resume first checks uploads with an unknown outcome", async () => {
     await loadSnapshot(snapshot({ paused: true, studies: [studyRow({ status: "unknown" })] }));
     mountHeader();
@@ -222,8 +263,8 @@ describe("AppHeader", () => {
     await flushPromises();
     await click("Workspace: /work/pkdb_data");
     // The current workspace is not listed again.
-    expect(buttons("Open /work/pkdb_data")).toHaveLength(0);
-    await click("Open /work/other");
+    expect(buttons("Open pkdb_data in /work")).toHaveLength(0);
+    await click("Open other in /work");
     expect(select).toHaveBeenCalledWith("/work/other");
     expect(button("Workspace: /work/pkdb_data").attributes("aria-expanded")).toBe("false");
     await afterMenuClosed();
@@ -259,7 +300,7 @@ describe("AppHeader", () => {
     expect(buttons("Settings")).toHaveLength(0);
     await click("Header menu");
     const menu = page().get(".header-panel");
-    expect(menu.text()).toContain("/work/pkdb_data");
+    expect(menu.text()).toContain("pkdb_data");
     expect(menu.text()).toContain("Active");
     expect(menu.text()).toContain("Connected");
     expect(menu.text()).toContain("curator");
@@ -267,6 +308,44 @@ describe("AppHeader", () => {
     await flushPromises();
     expect(wrapper.find('[aria-label="Header menu"]').exists()).toBe(false);
     expect(button("Settings").exists()).toBe(true);
+  });
+
+  it("does not reopen the collapsed menu by itself after the window was wide", async () => {
+    await loadSnapshot(snapshot());
+    setViewport(800);
+    mountHeader();
+    await flushPromises();
+    await click("Header menu");
+    setViewport(1280);
+    await flushPromises();
+    setViewport(800);
+    await flushPromises();
+    expect(button("Header menu").attributes("aria-expanded")).toBe("false");
+  });
+
+  it("shows the last known state and offers no actions while the server is stopped", async () => {
+    await loadSnapshot(snapshot({ recent_workspaces: [{ path: "/work/other", exists: true }] }));
+    mountHeader();
+    await flushPromises();
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(new TypeError("Failed to fetch"));
+    await useOverviewStore().refresh();
+    await flushPromises();
+    // The chips lose their status color.
+    for (const name of ["File watching: Active", "Connection: Offline"])
+      expect(button(name).get(".v-chip").classes().some((value) => value.startsWith("text-"))).toBe(false);
+    await click("File watching: Active");
+    expect(page().get(".watching-panel").text()).toContain("This is the last known state.");
+    expect(button("Pause automatic actions").attributes("disabled")).toBeDefined();
+    await click("Workspace: /work/pkdb_data");
+    expect(button("Choose workspace").attributes("disabled")).toBeDefined();
+    expect(button("Open other in /work").attributes("disabled")).toBeDefined();
+    expect(button("Remove /work/other from recent workspaces").attributes("disabled")).toBeDefined();
+    // The next good poll brings the actions back.
+    vi.spyOn(globalThis, "fetch").mockImplementation(async () => json(snapshot()));
+    await useOverviewStore().refresh();
+    await flushPromises();
+    expect(button("Choose workspace").attributes("disabled")).toBeUndefined();
+    expect(button("File watching: Active").get(".v-chip").classes()).toContain("text-success");
   });
 
   it("switches the theme and keeps the choice", async () => {
@@ -277,9 +356,27 @@ describe("AppHeader", () => {
     await click("Toggle color theme");
     expect(themeOf(wrapper)).toBe("v-theme--dark");
     expect(localStorage.getItem(THEME_KEY)).toBe("dark");
+    // Back to the light system theme, the app follows the system again.
     await click("Toggle color theme");
     expect(themeOf(wrapper)).toBe("v-theme--light");
-    expect(localStorage.getItem(THEME_KEY)).toBe("light");
+    expect(localStorage.getItem(THEME_KEY)).toBeNull();
+    expect(followsSystem()).toBe(true);
+  });
+
+  it("follows a dark system again when the curator switches to dark", async () => {
+    // tests/setup.ts mocks matchMedia for all tests: this test replaces it and puts it back.
+    const original = window.matchMedia;
+    onTestFinished(() => {
+      window.matchMedia = original;
+    });
+    window.matchMedia = (query) => mediaQuery(query, query.includes("dark"));
+    localStorage.setItem(THEME_KEY, "light");
+    await loadSnapshot(snapshot());
+    mountHeader();
+    await flushPromises();
+    await click("Toggle color theme");
+    expect(localStorage.getItem(THEME_KEY)).toBeNull();
+    expect(followsSystem()).toBe(true);
   });
 
   it("switches the theme when the browser refuses storage", async () => {
@@ -350,7 +447,7 @@ describe("StatusBanner", () => {
   });
 
   it("tells to open the printed link without a session", async () => {
-    vi.spyOn(globalThis, "fetch").mockImplementation(async () => json({ error: "No session" }, 401));
+    vi.spyOn(globalThis, "fetch").mockImplementation(async () => json({ error: "No session" }, { status: 401 }));
     const wrapper = mountBanner();
     await useOverviewStore().refresh();
     await flushPromises();
@@ -359,7 +456,7 @@ describe("StatusBanner", () => {
 
   it("shows other failures of the state", async () => {
     vi.spyOn(globalThis, "fetch").mockImplementation(async () =>
-      json({ error: "The local action failed. Review workspace activity and retry." }, 500),
+      json({ error: "The local action failed. Review workspace activity and retry." }, { status: 500 }),
     );
     const wrapper = mountBanner();
     await useOverviewStore().refresh();

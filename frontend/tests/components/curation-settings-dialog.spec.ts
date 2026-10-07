@@ -4,7 +4,8 @@ import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { ApiError } from "../../src/curation-app/api/client";
 import SettingsDialog from "../../src/curation-app/components/SettingsDialog.vue";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
-import { click, field, loadSnapshot, page, setViewport, snapshot } from "./curation-fixtures";
+import { snapshot } from "../unit/curation-fixtures";
+import { button, buttons, click, field, loadSnapshot, page, setViewport } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
 
@@ -80,6 +81,47 @@ describe("SettingsDialog", () => {
     await wrapper.setProps({ modelValue: true });
     await flushPromises();
     expect(key().element.value).toBe("");
+  });
+
+  it("sends the typed API key without surrounding spaces", async () => {
+    const configure = vi.spyOn(useOverviewStore(), "configure").mockResolvedValue(snapshot());
+    await openDialog();
+    await key().setValue("  secret-key \n");
+    await click("Save settings");
+    expect(configure).toHaveBeenCalledWith({ api_key: "secret-key" });
+  });
+
+  it("removes a stored API key", async () => {
+    await loadSnapshot(snapshot({ authenticated: true }));
+    const configure = vi
+      .spyOn(useOverviewStore(), "configure")
+      .mockImplementation(async () => {
+        await loadSnapshot(snapshot({ authenticated: false }));
+        return snapshot();
+      });
+    const wrapper = await openDialog();
+    expect(page().get('[role="dialog"]').text()).toContain("A key is set.");
+    await click("Remove key");
+    expect(configure).toHaveBeenCalledWith({ api_key: "" });
+    expect(buttons("Remove key")).toHaveLength(0);
+    expect(page().get('[role="dialog"]').text()).toContain("No key is set.");
+    expect(wrapper.emitted("update:modelValue")).toBeUndefined();
+  });
+
+  it("offers Remove key only when a key is set", async () => {
+    await openDialog();
+    expect(buttons("Remove key")).toHaveLength(0);
+  });
+
+  it("shows why the key could not be removed", async () => {
+    await loadSnapshot(snapshot({ authenticated: true }));
+    vi.spyOn(useOverviewStore(), "configure").mockRejectedValue(
+      new ApiError(400, { error: "Wait for the running job before changing connection" }),
+    );
+    await openDialog();
+    await click("Remove key");
+    expect(page().get('[role="dialog"] .v-alert').text()).toContain("Wait for the running job");
+    expect(button("Remove key").exists()).toBe(true);
   });
 
   it("clears the API key when the submit fails", async () => {

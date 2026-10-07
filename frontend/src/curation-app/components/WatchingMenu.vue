@@ -23,6 +23,8 @@ const state = computed(() =>
     ? { label: "Paused", tone: "warning" as const }
     : { label: "Active", tone: "success" as const },
 );
+/** The local server does not answer: the menu shows the last known state and offers no actions. */
+const stale = computed(() => overview.error !== null);
 /** Uploads with an unknown outcome, which Resume checks on the server first. */
 const unknownUploads = computed(() => props.snapshot.studies.some((row) => row.status === "unknown"));
 
@@ -52,14 +54,19 @@ async function toggle(): Promise<void> {
         :aria-label="`File watching: ${state.label}`"
       >
         <span class="header-control-label">File watching</span>
-        <VChip :color="state.tone" variant="tonal" size="small" class="status-chip">{{ state.label }}</VChip>
+        <VChip :color="stale ? undefined : state.tone" variant="tonal" size="small" class="status-chip">
+          {{ state.label }}
+        </VChip>
       </VBtn>
     </template>
     <VCard elevation="6" border class="header-menu watching-panel">
       <div class="panel-heading">
         <h2>File watching</h2>
-        <VChip :color="state.tone" variant="tonal" size="small" class="status-chip">{{ state.label }}</VChip>
+        <VChip :color="stale ? undefined : state.tone" variant="tonal" size="small" class="status-chip">
+          {{ state.label }}
+        </VChip>
       </div>
+      <p v-if="stale" class="panel-note">The local server does not answer. This is the last known state.</p>
       <p v-if="snapshot.paused">Automatic actions are paused. Saved files wait until you resume.</p>
       <p v-else>Saving a file starts the On save action of its study.</p>
       <p v-if="snapshot.paused && unknownUploads" class="panel-note">
@@ -72,6 +79,7 @@ async function toggle(): Promise<void> {
           color="primary"
           :prepend-icon="snapshot.paused ? 'fas fa-play' : 'fas fa-pause'"
           :loading="busy"
+          :disabled="stale"
           @click="toggle"
         >
           {{ snapshot.paused ? "Resume automatic actions" : "Pause automatic actions" }}

@@ -5,7 +5,8 @@ import { ApiError } from "../../src/curation-app/api/client";
 import type { Directories } from "../../src/curation-app/api/types";
 import WorkspaceDialog from "../../src/curation-app/components/WorkspaceDialog.vue";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
-import { button, buttons, click, field, loadSnapshot, page, setViewport, snapshot } from "./curation-fixtures";
+import { snapshot } from "../unit/curation-fixtures";
+import { button, buttons, click, field, loadSnapshot, page, setViewport } from "./curation-dom";
 
 enableAutoUnmount(afterEach);
 
@@ -124,14 +125,17 @@ describe("WorkspaceDialog", () => {
     vi.spyOn(useOverviewStore(), "listDirectories").mockResolvedValue(directories());
     const forget = vi.spyOn(useOverviewStore(), "forgetWorkspace").mockResolvedValue(snapshot());
     await openDialog();
-    const recent = dialog().get(".recent-workspaces");
-    expect(recent.text()).toContain("/old/pkdb_data");
-    expect(recent.text()).toContain("/gone/studies");
-    expect(recent.text()).toContain("Unavailable");
+    // Each recent workspace shows its folder name, then its parent folder.
+    const rows = dialog().findAll(".recent-item");
+    expect(rows.map((row) => [row.get(".recent-name").text(), row.get(".recent-parent").text()])).toEqual([
+      ["pkdb_data", "/old"],
+      ["studies", "/gone"],
+    ]);
+    expect(rows[1]?.text()).toContain("Unavailable");
     // The current workspace is not listed again.
-    expect(buttons("Open /work")).toHaveLength(0);
-    expect(button("Open /gone/studies").attributes("disabled")).toBeDefined();
-    expect(button("Open /old/pkdb_data").attributes("disabled")).toBeUndefined();
+    expect(buttons("Open work in /")).toHaveLength(0);
+    expect(button("Open studies in /gone").attributes("disabled")).toBeDefined();
+    expect(button("Open pkdb_data in /old").attributes("disabled")).toBeUndefined();
     await click("Remove /gone/studies from recent workspaces");
     expect(forget).toHaveBeenCalledWith("/gone/studies");
   });

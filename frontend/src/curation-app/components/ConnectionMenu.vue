@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
-import { VBtn, VCard, VChip, VMenu } from "vuetify/components";
+import { VAlert, VBtn, VCard, VChip, VMenu } from "vuetify/components";
 import type { ConnectionStatus, Snapshot, VocabularyState } from "../api/types";
+import { useOverviewStore } from "../stores/overview";
 
 type Tone = "success" | "warning" | "error" | "info";
 type Anchor = "bottom end" | "bottom";
@@ -31,7 +32,10 @@ const VOCABULARY: Record<VocabularyState["status"], string> = {
   current: "Current",
 };
 
+const overview = useOverviewStore();
 const state = computed(() => STATES[props.snapshot.connection]);
+/** The local server does not answer: the menu shows the last known state. */
+const stale = computed(() => overview.error !== null);
 const checked = computed(() =>
   props.snapshot.checked_at ? new Date(props.snapshot.checked_at).toLocaleTimeString() : null,
 );
@@ -58,16 +62,23 @@ function settings(): void {
         :aria-label="`Connection: ${state.label}`"
       >
         <span class="header-control-label">Connection</span>
-        <VChip :color="state.tone" variant="tonal" size="small" class="status-chip">{{ state.label }}</VChip>
+        <VChip :color="stale ? undefined : state.tone" variant="tonal" size="small" class="status-chip">
+          {{ state.label }}
+        </VChip>
       </VBtn>
     </template>
     <VCard elevation="6" border class="header-menu connection-panel">
       <div class="panel-heading">
         <h2>Connection</h2>
-        <VChip :color="state.tone" variant="tonal" size="small" class="status-chip">{{ state.label }}</VChip>
+        <VChip :color="stale ? undefined : state.tone" variant="tonal" size="small" class="status-chip">
+          {{ state.label }}
+        </VChip>
       </div>
+      <p v-if="stale" class="panel-note">The local server does not answer. This is the last known state.</p>
       <p>{{ state.detail }}</p>
-      <p v-if="snapshot.connection_error">{{ snapshot.connection_error }}</p>
+      <VAlert v-if="snapshot.connection_error" type="error" variant="tonal" density="compact" class="status-alert">
+        {{ snapshot.connection_error }}
+      </VAlert>
       <p v-if="checked" class="panel-note">Last checked {{ checked }}</p>
       <dl class="panel-facts">
         <dt>Upload target</dt>
@@ -80,8 +91,8 @@ function settings(): void {
         <dd>{{ versions }}</dd>
       </dl>
       <p v-if="snapshot.update_required">
-        The server runs pkdb {{ snapshot.server_version }}. Stop pkdb curate, run <code>pkdb update</code> and start
-        pkdb curate again.
+        <template v-if="snapshot.server_version">The server runs pkdb {{ snapshot.server_version }}. </template>Stop
+        pkdb curate, run <code>pkdb update</code> and start pkdb curate again.
       </p>
       <div class="panel-actions">
         <VBtn variant="tonal" color="primary" prepend-icon="fas fa-gear" @click="settings">
