@@ -62,12 +62,16 @@ class UnsafeFile(ValueError):
 
 
 class AmbiguousStudy(ValueError):
-    """Two folders of the workspace have the same identity `<substance>/<name>`."""
+    """Two or more folders of the workspace have the same identity `<substance>/<name>`."""
 
     def __init__(self, identity: str, paths: list[str]):
+        two = len(paths) == 2
         super().__init__(
-            f"{identity} is the identity of two folders: {', '.join(paths)}; rename one"
+            f"{identity} is the identity of {'two' if two else len(paths)} folders: "
+            f"{', '.join(paths)}; {'rename one' if two else 'rename all but one'}"
         )
+        # The folders relative to the workspace, for the app to list.
+        self.paths = paths
 
 
 def _read(path: Path) -> object | None:

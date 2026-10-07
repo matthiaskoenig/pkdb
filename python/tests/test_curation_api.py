@@ -386,7 +386,21 @@ def test_duplicate_identity_answers_409(api, valid_files):
         )
     engine.scan()
     status, _, data = request(server, "GET", DETAIL, headers=authenticate(server))
-    assert status == 409 and "identity of two folders" in json.loads(data)["error"]
+    body = json.loads(data)
+    assert status == 409 and "identity of two folders" in body["error"]
+    # The app lists the folders without parsing the message.
+    assert sorted(body["paths"]) == ["caffeine/Example", "copies/caffeine/Example"]
+
+
+def test_ambiguous_study_counts_and_lists_its_folders():
+    error = studies.AmbiguousStudy(
+        "caffeine/Example", ["a, b/caffeine/Example", "c", "d"]
+    )
+    assert str(error) == (
+        "caffeine/Example is the identity of 3 folders: "
+        "a, b/caffeine/Example, c, d; rename all but one"
+    )
+    assert error.paths == ["a, b/caffeine/Example", "c", "d"]
 
 
 def test_study_routes_require_the_session(api):
@@ -874,7 +888,9 @@ def test_write_routes_refuse_an_ambiguous_identity(api, valid_files, path, body)
     status, _, data = request(
         server, "POST", path, {"study": "caffeine/Example", **body}, headers
     )
-    assert status == 409 and "identity of two folders" in json.loads(data)["error"]
+    refused = json.loads(data)
+    assert status == 409 and "identity of two folders" in refused["error"]
+    assert len(refused["paths"]) == 2
     for route, existing in [
         ("/local/jobs", {"ids": ["caffeine/Example"], "action": "validate"}),
         ("/local/mode", {"ids": ["caffeine/Example"], "mode": "off"}),

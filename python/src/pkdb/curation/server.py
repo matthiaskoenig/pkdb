@@ -228,7 +228,7 @@ class Handler(BaseHTTPRequestHandler):
                 else:
                     self._reply(404, {"error": "Unknown resource"})
             except AmbiguousStudy as error:
-                self._reply(409, {"error": str(error)})
+                self._reply(409, {"error": str(error), "paths": error.paths})
             except StudyValidationError as error:
                 # The study is beyond the upload limits.
                 self._reply(413, {"error": str(error)})
@@ -329,7 +329,7 @@ class Handler(BaseHTTPRequestHandler):
         except IdentityError as error:
             self._reply(403, {"error": "no_user", "message": str(error)})
         except AmbiguousStudy as error:
-            self._reply(409, {"error": str(error)})
+            self._reply(409, {"error": str(error), "paths": error.paths})
         except (ReferenceError, WorkspaceError, UnsafeFile, ResumeRefused) as error:
             self._reply(400, {"error": str(error)})
         except LookupError:
