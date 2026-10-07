@@ -139,6 +139,24 @@ jobs:
         working-directory: frontend
       - run: npm run build:curation
         working-directory: frontend
+      # The curation app end to end in Chromium against the real `pkdb curate`, which the specs
+      # start with `uv run --project python` on copies of tools/curation_testing/fixture.
+      - name: Install Chromium for the curation app tests
+        if: runner.os == 'Linux' && matrix.python == '3.14'
+        run: npx playwright install --with-deps chromium
+        working-directory: frontend
+      - name: Test the curation app end to end
+        if: runner.os == 'Linux' && matrix.python == '3.14'
+        run: npm run test:curation-e2e
+        working-directory: frontend
+      - uses: actions/upload-artifact@v7
+        if: failure() && runner.os == 'Linux' && matrix.python == '3.14'
+        with:
+          name: curation-browser-failures
+          path: |
+            frontend/playwright-report/curation
+            frontend/test-results/curation
+          retention-days: 7
       - run: uv build --python ${{ matrix.python }}
       - name: Verify isolated public wheel and CLI
         run: |

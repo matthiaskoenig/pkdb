@@ -19,6 +19,7 @@
     "lint": "eslint .",
     "test:unit": "vitest run",
     "test:e2e": "bash ../tools/frontend_testing/run.sh",
+    "test:curation-e2e": "playwright test --config playwright.curation.config.ts",
     "test:source": "node scripts/check-source.ts",
     "postinstall": "node scripts/patch-declarations.ts"
   },
