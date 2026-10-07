@@ -361,6 +361,20 @@ describe("descriptions, comments and notes", () => {
     });
   });
 
+  it("does not write a row that was added and left empty", async () => {
+    await mountSection(withMetadata(fullStudyMetadata()));
+    await click("Add description");
+    await click("Add comment");
+    await click("Add curator");
+    await click("Save");
+    expect(posted(METADATA)[0]?.metadata).toMatchObject({
+      descriptions: ["Plasma levels in µg/l."],
+      comments: [{ user: "mkoenig", text: "Checked against the PDF." }],
+      curators: fullStudyMetadata().curators,
+    });
+    expect(page().find(".metadata-failure").exists()).toBe(false);
+  });
+
   it("keeps notes per table kind", async () => {
     await mountSection(withMetadata(fullStudyMetadata()));
     const notes = card("Notes per table");

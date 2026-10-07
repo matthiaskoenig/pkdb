@@ -255,6 +255,13 @@ export function startForm(detail: StudyDetail, author: string): MetadataForm {
 
 // Writing
 
+// A row that was added and left empty: the model refuses an empty text or user name, so it is not
+// written. Whitespace-only text is a value and stays.
+const keptText = (entry: string) => entry !== "";
+const keptComment = (row: Comment) => row.text !== "";
+const keptCurator = (row: CuratorRow) => row.user !== "";
+const keptAsset = (asset: SourceAsset) => asset.url !== "" || asset.sha256 !== "";
+
 function writtenProvenance(form: ProvenanceForm): Provenance {
   if (form.kind === "data_import" && form.data_import) return clone(form.data_import);
   if (form.kind === "automatic_curation")
@@ -263,7 +270,7 @@ function writtenProvenance(form: ProvenanceForm): Provenance {
       source_key: form.source_key,
       method: form.method,
       version: form.version,
-      assets: form.assets.map((asset) => ({ url: asset.url, sha256: asset.sha256 })),
+      assets: form.assets.filter(keptAsset).map((asset) => ({ url: asset.url, sha256: asset.sha256 })),
       run_id: form.run_id,
     };
   return { kind: "manual_curation", source_key: form.source_key };
@@ -271,9 +278,9 @@ function writtenProvenance(form: ProvenanceForm): Provenance {
 
 /**
  * The `study.json` value of the form, as the canonical writer would write it. Every value goes
- * as typed, also whitespace-only text and blank rows, which validation then names at their
- * fields. Only absent values are left out: an empty PMID or DOI field, no issue, no release, and
- * the notes of a table kind without descriptions and comments.
+ * as typed, also whitespace-only text, and validation names what it refuses at its field. Left
+ * out are rows that were added and left empty, an empty PMID or DOI field, no issue, no release,
+ * and the notes of a table kind without descriptions and comments.
  */
 export function fromForm(form: MetadataForm): StudyMetadata {
   const reference: StudyReference = {};
@@ -281,23 +288,23 @@ export function fromForm(form: MetadataForm): StudyMetadata {
   if (form.reference.doi !== "") reference.doi = form.reference.doi;
   const notes: StudyMetadata["notes"] = {};
   for (const kind of TABLE_KINDS) {
-    const { descriptions, comments } = form.notes[kind];
-    if (descriptions.length || comments.length)
-      notes[kind] = { descriptions: [...descriptions], comments: comments.map((entry) => ({ ...entry })) };
+    const descriptions = form.notes[kind].descriptions.filter(keptText);
+    const comments = form.notes[kind].comments.filter(keptComment).map((entry) => ({ ...entry }));
+    if (descriptions.length || comments.length) notes[kind] = { descriptions, comments };
   }
   return {
     format: 2,
     ...(reference.pmid !== undefined || reference.doi !== undefined ? { reference } : {}),
     creator: form.creator,
-    curators: form.curators.map((row) => ({ user: row.user, rating: row.rating })),
-    collaborators: [...form.collaborators],
+    curators: form.curators.filter(keptCurator).map((row) => ({ user: row.user, rating: row.rating })),
+    collaborators: form.collaborators.filter(keptText),
     licence: form.licence,
     access: form.access,
     provenance: writtenProvenance(form.provenance),
     ...(form.issue !== null ? { issue: form.issue } : {}),
     ...(form.release ? { release: { ...form.release } } : {}),
-    descriptions: [...form.descriptions],
-    comments: form.comments.map((entry) => ({ ...entry })),
+    descriptions: form.descriptions.filter(keptText),
+    comments: form.comments.filter(keptComment).map((entry) => ({ ...entry })),
     notes,
   };
 }
@@ -408,10 +415,19 @@ export function markMessage(mark: FieldMark, disk: string | null): string {
 
 // Issues
 
-/** `<prefix>.<index>` for the list index `part`, or the list itself without one; null for an unknown row. */
-function row(prefix: string, rows: readonly unknown[], part: string | undefined): string | null {
+/**
+ * `<prefix>.<form index>` for the list index `part` of the written rows, which skip the rows left
+ * empty; the list itself without an index; null for an unknown row.
+ */
+function row<T>(prefix: string, rows: readonly T[], kept: (row: T) => boolean, part: string | undefined): string | null {
   if (part === undefined) return prefix;
-  return /^\d+$/.test(part) && Number(part) < rows.length ? `${prefix}.${part}` : null;
+  if (!/^\d+$/.test(part)) return null;
+  let written = -1;
+  for (const [position, entry] of rows.entries()) {
+    if (kept(entry)) written += 1;
+    if (written === Number(part)) return `${prefix}.${position}`;
+  }
+  return null;
 }
 
 /**
@@ -433,29 +449,30 @@ export function issueTarget(form: MetadataForm, field: string | null | undefined
     case "collaborators":
       return head;
     case "curators": {
-      const target = row("curators", form.curators, rest[0]);
+      const target = row("curators", form.curators, keptCurator, rest[0]);
       if (target === null || rest.length === 0) return target;
       return `${target}.${rest[1] === "rating" ? "rating" : "user"}`;
     }
     case "descriptions":
-      return row("descriptions", form.descriptions, rest[0]);
+      return row("descriptions", form.descriptions, keptText, rest[0]);
     case "comments":
-      return row("comments", form.comments, rest[0]);
+      return row("comments", form.comments, keptComment, rest[0]);
     case "provenance": {
       // The path names the kind of a tagged union: provenance.automatic_curation.method.
       const [, name, index, part] = rest;
       if (name === undefined) return "provenance.kind";
       if (form.provenance.kind === "data_import") return "provenance.data_import";
       if (name !== "assets") return `provenance.${name}`;
-      const target = row("provenance.assets", form.provenance.assets, index);
+      const target = row("provenance.assets", form.provenance.assets, keptAsset, index);
       return target !== null && part !== undefined && index !== undefined ? `${target}.${part}` : target;
     }
     case "notes": {
       const [kind, name, index] = rest;
       const notes = TABLE_KINDS.find((candidate) => candidate === kind);
       if (notes === undefined) return null;
-      if (name === "descriptions") return row(`notes.${notes}.descriptions`, form.notes[notes].descriptions, index);
-      if (name === "comments") return row(`notes.${notes}.comments`, form.notes[notes].comments, index);
+      if (name === "descriptions")
+        return row(`notes.${notes}.descriptions`, form.notes[notes].descriptions, keptText, index);
+      if (name === "comments") return row(`notes.${notes}.comments`, form.notes[notes].comments, keptComment, index);
       // The form writes every kind as an object, so an issue of a whole kind lists with the others.
       return null;
     }

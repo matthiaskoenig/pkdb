@@ -51,15 +51,16 @@ describe("toForm and fromForm", () => {
     expect(fromForm(toForm(value))).toEqual(value);
   });
 
-  it("drops only what the canonical writer drops: notes without content and absent values", () => {
+  it("drops rows left empty, notes without content and absent values", () => {
     const form = toForm(fullStudyMetadata());
     form.reference = { pmid: "", doi: "" };
     form.descriptions.push("");
     form.comments.push({ user: "mkoenig", text: "" });
     form.curators.push({ user: "", rating: 0 });
     form.collaborators.push("");
+    form.provenance.assets.push({ url: "", sha256: "" });
     form.notes.outputs = { descriptions: [], comments: [] };
-    form.notes.scatters = { descriptions: [""], comments: [] };
+    form.notes.scatters = { descriptions: [""], comments: [{ user: "janekg", text: "" }] };
     form.issue = null;
     form.release = null;
 
@@ -68,18 +69,13 @@ describe("toForm and fromForm", () => {
     expect(value).not.toHaveProperty("reference");
     expect(value).not.toHaveProperty("issue");
     expect(value).not.toHaveProperty("release");
-    // Blank rows go to validation, which names them, rather than disappearing.
-    expect(value.descriptions).toEqual(["Plasma levels in µg/l.", ""]);
-    expect(value.comments).toEqual([
-      { user: "mkoenig", text: "Checked against the PDF." },
-      { user: "mkoenig", text: "" },
-    ]);
-    expect(value.curators).toHaveLength(3);
-    expect(value.collaborators).toEqual(["Jane Doe", ""]);
-    expect(value.notes).toEqual({
-      timecourses: { descriptions: ["Digitized from Figure 1."], comments: [] },
-      scatters: { descriptions: [""], comments: [] },
-    });
+    // The model refuses an empty text, so a row that was added and left empty is not written.
+    expect(value.descriptions).toEqual(["Plasma levels in µg/l."]);
+    expect(value.comments).toEqual([{ user: "mkoenig", text: "Checked against the PDF." }]);
+    expect(value.curators).toHaveLength(2);
+    expect(value.collaborators).toEqual(["Jane Doe"]);
+    expect(value.provenance).toMatchObject({ assets: [{ url: "https://example.org/Harder1988.pdf" }] });
+    expect(value.notes).toEqual({ timecourses: { descriptions: ["Digitized from Figure 1."], comments: [] } });
   });
 
   it("keeps every value as typed, also whitespace-only and padded text", () => {
@@ -221,11 +217,14 @@ describe("issueTarget", () => {
     expect(issueTarget(form, "notes.timecourses.descriptions.0")).toBe("notes.timecourses.descriptions.0");
   });
 
-  it("maps a list index to the same row of the form, which sends every row", () => {
+  it("maps a list index of the sent study.json past the rows left empty", () => {
     const blank = toForm(fullStudyMetadata());
     blank.curators.unshift({ user: "", rating: 0 });
-    expect(issueTarget(blank, "curators.0.user")).toBe("curators.0.user");
-    expect(issueTarget(blank, "curators.2.rating")).toBe("curators.2.rating");
+    expect(issueTarget(blank, "curators.1.user")).toBe("curators.2.user");
+    // Whitespace-only text is sent, so its row keeps its index.
+    blank.descriptions = ["", " ", "Doses."];
+    expect(issueTarget(blank, "descriptions.0")).toBe("descriptions.1");
+    expect(issueTarget(blank, "descriptions.1")).toBe("descriptions.2");
   });
 
   it("has no field for an issue of the whole file or an unknown path", () => {

@@ -76,16 +76,46 @@ def test_patterned_fields_have_plain_messages(valid_study):
     }
 
 
-def test_other_messages_stay_those_of_pydantic(valid_study):
+def test_empty_texts_and_user_names_have_plain_messages(valid_study):
+    patch = {
+        "creator": "",
+        "curators": [{"user": "", "rating": 1}],
+        "collaborators": [""],
+        "descriptions": [""],
+        "comments": [{"user": "mkoenig", "text": ""}],
+        "notes": {"outputs": {"descriptions": [""], "comments": []}},
+    }
     with pytest.raises(MetadataError) as error:
-        patch_metadata(
-            valid_study, {"licence": "maybe", "curators": [{"user": ""}]}, None
-        )
+        patch_metadata(valid_study, patch, None)
     messages = {issue.field: issue.message for issue in error.value.issues}
-    assert messages["licence"] == "licence: Input should be 'open' or 'closed'"
-    assert messages["curators.0.user"] == (
-        "curators.0.user: String should have at least 1 character"
-    )
+    text = "Enter some text or remove this entry."
+    assert messages == {
+        "creator": "creator: Enter a user name.",
+        "curators.0.user": "curators.0.user: Enter a user name.",
+        "collaborators.0": f"collaborators.0: {text}",
+        "descriptions.0": f"descriptions.0: {text}",
+        "comments.0.text": f"comments.0.text: {text}",
+        "notes.outputs.descriptions.0": f"notes.outputs.descriptions.0: {text}",
+    }
+
+
+def test_other_messages_stay_those_of_pydantic(valid_study):
+    patch = {
+        "licence": "maybe",
+        "curators": [{"user": "mkoenig", "rating": 7}],
+        "provenance": {"kind": "manual_curation", "source_key": ""},
+    }
+    with pytest.raises(MetadataError) as error:
+        patch_metadata(valid_study, patch, None)
+    messages = {issue.field: issue.message for issue in error.value.issues}
+    assert messages == {
+        "licence": "licence: Input should be 'open' or 'closed'",
+        "curators.0.rating": "curators.0.rating: Input should be less than or equal to 5",
+        "provenance.manual_curation.source_key": (
+            "provenance.manual_curation.source_key: "
+            "String should have at least 1 character"
+        ),
+    }
 
 
 def test_missing_file_is_a_metadata_error(tmp_path):
