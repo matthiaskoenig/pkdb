@@ -94,6 +94,17 @@ a.brand {
   margin: 0;
   overflow-wrap: anywhere;
 }
+/* In a dialog on a phone, each fact stands below its name, so that a server address keeps its
+   line. */
+@media (max-width: 599.98px) {
+  .v-dialog .panel-facts {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+  .v-dialog .panel-facts dd + dt {
+    margin-top: 8px;
+  }
+}
 .panel-actions {
   display: flex;
   flex-wrap: wrap;

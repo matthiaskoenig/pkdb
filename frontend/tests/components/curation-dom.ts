@@ -73,3 +73,12 @@ export function field(label: string): DOMWrapper<HTMLInputElement> {
   if (!(input instanceof HTMLInputElement)) throw new Error(`No field "${label}"`);
   return new DOMWrapper(input);
 }
+
+/** Answers each request by its path from `routes`, as the local server would; other paths get 404. */
+export function serve(routes: Record<string, unknown>): void {
+  vi.spyOn(globalThis, "fetch").mockImplementation(async (input) => {
+    const url = input instanceof Request ? input.url : String(input);
+    const path = new URL(url, "http://127.0.0.1").pathname;
+    return path in routes ? json(routes[path]) : json({ error: "Unknown resource" }, { status: 404 });
+  });
+}
