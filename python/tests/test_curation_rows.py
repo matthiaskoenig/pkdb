@@ -1,5 +1,7 @@
 import json
+import os
 import threading
+import time
 
 import pytest
 
@@ -247,6 +249,35 @@ def test_the_format_is_read_again_only_after_study_json_changes(workspace, monke
     engine.scan()
     assert decisions == ["Legacy1990", "Legacy1990"]
     assert engine.snapshot()["format1_folders"] == 0
+
+
+@pytest.mark.parametrize("replace", [False, True], ids=["in place", "replaced"])
+def test_a_same_size_edit_with_a_preserved_mtime_reads_the_format_again(
+    workspace, replace
+):
+    engine, folder, legacy = workspace
+    path = legacy / "study.json"
+    before = path.stat()
+    old = path.read_bytes()
+    new = b'{"format": 2}'.ljust(len(old))
+    assert len(new) == len(old)
+    if replace:
+        # As rsync -t and tar x write a file: a new inode.
+        (legacy / "study.json.tmp").write_bytes(new)
+        os.replace(legacy / "study.json.tmp", path)
+    else:
+        # As cp -p writes a file: the same inode, a new status change time.
+        path.write_bytes(new)
+    os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
+    while path.stat().st_ctime_ns == before.st_ctime_ns:
+        time.sleep(0.001)
+        os.utime(path, ns=(before.st_atime_ns, before.st_mtime_ns))
+    after = path.stat()
+    assert (after.st_size, after.st_mtime_ns) == (before.st_size, before.st_mtime_ns)
+    assert (after.st_ino != before.st_ino) is replace
+    engine.scan()
+    assert engine.snapshot()["format1_folders"] == 0
+    assert "caffeine/Legacy1990" in engine.studies
 
 
 def test_state_of_other_app_versions_is_kept(tmp_path, tmp_path_factory):

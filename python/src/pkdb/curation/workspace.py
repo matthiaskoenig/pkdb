@@ -307,7 +307,9 @@ class WorkspaceMixin(EngineState):
     def _is_v2(self, folder):
         """`is_v2_folder`, decided again only when study.json or a format 2 file changed.
 
-        Only scans call it, one at a time, so the remembered decisions need no lock.
+        Only scans call it, one at a time, so the remembered decisions need no lock. The
+        inode and the status change time tell a same-size edit that kept the modification
+        time, as `cp -p`, `rsync -t` and `tar x` write it.
         """
         try:
             stat = (folder / STUDY_JSON).stat()
@@ -316,6 +318,8 @@ class WorkspaceMixin(EngineState):
         key = (
             stat.st_size,
             stat.st_mtime_ns,
+            stat.st_ino,
+            stat.st_ctime_ns,
             *(os.path.lexists(folder / name) for name in FORMAT_2_FILES),
         )
         remembered = self._formats.get(folder)
