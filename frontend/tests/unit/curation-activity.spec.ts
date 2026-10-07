@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   clearable,
+  datetime,
   jobText,
   persistenceLabel,
   REVOKE_MS,
@@ -66,6 +67,14 @@ describe("persistenceLabel", () => {
     const written = job({ action: "write", report_id: null });
     delete written.persistence;
     expect(persistenceLabel(written)).toBeNull();
+  });
+});
+
+describe("datetime", () => {
+  it("gives the time of the server with milliseconds, as a datetime attribute allows", () => {
+    expect(datetime("2026-10-07T12:00:00.123456+00:00")).toBe("2026-10-07T12:00:00.123Z");
+    expect(datetime("2026-10-07T14:00:00+02:00")).toBe("2026-10-07T12:00:00.000Z");
+    expect(datetime("not a time")).toBe("not a time");
   });
 });
 

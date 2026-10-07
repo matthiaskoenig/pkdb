@@ -15,6 +15,7 @@ import {
   ACTION_ICONS,
   ACTION_LABELS,
   clearable,
+  datetime,
   JOB_STATUS_LABELS,
   JOB_STATUS_TONES,
   jobText,
@@ -212,7 +213,7 @@ function retried(): void {
             </template>
             <!-- Started by the local server: after a save, or by the first scan. -->
             <template v-if="entry.job.automatic"> · automatic</template>
-            · <time :datetime="entry.job.created_at" class="activity-time">{{ formatTime(entry.job.created_at) }}</time>
+            · <time :datetime="datetime(entry.job.created_at)" class="activity-time">{{ formatTime(entry.job.created_at) }}</time>
           </p>
           <div
             v-if="entry.reviewable || entry.cancelable || entry.url || entry.job.report_id"

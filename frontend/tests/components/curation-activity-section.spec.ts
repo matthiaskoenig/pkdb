@@ -180,7 +180,7 @@ describe("the activity of a study", () => {
     ]);
     const upload = entry("Uploaded");
     expect(textOf(upload.get(".activity-meta"))).toBe(`Upload · created · ${formatTime(at(30))}`);
-    expect(upload.get("time").attributes("datetime")).toBe(at(30));
+    expect(upload.get("time").attributes("datetime")).toBe("2026-10-07T12:30:00.123Z");
     expect(upload.get(".activity-status").text()).toBe("Succeeded");
     // A validation that the local server started, after a save or at the first scan, says so.
     expect(textOf(entry("Validation passed").get(".activity-meta"))).toBe(`Validation · automatic · ${formatTime(at(0))}`);
@@ -428,15 +428,16 @@ describe("clear finished history", () => {
 });
 
 describe("an upload with an unknown outcome", () => {
+  const unknown = job("upload-9", {
+    action: "upload",
+    status: "unknown",
+    message: "The connection closed during the upload",
+    persistence: "unknown",
+    endpoint: "https://beta.pk-db.com",
+    report_id: "upload-9",
+  });
+
   it("opens the review of the uncertain upload", async () => {
-    const unknown = job("upload-9", {
-      action: "upload",
-      status: "unknown",
-      message: "The connection closed during the upload",
-      persistence: "unknown",
-      endpoint: "https://beta.pk-db.com",
-      report_id: "upload-9",
-    });
     await mountSection([unknown], {}, {
       studies: [studyRow({ status: "unknown" })],
       endpoint: "https://beta.pk-db.com",
@@ -446,5 +447,23 @@ describe("an upload with an unknown outcome", () => {
     await press(review);
     expect(dialog().get("h2").text()).toBe("Review uncertain upload");
     expect(dialog().text()).toContain("The connection closed during the upload");
+  });
+
+  it("says so when the review queued the upload again", async () => {
+    const retry = vi.spyOn(useOverviewStore(), "retry").mockImplementation(async () => state);
+    await mountSection([unknown], {}, {
+      studies: [studyRow({ status: "unknown" })],
+      endpoint: "https://beta.pk-db.com",
+      can_upload: true,
+      offline: false,
+      authenticated: true,
+      connection: "connected",
+    });
+    await press(button("Review uncertain upload"));
+    await press(dialog().get('input[type="checkbox"]'));
+    await press(button("Validate and upload again"));
+    expect(retry).toHaveBeenCalledWith("caffeine/Example", { acknowledgeUnknown: true });
+    expect(dialogOpen()).toBe(false);
+    expect(notice()).toBe("Upload queued again.");
   });
 });

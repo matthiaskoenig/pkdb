@@ -12,7 +12,7 @@ export const ACTION_LABELS: Record<JobAction, string> = {
   write: "Change in the app",
 };
 
-/** The Font Awesome icon of each action, as the buttons of the study header show them. */
+/** The Font Awesome icon of each action; validations and uploads have those of the study header. */
 export const ACTION_ICONS: Record<JobAction, string> = {
   validate: "fas fa-circle-check",
   validate_remote: "fas fa-server",
@@ -99,13 +99,22 @@ export function uploadUrl(job: Job): string | null {
   }
 }
 
+/**
+ * The time of a job for the `datetime` of a `<time>` element, which allows at most milliseconds;
+ * the server writes microseconds.
+ */
+export function datetime(iso: string): string {
+  const date = new Date(iso);
+  return Number.isNaN(date.getTime()) ? iso : date.toISOString();
+}
+
 /** The statuses of the jobs that clearing the history keeps. */
 const KEPT_STATUSES: ReadonlySet<JobStatus> = new Set(["queued", "running", "unknown"]);
 
 /**
- * Whether clearing the history removes a job of `jobs`, the jobs of the workspace. It keeps
- * queued and running jobs, uploads with an unknown outcome and the last upload of each study
- * (`_kept` in jobs.py).
+ * Whether clearing the history removes a job of `jobs`, the jobs of the workspace in the order of
+ * the server (oldest first). It keeps queued and running jobs, uploads with an unknown outcome and
+ * the last upload of each study (`_kept` in jobs.py).
  */
 export function clearable(jobs: readonly Job[]): boolean {
   const uploads = new Map<string, Job>();
