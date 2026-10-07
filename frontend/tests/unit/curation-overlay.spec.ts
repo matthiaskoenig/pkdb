@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MappedTable, OverlayPoint, SourceView } from "../../src/curation-app/api/types";
 import {
@@ -432,6 +433,15 @@ describe("loadNoncedPlotly", () => {
     await loadNoncedPlotly();
     expect(document.head.querySelectorAll("style#plotly\\.js-style-global")).toHaveLength(1);
     expect(document.getElementById("plotly.js-style-global")).toBe(existing);
+  });
+
+  it("knows every style element that the bundled Plotly creates", async () => {
+    // A new version of Plotly may create another one, which the CSP would refuse.
+    const bundle = readFileSync("node_modules/plotly.js-dist-min/plotly.min.js", "utf8");
+    expect(bundle.match(/createElement\("style"\)/g)).toHaveLength(2);
+    expect(bundle).toContain('"plotly.js-style-"+');
+    const { PLOTLY_STYLES } = await import("../../src/curation-app/plotly");
+    for (const id of PLOTLY_STYLES.slice(1)) expect(bundle).toContain(`document.getElementById("${id}")`);
   });
 
   it("imports again after a failed import", async () => {

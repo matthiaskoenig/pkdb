@@ -9,7 +9,7 @@ import { loadPlotly } from "../features/plots/plotly";
  * element that exists: it inserts its rules into the stylesheet of the element with the CSSOM,
  * which the CSP allows.
  */
-const PLOTLY_STYLES = ["plotly.js-style-global", "9f215cf04c5486422605d13261cb87401f4e7763b6296af81e98efbc0130da53"];
+export const PLOTLY_STYLES = ["plotly.js-style-global", "9f215cf04c5486422605d13261cb87401f4e7763b6296af81e98efbc0130da53"];
 
 /**
  * The import of Plotly, shared by the plots of the page. `failed again` is a failure after a
