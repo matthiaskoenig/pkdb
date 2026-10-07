@@ -140,7 +140,7 @@ jobs:
       - run: npm run build:curation
         working-directory: frontend
       # The curation app end to end in Chromium against the real `pkdb curate`, which the specs
-      # start with `uv run --project python` on copies of tools/curation_testing/fixture.
+      # start with the Python of the uv environment on copies of tools/curation_testing/fixture.
       - name: Install Chromium for the curation app tests
         if: runner.os == 'Linux' && matrix.python == '3.14'
         run: npx playwright install --with-deps chromium
