@@ -193,7 +193,7 @@ export function plural(count: number, one: string, many = `${one}s`): string {
 }
 
 /** The problems of the last check: `2 errors`, `1 warning`, or `valid` for a passed check. */
-export function problemLabels(row: StudyRow): { label: string; tone: Tone }[] {
+export function problemLabels(row: Pick<StudyRow, "counts" | "status">): { label: string; tone: Tone }[] {
   const labels: { label: string; tone: Tone }[] = [];
   if (row.counts.errors > 0) labels.push({ label: plural(row.counts.errors, "error"), tone: "error" });
   if (row.counts.warnings > 0) labels.push({ label: plural(row.counts.warnings, "warning"), tone: "warning" });
@@ -203,7 +203,7 @@ export function problemLabels(row: StudyRow): { label: string; tone: Tone }[] {
 }
 
 /** What the study is doing, or why its last check is not current; null for a finished check. */
-export function activityLabel(row: StudyRow): string | null {
+export function activityLabel(row: Pick<StudyRow, "status">): string | null {
   return ACTIVITY_LABELS[row.status];
 }
 
@@ -228,7 +228,7 @@ export function uploadBlocker(snapshot: Snapshot): string | null {
 }
 
 /** The GitHub page of an issue: its URL, else the issue of the configured repository. */
-export function issueUrl(row: StudyRow, repository: string): string | null {
+export function issueUrl(row: Pick<StudyRow, "issue" | "summary">, repository: string): string | null {
   if (row.issue?.url) return row.issue.url;
   const number = row.issue?.number ?? row.summary.issue;
   if (number === undefined || number === null || !/^[\w.-]+\/[\w.-]+$/.test(repository)) return null;

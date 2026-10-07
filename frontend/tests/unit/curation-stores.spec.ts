@@ -8,59 +8,25 @@ import {
   isRevisionConflict,
   setCsrfToken,
 } from "../../src/curation-app/api/client";
-import type { StudyDetail, StudyMetadata, StudyRow } from "../../src/curation-app/api/types";
+import type { StudyDetail } from "../../src/curation-app/api/types";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
-import { json, snapshot, studyRow } from "./curation-fixtures";
+import { json, snapshot, studyDetail, studyMetadata } from "./curation-fixtures";
 
-const metadata: StudyMetadata = {
-  format: 2,
-  reference: { pmid: "3678553" },
-  creator: "curator",
-  curators: [{ user: "curator", rating: 4.5 }],
-  collaborators: [],
-  licence: "open",
-  access: "public",
-  provenance: { kind: "manual_curation", source_key: "pkdb.manual" },
-  descriptions: [],
-  comments: [],
-  notes: {},
-};
+const metadata = studyMetadata();
 
-const row: StudyRow = studyRow();
-
-
+/** The detail of the study `id` with the `study.json` revision `revision` and no `review.json`. */
 function detail(revision: string, id = "caffeine/Example"): StudyDetail {
-  return {
+  return studyDetail({
     id,
     path: `studies/${id}`,
-    status: row.status,
-    mode: row.mode,
-    sync: row.sync,
-    counts: row.counts,
-    summary: row.summary,
-    issue: null,
-    problems: [],
-    message: null,
-    last_upload: null,
-    jobs: [],
-    report_id: null,
     metadata: { revision, value: metadata, issues: [] },
-    reference: null,
     reference_match: false,
-    people: {
-      creator: { username: "curator", display_name: "curator", title: null, affiliation: null, avatar_url: null },
-      curators: [],
-      collaborators: [],
-    },
     review: { revision: "absent", value: null, issues: [] },
-    acknowledged: [],
-    conflicts: [],
     sources: [],
     files: ["study.json"],
-  };
+  });
 }
-
 
 /** Records the requests that the stores send: method, URL, If-None-Match, JSON body and signal. */
 function server(answer: (method: string, url: string) => Response | Promise<Response>) {

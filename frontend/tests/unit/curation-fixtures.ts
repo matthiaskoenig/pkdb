@@ -1,5 +1,5 @@
 /** Responses of the local API of `pkdb curate` for the tests of the curation app. */
-import type { Snapshot, StudyRow } from "../../src/curation-app/api/types";
+import type { Snapshot, StudyDetail, StudyMetadata, StudyRow } from "../../src/curation-app/api/types";
 
 /** The overview row of the valid study `caffeine/Example`. */
 export function studyRow(changes: Partial<StudyRow> = {}): StudyRow {
@@ -60,6 +60,84 @@ export function snapshot(changes: Partial<Snapshot> = {}): Snapshot {
     format1_folders: 0,
     jobs: [],
     recent_workspaces: [{ path: "/work/pkdb_data", exists: true }],
+    ...changes,
+  };
+}
+
+/** The `study.json` of `caffeine/Example`: manually curated by `curator`, with a PMID. */
+export function studyMetadata(changes: Partial<StudyMetadata> = {}): StudyMetadata {
+  return {
+    format: 2,
+    reference: { pmid: "3678553" },
+    creator: "curator",
+    curators: [{ user: "curator", rating: 4.5 }],
+    collaborators: [],
+    licence: "open",
+    access: "public",
+    provenance: { kind: "manual_curation", source_key: "pkdb.manual" },
+    descriptions: [],
+    comments: [],
+    notes: {},
+    ...changes,
+  };
+}
+
+/**
+ * The study page of the valid draft study `caffeine/Example` (`GET /local/studies/caffeine/Example`),
+ * built from the fields of its overview row: no review items, a paper table `Tab2` with its raw
+ * table and a figure `Fig1`.
+ */
+export function studyDetail(changes: Partial<StudyDetail> = {}): StudyDetail {
+  const row = studyRow();
+  return {
+    id: row.id,
+    path: row.path,
+    status: row.status,
+    mode: row.mode,
+    sync: row.sync,
+    counts: row.counts,
+    summary: row.summary,
+    issue: row.issue,
+    problems: [],
+    message: null,
+    last_upload: null,
+    jobs: [],
+    report_id: null,
+    metadata: { revision: "study-1", value: studyMetadata(), issues: [] },
+    reference: null,
+    reference_match: null,
+    people: {
+      creator: { username: "curator", display_name: "curator", title: null, affiliation: null, avatar_url: null },
+      curators: [],
+      collaborators: [],
+    },
+    review: { revision: "review-1", value: { status: "draft", reviewers: [], items: [] }, issues: [] },
+    acknowledged: [],
+    conflicts: [],
+    sources: [
+      { source: "Fig1", image: "Example_Fig1.png", raw: null, raw_kind: null, tables: ["timecourses_Fig1.tsv"] },
+      {
+        source: "Tab2",
+        image: "Example_Tab2.png",
+        raw: "Example_Tab2.tsv",
+        raw_kind: "table",
+        tables: ["outputs_Tab2.tsv"],
+      },
+    ],
+    files: [
+      "characteristica.tsv",
+      "Example.pdf",
+      "Example_Fig1.png",
+      "Example_Tab2.png",
+      "Example_Tab2.tsv",
+      "interventions.tsv",
+      "outputs_Tab2.tsv",
+      "reference.json",
+      "review.json",
+      "study.json",
+      "subjects.tsv",
+      "timecourses_Fig1.tsv",
+    ],
     ...changes,
   };
 }

@@ -1,7 +1,7 @@
 /** Mounting helpers of the curation app tests: viewport, state, buttons and fields. */
 import { vi } from "vitest";
 import { DOMWrapper, flushPromises } from "@vue/test-utils";
-import type { Snapshot } from "../../src/curation-app/api/types";
+import { isRecord, type Snapshot } from "../../src/curation-app/api/types";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { json } from "../unit/curation-fixtures";
 
@@ -81,4 +81,40 @@ export function serve(routes: Record<string, unknown>): void {
     const path = new URL(url, "http://127.0.0.1").pathname;
     return path in routes ? json(routes[path]) : json({ error: "Unknown resource" }, { status: 404 });
   });
+}
+
+/** A request that `serveApi` answered, with its JSON body. */
+export interface ServedRequest {
+  method: string;
+  path: string;
+  body: Record<string, unknown> | null;
+}
+
+/** An answer of `serveApi` that depends on the JSON body of the request. */
+export type Handler = (body: Record<string, unknown> | null) => Response | Promise<Response>;
+
+function isHandler(value: unknown): value is Handler {
+  return typeof value === "function";
+}
+
+/**
+ * Answers each request by `<METHOD> <path>` from `routes`, as the local server would, and
+ * records the requests. A route is a JSON body, or a `Handler` of the request body; other
+ * routes get 404.
+ */
+export function serveApi(routes: Record<string, unknown>): ServedRequest[] {
+  const requests: ServedRequest[] = [];
+  vi.spyOn(globalThis, "fetch").mockImplementation(async (input, init) => {
+    const url = input instanceof Request ? input.url : String(input);
+    const method = init?.method ?? "GET";
+    const path = new URL(url, "http://127.0.0.1").pathname;
+    const body: unknown = typeof init?.body === "string" ? JSON.parse(init.body) : null;
+    const record = isRecord(body) ? body : null;
+    requests.push({ method, path, body: record });
+    const key = `${method} ${path}`;
+    if (!(key in routes)) return json({ error: "Unknown resource" }, { status: 404 });
+    const answer = routes[key];
+    return isHandler(answer) ? answer(record) : json(answer);
+  });
+  return requests;
 }

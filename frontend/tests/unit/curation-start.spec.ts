@@ -53,13 +53,16 @@ describe("start", () => {
       app = await start(target);
       const router = app.config.globalProperties.$router;
       await router.isReady();
-      // The app polls the state of the local server from the start.
-      expect(calls).toEqual([["GET /local/state", "", "#/studies/caffeine/Example"]]);
+      // The app polls the state of the local server from the start, and the study page loads its study.
+      expect(calls).toEqual([
+        ["GET /local/state", "", "#/studies/caffeine/Example"],
+        ["GET /local/studies/caffeine/Example", "", "#/studies/caffeine/Example"],
+      ]);
 
       window.location.hash = hash;
       await vi.waitFor(() => expect(window.location.hash).toBe("#/"));
-      await vi.waitFor(() => expect(calls.length).toBeGreaterThanOrEqual(3));
-      expect(calls.slice(1, 3)).toEqual([
+      await vi.waitFor(() => expect(calls.length).toBeGreaterThanOrEqual(4));
+      expect(calls.slice(2, 4)).toEqual([
         ["POST /local/session", '{"token":"pasted"}', ""],
         ["GET /local/state", "", ""],
       ]);

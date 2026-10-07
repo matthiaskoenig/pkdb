@@ -1,0 +1,210 @@
+import { describe, expect, it } from "vitest";
+import type { ReviewItem, StudyDetail } from "../../src/curation-app/api/types";
+import {
+  approvalRefusal,
+  defaultSection,
+  duplicatePaths,
+  folderPath,
+  isSection,
+  issueLabel,
+  newTable,
+  openItems,
+  provenanceLabel,
+  railCounts,
+  releaseLabel,
+  SECTIONS,
+  tableFiles,
+} from "../../src/curation-app/study";
+import { studyDetail } from "./curation-fixtures";
+
+function item(state: ReviewItem["state"], id: string = state): ReviewItem {
+  return {
+    id,
+    kind: "question",
+    state,
+    text: "Is the mean read from the table?",
+    author: "curator",
+    created: "2026-10-05T10:12:00Z",
+    thread: [],
+  };
+}
+
+/** The Example detail with the review items `items` and the problem counts `counts`. */
+function detail(items: ReviewItem[], counts = { errors: 0, warnings: 0 }, changes: Partial<StudyDetail> = {}) {
+  return studyDetail({
+    counts,
+    review: { revision: "review-1", value: { status: "in_review", reviewers: [], items }, issues: [] },
+    ...changes,
+  });
+}
+
+describe("sections", () => {
+  it("lists the six sections of the study page in the order of the rail", () => {
+    expect(SECTIONS).toEqual(["metadata", "review", "problems", "sources", "tables", "activity"]);
+    expect(isSection("review")).toBe(true);
+    expect(isSection("figures")).toBe(false);
+    expect(isSection(undefined)).toBe(false);
+  });
+
+  it("opens on Review when items are open, on Problems when there are errors, otherwise on Metadata", () => {
+    expect(defaultSection(detail([item("open")], { errors: 2, warnings: 0 }))).toBe("review");
+    expect(defaultSection(detail([item("resolved"), item("dismissed")], { errors: 2, warnings: 1 }))).toBe("problems");
+    expect(defaultSection(detail([item("resolved")], { errors: 0, warnings: 3 }))).toBe("metadata");
+    expect(defaultSection(studyDetail())).toBe("metadata");
+  });
+
+  it("counts open items from the summary when review.json is invalid", () => {
+    const invalid = studyDetail({
+      summary: { ...studyDetail().summary, open_items: 2 },
+      review: { revision: "review-1", value: null, issues: [] },
+    });
+    expect(openItems(invalid)).toBe(2);
+    expect(defaultSection(invalid)).toBe("review");
+  });
+});
+
+describe("railCounts", () => {
+  it("counts open items, errors and warnings, sources, and table and raw table files", () => {
+    const counts = railCounts(
+      detail([item("open", "a"), item("open", "b"), item("resolved")], { errors: 2, warnings: 3 }),
+    );
+    // subjects, interventions, characteristica, outputs_Tab2, timecourses_Fig1 and the raw Example_Tab2.
+    expect(counts).toEqual({ review: 2, problems: 5, sources: 2, tables: 6 });
+  });
+
+  it("counts zeros for an empty study", () => {
+    expect(railCounts(studyDetail({ sources: [], files: ["study.json", "review.json"] }))).toEqual({
+      review: 0,
+      problems: 0,
+      sources: 0,
+      tables: 0,
+    });
+  });
+});
+
+describe("tableFiles", () => {
+  it("keeps the data tables and the raw tables of the study in the order of the files", () => {
+    const files = [
+      "characteristica.tsv",
+      "Example_Fig1.wpd.json",
+      "Example_Tab2.tsv",
+      "Example_TabA.tsv",
+      "notes.tsv",
+      "Other_Tab2.tsv",
+      "outputs_Text.tsv",
+      "scatters_Fig2.tsv",
+      "study.json",
+      "subjects.tsv",
+      "timecourses_Fig1.tsv",
+    ];
+    expect(tableFiles(studyDetail({ files }))).toEqual([
+      "characteristica.tsv",
+      "Example_Tab2.tsv",
+      "Example_TabA.tsv",
+      "outputs_Text.tsv",
+      "scatters_Fig2.tsv",
+      "subjects.tsv",
+      "timecourses_Fig1.tsv",
+    ]);
+  });
+});
+
+describe("header labels", () => {
+  it("names the release with its date", () => {
+    expect(releaseLabel({ pkdb_id: "PKDB00198", date: "2026-09-28" })).toBe("PKDB00198 · released 2026-09-28");
+  });
+
+  it("names the issue with its labels", () => {
+    const issue = { number: 2158, state: "open", labels: ["check"], assignees: [], url: null };
+    expect(issueLabel(issue, 2158)).toBe("#2158 · check");
+    expect(issueLabel({ ...issue, labels: ["check", "caffeine"] }, 2158)).toBe("#2158 · check, caffeine");
+    expect(issueLabel({ ...issue, labels: [] }, 2158)).toBe("#2158");
+    // Without the cached GitHub issue, the number of study.json.
+    expect(issueLabel(null, 2158)).toBe("#2158");
+    expect(issueLabel(null, null)).toBeNull();
+  });
+
+  it("names AI curation with its method", () => {
+    expect(provenanceLabel({ provenance: { kind: "automatic_curation", method: "claude-opus-5-5" } })).toBe(
+      "AI curated · claude-opus-5-5",
+    );
+    expect(provenanceLabel({ provenance: { kind: "automatic_curation" } })).toBe("AI curated");
+    expect(provenanceLabel({ provenance: { kind: "data_import" } })).toBe("Data import");
+    expect(provenanceLabel({ provenance: { kind: "manual_curation" } })).toBeNull();
+    expect(provenanceLabel({})).toBeNull();
+  });
+
+  it("explains why approval was refused", () => {
+    expect(approvalRefusal("1 review item is open")).toBe(
+      "Approved needs zero open review items and zero validation errors. 1 review item is open.",
+    );
+    expect(approvalRefusal("Validation has 2 errors.")).toBe(
+      "Approved needs zero open review items and zero validation errors. Validation has 2 errors.",
+    );
+  });
+});
+
+describe("paths", () => {
+  it("joins the folder of a study to the workspace with its separator", () => {
+    expect(folderPath("/work/pkdb_data", "caffeine/Example")).toBe("/work/pkdb_data/caffeine/Example");
+    expect(folderPath("/work/pkdb_data/", "caffeine/Example")).toBe("/work/pkdb_data/caffeine/Example");
+    expect(folderPath("C:\\work\\pkdb_data", "caffeine/Example")).toBe("C:\\work\\pkdb_data\\caffeine\\Example");
+  });
+
+  it("reads the folders of a duplicate identity from the message of the server", () => {
+    expect(
+      duplicatePaths(
+        "caffeine/Example is the identity of two folders: caffeine/Example, archive/caffeine/Example; rename one",
+      ),
+    ).toEqual(["caffeine/Example", "archive/caffeine/Example"]);
+    expect(duplicatePaths("Something else")).toEqual([]);
+  });
+});
+
+describe("newTable", () => {
+  const example = studyDetail();
+
+  it("previews the sheet, the file and the image of a data table", () => {
+    expect(newTable(example, "outputs", "Tab3")).toEqual({
+      sheet: "outputs_Tab3",
+      file: "outputs_Tab3.tsv",
+      image: "Example_Tab3.png",
+      imageFound: false,
+      payload: { table: "outputs_Tab3" },
+      problem: null,
+    });
+    expect(newTable(example, "timecourses", " Fig1 ")).toMatchObject({
+      sheet: "timecourses_Fig1",
+      image: "Example_Fig1.png",
+      imageFound: true,
+    });
+    // The text of the paper has no image.
+    expect(newTable(example, "outputs", "Text")).toMatchObject({ image: null, problem: null });
+  });
+
+  it("names a raw table after the study folder", () => {
+    expect(newTable(example, "raw", "Tab3")).toEqual({
+      sheet: "Example_Tab3",
+      file: "Example_Tab3.tsv",
+      image: "Example_Tab3.png",
+      imageFound: false,
+      payload: { raw: "Tab3" },
+      problem: null,
+    });
+  });
+
+  it("explains why a table cannot be added", () => {
+    expect(newTable(example, "outputs", "")).toBeNull();
+    expect(newTable(example, "outputs", "3")?.problem).toBe(
+      "Use a source such as Tab3, Fig2A or Text.",
+    );
+    expect(newTable(example, "raw", "Fig2")?.problem).toBe("A raw table needs a paper table source such as Tab3.");
+    expect(newTable(example, "outputs", "tab2")?.problem).toBe("Use a source such as Tab3, Fig2A or Text.");
+    expect(newTable(example, "outputs", "TAB2")?.problem).toBe("Use a source such as Tab3, Fig2A or Text.");
+    expect(newTable(example, "outputs", "Tab2")?.problem).toBe("outputs_Tab2.tsv already exists.");
+    expect(newTable(example, "raw", "Tab2")?.problem).toBe("Example_Tab2.tsv already exists.");
+    expect(newTable(example, "timecourses", "Fig1_caffeine_plasma_D")?.problem).toBe(
+      "The sheet timecourses_Fig1_caffeine_plasma_D has 34 characters. Excel allows 31.",
+    );
+  });
+});
