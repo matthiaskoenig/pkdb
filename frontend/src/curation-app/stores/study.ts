@@ -1,4 +1,4 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { defineStore } from "pinia";
 import { getJson, postJson, studyPath } from "../api/client";
 import {
@@ -41,6 +41,8 @@ export const useStudyStore = defineStore("curation-study", () => {
   );
   const tables = new Map<string, Cached<TableResponse>>();
   const sources = new Map<string, Cached<SourceView>>();
+  // Aborts the table and source requests of the open study when it closes.
+  let requests = new AbortController();
   let roster: Promise<Profile[]> | undefined;
 
   function opened(): string {
@@ -60,6 +62,8 @@ export const useStudyStore = defineStore("curation-study", () => {
 
   function close(): void {
     polling.reset();
+    requests.abort();
+    requests = new AbortController();
     identity.value = null;
     tables.clear();
     sources.clear();
@@ -69,9 +73,13 @@ export const useStudyStore = defineStore("curation-study", () => {
     return identity.value === null ? Promise.resolve() : polling.refresh();
   }
 
+  /** GET a route of the open study; it rejects with an AbortError (`isAbort`) when the study closes first. */
   async function revalidated<T>(cache: Map<string, Cached<T>>, path: string, accept: Guard<T>): Promise<T> {
+    const { signal } = requests;
     const cached = cache.get(path);
-    const result = await getJson(path, accept, { etag: cached?.etag ?? null });
+    const result = await getJson(path, accept, { etag: cached?.etag ?? null, signal });
+    // An answer that arrives after the study closed is neither cached nor returned.
+    if (signal.aborted) throw new DOMException("The study was closed", "AbortError");
     if (result.status === 200) {
       cache.set(path, { etag: result.etag, data: result.data });
       return result.data;
@@ -80,12 +88,12 @@ export const useStudyStore = defineStore("curation-study", () => {
     return cached.data;
   }
 
-  /** The header and rows of a table, or the grid of a raw table, of the open study. */
+  /** The header and rows of a table, or the grid of a raw table, of the open study (see `revalidated`). */
   function table(file: string): Promise<TableResponse> {
     return revalidated(tables, studyPath(opened(), "tables", file), isTableResponse);
   }
 
-  /** The source view of the open study: image, raw extraction, mapped rows and overlay. */
+  /** The source view of the open study: image, raw extraction, mapped rows and overlay (see `revalidated`). */
   function source(name: string): Promise<SourceView> {
     return revalidated(sources, studyPath(opened(), "sources", name), isSourceView);
   }
@@ -102,11 +110,18 @@ export const useStudyStore = defineStore("curation-study", () => {
     return roster;
   }
 
-  /** POST a write of the open study, then load the detail that it changed. */
+  /**
+   * POST a write of the open study, then load the detail that it changed.
+   *
+   * The detail is loaded after a failure too, such as a stale revision or an unexpected answer
+   * to a write that took effect. The caller receives the failure.
+   */
   async function write<T>(path: string, body: Record<string, unknown>, accept: Guard<T>): Promise<T> {
-    const result = await postJson(path, { ...body, study: opened() }, accept);
-    await polling.refresh();
-    return result;
+    try {
+      return await postJson(path, { ...body, study: opened() }, accept);
+    } finally {
+      await refresh();
+    }
   }
 
   /** Write `study.json` over the revision that was read; a stale revision is a revision conflict. */
@@ -129,9 +144,9 @@ export const useStudyStore = defineStore("curation-study", () => {
   }
 
   return {
-    identity,
-    detail: polling.data,
-    error: polling.error,
+    identity: computed(() => identity.value),
+    detail: computed(() => polling.data.value),
+    error: computed(() => polling.error.value),
     open,
     close,
     refresh,

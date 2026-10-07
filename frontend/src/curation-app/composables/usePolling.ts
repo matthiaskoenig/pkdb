@@ -6,9 +6,9 @@ export const POLL_INTERVAL_MS = 1500;
 
 export interface Polling<T> {
   /** The data of the last 200 response; a 304 keeps it. */
-  readonly data: ShallowRef<T | null>;
+  readonly data: Readonly<ShallowRef<T | null>>;
   /** The error of the last load, such as ServerStopped or SessionMissing; null after a success. */
-  readonly error: ShallowRef<Error | null>;
+  readonly error: Readonly<ShallowRef<Error | null>>;
   /** Load now; a load in flight is aborted and its answer ignored. */
   refresh(): Promise<void>;
   /** Load now and then every interval while the page is visible; nothing while it polls already. */

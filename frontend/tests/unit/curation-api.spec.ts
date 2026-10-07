@@ -3,8 +3,10 @@ import {
   ApiError,
   ServerStopped,
   SessionMissing,
+  UnexpectedResponse,
   csrfToken,
   getJson,
+  isAbort,
   isNoUser,
   isRevisionConflict,
   isValidationError,
@@ -12,8 +14,8 @@ import {
   setCsrfToken,
   studyPath,
 } from "../../src/curation-app/api/client";
-import { bootstrap } from "../../src/curation-app/api/session";
-import { isRecord } from "../../src/curation-app/api/types";
+import { bootstrap, launchToken } from "../../src/curation-app/api/session";
+import { hasKeys, isRecord } from "../../src/curation-app/api/types";
 
 function json(
   body: unknown,
@@ -64,10 +66,21 @@ describe("getJson", () => {
     expect(request(fetch).headers.get("If-None-Match")).toBe('"v1"');
   });
 
-  it("refuses a response without the expected keys", async () => {
+  it("refuses a response that is not an object", async () => {
     vi.spyOn(globalThis, "fetch").mockResolvedValue(json(["not", "an", "object"]));
     const error = await rejection(getJson("/local/state", isRecord));
-    expect(error).toBeInstanceOf(ApiError);
+    expect(error).toBeInstanceOf(UnexpectedResponse);
+    expect(error).not.toBeInstanceOf(ApiError);
+  });
+
+  it("refuses an object without one of the expected keys", async () => {
+    const isPair = hasKeys<{ revision: string; content: string }>("revision", "content");
+    expect(isPair({ revision: "r1", content: "" })).toBe(true);
+    expect(isPair({ revision: "r1" })).toBe(false);
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(json({ revision: "r1" }));
+    const error = await rejection(getJson("/local/studies/caffeine/Example", isPair));
+    expect(error).toBeInstanceOf(UnexpectedResponse);
+    expect(error instanceof UnexpectedResponse && error.status).toBe(200);
   });
 
   it("keeps the CSRF token of the state, so that POSTs work after a restart of the server", async () => {
@@ -94,6 +107,49 @@ describe("postJson", () => {
     expect(headers.get("Content-Type")).toBe("application/json");
     expect(headers.get("X-CSRF-Token")).toBe("csrf-1");
     expect(JSON.parse(String(init.body))).toEqual({ ids: ["caffeine/Example"], action: "validate" });
+  });
+
+  it("takes a fresh CSRF token from the state and sends the action once more when the token is refused", async () => {
+    setCsrfToken("");
+    const fetch = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValueOnce(json({ error: "Missing or invalid action token" }, { status: 403 }))
+      .mockResolvedValueOnce(json({ workspace: "/work", csrf_token: "fresh" }))
+      .mockResolvedValueOnce(json({ revision: "r2" }));
+    await expect(postJson("/local/studies/metadata", { study: "caffeine/Example" }, isRecord)).resolves.toEqual({
+      revision: "r2",
+    });
+    const calls = fetch.mock.calls.map(([input, init]) => [
+      init?.method ?? "GET",
+      String(input),
+      new Headers(init?.headers).get("X-CSRF-Token"),
+    ]);
+    expect(calls).toEqual([
+      ["POST", "/local/studies/metadata", ""],
+      ["GET", "/local/state", null],
+      ["POST", "/local/studies/metadata", "fresh"],
+    ]);
+  });
+
+  it("sends a refused action only once more", async () => {
+    const fetch = vi
+      .spyOn(globalThis, "fetch")
+      .mockImplementation(async (input) =>
+        String(input) === "/local/state"
+          ? json({ csrf_token: "fresh" })
+          : json({ error: "Missing or invalid action token" }, { status: 403 }),
+      );
+    const error = await rejection(postJson("/local/jobs", {}, isRecord));
+    expect(error).toBeInstanceOf(ApiError);
+    expect(fetch).toHaveBeenCalledTimes(3);
+  });
+
+  it("never sends an action again that a missing user refused", async () => {
+    const fetch = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(json({ error: "no_user", message: "Set a PK-DB user first" }, { status: 403 }));
+    expect(isNoUser(await rejection(postJson("/local/studies/review", {}, isRecord)))).toBe(true);
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 
   it("turns a stale revision into a revision conflict with the current document", async () => {
@@ -183,6 +239,24 @@ describe("studyPath", () => {
   });
 });
 
+describe("isAbort", () => {
+  it("recognizes a canceled request", () => {
+    expect(isAbort(new DOMException("The study was closed", "AbortError"))).toBe(true);
+    expect(isAbort(new ServerStopped("The local server stopped. Start pkdb curate again."))).toBe(false);
+    expect(isAbort(undefined)).toBe(false);
+  });
+});
+
+describe("launchToken", () => {
+  it("reads the token of the launch URL, also after the hash router rewrote it", () => {
+    expect(launchToken("#token=abc")).toBe("abc");
+    expect(launchToken("#/token=abc")).toBe("abc");
+    expect(launchToken("#/studies/caffeine/Example")).toBeNull();
+    expect(launchToken("#token=")).toBeNull();
+    expect(launchToken("")).toBeNull();
+  });
+});
+
 describe("bootstrap", () => {
   beforeEach(() => {
     window.history.replaceState(null, "", "/");
@@ -207,6 +281,14 @@ describe("bootstrap", () => {
     expect(JSON.parse(String(init.body))).toEqual({ token: "launch-token" });
     expect(csrfToken()).toBe("csrf-from-session");
     expect(window.location.href).toBe(`${window.location.origin}/`);
+  });
+
+  it("takes the launch token that the hash router rewrote", async () => {
+    window.history.replaceState(null, "", "/#/token=rewritten");
+    const fetch = vi.spyOn(globalThis, "fetch").mockResolvedValue(json({ csrf_token: "csrf" }));
+    await bootstrap(window.location, window.history);
+    expect(JSON.parse(String(request(fetch).init.body))).toEqual({ token: "rewritten" });
+    expect(window.location.hash).toBe("");
   });
 
   it("relies on the session cookie without a launch token", async () => {

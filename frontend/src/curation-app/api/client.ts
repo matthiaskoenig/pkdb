@@ -3,10 +3,14 @@
  */
 import {
   isRecord,
+  isSession,
   type Guard,
   type RevisionConflictBody,
   type ValidationErrorBody,
 } from "./types";
+
+/** The `error` of the 403 for a missing or stale CSRF token (`_authenticated` in server.py). */
+const ACTION_TOKEN_REFUSED = "Missing or invalid action token";
 
 let token = "";
 
@@ -44,6 +48,21 @@ export class ServerStopped extends Error {
 /** The browser has no session cookie of the running server (401). */
 export class SessionMissing extends Error {
   override readonly name = "SessionMissing";
+}
+
+/** A successful response whose body is not the expected JSON; the request may have taken effect. */
+export class UnexpectedResponse extends Error {
+  override readonly name = "UnexpectedResponse";
+
+  constructor(readonly status: number) {
+    super("The local server sent an unexpected response");
+  }
+}
+
+/** A request that was canceled, for example of a study that was closed before the answer. */
+export function isAbort(error: unknown): boolean {
+  // An AbortError of another realm, such as a test environment, is no DOMException of this one.
+  return typeof error === "object" && error !== null && "name" in error && error.name === "AbortError";
 }
 
 /** A file changed on disk since the app read it; the body holds its current content. */
@@ -115,7 +134,7 @@ async function content<T>(response: Response, accept: Guard<T>): Promise<T> {
     value = undefined;
   }
   if (isRecord(value) && typeof value.csrf_token === "string" && value.csrf_token) token = value.csrf_token;
-  if (!accept(value)) throw new ApiError(response.status, { error: "The local server sent an unexpected response" });
+  if (!accept(value)) throw new UnexpectedResponse(response.status);
   return value;
 }
 
@@ -134,8 +153,7 @@ export async function getJson<T>(
   return { status: 200, etag: response.headers.get("ETag"), data: await content(response, accept) };
 }
 
-/** POST a JSON action with the CSRF token. */
-export async function postJson<T>(path: string, body: Record<string, unknown>, accept: Guard<T>): Promise<T> {
+async function post<T>(path: string, body: Record<string, unknown>, accept: Guard<T>): Promise<T> {
   const response = await send(path, {
     method: "POST",
     headers: { Accept: "application/json", "Content-Type": "application/json", "X-CSRF-Token": token },
@@ -143,4 +161,20 @@ export async function postJson<T>(path: string, body: Record<string, unknown>, a
   });
   if (!response.ok) return failure(response);
   return content(response, accept);
+}
+
+/**
+ * POST a JSON action with the CSRF token.
+ *
+ * After a reload without the launch token, or a restart of the server, the token may be missing
+ * or stale: then the action is sent once more with the token of `GET /local/state`.
+ */
+export async function postJson<T>(path: string, body: Record<string, unknown>, accept: Guard<T>): Promise<T> {
+  try {
+    return await post(path, body, accept);
+  } catch (error) {
+    if (!(error instanceof ApiError && error.status === 403 && error.body.error === ACTION_TOKEN_REFUSED)) throw error;
+  }
+  await getJson("/local/state", isSession);
+  return post(path, body, accept);
 }

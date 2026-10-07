@@ -1,3 +1,4 @@
+import { computed } from "vue";
 import { defineStore } from "pinia";
 import { getJson, postJson } from "../api/client";
 import {
@@ -31,11 +32,18 @@ export const useOverviewStore = defineStore("curation-overview", () => {
     { immediate: false },
   );
 
-  /** POST an action, then load the state that it changed. */
+  /**
+   * POST an action, then load the state that it changed.
+   *
+   * The state is loaded after a failure too: an unexpected answer can follow an action that
+   * took effect. The caller receives the failure.
+   */
   async function act<T>(path: string, body: Record<string, unknown>, accept: Guard<T>): Promise<T> {
-    const result = await postJson(path, body, accept);
-    await polling.refresh();
-    return result;
+    try {
+      return await postJson(path, body, accept);
+    } finally {
+      await polling.refresh();
+    }
   }
 
   function selectWorkspace(path: string): Promise<Snapshot> {
@@ -71,9 +79,12 @@ export const useOverviewStore = defineStore("curation-overview", () => {
     return act("/local/history/clear", {}, isSnapshot);
   }
 
-  /** Upload again after the curator inspected the server for an upload with an unknown outcome. */
-  function retry(id: string): Promise<Snapshot> {
-    return act("/local/retry", { id, acknowledge_unknown: true }, isSnapshot);
+  /**
+   * Upload again after an upload with an unknown outcome. The server refuses unless the curator
+   * acknowledged that they inspected the server.
+   */
+  function retry(id: string, { acknowledgeUnknown }: { acknowledgeUnknown: boolean }): Promise<Snapshot> {
+    return act("/local/retry", { id, acknowledge_unknown: acknowledgeUnknown }, isSnapshot);
   }
 
   function pause(paused: boolean): Promise<Snapshot> {
@@ -99,8 +110,8 @@ export const useOverviewStore = defineStore("curation-overview", () => {
   }
 
   return {
-    snapshot: polling.data,
-    error: polling.error,
+    snapshot: computed(() => polling.data.value),
+    error: computed(() => polling.error.value),
     start: polling.start,
     stop: polling.stop,
     refresh: polling.refresh,
