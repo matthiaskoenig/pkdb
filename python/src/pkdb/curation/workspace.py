@@ -1,6 +1,6 @@
 """Workspace selection, scanning and file resolution for the curation engine.
 
-Reads and writes engine attributes: lock, root, studies, modes, recent_workspaces,
+Reads and writes engine attributes: lock, scan_lock, root, studies, modes, recent_workspaces,
 reference_previews, paused, queue, stop, wakeup, state_dir. Uses engine methods _save,
 _enqueue_one, snapshot, _local_vocabulary and _sync_later.
 """
@@ -49,15 +49,17 @@ class WorkspaceMixin(EngineState):
             raise WorkspaceError(
                 "Application state must be outside the selected source workspace"
             )
-        with self.lock:
-            if self.active:
-                raise WorkspaceError(
-                    "Wait for the current job before changing workspace"
-                )
-            self._cancel_pending()
-            self.root = root
-            self.studies = {}
-        self.scan(initial=True)
+        # A running scan finishes first; it would otherwise add rows of the old workspace.
+        with self.scan_lock:
+            with self.lock:
+                if self.active:
+                    raise WorkspaceError(
+                        "Wait for the current job before changing workspace"
+                    )
+                self._cancel_pending()
+                self.root = root
+                self.studies = {}
+            self._scan(initial=True)
         with self.lock:
             self.recent_workspaces = [
                 str(root),
@@ -128,9 +130,9 @@ class WorkspaceMixin(EngineState):
             ],
         }
 
-    def _row(self, folder):
+    def _row(self, folder, root):
         identifier = f"{folder.parent.name}/{folder.name}"
-        path = folder.relative_to(self.root).as_posix()
+        path = folder.relative_to(root).as_posix()
         uploads = [
             job["upload"]
             for job in self.jobs
@@ -163,13 +165,27 @@ class WorkspaceMixin(EngineState):
         }
 
     def scan(self, initial=False):
-        root = self.root
+        """Scan the workspace for study changes; one scan runs at a time.
+
+        The watcher, jobs, app writes and workspace switches all scan through the scan lock,
+        which is never taken while holding the engine lock or a folder lock.
+        """
+        with self.scan_lock:
+            self._scan(initial)
+
+    def _scan(self, initial):
+        # A scan of a workspace that was replaced meanwhile stops before it changes a row:
+        # its keys and paths are relative to the old root.
+        with self.lock:
+            root = self.root
         folders = {
             p.parent
             for p in root.rglob("study.json")
             if not p.is_symlink() and not ignored_source(p.relative_to(root))
         }
         with self.lock:
+            if self.root is not root:
+                return
             folders.update(row["_folder"] for row in self.studies.values())
         format1 = 0
         for folder in sorted(folders):
@@ -179,12 +195,16 @@ class WorkspaceMixin(EngineState):
                     continue
                 if not is_v2_folder(folder):
                     with self.lock:
+                        if self.root is not root:
+                            return
                         self.studies.pop(key, None)
                     if (folder / "study.json").is_file():
                         format1 += 1
                     continue
                 with self.lock:
-                    row = self.studies.setdefault(key, self._row(folder))
+                    if self.root is not root:
+                        return
+                    row = self.studies.setdefault(key, self._row(folder, root))
                 paths = sorted(
                     p
                     for p in folder.rglob("*")
@@ -208,6 +228,8 @@ class WorkspaceMixin(EngineState):
                 summary = study_summary(folder)
                 sync = self._sync_state(folder)
                 with self.lock:
+                    if self.root is not root:
+                        return
                     old = row["_fingerprint"]
                     was_open = row["_signature"] is not None and row["_signature"][1]
                     closed = was_open and not signature[1]
@@ -249,7 +271,9 @@ class WorkspaceMixin(EngineState):
                     )
             except (OSError, StudyValidationError) as error:
                 with self.lock:
-                    row = self.studies.setdefault(key, self._row(folder))
+                    if self.root is not root:
+                        return
+                    row = self.studies.setdefault(key, self._row(folder, root))
                     row["status"] = "waiting"
                     row["stale"] = True
                     row["message"] = (
@@ -258,6 +282,8 @@ class WorkspaceMixin(EngineState):
                         else "Symlinked source files are not accepted"
                     )
         with self.lock:
+            if self.root is not root:
+                return
             self.format1_folders = format1
             counts = Counter(r["id"] for r in self.studies.values())
             for row in self.studies.values():
@@ -395,8 +421,10 @@ class WorkspaceMixin(EngineState):
                     raise ReferenceError("Reference preview expired; preview again")
                 save_reference(folder, entry[1])
                 del self.reference_previews[token]
-                self.scan()
-                return {"ok": True}
+        if action == "save":
+            # The scan lock is never taken while holding the engine lock.
+            self.scan()
+            return {"ok": True}
         resolver = ReferenceResolver(
             offline=offline, refresh=body.get("refresh", False)
         )

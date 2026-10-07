@@ -367,8 +367,9 @@ class JobsMixin(EngineState):
                 row.update(status="conflict", stale=True)
                 return  # The finally block writes the report.
             if synced_source != expected:
+                # Outside the engine lock, which the scan takes for each row.
+                self.scan()
                 with self.lock:
-                    self.scan()
                     # This job validates the repaired source; a save after it stays pending.
                     row.update(
                         status="validating",

@@ -44,6 +44,7 @@ class CurationEngine(
         start=True,
     ):
         self.lock = threading.RLock()
+        self.scan_lock = threading.Lock()
         self._connection_generation = 0
         self.stop = threading.Event()
         self.wakeup = threading.Event()

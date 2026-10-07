@@ -1,8 +1,10 @@
 import json
+import threading
 
 import pytest
 
 from pkdb.curation import engine as module
+from pkdb.curation import workspace as workspace_module
 from pkdb.studyformat.jsonio import dump_json
 
 
@@ -103,6 +105,86 @@ def test_duplicate_identity_is_marked_and_refused(workspace, tmp_path, valid_fil
     assert len(rows) == 2 and all(row["duplicate"] for row in rows)
     with pytest.raises(ValueError, match="identity of two folders"):
         engine.enqueue(["caffeine/Example"], "validate")
+
+
+def test_duplicates_are_never_scheduled(workspace, tmp_path, valid_files):
+    engine, folder, legacy = workspace
+    copy = tmp_path / "copies" / "caffeine" / "Example"
+    copy.mkdir(parents=True)
+    for file, content in valid_files.items():
+        (copy / file).write_bytes(
+            content if isinstance(content, bytes) else content.encode()
+        )
+    engine.scan()
+    assert all(row["duplicate"] and row["_pending"] for row in engine.studies.values())
+    for row in engine.studies.values():
+        row["_changed_at"] -= 2
+    engine.schedule_changes()
+    assert not engine.queue
+
+
+@pytest.fixture
+def substance(tmp_path, tmp_path_factory, make_study, valid_files):
+    """An engine whose workspace is the substance folder of two studies."""
+    folders = [make_study(valid_files, name=name) for name in ("Example", "Other")]
+    engine = module.CurationEngine(
+        folders[0].parent,
+        state_dir=tmp_path_factory.mktemp("state"),
+        offline=True,
+        start=False,
+    )
+    assert sorted(engine.studies) == ["Example", "Other"]
+    for row in engine.studies.values():
+        row["_signature"] = None  # the next scan reads both studies again
+    yield engine, folders
+    engine.close()
+
+
+def test_a_workspace_switch_waits_for_the_running_scan(
+    substance, tmp_path, monkeypatch
+):
+    engine, folders = substance
+    real_summary = workspace_module.study_summary
+    switches = []
+
+    def summary(folder):
+        if not switches:
+            # The curator opens the repository root while the watcher scans.
+            switches.append(
+                threading.Thread(target=engine.select_workspace, args=(tmp_path,))
+            )
+            switches[0].start()
+            switches[0].join(timeout=0.5)
+        return real_summary(folder)
+
+    monkeypatch.setattr(workspace_module, "study_summary", summary)
+    engine.scan()
+    switches[0].join(timeout=10)
+    assert not switches[0].is_alive()
+    assert engine.root == tmp_path
+    rows = engine.snapshot()["studies"]
+    assert sorted(row["path"] for row in rows) == ["caffeine/Example", "caffeine/Other"]
+    assert not any(row["duplicate"] for row in rows)
+    assert engine.study_folder("caffeine/Other") == folders[1]
+
+
+def test_a_scan_of_a_replaced_workspace_stops(substance, tmp_path, monkeypatch):
+    engine, folders = substance
+    real_summary = workspace_module.study_summary
+    switched = []
+
+    def summary(folder):
+        if not switched:
+            # A new workspace without rows, as if the switch had not waited for this scan.
+            switched.append(folder)
+            engine.root, engine.studies = tmp_path, {}
+        return real_summary(folder)
+
+    monkeypatch.setattr(workspace_module, "study_summary", summary)
+    engine.format1_folders = 7
+    engine.scan()
+    assert engine.studies == {}
+    assert engine.format1_folders == 7
 
 
 def test_summary_of_unreadable_files(workspace):

@@ -14,6 +14,7 @@ from pkdb.curation.github import GitHubAssignments
 
 class EngineState:
     lock: threading.RLock
+    scan_lock: threading.Lock
     stop: threading.Event
     wakeup: threading.Event
     state_dir: Path
