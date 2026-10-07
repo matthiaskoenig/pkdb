@@ -587,6 +587,39 @@ def test_review_write_errors(api):
     assert read_review(folder).review.items == []
 
 
+@pytest.mark.parametrize(
+    ("key", "change", "action"),
+    [
+        (
+            "review",
+            {"status": "in_review"},
+            {"action": "add", "kind": "issue", "text": "Check the dose."},
+        ),
+        ("metadata", {"licence": "closed"}, {}),
+    ],
+)
+def test_a_stale_write_shows_the_file_on_disk_at_once(api, key, change, action):
+    """The study page loads the study after a 409 and gets the file on disk, not a 304."""
+    server, engine, folder = api
+    headers = authenticate(server)
+    status, response_headers, data = request(server, "GET", DETAIL, headers=headers)
+    document = json.loads(data)[key]
+    on_disk = {**document["value"], **change}
+    name = "review.json" if key == "review" else "study.json"
+    (folder / name).write_text(json.dumps(on_disk, indent=2) + "\n")
+    body = action or {"metadata": document["value"]}
+    route = f"/local/studies/{key}"
+    write = {"study": "caffeine/Example", "revision": document["revision"], **body}
+    stale = request(server, "POST", route, write, headers)
+    assert stale[0] == 409
+    etag = {**headers, "If-None-Match": response_headers["ETag"]}
+    status, _, data = request(server, "GET", DETAIL, headers=etag)
+    assert status == 200
+    reloaded = json.loads(data)[key]
+    assert reloaded["revision"] == json.loads(stale[2])["revision"]
+    assert reloaded["value"] == on_disk
+
+
 def test_writes_need_a_user(api):
     server, engine, folder = api
     engine.user = ""

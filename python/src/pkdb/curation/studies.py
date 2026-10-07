@@ -12,7 +12,8 @@ import hashlib
 import json
 import os
 import stat
-from collections.abc import Callable
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager
 from pathlib import Path
 from typing import Any
 from urllib.parse import quote
@@ -41,7 +42,12 @@ from pkdb.studyformat.review_edit import (
     read_review,
     warning_locations,
 )
-from pkdb.studyformat.revision import folder_lock, read_revision, revision_of
+from pkdb.studyformat.revision import (
+    RevisionConflict,
+    folder_lock,
+    read_revision,
+    revision_of,
+)
 from pkdb.studyformat.sources import source_view, study_sources
 from pkdb.studyformat.sync import SyncResult, add_table, conflict_data, sync_study
 from pkdb.studyformat.tables import REVIEW_JSON, STUDY_JSON
@@ -484,15 +490,28 @@ class StudiesMixin(EngineState):
             return stream.read(), media_type
 
     def _rescan(self) -> None:
-        """Rescan after a write, so that the study ETag changes at once.
+        """Rescan, so that the study ETag changes at once after a write or a stale write.
 
-        The write succeeded; a failed scan is left to the watcher, which retries every second.
+        A failed scan is left to the watcher, which retries every second.
         """
         try:
             self.scan()
         except Exception:
             # Nothing is logged, since errors can carry paths and settings.
             pass
+
+    @contextmanager
+    def _rescanned_on_conflict(self) -> Iterator[None]:
+        """Rescan when a write finds its file changed on disk since the app read it.
+
+        The study page loads the study after the conflict; without the scan, its ETag would
+        still be the one of the old file until the watcher notices the change.
+        """
+        try:
+            yield
+        except RevisionConflict:
+            self._rescan()
+            raise
 
     def write_metadata(self, identity: str, revision: str, metadata: dict) -> dict:
         """Write `study.json`; a changed PubMed ID or DOI refreshes `reference.json`.
@@ -511,9 +530,13 @@ class StudiesMixin(EngineState):
                 validation_issues(error, STUDY_JSON, study_metadata.CODE)
             ) from None
         _writable(folder, STUDY_JSON, MetadataError)
-        written = study_metadata.write_metadata(
-            folder, model, revision, resolver=ReferenceResolver(offline=self.offline)
-        )
+        with self._rescanned_on_conflict():
+            written = study_metadata.write_metadata(
+                folder,
+                model,
+                revision,
+                resolver=ReferenceResolver(offline=self.offline),
+            )
         self._record_write(identity, "Saved study.json")
         self._rescan()
         return {
@@ -532,7 +555,8 @@ class StudiesMixin(EngineState):
         revision = _text(payload, "revision")
         _writable(folder, REVIEW_JSON, _review_error)
         try:
-            result = self._review_change(folder, author, revision, payload)
+            with self._rescanned_on_conflict():
+                result = self._review_change(folder, author, revision, payload)
         except ValidationError as error:
             # A new item, target or reply that the review model refuses.
             raise _review_error(
