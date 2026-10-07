@@ -123,6 +123,8 @@ export function makeVuetify(options: { cspNonce?: string | undefined } = {}) {
             surface: "#192b31",
             // Vuetify's default (#cf6679) has 4.1:1 on the surface; field errors are text.
             error: "#f28b82",
+            // Text on the error color, such as a flat error alert: 5.5:1; Vuetify picks white, 2.4:1.
+            "on-error": "#601410",
             // The thumb of switches; Vuetify's default is lavender.
             "surface-bright": "#dcefef",
           },
