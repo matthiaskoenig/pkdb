@@ -2,7 +2,7 @@
 
 !!! info "Available in the development version"
 
-    The local curation command is implemented for [issue #826](https://github.com/matthiaskoenig/pkdb/issues/826) and is not yet part of a published release. Install the current checkout with `pip install ./python` to try it. The screenshots below show the running app and real offline validation of local apixaban studies, not design mockups.
+    The local curation command is implemented for [issue #826](https://github.com/matthiaskoenig/pkdb/issues/826) and is not yet part of a published release. To try it, build the app with `npm ci` and `npm run build:curation` in `frontend/` (Node **24.21.0** and npm **12.1.0**), then install the current checkout with `pip install ./python`. The screenshots below show the running app and real offline validation of local apixaban studies, not design mockups.
 
 The app brings study selection, validation feedback, and uploads into a local browser interface. You continue editing JSON, spreadsheets, images, and other source files in the default applications on your computer. PK-DB observes saved changes and automatically validates them, or validates and uploads them when you select **Upload on save**.
 

@@ -51,6 +51,8 @@ export default defineConfig({
     // Fonts and images stay files: the CSP allows no data: fonts.
     assetsInlineLimit: 0,
     sourcemap: false,
+    // plotly.js-dist-min is one prebuilt 4.6 MB chunk that loads lazily and cannot be split.
+    chunkSizeWarningLimit: 5000,
     rolldownOptions: { input: fileURLToPath(new URL(`./${entry}`, import.meta.url)) },
   },
   server: { port: 8090, strictPort: true, proxy: { "/local": local(), "/avatars": local() } },
