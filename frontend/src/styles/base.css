@@ -47,8 +47,10 @@ summary {
   color: rgba(var(--v-theme-on-surface), 0.58);
   opacity: 1;
 }
-/* Vuetify dims field labels and hints below the contrast of WCAG AA in the light theme. */
-.v-field-label {
+/* Vuetify dims field labels, the labels of radio groups and hints below the contrast of WCAG AA
+   in the light theme. */
+.v-field-label,
+.v-radio-group > .v-input__control > .v-label {
   opacity: 1 !important;
   color: rgba(var(--v-theme-on-surface), 0.78);
 }
