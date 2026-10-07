@@ -2,7 +2,9 @@ import { describe, expect, it } from "vitest";
 import type { ValidationIssue } from "../../src/curation-app/api/types";
 import {
   changedFields,
+  copyField,
   fieldLabel,
+  fieldText,
   FIELD_KEYS,
   fromForm,
   issueMessage,
@@ -12,6 +14,7 @@ import {
   readStudyJson,
   startForm,
   toForm,
+  withKind,
 } from "../../src/curation-app/metadata";
 import { fullStudyMetadata, studyDetail, studyMetadata } from "./curation-fixtures";
 
@@ -48,15 +51,15 @@ describe("toForm and fromForm", () => {
     expect(fromForm(toForm(value))).toEqual(value);
   });
 
-  it("drops blank entries, notes without content and empty identifiers like the canonical writer", () => {
+  it("drops only what the canonical writer drops: notes without content and absent values", () => {
     const form = toForm(fullStudyMetadata());
-    form.reference = { pmid: " ", doi: "" };
-    form.descriptions.push("", "  ");
-    form.comments.push({ user: "mkoenig", text: " " });
+    form.reference = { pmid: "", doi: "" };
+    form.descriptions.push("");
+    form.comments.push({ user: "mkoenig", text: "" });
     form.curators.push({ user: "", rating: 0 });
     form.collaborators.push("");
-    form.notes.outputs = { descriptions: [""], comments: [] };
-    form.notes.scatters = { descriptions: [], comments: [{ user: "janekg", text: "" }] };
+    form.notes.outputs = { descriptions: [], comments: [] };
+    form.notes.scatters = { descriptions: [""], comments: [] };
     form.issue = null;
     form.release = null;
 
@@ -65,22 +68,31 @@ describe("toForm and fromForm", () => {
     expect(value).not.toHaveProperty("reference");
     expect(value).not.toHaveProperty("issue");
     expect(value).not.toHaveProperty("release");
-    expect(value.descriptions).toEqual(["Plasma levels in µg/l."]);
-    expect(value.comments).toEqual([{ user: "mkoenig", text: "Checked against the PDF." }]);
-    expect(value.curators).toHaveLength(2);
-    expect(value.collaborators).toEqual(["Jane Doe"]);
-    expect(value.notes).toEqual({ timecourses: { descriptions: ["Digitized from Figure 1."], comments: [] } });
+    // Blank rows go to validation, which names them, rather than disappearing.
+    expect(value.descriptions).toEqual(["Plasma levels in µg/l.", ""]);
+    expect(value.comments).toEqual([
+      { user: "mkoenig", text: "Checked against the PDF." },
+      { user: "mkoenig", text: "" },
+    ]);
+    expect(value.curators).toHaveLength(3);
+    expect(value.collaborators).toEqual(["Jane Doe", ""]);
+    expect(value.notes).toEqual({
+      timecourses: { descriptions: ["Digitized from Figure 1."], comments: [] },
+      scatters: { descriptions: [""], comments: [] },
+    });
   });
 
-  it("trims identifiers and user names, but keeps the text of descriptions", () => {
-    const form = toForm(studyMetadata());
-    form.reference = { pmid: " 123 ", doi: " 10.1000/x " };
-    form.creator = " mkoenig ";
-    form.descriptions = ["  indented"];
-    const value = fromForm(form);
-    expect(value.reference).toEqual({ pmid: "123", doi: "10.1000/x" });
-    expect(value.creator).toBe("mkoenig");
-    expect(value.descriptions).toEqual(["  indented"]);
+  it("keeps every value as typed, also whitespace-only and padded text", () => {
+    const value = fullStudyMetadata({
+      reference: { pmid: " 123 ", doi: " 10.1000/x " },
+      creator: " mkoenig ",
+      curators: [{ user: " janekg", rating: 2.5 }],
+      collaborators: [" Jane Doe ", "   "],
+      descriptions: ["   ", "  indented", "trailing  "],
+      comments: [{ user: "mkoenig", text: "  " }],
+      notes: { outputs: { descriptions: [" "], comments: [{ user: "janekg", text: " padded " }] } },
+    });
+    expect(fromForm(toForm(value))).toEqual(value);
   });
 
   it("keeps only the fields of the chosen provenance kind", () => {
@@ -209,10 +221,11 @@ describe("issueTarget", () => {
     expect(issueTarget(form, "notes.timecourses.descriptions.0")).toBe("notes.timecourses.descriptions.0");
   });
 
-  it("maps a list index of the sent study.json past the blank rows of the form", () => {
+  it("maps a list index to the same row of the form, which sends every row", () => {
     const blank = toForm(fullStudyMetadata());
     blank.curators.unshift({ user: "", rating: 0 });
-    expect(issueTarget(blank, "curators.1.user")).toBe("curators.2.user");
+    expect(issueTarget(blank, "curators.0.user")).toBe("curators.0.user");
+    expect(issueTarget(blank, "curators.2.rating")).toBe("curators.2.rating");
   });
 
   it("has no field for an issue of the whole file or an unknown path", () => {
@@ -238,6 +251,44 @@ describe("issueTarget", () => {
     expect(issueMessage(issue("reference.doi", "reference.doi: Value error, 'doi' is not a valid DOI"))).toBe(
       "'doi' is not a valid DOI",
     );
+  });
+});
+
+describe("withKind", () => {
+  it("drops the source key of a manual curation for another kind and keeps a typed one", () => {
+    const manual = toForm(studyMetadata()).provenance;
+    expect(withKind(manual, "automatic_curation")).toMatchObject({ kind: "automatic_curation", source_key: "" });
+    expect(withKind({ ...manual, source_key: "lab.notes" }, "automatic_curation").source_key).toBe("lab.notes");
+    const automatic = withKind(manual, "automatic_curation");
+    expect(withKind(automatic, "manual_curation")).toEqual(manual);
+    expect(withKind({ ...automatic, source_key: "pkdb.ai" }, "manual_curation").source_key).toBe("pkdb.ai");
+  });
+});
+
+describe("disk versions after a reload", () => {
+  it("describes the value of a field for a sentence", () => {
+    const form = toForm(fullStudyMetadata());
+    expect(fieldText(form, "creator")).toBe("curator");
+    expect(fieldText(form, "curators")).toBe("mkoenig (3), janekg (4.5)");
+    expect(fieldText(form, "collaborators")).toBe("Jane Doe");
+    expect(fieldText(form, "provenance.kind")).toBe("Automatic curation");
+    expect(fieldText(form, "provenance.assets")).toBe("https://example.org/Harder1988.pdf");
+    expect(fieldText(form, "descriptions")).toBe("Plasma levels in µg/l.");
+    expect(fieldText(form, "notes.outputs.comments")).toBe("janekg: AUC rounded.");
+    expect(fieldText(form, "release")).toBe("PKDB00198 · released 2026-09-28");
+    expect(fieldText(toForm(studyMetadata()), "reference.doi")).toBe("empty");
+    expect(fieldText(toForm(studyMetadata()), "descriptions")).toBe("none");
+  });
+
+  it("takes one field of the disk version into the form", () => {
+    const mine = toForm(fullStudyMetadata({ creator: "mkoenig", licence: "open" }));
+    const theirs = toForm(fullStudyMetadata({ creator: "janekg", curators: [] }));
+    copyField(mine, theirs, "creator");
+    expect(mine.creator).toBe("janekg");
+    expect(mine.licence).toBe("open");
+    expect(mine.curators).toHaveLength(2);
+    theirs.creator = "changed";
+    expect(mine.creator).toBe("janekg");
   });
 });
 

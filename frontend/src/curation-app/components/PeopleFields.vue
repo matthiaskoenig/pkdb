@@ -2,7 +2,8 @@
 import { computed } from "vue";
 import { VAutocomplete, VBtn, VCombobox, VListItem } from "vuetify/components";
 import type { Profile } from "../api/types";
-import { MARK_TEXT, type CuratorRow, type FieldMark } from "../metadata";
+import { markMessage, type CuratorRow, type FieldMark } from "../metadata";
+import DiskVersion from "./DiskVersion.vue";
 import PersonAvatar from "./PersonAvatar.vue";
 import RatingStars from "./RatingStars.vue";
 
@@ -17,7 +18,10 @@ const props = defineProps<{
   errors: ReadonlyMap<string, string[]>;
   /** The fields that changed on disk at the last reload. */
   marks: ReadonlyMap<string, FieldMark>;
+  /** The disk values of the fields that changed on both sides at the last reload. */
+  disk: ReadonlyMap<string, string>;
 }>();
+const emit = defineEmits<{ useDisk: [key: string] }>();
 
 interface Person {
   title: string;
@@ -48,7 +52,7 @@ function errorsAt(key: string): string[] {
 
 function markAt(key: string): string[] {
   const mark = props.marks.get(key);
-  return mark ? [MARK_TEXT[mark]] : [];
+  return mark ? [markMessage(mark, props.disk.get(key) ?? null)] : [];
 }
 
 function markColor(key: string): string | undefined {
@@ -100,6 +104,9 @@ function setCollaborators(value: unknown): void {
       <template v-if="creatorProfile" #prepend-inner>
         <PersonAvatar :profile="creatorProfile" :size="24" />
       </template>
+      <template v-if="disk.has('creator')" #details>
+        <DiskVersion field="creator" @use="emit('useDisk', 'creator')" />
+      </template>
       <template #item="{ props: item, item: person }">
         <VListItem v-bind="item" :subtitle="person.value" role="option">
           <template #prepend>
@@ -111,7 +118,10 @@ function setCollaborators(value: unknown): void {
 
     <div class="field-block curators-block" :class="{ [`field-block--${marks.get('curators')}`]: marks.has('curators') }">
       <h4 class="field-heading">Curators</h4>
-      <p v-if="marks.has('curators')" class="field-mark">{{ markAt("curators")[0] }}</p>
+      <div v-if="marks.has('curators')" class="field-mark-row">
+        <p class="field-mark">{{ markAt("curators")[0] }}</p>
+        <DiskVersion v-if="disk.has('curators')" field="curators" @use="emit('useDisk', 'curators')" />
+      </div>
       <div v-for="(row, index) in curators" :key="index" class="curator-row">
         <VAutocomplete
           :model-value="row.user || null"
@@ -178,7 +188,11 @@ function setCollaborators(value: unknown): void {
       :base-color="markColor('collaborators')"
       class="collaborators-field"
       @update:model-value="setCollaborators"
-    />
+    >
+      <template v-if="disk.has('collaborators')" #details>
+        <DiskVersion field="collaborators" @use="emit('useDisk', 'collaborators')" />
+      </template>
+    </VCombobox>
   </div>
 </template>
 

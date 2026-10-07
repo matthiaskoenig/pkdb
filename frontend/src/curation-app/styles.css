@@ -168,6 +168,23 @@ a.brand {
 .field-mark-inline {
   margin-inline-start: 8px;
 }
+/* The button that takes the disk version of a field follows its message, or goes below it in a
+   narrow column. */
+.v-input__details:has(.disk-version) {
+  flex-wrap: wrap;
+  align-items: center;
+  column-gap: 12px;
+}
+.v-input__details:has(.disk-version) .v-messages {
+  flex: 1 1 16rem;
+}
+/* The mark of a list that changed on both sides, with the button that takes the disk version. */
+.field-mark-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 12px;
+}
 .field-note,
 .field-empty {
   color: rgba(var(--v-theme-on-surface), 0.78);
@@ -178,18 +195,15 @@ a.brand {
 .row-add {
   align-self: flex-start;
 }
-/* A text area grows with its text up to ten lines, where browsers size fields by content; the
-   others keep the rows of the field and a resize handle. CSS rather than Vuetify's auto-grow,
-   which measures the field on every change. */
+/* A text area grows with its text up to ten lines. Where browsers size fields by content, CSS
+   does it; elsewhere the components turn on Vuetify's auto-grow (see fieldSizing.ts). */
 @supports (field-sizing: content) {
   .grow-textarea textarea {
+    field-sizing: content;
+    min-height: calc(2lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px));
+    max-height: calc(10lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px));
     resize: none;
   }
-}
-.grow-textarea textarea {
-  field-sizing: content;
-  min-height: calc(2lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px));
-  max-height: calc(10lh + var(--v-field-padding-top, 0px) + var(--v-input-padding-top, 0px) + var(--v-field-padding-bottom, 0px));
 }
 /* Messages of fields that wrap keep their lines apart. */
 .v-input .v-messages__message {

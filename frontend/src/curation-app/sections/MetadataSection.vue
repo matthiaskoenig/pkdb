@@ -24,16 +24,19 @@ import {
 } from "vuetify/components";
 import { isNoUser, isRevisionConflict, isValidationError } from "../api/client";
 import type { DocumentState, Profile, StudyMetadata, TableKind, ValidationIssue } from "../api/types";
+import DiskVersion from "../components/DiskVersion.vue";
 import NotesFields from "../components/NotesFields.vue";
 import PeopleFields from "../components/PeopleFields.vue";
 import ReferenceDialog from "../components/ReferenceDialog.vue";
 import {
   changedFields,
   clone,
+  copyField,
   fieldLabel,
+  fieldText,
   fromForm,
   issuesByTarget,
-  MARK_TEXT,
+  markMessage,
   mergeOnReload,
   PROVENANCE_LABELS,
   readStudyJson,
@@ -41,8 +44,10 @@ import {
   TABLE_KIND_LABELS,
   TABLE_KINDS,
   toForm,
+  withKind,
   type FieldMark,
   type MetadataForm,
+  type ProvenanceKind,
 } from "../metadata";
 import { issueUrl, plural } from "../overview";
 import { useDialogStore } from "../stores/dialogs";
@@ -102,6 +107,18 @@ let noticeTimer: ReturnType<typeof setTimeout> | undefined;
 const referenceOpen = ref(false);
 const openPanels = ref<TableKind[]>([]);
 
+/** The form before the last Discard, which Undo restores for a few seconds or until the next edit. */
+interface Discarded {
+  form: MetadataForm;
+  base: MetadataForm | null;
+  revision: string | null;
+  adopted: string | null | undefined;
+  marks: ReadonlyMap<string, FieldMark>;
+  reloaded: string[] | null;
+}
+const undo = ref<Discarded | null>(null);
+let undoTimer: ReturnType<typeof setTimeout> | undefined;
+
 const writable = computed(() => revision.value !== null);
 const dirty = computed(
   () => form.value !== null && (base.value === null || changedFields(base.value, form.value).length > 0),
@@ -116,7 +133,8 @@ const barShown = computed(
     noUser.value !== null ||
     reloaded.value !== null ||
     referenceError.value !== "" ||
-    notice.value !== "",
+    notice.value !== "" ||
+    undo.value !== null,
 );
 /** A conflict with a readable study.json blocks Save until Reload. */
 const canSave = computed(() => dirty.value && writable.value && !saving.value && !conflict.value?.theirs);
@@ -237,9 +255,26 @@ function errorsAt(key: string): string[] {
   return errors.value.get(key) ?? [];
 }
 
+/** The disk values of the fields that changed on both sides at the last reload. */
+const disk = computed(() => {
+  const theirs = base.value;
+  const values = new Map<string, string>();
+  if (theirs)
+    for (const [key, mark] of marks.value) if (mark === "conflict") values.set(key, fieldText(theirs, key));
+  return values;
+});
+
 function markAt(key: string): string[] {
   const mark = marks.value.get(key);
-  return mark ? [MARK_TEXT[mark]] : [];
+  return mark ? [markMessage(mark, disk.value.get(key) ?? null)] : [];
+}
+
+/** Replace the edit of a field that changed on both sides with the version on disk. */
+function useDisk(key: string): void {
+  if (!form.value || !base.value) return;
+  copyField(form.value, base.value, key);
+  marks.value = new Map([...marks.value, [key, "disk"]]);
+  reloaded.value = reloaded.value?.filter((field) => field !== key) ?? null;
 }
 
 function markColor(key: string): string | undefined {
@@ -266,6 +301,11 @@ function notesSummary(kind: TableKind): string {
   ].filter(Boolean);
   const changed = marks.value.has(`notes.${kind}.descriptions`) || marks.value.has(`notes.${kind}.comments`);
   return [parts.join(", ") || "No notes", changed ? "changed on disk" : ""].filter(Boolean).join(" · ");
+}
+
+function setKind(kind: unknown): void {
+  const chosen = kindItems.value.find((item) => item.value === kind)?.value;
+  if (form.value && chosen) form.value.provenance = withKind(form.value.provenance, chosen satisfies ProvenanceKind);
 }
 
 function addAsset(): void {
@@ -357,10 +397,46 @@ function reload(): void {
   openPanels.value = [...new Set([...openPanels.value, ...kinds])];
 }
 
-/** Drop the edits: the form shows study.json as the app last read it. */
+/** Drop the edits: the form shows study.json as the app last read it. Undo brings them back. */
 function discard(): void {
-  if (studyJson.value) adopt(studyJson.value);
+  if (!studyJson.value || !form.value) return;
+  const discarded: Discarded = {
+    form: clone(form.value),
+    base: base.value && clone(base.value),
+    revision: revision.value,
+    adopted,
+    marks: marks.value,
+    reloaded: reloaded.value,
+  };
+  adopt(studyJson.value);
+  undo.value = discarded;
+  clearTimeout(undoTimer);
+  undoTimer = setTimeout(() => (undo.value = null), NOTICE_MS);
+  announce("Changes discarded.");
 }
+
+/** Bring back the form of the last Discard, over the revision it was read from. */
+function undoDiscard(): void {
+  const discarded = undo.value;
+  if (!discarded) return;
+  undo.value = null;
+  clearTimeout(undoTimer);
+  form.value = discarded.form;
+  base.value = discarded.base;
+  revision.value = discarded.revision;
+  adopted = discarded.adopted;
+  marks.value = discarded.marks;
+  reloaded.value = discarded.reloaded;
+  announce("Changes restored.");
+}
+
+// The next edit ends the undo of a Discard.
+watch(dirty, (value) => {
+  if (value && undo.value) {
+    undo.value = null;
+    clearTimeout(undoTimer);
+  }
+});
 
 /** An invalid study.json: start a new one from what the folder summary could read. */
 function startNew(): void {
@@ -399,7 +475,7 @@ function answerLeave(leave: boolean): void {
   const resolve = answer;
   answer = null;
   leaving.value = false;
-  if (leave) discard();
+  if (leave && studyJson.value) adopt(studyJson.value);
   resolve?.(leave);
 }
 
@@ -426,6 +502,7 @@ onMounted(() => window.addEventListener("beforeunload", beforeUnload));
 onBeforeUnmount(() => {
   window.removeEventListener("beforeunload", beforeUnload);
   clearTimeout(noticeTimer);
+  clearTimeout(undoTimer);
   answer?.(false);
 });
 </script>
@@ -481,7 +558,11 @@ onBeforeUnmount(() => {
               :messages="markAt('reference.pmid')"
               :base-color="markColor('reference.pmid')"
               class="field-pmid"
-            />
+            >
+              <template v-if="disk.has('reference.pmid')" #details>
+                <DiskVersion field="reference.pmid" @use="useDisk('reference.pmid')" />
+              </template>
+            </VTextField>
             <VTextField
               v-model="form.reference.doi"
               label="DOI"
@@ -492,7 +573,11 @@ onBeforeUnmount(() => {
               :error-messages="errorsAt('reference.doi')"
               :messages="markAt('reference.doi')"
               :base-color="markColor('reference.doi')"
-            />
+            >
+              <template v-if="disk.has('reference.doi')" #details>
+                <DiskVersion field="reference.doi" @use="useDisk('reference.doi')" />
+              </template>
+            </VTextField>
           </div>
           <p v-if="identifiersChanged" class="field-note">
             Saving study.json fetches reference.json for the new identifiers.
@@ -531,6 +616,8 @@ onBeforeUnmount(() => {
             :profiles="profiles"
             :errors="errors"
             :marks="marks"
+            :disk="disk"
+            @use-disk="useDisk"
           />
         </VCardText>
       </VCard>
@@ -551,6 +638,9 @@ onBeforeUnmount(() => {
             >
               <VRadio label="Open" value="open" />
               <VRadio label="Closed" value="closed" />
+              <template v-if="disk.has('licence')" #details>
+                <DiskVersion field="licence" @use="useDisk('licence')" />
+              </template>
             </VRadioGroup>
             <VRadioGroup
               v-model="form.access"
@@ -562,32 +652,44 @@ onBeforeUnmount(() => {
             >
               <VRadio label="Public" value="public" :disabled="!form.release" />
               <VRadio label="Private" value="private" />
+              <template v-if="disk.has('access')" #details>
+                <DiskVersion field="access" @use="useDisk('access')" />
+              </template>
             </VRadioGroup>
           </div>
           <VSelect
-            v-model="form.provenance.kind"
+            :model-value="form.provenance.kind"
             :items="kindItems"
             label="Provenance"
             hide-details="auto"
-            :disabled="imported !== null"
+            :readonly="imported !== null"
+            :menu-icon="imported ? '' : '$dropdown'"
             :error-messages="errorsAt('provenance.kind')"
             :messages="imported ? ['Set by the importer', ...markAt('provenance.kind')] : markAt('provenance.kind')"
             :base-color="markColor('provenance.kind')"
             class="field-provenance"
-          />
-          <dl v-if="form.provenance.kind === 'data_import' && imported" class="panel-facts">
-            <dt>Importer</dt>
-            <dd>{{ imported.importer }} {{ imported.importer_version }}</dd>
-            <dt>Source</dt>
-            <dd>{{ imported.source_key }}, release {{ imported.release }}, revision {{ imported.revision }}</dd>
-            <dt>Evidence</dt>
-            <dd>{{ imported.evidence_kind }}, {{ imported.reference_scope }}</dd>
-            <dt>Assets</dt>
-            <dd>{{ plural(imported.assets.length, "asset") }}</dd>
-          </dl>
-          <p v-if="imported && errorsAt('provenance.data_import').length" class="field-error">
-            {{ errorsAt("provenance.data_import").join(" ") }}
-          </p>
+            @update:model-value="setKind"
+          >
+            <template v-if="disk.has('provenance.kind')" #details>
+              <DiskVersion field="provenance.kind" @use="useDisk('provenance.kind')" />
+            </template>
+          </VSelect>
+          <!-- The importer sets a data import: the form shows it and has no fields for it. -->
+          <template v-if="imported">
+            <dl class="panel-facts data-import-facts">
+              <dt>Importer</dt>
+              <dd>{{ imported.importer }} {{ imported.importer_version }}</dd>
+              <dt>Source</dt>
+              <dd>{{ imported.source_key }}, release {{ imported.release }}, revision {{ imported.revision }}</dd>
+              <dt>Evidence</dt>
+              <dd>{{ imported.evidence_kind }}, {{ imported.reference_scope }}</dd>
+              <dt>Assets</dt>
+              <dd>{{ plural(imported.assets.length, "asset") }}</dd>
+            </dl>
+            <p v-if="errorsAt('provenance.data_import').length" class="field-error">
+              {{ errorsAt("provenance.data_import").join(" ") }}
+            </p>
+          </template>
           <template v-else>
             <div class="field-grid">
               <VTextField
@@ -599,7 +701,11 @@ onBeforeUnmount(() => {
                 :error-messages="errorsAt('provenance.source_key')"
                 :messages="markAt('provenance.source_key')"
                 :base-color="markColor('provenance.source_key')"
-              />
+              >
+                <template v-if="disk.has('provenance.source_key')" #details>
+                  <DiskVersion field="provenance.source_key" @use="useDisk('provenance.source_key')" />
+                </template>
+              </VTextField>
               <template v-if="form.provenance.kind === 'automatic_curation'">
                 <VTextField
                   v-model="form.provenance.method"
@@ -610,7 +716,11 @@ onBeforeUnmount(() => {
                   :error-messages="errorsAt('provenance.method')"
                   :messages="markAt('provenance.method')"
                   :base-color="markColor('provenance.method')"
-                />
+                >
+                  <template v-if="disk.has('provenance.method')" #details>
+                    <DiskVersion field="provenance.method" @use="useDisk('provenance.method')" />
+                  </template>
+                </VTextField>
                 <VTextField
                   v-model="form.provenance.version"
                   label="Version"
@@ -620,7 +730,11 @@ onBeforeUnmount(() => {
                   :error-messages="errorsAt('provenance.version')"
                   :messages="markAt('provenance.version')"
                   :base-color="markColor('provenance.version')"
-                />
+                >
+                  <template v-if="disk.has('provenance.version')" #details>
+                    <DiskVersion field="provenance.version" @use="useDisk('provenance.version')" />
+                  </template>
+                </VTextField>
                 <VTextField
                   v-model="form.provenance.run_id"
                   label="Run ID"
@@ -630,7 +744,11 @@ onBeforeUnmount(() => {
                   :error-messages="errorsAt('provenance.run_id')"
                   :messages="markAt('provenance.run_id')"
                   :base-color="markColor('provenance.run_id')"
-                />
+                >
+                  <template v-if="disk.has('provenance.run_id')" #details>
+                    <DiskVersion field="provenance.run_id" @use="useDisk('provenance.run_id')" />
+                  </template>
+                </VTextField>
               </template>
             </div>
             <div
@@ -639,7 +757,14 @@ onBeforeUnmount(() => {
               :class="blockClass('provenance.assets')"
             >
               <h4 class="field-heading">Assets</h4>
-              <p v-if="markAt('provenance.assets').length" class="field-mark">{{ markAt("provenance.assets")[0] }}</p>
+              <div v-if="marks.has('provenance.assets')" class="field-mark-row">
+                <p class="field-mark">{{ markAt("provenance.assets")[0] }}</p>
+                <DiskVersion
+                  v-if="disk.has('provenance.assets')"
+                  field="provenance.assets"
+                  @use="useDisk('provenance.assets')"
+                />
+              </div>
               <div v-for="(asset, index) in form.provenance.assets" :key="index" class="asset-row">
                 <VTextField
                   v-model="asset.url"
@@ -722,6 +847,8 @@ onBeforeUnmount(() => {
             :profiles="profiles"
             :errors="errors"
             :marks="marks"
+            :disk="disk"
+            @use-disk="useDisk"
           />
         </VCardText>
       </VCard>
@@ -747,6 +874,8 @@ onBeforeUnmount(() => {
                   :profiles="profiles"
                   :errors="errors"
                   :marks="marks"
+                  :disk="disk"
+                  @use-disk="useDisk"
                 />
               </VExpansionPanelText>
             </VExpansionPanel>
@@ -834,6 +963,7 @@ onBeforeUnmount(() => {
           {{ dirty ? "Unsaved changes in study.json" : notice || "No unsaved changes" }}
         </span>
         <div class="savebar-actions">
+          <VBtn v-if="undo" variant="text" color="primary" @click="undoDiscard">Undo</VBtn>
           <VBtn variant="text" :disabled="!dirty || saving" @click="discard">Discard</VBtn>
           <VBtn variant="flat" color="primary" :disabled="!canSave" :loading="saving" @click="save">Save</VBtn>
         </div>
@@ -918,9 +1048,18 @@ onBeforeUnmount(() => {
 .field-row--radios {
   gap: 8px 16px;
 }
-/* The messages of a radio group start below its label, as the messages of a field do. */
+/* The label, the first radio circle and the messages of a radio group start at the edge of the
+   card content, as the fields and headings do. */
+.field-row--radios :deep(.v-radio-group > .v-input__control > .v-label) {
+  margin-inline-start: 0;
+}
+/* The input of a radio is 5px wider than its circle on each side. */
+.field-row--radios :deep(.v-selection-control-group) {
+  padding-inline-start: 0;
+  margin-inline-start: -5px;
+}
 .field-row--radios :deep(.v-input__details) {
-  padding-inline: 16px;
+  padding-inline: 0;
 }
 .field-grid {
   display: grid;

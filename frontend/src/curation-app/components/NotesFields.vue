@@ -2,7 +2,9 @@
 import { computed } from "vue";
 import { VBtn, VTextarea } from "vuetify/components";
 import type { Comment, Profile } from "../api/types";
-import { MARK_TEXT, type FieldMark } from "../metadata";
+import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
+import { markMessage, type FieldMark } from "../metadata";
+import DiskVersion from "./DiskVersion.vue";
 import PersonAvatar from "./PersonAvatar.vue";
 
 /** Descriptions and comments: of the study, or of one table kind in its notes. */
@@ -18,7 +20,12 @@ const props = defineProps<{
   profiles: ReadonlyMap<string, Profile>;
   errors: ReadonlyMap<string, string[]>;
   marks: ReadonlyMap<string, FieldMark>;
+  /** The disk values of the fields that changed on both sides at the last reload. */
+  disk: ReadonlyMap<string, string>;
 }>();
+const emit = defineEmits<{ useDisk: [key: string] }>();
+
+const autoGrow = !sizesFieldsByContent();
 
 const descriptionsKey = computed(() => `${props.prefix}descriptions`);
 const commentsKey = computed(() => `${props.prefix}comments`);
@@ -29,7 +36,7 @@ function errorsAt(key: string): string[] {
 
 function markAt(key: string): string | null {
   const mark = props.marks.get(key);
-  return mark ? MARK_TEXT[mark] : null;
+  return mark ? markMessage(mark, props.disk.get(key) ?? null) : null;
 }
 
 function blockClass(key: string): Record<string, boolean> {
@@ -65,7 +72,14 @@ function addComment(): void {
   <div class="notes-fields">
     <div class="field-block descriptions-block" :class="blockClass(descriptionsKey)">
       <h4 class="field-heading">Descriptions</h4>
-      <p v-if="markAt(descriptionsKey)" class="field-mark">{{ markAt(descriptionsKey) }}</p>
+      <div v-if="markAt(descriptionsKey)" class="field-mark-row">
+        <p class="field-mark">{{ markAt(descriptionsKey) }}</p>
+        <DiskVersion
+          v-if="disk.has(descriptionsKey)"
+          :field="descriptionsKey"
+          @use="emit('useDisk', descriptionsKey)"
+        />
+      </div>
       <div v-for="(entry, index) in descriptions" :key="index" class="note-row">
         <VTextarea
           :model-value="entry"
@@ -73,6 +87,8 @@ function addComment(): void {
           variant="outlined"
           density="compact"
           rows="2"
+          :auto-grow="autoGrow"
+          :max-rows="GROW_ROWS"
           class="grow-textarea"
           :error-messages="errorsAt(`${descriptionsKey}.${index}`)"
           hide-details="auto"
@@ -104,7 +120,10 @@ function addComment(): void {
 
     <div class="field-block comments-block" :class="blockClass(commentsKey)">
       <h4 class="field-heading">Comments</h4>
-      <p v-if="markAt(commentsKey)" class="field-mark">{{ markAt(commentsKey) }}</p>
+      <div v-if="markAt(commentsKey)" class="field-mark-row">
+        <p class="field-mark">{{ markAt(commentsKey) }}</p>
+        <DiskVersion v-if="disk.has(commentsKey)" :field="commentsKey" @use="emit('useDisk', commentsKey)" />
+      </div>
       <div v-for="(entry, index) in comments" :key="index" class="note-row comment-row">
         <div class="comment-body">
           <span class="comment-author">
@@ -113,10 +132,12 @@ function addComment(): void {
           </span>
           <VTextarea
             :model-value="entry.text"
-            :label="`Comment by ${entry.user}`"
+            :label="`Comment ${index + 1} by ${entry.user}`"
             variant="outlined"
             density="compact"
             rows="2"
+            :auto-grow="autoGrow"
+            :max-rows="GROW_ROWS"
             class="grow-textarea"
             :error-messages="errorsAt(`${commentsKey}.${index}`)"
             hide-details="auto"

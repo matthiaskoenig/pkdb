@@ -3,7 +3,7 @@ import { DOMWrapper, enableAutoUnmount, flushPromises, mount, type VueWrapper } 
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { defineComponent, h } from "vue";
 import { RouterView, type Router } from "vue-router";
-import { VAutocomplete, VCombobox, VSelect } from "vuetify/components";
+import { VAutocomplete, VCombobox, VSelect, VTextarea } from "vuetify/components";
 import type { StudyDetail, StudyMetadata, ValidationIssue } from "../../src/curation-app/api/types";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
@@ -46,6 +46,17 @@ const write: Handler = (body) => {
   served = { ...served, metadata: { revision, value: body?.metadata as StudyMetadata, issues: [] } };
   return json({ revision, reference: null, reference_error: null });
 };
+
+/** Refuses a save as the local server does after `disk` was written to study.json by hand. */
+function changedOnDisk(disk: StudyMetadata): Handler {
+  return () => {
+    served = withMetadata(disk, "study-2");
+    return json(
+      { error: "changed", file: "study.json", revision: "study-2", content: JSON.stringify(disk) },
+      { status: 409 },
+    );
+  };
+}
 
 /**
  * The metadata section of `detail` inside the app's router view, with `routes` besides the
@@ -95,11 +106,12 @@ function saveBar() {
 }
 
 function ratingOf(name: string) {
-  return page().get(`[role="radiogroup"][aria-label="${name}"]`);
+  return page().get(`[role="slider"][aria-label="${name}"]`);
 }
 
-function checkedRating(name: string): string | null {
-  return ratingOf(name).find('[aria-checked="true"]').attributes("aria-label") ?? null;
+/** The value text of a rating, such as "3.5 of 5". */
+function ratingText(name: string): string | null {
+  return ratingOf(name).attributes("aria-valuetext") ?? null;
 }
 
 /** Waits until the dialog of a guarded navigation shows its buttons. */
@@ -183,17 +195,24 @@ describe("people card", () => {
 
   it("rates curators from 0 to 5 in half steps and adds and removes them", async () => {
     await mountSection();
-    expect(checkedRating("Rating of curator")).toBe("4.5 stars");
+    const rating = ratingOf("Rating of curator");
+    expect(rating.attributes()).toMatchObject({
+      tabindex: "0",
+      "aria-valuemin": "0",
+      "aria-valuemax": "5",
+      "aria-valuenow": "4.5",
+      "aria-valuetext": "4.5 of 5",
+    });
 
-    await ratingOf("Rating of curator").get('[aria-label="3 stars"]').trigger("click");
-    expect(checkedRating("Rating of curator")).toBe("3 stars");
-    // The arrow keys change the rating in half steps.
-    await ratingOf("Rating of curator").get('[aria-checked="true"]').trigger("keydown", { key: "ArrowRight" });
-    expect(checkedRating("Rating of curator")).toBe("3.5 stars");
+    // A click on the left half of the third star gives 2.5, on its right half 3.
+    await rating.get('[data-step="2.5"]').trigger("click");
+    expect(ratingText("Rating of curator")).toBe("2.5 of 5");
+    await rating.get('[data-step="3"]').trigger("click");
+    expect(ratingText("Rating of curator")).toBe("3 of 5");
 
     await click("Add curator");
     await labeled(wrapper, VAutocomplete, "Curator 2").setValue("mkoenig");
-    await ratingOf("Rating of mkoenig").get('[aria-label="0.5 stars"]').trigger("click");
+    await ratingOf("Rating of mkoenig").get('[data-step="0.5"]').trigger("click");
     await click("Remove curator 1");
     expect(wrapper.findAllComponents(VAutocomplete).map((field) => field.props("label"))).toEqual([
       "Creator",
@@ -202,6 +221,23 @@ describe("people card", () => {
 
     await click("Save");
     expect(posted(METADATA)[0]?.metadata).toMatchObject({ curators: [{ user: "mkoenig", rating: 0.5 }] });
+  });
+
+  it("changes a rating with the keys of a slider", async () => {
+    await mountSection();
+    const rating = ratingOf("Rating of curator");
+    const press = async (key: string) => {
+      await rating.trigger("keydown", { key });
+      return ratingText("Rating of curator");
+    };
+    expect(await press("ArrowRight")).toBe("5 of 5");
+    expect(await press("ArrowUp")).toBe("5 of 5");
+    expect(await press("ArrowLeft")).toBe("4.5 of 5");
+    expect(await press("ArrowDown")).toBe("4 of 5");
+    expect(await press("Home")).toBe("0 of 5");
+    expect(await press("ArrowDown")).toBe("0 of 5");
+    expect(await press("ArrowUp")).toBe("0.5 of 5");
+    expect(await press("End")).toBe("5 of 5");
   });
 
   it("lists collaborators in a combobox", async () => {
@@ -234,11 +270,15 @@ describe("access and provenance card", () => {
     await mountSection();
     const kind = labeled(wrapper, VSelect, "Provenance");
     expect(kind.props("modelValue")).toBe("manual_curation");
+    expect(field("Source key").element.value).toBe("pkdb.manual");
     expect(() => field("Method")).toThrow();
 
     await kind.setValue("automatic_curation");
+    // The source key of a manual curation does not carry over.
+    expect(field("Source key").element.value).toBe("");
     expect(page().get(".assets-block").text()).toContain("No assets. An automatic curation needs at least one.");
     await click("Add asset");
+    await field("Source key").setValue("pkdb.ai");
     await field("Method").setValue("claude-opus-5-5");
     await field("Version").setValue("1");
     await field("Run ID").setValue("run-1");
@@ -249,13 +289,41 @@ describe("access and provenance card", () => {
     expect(posted(METADATA)[0]?.metadata).toMatchObject({
       provenance: {
         kind: "automatic_curation",
-        source_key: "pkdb.manual",
+        source_key: "pkdb.ai",
         method: "claude-opus-5-5",
         version: "1",
         run_id: "run-1",
         assets: [{ url: "https://example.org/Example.pdf", sha256: "c".repeat(64) }],
       },
     });
+  });
+
+  it("shows a data import read only, so that it cannot change", async () => {
+    await mountSection(
+      withMetadata(
+        studyMetadata({
+          provenance: {
+            kind: "data_import",
+            source_key: "pkdb.import",
+            release: "2026.1",
+            revision: "abc",
+            importer: "pkdb-importer",
+            importer_version: "1.2",
+            assets: [{ url: "https://example.org/data.zip", sha256: "b".repeat(64) }],
+            dataset_ids: [],
+            evidence_kind: "observed",
+            reference_scope: "primary_publication",
+          },
+        }),
+      ),
+    );
+    const access = card("Access and provenance");
+    expect(labeled(wrapper, VSelect, "Provenance").props("readonly")).toBe(true);
+    expect(access.text()).toContain("Set by the importer");
+    expect(access.get(".data-import-facts").text()).toContain("pkdb-importer 1.2");
+    for (const label of ["Source key", "Method", "Version", "Run ID"]) expect(() => field(label)).toThrow();
+    expect(buttons("Add asset")).toHaveLength(0);
+    expect(saveBar().exists()).toBe(false);
   });
 });
 
@@ -275,12 +343,12 @@ describe("descriptions, comments and notes", () => {
     await mountSection(withMetadata(fullStudyMetadata()));
     const notes = card("Descriptions and comments").element;
     expect(textArea("Description 1", notes).element.value).toBe("Plasma levels in µg/l.");
-    expect(textArea("Comment by mkoenig", notes).element.value).toBe("Checked against the PDF.");
+    expect(textArea("Comment 1 by mkoenig", notes).element.value).toBe("Checked against the PDF.");
 
     await click("Add description");
     await textArea("Description 2", notes).setValue("Doses in mg.");
     await click("Add comment");
-    await textArea("Comment by curator", notes).setValue("Looks good.");
+    await textArea("Comment 2 by curator", notes).setValue("Looks good.");
     await click("Remove description 1");
     await click("Save");
 
@@ -331,8 +399,38 @@ describe("saving", () => {
 
     await click("Discard");
     expect(field("DOI").element.value).toBe("");
-    expect(saveBar().exists()).toBe(false);
+    expect(saveBar().text()).toContain("Changes discarded.");
     expect(page().get('nav[aria-label="Study sections"] a .rail-label').text()).toBe("Metadata");
+  });
+
+  it("undoes a discard for a few seconds, until the next edit", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      await mountSection();
+      await field("DOI").setValue("10.1000/xyz");
+      await click("Discard");
+      expect(page().get(".metadata-notice").text()).toBe("Changes discarded.");
+
+      await click("Undo");
+      expect(field("DOI").element.value).toBe("10.1000/xyz");
+      expect(saveBar().text()).toContain("Unsaved changes in study.json");
+      expect(buttons("Undo")).toHaveLength(0);
+
+      // The next edit ends the undo.
+      await click("Discard");
+      await field("PMID").setValue("1");
+      expect(buttons("Undo")).toHaveLength(0);
+
+      // So do a few seconds.
+      await click("Discard");
+      expect(buttons("Undo")).toHaveLength(1);
+      vi.advanceTimersByTime(NOTICE_MS);
+      await flushPromises();
+      expect(buttons("Undo")).toHaveLength(0);
+      expect(saveBar().exists()).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("posts the full study.json with its revision and hides the bar after the save", async () => {
@@ -436,7 +534,7 @@ describe("saving", () => {
     await click("Reload");
 
     expect(radio("Closed").checked).toBe(true);
-    expect(checkedRating("Rating of curator")).toBe("5 stars");
+    expect(ratingText("Rating of curator")).toBe("5 of 5");
     const notes = card("Descriptions and comments").element;
     expect(textArea("Description 1", notes).element.value).toBe("From disk.");
     expect(page().get(".curators-block").text()).toContain("Changed on disk");
@@ -455,19 +553,37 @@ describe("saving", () => {
 
   it("names a field changed on both sides and keeps the local edit", async () => {
     const disk = studyMetadata({ licence: "open", access: "private", creator: "janekg" });
-    await mountSection(studyDetail(), {
-      [`POST ${METADATA}`]: () =>
-        json(
-          { error: "changed", file: "study.json", revision: "study-2", content: JSON.stringify(disk) },
-          { status: 409 },
-        ),
-    });
+    await mountSection(studyDetail(), { [`POST ${METADATA}`]: changedOnDisk(disk) });
     await labeled(wrapper, VAutocomplete, "Creator").setValue("mkoenig");
     await click("Save");
     await click("Reload");
     expect(labeled(wrapper, VAutocomplete, "Creator").props("modelValue")).toBe("mkoenig");
     expect(page().get(".metadata-reloaded").text()).toContain("Changed on both sides, your version is kept: Creator");
-    expect(messagesOf(page().get(".creator-field input"))).toBe("Changed on disk too. Your edit is kept.");
+    expect(messagesOf(page().get(".creator-field input"))).toBe(
+      "Changed on disk too. Your edit is kept. On disk: janekg",
+    );
+
+    // The disk version replaces the edit of that field only.
+    await click("Use the disk version of Creator");
+    expect(labeled(wrapper, VAutocomplete, "Creator").props("modelValue")).toBe("janekg");
+    expect(messagesOf(page().get(".creator-field input"))).toBe("Changed on disk");
+    expect(buttons(/^Use the disk version/)).toHaveLength(0);
+    expect(page().get(".metadata-reloaded").text()).not.toContain("Changed on both sides");
+    expect(saveBar().text()).toContain("No unsaved changes");
+  });
+
+  it("offers the disk version of a list that changed on both sides", async () => {
+    const disk = studyMetadata({ descriptions: ["From disk."] });
+    await mountSection(studyDetail(), { [`POST ${METADATA}`]: changedOnDisk(disk) });
+    await click("Add description");
+    await textArea("Description 1", card("Descriptions and comments").element).setValue("Mine.");
+    await click("Save");
+    await click("Reload");
+    const block = page().get(".descriptions-block");
+    expect(block.text()).toContain("Changed on disk too. Your edit is kept. On disk: From disk.");
+    await click("Use the disk version of Descriptions");
+    expect(textArea("Description 1", card("Descriptions and comments").element).element.value).toBe("From disk.");
+    expect(page().get(".descriptions-block").text()).not.toContain("Your edit is kept");
   });
 
   it("follows study.json on disk while the form has no unsaved edits", async () => {
@@ -550,6 +666,21 @@ describe("leaving with unsaved changes", () => {
     const edited = new Event("beforeunload", { cancelable: true });
     window.dispatchEvent(edited);
     expect(edited.defaultPrevented).toBe(true);
+  });
+});
+
+describe("text areas", () => {
+  it("grow by CSS where browsers size fields by content", async () => {
+    await mountSection(withMetadata(fullStudyMetadata()));
+    expect(wrapper.findAllComponents(VTextarea).map((area) => area.props("autoGrow"))).toEqual([false, false]);
+  });
+
+  it("grow with Vuetify, up to ten rows, where they do not", async () => {
+    vi.spyOn(CSS, "supports").mockReturnValue(false);
+    await mountSection(withMetadata(fullStudyMetadata()));
+    const areas = wrapper.findAllComponents(VTextarea);
+    expect(areas.map((area) => area.props("autoGrow"))).toEqual([true, true]);
+    expect(areas.map((area) => Number(area.props("maxRows")))).toEqual([10, 10]);
   });
 });
 

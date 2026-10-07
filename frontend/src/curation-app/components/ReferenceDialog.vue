@@ -17,6 +17,7 @@ import {
   VTextField,
 } from "vuetify/components";
 import type { Json, ReferenceAuthor, ReferencePreview, ReferenceRecord } from "../api/types";
+import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 
@@ -36,6 +37,7 @@ const emit = defineEmits<{ saved: []; useDoi: [doi: string] }>();
 
 const study = useStudyStore();
 const overview = useOverviewStore();
+const autoGrow = !sizesFieldsByContent();
 const titleId = useId();
 const searchId = useId();
 const correctionsId = useId();
@@ -397,6 +399,8 @@ const previewed = computed(() => {
               variant="outlined"
               density="compact"
               rows="2"
+              :auto-grow="autoGrow"
+              :max-rows="GROW_ROWS"
               class="grow-textarea"
             />
             <VTextField
@@ -555,9 +559,9 @@ const previewed = computed(() => {
   display: flex;
   flex-direction: column;
 }
-/* Below the label of the checkbox above it. */
+/* Below the label text of the checkbox above it. */
 .reference-option-note {
-  margin: -6px 0 4px 40px;
+  margin: -6px 0 4px 28px;
 }
 .reference-preview {
   padding: 12px 16px;
