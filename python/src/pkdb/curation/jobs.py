@@ -164,13 +164,12 @@ class JobsMixin(EngineState):
         self.wakeup.set()
         return job
 
-    def _remember(self, job):
-        """Add a job to the history, which keeps the last 100 finished jobs.
+    def _kept(self):
+        """The jobs that the history always keeps, and the other, finished jobs.
 
-        Queued, running and unknown jobs are kept besides them, and so is the latest upload
-        of each study, from which its row shows the last upload after a restart.
+        Queued, running and unknown jobs are kept, and so is the latest upload of each study,
+        from which its row shows the last upload after a restart.
         """
-        self.jobs.append(job)
         uploads = {j["study_id"]: j for j in self.jobs if j.get("upload")}
         protected, finished = [], []
         for entry in self.jobs:
@@ -181,6 +180,12 @@ class JobsMixin(EngineState):
                 protected.append(entry)
             else:
                 finished.append(entry)
+        return protected, finished
+
+    def _remember(self, job):
+        """Add a job to the history: the last 100 finished jobs, and those it always keeps."""
+        self.jobs.append(job)
+        protected, finished = self._kept()
         self.jobs = sorted(protected + finished[-100:], key=lambda j: j["created_at"])
 
     def _record_write(self, identity, message, status="succeeded"):
@@ -750,10 +755,9 @@ class JobsMixin(EngineState):
         return self.snapshot()
 
     def clear_history(self):
+        """Remove the finished jobs and their reports, except the jobs it always keeps (`_kept`)."""
         with self.lock:
-            self.jobs = [
-                j for j in self.jobs if j["status"] in {"queued", "running", "unknown"}
-            ]
+            self.jobs = self._kept()[0]
             keep = {j["report_id"] for j in self.jobs if j.get("report_id")}
             for path in (self.state_dir / "reports").glob("*.json"):
                 if path.stem not in keep:

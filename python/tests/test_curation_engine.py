@@ -291,6 +291,46 @@ def test_the_last_upload_survives_many_app_writes_and_a_restart(workspace, monke
         restarted.close()
 
 
+def test_clearing_the_history_keeps_active_jobs_and_the_last_upload(
+    workspace, monkeypatch
+):
+    engine, _ = workspace
+    prepare_mock(monkeypatch)
+    url = "https://pk-db.example/data/Example2020"
+    result = SimpleNamespace(
+        created=True, url=url, model_dump=lambda **_: {"created": True}
+    )
+    client, _ = enable_upload(engine, monkeypatch, lambda _: result)
+    client.last_upload_report = None
+    identity = row(engine)["id"]
+    engine.enqueue([identity], "upload")
+    upload = run_next(engine)
+    engine.enqueue([identity], "validate")
+    validation = run_next(engine)
+    engine._record_write(identity, "Saved study.json")
+    engine.enqueue([identity], "validate")
+    queued = engine.queue[identity]
+    reports = engine.state_dir / "reports"
+    assert {path.stem for path in reports.glob("*.json")} == {
+        upload["id"],
+        validation["id"],
+    }
+
+    engine.clear_history()
+
+    assert engine.jobs == [upload, queued]
+    assert {path.stem for path in reports.glob("*.json")} == {upload["id"]}
+    assert row(engine)["report_id"] is None
+    engine.close()
+    restarted = module.CurationEngine(
+        engine.root, state_dir=engine.state_dir, offline=True, start=False
+    )
+    try:
+        assert row(restarted)["last_upload"]["url"] == url
+    finally:
+        restarted.close()
+
+
 def upload_result():
     return SimpleNamespace(
         created=True,
