@@ -242,7 +242,7 @@ const format1Notice = computed(() =>
             color="primary"
             role="group"
             aria-label="Filter by status"
-            class="overview-chips"
+            class="filter-chips overview-chips"
           >
             <VChip
               v-for="item in STATUS_CHIPS"
@@ -394,16 +394,6 @@ const format1Notice = computed(() =>
     flex: 1 1 100%;
     max-width: none;
   }
-}
-/* The group adds its own margins around the chips; the gap of the filters is enough. */
-.overview-chips :deep(.v-slide-group__content) {
-  margin: 0;
-  padding: 0;
-}
-.chip-count {
-  margin-inline-start: 8px;
-  font-variant-numeric: tabular-nums;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 .study-panel {
   overflow: hidden;

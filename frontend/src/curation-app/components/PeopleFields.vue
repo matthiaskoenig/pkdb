@@ -3,6 +3,7 @@ import { computed } from "vue";
 import { VAutocomplete, VBtn, VCombobox, VListItem } from "vuetify/components";
 import type { Profile } from "../api/types";
 import { markMessage, type CuratorRow, type FieldMark } from "../metadata";
+import { profileOf as knownProfile } from "../study";
 import DiskVersion from "./DiskVersion.vue";
 import PersonAvatar from "./PersonAvatar.vue";
 import RatingStars from "./RatingStars.vue";
@@ -30,9 +31,7 @@ interface Person {
 }
 
 function profileOf(user: string): Profile {
-  return (
-    props.profiles.get(user) ?? { username: user, display_name: user, title: null, affiliation: null, avatar_url: null }
-  );
+  return knownProfile(props.profiles, user);
 }
 
 /** The roster, and the people of the form who are not in it, so that the fields can show them. */

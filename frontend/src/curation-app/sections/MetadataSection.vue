@@ -28,6 +28,8 @@ import DiskVersion from "../components/DiskVersion.vue";
 import NotesFields from "../components/NotesFields.vue";
 import PeopleFields from "../components/PeopleFields.vue";
 import ReferenceDialog from "../components/ReferenceDialog.vue";
+import UserHint from "../components/UserHint.vue";
+import { useNotice } from "../composables/useNotice";
 import {
   changedFields,
   clone,
@@ -50,10 +52,9 @@ import {
   type ProvenanceKind,
 } from "../metadata";
 import { issueUrl, plural } from "../overview";
-import { useDialogStore } from "../stores/dialogs";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { NOTICE_MS, releaseLabel } from "../study";
+import { knownProfiles, messageOf, NOTICE_MS, releaseLabel, userHint } from "../study";
 
 /**
  * The form of study.json. Saves are explicit and go over the revision that the form was read
@@ -64,7 +65,6 @@ const emit = defineEmits<{ unsaved: [value: boolean] }>();
 
 const study = useStudyStore();
 const overview = useOverviewStore();
-const dialogs = useDialogStore();
 const ids = {
   reference: useId(),
   people: useId(),
@@ -102,8 +102,7 @@ const marks = ref<ReadonlyMap<string, FieldMark>>(new Map());
 /** The fields that changed on both sides at the last reload; null before a reload. */
 const reloaded = ref<string[] | null>(null);
 const referenceError = ref("");
-const notice = ref("");
-let noticeTimer: ReturnType<typeof setTimeout> | undefined;
+const { notice, announce } = useNotice();
 const referenceOpen = ref(false);
 const openPanels = ref<TableKind[]>([]);
 
@@ -138,12 +137,6 @@ const barShown = computed(
 );
 /** A conflict with a readable study.json blocks Save until Reload. */
 const canSave = computed(() => dirty.value && writable.value && !saving.value && !conflict.value?.theirs);
-
-function announce(text: string): void {
-  clearTimeout(noticeTimer);
-  notice.value = text;
-  noticeTimer = text ? setTimeout(() => (notice.value = ""), NOTICE_MS) : undefined;
-}
 
 function clearFeedback(): void {
   failure.value = null;
@@ -184,17 +177,7 @@ onMounted(() => {
     () => undefined,
   );
 });
-const profiles = computed(() => {
-  const map = new Map<string, Profile>(roster.value.map((profile) => [profile.username, profile]));
-  const people = detail.value?.people;
-  for (const profile of [
-    ...(people?.creator ? [people.creator] : []),
-    ...(people?.curators.map((curator) => curator.profile) ?? []),
-    ...(people?.collaborators ?? []),
-  ])
-    if (!map.has(profile.username)) map.set(profile.username, profile);
-  return map;
-});
+const profiles = computed(() => knownProfiles(roster.value, detail.value?.people));
 const author = computed(() => overview.snapshot?.author.user ?? null);
 
 // Reference
@@ -318,10 +301,6 @@ function removeAsset(index: number): void {
 
 // Saving
 
-function messageOf(caught: unknown): string {
-  return caught instanceof Error ? caught.message : String(caught);
-}
-
 function refused(issues: ValidationIssue[], sent: MetadataForm): void {
   const grouped = issuesByTarget(sent, issues);
   errors.value = grouped.fields;
@@ -364,9 +343,7 @@ async function save(): Promise<void> {
     if (isRevisionConflict(caught))
       conflict.value = { revision: caught.body.revision, theirs: readStudyJson(caught.body.content) };
     else if (isValidationError(caught)) refused(caught.body.issues, sent);
-    else if (isNoUser(caught))
-      noUser.value =
-        caught.body.error === "no_user" ? "Set your PK-DB user in Connection settings" : caught.message;
+    else if (isNoUser(caught)) noUser.value = userHint(caught);
     else failure.value = { text: `study.json was not saved. ${messageOf(caught)}`, issues: [] };
   } finally {
     saving.value = false;
@@ -501,7 +478,6 @@ function beforeUnload(event: BeforeUnloadEvent): void {
 onMounted(() => window.addEventListener("beforeunload", beforeUnload));
 onBeforeUnmount(() => {
   window.removeEventListener("beforeunload", beforeUnload);
-  clearTimeout(noticeTimer);
   clearTimeout(undoTimer);
   answer?.(false);
 });
@@ -931,18 +907,7 @@ onBeforeUnmount(() => {
           <VBtn v-if="conflict.theirs" variant="flat" color="primary" size="small" @click="reload">Reload</VBtn>
         </div>
       </VAlert>
-      <VAlert
-        v-if="noUser"
-        type="error"
-        variant="tonal"
-        density="compact"
-        class="status-alert metadata-failure"
-      >
-        <div class="metadata-alert-row">
-          <p class="metadata-alert-text">{{ noUser }}</p>
-          <VBtn variant="flat" color="primary" size="small" @click="dialogs.openSettings">Open settings</VBtn>
-        </div>
-      </VAlert>
+      <UserHint v-if="noUser" :text="noUser" class="metadata-failure" />
       <VAlert
         v-if="failure"
         type="error"

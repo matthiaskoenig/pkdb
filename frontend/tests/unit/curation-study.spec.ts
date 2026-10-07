@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { ApiError } from "../../src/curation-app/api/client";
 import type { ReviewItem, StudyDetail } from "../../src/curation-app/api/types";
 import {
   approvalRefusal,
@@ -8,15 +9,19 @@ import {
   folderPath,
   isSection,
   issueLabel,
+  knownProfiles,
+  messageOf,
   newTable,
   openItems,
+  profileOf,
   provenanceLabel,
   railCounts,
   releaseLabel,
   SECTIONS,
   tableFiles,
+  userHint,
 } from "../../src/curation-app/study";
-import { studyDetail } from "./curation-fixtures";
+import { profile, roster, studyDetail } from "./curation-fixtures";
 
 function item(state: ReviewItem["state"], id: string = state): ReviewItem {
   return {
@@ -211,6 +216,43 @@ describe("newTable", () => {
     expect(newTable(example, "raw", "Tab2")?.problem).toBe("Example_Tab2.tsv already exists.");
     expect(newTable(example, "timecourses", "Fig1_caffeine_plasma_D")?.problem).toBe(
       "The sheet timecourses_Fig1_caffeine_plasma_D has 34 characters. Excel allows 31.",
+    );
+  });
+});
+
+describe("people", () => {
+  it("adds the people of the study who are not in the roster", () => {
+    const outside = profile("jdoe", "Jane Doe", false);
+    const people = { creator: profile("curator", "Someone else"), curators: [], collaborators: [outside] };
+    const profiles = knownProfiles(roster(), people);
+    expect([...profiles.keys()]).toEqual(["janekg", "mkoenig", "curator", "jdoe"]);
+    // The roster wins for someone in both.
+    expect(profiles.get("curator")?.display_name).toBe("Curator");
+    expect(knownProfiles([], null).size).toBe(0);
+  });
+
+  it("names an unknown user by the user name", () => {
+    const profiles = knownProfiles(roster(), null);
+    expect(profileOf(profiles, "mkoenig").display_name).toBe("Matthias König");
+    expect(profileOf(profiles, "agent-7")).toEqual({
+      username: "agent-7",
+      display_name: "agent-7",
+      title: null,
+      affiliation: null,
+      avatar_url: null,
+    });
+  });
+});
+
+describe("failures", () => {
+  it("names the message of a failure and what to do without a user", () => {
+    expect(messageOf(new Error("Disk full"))).toBe("Disk full");
+    expect(messageOf("refused")).toBe("refused");
+    expect(userHint(new ApiError(403, { error: "no_user", message: "Set a user." }))).toBe(
+      "Set your PK-DB user in Connection settings",
+    );
+    expect(userHint(new ApiError(403, { error: "user_mismatch", message: "The key is of janekg." }))).toBe(
+      "The key is of janekg.",
     );
   });
 });

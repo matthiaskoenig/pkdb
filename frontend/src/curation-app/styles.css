@@ -25,6 +25,17 @@ a.brand {
 .status-alert .v-alert__content {
   color: rgb(var(--v-theme-on-surface));
 }
+/* Filter chips with the count of what each one shows. The group adds its own margins around
+   the chips; the gap of the filters is enough. */
+.filter-chips .v-slide-group__content {
+  margin: 0;
+  padding: 0;
+}
+.chip-count {
+  margin-inline-start: 8px;
+  font-variant-numeric: tabular-nums;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
 /* Header */
 .header-controls {
   display: flex;

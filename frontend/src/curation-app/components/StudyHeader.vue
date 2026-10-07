@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, ref, useId } from "vue";
+import { computed, ref, useId } from "vue";
 import { VAlert, VBtn, VCard, VChip, VMenu, VProgressLinear, VSelect, VTooltip } from "vuetify/components";
 import { isNoUser, isRevisionConflict, isValidationError } from "../api/client";
 import type { ReviewStatus, StudyDetail, TablesResult } from "../api/types";
+import { useNotice } from "../composables/useNotice";
 import {
   activityLabel,
   formatTime,
@@ -21,7 +22,7 @@ import {
   approvalRefusal,
   folderPath,
   issueLabel,
-  NOTICE_MS,
+  messageOf,
   openItems,
   provenanceLabel,
   releaseLabel,
@@ -71,20 +72,11 @@ const busy = ref<Action | null>(null);
 const working = computed(() => busy.value !== null);
 /** The failure of the last action; it stays until it is dismissed or the next action starts. */
 const failure = ref<Failure | null>(null);
-/** The notice of the last action that succeeded; it disappears after `NOTICE_MS`. */
-const notice = ref("");
-let noticeTimer: ReturnType<typeof setTimeout> | undefined;
+/** The notice of the last action that succeeded; it disappears after a few seconds. */
+const { notice, announce } = useNotice();
 const menu = ref(false);
 const addTable = ref(false);
 const upload = ref(false);
-
-function announce(text: string): void {
-  clearTimeout(noticeTimer);
-  notice.value = text;
-  noticeTimer = text ? setTimeout(() => (notice.value = ""), NOTICE_MS) : undefined;
-}
-
-onBeforeUnmount(() => clearTimeout(noticeTimer));
 
 const substance = computed(() => props.detail.id.slice(0, props.detail.id.indexOf("/")));
 const name = computed(() => studyName(props.detail));
@@ -138,10 +130,6 @@ const canUpload = computed(() => row.value !== null && uploadReason.value === nu
 
 function sectionRoute(section: Section) {
   return { name: "Study", params: { substance: substance.value, name: name.value, section } };
-}
-
-function messageOf(caught: unknown): string {
-  return caught instanceof Error ? caught.message : String(caught);
 }
 
 /** Run an action unless one runs already; a write that needs a user opens the settings. */

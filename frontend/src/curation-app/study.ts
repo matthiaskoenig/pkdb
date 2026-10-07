@@ -1,8 +1,9 @@
 /**
  * The sections of the study page, the section it opens on, the counts of its rail, the labels
- * of its header and the names of a new table.
+ * of its header, the profiles of its people and the names of a new table.
  */
-import type { IssueState, Release, StudyDetail, StudySummary } from "./api/types";
+import type { ApiError } from "./api/client";
+import type { IssueState, People, Profile, Release, StudyDetail, StudySummary } from "./api/types";
 
 /** The sections of the study page in the order of the rail. */
 export const SECTIONS = ["metadata", "review", "problems", "sources", "tables", "activity"] as const;
@@ -98,8 +99,39 @@ export function approvalRefusal(reason: string): string {
   return `Approved needs zero open review items and zero validation errors. ${sentence}`;
 }
 
-/** How long the header shows the notice of an action that succeeded. */
+/** How long the header and the sections show the notice of an action that succeeded. */
 export const NOTICE_MS = 5000;
+
+// Failures of actions
+
+/** The message of a failed action. */
+export function messageOf(caught: unknown): string {
+  return caught instanceof Error ? caught.message : String(caught);
+}
+
+/** What to do about a write that was refused without a user (`isNoUser`). */
+export function userHint(error: ApiError): string {
+  return error.body.error === "no_user" ? "Set your PK-DB user in Connection settings" : error.message;
+}
+
+// People
+
+/** The profiles of the roster and of the people of the study who are not in it, by user name. */
+export function knownProfiles(roster: readonly Profile[], people: People | null | undefined): Map<string, Profile> {
+  const profiles = new Map<string, Profile>(roster.map((profile) => [profile.username, profile]));
+  for (const profile of [
+    ...(people?.creator ? [people.creator] : []),
+    ...(people?.curators.map((curator) => curator.profile) ?? []),
+    ...(people?.collaborators ?? []),
+  ])
+    if (!profiles.has(profile.username)) profiles.set(profile.username, profile);
+  return profiles;
+}
+
+/** The profile of `user`, or a profile with the user name alone for someone unknown. */
+export function profileOf(profiles: ReadonlyMap<string, Profile>, user: string): Profile {
+  return profiles.get(user) ?? { username: user, display_name: user, title: null, affiliation: null, avatar_url: null };
+}
 
 // Paths
 
