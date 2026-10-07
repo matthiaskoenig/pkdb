@@ -7,7 +7,15 @@ import SectionRail from "../components/SectionRail.vue";
 import StudyHeader from "../components/StudyHeader.vue";
 import SectionPlaceholder from "../sections/SectionPlaceholder.vue";
 import { useStudyStore } from "../stores/study";
-import { defaultSection, duplicatePaths, isSection, railCounts, SECTION_LABELS, type Section } from "../study";
+import {
+  defaultSection,
+  duplicateFolders,
+  duplicateHeading,
+  isSection,
+  railCounts,
+  SECTION_LABELS,
+  type Section,
+} from "../study";
 
 /**
  * The component of each section; a section without one shows a placeholder. A section gets the
@@ -37,9 +45,14 @@ const failure = computed(() => {
   const error = study.error;
   if (!(error instanceof ApiError)) return null;
   if (error.status === 404) return { kind: "missing" as const };
-  if (error.status === 409) return { kind: "duplicate" as const, paths: duplicatePaths(error.message) };
+  if (error.status === 409) return { kind: "duplicate" as const, paths: duplicateFolders(error.body) };
   return null;
 });
+const duplicateAdvice = computed(() =>
+  failure.value?.kind === "duplicate" && failure.value.paths.length === 2
+    ? `Both folders below are ${identity.value}. Rename one of them to open the study.`
+    : `Several folders are ${identity.value}. Rename all but one of them to open the study.`,
+);
 /** Why the study could not be loaded; the header banner reports a stopped server or a missing session. */
 const loadError = computed(() => {
   const error = study.error;
@@ -70,8 +83,8 @@ watch(
         <p>There is no study folder {{ identity }} in the workspace. It may have been moved or renamed.</p>
       </template>
       <template v-else>
-        <h1>This identity belongs to two folders</h1>
-        <p>The folders below are both {{ identity }}. Rename one of them to open the study.</p>
+        <h1>{{ duplicateHeading(failure.paths.length) }}</h1>
+        <p>{{ duplicateAdvice }}</p>
         <ul v-if="failure.paths.length" class="study-failure-paths">
           <li v-for="path in failure.paths" :key="path">{{ path }}</li>
         </ul>

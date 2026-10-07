@@ -98,6 +98,9 @@ export function approvalRefusal(reason: string): string {
   return `Approved needs zero open review items and zero validation errors. ${sentence}`;
 }
 
+/** How long the header shows the notice of an action that succeeded. */
+export const NOTICE_MS = 5000;
+
 // Paths
 
 /** The folder of a study, given relative to the workspace with `/`, joined with the separator of the workspace. */
@@ -107,10 +110,18 @@ export function folderPath(workspace: string, relative: string): string {
   return [base, ...relative.split("/").filter(Boolean)].join(separator);
 }
 
-/** The folders of a duplicate identity, from the 409 message `... two folders: <a>, <b>; rename one`. */
-export function duplicatePaths(message: string): string[] {
-  const listed = /folders: (.+); rename one$/.exec(message)?.[1];
-  return listed ? listed.split(", ") : [];
+/** The folders of a duplicate identity, relative to the workspace, from the `paths` of the 409 answer. */
+export function duplicateFolders(body: Record<string, unknown>): string[] {
+  const paths = body.paths;
+  return Array.isArray(paths) ? paths.filter((path): path is string => typeof path === "string") : [];
+}
+
+const NUMBERS = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
+
+/** `This identity belongs to two folders`, for the number of folders that the server listed. */
+export function duplicateHeading(folders: number): string {
+  if (folders < 2) return "This identity belongs to more than one folder";
+  return `This identity belongs to ${NUMBERS[folders] ?? folders} folders`;
 }
 
 // New tables

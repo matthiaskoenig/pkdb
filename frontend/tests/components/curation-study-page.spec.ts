@@ -1,4 +1,4 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, onTestFinished, vi } from "vitest";
 import { enableAutoUnmount, flushPromises, mount } from "@vue/test-utils";
 import { createPinia, disposePinia, setActivePinia, type Pinia } from "pinia";
 import { defineComponent, h } from "vue";
@@ -15,6 +15,7 @@ import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
+import { NOTICE_MS } from "../../src/curation-app/study";
 import StudyPage from "../../src/curation-app/views/StudyPage.vue";
 import { json, snapshot, studyDetail, studyMetadata, studyRow } from "../unit/curation-fixtures";
 import { button, buttons, click, field, page, serveApi, setViewport, type ServedRequest } from "./curation-dom";
@@ -161,6 +162,16 @@ function issue(message: string, changes: Partial<ValidationIssue> = {}): Validat
 
 function tablesResult(changes: Partial<TablesResult> = {}): TablesResult {
   return { ok: true, workbook_action: "unchanged", changes: [], conflicts: [], issues: [], ...changes };
+}
+
+/** A clipboard with `writeText`, removed again after the test; jsdom has none. */
+function stubClipboard(writeText: (text: string) => Promise<void>) {
+  const spy = vi.fn(writeText);
+  Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText: spy } });
+  onTestFinished(() => {
+    Reflect.deleteProperty(navigator, "clipboard");
+  });
+  return spy;
 }
 
 beforeEach(() => {
@@ -329,10 +340,83 @@ describe("StudyPage", () => {
     const status = select(wrapper, "Review status");
     await status.setValue("approved");
     await flushPromises();
-    expect(alertText()).toBe(
+    expect(page().get(".study-alert .study-alert-text").text()).toBe(
       "Approved needs zero open review items and zero validation errors. 1 review item is open.",
     );
+    const link = page().get(".study-alert a");
+    expect(link.text()).toBe("Show the open items");
+    expect(link.attributes("href")).toBe("#/studies/caffeine/Harder1988/review");
     expect(status.props("modelValue")).toBe("in_review");
+  });
+
+  it("lists the errors that block an approval, a few of them, with a link to Problems", async () => {
+    const errors = ["Fig1", "Fig2", "Tab1", "Tab2"].map((source) =>
+      issue(`Harder1988_${source}.png is missing`, { code: "missing_image" }),
+    );
+    const wrapper = await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/review": () =>
+        json({ error: "Validation has 4 errors", issues: errors, code: "approval_refused" }, { status: 422 }),
+    });
+    await select(wrapper, "Review status").setValue("approved");
+    await flushPromises();
+    const alert = page().get(".study-alert");
+    expect(alert.get(".study-alert-text").text()).toBe(
+      "Approved needs zero open review items and zero validation errors. Validation has 4 errors.",
+    );
+    expect(alert.findAll("li").map((item) => item.text())).toEqual([
+      "Harder1988_Fig1.png is missing",
+      "Harder1988_Fig2.png is missing",
+      "Harder1988_Tab1.png is missing",
+      "and 1 more",
+    ]);
+    const link = alert.get("a");
+    expect(link.text()).toBe("Show the problems");
+    expect(link.attributes("href")).toBe("#/studies/caffeine/Harder1988/problems");
+  });
+
+  it("allows no other action while the review status is being set", async () => {
+    let answer: (response: Response) => void = () => undefined;
+    const slow = new Promise<Response>((resolve) => (answer = resolve));
+    const wrapper = await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/review": () => slow,
+      "POST /local/jobs": { ok: true },
+    });
+    const status = select(wrapper, "Review status");
+    await status.setValue("approved");
+    await flushPromises();
+    expect(status.props("modelValue")).toBe("approved");
+    expect(status.props("disabled")).toBe(true);
+    expect(status.get('[role="progressbar"]').attributes("aria-label")).toBe("Setting the review status");
+    for (const name of ["Open tables", "Validate", "More actions"])
+      expect(button(name).attributes("disabled")).toBeDefined();
+
+    // A second choice while the first one is written changes nothing.
+    await status.setValue("draft");
+    await button("Validate").trigger("click");
+    await flushPromises();
+    expect(posted("/local/studies/review")).toHaveLength(1);
+    expect(posted("/local/jobs")).toHaveLength(0);
+
+    answer(json({ revision: "review-8" }));
+    await flushPromises();
+    expect(status.props("disabled")).toBe(false);
+    expect(button("Validate").attributes("disabled")).toBeUndefined();
+    expect(page().get(".study-notice").text()).toBe("Review status set to Approved.");
+  });
+
+  it("explains a review.json that changed on disk before the status was set", async () => {
+    const wrapper = await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/review": () =>
+        json(
+          { error: "review.json changed", file: "review.json", revision: "review-9", content: "{}" },
+          { status: 409 },
+        ),
+    });
+    await select(wrapper, "Review status").setValue("approved");
+    await flushPromises();
+    expect(alertText()).toBe(
+      "review.json changed on disk, so the status was not set. Check the review and set it again.",
+    );
   });
 
   it("opens the settings when a write needs a user", async () => {
@@ -373,13 +457,53 @@ describe("StudyPage", () => {
     await mountPage("/studies/caffeine/Harder1988/review", { "POST /local/jobs": { ok: true } });
     await click("Validate");
     expect(posted("/local/jobs")).toEqual([{ ids: ["caffeine/Harder1988"], action: "validate" }]);
-    expect(page().get(".study-notice").text()).toBe("Validation queued.");
+    const notice = page().get(".study-notice");
+    expect(notice.text()).toBe("Validation queued.");
+    expect(notice.attributes()).toMatchObject({ role: "status", "aria-live": "polite" });
   });
 
-  it("uploads only with an upload permission, after the upload review", async () => {
+  it("clears a notice after a few seconds and keeps an error until it is dismissed", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      await mountPage("/studies/caffeine/Harder1988/review", {
+        "POST /local/jobs": { ok: true },
+        "POST /local/studies/tables": () => json({ error: "Unable to open the workbook" }, { status: 500 }),
+      });
+      await click("Validate");
+      expect(page().get(".study-notice").text()).toBe("Validation queued.");
+      vi.advanceTimersByTime(NOTICE_MS);
+      await flushPromises();
+      expect(page().get(".study-notice").text()).toBe("");
+
+      await click("Open tables");
+      vi.advanceTimersByTime(NOTICE_MS * 4);
+      await flushPromises();
+      expect(alertText()).toBe("Unable to open the workbook");
+      await page().get(".study-alert").get('button[aria-label="Close"]').trigger("click");
+      await flushPromises();
+      expect(page().find(".study-alert").exists()).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("uploads only with an upload permission, and says why it cannot", async () => {
     await mountPage("/studies/caffeine/Harder1988/review", {}, snapshot({ studies: [harderRow] }));
+    const upload = button("Upload");
+    expect(upload.attributes("disabled")).toBeDefined();
+    // A caption, also shown where no pointer can hover over the tooltip.
+    const reason = page().get(".upload-reason");
+    expect(reason.text()).toBe("Work offline is on. Turn it off in the settings to upload.");
+    expect(upload.attributes("aria-describedby")).toBe(reason.attributes("id"));
+  });
+
+  it("says why it cannot upload a study that the overview does not list yet", async () => {
+    const connected = snapshot({ can_upload: true, offline: false, authenticated: true, connection: "connected" });
+    await mountPage("/studies/caffeine/Harder1988/review", {}, connected);
     expect(button("Upload").attributes("disabled")).toBeDefined();
-    expect(page().text()).toContain("Work offline is on. Turn it off in the settings to upload.");
+    expect(page().get(".upload-reason").text()).toBe(
+      "The workspace scan has not listed this study yet. Upload waits for the next scan.",
+    );
   });
 
   it("reviews an upload in the upload dialog", async () => {
@@ -400,8 +524,7 @@ describe("StudyPage", () => {
   });
 
   it("opens the folder and the PDF of the study and copies its path", async () => {
-    const writeText = vi.fn(async () => undefined);
-    Object.defineProperty(navigator, "clipboard", { configurable: true, value: { writeText } });
+    const writeText = stubClipboard(async () => undefined);
     await mountPage("/studies/caffeine/Harder1988/review", { "POST /local/files/open": { ok: true } });
 
     await click("More actions");
@@ -417,6 +540,17 @@ describe("StudyPage", () => {
     await click("Copy path");
     expect(writeText).toHaveBeenCalledWith("/work/pkdb_data/caffeine/Harder1988");
     expect(page().get(".study-notice").text()).toBe("Path copied.");
+  });
+
+  it("shows the path when it cannot be copied", async () => {
+    stubClipboard(async () => {
+      throw new DOMException("Write permission denied", "NotAllowedError");
+    });
+    await mountPage("/studies/caffeine/Harder1988/review");
+    await click("More actions");
+    await click("Copy path");
+    expect(alertText()).toBe("The path could not be copied: /work/pkdb_data/caffeine/Harder1988");
+    expect(page().get(".study-notice").text()).toBe("");
   });
 
   it("offers Open PDF only when the folder has the PDF", async () => {
@@ -497,14 +631,15 @@ describe("StudyPage", () => {
   });
 
   it("explains a duplicate identity with both folders", async () => {
-    const message =
-      "caffeine/Example is the identity of two folders: caffeine/Example, archive/caffeine/Example; rename one";
+    const paths = ["caffeine/Example", "archive, 2020/caffeine/Example"];
+    const message = `caffeine/Example is the identity of two folders: ${paths.join(", ")}; rename one`;
     await mountPage("/studies/caffeine/Example", {
-      [`GET ${EXAMPLE}`]: () => json({ error: message }, { status: 409 }),
+      [`GET ${EXAMPLE}`]: () => json({ error: message, paths }, { status: 409 }),
     });
     const main = page().get(".study-failure");
     expect(main.get("h1").text()).toBe("This identity belongs to two folders");
-    expect(main.findAll("li").map((item) => item.text())).toEqual(["caffeine/Example", "archive/caffeine/Example"]);
+    // A folder name with a comma stays one folder.
+    expect(main.findAll("li").map((item) => item.text())).toEqual(paths);
     expect(main.get("a").attributes("href")).toBe("#/");
     expect(page().find(".study-header").exists()).toBe(false);
   });

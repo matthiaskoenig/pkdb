@@ -3,7 +3,8 @@ import type { ReviewItem, StudyDetail } from "../../src/curation-app/api/types";
 import {
   approvalRefusal,
   defaultSection,
-  duplicatePaths,
+  duplicateFolders,
+  duplicateHeading,
   folderPath,
   isSection,
   issueLabel,
@@ -151,13 +152,18 @@ describe("paths", () => {
     expect(folderPath("C:\\work\\pkdb_data", "caffeine/Example")).toBe("C:\\work\\pkdb_data\\caffeine\\Example");
   });
 
-  it("reads the folders of a duplicate identity from the message of the server", () => {
-    expect(
-      duplicatePaths(
-        "caffeine/Example is the identity of two folders: caffeine/Example, archive/caffeine/Example; rename one",
-      ),
-    ).toEqual(["caffeine/Example", "archive/caffeine/Example"]);
-    expect(duplicatePaths("Something else")).toEqual([]);
+  it("takes the folders of a duplicate identity from the 409 answer", () => {
+    const paths = ["caffeine/Example", "archive, 2020/caffeine/Example"];
+    expect(duplicateFolders({ error: "caffeine/Example is the identity of two folders", paths })).toEqual(paths);
+    expect(duplicateFolders({ error: "Something else" })).toEqual([]);
+    expect(duplicateFolders({ paths: ["a", 2, null] })).toEqual(["a"]);
+  });
+
+  it("counts the folders of a duplicate identity in the heading", () => {
+    expect(duplicateHeading(2)).toBe("This identity belongs to two folders");
+    expect(duplicateHeading(3)).toBe("This identity belongs to three folders");
+    expect(duplicateHeading(12)).toBe("This identity belongs to 12 folders");
+    expect(duplicateHeading(0)).toBe("This identity belongs to more than one folder");
   });
 });
 
