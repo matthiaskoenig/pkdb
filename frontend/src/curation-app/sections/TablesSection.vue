@@ -272,7 +272,15 @@ const missingLine = computed(() => {
       The study has no tables yet. Add table adds a sheet to the workbook.
     </p>
     <template v-else>
-      <VTabs v-model="tab" show-arrows color="primary" density="compact" aria-label="Tables" class="tables-tabs">
+      <VTabs
+        v-model="tab"
+        show-arrows
+        center-active
+        color="primary"
+        density="compact"
+        aria-label="Tables"
+        class="tables-tabs"
+      >
         <VTab
           v-for="file in files"
           :id="tabId(file)"
