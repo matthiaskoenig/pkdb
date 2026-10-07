@@ -9,6 +9,7 @@ import MetadataSection from "../sections/MetadataSection.vue";
 import ProblemsSection from "../sections/ProblemsSection.vue";
 import ReviewSection from "../sections/ReviewSection.vue";
 import SectionPlaceholder from "../sections/SectionPlaceholder.vue";
+import SourcesSection from "../sections/SourcesSection.vue";
 import { useStudyStore } from "../stores/study";
 import {
   defaultSection,
@@ -29,6 +30,7 @@ const SECTION_VIEWS: Partial<Record<Section, Component>> = {
   metadata: MetadataSection,
   review: ReviewSection,
   problems: ProblemsSection,
+  sources: SourcesSection,
 };
 
 const route = useRoute();

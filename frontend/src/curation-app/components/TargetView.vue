@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { computed, ref, shallowRef, useId, watch } from "vue";
+import { computed, useId } from "vue";
+import { useRouter } from "vue-router";
 import { VCard, VCardText, VProgressLinear } from "vuetify/components";
-import { isAbort } from "../api/client";
 import type { ReviewTarget, SourceView, TableResponse } from "../api/types";
+import { useLoaded } from "../composables/useLoaded";
 import { plural } from "../overview";
 import { matchingRows, matchText, seriesOfTarget, shownColumns, targetText } from "../review";
 import { useStudyStore } from "../stores/study";
-import { messageOf, tableFiles } from "../study";
+import { sectionRoute, tableFiles } from "../study";
 import SourceOverlay from "./SourceOverlay.vue";
 
 /** At most this many rows are listed; the Tables section has all of them. */
@@ -22,6 +23,7 @@ const SCROLL_ROWS = 12;
 const props = defineProps<{ target: ReviewTarget | undefined }>();
 
 const study = useStudyStore();
+const router = useRouter();
 const headingId = useId();
 
 const file = computed(() => props.target?.file ?? null);
@@ -31,42 +33,12 @@ const filtered = computed(() => Object.keys(filters.value).length > 0);
 const tableFile = computed(() =>
   file.value !== null && study.detail !== null && tableFiles(study.detail).includes(file.value) ? file.value : null,
 );
-/** The digitized series of a timecourse target: a figure with a WebPlotDigitizer project. */
+/** The digitized series of a timecourse or scatter target: a figure with a WebPlotDigitizer project. */
 const series = computed(() => {
   const found = seriesOfTarget(props.target);
   const summary = found && study.detail?.sources.find((source) => source.source === found.source);
   return summary?.raw_kind === "digitization" ? found : null;
 });
-
-/** Loads `read()` into `data` when `key` changes and when the detail changes; late answers are dropped. */
-function useLoaded<T>(key: () => string | null, read: (key: string) => Promise<T>) {
-  // Shallow: a table of thousands of rows needs no deep reactivity.
-  const data = shallowRef<{ key: string; content: T } | null>(null);
-  const error = ref<string | null>(null);
-  const loading = ref(false);
-  let request = 0;
-  watch(
-    [key, () => study.detail],
-    async ([name]) => {
-      const current = ++request;
-      error.value = null;
-      // The last answer stays while the same resource revalidates.
-      if (data.value?.key !== name) data.value = null;
-      if (name === null) return;
-      loading.value = data.value === null;
-      try {
-        const content = await read(name);
-        if (current === request) data.value = { key: name, content };
-      } catch (caught) {
-        if (current === request && !isAbort(caught)) error.value = messageOf(caught);
-      } finally {
-        if (current === request) loading.value = false;
-      }
-    },
-    { immediate: true },
-  );
-  return { data, error, loading };
-}
 
 const {
   data: table,
@@ -75,6 +47,7 @@ const {
 } = useLoaded<TableResponse>(
   () => tableFile.value,
   (name) => study.table(name),
+  () => study.detail,
 );
 const {
   data: figure,
@@ -83,7 +56,13 @@ const {
 } = useLoaded<SourceView>(
   () => series.value?.source ?? null,
   (name) => study.source(name),
+  () => study.detail,
 );
+
+/** A clicked mapped point of the figure opens its row in the Tables section. */
+function showRow(row: { file: string; line: number }): void {
+  if (study.detail) void router.push(sectionRoute(study.detail.id, "tables", { file: row.file, line: String(row.line) }));
+}
 
 const rows = computed(() => {
   const loaded = table.value?.content;
@@ -135,16 +114,16 @@ const shown = computed(() => tableFile.value !== null || series.value !== null);
           <!-- The rows scroll inside their region, which takes the focus so that a keyboard can scroll it. -->
           <div
             v-if="rows.listed.length"
-            class="target-scroll"
-            :class="{ 'target-scroll--tall': rows.listed.length > SCROLL_ROWS }"
+            class="rows-scroll"
+            :class="{ 'rows-scroll--tall': rows.listed.length > SCROLL_ROWS }"
             tabindex="0"
             role="region"
             :aria-label="`Rows of ${tableFile}`"
           >
-            <table class="target-rows">
+            <table class="rows-table">
               <thead>
                 <tr>
-                  <th scope="col" class="target-line">Line</th>
+                  <th scope="col" class="rows-line">Line</th>
                   <th
                     v-for="index in rows.columns"
                     :key="index"
@@ -158,7 +137,7 @@ const shown = computed(() => tableFile.value !== null || series.value !== null);
               </thead>
               <tbody>
                 <tr v-for="row in rows.listed" :key="row.line">
-                  <th scope="row" class="target-line">{{ row.line }}</th>
+                  <th scope="row" class="rows-line">{{ row.line }}</th>
                   <td
                     v-for="index in rows.columns"
                     :key="index"
@@ -188,6 +167,7 @@ const shown = computed(() => tableFile.value !== null || series.value !== null);
           v-else-if="figure"
           :view="figure.content"
           :highlight="series.series"
+          @select-row="showRow"
         />
       </div>
     </VCardText>
@@ -229,62 +209,8 @@ const shown = computed(() => tableFile.value !== null || series.value !== null);
   font-size: 0.875rem;
   line-height: 1.45;
 }
-/* At most about twelve rows show at once. A shadow at a side shows that more columns are there:
-   the shadows stay at the edges, and covers in the surface color that scroll with the rows hide
-   them at the start and the end. */
-.target-scroll {
-  --cover: rgb(var(--v-theme-surface));
-  --cover-clear: rgba(var(--v-theme-surface), 0);
-  --shade: rgba(var(--v-theme-on-surface), 0.2);
-  max-height: 420px;
-  overflow: auto;
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 8px;
-  background:
-    linear-gradient(to right, var(--cover) 30%, var(--cover-clear)) left center / 40px 100% no-repeat local,
-    linear-gradient(to left, var(--cover) 30%, var(--cover-clear)) right center / 40px 100% no-repeat local,
-    linear-gradient(to right, var(--shade), var(--cover-clear)) left center / 14px 100% no-repeat scroll,
-    linear-gradient(to left, var(--shade), var(--cover-clear)) right center / 14px 100% no-repeat scroll,
-    var(--cover);
-}
-.target-rows {
-  min-width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
-  font-size: 0.8125rem;
-}
-.target-rows th,
-.target-rows td {
-  height: 32px;
-  padding: 0 12px;
-  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  text-align: start;
-  white-space: nowrap;
-}
-.target-rows tbody tr:last-child > * {
-  border-bottom: 0;
-}
-.target-rows thead th {
-  font-weight: 600;
-}
-/* Rows that scroll pass below the header, which needs the surface color then; the shadows of the
-   sides show in the rows below it. */
-.target-scroll--tall .target-rows thead th {
-  position: sticky;
-  top: 0;
-  z-index: 1;
-  background-color: rgb(var(--v-theme-surface));
-}
-/* The cells have no background, so that the shadows of the sides show through. */
-.target-rows .target-line {
-  font-variant-numeric: tabular-nums;
-}
-.target-rows tbody .target-line {
-  font-weight: 400;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
 /* A tint over the cell, so that the sticky header keeps its surface color below it. */
-.target-rows .target-column {
+.rows-table .target-column {
   background-image: linear-gradient(rgba(var(--v-theme-primary), 0.1), rgba(var(--v-theme-primary), 0.1));
 }
 </style>

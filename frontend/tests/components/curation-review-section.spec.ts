@@ -133,8 +133,17 @@ const OverlayStub = defineComponent({
     view: { type: Object as PropType<SourceView>, required: true },
     highlight: { type: String as PropType<string | null>, default: null },
   },
-  setup(props) {
-    return () => h("div", { class: "overlay-stub" }, `${props.view.source} ${props.highlight ?? "none"}`);
+  emits: ["select-row"],
+  setup(props, { emit }) {
+    return () =>
+      h("div", { class: "overlay-stub" }, [
+        `${props.view.source} ${props.highlight ?? "none"}`,
+        h(
+          "button",
+          { type: "button", onClick: () => emit("select-row", { file: "timecourses_Fig1.tsv", line: 3 }) },
+          "Select a mapped point",
+        ),
+      ]);
   },
 });
 
@@ -708,6 +717,26 @@ describe("target", () => {
     const overlay = wrapper.findComponent(OverlayStub);
     expect(overlay.props("view")).toEqual(figure);
     expect(overlay.props("highlight")).toBe("caf_plasma_D150");
+  });
+
+  it("opens the Tables section at the row of a clicked mapped point", async () => {
+    await mountSection();
+    await select("The error bars");
+    await click("Select a mapped point");
+    await vi.waitFor(() => expect(router.currentRoute.value.path).toBe("/studies/caffeine/Example/tables"));
+    expect(router.currentRoute.value.query).toEqual({ file: "timecourses_Fig1.tsv", line: "3" });
+  });
+
+  it("shows the overlay of a digitized scatter series", async () => {
+    const scatter = reviewItem({
+      id: ADDED,
+      kind: "question",
+      target: { file: "scatters_Fig1.tsv", rows: { name: "age_vs_cmax" } },
+      text: "Is the age the median?",
+    });
+    await mountSection(withReview({ items: [scatter] }));
+    expect(fetched(`${EXAMPLE}/sources/Fig1`)).toBe(1);
+    expect(wrapper.findComponent(OverlayStub).props("highlight")).toBe("age_vs_cmax");
   });
 });
 

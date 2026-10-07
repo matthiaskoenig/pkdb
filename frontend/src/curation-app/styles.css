@@ -255,3 +255,68 @@ a.brand {
   text-align: center;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
+
+/* Rows of a table in a region of their own, such as the rows of a review target or of a source.
+   At most about twelve rows show at once. A shadow at a side shows that more columns are there:
+   the shadows stay at the edges, and covers in the surface color that scroll with the rows hide
+   them at the start and the end. */
+.rows-scroll {
+  --cover: rgb(var(--v-theme-surface));
+  --cover-clear: rgba(var(--v-theme-surface), 0);
+  --shade: rgba(var(--v-theme-on-surface), 0.2);
+  max-height: 420px;
+  overflow: auto;
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 8px;
+  background:
+    linear-gradient(to right, var(--cover) 30%, var(--cover-clear)) left center / 40px 100% no-repeat local,
+    linear-gradient(to left, var(--cover) 30%, var(--cover-clear)) right center / 40px 100% no-repeat local,
+    linear-gradient(to right, var(--shade), var(--cover-clear)) left center / 14px 100% no-repeat scroll,
+    linear-gradient(to left, var(--shade), var(--cover-clear)) right center / 14px 100% no-repeat scroll,
+    var(--cover);
+}
+.rows-table {
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.8125rem;
+}
+.rows-table th,
+.rows-table td {
+  height: 32px;
+  padding: 0 12px;
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  text-align: start;
+  white-space: nowrap;
+}
+.rows-table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+.rows-table thead th {
+  font-weight: 600;
+}
+/* Rows that scroll pass below the header, which needs the surface color then; the shadows of the
+   sides show in the rows below it. The cells have no background, so that the shadows show
+   through. */
+.rows-scroll--tall .rows-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: rgb(var(--v-theme-surface));
+}
+/* A table that is only as wide as its columns, such as a few mapped rows or a raw extraction. */
+.rows-scroll--fit {
+  width: fit-content;
+  max-width: 100%;
+}
+.rows-scroll--fit .rows-table {
+  min-width: 0;
+}
+/* The line of a row in its file. */
+.rows-table .rows-line {
+  font-variant-numeric: tabular-nums;
+}
+.rows-table tbody .rows-line {
+  font-weight: 400;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
