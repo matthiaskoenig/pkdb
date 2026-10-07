@@ -1,6 +1,7 @@
 """Fixtures for study format 2 tests."""
 
 import gc
+import math
 import os
 import shutil
 import subprocess
@@ -9,93 +10,53 @@ from pathlib import Path
 
 import pytest
 
-from pkdb.domain.vocabulary import MeasurementRule, SubstanceDefinition, Vocabulary
-from pkdb.studyformat.jsonio import dump_json
-from pkdb.studyformat.tables import TABLES
-from pkdb.studyformat.text import render_tsv
-
-
-@pytest.fixture
-def sf_vocabulary():
-    return Vocabulary(
-        version="studyformat-test",
-        measurements=(
-            MeasurementRule(
-                name="species", dtype="categorical", choices=("Homo sapiens",)
-            ),
-            MeasurementRule(name="healthy", dtype="boolean", choices=("Y", "N")),
-            MeasurementRule(name="sex", dtype="categorical", choices=("M", "F", "NR")),
-            MeasurementRule(name="age", units=("yr",)),
-            MeasurementRule(name="concentration", units=("mg/l",), time_required=True),
-            MeasurementRule(name="cmax", units=("mg/l",)),
-            MeasurementRule(name="dosing", units=("mg",)),
-            # Numeric in the bundled vocabulary, but used without a dose.
-            MeasurementRule(name="qualitative dosing", units=("mg", "NO_UNIT")),
-            MeasurementRule(name="fasting", dtype="boolean", choices=("Y", "N")),
-            MeasurementRule(name="kinetics", dtype="abstract"),
-            MeasurementRule(
-                name="medication", dtype="boolean", choices=("Y", "N", "NR")
-            ),
-            MeasurementRule(name="change", units=("mg/l",), can_negative=True),
-            MeasurementRule(name="old_measure", units=("mg/l",), deprecated=True),
-            # Pharmacokinetic parameters that postprocessing derives from timecourses.
-            MeasurementRule(name="auc_end", units=("g/l*hr", "mol/l*hr")),
-            MeasurementRule(name="auc_inf", units=("g/l*hr", "mol/l*hr")),
-            MeasurementRule(name="clearance", units=("l/hr", "l/hr/kg")),
-            MeasurementRule(name="kel", units=("1/min",)),
-            MeasurementRule(name="thalf", units=("hr",)),
-            MeasurementRule(name="tmax", units=("hr",)),
-            MeasurementRule(name="vd", units=("l", "l/kg")),
-            MeasurementRule(name="vd_ss", units=("l", "l/kg")),
-        ),
-        substances=(SubstanceDefinition(name="drug", sid="drug", mass=500),),
-        tissues=("plasma",),
-        methods=("HPLC",),
-        routes=("oral",),
-        forms=("tablet",),
-        applications=(
-            "single dose",
-            "multiple dose",
-            "constant infusion",
-            "variable infusion",
-        ),
-        calculation_types=("calculation", "geometric mean", "sample mean"),
-    )
-
-
 # A performance check measures a step for an input and for SCALE times the
-# input, back to back, and the larger input may take at most SCALING_LIMIT
-# times the CPU time. Linear work takes four times as long and quadratic work
-# sixteen times, so the check catches a quadratic regression on a slow or busy
-# machine alike, where an absolute budget fails or passes by chance.
+# input, and the larger input may take at most SCALING_LIMIT times the CPU
+# time. Linear work takes four times as long and quadratic work sixteen times,
+# so the check catches a quadratic regression on a slow or busy machine alike,
+# where an absolute budget fails or passes by chance. Each size is measured up
+# to REPEATS times and its least CPU time counts, since a busy machine only
+# ever adds time.
 SCALE = 4
 SCALING_LIMIT = 6
+REPEATS = 3
 
 
 def cpu_seconds(step):
-    """The result of a step and the CPU seconds of this process it took.
+    """The result of a step and the CPU seconds of this thread it took.
 
-    time.process_time hardly depends on the load of the machine, unlike the
-    wall clock. Garbage of the preparation is collected first.
+    time.thread_time hardly depends on the load of the machine, unlike the wall
+    clock, and unlike time.process_time it leaves out the other threads of the
+    process, such as servers or watchers of other tests. Garbage of the
+    preparation is collected first.
     """
     gc.collect()
-    start = time.process_time()
+    start = time.thread_time()
     result = step()
-    return result, time.process_time() - start
+    return result, time.thread_time() - start
 
 
 @pytest.fixture
 def linear_cpu_time():
     """Check that a step takes CPU time linear in the size of its input.
 
-    `prepare(size)` builds the input of that size and returns the step, which
-    alone is measured, for `size` and SCALE times `size`. Returns the result of
-    the larger step.
+    `prepare(size)` returns the step for an input of that size, which alone is
+    measured; it is called for every measurement, so a step that changes its
+    input gets a fresh one each time. Steps of `size` and of SCALE times `size`
+    alternate, so that both meet the same load of the machine, up to REPEATS
+    times each, until the least CPU time of the larger steps is within
+    SCALING_LIMIT times the least of the smaller ones. Returns the result of
+    the last larger step.
     """
 
     def check(prepare, size):
-        _, small = cpu_seconds(prepare(size))
-        result, large = cpu_seconds(prepare(SCALE * size))
+        small = large = math.inf
+        for _ in range(REPEATS):
+            small = min(small, cpu_seconds(prepare(size))[1])
+            result, seconds = cpu_seconds(prepare(SCALE * size))
+            large = min(large, seconds)
+            if large <= SCALING_LIMIT * small:
+                break
         assert large <= SCALING_LIMIT * small, (
             f"{SCALE} times the input took {large / max(small, 1e-9):.1f} times "
             f"the CPU time ({small:.2f} s and {large:.2f} s)"
@@ -109,170 +70,6 @@ def linear_cpu_time():
 def cpu_time():
     """Measure a step in CPU seconds: `cpu_time(step)` returns its result and its time."""
     return cpu_seconds
-
-
-@pytest.fixture
-def make_study(tmp_path):
-    def make(files, *, name="Example", substance="caffeine") -> Path:
-        folder = tmp_path / substance / name
-        folder.mkdir(parents=True)
-        for file, content in files.items():
-            path = folder / file
-            if isinstance(content, bytes):
-                path.write_bytes(content)
-            else:
-                path.write_text(content, encoding="utf-8", newline="")
-        return folder
-
-    return make
-
-
-@pytest.fixture
-def tsv():
-    def render(kind, *rows):
-        spec = TABLES[kind]
-        for row in rows:
-            unknown = set(row) - set(spec.names)
-            assert not unknown, f"unknown columns {sorted(unknown)} for {kind}"
-        return render_tsv(
-            spec.names,
-            [tuple(row.get(name, "") for name in spec.names) for row in rows],
-        )
-
-    return render
-
-
-@pytest.fixture
-def valid_files(tsv):
-    """A complete, valid study before formatting (owned columns still empty)."""
-    timecourse = {
-        "label": "drug_plasma",
-        "subjects": "all",
-        "interventions": "D1",
-        "measurement": "concentration",
-        "substance": "drug",
-        "tissue": "plasma",
-        "time_unit": "h",
-        "unit": "mg/l",
-    }
-    point = {
-        "name": "age_vs_cmax",
-        "x_measurement": "age",
-        "x_unit": "yr",
-        "y_interventions": "D1",
-        "y_measurement": "cmax",
-        "y_substance": "drug",
-        "y_tissue": "plasma",
-        "y_unit": "mg/l",
-    }
-    return {
-        "study.json": dump_json(
-            {
-                "format": 2,
-                "reference": {"pmid": "123"},
-                "creator": "curator",
-                "curators": [{"user": "curator", "rating": 3}],
-                "licence": "open",
-                "access": "private",
-            }
-        ),
-        "reference.json": dump_json(
-            {"sid": "123", "name": "Example", "pmid": "123", "title": "Example study"}
-        ),
-        "review.json": dump_json({"status": "draft"}),
-        "subjects.tsv": tsv(
-            "subjects",
-            {"name": "all", "count": "2", "source": "Tab1"},
-            {"name": "S1", "parent": "all", "count": "1", "source": "TabA"},
-            {"name": "S2", "parent": "all", "count": "1", "source": "TabA"},
-        ),
-        "interventions.tsv": tsv(
-            "interventions",
-            {
-                "source": "Text",
-                "name": "D1",
-                "measurement": "dosing",
-                "substance": "drug",
-                "route": "oral",
-                "form": "tablet",
-                "application": "single dose",
-                "time": "0",
-                "time_unit": "h",
-                "mean": "100",
-                "unit": "mg",
-            },
-        ),
-        "characteristica.tsv": tsv(
-            "characteristica",
-            {
-                "source": "Tab1",
-                "subjects": "all",
-                "measurement": "species",
-                "choice": "Homo sapiens",
-            },
-            {
-                "source": "Tab1",
-                "subjects": "all",
-                "measurement": "healthy",
-                "choice": "Y",
-            },
-            {"source": "Tab1", "subjects": "all", "measurement": "sex", "choice": "M"},
-            {
-                "source": "TabA",
-                "subjects": "S1",
-                "measurement": "age",
-                "mean": "30",
-                "unit": "yr",
-            },
-            {
-                "source": "TabA",
-                "subjects": "S2",
-                "measurement": "age",
-                "mean": "40",
-                "unit": "yr",
-            },
-        ),
-        "outputs_Tab2.tsv": tsv(
-            "outputs",
-            {
-                "subjects": "all",
-                "interventions": "D1",
-                "measurement": "cmax",
-                "substance": "drug",
-                "tissue": "plasma",
-                "mean": "2.5",
-                "sd": "0.5",
-                "unit": "mg/l",
-            },
-        ),
-        "timecourses_Fig1.tsv": tsv(
-            "timecourses",
-            *(
-                {**timecourse, "time": t, "mean": m}
-                for t, m in (("0", "0"), ("1", "2"), ("2", "1"))
-            ),
-        ),
-        "scatters_Fig2.tsv": tsv(
-            "scatters",
-            {**point, "subjects": "S1", "x_mean": "30", "y_mean": "2"},
-            {**point, "subjects": "S2", "x_mean": "40", "y_mean": "3"},
-        ),
-        "Example.pdf": b"%PDF",
-        "Example_Tab1.png": b"png",
-        "Example_TabA.png": b"png",
-        "Example_Tab2.png": b"png",
-        "Example_Fig1.png": b"png",
-        "Example_Fig2.png": b"png",
-    }
-
-
-@pytest.fixture
-def valid_study(make_study, valid_files):
-    from pkdb.studyformat.formatter import format_folder
-
-    folder = make_study(valid_files)
-    assert format_folder(folder).ok
-    return folder
 
 
 @pytest.fixture

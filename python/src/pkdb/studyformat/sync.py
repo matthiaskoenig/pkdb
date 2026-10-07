@@ -103,6 +103,22 @@ class SyncConflict:
     kept: Side | None = None
 
 
+def conflict_data(conflict: SyncConflict) -> dict:
+    """A conflict as JSON, as pkdb tables sync and the curation app report it."""
+    return {
+        "file": conflict.file,
+        "sheet": conflict.sheet,
+        "workbook_rows": [
+            {"row": row, "text": text} for row, text in conflict.workbook_rows
+        ],
+        "table_lines": [
+            {"line": line, "text": text} for line, text in conflict.table_lines
+        ],
+        "base_lines": list(conflict.base_lines),
+        "kept": conflict.kept,
+    }
+
+
 @dataclass(frozen=True)
 class SyncResult:
     """Outcome of a sync, or of its plan in check mode.

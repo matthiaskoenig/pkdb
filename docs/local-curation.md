@@ -8,7 +8,7 @@ The app brings study selection, validation feedback, and uploads into a local br
 
 ## Start with a local workspace
 
-The launch command opens a browser window and watches an existing `pkdb_data` checkout:
+The app lists study format 2 folders by `<substance>/<name>`. Format 1 folders are only counted and are never touched; format 1 curation stays on the released app version until the migration. The launch command opens a browser window and watches an existing `pkdb_data` checkout:
 
 ```bash
 pkdb curate /path/to/pkdb_data
@@ -22,7 +22,7 @@ The app remembers the last ten opened workspaces in its state directory. Select 
 
 ## Select local studies
 
-The **Overview** tab of a selected study summarizes its key metadata from `study.json` (study identifier, name, date, licence, access, reference, and counts of groups, individuals, interventions, outputs and files), the literature reference from `reference.json` (title, authors, journal, publication date, PubMed and DOI links, and the abstract), and the creator, curators and collaborators with their scores. Curator names, titles and avatars come from the public curator roster bundled with the `pkdb` package, so they are shown offline; curators missing from the roster are shown by username with their initials. Hidden TSV tables generated from the study workbook are marked **Generated from `<Study>.xlsx`** in the file list and can only be revealed, not opened for editing; edit the workbook instead.
+Each study row shows its identity `<substance>/<name>`, the title of the publication from `reference.json`, the review status with the number of open review items, the error and warning counts of the last validation, the sync status of the workbook, the release, the GitHub issue, the curators, the **On save** action and the last upload. The GitHub issue of a study comes from the `issue` number in its `study.json`. Curator names and avatars come from the public curator roster bundled with the `pkdb` package, so they are shown offline; curators missing from the roster are shown by username.
 
 Workspace, file-watching, upload target, identity, and vocabulary controls are in the navigation header menus. The responsive workspace shows the study overview beside the selected study’s problems; on narrow screens these stack vertically. Selecting a study row, name, or checkbox opens its validation results immediately. Focus a row and press Enter or Space to open it with the keyboard. Use the detail panel to validate or validate and upload one study, or select several studies for batch actions.
 
@@ -32,7 +32,7 @@ The frontend has no GitHub user field. The command-line assignment options remai
 
 Select a study to inspect its validation report. **Validate** checks locally with the selected vocabulary; **Validate on server** additionally requests validation from the configured server without saving the study. Filter problems by file, issue code, or severity. Reports include the available workbook, sheet, physical row/cell, or JSON path. Each problem explains what failed, what was found, and what correction to investigate.
 
-Choose **Open file** to launch the computer's default application for that file type. **Reveal in folder** opens its containing directory; **Copy location** copies the diagnostic location for reference. The app does not edit or save source files. Opening a workbook does not guarantee that the spreadsheet application will jump to the reported cell.
+Choose **Open file** to launch the computer's default application for that file type. **Reveal in folder** opens its containing directory; **Copy location** copies the diagnostic location for reference. Opening a workbook does not guarantee that the spreadsheet application will jump to the reported cell.
 
 [![Actual validation report for Frost2013a showing a missing image, its JSON source location, and default-app file opening actions.](images/curation/problems.png)](images/curation/problems.png)
 
@@ -58,19 +58,17 @@ The app watches source files and offers a save-action selector for each study or
 
 Selecting **Upload on save** enables subsequent save-triggered uploads for the displayed studies, endpoint, and PK-DB account. It may replace existing studies where that account has permission. The app does not ask for confirmation on every save. The active mode and a pause control remain visible.
 
-Multiple events from one save are combined. The app waits for saves to settle and handles temporarily locked workbooks before validation. Rapid edits keep the latest pending revision instead of uploading every intermediate change. Opening a file, changing a filter, or refreshing assignments does not upload anything.
+Each save first synchronizes the study workbook with its tables as [`pkdb tables sync`](workbooks.md) does, then formats and validates the study, and uploads it when the mode is **Upload on save**. A sync conflict stops the job until you resolve it with `pkdb tables sync --keep workbook` or `pkdb tables sync --keep tables`, or in the workbook; the conflicting rows are listed as problems of the study. Tables that cannot be read, such as a table with an unknown column, or a workbook that cannot be read stop the job as well and are reported as validation problems. Multiple events from one save are combined. The app waits for saves to settle and handles temporarily locked workbooks before validation. Rapid edits keep the latest pending revision instead of uploading every intermediate change. Opening a file, changing a filter, or refreshing assignments does not upload anything.
 
 If you save again during an upload, the in-flight upload refers to its original snapshot; the newest saved revision is processed afterwards. A connection failure with an uncertain save outcome pauses further uploads for that study until the outcome is checked. Restarting the app will not silently upload changes accumulated while it was stopped.
 
 After a successful upload, the study overview, the detail panel, and the activity entry link to the uploaded study on the PK-DB website. The link remains available after restarting the app. The activity list lets you cancel queued jobs and clear finished history. Active and unknown-outcome jobs remain visible. **Resume suspended work** attempts reconciliation first. If an upload still has an unknown outcome, **Review unknown outcome** shows the previous server target; an explicit acknowledgment is required before retrying that study. A retry may replace data already saved by the earlier request.
 
-File watching continues while the local `pkdb curate` process runs, even if you close its browser tab. Stop the process to stop watching, or use the app's pause control to suspend automatic actions.
+File watching continues while the local `pkdb curate` process runs, even if you close its browser tab. Stop the process to stop watching, or use the app's pause control to suspend automatic actions. Pausing cancels the queued jobs, and resuming queues each of them again with its original action, so a queued validation stays a validation also when the study uploads on save; a save while paused follows the **On save** action instead.
 
 ## Vocabulary, credentials, and offline work
 
 Connected validation uses the target server's vocabulary. When its hash changes, the app retrieves and verifies the new snapshot and invalidates previous validation results. A processing-version mismatch requires upgrading the package; the app will not silently install software or change scientific values.
-
-Uploads read Excel workbooks directly and send the original source files, including any existing TSV files. Uploading does not generate TSV exports from Excel sheets.
 
 Uploads use your PK-DB API key and normal server permissions. Configure the endpoint and key as described in [Python client and API](python-client.md). GitHub access is separate from PK-DB authentication.
 
@@ -108,9 +106,13 @@ The menu explains the last failure, when the server was last checked, and the cl
 
 The app requires no Node installation, Docker, or hosted frontend. It binds to loopback and opens a protected launch URL in your default browser. With `--no-browser`, open the printed URL manually. Keep the local process running while you work; press **Ctrl+C** in its terminal to stop it. Use `--state-dir /path/to/app-state` for an isolated configuration and history directory outside your study workspace.
 
-On-save actions initially use file polling with a quiet period. The app never edits study sources. A later release of the app will use the same sync as [`pkdb tables`](workbooks.md) for study format 2 folders. Existing studies may be replaced by an authorized upload. The **Upload selected** review shows the target and identity, and labels unknown remote state rather than claiming that a study is new.
+On-save actions use file polling with a quiet period. Existing studies may be replaced by an authorized upload. The **Upload selected** review shows the target and identity, and labels unknown remote state rather than claiming that a study is new.
 
 See the [technical design](superpowers/specs/2026-09-24-local-curation-interface-design.md) for job behavior and access boundaries. A connected server must support the current package API and API-key curation context. Offline validation does not establish server compatibility or upload permission.
+
+## Local API
+
+The front end talks to the local service through `/local/` routes. All of them require the session cookie, and writes also require the CSRF header and JSON bodies of at most 1 MiB. GET responses carry an `ETag` and answer `304` to `If-None-Match`. The study routes are `GET /local/state`, `GET /local/studies/{substance}/{name}`, `.../tables/{file}`, `.../sources/{source}` and `.../files/{file}` (registered images only). The study page lists the creator, curators and collaborators with their roster profiles under `people`, the summary of `reference.json` under `reference` with `reference_match` (whether it has the PubMed ID and DOI of `study.json`), and the message and last upload of the row; `GET /local/curators` returns the bundled curator roster with names and avatar URLs. Writes go through `POST /local/studies/metadata` (`study.json`), `POST /local/studies/review` (`review.json` actions) and `POST /local/studies/tables` (open, sync, resolve, add a sheet); the workbook actions refuse a workbook that is a symlink. A stale revision returns `409` with the current document, validation errors return `422` with the issues, and writes are refused with `403`: `no_user` when no user is known and `user_mismatch` when the API key belongs to another account than the configured user. Writes are made as the account of the API key once the server confirmed it, otherwise as the configured user, as with `pkdb study` and `pkdb review`; `GET /local/state` names that author in `author.user`, or the reason why writes are refused in `author.reason`. Every write of the app is listed as a finished `write` entry in the activity of the study, such as "Saved study.json"; it starts no job, and the watcher validates the changed files as after any save. The session, workspace, settings, jobs, reference and file-open routes are unchanged.
 
 ## Literature references
 

@@ -1,6 +1,7 @@
 """Start the local workspace and open files using operating-system associations."""
 
 import os
+import shlex
 import subprocess
 import sys
 import webbrowser
@@ -11,7 +12,15 @@ def open_path(path: Path, *, reveal=False):
     path = Path(path).resolve(strict=True)
     if reveal and path.is_file():
         path = path.parent
-    if sys.platform == "win32":
+    if command := os.environ.get("PKDB_OPEN_COMMAND"):
+        subprocess.run(
+            # Windows paths keep their backslashes.
+            [*shlex.split(command, posix=os.name != "nt"), str(path)],
+            check=True,
+            timeout=15,
+            capture_output=True,
+        )
+    elif sys.platform == "win32":
         os.startfile(str(path))
     else:
         executable = "open" if sys.platform == "darwin" else "xdg-open"

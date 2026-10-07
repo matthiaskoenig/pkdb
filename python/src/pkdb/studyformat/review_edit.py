@@ -325,6 +325,33 @@ def target_for_issue(study: LoadedStudy, issue: ValidationIssue) -> ReviewTarget
     return ReviewTarget(file=source.file, rows=filters, column=column)
 
 
+def matching_warnings(
+    issues: list[ValidationIssue],
+    code: str,
+    file: str,
+    line: int | None = None,
+    column: str | None = None,
+) -> list[ValidationIssue]:
+    """The warnings `code` of `file`, at `line` and `column` when they are given."""
+    return [
+        issue
+        for issue in issues
+        if issue.severity == "warning"
+        and issue.code == code
+        and issue.source is not None
+        and issue.source.file == file
+        and (line is None or issue.source.row == line)
+        and (column is None or issue.source.header == column)
+    ]
+
+
+def warning_locations(
+    issues: list[ValidationIssue],
+) -> set[tuple[int | None, str | None]]:
+    """The rows and columns of these issues; one item acknowledges the warnings of one."""
+    return {(source.row, source.header) for issue in issues if (source := issue.source)}
+
+
 def acknowledge(
     folder: Path,
     author: Author,

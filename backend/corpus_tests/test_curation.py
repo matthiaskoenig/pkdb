@@ -16,6 +16,7 @@ from pkdb.curation.engine import CurationEngine
 from pkdb.preparation import source_hashes, study_folders
 from pkdb.schemas.queries import QuerySpec
 from pkdb.schemas.validation import StudyValidationError
+from pkdb.studyformat import is_v2_folder
 from pkdb_server.app import create_app
 from pkdb_server.commands.admin import create_admin
 from pkdb_server.commands.bootstrap import bootstrap, bootstrap_study
@@ -29,11 +30,17 @@ def test_curation_apixaban_roundtrip(session_factory, tmp_path, monkeypatch):
     if not value:
         pytest.skip("Set PKDB_CURATION_CORPUS to the read-only apixaban directory")
     source = Path(value).resolve()
+    if not any(is_v2_folder(folder) for folder in study_folders(source)):
+        pytest.skip(
+            "The corpus has no study format 2 folders; run it after the migration "
+            "(sub-project 5)"
+        )
     before = source_hashes(source)
-    # Uploads sync hidden TSV exports into the study folders; work on a copy so
-    # the read-only corpus never changes.
+    # Jobs sync and format the study folders; work on a copy so the read-only
+    # corpus never changes. The copy keeps the substance directory, so the engine
+    # addresses each study by its identity `<substance>/<name>`.
     corpus = tmp_path / "corpus"
-    shutil.copytree(source, corpus, symlinks=True)
+    shutil.copytree(source, corpus / source.name, symlinks=True)
     root = Path(__file__).resolve().parents[1]
     assert not bootstrap(root / "bootstrap", session_factory).errors
     create_admin(
@@ -51,6 +58,7 @@ def test_curation_apixaban_roundtrip(session_factory, tmp_path, monkeypatch):
     )
     assert report["ok"], report
     for folder in study_folders(corpus):
+        # bootstrap_study reads format 1 folders until the migration (sub-project 5).
         try:
             bootstrap_study(folder, session_factory)
         except StudyValidationError:
@@ -69,10 +77,13 @@ def test_curation_apixaban_roundtrip(session_factory, tmp_path, monkeypatch):
         actor, "Isolated curation", scopes=("read", "studies:write"), lifetime_days=1
     )["secret"]
     with TestClient(app) as transport:
-        monkeypatch.setattr(
-            "pkdb.curation.engine.Client",
-            lambda *args, **kwargs: Client(*args, transport=transport, **kwargs),
-        )
+
+        def bound(*args, **kwargs):
+            return Client(*args, transport=transport, **kwargs)
+
+        # Jobs and the connection check each open their own client.
+        monkeypatch.setattr("pkdb.curation.jobs.Client", bound)
+        monkeypatch.setattr("pkdb.curation.connection.Client", bound)
         engine = CurationEngine(
             corpus,
             endpoint="http://testserver",
@@ -83,14 +94,17 @@ def test_curation_apixaban_roundtrip(session_factory, tmp_path, monkeypatch):
         try:
             engine.connect()
             assert engine.account == "mkoenig" and engine.can_upload
+            # The engine lists study format 2 folders only.
+            identities = [row["id"] for row in engine.studies.values()]
+            assert identities, "The corpus has no study format 2 folders"
             summaries = []
             durations = []
             for _ in range(2):
                 started = time.perf_counter()
                 counts = Counter()
-                for identifier in engine.studies:
-                    job = engine.enqueue([identifier], "upload")[0]
-                    engine.queue.pop(identifier)
+                for identity in identities:
+                    job = engine.enqueue([identity], "upload")[0]
+                    engine.queue.pop(identity)
                     engine.run_job(job)
                     assert job["status"] != "unknown", engine.report(job["report_id"])
                     counts[

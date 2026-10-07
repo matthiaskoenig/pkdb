@@ -58,3 +58,27 @@ def test_paginates_users_and_issues():
     ).refresh()
     assert len(data["users"]) == 100
     assert ("/repos/owner/data/assignees", "2") in calls
+
+
+def test_issues_are_found_by_number():
+    issue = {"number": 7, "title": "first", "state": "open"}
+    provider = GitHubAssignments(
+        "owner/data",
+        cached={"users": [], "issues": [issue, {**issue, "title": "copy"}]},
+    )
+    assert provider.issue(7) == issue
+    assert provider.issue(8) is None
+    provider.data = {**provider.data, "issues": [{**issue, "number": 8}]}
+    assert provider.issue(7) is None
+    assert provider.issue(8) == {**issue, "number": 8}
+    provider.transport = httpx2.MockTransport(
+        lambda request: httpx2.Response(
+            200,
+            json=[]
+            if request.url.path.endswith("assignees")
+            else [{"number": 9, "title": "t", "state": "closed", "assignees": []}],
+        )
+    )
+    provider.refresh()
+    assert (provider.issue(9) or {}).get("state") == "closed"
+    assert provider.issue(8) is None

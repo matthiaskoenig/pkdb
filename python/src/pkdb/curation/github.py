@@ -13,12 +13,24 @@ class GitHubAssignments:
             raise ValueError("GitHub repository must be owner/name")
         self.repository = repository
         self.token = token
-        self.data: dict[str, Any] = cached or {
-            "users": [],
-            "issues": [],
-            "status": "not_loaded",
-        }
+        self.data = cached or {"users": [], "issues": [], "status": "not_loaded"}
         self.transport = transport
+
+    @property
+    def data(self) -> dict[str, Any]:
+        return self._data
+
+    @data.setter
+    def data(self, value: dict[str, Any]) -> None:
+        self._data = value
+        # Rows look their issue up by number on every snapshot; the first one counts.
+        self._issues: dict[Any, dict] = {}
+        for issue in value.get("issues", []):
+            self._issues.setdefault(issue.get("number"), issue)
+
+    def issue(self, number) -> dict | None:
+        """The issue with this number, or None."""
+        return self._issues.get(number)
 
     def refresh(self):
         headers = {"Accept": "application/vnd.github+json"}

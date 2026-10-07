@@ -608,7 +608,15 @@ def test_the_row_limit_counts_the_rows_of_every_sheet(workbook):
 
 
 def test_reading_a_large_sheet_is_fast(sf_vocabulary, tmp_path, linear_cpu_time):
+    workbooks = {}
+
     def prepare(count):
+        # Reading leaves the workbook as it is, so each size is built once.
+        if count not in workbooks:
+            workbooks[count] = build_sheet(count)
+        return lambda: read_workbook(workbooks[count], STUDY)
+
+    def build_sheet(count):
         rows = [
             {
                 "subjects": "all",
@@ -628,8 +636,7 @@ def test_reading_a_large_sheet_is_fast(sf_vocabulary, tmp_path, linear_cpu_time)
         tables = {"subjects.tsv": subjects(), "outputs_Tab1.tsv": outputs(*rows)}
         folder = tmp_path / str(count)
         folder.mkdir()
-        path = build(tables, sf_vocabulary, folder / "Example.xlsx")
-        return lambda: read_workbook(path, STUDY)
+        return build(tables, sf_vocabulary, folder / "Example.xlsx")
 
     # A sheet of 5,000 and one of 20,000 rows.
     content = linear_cpu_time(prepare, 5_000)

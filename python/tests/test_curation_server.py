@@ -1,14 +1,19 @@
 """Exercise the actual local HTTP boundary without launching desktop apps."""
 
 import json
+import re
+import shlex
+import sys
 import threading
-from http.client import HTTPConnection
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import Mock
 
 import pytest
+from curation_http import authenticate, request
 
 from pkdb.curation import server as transport
+from pkdb.curation.engine import CurationEngine
 from pkdb.curation.launch import open_path
 
 
@@ -16,7 +21,9 @@ from pkdb.curation.launch import open_path
 def local_server(tmp_path, monkeypatch):
     assets = tmp_path / "static"
     assets.mkdir()
-    (assets / "index.html").write_text("<h1>Local curation</h1>")
+    (assets / "index.html").write_text(
+        '<h1>Local curation</h1><style nonce="__PKDB_NONCE__"></style>'
+    )
     (assets / "app.js").write_text("console.log('loaded')")
     monkeypatch.setattr(transport, "ASSETS", assets)
     engine = Mock()
@@ -28,35 +35,6 @@ def local_server(tmp_path, monkeypatch):
     server.shutdown()
     server.server_close()
     thread.join(timeout=3)
-
-
-def request(server, method, path, body=None, headers=None):
-    connection = HTTPConnection("127.0.0.1", server.server_port, timeout=3)
-    defaults = {"Origin": server.origin, "Content-Type": "application/json"}
-    defaults.update(headers or {})
-    connection.request(
-        method,
-        path,
-        body=json.dumps(body) if body is not None else None,
-        headers=defaults,
-    )
-    response = connection.getresponse()
-    result = response.status, dict(response.getheaders()), response.read()
-    connection.close()
-    return result
-
-
-def authenticate(server):
-    status, headers, data = request(
-        server, "POST", "/local/session", {"token": server.bootstrap_token}
-    )
-    assert status == 200
-    assert "HttpOnly" in headers["Set-Cookie"]
-    assert "SameSite=Strict" in headers["Set-Cookie"]
-    return {
-        "Cookie": headers["Set-Cookie"].split(";", 1)[0],
-        "X-CSRF-Token": json.loads(data)["csrf_token"],
-    }
 
 
 def test_browser_bootstrap_and_actions(local_server):
@@ -113,6 +91,14 @@ def test_payload_limits_paths_and_errors(local_server):
     server, engine = local_server
     headers = authenticate(server)
     assert request(server, "GET", "/static/%2e%2e/secret")[0] == 404
+    assert transport.MAX_BODY == 1024 * 1024
+    engine.configure.return_value = {"ok": True}
+    large = "x" * (512 * 1024)
+    assert (
+        request(server, "POST", "/local/settings", {"api_key": large}, headers)[0]
+        == 200
+    )
+    engine.configure.assert_called_with(api_key=large)
     assert (
         request(
             server,
@@ -127,7 +113,6 @@ def test_payload_limits_paths_and_errors(local_server):
         request(server, "POST", "/local/settings", {"unexpected": True}, headers)[0]
         == 400
     )
-    engine.configure.return_value = {"ok": True}
     assert (
         request(server, "POST", "/local/settings", {"user": "curator"}, headers)[0]
         == 200
@@ -264,14 +249,61 @@ def test_bundled_curator_avatars_are_served_as_images():
         assert headers["Content-Type"] == "image/webp"
         assert data[:4] == b"RIFF"
         for path in (
-            "/static/avatars/..%2f..%2fmetadata.py",
-            "/static/avatars/missing.webp",
+            "/avatars/..%2f..%2fmetadata.py",
+            "/avatars/../metadata.py",
+            "/avatars/missing.webp",
+            "/static/avatars/matthias_koenig.webp",
         ):
             assert request(server, "GET", path)[0] == 404
     finally:
         server.shutdown()
         server.server_close()
         thread.join(timeout=3)
+
+
+def _style_src(headers):
+    policy = headers["Content-Security-Policy"]
+    return next(
+        part.strip()
+        for part in policy.split(";")
+        if part.strip().startswith("style-src")
+    )
+
+
+def test_index_gets_a_fresh_style_nonce_per_response(local_server):
+    server, _ = local_server
+    nonces = []
+    for path in ("/", "/index.html"):
+        status, headers, data = request(server, "GET", path)
+        assert status == 200
+        assert b"__PKDB_NONCE__" not in data
+        found = re.search(rb'nonce="([^"]+)"', data)
+        assert found
+        nonce = found.group(1).decode()
+        assert _style_src(headers) == f"style-src 'self' 'nonce-{nonce}'"
+        assert "unsafe-inline" not in headers["Content-Security-Policy"]
+        nonces.append(nonce)
+    assert nonces[0] != nonces[1]
+    status, headers, _ = request(server, "GET", "/static/app.js")
+    assert status == 200
+    assert _style_src(headers) == "style-src 'self'"
+    assert "unsafe-inline" not in headers["Content-Security-Policy"]
+
+
+def test_open_path_runs_the_recording_command(tmp_path, monkeypatch):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    record = tmp_path / "record.txt"
+    monkeypatch.setenv(
+        "PKDB_OPEN_COMMAND",
+        f"{shlex.quote(sys.executable)} -c "
+        + shlex.quote(
+            "import sys, pathlib; "
+            f"pathlib.Path({str(record)!r}).write_text(sys.argv[1])"
+        ),
+    )
+    open_path(file)
+    assert record.read_text() == str(file)
 
 
 def test_folder_browsing_and_recent_workspace_actions(local_server):
@@ -327,3 +359,41 @@ def test_curate_cli_explains_missing_workspace(tmp_path, capsys):
         == 1
     )
     assert f"Folder does not exist: {missing}" in capsys.readouterr().err
+
+
+def test_assignment_mapping_route_is_gone(local_server):
+    server, engine = local_server
+    headers = authenticate(server)
+    status = request(
+        server,
+        "POST",
+        "/local/assignments/map",
+        {"number": 1, "study_id": "caffeine/Example"},
+        headers,
+    )[0]
+    assert status == 404
+    engine.map_assignment.assert_not_called()
+    assert not hasattr(CurationEngine, "map_assignment")
+
+
+@pytest.mark.parametrize(
+    ("platform", "command", "expected"),
+    [
+        ("posix", "'/opt/my tools/rec' --flag", ["/opt/my tools/rec", "--flag"]),
+        # Windows paths keep their backslashes.
+        ("nt", r"C:\Tools\rec.exe --flag", [r"C:\Tools\rec.exe", "--flag"]),
+    ],
+)
+def test_open_command_is_split_for_the_platform(
+    tmp_path, monkeypatch, platform, command, expected
+):
+    file = tmp_path / "outputs.xlsx"
+    file.write_text("x")
+    runner = Mock()
+    monkeypatch.setattr(
+        "pkdb.curation.launch.os",
+        SimpleNamespace(name=platform, environ={"PKDB_OPEN_COMMAND": command}),
+    )
+    monkeypatch.setattr("pkdb.curation.launch.subprocess.run", runner)
+    open_path(file)
+    assert runner.call_args.args[0] == [*expected, str(file)]

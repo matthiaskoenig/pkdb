@@ -6,9 +6,19 @@ from digitize_fixtures import GOOD, png, project
 
 import pkdb.studyformat.metadata as metadata
 from pkdb.cli import main
+from pkdb.errors import ClientError
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.review_edit import read_review
 from pkdb.studyformat.validation import validate_folder
+
+
+@pytest.fixture(autouse=True)
+def curator(monkeypatch):
+    """The study and review writes of these tests run as the PK-DB user curator."""
+    monkeypatch.setenv("PKDB_USER", "curator")
+    monkeypatch.delenv("PKDB_AGENT", raising=False)
+    monkeypatch.delenv("PKDB_API_KEY", raising=False)
+    monkeypatch.delenv("PKDB_ENDPOINT", raising=False)
 
 
 def test_study_show_and_patch(valid_study, capsys):
@@ -317,3 +327,67 @@ def test_study_reference_refreshes_unchanged_identifiers(
     args = ["study", "reference", str(valid_study), "--offline", "--format", "json"]
     assert main([*args, "--pmid", "123"]) == 0
     assert json.loads(capsys.readouterr().out)["reference"] == "saved"
+
+
+@pytest.fixture
+def online(account_server, monkeypatch):
+    """A configured server and API key; the key belongs to curator."""
+    monkeypatch.setenv("PKDB_ENDPOINT", "https://pk-db.test")
+    monkeypatch.setenv("PKDB_API_KEY", "key")
+    return account_server
+
+
+def review_add(study, *extra):
+    return ["review", "add", str(study), "--kind", "question", "--text", "Why?", *extra]
+
+
+def test_writes_check_the_account_of_the_api_key(valid_study, online, capsys):
+    assert main([*review_add(valid_study), "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out)["item"]["author"] == "curator"
+    assert online.calls[-1][:3] == ("https://pk-db.test", "key", "curator")
+    patch = ["study", "patch", str(valid_study), "--json", '{"licence": "closed"}']
+    assert main([*patch, "--format", "json"]) == 0
+    assert len(online.calls) == 2
+
+
+def test_writes_refuse_a_key_of_another_account(valid_study, online, capsys):
+    online.failure = ClientError(
+        "The API key belongs to PK-DB user 'other', not the expected user 'curator'",
+        code="user_mismatch",
+    )
+    before = (valid_study / "review.json").read_bytes()
+    assert main([*review_add(valid_study), "--format", "json"]) == 1
+    output = json.loads(capsys.readouterr().out)
+    assert output["error"] == "user_mismatch" and "'other'" in output["message"]
+    assert (valid_study / "review.json").read_bytes() == before
+    patch = ["study", "patch", str(valid_study), "--json", '{"licence": "closed"}']
+    assert main([*patch, "--format", "human"]) == 1
+    assert "'other'" in capsys.readouterr().err
+    assert '"open"' in (valid_study / "study.json").read_text()
+    # --offline writes without asking the server.
+    calls = len(online.calls)
+    assert main([*review_add(valid_study), "--offline", "--format", "json"]) == 0
+    assert main([*patch, "--offline", "--format", "json"]) == 0
+    assert len(online.calls) == calls
+
+
+def test_writes_fall_back_to_the_user_when_the_server_is_unreachable(
+    valid_study, online, capsys
+):
+    online.failure = ClientError("PK-DB request failed", code="unreachable")
+    assert main([*review_add(valid_study), "--format", "json"]) == 0
+    assert json.loads(capsys.readouterr().out)["item"]["author"] == "curator"
+
+
+def test_writes_without_a_key_ask_no_server(
+    valid_study, account_server, capsys, monkeypatch
+):
+    monkeypatch.setenv("PKDB_ENDPOINT", "https://pk-db.test")
+    assert main([*review_add(valid_study), "--format", "json"]) == 0
+    assert account_server.calls == []
+    capsys.readouterr()
+    monkeypatch.delenv("PKDB_USER")
+    patch = ["study", "patch", str(valid_study), "--json", '{"licence": "closed"}']
+    assert main([*patch, "--format", "json"]) == 1
+    assert json.loads(capsys.readouterr().out)["error"] == "no_user"
+    assert main([*patch, "--user", "curator", "--format", "json"]) == 0

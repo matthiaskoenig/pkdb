@@ -4,7 +4,7 @@ import pytest
 
 from pkdb.identity import Author
 from pkdb.schemas.review import ReviewTarget
-from pkdb.studyformat.issues import row_issue
+from pkdb.studyformat.issues import make_issue, row_issue
 from pkdb.studyformat.load import load_study
 from pkdb.studyformat.review_edit import (
     ApprovalRefused,
@@ -12,12 +12,14 @@ from pkdb.studyformat.review_edit import (
     acknowledge,
     add_item,
     dismiss,
+    matching_warnings,
     read_review,
     reopen,
     reply,
     resolve,
     set_status,
     target_for_issue,
+    warning_locations,
 )
 from pkdb.studyformat.revision import RevisionConflict
 from pkdb.studyformat.validation import validate_folder
@@ -282,3 +284,41 @@ def test_target_filter_adds_columns_until_it_matches_one_row(
     assert target.rows == {"label": "drug_plasma", "time": "1", "subjects": "S2"}
     assert target.column == "mean"
     assert table.matching_lines(target.rows) == {row.line}
+
+
+def test_matching_warnings_and_their_locations():
+    table = "timecourses_Fig1.tsv"
+    at_mean = make_issue(
+        "outside_range", "Out.", file=table, line=3, header="mean", severity="warning"
+    )
+    at_sd = make_issue(
+        "outside_range", "Out.", file=table, line=3, header="sd", severity="warning"
+    )
+    below = make_issue(
+        "outside_range", "Out.", file=table, line=4, header="mean", severity="warning"
+    )
+    error = make_issue(
+        "outside_range", "Out.", file=table, line=3, header="mean", severity="error"
+    )
+    other_code = make_issue("missing_image", "No.", file=table, severity="warning")
+    other_file = make_issue(
+        "outside_range", "Out.", file="subjects.tsv", line=3, severity="warning"
+    )
+    project = [
+        make_issue("unknown_dataset", text, file="Example_Fig1.wpd.json")
+        for text in ("Legend.", "Axis labels.")
+    ]
+    issues = [at_mean, at_sd, below, error, other_code, other_file, *project]
+    matches = matching_warnings(issues, "outside_range", table)
+    assert matches == [at_mean, at_sd, below]
+    assert matching_warnings(issues, "outside_range", table, line=3) == [at_mean, at_sd]
+    assert matching_warnings(issues, "outside_range", table, column="mean") == [
+        at_mean,
+        below,
+    ]
+    assert matching_warnings(issues, "outside_range", table, 3, "sd") == [at_sd]
+    assert matching_warnings(issues, "outside_range", "reference.json") == []
+    assert warning_locations(matches) == {(3, "mean"), (3, "sd"), (4, "mean")}
+    file_level = matching_warnings(issues, "unknown_dataset", "Example_Fig1.wpd.json")
+    assert file_level == project
+    assert warning_locations(file_level) == {(None, None)}
