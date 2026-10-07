@@ -1,51 +1,11 @@
-:root {
-  font-family:
-    Inter,
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    "Segoe UI",
-    sans-serif;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-}
-body {
-  margin: 0;
-}
-a {
-  text-underline-offset: 3px;
-}
-a:not(.v-btn) {
-  color: rgb(var(--v-theme-primary));
-}
-button,
-a,
-input,
-summary {
-  touch-action: manipulation;
-}
-:focus-visible {
-  outline: 3px solid rgb(var(--v-theme-primary));
-  outline-offset: 3px;
-}
-/* A text field shows the focus ring around the whole field: around its input
-   the ring would cross the floating label. */
-.v-field input:focus-visible {
-  outline: none;
-}
-.v-field:has(input:focus-visible) {
-  outline: 3px solid rgb(var(--v-theme-primary));
-  outline-offset: 2px;
-}
+@import "../styles/base.css";
 h1 {
   font-size: 1.6rem;
   line-height: 1.25;
   letter-spacing: -0.02em;
   margin: 0 0 0.5rem;
 }
-.app-header {
-  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
+/* Aligned with the 16px padding of the page content. */
 .brand {
   display: flex;
   align-items: center;
@@ -58,12 +18,4 @@ h1 {
 }
 a.brand {
   color: rgb(var(--v-theme-on-surface));
-}
-.brand-logo {
-  object-fit: contain;
-}
-.v-theme--dark .brand-logo {
-  background: #fff;
-  border-radius: 6px;
-  padding: 3px;
 }
