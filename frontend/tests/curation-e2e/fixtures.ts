@@ -3,7 +3,7 @@ import { mkdtempSync, rmSync } from "node:fs";
 import { join } from "node:path";
 import { promisify } from "node:util";
 import { expect, test as base, type BrowserContext, type ConsoleMessage, type Cookie, type Page } from "@playwright/test";
-import { pythonProject, ROOT_VARIABLE, testing } from "./paths.ts";
+import { PYTHON_VARIABLE, ROOT_VARIABLE, testing } from "./paths.ts";
 
 declare global {
   interface Window {
@@ -14,11 +14,29 @@ declare global {
   }
 }
 
-const run = promisify(execFile);
+const execute = promisify(execFile);
 /** How long `pkdb curate` may take to print its launch URL. */
 const START_MS = 60_000;
 /** How long it may take to stop after Ctrl+C before it is killed. */
 const STOP_MS = 10_000;
+/** How much of the latest output of a server a failed test reports. */
+const TAIL_CHARACTERS = 20_000;
+/** The line in which `pkdb curate` prints its launch URL. */
+const LAUNCH_LINE = /^PK-DB curation: (http:\/\/127\.0\.0\.1:\d+\/#token=\S+)\r?\n/m;
+/** The name of the session cookie that the launch token creates. */
+const SESSION_COOKIE = "pkdb_curation";
+
+/** The interpreter of the python/ project, which the global setup found. */
+function python(): string {
+  const interpreter = process.env[PYTHON_VARIABLE];
+  if (!interpreter) throw new Error(`${PYTHON_VARIABLE} is not set: run the suite with playwright.curation.config.ts`);
+  return interpreter;
+}
+
+/** Run a script of tools/curation_testing with the interpreter of the python/ project. */
+export async function runTool(script: string, ...args: string[]): Promise<void> {
+  await execute(python(), [join(testing, script), ...args]);
+}
 
 /** A running `pkdb curate` on a fresh copy of the fixture workspace. */
 export interface CurationServer {
@@ -36,86 +54,111 @@ export interface CurationServer {
 function serverEnvironment(cache: string, openLog: string): NodeJS.ProcessEnv {
   const environment: NodeJS.ProcessEnv = { ...process.env };
   for (const name of ["PKDB_API_KEY", "PKDB_ENDPOINT", "PKDB_AGENT"]) delete environment[name];
-  const opener = join(testing, "record_open.py");
+  // The server splits the command like a shell, so the paths are quoted.
+  const quoted = (path: string) => `'${path.replaceAll("'", "'\\''")}'`;
   return {
     ...environment,
     PKDB_USER: "curator",
     PKDB_NO_UPDATE: "1",
     // An empty cache: validation uses the vocabulary bundled with the client.
     XDG_CACHE_HOME: cache,
-    // `uv run` puts the Python of the project first on the PATH; the server splits the command
-    // like a shell, so the path is quoted.
-    PKDB_OPEN_COMMAND: `python '${opener.replaceAll("'", "'\\''")}'`,
+    PKDB_OPEN_COMMAND: `${quoted(python())} ${quoted(join(testing, "record_open.py"))}`,
     PKDB_OPEN_LOG: openLog,
   };
 }
 
-/**
- * The launch URL from the output of `pkdb curate`, or an error with its output when it stops
- * first. The output is read to its end, so that a full pipe never blocks the server.
- */
-function launchUrlOf(child: ChildProcess): Promise<string> {
-  return new Promise((resolve, reject) => {
-    let output = "";
-    let started = false;
-    const timer = setTimeout(() => fail(new Error(`pkdb curate printed no launch URL:\n${output}`)), START_MS);
-    function fail(error: Error): void {
-      clearTimeout(timer);
-      reject(error);
-    }
-    function read(chunk: Buffer): void {
-      if (started) return;
-      output += chunk.toString();
-      const match = /PK-DB curation: (http:\/\/127\.0\.0\.1:\d+\/#token=\S+)/.exec(output);
-      if (match?.[1]) {
-        started = true;
-        clearTimeout(timer);
-        resolve(match[1]);
-      }
-    }
-    child.stdout?.on("data", read);
-    child.stderr?.on("data", read);
-    child.once("exit", (code) => fail(new Error(`pkdb curate stopped with code ${code}:\n${output}`)));
-  });
-}
-
+/** `pkdb curate` on a copy of the fixture in its own folder, with the latest part of its output. */
 class RunningServer {
-  constructor(
-    readonly info: CurationServer,
-    private readonly child: ChildProcess,
-    private readonly folder: string,
-  ) {}
+  /** The launch URL once the server printed it; rejected when it stops or takes too long. */
+  readonly launchUrl: Promise<string>;
+  private tail = "";
 
-  /** Start `pkdb curate` on a new copy of the fixture in a new folder below `root`. */
+  private constructor(
+    private readonly folder: string,
+    readonly workspace: string,
+    readonly openLog: string,
+    private readonly child: ChildProcess,
+  ) {
+    this.launchUrl = this.readLaunchUrl();
+  }
+
+  /** Copy the fixture into a new folder below `root` and start `pkdb curate` on it. */
   static async start(root: string): Promise<RunningServer> {
     const folder = mkdtempSync(join(root, "server-"));
     const workspace = join(folder, "workspace");
     const openLog = join(folder, "open.log");
-    await run("uv", ["run", "--project", pythonProject, "python", join(testing, "workspace.py"), workspace]);
+    try {
+      await runTool("workspace.py", workspace);
+    } catch (error) {
+      rmSync(folder, { recursive: true, force: true });
+      throw error;
+    }
+    // The interpreter itself, not `uv run`, so that signals reach the server.
     const child = spawn(
-      "uv",
+      python(),
       [
-        ...["run", "--project", pythonProject, "pkdb", "curate", workspace],
+        ...["-m", "pkdb", "curate", workspace],
         ...["--offline", "--no-browser", "--port", "0", "--state-dir", join(folder, "state")],
       ],
       { env: serverEnvironment(join(folder, "cache"), openLog), stdio: ["ignore", "pipe", "pipe"] },
     );
-    try {
-      const launchUrl = await launchUrlOf(child);
-      return new RunningServer({ launchUrl, origin: new URL(launchUrl).origin, workspace, openLog }, child, folder);
-    } catch (error) {
-      child.kill("SIGKILL");
-      rmSync(folder, { recursive: true, force: true });
-      throw error;
-    }
+    return new RunningServer(folder, workspace, openLog, child);
   }
 
-  /** Stop the server as Ctrl+C does, then remove its workspace and state. */
+  /** The latest output of the server, for the report of a failed test. */
+  get log(): string {
+    return this.tail;
+  }
+
+  async info(): Promise<CurationServer> {
+    const launchUrl = await this.launchUrl;
+    return { launchUrl, origin: new URL(launchUrl).origin, workspace: this.workspace, openLog: this.openLog };
+  }
+
+  /**
+   * Read both output streams to their end, so that a full pipe never blocks the server, keep
+   * their latest part, and resolve with the launch URL once a stream printed its whole line.
+   */
+  private readLaunchUrl(): Promise<string> {
+    const child = this.child;
+    return new Promise((resolve, reject) => {
+      let settled = false;
+      const settle = (result: string | Error) => {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        if (typeof result === "string") resolve(result);
+        else reject(result);
+      };
+      const timer = setTimeout(
+        () => settle(new Error(`pkdb curate printed no launch URL within ${START_MS} ms:\n${this.tail}`)),
+        START_MS,
+      );
+      for (const stream of [child.stdout, child.stderr]) {
+        let line = "";
+        stream?.setEncoding("utf8");
+        stream?.on("data", (text: string) => {
+          this.tail = (this.tail + text).slice(-TAIL_CHARACTERS);
+          if (settled) return;
+          line += text;
+          const match = LAUNCH_LINE.exec(line);
+          if (match?.[1]) settle(match[1]);
+        });
+      }
+      child.once("error", (error) => settle(error));
+      child.once("exit", (code, signal) =>
+        settle(new Error(`pkdb curate stopped (${signal ?? `code ${code}`}) before its launch URL:\n${this.tail}`)),
+      );
+    });
+  }
+
+  /** Stop the server as Ctrl+C does, kill it when it does not stop, and remove its folder. */
   async stop(): Promise<void> {
     const child = this.child;
+    // A launch URL that never came is reported by the test that waited for it.
+    this.launchUrl.catch(() => undefined);
     if (child.exitCode === null && child.signalCode === null) {
       const exited = new Promise((resolve) => child.once("exit", resolve));
-      // uv passes the interrupt on to pkdb curate, which closes its engine.
       child.kill("SIGINT");
       const timer = setTimeout(() => child.kill("SIGKILL"), STOP_MS);
       await exited;
@@ -138,9 +181,15 @@ class ServerPool {
       await this.close();
       const root = process.env[ROOT_VARIABLE];
       if (!root) throw new Error(`${ROOT_VARIABLE} is not set: run the suite with playwright.curation.config.ts`);
+      // Kept before its launch URL comes, so that closing the pool stops it in any case.
       this.current = { file, server: await RunningServer.start(root), cookies: [] };
     }
-    return this.current.server.info;
+    return this.current.server.info();
+  }
+
+  /** The latest output of the server of the file. */
+  get log(): string {
+    return this.current?.server.log ?? "";
   }
 
   /** The session cookie of the file, once a test opened the launch URL. */
@@ -174,7 +223,7 @@ export interface CurationApp {
    */
   open(hash?: string): Promise<void>;
   /**
-   * Accept the console error of a request to `path` that the server answers with `status`.
+   * Accept one console error of a request to `path` that the server answers with `status`.
    * Browsers log every 4xx answer; any other console error fails the test.
    */
   allowFailedRequest(path: string, status: number): void;
@@ -201,9 +250,11 @@ async function openApp(page: Page, context: BrowserContext, servers: ServerPool,
   const session = page.waitForResponse((response) => new URL(response.url()).pathname === "/local/session");
   await page.goto(server.launchUrl);
   expect((await session).status()).toBe(200);
-  servers.cookies = await context.cookies(server.origin);
   // The app creates its router after the session; a route changed before would be missed.
   await expect(header).toBeVisible();
+  const cookies = await context.cookies(server.origin);
+  expect(cookies.map((cookie) => cookie.name)).toContain(SESSION_COOKIE);
+  servers.cookies = cookies;
   if (hash !== "#/") await showRoute(page, hash);
 }
 
@@ -237,13 +288,17 @@ export const test = base.extend<{ curation: CurationServer; app: CurationApp }, 
     },
     { scope: "worker", timeout: START_MS + STOP_MS },
   ],
-  curation: async ({ servers }, use, testInfo) => {
-    await use(await servers.forFile(testInfo.file));
-  },
-  app: async ({ page, context, servers, curation }, use) => {
+  // Its own timeout, so that a server without a launch URL reports its output.
+  curation: [
+    async ({ servers }, use, testInfo) => {
+      await use(await servers.forFile(testInfo.file));
+    },
+    { timeout: START_MS + STOP_MS },
+  ],
+  app: async ({ page, context, servers, curation }, use, testInfo) => {
     const violations: string[] = [];
     const errors: string[] = [];
-    const expected: ExpectedError[] = [];
+    const allowed: ExpectedError[] = [];
     await page.exposeFunction("__reportCspViolation", (violation: string) => violations.push(violation));
     await page.addInitScript(() => {
       window.__cspViolations = [];
@@ -255,20 +310,26 @@ export const test = base.extend<{ curation: CurationServer; app: CurationApp }, 
     });
     page.on("console", (message) => {
       if (message.type() !== "error") return;
-      if (expected.some((allowed) => isFailedRequest(message, allowed))) return;
-      errors.push(`${message.text()} (${message.location().url})`);
+      // Each allowance accepts one error.
+      const index = allowed.findIndex((expected) => isFailedRequest(message, expected));
+      if (index >= 0) allowed.splice(index, 1);
+      else errors.push(`${message.text()} (${message.location().url})`);
     });
     page.on("pageerror", (error) => errors.push(error.message));
 
     await use({
       server: curation,
       open: (hash = "#/") => openApp(page, context, servers, curation, hash),
-      allowFailedRequest: (path, status) => expected.push({ path, status }),
+      allowFailedRequest: (path, status) => allowed.push({ path, status }),
     });
 
     // The page's own list holds also the violations whose report is still on its way.
     const inPage = page.isClosed() ? [] : await page.evaluate(() => window.__cspViolations ?? []);
-    expect([...new Set([...violations, ...inPage])], "Content Security Policy violations").toEqual([]);
+    const found = [...new Set([...violations, ...inPage])];
+    if (testInfo.status !== testInfo.expectedStatus || found.length || errors.length) {
+      await testInfo.attach("pkdb-curate.log", { body: servers.log, contentType: "text/plain" });
+    }
+    expect(found, "Content Security Policy violations").toEqual([]);
     expect(errors, "console errors").toEqual([]);
   },
 });

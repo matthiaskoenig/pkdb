@@ -1,12 +1,8 @@
-import { execFile } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
-import { promisify } from "node:util";
 import type { Page } from "@playwright/test";
-import { expect, setAutomaticActions, test } from "./fixtures.ts";
-import { pythonProject, testing } from "./paths.ts";
+import { expect, runTool, setAutomaticActions, test } from "./fixtures.ts";
 
-const run = promisify(execFile);
 const TABLE = "timecourses_Fig1.tsv";
 const SHEET = "timecourses_Fig1";
 
@@ -44,7 +40,7 @@ async function editWorkbook(workspace: string, line: number, column: string, val
   // The sheet has the rows and columns of the table: line 6 is row 6, the header is row 1.
   const cell = `${columnName(readTable(workspace)[0]!.indexOf(column))}${line}`;
   const workbook = join(workspace, "caffeine/Demo2020/Demo2020.xlsx");
-  await run("uv", ["run", "--project", pythonProject, "python", join(testing, "edit_workbook.py"), workbook, SHEET, cell, value]);
+  await runTool("edit_workbook.py", workbook, SHEET, cell, value);
 }
 
 /** The sync alert of the section, which starts with `text`; a summary of the last sync may follow. */
