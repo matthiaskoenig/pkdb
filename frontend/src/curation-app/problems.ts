@@ -131,15 +131,18 @@ export function suggestionView(suggestion: Suggestion): SuggestionView {
 
 /**
  * The query of the Tables section that shows the cell of an issue: its file, and its line and
- * column when it has them; null without a file. Only the tables of a study can be shown.
+ * column (the header, or the letter in a raw table) when it has them; null without a file. Only
+ * the tables of a study can be shown.
  */
 export function tableQuery(issue: ValidationIssue): Record<string, string> | null {
   const source = issue.source;
   if (!source) return null;
+  // A raw table has no header: its cells are named by their column letter.
+  const column = source.header ?? source.column;
   return {
     file: source.file,
     ...(source.row != null ? { line: String(source.row) } : {}),
-    ...(source.header ? { column: source.header } : {}),
+    ...(column ? { column } : {}),
   };
 }
 

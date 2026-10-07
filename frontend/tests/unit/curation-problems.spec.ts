@@ -158,6 +158,17 @@ describe("links and acknowledgements", () => {
     expect(tableQuery(limit)).toBeNull();
   });
 
+  it("names the cell of a raw table by its column letter, as the grid of the Tables section does", () => {
+    const raw = issue("invalid_encoding", "error", {
+      file: "Example_Tab2.tsv",
+      sheet: "Example_Tab2",
+      row: 3,
+      column: "B",
+      cell: "B3",
+    });
+    expect(tableQuery(raw)).toEqual({ file: "Example_Tab2.tsv", line: "3", column: "B" });
+  });
+
   it("acknowledges a warning at exactly its file, line and column", () => {
     expect(acknowledgement(mean)).toEqual({
       code: "outside_range",
