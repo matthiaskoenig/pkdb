@@ -30,6 +30,11 @@ REPORT = MigrationReport(
             reason="sheet_name: Sheet Fig1.2 is not a source name",
         ),
         StudyResult(
+            study="caffeine/C2001a",
+            outcome="not_converted",
+            reason="registry_sid: study.json has the identifier PKDB00001",
+        ),
+        StudyResult(
             study="caffeine/D2002",
             outcome="intended",
             changes=[Change(kind="group_count_1", count=1, examples=["all"])],
@@ -58,6 +63,7 @@ def test_the_json_report_is_sorted_and_complete(tmp_path):
         "caffeine/A1999",
         "caffeine/B2000",
         "caffeine/C2001",
+        "caffeine/C2001a",
         "caffeine/D2002",
     ]
     assert md == tmp_path / "migration.md"
@@ -79,6 +85,11 @@ def test_the_markdown_summary_and_sections():
     assert "| caffeine/A1999 | PKDB00001, PKDB00002 |" in text
     assert "### Registry paths that do not exist" in text
     assert "### Sheet names outside the source pattern" in text
+    assert (
+        "### Identifiers that differ from the registry\n\n| Study | Reason |\n"
+        "| --- | --- |\n"
+        "| caffeine/C2001a | registry_sid: study.json has the identifier PKDB00001 |\n"
+    ) in text
     assert "| studies/caffeine/F2004 | papers/caffeine/F2004 | yes |" in text
     assert "caffeine/B2000\n" in text
     assert "—" not in text

@@ -167,7 +167,9 @@ def convert_study(
     tables, decisions = study_tables(study, name, bars, images=image_sources(v1, name))
     if "subjects.tsv" not in tables:
         raise NotConverted("no_subjects", "The study has no groups or individuals")
-    release = registry.release(f"{v1.parent.name}/{name}")
+    release = registry.release(
+        f"{v1.parent.name}/{name}", str(bundle.study.get("sid", ""))
+    )
     try:
         metadata, metadata_decisions = study_metadata(
             bundle.study, bundle.reference, release, creator_fallback=approver or "pkdb"

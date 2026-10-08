@@ -22,7 +22,6 @@ SECTION_KINDS = {
     "outputset": "outputs",
     "dataset": "scatters",
 }
-PKDB_ID = re.compile(r"PKDB[0-9]{5}")
 PMID = re.compile(r"[1-9][0-9]*")
 
 
@@ -90,7 +89,6 @@ def study_metadata(
             merged.descriptions.extend(descriptions)
             merged.comments.extend(comments)
     decisions = []
-    sid = str(v1.get("sid", ""))
     if (
         release is not None
         and v1.get("date")
@@ -100,20 +98,6 @@ def study_metadata(
             Decision(
                 kind="registry_date",
                 detail=f"study.json date {v1['date']}, registry date {release.date.isoformat()}",
-            )
-        )
-    if release is None and PKDB_ID.fullmatch(sid):
-        decisions.append(
-            Decision(
-                kind="registry_sid",
-                detail=f"study.json sid {sid} is not in the registry",
-            )
-        )
-    elif release is not None and PKDB_ID.fullmatch(sid) and sid != release.pkdb_id:
-        decisions.append(
-            Decision(
-                kind="registry_sid",
-                detail=f"study.json sid {sid}, registry identifier {release.pkdb_id}",
             )
         )
     access = v1.get("access", "private")

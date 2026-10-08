@@ -23,7 +23,6 @@ DECISION_HEADINGS = {
     "schedule": "Converted dosing schedules",
     "unreferenced_sheet": "Sheets that study.json never used",
     "registry_date": "Dates that differ from the registry",
-    "registry_sid": "Identifiers that differ from the registry",
     "image_converted": "Converted images",
     "removed_file": "Removed data files",
     "scatter_label": "Renamed scatter outputs",
@@ -32,6 +31,11 @@ DECISION_HEADINGS = {
     "label_renamed": "Renamed timecourse labels",
     "reference_replaced": "Replaced reference snapshots",
     "reference_resolved": "Resolved missing references",
+}
+# Reasons of studies that are not converted, listed again under manual decisions.
+REASON_HEADINGS = {
+    "registry_sid": "Identifiers that differ from the registry",
+    "sheet_name": "Sheet names outside the source pattern",
 }
 
 
@@ -131,18 +135,14 @@ def _decisions(
                 "",
             ]
     lines += _registry(report)
-    sheets = [
-        [s.study, s.reason or ""]
-        for s in grouped["not_converted"]
-        if (s.reason or "").split(":", 1)[0] == "sheet_name"
-    ]
-    if sheets:
-        lines += [
-            "### Sheet names outside the source pattern",
-            "",
-            *_table(["Study", "Reason"], sheets),
-            "",
+    for code, heading in REASON_HEADINGS.items():
+        refused = [
+            [s.study, s.reason or ""]
+            for s in grouped["not_converted"]
+            if (s.reason or "").split(":", 1)[0] == code
         ]
+        if refused:
+            lines += [f"### {heading}", "", *_table(["Study", "Reason"], refused), ""]
     lines += _papers(report)
     if lines[-2:] == ["## Manual decisions", ""]:
         lines += ["None.", ""]

@@ -62,8 +62,10 @@ def test_the_converted_folder_equals_the_format_2_twin(tmp_path, valid_study, wo
     assert conversion.decisions == []
 
 
-def test_a_registered_study_is_released_and_approved(tmp_path):
+@pytest.mark.parametrize("sid", ["Example", "PKDB00042"])
+def test_a_registered_study_is_released_and_approved(tmp_path, sid):
     v1 = v1_full_example(tmp_path / "v1")
+    rewrite_study(v1, sid=sid)
     registry = Registry({"PKDB00042": ("caffeine/Example", date(2020, 1, 2))})
     target = tmp_path / "v2" / "caffeine" / "Example"
     convert_study(
@@ -77,6 +79,28 @@ def test_a_registered_study_is_released_and_approved(tmp_path):
     assert metadata["release"] == {"pkdb_id": "PKDB00042", "date": "2020-01-02"}
     review = json.loads((target / "review.json").read_text())
     assert (review["status"], review["approved_by"]) == ("approved", "mkoenig")
+
+
+@pytest.mark.parametrize(
+    "registered", [{}, {"PKDB00043": ("caffeine/Example", date(2020, 1, 2))}]
+)
+def test_a_released_study_that_the_registry_does_not_release_is_not_converted(
+    tmp_path, registered
+):
+    v1 = v1_full_example(tmp_path / "v1")
+    rewrite_study(v1, sid="PKDB00042", access="public")
+    target = tmp_path / "v2" / "caffeine" / "Example"
+    with pytest.raises(NotConverted) as error:
+        convert_study(
+            v1,
+            target,
+            registry=Registry(registered),
+            approver="mkoenig",
+            resolver=NoNetwork(offline=True),
+        )
+    assert error.value.code == "registry_sid"
+    assert "PKDB00042" in error.value.message
+    assert not target.exists()
 
 
 def test_a_stale_hidden_tsv_beside_the_workbook_is_ignored_and_removed(tmp_path):
