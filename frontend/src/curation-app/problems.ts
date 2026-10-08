@@ -168,6 +168,27 @@ export function acknowledgement(issue: ValidationIssue): Acknowledgement | null 
   return { code: issue.code, file: source.file, line: source.row ?? null, column: source.header ?? null };
 }
 
+/**
+ * The warnings that acknowledging `issue` covers when its review item can target only its file,
+ * else null. The library pins an acknowledgement to a row only for a warning at a line of a data
+ * table (`target_for_issue` in `studyformat/review_edit.py`); any other warning gets the target of
+ * its file alone. This mirrors `acknowledged` in `studyformat/validation.py` for such a target:
+ * it matches every warning of the same code in that file, at any line and column, also the
+ * warnings of later validations. `dataTables` are the data tables of the study, without raw tables.
+ */
+export function fileWideScope(
+  issue: ValidationIssue,
+  problems: readonly ValidationIssue[],
+  dataTables: ReadonlySet<string>,
+): ValidationIssue[] | null {
+  const file = issue.source?.file;
+  if (issue.severity !== "warning" || !file) return null;
+  if (issue.source?.row != null && dataTables.has(file)) return null;
+  return problems.filter(
+    (other) => other.severity === "warning" && other.code === issue.code && other.source?.file === file,
+  );
+}
+
 /** What the dialog says when the warning is no longer in the files that the server validated. */
 export const NO_SUCH_WARNING = "This warning is not in the current files. Validate the study and try again.";
 

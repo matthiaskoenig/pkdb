@@ -5,6 +5,7 @@ import {
   acknowledgeFailure,
   acknowledgement,
   DID_YOU_MEAN,
+  fileWideScope,
   filterIssues,
   groupByFile,
   groupCounts,
@@ -186,6 +187,27 @@ describe("links and acknowledgements", () => {
     });
     const row = issue("duplicate_observation", "warning", { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 4 });
     expect(acknowledgement(row)).toMatchObject({ line: 4, column: null });
+  });
+
+  it("finds the warnings that an acknowledgement of the whole file covers", () => {
+    const tables = new Set(["timecourses_Fig1.tsv", "interventions.tsv"]);
+    const figure = { file: "Example_Fig1.wpd.json", path: [] };
+    const first = issue("unknown_dataset", "warning", figure, { message: "Dataset A matches no mapped row" });
+    const second = issue("unknown_dataset", "warning", figure, { message: "Dataset B matches no mapped row" });
+    // The same code at a line of the file, and another code: as acknowledged() in validation.py.
+    const atLine = issue("unknown_dataset", "warning", { ...figure, row: 7, header: "x" });
+    const other = issue("digitized_mismatch", "warning", figure);
+    const problems = [first, second, atLine, other, mean, unused];
+    expect(fileWideScope(first, problems, tables)).toEqual([first, second, atLine]);
+    // A line of a file that is no data table, such as the workbook or a raw table, covers the file too.
+    const workbook = issue("unknown_dataset", "warning", { file: "Example.xlsx", sheet: "outputs_Tab2", row: 4 });
+    expect(fileWideScope(workbook, [workbook], tables)).toEqual([workbook]);
+    const raw = issue("unknown_dataset", "warning", cell("Example_Tab2.tsv", 3, "B", "B"));
+    expect(fileWideScope(raw, [raw], tables)).toEqual([raw]);
+    // A line of a data table is pinned to its row; errors are never acknowledged.
+    expect(fileWideScope(mean, problems, tables)).toBeNull();
+    expect(fileWideScope(header, [header], tables)).toBeNull();
+    expect(fileWideScope(issue("unknown_dataset", "warning"), problems, tables)).toBeNull();
   });
 
   it("says plainly that a warning is no longer in the files", () => {

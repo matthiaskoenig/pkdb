@@ -4,6 +4,7 @@ import type { ConflictData, ReviewItem, StudyDetail, TablesResult } from "../../
 import {
   actionFailure,
   approvalRefusal,
+  dataTableFiles,
   defaultSection,
   duplicateFolders,
   duplicateHeading,
@@ -122,6 +123,14 @@ describe("tableFiles", () => {
       "characteristica.tsv",
       "Example_Tab2.tsv",
       "Example_TabA.tsv",
+      "outputs_Text.tsv",
+      "scatters_Fig2.tsv",
+      "subjects.tsv",
+      "timecourses_Fig1.tsv",
+    ]);
+    // The library loads only the data tables as tables.
+    expect([...dataTableFiles(studyDetail({ files }))]).toEqual([
+      "characteristica.tsv",
       "outputs_Text.tsv",
       "scatters_Fig2.tsv",
       "subjects.tsv",

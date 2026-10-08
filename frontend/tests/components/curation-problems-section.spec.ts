@@ -280,6 +280,10 @@ function control(within: Within, name: string): DOMWrapper<HTMLElement> {
   return found[0]!;
 }
 
+function textOf(element: Pick<DOMWrapper<Element>, "text">): string {
+  return element.text().replace(/\s+/g, " ").trim();
+}
+
 function dialog() {
   return page().get('.v-overlay--active[role="dialog"]');
 }
@@ -701,6 +705,39 @@ describe("acknowledgements", () => {
         text: "The point lies on the axis.",
       },
     ]);
+  });
+
+  it("tells that a warning without a row in a data table is acknowledged in its whole file", async () => {
+    const second: ValidationIssue = {
+      ...digitizedMismatch,
+      message: "2 points of dataset 'caf_plasma_D300' have no mapped row within 2 pixels",
+    };
+    const problems = [outsideRange, digitizedMismatch, second];
+    await mountSection(withProblems({ problems, counts: { errors: 0, warnings: 3 } }));
+    const items = section().findAll<HTMLElement>(".problem");
+    const opener = control(items[1]!, "Acknowledge");
+    opener.element.focus();
+    await opener.trigger("click");
+    await flushPromises();
+    const scope = dialog().get(".acknowledge-scope");
+    expect(textOf(scope.get(".acknowledge-scope-text"))).toBe(
+      "This warning has no row in a data table. The acknowledgement covers every digitized_mismatch warning in " +
+        "Example_Fig1.wpd.json, also later ones. It covers 2 warnings now.",
+    );
+    expect(scope.findAll(".acknowledge-covered li").map(textOf)).toEqual([digitizedMismatch.message, second.message]);
+
+    await textArea("Reason", dialog().element).setValue("The points lie on the axis.");
+    await control(dialog(), "Acknowledge").trigger("click");
+    await flushPromises();
+    // Both warnings leave the list after the next validation.
+    expect(section().findAll(".problem-acknowledged")).toHaveLength(2);
+    expect(notice()).toBe("2 warnings digitized_mismatch acknowledged.");
+  });
+
+  it("names no wider scope for a warning at a row of a data table", async () => {
+    await mountSection();
+    await openAcknowledge("outside_range");
+    expect(dialog().find(".acknowledge-scope").exists()).toBe(false);
   });
 
   it("keeps the dialog open with the locations when several warnings match", async () => {

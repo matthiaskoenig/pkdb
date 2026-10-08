@@ -23,7 +23,7 @@ from pkdb.studyformat.review_edit import (
     warning_locations,
 )
 from pkdb.studyformat.revision import RevisionConflict
-from pkdb.studyformat.validation import validate_folder
+from pkdb.studyformat.validation import Acknowledgement, acknowledged, validate_folder
 
 NOW = datetime(2026, 10, 6, 12, 0, tzinfo=UTC)
 PERSON = Author("curator")
@@ -307,6 +307,35 @@ def test_target_filter_adds_columns_until_it_matches_one_row(
     assert target.rows == {"label": "drug_plasma", "time": "1", "subjects": "S2"}
     assert target.column == "mean"
     assert table.matching_lines(target.rows) == {row.line}
+
+
+def test_a_warning_off_a_data_table_row_is_acknowledged_in_its_whole_file(valid_study):
+    """The rule that `fileWideScope` of the curation app mirrors (problems.ts).
+
+    A warning without a line, or with a line in a file that is no data table, gets the
+    target of its file alone, and `acknowledged` matches that target with every warning of
+    the same code in the file, at any line and column. The app tells this in its dialog.
+    """
+    study = load_study(valid_study)
+    figure = "Example2020_Fig1.wpd.json"
+    no_line = make_issue("unknown_dataset", "A.", file=figure, severity="warning")
+    workbook_row = make_issue(
+        "unknown_dataset", "B.", file="Example2020.xlsx", line=4, severity="warning"
+    )
+    raw_row = make_issue(
+        "unknown_dataset", "C.", file="Example2020_Tab2.tsv", line=3, severity="warning"
+    )
+    for issue in (no_line, workbook_row, raw_row):
+        assert issue.source is not None
+        assert target_for_issue(study, issue) == ReviewTarget(file=issue.source.file)
+    targets = {"unknown_dataset": [Acknowledgement(file=figure)]}
+    elsewhere = make_issue(
+        "unknown_dataset", "D.", file=figure, line=7, header="x", severity="warning"
+    )
+    other_code = make_issue("digitized_mismatch", "E.", file=figure, severity="warning")
+    assert acknowledged(no_line, targets)
+    assert acknowledged(elsewhere, targets)
+    assert not acknowledged(other_code, targets)
 
 
 def test_matching_warnings_and_their_locations():

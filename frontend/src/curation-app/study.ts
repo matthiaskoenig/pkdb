@@ -72,6 +72,11 @@ export function isRawTable(file: string): boolean {
   return !DATA_TABLE.test(file) && !SOURCE_TABLE.test(file);
 }
 
+/** The data tables of a study, which the library loads as tables: `tableFiles` without the raw tables. */
+export function dataTableFiles(detail: Pick<StudyDetail, "id" | "files">): Set<string> {
+  return new Set(tableFiles(detail).filter((file) => !isRawTable(file)));
+}
+
 /** The counts of the rail: open items, errors plus warnings, sources, and table and raw table files. */
 export function railCounts(detail: StudyDetail): Partial<Record<Section, number>> {
   return {

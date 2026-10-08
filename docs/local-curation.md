@@ -131,7 +131,7 @@ The Problems section lists the issues of the last validation by file. Each shows
 
 Filter by **All**, **Errors** or **Warnings**. **Show in table** opens the Tables section at the cell of the issue. **Open** opens another file of the study, such as `study.json`, in its default application, and **Open tables** opens the workbook.
 
-**Acknowledge** marks a warning as expected; errors cannot be acknowledged. It asks for a reason and writes a resolved review item that acknowledges the warning at its file, line and column. The warning leaves the list after the next validation. The acknowledged warnings are listed below the problems with their reason and a link to their review item. Dismissing that item brings the warning back.
+**Acknowledge** marks a warning as expected; errors cannot be acknowledged. It asks for a reason and writes a resolved review item that acknowledges the warning at its file, line and column. A warning at a row of a data table is acknowledged at that row. Any other warning, such as one of a whole file, a raw table or the workbook, is acknowledged in its whole file: the review item then covers every warning with the same code in that file, also the ones of later validations. The dialog says so and lists the warnings that it covers now. The warning leaves the list after the next validation. The acknowledged warnings are listed below the problems with their reason and a link to their review item. Dismissing that item brings the warning back.
 
 ### Sources
 

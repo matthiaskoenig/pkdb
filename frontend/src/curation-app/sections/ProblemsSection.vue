@@ -12,6 +12,7 @@ import { sectionHeading } from "../composables/useReturnFocus";
 import { formatTime, plural } from "../overview";
 import {
   acknowledgement,
+  fileWideScope,
   filterIssues,
   groupByFile,
   groupCounts,
@@ -28,6 +29,7 @@ import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import {
   actionFailure,
+  dataTableFiles,
   knownProfiles,
   messageOf,
   profileOf,
@@ -181,10 +183,16 @@ function acknowledge(issue: ValidationIssue): void {
 }
 
 function acknowledgedWarning(issue: ValidationIssue): void {
-  const key = locationKey(issue);
+  // An acknowledgement of the whole file covers every warning of the code in the file.
+  const covered = (detail.value && fileWideScope(issue, problems.value, dataTableFiles(detail.value))) || [issue];
   // A validation that left the warning out already needs no mark.
-  if (problems.value.some((entry) => locationKey(entry) === key)) study.markAcknowledged(key);
-  announce(`Warning ${issue.code} acknowledged.`);
+  for (const key of new Set(covered.map(locationKey)))
+    if (problems.value.some((entry) => locationKey(entry) === key)) study.markAcknowledged(key);
+  announce(
+    covered.length > 1
+      ? `${plural(covered.length, "warning")} ${issue.code} acknowledged.`
+      : `Warning ${issue.code} acknowledged.`,
+  );
 }
 
 /**

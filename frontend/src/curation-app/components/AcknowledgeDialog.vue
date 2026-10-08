@@ -15,9 +15,11 @@ import {
 import type { ValidationIssue } from "../api/types";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
-import { acknowledgeFailure, acknowledgement, location, locationKey } from "../problems";
+import { plural } from "../overview";
+import { acknowledgeFailure, acknowledgement, fileWideScope, location, locationKey } from "../problems";
 import type { ReviewFailure } from "../review";
 import { useStudyStore } from "../stores/study";
+import { dataTableFiles } from "../study";
 import UserHint from "./UserHint.vue";
 
 /**
@@ -43,6 +45,18 @@ const reason = ref("");
 const failure = ref<ReviewFailure | null>(null);
 
 const payload = computed(() => (props.issue ? acknowledgement(props.issue) : null));
+/** The warnings that the acknowledgement covers when it can target only the file of the warning. */
+const covered = computed(() => {
+  const detail = study.detail;
+  return props.issue && detail ? fileWideScope(props.issue, detail.problems, dataTableFiles(detail)) : null;
+});
+/** The covered warnings that the dialog lists; a long list ends with how many more there are. */
+const LISTED = 10;
+const coveredLines = computed(() =>
+  (covered.value ?? [])
+    .slice(0, LISTED)
+    .map((warning) => [warning.message, location(warning, { file: false })].filter(Boolean).join(" · ")),
+);
 const writable = computed(() => study.detail?.review.revision != null && study.detail.review.value !== null);
 const canSubmit = computed(() => payload.value !== null && writable.value && !busy.value && reason.value.trim() !== "");
 
@@ -93,6 +107,23 @@ async function submit(): Promise<void> {
           <dt>Message</dt>
           <dd>{{ issue.message }}</dd>
         </dl>
+        <VAlert
+          v-if="covered && issue.source"
+          type="warning"
+          variant="tonal"
+          density="compact"
+          class="status-alert acknowledge-scope"
+        >
+          <p class="acknowledge-scope-text">
+            This warning has no row in a data table. The acknowledgement covers every
+            <code class="acknowledge-code">{{ issue.code }}</code> warning in {{ issue.source.file }}, also later
+            ones. It covers {{ plural(covered.length, "warning") }} now.
+          </p>
+          <ul v-if="covered.length > 1" class="acknowledge-covered">
+            <li v-for="(line, index) in coveredLines" :key="index">{{ line }}</li>
+            <li v-if="covered.length > LISTED">And {{ plural(covered.length - LISTED, "more warning") }}.</li>
+          </ul>
+        </VAlert>
         <p class="field-note">
           A resolved review item keeps the reason. Dismiss the item to bring the warning back.
         </p>
@@ -156,6 +187,14 @@ async function submit(): Promise<void> {
 .acknowledge-code {
   font-size: 0.875rem;
   font-weight: 600;
+}
+.acknowledge-scope-text {
+  margin: 0;
+}
+.acknowledge-covered {
+  margin: 4px 0 0;
+  padding-inline-start: 20px;
+  overflow-wrap: anywhere;
 }
 .acknowledge-issues {
   margin: 4px 0 0;
