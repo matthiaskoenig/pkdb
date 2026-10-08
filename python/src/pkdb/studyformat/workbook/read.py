@@ -541,6 +541,28 @@ def _read(
     return WorkbookContent(tables, sheets, base, issues)
 
 
+def sheet_names(path: Path) -> tuple[str, ...] | None:
+    """The names of the sheets of a workbook in workbook order, without reading a cell.
+
+    None when the workbook cannot be read.
+    """
+    with warnings.catch_warnings():
+        warnings.filterwarnings("ignore", module="openpyxl")
+        try:
+            reader = ExcelReader(Path(path), read_only=True, keep_links=False)
+        except Exception:
+            # openpyxl raises many kinds of errors for a damaged or foreign file.
+            return None
+        try:
+            reader.read_manifest()
+            reader.read_workbook()
+            return tuple(sheet.name for sheet in reader.parser.sheets)
+        except Exception:
+            return None
+        finally:
+            reader.archive.close()
+
+
 def read_workbook(
     path: Path, study_name: str, *, max_rows: int | None = None
 ) -> WorkbookContent:

@@ -1581,6 +1581,51 @@ def test_preview_table_refuses_what_add_table_refuses(
         assert issue.message == message
 
 
+@pytest.mark.parametrize(("kind", "source"), [("raw", "Fig2"), ("outputs", "Tab 3")])
+def test_preview_table_names_no_image_for_a_refused_source(valid_study, kind, source):
+    # Example_Fig2.png exists, but a raw table of Fig2 is refused.
+    preview = preview_table(valid_study, kind, source)
+
+    assert (preview.image, preview.image_found) == (None, False)
+    assert [issue.code for issue in preview.issues] == ["invalid_table_name"]
+
+
+@pytest.mark.parametrize("source", ["TabA", "Taba"])
+def test_preview_table_refuses_a_sheet_of_the_workbook_ignoring_case(
+    study, workbook, sf_vocabulary, source
+):
+    assert add_table(study, sf_vocabulary, "outputs_TabA").ok
+
+    [issue] = preview_table(study, "outputs", source).issues
+
+    assert issue.code == "table_exists"
+    assert issue.message == "The sheet outputs_TabA already exists in Example.xlsx"
+    assert not add_table(study, sf_vocabulary, f"outputs_{source}").ok
+
+
+def test_preview_table_ok_means_that_add_table_adds_the_sheet(
+    study, workbook, sf_vocabulary
+):
+    assert preview_table(study, "raw", "Tab9").issues == ()
+
+    assert add_table(study, sf_vocabulary, "Example_Tab9").ok
+
+
+def test_preview_table_reads_no_workbook_it_cannot_trust(
+    study, workbook, sf_vocabulary, tmp_path
+):
+    assert add_table(study, sf_vocabulary, "outputs_TabA").ok
+    # A symlinked workbook is never read: it would reach outside the study folder.
+    outside = tmp_path / "outside.xlsx"
+    workbook.rename(outside)
+    workbook.symlink_to(outside)
+    assert preview_table(study, "outputs", "TabA").issues == ()
+    # An unreadable workbook is reported by add_table after its sync.
+    workbook.unlink()
+    workbook.write_bytes(b"not a workbook")
+    assert preview_table(study, "outputs", "TabA").issues == ()
+
+
 def test_workbook_check_plans_without_writing(study, workbook, sf_vocabulary):
     in_step = {"action": "unchanged", "changes": [], "conflicts": 0, "ok": True}
     assert workbook_check(study, sf_vocabulary) == in_step

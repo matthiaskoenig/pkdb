@@ -42,7 +42,13 @@ from pkdb.studyformat.load import (
     load_table,
 )
 from pkdb.studyformat.merge import Conflict, Preference, merge_lines
-from pkdb.studyformat.raw import RAW_SOURCE, load_raw, parse_raw_file, render_raw
+from pkdb.studyformat.raw import (
+    RAW_SOURCE,
+    load_raw,
+    parse_raw_file,
+    raw_file,
+    render_raw,
+)
 from pkdb.studyformat.tables import (
     KIND_ORDER,
     RAW_KIND,
@@ -64,7 +70,7 @@ from pkdb.studyformat.workbook.base import (
     workbook_path,
     write_state,
 )
-from pkdb.studyformat.workbook.read import WorkbookContent, read_workbook
+from pkdb.studyformat.workbook.read import WorkbookContent, read_workbook, sheet_names
 from pkdb.studyformat.workbook.write import WorkbookError, build_workbook
 
 Side = Literal["workbook", "tables"]
@@ -922,17 +928,18 @@ NEW_TABLE_KINDS = (
 )
 
 
-def new_table_name(study: str, kind: str, source: str) -> str:
-    """The sheet of a new table: `<kind>_<source>`, or `<study>_<source>` for a raw table."""
-    return f"{study}_{source}" if kind == RAW_KIND else f"{kind}_{source}"
+def new_table_file(study: str, kind: str, source: str) -> str:
+    """The table file of a new table, or of the raw table of a study; its sheet is its name without `.tsv`."""
+    return raw_file(study, source) if kind == RAW_KIND else table_file(kind, source)
 
 
 @dataclass(frozen=True)
 class TablePreview:
     """A new table before it is added: its sheet, file and image, and why it cannot be added.
 
-    `image` is the image of its source, None for the text of the paper. `issues` hold the
-    refusal of the name, and are empty when `add_table` would sync and add the sheet.
+    `image` is the image of its source; None for the text of the paper and for a refused
+    kind or source. `issues` hold the refusal of the name, and are empty when `add_table`
+    would sync and add the sheet.
     """
 
     table: str
@@ -956,34 +963,67 @@ def _name_refusal(folder: Path, table: str) -> ValidationIssue | None:
     return None
 
 
+def _sheet_exists(workbook: Path, sheet: str) -> ValidationIssue:
+    return make_issue(
+        "table_exists",
+        f"The sheet {sheet} already exists in {workbook.name}",
+        file=workbook.name,
+        sheet=sheet,
+    )
+
+
+def _sheet_refusal(folder: Path, table: str) -> ValidationIssue | None:
+    """A sheet of the workbook named `table` ignoring case, which `add_table` refuses after its sync.
+
+    A symlinked workbook is never read, and one that cannot be read has no sheets here:
+    `add_table` reports both.
+    """
+    path = workbook_path(folder)
+    if path.is_symlink() or not path.is_file():
+        return None
+    sheet = _same_name(table, sheet_names(path) or ())
+    return None if sheet is None else _sheet_exists(path, sheet)
+
+
+def _source_refusal(kind: str, source: str) -> ValidationIssue | None:
+    """Why a new table cannot have a kind and a source: a kind of NEW_TABLE_KINDS, a paper
+    table for a raw table, and otherwise a source such as Tab3, Fig2A or Text."""
+    if kind not in NEW_TABLE_KINDS:
+        *kinds, last = NEW_TABLE_KINDS
+        return make_issue(
+            "invalid_table_name", f"Choose the kind {', '.join(kinds)} or {last}"
+        )
+    if kind == RAW_KIND and not RAW_SOURCE.fullmatch(source):
+        return make_issue(
+            "invalid_table_name", "A raw table needs a paper table source such as Tab3"
+        )
+    if not SOURCE_PATTERN.fullmatch(source):
+        return make_issue(
+            "invalid_table_name", "Use a source such as Tab3, Fig2A or Text"
+        )
+    return None
+
+
 def preview_table(folder: Path, kind: str, source: str) -> TablePreview:
     """What `add_table` would add for a kind of NEW_TABLE_KINDS and a source, or why it refuses.
 
-    The source of a raw table must be a paper table, and any other source one such as Tab3,
-    Fig2A or Text; then the checks of `add_table` before its sync apply.
+    It refuses a kind or a source that a new table cannot have, then what `add_table`
+    refuses before its sync, and a sheet of the workbook with the same name ignoring case,
+    as `add_table` refuses after its sync. The image is named for an accepted source only.
     """
     folder = Path(folder).resolve()
     source = source.strip()
-    table = new_table_name(folder.name, kind, source)
-    if kind not in NEW_TABLE_KINDS:
-        *kinds, last = NEW_TABLE_KINDS
-        issue = make_issue(
-            "invalid_table_name", f"Choose the kind {', '.join(kinds)} or {last}"
-        )
-    elif kind == RAW_KIND and not RAW_SOURCE.fullmatch(source):
-        issue = make_issue(
-            "invalid_table_name", "A raw table needs a paper table source such as Tab3"
-        )
-    elif not SOURCE_PATTERN.fullmatch(source):
-        issue = make_issue(
-            "invalid_table_name", "Use a source such as Tab3, Fig2A or Text"
-        )
-    else:
+    file = new_table_file(folder.name, kind, source)
+    table = file.removesuffix(".tsv")
+    image = None
+    if (issue := _source_refusal(kind, source)) is None:
+        image = None if source == TEXT_SOURCE else image_file(folder.name, source)
         issue = _name_refusal(folder, table)
-    image = None if source == TEXT_SOURCE else image_file(folder.name, source)
+        if issue is None:
+            issue = _sheet_refusal(folder, table)
     return TablePreview(
         table=table,
-        file=f"{table}.tsv",
+        file=file,
         image=image,
         image_found=image is not None and (folder / image).is_file(),
         issues=() if issue is None else (issue,),
@@ -1046,14 +1086,7 @@ def add_table(
             )
         )
     if (sheet := _same_name(table, content.sheets)) is not None:
-        return refused(
-            make_issue(
-                "table_exists",
-                f"The sheet {sheet} already exists in {path.name}",
-                file=path.name,
-                sheet=sheet,
-            )
-        )
+        return refused(_sheet_exists(path, sheet))
     replaced = _replace_workbook(
         path,
         tables,

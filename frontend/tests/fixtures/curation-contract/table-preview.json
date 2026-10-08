@@ -74,7 +74,7 @@
       "response": {
         "table": "Demo2020_Fig2",
         "file": "Demo2020_Fig2.tsv",
-        "image": "Demo2020_Fig2.png",
+        "image": null,
         "image_found": false,
         "issues": [
           {
@@ -102,7 +102,7 @@
       "response": {
         "table": "outputs_Tab 3",
         "file": "outputs_Tab 3.tsv",
-        "image": "Demo2020_Tab 3.png",
+        "image": null,
         "image_found": false,
         "issues": [
           {
