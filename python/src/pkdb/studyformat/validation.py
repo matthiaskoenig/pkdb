@@ -10,11 +10,13 @@ import re
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Literal
 from urllib.parse import quote
 
 from pkdb.domain.validation import prepare_study
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.schemas.prepared import PreparedStudy
+from pkdb.schemas.review import ReviewTarget
 from pkdb.schemas.validation import (
     StudyValidationError,
     ValidationIssue,
@@ -115,11 +117,16 @@ def first_difference(current: bytes, canonical: bytes) -> int:
 
 @dataclass(frozen=True)
 class Acknowledgement:
-    """Where a review item acknowledges a warning; None reaches every file or line."""
+    """Where a review item acknowledges a warning; None reaches every file or line.
+
+    A key reaches exactly the warning with that key. A file without lines, column and key
+    reaches every warning of the code in the file.
+    """
 
     file: str | None = None
     column: str | None = None
     lines: frozenset[int] | None = None
+    key: str | None = None
 
 
 def acknowledgements(study: LoadedStudy) -> dict[str, list[Acknowledgement]]:
@@ -142,7 +149,7 @@ def acknowledgements(study: LoadedStudy) -> dict[str, list[Acknowledgement]]:
             table = study.table(target.file)
             lines = table.matching_lines(target.rows) if table else frozenset()
         result[item.acknowledges].append(
-            Acknowledgement(target.file, target.column, lines)
+            Acknowledgement(target.file, target.column, lines, target.key)
         )
     return result
 
@@ -159,12 +166,36 @@ def acknowledged(
             return True
         if source is None or source.file != target.file:
             continue
+        if target.key is not None:
+            if source.key == target.key:
+                return True
+            continue
         if target.column and source.header != target.column:
             continue
         if target.lines is not None and source.row not in target.lines:
             continue
         return True
     return False
+
+
+AcknowledgementScope = Literal["study", "file", "column", "rows", "key"]
+
+
+def acknowledgement_scope(target: ReviewTarget | None) -> AcknowledgementScope:
+    """What an acknowledgement with this target covers, as `acknowledged` matches it.
+
+    `study`: every warning of the code; `file`: every warning of the code in the file, also later
+    ones; `column`: every warning of the code in that column of the file; `rows`: the warnings at
+    the rows that the filter matches, in the column when it names one; `key`: the warning that
+    has the key.
+    """
+    if target is None or target.file is None:
+        return "study"
+    if target.key is not None:
+        return "key"
+    if target.rows:
+        return "rows"
+    return "column" if target.column else "file"
 
 
 def _severities(issues: list[ValidationIssue]) -> tuple[int, int]:

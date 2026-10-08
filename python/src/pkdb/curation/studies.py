@@ -63,7 +63,7 @@ from pkdb.studyformat.sync import (
 from pkdb.studyformat.tables import RAW_KIND, REVIEW_JSON, STUDY_JSON
 from pkdb.studyformat.targets import match_target
 from pkdb.studyformat.text import natural_key
-from pkdb.studyformat.validation import validate_folder
+from pkdb.studyformat.validation import acknowledgement_scope, validate_folder
 from pkdb.studyformat.workbook.base import workbook_path
 
 IMAGE_TYPES = {
@@ -246,6 +246,11 @@ def _acknowledged(review: dict | None) -> list[dict]:
             "author": item["author"],
             "resolved_by": item.get("resolved_by"),
             "resolved": item.get("resolved"),
+            "scope": acknowledgement_scope(
+                ReviewTarget.model_validate(item["target"])
+                if item.get("target")
+                else None
+            ),
         }
         for item in (review["items"] if review else [])
         if item.get("acknowledges") and item["state"] != "dismissed"
@@ -306,9 +311,10 @@ def _line(payload: dict) -> int | None:
     return line
 
 
-def _located(line: int | None, column: str | None) -> str:
+def _located(line: int | None, column: str | None, key: str | None) -> str:
     parts = [f"line {line}"] if line is not None else []
     parts += [f"column {column}"] if column is not None else []
+    parts += [f"key {key}"] if key is not None else []
     return " ".join(parts) or "the file"
 
 
@@ -709,8 +715,8 @@ class StudiesMixin(EngineState):
     ) -> dict:
         """Acknowledge the warnings of one location, as `pkdb review acknowledge` does.
 
-        A `line` or `column` of null matches only warnings without one; a left out one
-        matches every line or column, as an option left out of the command does.
+        A `line`, `column` or `key` of null matches only warnings without one; a left out
+        one matches every line, column or key, as an option left out of the command does.
         """
         code, file, text = (_text(payload, name) for name in ("code", "file", "text"))
         matches = matching_warnings(
@@ -719,20 +725,21 @@ class StudiesMixin(EngineState):
             file,
             _line(payload) if "line" in payload else ANY,
             _optional_text(payload, "column") if "column" in payload else ANY,
+            _optional_text(payload, "key") if "key" in payload else ANY,
         )
         if not matches:
             raise NoSuchWarning(f"No warning [{code}] in {file} matches")
         locations = warning_locations(matches)
         if len(locations) != 1:
             named = ", ".join(
-                _located(line, column)
-                for line, column in sorted(
-                    locations, key=lambda at: (at[0] or 0, at[1] or "")
+                _located(line, column, key)
+                for line, column, key in sorted(
+                    locations, key=lambda at: (at[0] or 0, at[1] or "", at[2] or "")
                 )
             )
             raise ReviewError(
                 f"{len(matches)} warnings [{code}] match in {file} at {named}; give "
-                "the line and column of one"
+                "the line, column and key of one"
             )
         item, revision = review_edit.acknowledge(
             folder, author, matches[0], text, revision=revision

@@ -504,6 +504,7 @@ def check_digitizations(study: LoadedStudy) -> Iterator[ValidationIssue]:
                     "unknown_dataset",
                     f"The dataset {dataset.name!r} matches no mapped row of source {digitization.source}",
                     file=digitization.file,
+                    key=dataset.name,
                 )
         matched: dict[str, set[int]] = {name: set() for name in datasets}
         for point in points:
@@ -547,6 +548,7 @@ def check_digitizations(study: LoadedStudy) -> Iterator[ValidationIssue]:
                     "digitized_mismatch",
                     f"{unmatched} {points} of dataset {dataset.name!r} {have} no mapped row within {MISMATCH_PIXELS:g} pixels",
                     file=digitization.file,
+                    key=dataset.name,
                 )
 
 

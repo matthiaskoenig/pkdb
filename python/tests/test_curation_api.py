@@ -2,6 +2,7 @@
 
 import json
 import threading
+from types import SimpleNamespace
 
 import openpyxl
 import pytest
@@ -14,6 +15,7 @@ from pkdb.curation.server import create_server
 from pkdb.identity import Author, IdentityError
 from pkdb.schemas.validation import fail
 from pkdb.studyformat.formatter import format_folder
+from pkdb.studyformat.issues import make_issue
 from pkdb.studyformat.jsonio import dump_json
 from pkdb.studyformat.review_edit import read_review
 from pkdb.studyformat.sync import sync_study
@@ -287,6 +289,7 @@ def test_acknowledged_warnings_are_listed_until_dismissed(api):
             "author": "curator",
             "resolved_by": "curator",
             "resolved": created,
+            "scope": "rows",
         }
     ]
 
@@ -944,7 +947,7 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
     # A line and a column that are left out match every line and column.
     assert json.loads(data) == {
         "error": "2 warnings [outside_range] match in timecourses_Fig1.tsv at line 3 "
-        "column mean, line 4 column mean; give the line and column of one",
+        "column mean, line 4 column mean; give the line, column and key of one",
         "issues": [],
     }
     missing = {**body, "code": "missing_image"}
@@ -974,6 +977,85 @@ def test_acknowledge_one_warning(api, sf_vocabulary, monkeypatch):
     assert item["acknowledges"] == "outside_range" and item["state"] == "resolved"
     assert item["target"]["rows"] == {"label": "drug_plasma", "time": "2"}
     assert json.loads(data)["revision"] == read_review(folder).revision
+
+
+def test_acknowledge_one_dataset_by_its_key(api, sf_vocabulary, monkeypatch):
+    server, engine, folder = api
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    (folder / "Example_Fig1.wpd.json").write_text(
+        json.dumps(project(GOOD, extra=("legend", "axis labels")))
+    )
+    assert format_folder(folder).ok
+    headers = authenticate(server)
+    body = {
+        "study": "caffeine/Example",
+        "revision": _detail(server, headers)["review"]["revision"],
+        "action": "acknowledge",
+        "code": "unknown_dataset",
+        "file": "Example_Fig1.wpd.json",
+        "line": None,
+        "column": None,
+        "text": "Not data.",
+    }
+    status, _, data = request(server, "POST", "/local/studies/review", body, headers)
+    assert status == 422
+    assert json.loads(data)["error"] == (
+        "2 warnings [unknown_dataset] match in Example_Fig1.wpd.json at key axis labels, "
+        "key legend; give the line, column and key of one"
+    )
+    # A null key matches only warnings without one.
+    status, _, data = request(
+        server, "POST", "/local/studies/review", {**body, "key": None}, headers
+    )
+    assert status == 422 and json.loads(data)["code"] == "no_such_warning"
+    status, _, data = request(
+        server, "POST", "/local/studies/review", {**body, "key": "legend"}, headers
+    )
+    assert status == 200
+    target = json.loads(data)["item"]["target"]
+    assert (target["file"], target["key"], "column" in target) == (
+        "Example_Fig1.wpd.json",
+        "legend",
+        False,
+    )
+    [entry] = _detail(server, headers)["acknowledged"]
+    assert entry["scope"] == "key"
+    assert entry["target"] == {
+        "file": "Example_Fig1.wpd.json",
+        "rows": {},
+        "key": "legend",
+    }
+
+
+def test_a_warning_without_a_row_or_a_key_is_refused_plainly(
+    api, sf_vocabulary, monkeypatch
+):
+    server, engine, folder = api
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    unkeyed = make_issue("unknown_dataset", "Old.", file="Example_Fig1.wpd.json")
+    monkeypatch.setattr(
+        studies,
+        "validate_folder",
+        lambda folder, vocabulary: SimpleNamespace(issues=[unkeyed]),
+    )
+    headers = authenticate(server)
+    body = {
+        "study": "caffeine/Example",
+        "revision": _detail(server, headers)["review"]["revision"],
+        "action": "acknowledge",
+        "code": "unknown_dataset",
+        "file": "Example_Fig1.wpd.json",
+        "text": "Not data.",
+    }
+    status, _, data = request(server, "POST", "/local/studies/review", body, headers)
+    assert status == 422
+    answer = json.loads(data)
+    assert answer["code"] == "no_exact_target"
+    assert answer["error"].startswith(
+        "The warning [unknown_dataset] in Example_Fig1.wpd.json has no row of a data "
+        "table and no key, so it cannot be acknowledged alone."
+    )
+    assert read_review(folder).review.items == []
 
 
 def test_tables_open_uses_the_opener(api, monkeypatch):

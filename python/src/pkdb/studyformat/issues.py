@@ -216,6 +216,7 @@ def make_issue(
     line: int | None = None,
     column: int | None = None,
     header: str | None = None,
+    key: str | None = None,
     severity: Literal["error", "warning"] | None = None,
     hint: str | None = None,
     candidates: Iterable[str] = (),
@@ -226,10 +227,12 @@ def make_issue(
 
     An issue of a TSV file is located at its line, and its sheet is the file
     name without `.tsv`. An issue found in the workbook names the workbook as
-    `file` and its `sheet`, and `line` is the sheet row. A hint or candidates
-    add a suggestion of the kind `suggestion`, by default FIX with a hint and
-    CANDIDATES without. The severity defaults to warning for warning codes and
-    to error otherwise.
+    `file` and its `sheet`, and `line` is the sheet row. `key` names the place
+    of an issue in a file without rows, such as the dataset of a
+    WebPlotDigitizer project, so that a review item can acknowledge exactly
+    this issue. A hint or candidates add a suggestion of the kind
+    `suggestion`, by default FIX with a hint and CANDIDATES without. The
+    severity defaults to warning for warning codes and to error otherwise.
     """
     source = None
     if file is not None:
@@ -243,6 +246,7 @@ def make_issue(
             column=letter,
             cell=f"{letter}{line}" if letter and line else None,
             header=header,
+            key=key,
         )
     candidates = list(candidates)
     suggestions = (

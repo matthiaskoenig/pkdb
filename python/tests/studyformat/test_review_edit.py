@@ -1,14 +1,18 @@
+import json
 from datetime import UTC, datetime
 
 import pytest
+from digitize_fixtures import GOOD, png, project
 
 from pkdb.identity import Author
 from pkdb.schemas.review import ReviewTarget
+from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.issues import make_issue, row_issue
 from pkdb.studyformat.load import load_study
 from pkdb.studyformat.review_edit import (
     ANY,
     ApprovalRefused,
+    NoExactTarget,
     ReviewError,
     acknowledge,
     add_item,
@@ -23,7 +27,12 @@ from pkdb.studyformat.review_edit import (
     warning_locations,
 )
 from pkdb.studyformat.revision import RevisionConflict
-from pkdb.studyformat.validation import Acknowledgement, acknowledged, validate_folder
+from pkdb.studyformat.validation import (
+    Acknowledgement,
+    acknowledged,
+    acknowledgement_scope,
+    validate_folder,
+)
 
 NOW = datetime(2026, 10, 6, 12, 0, tzinfo=UTC)
 PERSON = Author("curator")
@@ -309,33 +318,146 @@ def test_target_filter_adds_columns_until_it_matches_one_row(
     assert table.matching_lines(target.rows) == {row.line}
 
 
-def test_a_warning_off_a_data_table_row_is_acknowledged_in_its_whole_file(valid_study):
-    """The rule that `fileWideScope` of the curation app mirrors (problems.ts).
+def two_datasets(make_study, valid_files):
+    folder = make_study(
+        {
+            **valid_files,
+            "Example_Fig1.png": png(100, 100),
+            "Example_Fig1.wpd.json": json.dumps(
+                project(GOOD, extra=("legend", "axis labels"))
+            ),
+        }
+    )
+    assert format_folder(folder).ok
+    return folder
 
-    A warning without a line, or with a line in a file that is no data table, gets the
-    target of its file alone, and `acknowledged` matches that target with every warning of
-    the same code in the file, at any line and column. The app tells this in its dialog.
-    """
-    study = load_study(valid_study)
-    figure = "Example2020_Fig1.wpd.json"
-    no_line = make_issue("unknown_dataset", "A.", file=figure, severity="warning")
-    workbook_row = make_issue(
-        "unknown_dataset", "B.", file="Example2020.xlsx", line=4, severity="warning"
+
+def test_a_warning_of_a_whole_file_is_acknowledged_by_its_key(valid_study):
+    issue = make_issue(
+        "unknown_dataset", "A.", file="Example_Fig1.wpd.json", key="legend"
     )
-    raw_row = make_issue(
-        "unknown_dataset", "C.", file="Example2020_Tab2.tsv", line=3, severity="warning"
+    target = target_for_issue(load_study(valid_study), issue)
+    assert target == ReviewTarget(file="Example_Fig1.wpd.json", key="legend")
+
+
+@pytest.mark.parametrize(
+    "location",
+    [
+        {"file": "Example_Fig1.wpd.json"},
+        {"file": "Example.xlsx", "line": 4},
+        {"file": "Example_Tab2.tsv", "line": 3},
+        {"file": "timecourses_Fig1.tsv", "line": 1, "header": "mean"},
+    ],
+)
+def test_a_warning_without_a_row_or_a_key_is_not_acknowledged_alone(
+    valid_study, location
+):
+    issue = make_issue("unknown_dataset", "A.", **location)
+    with pytest.raises(NoExactTarget, match="cannot be acknowledged alone"):
+        target_for_issue(load_study(valid_study), issue)
+
+
+def test_a_warning_without_a_file_is_not_acknowledged_alone(valid_study):
+    issue = make_issue("unknown_dataset", "A.")
+    with pytest.raises(NoExactTarget, match="has no file"):
+        target_for_issue(load_study(valid_study), issue)
+
+
+def test_a_key_covers_its_warning_and_a_file_target_every_one():
+    figure = "Example_Fig1.wpd.json"
+    legend, labels = (
+        make_issue("unknown_dataset", f"{name}.", file=figure, key=name)
+        for name in ("legend", "axis labels")
     )
-    for issue in (no_line, workbook_row, raw_row):
-        assert issue.source is not None
-        assert target_for_issue(study, issue) == ReviewTarget(file=issue.source.file)
-    targets = {"unknown_dataset": [Acknowledgement(file=figure)]}
-    elsewhere = make_issue(
-        "unknown_dataset", "D.", file=figure, line=7, header="x", severity="warning"
+    exact = {"unknown_dataset": [Acknowledgement(file=figure, key="legend")]}
+    assert acknowledged(legend, exact) and not acknowledged(labels, exact)
+    # A target of the file alone, as review.json files written before keys hold it.
+    whole = {"unknown_dataset": [Acknowledgement(file=figure)]}
+    assert acknowledged(legend, whole) and acknowledged(labels, whole)
+    # It also covers a warning of the code at a line of the file, but no other code.
+    at_line = make_issue("unknown_dataset", "C.", file=figure, line=7, header="x")
+    other_code = make_issue("digitized_mismatch", "D.", file=figure, key="legend")
+    assert acknowledged(at_line, whole) and not acknowledged(other_code, whole)
+
+
+def test_acknowledging_one_dataset_keeps_the_warning_of_another(
+    make_study, valid_files, sf_vocabulary
+):
+    folder = two_datasets(make_study, valid_files)
+    legend = next(
+        issue
+        for issue in validate_folder(folder, sf_vocabulary).issues
+        if issue.code == "unknown_dataset"
+        and issue.source
+        and issue.source.key == "legend"
     )
-    other_code = make_issue("digitized_mismatch", "E.", file=figure, severity="warning")
-    assert acknowledged(no_line, targets)
-    assert acknowledged(elsewhere, targets)
-    assert not acknowledged(other_code, targets)
+    item, _ = acknowledge(folder, PERSON, legend, "The legend is no series.", now=NOW)
+    assert item.target == ReviewTarget(file="Example_Fig1.wpd.json", key="legend")
+    keys = [
+        issue.source.key
+        for issue in validate_folder(folder, sf_vocabulary).issues
+        if issue.code == "unknown_dataset" and issue.source
+    ]
+    assert keys == ["axis labels"]
+
+
+def test_a_legacy_acknowledgement_of_a_file_covers_later_datasets(
+    make_study, valid_files, sf_vocabulary
+):
+    """A review.json written before keys keeps hiding every warning of its code in the file."""
+    folder = two_datasets(make_study, valid_files)
+    add_item(
+        folder,
+        PERSON,
+        kind="issue",
+        text="Not data.",
+        target=ReviewTarget(file="Example_Fig1.wpd.json"),
+        acknowledges="unknown_dataset",
+        now=NOW,
+    )
+    assert "unknown_dataset" not in _codes(folder, sf_vocabulary)
+    path = folder / "Example_Fig1.wpd.json"
+    path.write_text(json.dumps(project(GOOD, extra=("legend", "axis labels", "grid"))))
+    assert "unknown_dataset" not in _codes(folder, sf_vocabulary)
+
+
+def test_a_dataset_added_later_raises_a_new_warning(
+    make_study, valid_files, sf_vocabulary
+):
+    folder = two_datasets(make_study, valid_files)
+    for issue in validate_folder(folder, sf_vocabulary).issues:
+        if issue.code == "unknown_dataset":
+            acknowledge(folder, PERSON, issue, "Not data.", now=NOW)
+    assert "unknown_dataset" not in _codes(folder, sf_vocabulary)
+    path = folder / "Example_Fig1.wpd.json"
+    path.write_text(json.dumps(project(GOOD, extra=("legend", "axis labels", "grid"))))
+    keys = [
+        issue.source.key
+        for issue in validate_folder(folder, sf_vocabulary).issues
+        if issue.code == "unknown_dataset" and issue.source
+    ]
+    assert keys == ["grid"]
+
+
+@pytest.mark.parametrize(
+    ("target", "scope"),
+    [
+        (None, "study"),
+        (ReviewTarget(), "study"),
+        (ReviewTarget(file="Example_Fig1.wpd.json"), "file"),
+        (ReviewTarget(file="timecourses_Fig1.tsv", column="mean"), "column"),
+        (ReviewTarget(file="timecourses_Fig1.tsv", rows={"time": "1"}), "rows"),
+        (
+            ReviewTarget(
+                file="timecourses_Fig1.tsv", rows={"time": "1"}, column="mean"
+            ),
+            "rows",
+        ),
+        (ReviewTarget(file="Example_Fig1.wpd.json", key="legend"), "key"),
+    ],
+)
+def test_the_scope_of_an_acknowledgement(target, scope):
+    assert acknowledgement_scope(target) == scope
 
 
 def test_matching_warnings_and_their_locations():
@@ -357,8 +479,8 @@ def test_matching_warnings_and_their_locations():
         "outside_range", "Out.", file="subjects.tsv", line=3, severity="warning"
     )
     project = [
-        make_issue("unknown_dataset", text, file="Example_Fig1.wpd.json")
-        for text in ("Legend.", "Axis labels.")
+        make_issue("unknown_dataset", f"{key}.", file="Example_Fig1.wpd.json", key=key)
+        for key in ("legend", "axis labels")
     ]
     issues = [at_mean, at_sd, below, error, other_code, other_file, *project]
     matches = matching_warnings(issues, "outside_range", table)
@@ -370,10 +492,24 @@ def test_matching_warnings_and_their_locations():
     ]
     assert matching_warnings(issues, "outside_range", table, 3, "sd") == [at_sd]
     assert matching_warnings(issues, "outside_range", "reference.json") == []
-    assert warning_locations(matches) == {(3, "mean"), (3, "sd"), (4, "mean")}
+    assert warning_locations(matches) == {
+        (3, "mean", None),
+        (3, "sd", None),
+        (4, "mean", None),
+    }
     file_level = matching_warnings(issues, "unknown_dataset", "Example_Fig1.wpd.json")
     assert file_level == project
-    assert warning_locations(file_level) == {(None, None)}
+    assert warning_locations(file_level) == {
+        (None, None, "legend"),
+        (None, None, "axis labels"),
+    }
+    figure = "Example_Fig1.wpd.json"
+    assert matching_warnings(issues, "unknown_dataset", figure, key="legend") == [
+        project[0]
+    ]
+    # None matches only warnings without a key.
+    assert matching_warnings(issues, "unknown_dataset", figure, key=None) == []
+    assert matching_warnings(issues, "outside_range", table, key=None) == matches
 
 
 def test_matching_warnings_without_a_line_or_column():
