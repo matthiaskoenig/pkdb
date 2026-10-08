@@ -1,5 +1,6 @@
 import json
 
+import pytest
 from migration_fixtures import (
     DATASET,
     IMAGES,
@@ -315,21 +316,104 @@ def test_a_jpg_image_is_an_intended_change(tmp_path, sf_vocabulary):
     ]
 
 
-def test_a_geometric_mean_moved_to_gmean_is_an_intended_change(tmp_path, sf_vocabulary):
-    output = {key: value for key, value in OUTPUT.items() if key != "sd"}
-    geometric = {**output, "calculation_type": "geometric mean"}
-    v1 = v1_study(tmp_path / "v1", with_outputs(geometric, TIMECOURSE), SHEETS, IMAGES)
-    a = prepare(v1, vocabulary=sf_vocabulary).study
-    # Format 2 refuses calculation `geometric mean`, so B is the converted
-    # arithmetic twin with the record as the converter writes a geometric mean.
-    twin = v1_study(tmp_path / "twin", with_outputs(output, TIMECOURSE), SHEETS, IMAGES)
-    b = prepare(converted(tmp_path, twin), vocabulary=sf_vocabulary).study
-    [record] = [m for m in b.measurements if m.key == "outputs_Tab2.tsv:2"]
-    record.calculation_type = "geometric mean"
-    record.statistics.gmean, record.statistics.mean = record.statistics.mean, None
-    changes, differences = compare(a, b)
-    assert differences == []
-    assert [(c.kind, c.count) for c in changes] == [("gmean", 1)]
+@pytest.mark.parametrize("spread", [True, False], ids=["with sd", "mean only"])
+def test_a_geometric_mean_moved_to_gmean_is_an_intended_change(
+    tmp_path, sf_vocabulary, spread
+):
+    output = {**OUTPUT, "calculation_type": "geometric mean"}
+    if not spread:
+        del output["sd"]
+    v1 = v1_study(tmp_path / "v1", with_outputs(output, TIMECOURSE), SHEETS, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("gmean", 1)]
+
+
+def test_a_geometric_mean_of_a_characteristic_is_an_intended_change(
+    tmp_path, sf_vocabulary
+):
+    age = {"measurement_type": "age", "mean": 35, "unit": "yr", "image": "Tab1"}
+    group = STUDY["groupset"]["groups"][0]
+    characteristica = [
+        *group["characteristica"],
+        {**age, "calculation_type": "geometric mean"},
+    ]
+    study = with_outputs(
+        OUTPUT,
+        TIMECOURSE,
+        groupset={"groups": [{**group, "characteristica": characteristica}]},
+    )
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("gmean", 1)]
+
+
+def without_image(entry):
+    return {key: value for key, value in entry.items() if key != "image"}
+
+
+def test_images_that_the_conversion_adds_are_an_intended_change(
+    tmp_path, sf_vocabulary
+):
+    # Characteristica take the image of their subject, outputs that of their sheet.
+    group = STUDY["groupset"]["groups"][0]
+    characteristica = [without_image(c) for c in group["characteristica"]]
+    outputs = [OUTPUT, TIMECOURSE, X_OUTPUT, Y_OUTPUT]
+    study = with_outputs(
+        *map(without_image, outputs),
+        groupset={"groups": [{**group, "characteristica": characteristica}]},
+        dataset=DATASET,
+    )
+    sheets = {**SHEETS, **SCATTER_SHEET}
+    v1 = v1_study(tmp_path / "v1", study, sheets, (*IMAGES, "Fig2"))
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    [change] = result.changes
+    assert (change.kind, change.count) == ("image_added", 3 + 1 + 3 + 4)
+    assert change.examples[0] == (
+        "characteristica[Example_Tab1.png all species sample mean Homo sapiens]"
+    )
+
+
+def test_an_output_takes_the_figure_of_its_image(tmp_path, sf_vocabulary):
+    # The rows of sheet Tab2 show Fig1: the converted row is a row of Fig1.
+    study = with_outputs({**OUTPUT, "image": "Fig1"}, TIMECOURSE)
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    v2 = converted(tmp_path, v1)
+    assert (v2 / "outputs_Fig1.tsv").exists()
+    assert judge(v1, v2, sf_vocabulary).outcome == "identical"
+
+
+def test_an_image_that_the_conversion_drops_is_a_mismatch(tmp_path, sf_vocabulary):
+    # The image of the characteristic is no file of the folder.
+    group = STUDY["groupset"]["groups"][0]
+    sex = {"measurement_type": "sex", "choice": "M", "image": "Tab9"}
+    characteristica = [*group["characteristica"][:2], sex]
+    study = {
+        **STUDY,
+        "groupset": {"groups": [{**group, "characteristica": characteristica}]},
+    }
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "mismatch"
+    assert result.changes == []
+    assert [(d.path, d.a, d.b) for d in result.differences] == [
+        (
+            "characteristica[Example_Tab9.png all sex sample mean M]",
+            "count 2",
+            "missing",
+        ),
+        ("characteristica[all sex sample mean M]", "missing", "count 2"),
+    ]
+
+
+def test_a_dropped_output_label_is_an_intended_change(tmp_path, sf_vocabulary):
+    study = with_outputs({**OUTPUT, "label": "cmax_all"}, TIMECOURSE)
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("output_label", 1)]
 
 
 def test_differences_are_listed_up_to_the_maximum(tmp_path, sf_vocabulary):

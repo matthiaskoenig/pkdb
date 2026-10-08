@@ -210,6 +210,7 @@ class _Normalizer:
         self.as_individuals = as_individuals
         self.changes = changes
         self.labels = _scatter_labels(study)
+        self.groups = {group.name for group in study.groups}
         self.images: dict[str, str] = {}
 
     def image(self, image: str | None) -> str | None:
@@ -239,19 +240,33 @@ class _Normalizer:
             key = key._replace(calculation_type=None)
         return key
 
-    def geometric(self, key: Key, statistics: Statistics) -> Statistics:
-        """A geometric mean that format 1 wrote as `mean` moves to `gmean`."""
+    def geometric(self, key: Key, statistics: Statistics) -> tuple[Key, Statistics]:
+        """A geometric mean that format 1 wrote as `mean` moves to `gmean`.
+
+        Format 2 retired the calculation `geometric mean`, so the converter
+        leaves it empty and `prepare` fills `sample mean` for a group's record.
+        """
         if (
             key.calculation_type != GEOMETRIC_MEAN
             or statistics.mean is None
             or statistics.gmean is not None
         ):
-            return statistics
+            return key, statistics
         self.changes.add("gmean", described(key))
-        return statistics.model_copy(update={"gmean": statistics.mean, "mean": None})
+        of_group = key.group is not None or (
+            key.table == "characteristica" and key.subject in self.groups
+        )
+        key = key._replace(calculation_type=GROUP_CALCULATION if of_group else None)
+        return key, statistics.model_copy(
+            update={"gmean": statistics.mean, "mean": None}
+        )
 
     def output(self, key: Key) -> Key:
-        """Array outputs and the labels of scatter points as format 2 holds them."""
+        """Array outputs and output labels as format 2 holds them.
+
+        Scatter points take the labels of their scatter; other outputs lose
+        their label, since the format 2 outputs table has none.
+        """
         scatter = self.labels.get(key.label) if key.label else None
         if key.output_type == "array":
             self.changes.add("array_output", described(key))
@@ -259,11 +274,16 @@ class _Normalizer:
             key = key._replace(output_type=kind)
         if scatter is not None and scatter != key.label:
             key = key._replace(label=scatter)
+        elif scatter is None and key.label and key.output_type == "output":
+            self.changes.add("output_label", described(key))
+            key = key._replace(label=None)
         return key
 
     def __call__(self, key: Key, statistics: Statistics) -> tuple[Key, Statistics]:
-        key = self.subject(key._replace(image=self.image(key.image)))
-        statistics = self.geometric(key, statistics)
+        key, statistics = self.geometric(
+            key._replace(image=self.image(key.image)), statistics
+        )
+        key = self.subject(key)
         if key.table == "measurements":
             key = self.output(key)
         return key, statistics
@@ -414,14 +434,21 @@ def _error_bars(a: Statistics, b: Statistics) -> Statistics | None:
     return b.model_copy(update={kind: spread, "error_bar": None, "error_type": None})
 
 
-def _match(
-    key: Key, a: list[Statistics], b: list[Statistics], changes: Changes
-) -> list[Difference]:
-    """Pair the records of one key; differences of the records left unpaired."""
+class _Paired(NamedTuple):
+    """Records left unpaired, the number of pairs and of those paired by an error bar."""
+
+    a: list[Statistics]
+    b: list[Statistics]
+    pairs: int
+    bars: int
+
+
+def _pair(a: list[Statistics], b: list[Statistics]) -> _Paired:
+    """Pair records that are equal, directly or through B's error bar."""
     left = sorted(a, key=_order)
     right = sorted(b, key=_order)
     if len(left) == len(right) and all(map(_same_statistics, left, right)):
-        return []
+        return _Paired([], [], len(left), 0)
     unmatched = []
     for statistics in left:
         found = next(
@@ -432,7 +459,8 @@ def _match(
             unmatched.append(statistics)
         else:
             del right[found]
-    left, unmatched = unmatched, []
+    pairs = len(left) - len(unmatched)
+    left, unmatched, bars = unmatched, [], 0
     for statistics in left:
         found = None
         for index, other in enumerate(right):
@@ -443,13 +471,18 @@ def _match(
         if found is None:
             unmatched.append(statistics)
         else:
-            changes.add("error_bar", described(key))
+            bars += 1
             del right[found]
+    return _Paired(unmatched, right, pairs + bars, bars)
+
+
+def _unpaired(key: Key, a: list[Statistics], b: list[Statistics]) -> list[Difference]:
+    """Differences of the records of one key that found no equal record."""
     differences = []
     path = described(key)
-    for index in range(max(len(unmatched), len(right))):
-        old = unmatched[index] if index < len(unmatched) else None
-        new = right[index] if index < len(right) else None
+    for index in range(max(len(a), len(b))):
+        old = a[index] if index < len(a) else None
+        new = b[index] if index < len(b) else None
         if old is None or new is None:
             differences.append(Difference(path=path, a=_summary(old), b=_summary(new)))
             continue
@@ -463,6 +496,45 @@ def _match(
             for name in STATISTICS
             if not same(getattr(old, name), getattr(new, name))
         )
+    return differences
+
+
+def _match(
+    a: Mapping[Key, list[Statistics]],
+    b: Mapping[Key, list[Statistics]],
+    changes: Changes,
+) -> list[Difference]:
+    """Pair A's records with B's records of the same key, then list the rest.
+
+    Images are provenance: an A record without image pairs with a B record
+    that differs only by having one, an intended change `image_added`. An A
+    image that differs from B's stays a difference.
+    """
+    left_a: dict[Key, list[Statistics]] = {}
+    left_b = {key: list(records) for key, records in b.items()}
+
+    def pair(key: Key, other: Key) -> int:
+        paired = _pair(left_a[key], left_b.get(other, []))
+        left_a[key], left_b[other] = paired.a, paired.b
+        for _ in range(paired.bars):
+            changes.add("error_bar", described(other))
+        return paired.pairs
+
+    for key, records in a.items():
+        left_a[key] = records
+        pair(key, key)
+    with_image = defaultdict(list)
+    for key in b:
+        if key.image is not None:
+            with_image[key._replace(image=None)].append(key)
+    for key in a:
+        if key.image is None:
+            for other in with_image.get(key, []):
+                for _ in range(pair(key, other)):
+                    changes.add("image_added", described(other))
+    differences = []
+    for key in dict.fromkeys([*a, *b]):
+        differences += _unpaired(key, left_a.get(key, []), left_b.get(key, []))
     return differences
 
 
@@ -500,11 +572,10 @@ def compare(
     as_individuals = _individuals(a, changes)
     a_records, a_keys = _records(a, as_individuals, changes)
     b_records, b_keys = _records(b, set(), None)
-    differences = []
-    for key in dict.fromkeys([*a_records, *b_records]):
-        differences += _match(
-            key, a_records.get(key, []), b_records.get(key, []), changes
-        )
+    differences = _match(a_records, b_records, changes)
+    # Timecourses and scatters hold records; their images are compared above.
+    a_keys = {record: key._replace(image=None) for record, key in a_keys.items()}
+    b_keys = {record: key._replace(image=None) for record, key in b_keys.items()}
     differences += _differences(
         "subjects",
         _subjects(a, as_individuals),
