@@ -90,3 +90,33 @@ test("a conflict between the workbook and the tables is resolved by keeping the 
   await expect(gridCell(page, 7, "1.08")).toBeVisible();
   expect(cellOf(workspace, 7, "mean")).toBe("1.08");
 });
+
+test("Add table previews the new table on the local server while the curator types, then adds its sheet", async ({ page }) => {
+  await page.getByRole("button", { name: "Add table", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Add table" });
+  const source = dialog.getByRole("textbox", { name: "Source" });
+  const add = dialog.getByRole("button", { name: "Add", exact: true });
+  const preview = dialog.locator(".table-preview");
+
+  // Typed key by key without a pause, the preview follows the last key.
+  await source.pressSequentially("Tab2");
+  await expect(dialog.getByText("outputs_Tab2.tsv already exists")).toBeVisible();
+  await expect(preview).toBeHidden();
+  await expect(add).toBeDisabled();
+  await source.press("Backspace");
+  await source.pressSequentially("3");
+  await expect(preview).toContainText("outputs_Tab3.tsv");
+  await expect(preview).toContainText("Demo2020_Tab3.png");
+  await expect(add).toBeEnabled();
+
+  await dialog.getByRole("radio", { name: "Raw table" }).check();
+  await source.fill("Fig2");
+  await expect(dialog.getByText("A raw table needs a paper table source such as Tab3")).toBeVisible();
+  await expect(add).toBeDisabled();
+  await source.fill("Tab3");
+  await expect(preview).toContainText("Demo2020_Tab3.tsv");
+  await add.click();
+
+  await expect(dialog).toBeHidden();
+  await expect(page.getByRole("status").filter({ hasText: "Added the sheet Demo2020_Tab3 to the workbook." })).toBeVisible();
+});

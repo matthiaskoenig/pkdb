@@ -10,7 +10,7 @@ from curation_contract import check_contract
 
 from pkdb.cache import bundled_vocabulary
 from pkdb.curation.engine import CurationEngine
-from pkdb.studyformat.sync import conflict_data, sync_study
+from pkdb.studyformat.sync import NEW_TABLE_KINDS, conflict_data, sync_study
 from pkdb.studyformat.tables import TABLES
 
 FIXTURE = Path(__file__).resolve().parents[2] / "tools" / "curation_testing" / "fixture"
@@ -77,4 +77,28 @@ def test_tables_contract(workspace, engine_on):
     check_contract(
         "tables",
         {"tables": tables, "table_kinds": list(TABLES), "conflicts": conflicts},
+    )
+
+
+TABLE_PREVIEWS = [
+    {"kind": "outputs", "source": "Tab3"},
+    {"kind": "timecourses", "source": "Text"},
+    {"kind": "raw", "source": "Tab2"},
+    {"kind": "raw", "source": "Fig2"},
+    {"kind": "outputs", "source": "Tab 3"},
+    {"kind": "outputs", "source": "Tab2"},
+]
+
+
+def test_table_preview_contract(workspace, engine_on):
+    """The kinds of a new table, and previews of Demo2020 that can be added or are refused."""
+    engine = engine_on(workspace)
+    previews = [
+        {"request": request, "response": engine.table_preview(DEMO, request)}
+        for request in TABLE_PREVIEWS
+    ]
+    refused = [len(entry["response"]["issues"]) for entry in previews]
+    assert refused == [0, 0, 1, 1, 1, 1]
+    check_contract(
+        "table-preview", {"kinds": list(NEW_TABLE_KINDS), "previews": previews}
     )

@@ -15,7 +15,13 @@ from openpyxl.utils import get_column_letter
 
 from pkdb.studyformat import SyncResult, add_table, sync, sync_study, workbook_check
 from pkdb.studyformat.formatter import FileChange, format_folder
-from pkdb.studyformat.sync import SyncConflict, conflict_data
+from pkdb.studyformat.sync import (
+    NEW_TABLE_KINDS,
+    SyncConflict,
+    TablePreview,
+    conflict_data,
+    preview_table,
+)
 from pkdb.studyformat.tables import parse_table_file
 from pkdb.studyformat.workbook.base import (
     read_state,
@@ -1515,6 +1521,64 @@ def test_add_table_never_replaces_a_workbook_saved_meanwhile(
     assert "outputs_Tab3" not in content.sheets
     [_, _, row, _] = lines(content.tables[TIMECOURSES].text)
     assert row.split("\t")[names(TIMECOURSES).index("mean")] == "2.25"
+
+
+def test_new_table_kinds_are_the_tables_split_by_source_and_raw():
+    assert NEW_TABLE_KINDS == ("outputs", "timecourses", "scatters", "raw")
+
+
+def test_preview_table_names_the_sheet_file_and_image(valid_study):
+    assert preview_table(valid_study, "outputs", " Tab3 ") == TablePreview(
+        table="outputs_Tab3",
+        file="outputs_Tab3.tsv",
+        image="Example_Tab3.png",
+        image_found=False,
+        issues=(),
+    )
+    raw = preview_table(valid_study, "raw", "Tab2")
+    assert (raw.table, raw.file, raw.image, raw.image_found, raw.issues) == (
+        "Example_Tab2",
+        "Example_Tab2.tsv",
+        "Example_Tab2.png",
+        True,
+        (),
+    )
+    text = preview_table(valid_study, "outputs", "Text")
+    assert (text.image, text.image_found, text.issues) == (None, False, ())
+
+
+@pytest.mark.parametrize(
+    ("kind", "source", "code", "message"),
+    [
+        (
+            "raw",
+            "Fig2",
+            "invalid_table_name",
+            "A raw table needs a paper table source such as Tab3",
+        ),
+        (
+            "outputs",
+            "Tab 3",
+            "invalid_table_name",
+            "Use a source such as Tab3, Fig2A or Text",
+        ),
+        (
+            "subjects",
+            "Tab3",
+            "invalid_table_name",
+            "Choose the kind outputs, timecourses, scatters or raw",
+        ),
+        ("timecourses", "Fig1", "table_exists", "timecourses_Fig1.tsv already exists"),
+        ("outputs", "Tab" + "1" * 30, "table_name_too_long", None),
+    ],
+)
+def test_preview_table_refuses_what_add_table_refuses(
+    valid_study, kind, source, code, message
+):
+    [issue] = preview_table(valid_study, kind, source).issues
+    assert issue.code == code
+    if message is not None:
+        assert issue.message == message
 
 
 def test_workbook_check_plans_without_writing(study, workbook, sf_vocabulary):

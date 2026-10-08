@@ -3,10 +3,12 @@
  * python/tests/test_curation_contract.py. Regenerate them there with PKDB_UPDATE_CONTRACT=1.
  */
 import { describe, expect, it } from "vitest";
-import type { ConflictData, TableEntry } from "../../src/curation-app/api/types";
+import type { ConflictData, TableEntry, TablePreview } from "../../src/curation-app/api/types";
+import { isTablePreview } from "../../src/curation-app/api/types";
 import { isRawTable, railCounts, tableFiles } from "../../src/curation-app/study";
-import { TABLE_KINDS } from "../../src/curation-app/tableKinds";
+import { NEW_TABLE_KINDS, TABLE_KINDS } from "../../src/curation-app/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
+import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
 import tablesFixture from "../fixtures/curation-contract/tables.json";
 import { studyDetail, SUBJECTS_COLUMNS } from "./curation-fixtures";
 
@@ -57,5 +59,15 @@ describe("tables contract", () => {
     expect(view.table.kind).toBe("raw");
     expect(view.table.rows[0]?.cells[0]).toBe("Parameter");
     expect(view.note).toBe("The sheet has no rows in the workbook, but the table changed since the last sync.");
+  });
+});
+
+describe("table preview contract", () => {
+  it("offers every kind of a new table that the library adds", () => {
+    expect(NEW_TABLE_KINDS.map((kind) => kind.value)).toEqual(tablePreviewFixture.kinds);
+  });
+
+  it("accepts every preview answer", () => {
+    for (const { response } of tablePreviewFixture.previews) expect(isTablePreview(contract<TablePreview>(response))).toBe(true);
   });
 });

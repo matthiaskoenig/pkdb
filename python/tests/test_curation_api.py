@@ -674,7 +674,7 @@ def test_writes_need_a_user(api):
         {"action": "open"},
         {"action": "sync"},
         {"action": "resolve", "keep": "workbook"},
-        {"action": "add", "raw": "Tab3"},
+        {"action": "add", "kind": "raw", "source": "Tab3"},
     ]:
         tables = request(
             server,
@@ -920,17 +920,44 @@ def test_tables_sync_resolve_and_add(api, sf_vocabulary, monkeypatch):
         .split("\t")[lines[0].split("\t").index("mean")]
         == "5"
     )
-    status, result = tables(action="add", raw="Tab3")
+    status, result = tables(action="add", kind="raw", source="Tab3")
     assert status == 200 and result["ok"] and result["table"] == "Example_Tab3"
     assert "Example_Tab3" in openpyxl.load_workbook(workbook_path(folder)).sheetnames
-    status, result = tables(action="add", table="outputs_Tab3")
+    status, result = tables(action="add", kind="outputs", source="Tab3")
     assert status == 200 and result["ok"]
-    status, result = tables(action="add", table="nonsense")
+    status, result = tables(action="add", kind="outputs", source="nonsense")
     assert status == 200 and not result["ok"]
     assert result["issues"][0]["code"] == "invalid_table_name"
     assert tables(action="add")[0] == 400
-    assert tables(action="add", table="outputs_Tab4", raw="Tab4")[0] == 400
+    assert tables(action="add", kind="outputs")[0] == 400
     assert tables(action="close")[0] == 400
+
+
+def test_table_preview_and_add_by_kind_and_source(api, sf_vocabulary, monkeypatch):
+    server, engine, folder = api
+    monkeypatch.setattr(engine, "_local_vocabulary", lambda: sf_vocabulary)
+    headers = authenticate(server)
+    preview = "/local/studies/tables/preview"
+    body = {"study": "caffeine/Example", "kind": "outputs", "source": "Tab3"}
+    status, _, data = request(server, "POST", preview, body, headers)
+    assert status == 200
+    assert json.loads(data) == {
+        "table": "outputs_Tab3",
+        "file": "outputs_Tab3.tsv",
+        "image": "Example_Tab3.png",
+        "image_found": False,
+        "issues": [],
+    }
+    status, _, data = request(
+        server, "POST", preview, {**body, "kind": "raw", "source": "Fig1"}, headers
+    )
+    assert [issue["message"] for issue in json.loads(data)["issues"]] == [
+        "A raw table needs a paper table source such as Tab3"
+    ]
+    # A preview writes nothing and needs no user.
+    engine.user = ""
+    assert request(server, "POST", preview, body, headers)[0] == 200
+    assert not (folder / "outputs_Tab3.tsv").exists()
 
 
 @pytest.mark.parametrize(
@@ -1112,7 +1139,7 @@ def test_app_writes_are_listed_in_the_activity(api, sf_vocabulary, monkeypatch):
     for body in [
         {"action": "open"},
         {"action": "sync"},
-        {"action": "add", "raw": "Tab3"},
+        {"action": "add", "kind": "raw", "source": "Tab3"},
     ]:
         request(
             server,
@@ -1200,7 +1227,7 @@ def test_tables_refuse_a_symlinked_workbook(api, tmp_path_factory, monkeypatch):
         {"action": "open"},
         {"action": "sync"},
         {"action": "resolve", "keep": "tables"},
-        {"action": "add", "raw": "Tab3"},
+        {"action": "add", "kind": "raw", "source": "Tab3"},
     ]:
         status, _, data = request(
             server,

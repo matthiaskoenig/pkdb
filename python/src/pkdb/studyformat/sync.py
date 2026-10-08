@@ -42,10 +42,11 @@ from pkdb.studyformat.load import (
     load_table,
 )
 from pkdb.studyformat.merge import Conflict, Preference, merge_lines
-from pkdb.studyformat.raw import load_raw, parse_raw_file, render_raw
+from pkdb.studyformat.raw import RAW_SOURCE, load_raw, parse_raw_file, render_raw
 from pkdb.studyformat.tables import (
     KIND_ORDER,
     RAW_KIND,
+    SOURCE_PATTERN,
     TABLES,
     TEXT_SOURCE,
     TableSpec,
@@ -914,6 +915,81 @@ def _add_open_issue(workbook: Path, table: str, lock: Path | None) -> Validation
     )
 
 
+# The kinds of a new table: the tables split by source, and the raw table of a paper table.
+NEW_TABLE_KINDS = (
+    *(kind for kind, spec in TABLES.items() if spec.per_source),
+    RAW_KIND,
+)
+
+
+def new_table_name(study: str, kind: str, source: str) -> str:
+    """The sheet of a new table: `<kind>_<source>`, or `<study>_<source>` for a raw table."""
+    return f"{study}_{source}" if kind == RAW_KIND else f"{kind}_{source}"
+
+
+@dataclass(frozen=True)
+class TablePreview:
+    """A new table before it is added: its sheet, file and image, and why it cannot be added.
+
+    `image` is the image of its source, None for the text of the paper. `issues` hold the
+    refusal of the name, and are empty when `add_table` would sync and add the sheet.
+    """
+
+    table: str
+    file: str
+    image: str | None
+    image_found: bool
+    issues: tuple[ValidationIssue, ...] = ()
+
+
+def _name_refusal(folder: Path, table: str) -> ValidationIssue | None:
+    """Why `add_table` refuses a name before it syncs: not a new table name, or an existing file."""
+    if (issue := _table_name_issue(table, folder.name)) is not None:
+        return issue
+    try:
+        names = [entry.name for entry in folder.iterdir()]
+    except OSError:
+        # The sync reports a folder it cannot read.
+        names = []
+    if (existing := _same_name(f"{table}.tsv", names)) is not None:
+        return make_issue("table_exists", f"{existing} already exists", file=existing)
+    return None
+
+
+def preview_table(folder: Path, kind: str, source: str) -> TablePreview:
+    """What `add_table` would add for a kind of NEW_TABLE_KINDS and a source, or why it refuses.
+
+    The source of a raw table must be a paper table, and any other source one such as Tab3,
+    Fig2A or Text; then the checks of `add_table` before its sync apply.
+    """
+    folder = Path(folder).resolve()
+    source = source.strip()
+    table = new_table_name(folder.name, kind, source)
+    if kind not in NEW_TABLE_KINDS:
+        *kinds, last = NEW_TABLE_KINDS
+        issue = make_issue(
+            "invalid_table_name", f"Choose the kind {', '.join(kinds)} or {last}"
+        )
+    elif kind == RAW_KIND and not RAW_SOURCE.fullmatch(source):
+        issue = make_issue(
+            "invalid_table_name", "A raw table needs a paper table source such as Tab3"
+        )
+    elif not SOURCE_PATTERN.fullmatch(source):
+        issue = make_issue(
+            "invalid_table_name", "Use a source such as Tab3, Fig2A or Text"
+        )
+    else:
+        issue = _name_refusal(folder, table)
+    image = None if source == TEXT_SOURCE else image_file(folder.name, source)
+    return TablePreview(
+        table=table,
+        file=f"{table}.tsv",
+        image=image,
+        image_found=image is not None and (folder / image).is_file(),
+        issues=() if issue is None else (issue,),
+    )
+
+
 def add_table(
     folder: Path,
     vocabulary: Vocabulary,
@@ -933,15 +1009,7 @@ def add_table(
     """
     folder = Path(folder).resolve()
     path = workbook_path(folder)
-    if (issue := _table_name_issue(table, folder.name)) is not None:
-        return AddTableResult(table, None, (issue,))
-    try:
-        names = [entry.name for entry in folder.iterdir()]
-    except OSError:
-        # The sync reports a folder it cannot read.
-        names = []
-    if (existing := _same_name(f"{table}.tsv", names)) is not None:
-        issue = make_issue("table_exists", f"{existing} already exists", file=existing)
+    if (issue := _name_refusal(folder, table)) is not None:
         return AddTableResult(table, None, (issue,))
     synced = sync_study(folder, vocabulary, max_rows=max_rows)
 

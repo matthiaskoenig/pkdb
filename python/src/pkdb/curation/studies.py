@@ -51,8 +51,15 @@ from pkdb.studyformat.revision import (
     revision_of,
 )
 from pkdb.studyformat.sources import source_view, study_sources
-from pkdb.studyformat.sync import SyncResult, add_table, conflict_data, sync_study
-from pkdb.studyformat.tables import REVIEW_JSON, STUDY_JSON
+from pkdb.studyformat.sync import (
+    AddTableResult,
+    SyncResult,
+    add_table,
+    conflict_data,
+    preview_table,
+    sync_study,
+)
+from pkdb.studyformat.tables import RAW_KIND, REVIEW_JSON, STUDY_JSON
 from pkdb.studyformat.text import natural_key
 from pkdb.studyformat.validation import validate_folder
 from pkdb.studyformat.workbook.base import workbook_path
@@ -687,6 +694,21 @@ class StudiesMixin(EngineState):
             # A sync can have written some files before it failed.
             self._rescan()
 
+    def table_preview(self, identity: str, payload: dict) -> dict:
+        """What Add table would add for `kind` and `source`, and why it would refuse; writes nothing."""
+        preview = preview_table(
+            self.study_folder(identity),
+            _text(payload, "kind"),
+            _text(payload, "source"),
+        )
+        return {
+            "table": preview.table,
+            "file": preview.file,
+            "image": preview.image,
+            "image_found": preview.image_found,
+            "issues": _issues(list(preview.issues)),
+        }
+
     def tables_action(self, identity: str, payload: dict) -> dict:
         """Open the workbook, sync it, resolve its conflicts with `keep`, or add a sheet."""
         # The workbook and the tables record no author, but writes need a user (spec 7.4).
@@ -700,18 +722,15 @@ class StudiesMixin(EngineState):
             )
         action = payload.get("action")
         if action == "add":
-            table, raw = (
-                _optional_text(payload, "table"),
-                _optional_text(payload, "raw"),
-            )
-            if (table is None) == (raw is None):
-                raise ValueError(
-                    "Give the name of a table or the source of a raw table"
+            kind = _text(payload, "kind")
+            preview = preview_table(folder, kind, _text(payload, "source"))
+            added = (
+                AddTableResult(preview.table, None, preview.issues)
+                if preview.issues
+                else self._under_folder_lock(
+                    folder,
+                    lambda vocabulary: add_table(folder, vocabulary, preview.table),
                 )
-            # A raw table is named after the study folder.
-            name = table if table is not None else f"{folder.name}_{raw}"
-            added = self._under_folder_lock(
-                folder, lambda vocabulary: add_table(folder, vocabulary, name)
             )
             synced = (
                 _sync_result(added.sync)
@@ -719,12 +738,12 @@ class StudiesMixin(EngineState):
                 else {"workbook_action": "unchanged", "changes": [], "conflicts": []}
             )
             issues = [*(added.sync.issues if added.sync else ()), *added.issues]
-            kind = "table" if table is not None else "raw table"
+            noun = "raw table" if kind == RAW_KIND else "table"
             self._record_write(
                 identity,
-                f"Added {kind} {added.table or name}"
+                f"Added {noun} {added.table}"
                 if added.ok
-                else f"Could not add {kind} {name}",
+                else f"Could not add {noun} {preview.table}",
                 "succeeded" if added.ok else "failed",
             )
             return {

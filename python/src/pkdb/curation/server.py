@@ -380,6 +380,7 @@ class Handler(BaseHTTPRequestHandler):
             "/local/studies/metadata",
             "/local/studies/review",
             "/local/studies/tables",
+            "/local/studies/tables/preview",
         }:
             study = body.get("study")
             if not isinstance(study, str):
@@ -390,6 +391,8 @@ class Handler(BaseHTTPRequestHandler):
                 )
             if path == "/local/studies/review":
                 return engine.review_action(study, body)
+            if path == "/local/studies/tables/preview":
+                return engine.table_preview(study, body)
             return engine.tables_action(study, body)
         if path in {
             "/local/reference/read",

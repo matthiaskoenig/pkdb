@@ -11,6 +11,7 @@ import {
   isReviewWrite,
   isSourceView,
   isStudyDetail,
+  isTablePreview,
   isTableResponse,
   isTablesResult,
   type Guard,
@@ -23,11 +24,13 @@ import {
   type SourceView,
   type StudyDetail,
   type StudyMetadata,
+  type TablePreview,
   type TableResponse,
   type TablesResult,
 } from "../api/types";
 import { POLL_INTERVAL_MS, usePolling } from "../composables/usePolling";
 import { lastWrite, reportAfter, type AcknowledgedMark } from "../problems";
+import type { NewTableKind } from "../tableKinds";
 
 export type ReviewAction = "add" | "reply" | "resolve" | "dismiss" | "reopen" | "status" | "acknowledge";
 
@@ -194,6 +197,11 @@ export const useStudyStore = defineStore("curation-study", () => {
     return result;
   }
 
+  /** What Add table would add for `kind` and `source`, and why the server would refuse it; writes nothing. */
+  function previewTable(kind: NewTableKind, source: string): Promise<TablePreview> {
+    return postJson("/local/studies/tables/preview", { study: opened(), kind, source }, isTablePreview);
+  }
+
   /** `reference.json` of the open study; empty when there is none. */
   async function readReference(): Promise<ReferenceRecord> {
     return (await postJson("/local/reference/read", { id: opened() }, isReferenceRead)).reference;
@@ -242,6 +250,7 @@ export const useStudyStore = defineStore("curation-study", () => {
     saveMetadata,
     reviewAction,
     tablesAction,
+    previewTable,
     readReference,
     searchReference,
     previewReference,

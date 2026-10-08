@@ -658,6 +658,18 @@ export interface TablesResult {
   table?: string;
 }
 
+/** What Add table would add for a kind and a source, and why the local server would refuse it. */
+export interface TablePreview {
+  /** The sheet of the workbook, also the name of the table. */
+  table: string;
+  file: string;
+  /** The image of the source that the table needs; null for the text of the paper. */
+  image: string | null;
+  image_found: boolean;
+  /** Why the table cannot be added; empty when it can. */
+  issues: ValidationIssue[];
+}
+
 // Error bodies
 
 /** The body of a 409 for a file that changed on disk since the app read it. */
@@ -761,6 +773,8 @@ export const isMetadataWrite = hasKeys<MetadataWrite>("revision", "reference", "
 export const isReviewWrite = hasKeys<ReviewWrite>("revision");
 
 export const isTablesResult = hasKeys<TablesResult>("ok", "workbook_action", "changes", "conflicts", "issues");
+
+export const isTablePreview = hasKeys<TablePreview>("table", "file", "image", "image_found", "issues");
 
 export const isReferenceRead = hasKeys<{ reference: ReferenceRecord }>("reference");
 

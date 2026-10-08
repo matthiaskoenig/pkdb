@@ -8,15 +8,18 @@ import type {
   ReviewItem,
   Snapshot,
   StudyDetail,
+  TablePreview,
   TablesResult,
   ValidationIssue,
 } from "../../src/curation-app/api/types";
+import { PREVIEW_HOLD_MS } from "../../src/curation-app/composables/usePreview";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { NOTICE_MS } from "../../src/curation-app/study";
 import StudyPage from "../../src/curation-app/views/StudyPage.vue";
+import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
 import { json, snapshot, sourceSummary, studyDetail, studyMetadata, studyRow } from "../unit/curation-fixtures";
 import {
   button,
@@ -29,6 +32,7 @@ import {
   radio,
   serveApi,
   setViewport,
+  type Handler,
   type ServedRequest,
 } from "./curation-dom";
 
@@ -173,6 +177,40 @@ function issue(message: string, changes: Partial<ValidationIssue> = {}): Validat
 function tablesResult(changes: Partial<TablesResult> = {}): TablesResult {
   return { ok: true, workbook_action: "unchanged", changes: [], conflicts: [], issues: [], ...changes };
 }
+
+/** The previews of new tables of Harder1988 that the local server gives, by kind and source. */
+const HARDER_PREVIEWS: Record<string, TablePreview> = {
+  "outputs Tab3": {
+    table: "outputs_Tab3",
+    file: "outputs_Tab3.tsv",
+    image: "Harder1988_Tab3.png",
+    image_found: true,
+    issues: [],
+  },
+  "raw Tab4": {
+    table: "Harder1988_Tab4",
+    file: "Harder1988_Tab4.tsv",
+    image: "Harder1988_Tab4.png",
+    image_found: false,
+    issues: [],
+  },
+};
+
+/** The preview of the contract fixture for a kind and a source, a real answer of the local server. */
+function fixturePreview(kind: unknown, source: unknown): TablePreview | undefined {
+  const entry = tablePreviewFixture.previews.find((preview) => preview.request.kind === kind && preview.request.source === source);
+  return entry?.response as TablePreview | undefined;
+}
+
+/** Answers `POST /local/studies/tables/preview` for the posted kind and source from `preview`. */
+function previewHandler(preview: (kind: unknown, source: unknown) => TablePreview | undefined): Handler {
+  return (body) => {
+    const answer = preview(body?.kind, body?.source);
+    return answer ? json(answer) : json({ error: "Unknown resource" }, { status: 404 });
+  };
+}
+
+const harderPreview = previewHandler((kind, source) => HARDER_PREVIEWS[`${String(kind)} ${String(source)}`]);
 
 /** A clipboard with `writeText`, removed again after the test; jsdom has none. */
 function stubClipboard(writeText: (text: string) => Promise<void>) {
@@ -594,6 +632,7 @@ describe("StudyPage", () => {
 
   it("adds a data table from the add table dialog", async () => {
     await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/tables/preview": harderPreview,
       "POST /local/studies/tables": tablesResult({ table: "outputs_Tab3", workbook_action: "regenerated" }),
     });
     await click("More actions");
@@ -611,8 +650,11 @@ describe("StudyPage", () => {
     expect(preview.get(".image-state").text()).toBe("In the folder");
 
     await click("Add");
+    expect(posted("/local/studies/tables/preview")).toEqual([
+      { study: "caffeine/Harder1988", kind: "outputs", source: "Tab3" },
+    ]);
     expect(posted("/local/studies/tables")).toEqual([
-      { study: "caffeine/Harder1988", action: "add", table: "outputs_Tab3" },
+      { study: "caffeine/Harder1988", action: "add", kind: "outputs", source: "Tab3" },
     ]);
     expect(page().find('.v-overlay--active[role="dialog"]').exists()).toBe(false);
     expect(page().get(".study-notice").text()).toBe("Added the sheet outputs_Tab3 to the workbook.");
@@ -631,6 +673,7 @@ describe("StudyPage", () => {
 
   it("adds a raw table and shows the issues of the API", async () => {
     await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/tables/preview": harderPreview,
       "POST /local/studies/tables": tablesResult({
         ok: false,
         issues: [
@@ -654,12 +697,15 @@ describe("StudyPage", () => {
     expect(preview.text()).toContain("Add Harder1988_Tab4.png to the folder");
 
     await click("Add");
-    expect(posted("/local/studies/tables")).toEqual([{ study: "caffeine/Harder1988", action: "add", raw: "Tab4" }]);
+    expect(posted("/local/studies/tables")).toEqual([
+      { study: "caffeine/Harder1988", action: "add", kind: "raw", source: "Tab4" },
+    ]);
     expect(dialog().get(".v-alert").text()).toContain("Close the workbook first");
   });
 
   it("asks in Add table to set the user when the write needs one", async () => {
     await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/tables/preview": harderPreview,
       "POST /local/studies/tables": () =>
         json({ error: "no_user", message: "Set a user with --user or in the settings." }, { status: 403 }),
     });
@@ -676,17 +722,74 @@ describe("StudyPage", () => {
   });
 
   it("refuses a source that is not a paper table or figure, and an existing table", async () => {
-    await mountPage("/studies/caffeine/Harder1988/review");
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/tables/preview": previewHandler(fixturePreview),
+    });
     await click("More actions");
     await click("Add table");
     await field("Source").setValue("Tab 3");
     await flushPromises();
-    expect(dialog().text()).toContain("Use a source such as Tab3, Fig2A or Text.");
+    expect(dialog().text()).toContain(fixturePreview("outputs", "Tab 3")?.issues[0]?.message);
+    expect(dialog().find(".table-preview").exists()).toBe(false);
     expect(button("Add").attributes("disabled")).toBeDefined();
     await field("Source").setValue("Tab2");
     await flushPromises();
-    expect(dialog().text()).toContain("outputs_Tab2.tsv already exists.");
+    expect(dialog().text()).toContain(fixturePreview("outputs", "Tab2")?.issues[0]?.message);
     expect(button("Add").attributes("disabled")).toBeDefined();
+  });
+
+  it("shows only the preview of the current source when the answers come late, and Add waits for it", async () => {
+    const answers = new Map<unknown, (answer: Response) => void>();
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/tables/preview": (body: Record<string, unknown> | null) =>
+        new Promise<Response>((resolve) => answers.set(body?.source, resolve)),
+    });
+    const sources = () => posted("/local/studies/tables/preview").map((body) => body?.source);
+    await click("More actions");
+    await click("Add table");
+    await field("Source").setValue("Tab2");
+    await flushPromises();
+    await field("Source").setValue("Tab3");
+    await flushPromises();
+    // One request at a time: Tab3 is asked for when the answer about Tab2 arrives.
+    expect(sources()).toEqual(["Tab2"]);
+    expect(button("Add").attributes("disabled")).toBeDefined();
+
+    answers.get("Tab2")?.(json(fixturePreview("outputs", "Tab2")));
+    await flushPromises();
+    // The answer about Tab2 is stale and never shows.
+    expect(dialog().text()).not.toContain(fixturePreview("outputs", "Tab2")?.issues[0]?.message);
+    expect(dialog().find(".table-preview").exists()).toBe(false);
+    expect(sources()).toEqual(["Tab2", "Tab3"]);
+    // Pressing Enter before the answer about Tab3 adds nothing.
+    await dialog().get("form").trigger("submit");
+    await flushPromises();
+    expect(posted("/local/studies/tables")).toEqual([]);
+    expect(button("Add").attributes("disabled")).toBeDefined();
+
+    answers.get("Tab3")?.(json(HARDER_PREVIEWS["outputs Tab3"]));
+    await flushPromises();
+    expect(dialog().get(".table-preview").text()).toContain("outputs_Tab3.tsv");
+    expect(button("Add").attributes("disabled")).toBeUndefined();
+
+    // Another key: Add waits at once, while the last preview shows for a moment only.
+    await field("Source").setValue("Tab34");
+    await flushPromises();
+    expect(button("Add").attributes("disabled")).toBeDefined();
+    await dialog().get("form").trigger("submit");
+    await flushPromises();
+    expect(posted("/local/studies/tables")).toEqual([]);
+    await new Promise((resolve) => setTimeout(resolve, PREVIEW_HOLD_MS));
+    expect(dialog().find(".table-preview").exists()).toBe(false);
+    answers.get("Tab34")?.(
+      json({ ...HARDER_PREVIEWS["outputs Tab3"], table: "outputs_Tab34", file: "outputs_Tab34.tsv" }),
+    );
+    await flushPromises();
+    expect(dialog().get(".table-preview").text()).toContain("outputs_Tab34.tsv");
+    await click("Add");
+    expect(posted("/local/studies/tables")).toEqual([
+      { study: "caffeine/Harder1988", action: "add", kind: "outputs", source: "Tab34" },
+    ]);
   });
 
   it("explains a duplicate identity with both folders", async () => {

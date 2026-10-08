@@ -16,7 +16,6 @@ import {
   issueLabel,
   knownProfiles,
   messageOf,
-  newTable,
   openItems,
   profileMap,
   profileOf,
@@ -206,54 +205,6 @@ describe("paths", () => {
     expect(duplicateHeading(3)).toBe("This identity belongs to three folders");
     expect(duplicateHeading(12)).toBe("This identity belongs to 12 folders");
     expect(duplicateHeading(0)).toBe("This identity belongs to more than one folder");
-  });
-});
-
-describe("newTable", () => {
-  const example = studyDetail();
-
-  it("previews the sheet, the file and the image of a data table", () => {
-    expect(newTable(example, "outputs", "Tab3")).toEqual({
-      sheet: "outputs_Tab3",
-      file: "outputs_Tab3.tsv",
-      image: "Example_Tab3.png",
-      imageFound: false,
-      payload: { table: "outputs_Tab3" },
-      problem: null,
-    });
-    expect(newTable(example, "timecourses", " Fig1 ")).toMatchObject({
-      sheet: "timecourses_Fig1",
-      image: "Example_Fig1.png",
-      imageFound: true,
-    });
-    // The text of the paper has no image.
-    expect(newTable(example, "outputs", "Text")).toMatchObject({ image: null, problem: null });
-  });
-
-  it("names a raw table after the study folder", () => {
-    expect(newTable(example, "raw", "Tab3")).toEqual({
-      sheet: "Example_Tab3",
-      file: "Example_Tab3.tsv",
-      image: "Example_Tab3.png",
-      imageFound: false,
-      payload: { raw: "Tab3" },
-      problem: null,
-    });
-  });
-
-  it("explains why a table cannot be added", () => {
-    expect(newTable(example, "outputs", "")).toBeNull();
-    expect(newTable(example, "outputs", "3")?.problem).toBe(
-      "Use a source such as Tab3, Fig2A or Text.",
-    );
-    expect(newTable(example, "raw", "Fig2")?.problem).toBe("A raw table needs a paper table source such as Tab3.");
-    expect(newTable(example, "outputs", "tab2")?.problem).toBe("Use a source such as Tab3, Fig2A or Text.");
-    expect(newTable(example, "outputs", "TAB2")?.problem).toBe("Use a source such as Tab3, Fig2A or Text.");
-    expect(newTable(example, "outputs", "Tab2")?.problem).toBe("outputs_Tab2.tsv already exists.");
-    expect(newTable(example, "raw", "Tab2")?.problem).toBe("Example_Tab2.tsv already exists.");
-    expect(newTable(example, "timecourses", "Fig1_caffeine_plasma_D")?.problem).toBe(
-      "The sheet timecourses_Fig1_caffeine_plasma_D has 34 characters. Excel allows 31.",
-    );
   });
 });
 
