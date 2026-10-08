@@ -282,7 +282,7 @@ One run collects all issues instead of stopping at the first. Layers:
 5. Vocabulary: values and per-measurement rules (allowed units, choices, required time, negative values), against the vocabulary lock offline or the server online.
 6. Postprocessing: derivations, unit normalization and PK derivation through the existing `prepare_study` stages.
 
-Issues reuse `ValidationIssue` (code, severity, message, suggestions). `SourceLocation` points to file, row, column and header. Workbook rows match TSV lines one to one (header on line and row 1), so the same location identifies the TSV line and the workbook cell. Output goes to the terminal, the curation app and `--json`.
+Issues reuse `ValidationIssue` (code, severity, message, suggestions). `SourceLocation` points to file, row, column and header, and, for a file without rows, a key (the dataset of a WebPlotDigitizer project, a review item). Workbook rows match TSV lines one to one (header on line and row 1), so the same location identifies the TSV line and the workbook cell. Output goes to the terminal, the curation app and `--json`.
 
 The same code runs on workbook save in the curation app, in `pkdb validate`, in the pkdb_data pre-commit hook, in pkdb_data CI and on the server for every upload.
 
