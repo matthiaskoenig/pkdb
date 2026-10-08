@@ -1,9 +1,11 @@
 """Table rows of a parsed format 1 study: the inverse of the format 2 reader."""
 
+from collections import Counter
 from collections.abc import Mapping
 from decimal import Decimal
 from pathlib import Path
 
+from pkdb.domain.datasets import STATISTICS_FIELDS
 from pkdb.migration.metadata import single_line
 from pkdb.migration.model import Decision, NotConverted
 from pkdb.migration.sources import curator_source, observation_source
@@ -18,7 +20,7 @@ from pkdb.schemas.study import (
     Statistics,
 )
 from pkdb.studyformat.cells import NAME_PATTERN, NOT_REPORTED
-from pkdb.studyformat.tables import TABLES, table_file
+from pkdb.studyformat.tables import TABLES, TEXT_SOURCE, table_file
 from pkdb.studyformat.text import format_number, render_tsv
 
 Tables = dict[str, list[dict[str, str]]]
@@ -29,6 +31,7 @@ PERCENT = frozenset({"cv", "gcv"})
 LIST = ","
 # The administration times of an irregular schedule.
 TIMES = ";"
+GEOMETRIC_MEAN = "geometric mean"
 
 
 def number(value: float | int | None) -> str:
@@ -96,6 +99,27 @@ def observation(record: Observation, error_bars: ErrorBars) -> dict[str, str]:
     }
 
 
+def _geometric(
+    record: Observation, row: dict[str, str], decisions: list[Decision]
+) -> dict[str, str]:
+    """A geometric mean that format 1 wrote as `mean` moves to `gmean`."""
+    stats = record.statistics
+    if (
+        record.calculation_type != GEOMETRIC_MEAN
+        or stats.gmean is not None
+        or stats.mean is None
+    ):
+        return row
+    if any(getattr(stats, name) is not None for name in ("sd", "se", "cv")):
+        decisions.append(
+            Decision(
+                kind="geometric_spread",
+                detail=f"{record.key}: geometric mean with sd, se or cv",
+            )
+        )
+    return {**row, "gmean": row["mean"], "mean": ""}
+
+
 def _name(name: str) -> str:
     if not NAME_PATTERN.fullmatch(name) or name != name.strip():
         raise NotConverted(
@@ -152,7 +176,10 @@ def _characteristic_image(
 
 
 def _characteristica(
-    study: CanonicalStudy, name: str, error_bars: ErrorBars
+    study: CanonicalStudy,
+    name: str,
+    error_bars: ErrorBars,
+    decisions: list[Decision],
 ) -> list[dict[str, str]]:
     rows = []
     subjects: list[Group | Individual] = [*study.groups, *study.individuals]
@@ -160,13 +187,12 @@ def _characteristica(
         for record in subject.characteristica:
             assert record.source is not None
             image = _characteristic_image(record, subject, name)
-            rows.append(
-                {
-                    **observation(record, error_bars),
-                    "subjects": subject.name,
-                    "source": curator_source(record.source, image, name),
-                }
-            )
+            row = {
+                **observation(record, error_bars),
+                "subjects": subject.name,
+                "source": curator_source(record.source, image, name),
+            }
+            rows.append(_geometric(record, row, decisions))
     return rows
 
 
@@ -194,20 +220,19 @@ def _interventions(
         if (decision := _schedule(record)) is not None:
             decisions.append(decision)
         assert record.source is not None
-        rows.append(
-            {
-                **observation(record, error_bars),
-                "name": record.name,
-                "subjects": text(record.subject),
-                "route": text(record.route),
-                "form": text(record.form),
-                "application": text(record.application),
-                "time_end": number(record.time_end),
-                "interval": number(record.interval),
-                "doses": number(record.doses),
-                "source": curator_source(record.source, record.image, name),
-            }
-        )
+        row = {
+            **observation(record, error_bars),
+            "name": record.name,
+            "subjects": text(record.subject),
+            "route": text(record.route),
+            "form": text(record.form),
+            "application": text(record.application),
+            "time_end": number(record.time_end),
+            "interval": number(record.interval),
+            "doses": number(record.doses),
+            "source": curator_source(record.source, record.image, name),
+        }
+        rows.append(_geometric(record, row, decisions))
     return rows
 
 
@@ -225,25 +250,213 @@ def _measurement(
     }
 
 
+def _by_subject(scatter: str, records: list[Measurement]) -> dict[str, Measurement]:
+    """The points of one scatter axis by their subject, which pairs x and y."""
+    points: dict[str, Measurement] = {}
+    for record in records:
+        subject = record.group or record.individual
+        if subject is None:
+            raise NotConverted(
+                "scatter_pairs", f"Scatter {scatter} has a point without a subject."
+            )
+        if subject in points:
+            raise NotConverted(
+                "scatter_pairs",
+                f"Scatter {scatter} has more than one point of subject {subject}; "
+                "format 2 pairs x and y by subject.",
+            )
+        points[subject] = record
+    return points
+
+
+def _shared(record: Measurement, field: str) -> object:
+    """A field by which format 1 pairs the points of a scatter."""
+    values = record.statistics if field in STATISTICS_FIELDS else record
+    return getattr(values, field, None)
+
+
+def _scatter_pairs(
+    scatter: str,
+    labels: list[str],
+    shared: list[str],
+    by_label: Mapping[str, list[Measurement]],
+) -> list[tuple[str, Measurement, Measurement]]:
+    """Subject, x and y output of each point, paired by subject as format 2 pairs them.
+
+    Format 1 pairs the outputs by the `shared` fields, so these must agree too.
+    """
+    xs, ys = (_by_subject(scatter, by_label.get(label, [])) for label in labels)
+    if set(xs) != set(ys) or any(
+        _shared(xs[subject], field) != _shared(ys[subject], field)
+        for subject in xs
+        for field in shared
+    ):
+        raise NotConverted(
+            "scatter_pairs",
+            f"Scatter {scatter}: the x and y outputs do not pair by subject.",
+        )
+    return [(subject, x, ys[subject]) for subject, x in xs.items()]
+
+
+def _scatter_source(scatter: str, records: list[Measurement], name: str) -> str:
+    """The one source of the points of a scatter, which names its file."""
+    sources = {
+        observation_source(record.source, record.image, name)
+        for record in records
+        if record.source is not None
+    }
+    if len(sources) > 1:
+        raise NotConverted(
+            "scatter_source",
+            f"Scatter {scatter} has points from {', '.join(sorted(sources))}; "
+            "a format 2 scatter has one source.",
+        )
+    return sources.pop() if sources else TEXT_SOURCE
+
+
+def _point(scatter: str, prefix: str, record: Measurement) -> dict[str, str]:
+    """The `x_` or `y_` cells of a scatter point."""
+    stats = record.statistics
+    lost = [
+        name
+        for name in STATISTICS
+        if name not in ("mean", "count") and getattr(stats, name) is not None
+    ]
+    if record.calculation_type is not None:
+        lost.append("calculation")
+    if record.choice is not None:
+        lost.append("choice")
+    if lost:
+        raise NotConverted(
+            "scatter_statistics",
+            f"Scatter {scatter} has {', '.join(lost)}; "
+            "a format 2 scatter point holds a mean only.",
+        )
+    return {
+        f"{prefix}_interventions": LIST.join(record.interventions),
+        f"{prefix}_measurement": text(record.measurement_type),
+        f"{prefix}_substance": text(record.substance),
+        f"{prefix}_tissue": text(record.tissue),
+        f"{prefix}_method": text(record.method),
+        f"{prefix}_time": time(record),
+        f"{prefix}_time_unit": NOT_REPORTED
+        if record.time_unit_not_reported
+        else text(record.time_unit),
+        f"{prefix}_mean": number(stats.mean),
+        f"{prefix}_unit": text(record.unit),
+    }
+
+
+def _scatter_rows(
+    study: CanonicalStudy, name: str, decisions: list[Decision]
+) -> tuple[Tables, dict[str, str]]:
+    """Rows of scatters_<source>.tsv, one per subject pairing its x and y outputs.
+
+    Each subset of a format 1 dataset is one format 2 scatter, named by the
+    subset. Its source is the source of its points, as for any output. Also
+    returns the table file of each output that became a scatter point.
+    """
+    by_label: dict[str, list[Measurement]] = {}
+    for record in study.measurements:
+        if record.label:
+            by_label.setdefault(record.label, []).append(record)
+    tables: Tables = {}
+    used: dict[str, str] = {}
+    names: set[str] = set()
+    for dataset in study.scatters:
+        for subset in dataset.subsets:
+            scatter = subset.name or dataset.name
+            if scatter in names:
+                raise NotConverted(
+                    "scatter_name", f"Two scatters have the name {scatter}."
+                )
+            names.add(scatter)
+            labels = [dimension.output for dimension in subset.dimensions]
+            if len(labels) != 2:
+                raise NotConverted(
+                    "scatter_dimensions",
+                    f"Scatter {scatter} has {len(labels)} dimensions; "
+                    "a format 2 scatter has x and y.",
+                )
+            pairs = _scatter_pairs(scatter, labels, subset.shared, by_label)
+            points = [record for _, x, y in pairs for record in (x, y)]
+            source = _scatter_source(scatter, points, name)
+            file = table_file("scatters", source)
+            for record in points:
+                if record.key in used:
+                    raise NotConverted(
+                        "scatter_outputs",
+                        f"Output {record.label} is in more than one scatter; "
+                        "format 2 holds each point once.",
+                    )
+                if record.output_type == "timecourse":
+                    raise NotConverted(
+                        "scatter_outputs",
+                        f"Scatter {scatter} uses the timecourse {record.label}; "
+                        "format 2 holds a point in a timecourse or in a scatter.",
+                    )
+                used[record.key] = file
+            for subject, x, y in pairs:
+                notes = dict.fromkeys(note for note in (comment(x), comment(y)) if note)
+                tables.setdefault(file, []).append(
+                    {
+                        "name": scatter,
+                        "subjects": text(subject),
+                        "source": source,
+                        **_point(scatter, "x", x),
+                        **_point(scatter, "y", y),
+                        "comment": " / ".join(notes),
+                    }
+                )
+            if labels != [f"{scatter}_x", f"{scatter}_y"]:
+                decisions.append(
+                    Decision(
+                        kind="scatter_label",
+                        detail=f"{scatter}: {labels[0]}, {labels[1]} become "
+                        f"{scatter}_x, {scatter}_y",
+                    )
+                )
+    return tables, used
+
+
+def _plural(count: int, noun: str) -> str:
+    return f"{count} {noun}" if count == 1 else f"{count} {noun}s"
+
+
 def study_tables(
     study: CanonicalStudy, name: str, error_bars: ErrorBars = {}
 ) -> tuple[Tables, list[Decision]]:
     """The format 2 tables of a parsed format 1 study and the decisions to check."""
     decisions: list[Decision] = []
+    scatters, used = _scatter_rows(study, name, decisions)
     tables: Tables = {
         "subjects.tsv": _subjects(study, name, decisions),
-        "characteristica.tsv": _characteristica(study, name, error_bars),
+        "characteristica.tsv": _characteristica(study, name, error_bars, decisions),
         "interventions.tsv": _interventions(study, name, error_bars, decisions),
     }
+    arrays: Counter[str] = Counter()
     for record in study.measurements:
-        if record.output_type == "timecourse":
+        if record.key in used:
+            file = used[record.key]
+        else:
             source, row = _measurement(record, name, error_bars)
-            tables.setdefault(table_file("timecourses", source), []).append(
-                {**row, "label": text(record.label)}
-            )
-        elif record.output_type == "output":
-            source, row = _measurement(record, name, error_bars)
-            tables.setdefault(table_file("outputs", source), []).append(row)
+            row = _geometric(record, row, decisions)
+            if record.label and record.output_type in ("timecourse", "array"):
+                file = table_file("timecourses", source)
+                row = {**row, "label": text(record.label)}
+            else:
+                file = table_file("outputs", source)
+            tables.setdefault(file, []).append(row)
+        if record.output_type == "array":
+            arrays[file] += 1
+    tables |= scatters
+    # One decision per table: a study can hold thousands of array outputs.
+    decisions += [
+        Decision(
+            kind="array_output", detail=f"{_plural(count, 'array output')} in {file}"
+        )
+        for file, count in arrays.items()
+    ]
     return {file: rows for file, rows in tables.items() if rows}, decisions
 
 
