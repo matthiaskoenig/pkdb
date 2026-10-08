@@ -1,5 +1,7 @@
+import fcntl
 import json
 import os
+import sys
 import time
 
 import pytest
@@ -74,6 +76,34 @@ def two_studies(root):
     (root / "other" / "studies" / "caffeine").rename(root / "studies" / "codeine")
 
 
+def keep_v1(monkeypatch):
+    """Let the gate find a mismatch, so every converted study stays v1."""
+    monkeypatch.setattr(
+        run_module,
+        "judge",
+        lambda v1, v2, vocabulary: run_module.StudyResult(
+            study=f"{v1.parent.name}/{v1.name}", outcome="mismatch"
+        ),
+    )
+
+
+def tree(root):
+    """Every path below root with the bytes of each file."""
+    return {
+        path.relative_to(root).as_posix(): path.read_bytes() if path.is_file() else None
+        for path in sorted(root.rglob("*"))
+    }
+
+
+def interrupted(root):
+    """caffeine/Example as a run interrupted after the first rename of its swap leaves it."""
+    folder = v1_full_example(root)
+    backup = root / ".pkdb-migrate" / "v1" / "caffeine" / "Example"
+    backup.parent.mkdir(parents=True)
+    folder.rename(backup)
+    return backup
+
+
 def backup_of_example(root):
     """A v1 backup of caffeine/Example as an interrupted swap leaves it."""
     backup = root / ".pkdb-migrate" / "v1" / "caffeine" / "Example"
@@ -109,13 +139,7 @@ def test_a_dry_run_writes_only_the_report(tmp_path, sf_vocabulary):
 
 def test_a_mismatch_stays_v1(tmp_path, sf_vocabulary, monkeypatch):
     folder = v1_full_example(tmp_path)
-    monkeypatch.setattr(
-        run_module,
-        "judge",
-        lambda v1, v2, vocabulary: run_module.StudyResult(
-            study="caffeine/Example", outcome="mismatch"
-        ),
-    )
+    keep_v1(monkeypatch)
     report = go(tmp_path, sf_vocabulary)
     assert report.studies[0].written is False
     assert (folder / "Example.xlsx").exists()
@@ -300,15 +324,54 @@ def test_a_reference_that_cannot_be_resolved_keeps_the_study_v1(
     assert not (tmp_path / ".pkdb-migrate").exists()
 
 
-def test_an_interrupted_swap_is_restored_on_the_next_run(tmp_path, sf_vocabulary):
-    folder = v1_full_example(tmp_path)
-    backup = tmp_path / ".pkdb-migrate" / "v1" / "caffeine" / "Example"
-    backup.parent.mkdir(parents=True)
-    folder.rename(backup)  # interrupted after the first rename of a swap
-    report = go(tmp_path, sf_vocabulary, dry_run=True)
+def test_an_interrupted_swap_is_restored_on_the_next_run(
+    tmp_path, sf_vocabulary, monkeypatch
+):
+    before = tree(interrupted(tmp_path))
+    keep_v1(monkeypatch)
+    report = go(tmp_path, sf_vocabulary)
     assert report.recovered == ["caffeine/Example"]
-    assert (folder / "Example.xlsx").exists()
+    assert tree(tmp_path / "studies" / "caffeine" / "Example") == before
     assert not (tmp_path / ".pkdb-migrate").exists()
+
+
+def test_a_dry_run_refuses_to_start_after_an_interrupted_run(tmp_path, sf_vocabulary):
+    interrupted(tmp_path)
+    before = tree(tmp_path)
+    with pytest.raises(run_module.RunRefused) as refused:
+        go(tmp_path, sf_vocabulary, dry_run=True)
+    assert str(refused.value) == (
+        f"An interrupted run left .pkdb-migrate in {tmp_path}; "
+        "run pkdb migrate without --dry-run to finish or undo it."
+    )
+    assert tree(tmp_path) == before
+
+
+def test_a_second_run_is_refused_while_one_runs(tmp_path, sf_vocabulary):
+    interrupted(tmp_path)
+    before = tree(tmp_path)
+    descriptor = os.open(tmp_path, os.O_RDONLY)
+    try:
+        fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        for dry_run in (False, True):
+            with pytest.raises(run_module.RunRefused) as refused:
+                go(tmp_path, sf_vocabulary, dry_run=dry_run)
+            assert str(refused.value) == (
+                f"Another pkdb migrate is running in {tmp_path}; wait for it to finish."
+            )
+    finally:
+        os.close(descriptor)
+    assert tree(tmp_path) == before
+    assert go(tmp_path, sf_vocabulary).recovered == ["caffeine/Example"]
+
+
+def test_a_run_without_file_locks_is_refused(tmp_path, sf_vocabulary, monkeypatch):
+    v1_full_example(tmp_path)
+    before = tree(tmp_path)
+    monkeypatch.setitem(sys.modules, "fcntl", None)
+    with pytest.raises(run_module.RunRefused, match="needs Linux or macOS"):
+        go(tmp_path, sf_vocabulary)
+    assert tree(tmp_path) == before
 
 
 def test_a_finished_swap_drops_its_backup_on_the_next_run(tmp_path, sf_vocabulary):
@@ -363,7 +426,8 @@ def test_a_swap_that_cannot_be_undone_is_recovered_by_the_next_run(
     assert not folder.exists()
     assert (tmp_path / ".pkdb-migrate" / "v1" / "caffeine" / "Example").is_dir()
     monkeypatch.setattr(run_module, "_rename", rename)
-    report = go(tmp_path, sf_vocabulary, dry_run=True)
+    keep_v1(monkeypatch)
+    report = go(tmp_path, sf_vocabulary)
     assert report.recovered == ["caffeine/Example"]
     assert (folder / "Example.xlsx").exists()
 

@@ -8,7 +8,9 @@ its v1 folder by a swap of two renames below the repository root:
 
 and the backup of step 1 is deleted afterwards. A run interrupted between the
 renames leaves the backup behind; the next run puts it back or, when the swap
-had finished, deletes it. One run at a time works on a checkout.
+had finished, deletes it. A dry run never recovers: it refuses to start while
+`.pkdb-migrate` exists. An exclusive lock on the repository root folder keeps a
+second run from starting while one works on the checkout.
 """
 
 import json
@@ -57,6 +59,10 @@ STOPPED = "converter_error: the worker process stopped"
 
 class SwapError(RuntimeError):
     """A swap failed half way and its v1 folder could not be put back."""
+
+
+class RunRefused(ValueError):
+    """The run cannot start, and changed nothing; the message says why."""
 
 
 @dataclass(frozen=True)
@@ -393,6 +399,29 @@ def _registry(
 
 
 @contextmanager
+def _locked(root: Path) -> Iterator[None]:
+    """Hold an exclusive lock on the repository root folder; refuse a second run."""
+    try:
+        import fcntl
+    except ImportError:
+        raise RunRefused("pkdb migrate needs Linux or macOS.") from None
+    descriptor = os.open(root, os.O_RDONLY)
+    try:
+        try:
+            fcntl.flock(descriptor, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            raise RunRefused(
+                f"Another pkdb migrate is running in {root}; wait for it to finish."
+            ) from None
+        try:
+            yield
+        finally:
+            fcntl.flock(descriptor, fcntl.LOCK_UN)
+    finally:
+        os.close(descriptor)
+
+
+@contextmanager
 def _work_folder(root: Path, dry_run: bool) -> Iterator[Path]:
     """`.pkdb-migrate` for a real run, a temporary folder for a dry run.
 
@@ -428,9 +457,9 @@ def migrate(
     """Convert the v1 studies below `paths` and write the report.
 
     `paths` are the studies folder, substance folders or study folders of one
-    checkout. Only proven studies replace their v1 folder; a dry run moves,
-    removes and replaces nothing, but puts back the v1 folders of an
-    interrupted run.
+    checkout. Only proven studies replace their v1 folder. A dry run writes
+    only the report; it refuses to start while an interrupted run's
+    `.pkdb-migrate` exists. Raises RunRefused when the run cannot start.
     """
     if not paths:
         raise ValueError(
@@ -442,41 +471,48 @@ def migrate(
     _check_paths(paths, root)
     known = Registry.read(registry)
     vocabulary = vocabulary if vocabulary is not None else bundled_vocabulary()
-    summary = MigrationReport(dry_run=dry_run)
-    _recover(root, summary)
-    folders = _triage(_discover(paths, root), root, summary, dry_run)
-    with _work_folder(root, dry_run) as work:
-        tasks = [
-            Task(
-                v1=folder,
-                work=work,
-                registry=known,
-                approver=approver,
-                vocabulary=vocabulary,
-                dry_run=dry_run,
-                resolver_factory=resolver_factory,
+    with _locked(root):
+        summary = MigrationReport(dry_run=dry_run)
+        if dry_run and _exists(root / WORK):
+            raise RunRefused(
+                f"An interrupted run left {WORK} in {root}; run pkdb migrate "
+                "without --dry-run to finish or undo it."
             )
-            for folder in folders
-        ]
-        for study in _results(tasks, jobs):
-            if not dry_run and study.outcome in PROVEN:
-                try:
-                    _swap(root, root / STUDIES / study.study)
-                except OSError as error:
-                    study = study.model_copy(
-                        update={
-                            "outcome": "not_converted",
-                            "reason": f"swap: {type(error).__name__}: {error}",
-                        }
-                    )
-                else:
-                    study = study.model_copy(update={"written": True})
-            summary.studies.append(study)
-    _registry(root, registry, known, summary, dry_run)
-    summary.studies.sort(key=lambda study: natural_key(study.study))
-    summary.skipped = _sorted(summary.skipped)
-    summary.removed_empty = _sorted(summary.removed_empty)
-    summary.recovered = _sorted(summary.recovered)
-    summary.papers.sort(key=lambda move: natural_key(move.source))
-    write_report(summary, report)
-    return summary
+        if not dry_run:
+            _recover(root, summary)
+        folders = _triage(_discover(paths, root), root, summary, dry_run)
+        with _work_folder(root, dry_run) as work:
+            tasks = [
+                Task(
+                    v1=folder,
+                    work=work,
+                    registry=known,
+                    approver=approver,
+                    vocabulary=vocabulary,
+                    dry_run=dry_run,
+                    resolver_factory=resolver_factory,
+                )
+                for folder in folders
+            ]
+            for study in _results(tasks, jobs):
+                if not dry_run and study.outcome in PROVEN:
+                    try:
+                        _swap(root, root / STUDIES / study.study)
+                    except OSError as error:
+                        study = study.model_copy(
+                            update={
+                                "outcome": "not_converted",
+                                "reason": f"swap: {type(error).__name__}: {error}",
+                            }
+                        )
+                    else:
+                        study = study.model_copy(update={"written": True})
+                summary.studies.append(study)
+        _registry(root, registry, known, summary, dry_run)
+        summary.studies.sort(key=lambda study: natural_key(study.study))
+        summary.skipped = _sorted(summary.skipped)
+        summary.removed_empty = _sorted(summary.removed_empty)
+        summary.recovered = _sorted(summary.recovered)
+        summary.papers.sort(key=lambda move: natural_key(move.source))
+        write_report(summary, report)
+        return summary
