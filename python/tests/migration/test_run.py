@@ -9,7 +9,7 @@ from migration_fixtures import IMAGES, SHEETS, STUDY, v1_full_example, v1_study
 
 from pkdb.migration import run as run_module
 from pkdb.migration.convert import convert_study
-from pkdb.migration.model import NotConverted
+from pkdb.migration.model import MigrationReport, NotConverted
 from pkdb.migration.registry import Registry
 from pkdb.migration.run import migrate
 from pkdb.references import NotFound, ReferenceResolver
@@ -104,6 +104,25 @@ def interrupted(root):
     return backup
 
 
+def written_report(root):
+    """The JSON report that the last run wrote."""
+    return MigrationReport.model_validate_json((root / "migration.json").read_text())
+
+
+def interrupt_second_swap(monkeypatch):
+    """Swap the first proven study, then stop the run as Ctrl-C would."""
+    swap = run_module._swap
+    swaps = []
+
+    def interrupted_swap(root, folder):
+        swaps.append(folder)
+        if len(swaps) > 1:
+            raise KeyboardInterrupt
+        swap(root, folder)
+
+    monkeypatch.setattr(run_module, "_swap", interrupted_swap)
+
+
 def backup_of_example(root):
     """A v1 backup of caffeine/Example as an interrupted swap leaves it."""
     backup = root / ".pkdb-migrate" / "v1" / "caffeine" / "Example"
@@ -160,9 +179,15 @@ def test_a_rerun_skips_converted_studies_and_retries_the_rest(tmp_path, sf_vocab
     assert first.studies[0].reason is not None
     assert first.studies[0].reason.startswith("image_conflict: ")
     assert (broken / "Broken.xlsx").exists()
+    # Example is format 2 now: it is skipped, and its first result carried forward.
     second = go(tmp_path, sf_vocabulary)
-    assert second.skipped == ["caffeine/Example"]
-    assert [s.study for s in second.studies] == ["caffeine/Broken"]
+    assert second.skipped == []
+    assert [s.study for s in second.studies] == ["caffeine/Broken", "caffeine/Example"]
+    assert second.studies[1] == first.studies[1]
+    (tmp_path / "migration.json").unlink()
+    third = go(tmp_path, sf_vocabulary)
+    assert third.skipped == ["caffeine/Example"]
+    assert [s.study for s in third.studies] == ["caffeine/Broken"]
 
 
 def test_folders_without_study_json_move_to_papers_and_empty_ones_go(
@@ -379,8 +404,10 @@ def test_a_finished_swap_drops_its_backup_on_the_next_run(tmp_path, sf_vocabular
     go(tmp_path, sf_vocabulary)
     backup_of_example(tmp_path)  # interrupted after the second rename of a swap
     report = go(tmp_path, sf_vocabulary)
-    assert report.recovered == ["caffeine/Example"]
-    assert report.skipped == ["caffeine/Example"]
+    assert (report.recovered, report.skipped) == (["caffeine/Example"], [])
+    assert [(s.study, s.written) for s in report.studies] == [
+        ("caffeine/Example", True)
+    ]
     assert is_v2_folder(folder) and not (tmp_path / ".pkdb-migrate").exists()
 
 
@@ -425,6 +452,7 @@ def test_a_swap_that_cannot_be_undone_is_recovered_by_the_next_run(
         go(tmp_path, sf_vocabulary)
     assert not folder.exists()
     assert (tmp_path / ".pkdb-migrate" / "v1" / "caffeine" / "Example").is_dir()
+    assert written_report(tmp_path).interrupted
     monkeypatch.setattr(run_module, "_rename", rename)
     keep_v1(monkeypatch)
     report = go(tmp_path, sf_vocabulary)
@@ -443,10 +471,10 @@ def test_a_backup_left_behind_is_never_deleted_unseen(
     assert (tmp_path / ".pkdb-migrate" / "v1" / "caffeine" / "Example").is_dir()
     monkeypatch.setattr(run_module, "_remove", remove)
     report = go(tmp_path, sf_vocabulary)
-    assert (report.recovered, report.skipped) == (
-        ["caffeine/Example"],
-        ["caffeine/Example"],
-    )
+    assert (report.recovered, report.skipped) == (["caffeine/Example"], [])
+    assert [(s.study, s.written) for s in report.studies] == [
+        ("caffeine/Example", True)
+    ]
     assert is_v2_folder(folder) and not (tmp_path / ".pkdb-migrate").exists()
 
 
@@ -552,3 +580,72 @@ def test_the_repository_root_contains_the_studies_folder(tmp_path):
     assert run_module.repository_root(tmp_path / "studies") == tmp_path
     with pytest.raises(ValueError, match="studies"):
         run_module.repository_root(tmp_path.parent)
+
+
+def test_an_interrupted_run_writes_its_report(tmp_path, sf_vocabulary, monkeypatch):
+    two_studies(tmp_path)
+    interrupt_second_swap(monkeypatch)
+    with pytest.raises(KeyboardInterrupt):
+        go(tmp_path, sf_vocabulary)
+    report = written_report(tmp_path)
+    assert report.interrupted
+    assert [(s.study, s.outcome, s.written) for s in report.studies] == [
+        ("caffeine/Example", "identical", True)
+    ]
+    text = (tmp_path / "migration.md").read_text()
+    assert text.startswith("# Study format 2 migration\n\nInterrupted. ")
+    assert (tmp_path / "studies" / "codeine" / "Example" / "Example.xlsx").exists()
+
+
+def test_a_rerun_carries_the_studies_that_earlier_runs_wrote_forward(
+    tmp_path, sf_vocabulary, monkeypatch
+):
+    two_studies(tmp_path)
+    interrupt_second_swap(monkeypatch)
+    with pytest.raises(KeyboardInterrupt):
+        go(tmp_path, sf_vocabulary)
+    monkeypatch.undo()
+    first = written_report(tmp_path).studies[0]
+    report = go(tmp_path, sf_vocabulary)
+    assert not report.interrupted and report.skipped == []
+    assert [(s.study, s.outcome, s.written) for s in report.studies] == [
+        ("caffeine/Example", "identical", True),
+        ("codeine/Example", "identical", True),
+    ]
+    assert report.studies[0] == first
+    assert written_report(tmp_path) == report
+    # A run over one substance keeps the results of the others.
+    v1_full_example(tmp_path / "third")
+    (tmp_path / "third" / "studies" / "caffeine").rename(
+        tmp_path / "studies" / "morphine"
+    )
+    report = go(tmp_path, sf_vocabulary, paths=[tmp_path / "studies" / "morphine"])
+    assert [(s.study, s.written) for s in report.studies] == [
+        ("caffeine/Example", True),
+        ("codeine/Example", True),
+        ("morphine/Example", True),
+    ]
+
+
+def test_results_that_were_not_written_are_not_carried_forward(tmp_path, sf_vocabulary):
+    v1_full_example(tmp_path)
+    go(tmp_path, sf_vocabulary, dry_run=True)
+    report = go(tmp_path, sf_vocabulary, dry_run=True)
+    assert [(s.study, s.written) for s in report.studies] == [
+        ("caffeine/Example", False)
+    ]
+
+
+def test_an_unreadable_earlier_report_is_replaced_with_a_warning(
+    tmp_path, sf_vocabulary
+):
+    v1_full_example(tmp_path)
+    (tmp_path / "migration.json").write_text("{", encoding="utf-8")
+    report = go(tmp_path, sf_vocabulary, dry_run=True)
+    assert report.warnings == [
+        "The earlier report migration.json could not be read, "
+        "so this report lists only this run."
+    ]
+    assert [s.study for s in written_report(tmp_path).studies] == ["caffeine/Example"]
+    text = (tmp_path / "migration.md").read_text()
+    assert "\nWarning: The earlier report migration.json could not be read" in text

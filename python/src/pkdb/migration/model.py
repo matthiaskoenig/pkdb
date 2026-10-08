@@ -71,6 +71,9 @@ class RegistryFindings(Model):
 
 class MigrationReport(Model):
     dry_run: bool
+    # The run stopped before it finished, for example by Ctrl-C or a failed swap.
+    interrupted: bool = False
+    warnings: list[str] = Field(default_factory=list)
     studies: list[StudyResult] = Field(default_factory=list)
     skipped: list[str] = Field(default_factory=list)
     papers: list[PaperMove] = Field(default_factory=list)

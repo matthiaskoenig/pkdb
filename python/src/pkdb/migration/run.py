@@ -398,6 +398,46 @@ def _registry(
     report.registry = findings
 
 
+def _earlier(path: Path, summary: MigrationReport) -> list[StudyResult]:
+    """The written results of the report of earlier runs at `path`.
+
+    A report that cannot be read is replaced; the new report says so.
+    """
+    if not _exists(path):
+        return []
+    try:
+        earlier = MigrationReport.model_validate_json(path.read_bytes())
+    except OSError, ValueError:
+        summary.warnings.append(
+            f"The earlier report {path.name} could not be read, "
+            "so this report lists only this run."
+        )
+        return []
+    return [study for study in earlier.studies if study.written]
+
+
+def _finish(summary: MigrationReport, written: list[StudyResult], root: Path) -> None:
+    """Carry earlier written studies forward and sort the report.
+
+    The report is cumulative: a study that an earlier run wrote is skipped as
+    format 2 now, so its earlier result goes back into the studies.
+    """
+    reported = {study.study for study in summary.studies}
+    carried = [
+        study
+        for study in written
+        if study.study not in reported and is_v2_folder(root / STUDIES / study.study)
+    ]
+    summary.studies.extend(carried)
+    names = {study.study for study in carried}
+    summary.skipped = [name for name in summary.skipped if name not in names]
+    summary.studies.sort(key=lambda study: natural_key(study.study))
+    summary.skipped = _sorted(summary.skipped)
+    summary.removed_empty = _sorted(summary.removed_empty)
+    summary.recovered = _sorted(summary.recovered)
+    summary.papers.sort(key=lambda move: natural_key(move.source))
+
+
 @contextmanager
 def _locked(root: Path) -> Iterator[None]:
     """Hold an exclusive lock on the repository root folder; refuse a second run."""
@@ -460,6 +500,10 @@ def migrate(
     checkout. Only proven studies replace their v1 folder. A dry run writes
     only the report; it refuses to start while an interrupted run's
     `.pkdb-migrate` exists. Raises RunRefused when the run cannot start.
+
+    The report is cumulative: it keeps the studies that earlier runs wrote. It
+    is also written when the run stops early, such as on Ctrl-C or a
+    SwapError, marked as interrupted, before the error is raised again.
     """
     if not paths:
         raise ValueError(
@@ -478,41 +522,48 @@ def migrate(
                 f"An interrupted run left {WORK} in {root}; run pkdb migrate "
                 "without --dry-run to finish or undo it."
             )
+        written = _earlier(report, summary)
         if not dry_run:
             _recover(root, summary)
-        folders = _triage(_discover(paths, root), root, summary, dry_run)
-        with _work_folder(root, dry_run) as work:
-            tasks = [
-                Task(
-                    v1=folder,
-                    work=work,
-                    registry=known,
-                    approver=approver,
-                    vocabulary=vocabulary,
-                    dry_run=dry_run,
-                    resolver_factory=resolver_factory,
-                )
-                for folder in folders
-            ]
-            for study in _results(tasks, jobs):
-                if not dry_run and study.outcome in PROVEN:
-                    try:
-                        _swap(root, root / STUDIES / study.study)
-                    except OSError as error:
-                        study = study.model_copy(
-                            update={
-                                "outcome": "not_converted",
-                                "reason": f"swap: {type(error).__name__}: {error}",
-                            }
-                        )
-                    else:
-                        study = study.model_copy(update={"written": True})
-                summary.studies.append(study)
-        _registry(root, registry, known, summary, dry_run)
-        summary.studies.sort(key=lambda study: natural_key(study.study))
-        summary.skipped = _sorted(summary.skipped)
-        summary.removed_empty = _sorted(summary.removed_empty)
-        summary.recovered = _sorted(summary.recovered)
-        summary.papers.sort(key=lambda move: natural_key(move.source))
-        write_report(summary, report)
+        try:
+            folders = _triage(_discover(paths, root), root, summary, dry_run)
+            with _work_folder(root, dry_run) as work:
+                tasks = [
+                    Task(
+                        v1=folder,
+                        work=work,
+                        registry=known,
+                        approver=approver,
+                        vocabulary=vocabulary,
+                        dry_run=dry_run,
+                        resolver_factory=resolver_factory,
+                    )
+                    for folder in folders
+                ]
+                for study in _results(tasks, jobs):
+                    if not dry_run and study.outcome in PROVEN:
+                        study = _written(root, study)
+                    summary.studies.append(study)
+            _registry(root, registry, known, summary, dry_run)
+        except BaseException:
+            # Ctrl-C, a SwapError or any other stop: the report lists what was done.
+            summary.interrupted = True
+            raise
+        finally:
+            _finish(summary, written, root)
+            write_report(summary, report)
         return summary
+
+
+def _written(root: Path, study: StudyResult) -> StudyResult:
+    """Swap a proven study into place; a swap that fails leaves it not converted."""
+    try:
+        _swap(root, root / STUDIES / study.study)
+    except OSError as error:
+        return study.model_copy(
+            update={
+                "outcome": "not_converted",
+                "reason": f"swap: {type(error).__name__}: {error}",
+            }
+        )
+    return study.model_copy(update={"written": True})

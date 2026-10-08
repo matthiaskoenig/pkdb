@@ -42,3 +42,19 @@ def test_a_path_outside_a_checkout_is_an_error(tmp_path, monkeypatch, capsys):
     code = main(["migrate", "nowhere"])
     assert code == 2
     assert capsys.readouterr().err
+
+
+def test_an_interrupted_run_exits_130(tmp_path, monkeypatch, capsys, sf_vocabulary):
+    v1_full_example(tmp_path)
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setattr("pkdb.migration_cli.bundled_vocabulary", lambda: sf_vocabulary)
+
+    def interrupted(*args, **options):
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr("pkdb.migration.run.migrate", interrupted)
+    assert main(["migrate", "studies", "--jobs", "1"]) == 130
+    assert capsys.readouterr().err == (
+        "Interrupted. migration.md lists the studies written so far. "
+        "Run pkdb migrate again to finish or undo the interrupted swaps.\n"
+    )

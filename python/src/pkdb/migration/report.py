@@ -191,11 +191,13 @@ def _papers(report: MigrationReport) -> list[str]:
 def markdown(report: MigrationReport) -> str:
     report = _sorted(report)
     grouped = _by_outcome(report)
+    status = "Dry run." if report.dry_run else "Written."
     lines = [
         "# Study format 2 migration",
         "",
-        "Dry run." if report.dry_run else "Written.",
+        f"Interrupted. {status}" if report.interrupted else status,
         "",
+        *(line for warning in report.warnings for line in (f"Warning: {warning}", "")),
         *_summary(report, grouped),
         *_classes(grouped),
         *_decisions(report, grouped),

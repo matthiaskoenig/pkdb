@@ -104,6 +104,13 @@ def test_cells_escape_pipes_and_line_breaks():
     assert "Written." in markdown(report)
 
 
+def test_an_interrupted_run_says_so_first():
+    report = MigrationReport(dry_run=True, interrupted=True, warnings=["Look."])
+    assert markdown(report).startswith(
+        "# Study format 2 migration\n\nInterrupted. Dry run.\n\nWarning: Look.\n"
+    )
+
+
 def test_every_decision_kind_appears_under_a_heading():
     kinds = [
         "output_label",

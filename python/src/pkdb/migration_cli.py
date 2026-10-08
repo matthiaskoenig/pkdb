@@ -84,6 +84,16 @@ def run(args) -> int:
             jobs=args.jobs,
             vocabulary=bundled_vocabulary(),
         )
+    except KeyboardInterrupt:
+        print(
+            safe_text(
+                f"Interrupted. {args.report.with_suffix('.md')} lists the studies "
+                "written so far. Run pkdb migrate again to finish or undo the "
+                "interrupted swaps."
+            ),
+            file=sys.stderr,
+        )
+        return 130
     except SwapError as error:
         print(safe_text(str(error)), file=sys.stderr)
         print(
