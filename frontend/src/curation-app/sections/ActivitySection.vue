@@ -17,7 +17,6 @@ import {
   datetime,
   JOB_STATUS_LABELS,
   JOB_STATUS_TONES,
-  jobText,
   messageParts,
   persistenceLabel,
   reportFileName,
@@ -59,7 +58,7 @@ const entries = computed(() =>
     textId: `${id}-${job.id}-text`,
     metaId: `${id}-${job.id}-meta`,
     // Writes name review items by id; the parts name them by kind and text.
-    parts: messageParts(jobText(job), detail.value?.review.value?.items ?? []),
+    parts: messageParts(job, detail.value?.review.value?.items ?? []),
     persistence: persistenceLabel(job),
     url: uploadUrl(job),
     cancelable: job.status === "queued",

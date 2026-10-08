@@ -4,7 +4,6 @@ import type { Job, SourceLocation, ValidationIssue } from "../../src/curation-ap
 import {
   acknowledgeFailure,
   acknowledgement,
-  DID_YOU_MEAN,
   fileWideScope,
   filterIssues,
   groupByFile,
@@ -17,7 +16,6 @@ import {
   noIssuesText,
   reportAfter,
   severityCounts,
-  SPELLING_HINT,
   suggestionView,
   tableQuery,
   validatesAfterWrite,
@@ -123,7 +121,8 @@ describe("severity", () => {
 
 describe("suggestionView", () => {
   it("offers the candidates of a spelling suggestion after Did you mean", () => {
-    expect(suggestionView({ kind: "fix", message: DID_YOU_MEAN, candidates: ["all", "smokers"] })).toEqual({
+    // The kind decides, not the message.
+    expect(suggestionView({ kind: "did_you_mean", message: "Any message.", candidates: ["all", "smokers"] })).toEqual({
       lead: "Did you mean:",
       candidates: ["all", "smokers"],
       note: null,
@@ -131,10 +130,16 @@ describe("suggestionView", () => {
   });
 
   it("offers term suggestions after Did you mean, with their caveat", () => {
+    const caveat = "Candidates are spelling suggestions, not equivalent terms.";
     expect(
-      suggestionView({ kind: "fix", message: SPELLING_HINT, candidates: ["plasma", "saliva/plasma"] }),
-    ).toEqual({ lead: "Did you mean:", candidates: ["plasma", "saliva/plasma"], note: SPELLING_HINT });
-    expect(SPELLING_HINT).toBe("Candidates are spelling suggestions, not equivalent terms.");
+      suggestionView({ kind: "check_vocabulary", message: caveat, candidates: ["plasma", "saliva/plasma"] }),
+    ).toEqual({ lead: "Did you mean:", candidates: ["plasma", "saliva/plasma"], note: caveat });
+    // Without candidates, the caveat alone is the message.
+    expect(suggestionView({ kind: "check_vocabulary", message: caveat, candidates: [] })).toEqual({
+      lead: caveat,
+      candidates: [],
+      note: null,
+    });
   });
 
   it("shows another hint before its candidates", () => {
@@ -149,6 +154,10 @@ describe("suggestionView", () => {
       candidates: [],
       note: null,
     });
+    // A hint with the message of another kind keeps its kind.
+    expect(suggestionView({ kind: "fix", message: "Did you mean one of these?", candidates: ["a"] }).lead).toBe(
+      "Did you mean one of these?",
+    );
   });
 });
 

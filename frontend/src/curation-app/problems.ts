@@ -99,12 +99,6 @@ export function location(issue: ValidationIssue, { file = true }: { file?: boole
   return parts.join(" · ");
 }
 
-/** The message of a spelling suggestion of the library (`DID_YOU_MEAN` in `studyformat/issues.py`). */
-export const DID_YOU_MEAN = "Did you mean one of these?";
-
-/** The hint of the spelling suggestions of an unknown term (`studyformat/terms.py`). */
-export const SPELLING_HINT = "Candidates are spelling suggestions, not equivalent terms.";
-
 function candidateText(candidate: Json): string {
   return typeof candidate === "string" ? candidate : JSON.stringify(candidate);
 }
@@ -117,14 +111,14 @@ export interface SuggestionView {
 }
 
 /**
- * A suggestion to show: spelling suggestions follow `Did you mean:`, with the caveat of term
- * suggestions after them; any other hint comes before its candidates, such as lines to add to
- * a file.
+ * A suggestion to show, by its kind (`studyformat/issues.py`): candidates alone follow
+ * `Did you mean:`, and so do the spelling suggestions of an unknown term, with their caveat after
+ * them; any other hint comes before its candidates, such as lines to add to a file.
  */
 export function suggestionView(suggestion: Suggestion): SuggestionView {
   const candidates = (suggestion.candidates ?? []).map(candidateText);
-  if (suggestion.message === DID_YOU_MEAN) return { lead: "Did you mean:", candidates, note: null };
-  if (suggestion.message === SPELLING_HINT && candidates.length)
+  if (suggestion.kind === "did_you_mean") return { lead: "Did you mean:", candidates, note: null };
+  if (suggestion.kind === "check_vocabulary" && candidates.length)
     return { lead: "Did you mean:", candidates, note: suggestion.message };
   return { lead: suggestion.message, candidates, note: null };
 }

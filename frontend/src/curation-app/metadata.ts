@@ -464,11 +464,10 @@ export function issueTarget(form: MetadataForm, field: string | null | undefined
   }
 }
 
-/** The message of an issue without the path and the "Value error" that validation puts before it. */
+/** The message of an issue without its field, as the library gives it in `context.detail`. */
 export function issueMessage(issue: ValidationIssue): string {
-  const prefix = issue.field ? `${issue.field}: ` : "";
-  const message = prefix && issue.message.startsWith(prefix) ? issue.message.slice(prefix.length) : issue.message;
-  return message.replace(/^Value error, /, "");
+  const detail = issue.context?.detail;
+  return typeof detail === "string" ? detail : issue.message;
 }
 
 /** The messages of `issues` by the field of the form that shows them, and the messages of the others. */

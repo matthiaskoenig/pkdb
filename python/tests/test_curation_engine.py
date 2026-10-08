@@ -577,6 +577,35 @@ def test_saved_problems_found_load_with_their_own_status(workspace):
         restarted.close()
 
 
+def test_saved_jobs_of_part_c_keep_their_links_and_texts(workspace):
+    engine, _ = workspace
+    engine.jobs.extend(
+        [
+            job_entry(
+                "write",
+                action="write",
+                message="Added review item 01M2FC4AG038NKRKAYDXR834N3",
+            ),
+            job_entry("queued", "canceled", message="Queued"),
+        ]
+    )
+    engine.close()
+    restarted = module.CurationEngine(
+        engine.root, state_dir=engine.state_dir, offline=True, start=False
+    )
+    try:
+        jobs = {
+            job["id"]: job for job in restarted.study_detail("caffeine/Example")["jobs"]
+        }
+        assert jobs["write"]["parts"] == [
+            {"text": "Added "},
+            {"item": "01M2FC4AG038NKRKAYDXR834N3"},
+        ]
+        assert jobs["queued"]["message"] == "Canceled before it started"
+    finally:
+        restarted.close()
+
+
 def upload_result():
     return SimpleNamespace(
         created=True,

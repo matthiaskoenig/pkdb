@@ -15,7 +15,13 @@ from pkdb.cache import (
 from pkdb.curation.connection import ConnectionMixin
 from pkdb.curation.github import GitHubAssignments
 from pkdb.curation.issues import IssuesMixin
-from pkdb.curation.jobs import JobsMixin, fingerprint, maybe_sent, now
+from pkdb.curation.jobs import (
+    CANCELED_BEFORE_START,
+    JobsMixin,
+    fingerprint,
+    maybe_sent,
+    now,
+)
 from pkdb.curation.state import THEMES
 from pkdb.curation.studies import StudiesMixin
 from pkdb.curation.workspace import (
@@ -114,6 +120,10 @@ class CurationEngine(
             ):
                 # Saved before problems found had a status of their own.
                 job["status"] = "invalid"
+            elif job.get("status") == "canceled" and job.get("message") == "Queued":
+                # Saved by earlier versions, which kept the message of a queued job when
+                # canceling it.
+                job["message"] = CANCELED_BEFORE_START
         self.modes = saved.get("modes", {})
         self.recent_workspaces = [
             item for item in saved.get("recent_workspaces", []) if isinstance(item, str)

@@ -18,8 +18,10 @@ import {
 } from "../../src/curation-app/metadata";
 import { fullStudyMetadata, studyDetail, studyMetadata } from "./curation-fixtures";
 
-function issue(field: string | null, message = `${field}: Input is invalid`): ValidationIssue {
-  return { code: "invalid_study_json", severity: "error", message, field };
+/** An issue of study.json as the library gives it: the message names the field, the detail does not. */
+function issue(field: string | null, detail = "Input is invalid"): ValidationIssue {
+  if (field === null) return { code: "invalid_study_json", severity: "error", message: detail, field };
+  return { code: "invalid_study_json", severity: "error", message: `${field}: ${detail}`, field, context: { detail } };
 }
 
 describe("toForm and fromForm", () => {
@@ -237,8 +239,8 @@ describe("issueTarget", () => {
 
   it("groups the messages by field, without the path, and lists the others", () => {
     const issues = [
-      issue("curators.1.rating", "curators.1.rating: Input should be less than or equal to 5"),
-      issue("format", "format: Input should be 2"),
+      issue("curators.1.rating", "Input should be less than or equal to 5"),
+      issue("format", "Input should be 2"),
       issue(null, "study.json is not valid JSON"),
     ];
     const grouped = issuesByTarget(form, issues);
@@ -246,10 +248,17 @@ describe("issueTarget", () => {
       "curators.1.rating": ["Input should be less than or equal to 5"],
     });
     expect(grouped.general).toEqual(["format: Input should be 2", "study.json is not valid JSON"]);
-    expect(issueMessage(issues[0]!)).toBe("Input should be less than or equal to 5");
-    expect(issueMessage(issue("reference.doi", "reference.doi: Value error, 'doi' is not a valid DOI"))).toBe(
-      "'doi' is not a valid DOI",
+  });
+
+  it("shows the message of the library without its field", () => {
+    expect(issueMessage(issue("curators.1.rating", "Input should be less than or equal to 5"))).toBe(
+      "Input should be less than or equal to 5",
     );
+    // The detail of the library is the message, also when it names the field itself.
+    expect(issueMessage(issue("reference", "reference: give a pmid or a doi"))).toBe("reference: give a pmid or a doi");
+    // An issue without a detail keeps its whole message.
+    const whole: ValidationIssue = { code: "invalid_study_json", severity: "error", message: "creator: Bad", field: "creator" };
+    expect(issueMessage(whole)).toBe("creator: Bad");
   });
 });
 

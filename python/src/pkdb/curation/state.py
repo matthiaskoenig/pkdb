@@ -77,5 +77,9 @@ class EngineState:
         def _wait(self, row: dict, error: Exception) -> None: ...
         def _sync_later(self, row: dict) -> None: ...
         def _record_write(
-            self, identity: str, message: str, status: str = "succeeded"
+            self,
+            identity: str,
+            message: str,
+            status: str = "succeeded",
+            item: str | None = None,
         ) -> None: ...

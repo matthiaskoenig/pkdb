@@ -77,26 +77,18 @@ const STAGE_LABELS: Partial<Record<string, string>> = {
   complete: "Finishing",
 };
 
-/** The message of a queued job, which a running job keeps until it ends. */
-const QUEUED_MESSAGE = "Queued";
-
 /**
  * What a job does or did: a queued or running job keeps the message "Queued" of the server
- * until it ends, so its status and stage say what it does. Earlier versions also kept it when
- * they canceled a queued job.
+ * until it ends, so its status and stage say what it does.
  */
 export function jobText(job: Job): string {
   if (job.status === "queued") return "Waiting to start";
   if (job.status === "running") return (job.stage && STAGE_LABELS[job.stage]) || "Running";
-  if (job.status === "canceled" && job.message === QUEUED_MESSAGE) return "Canceled before it started";
   return job.message;
 }
 
 /** A part of the text of a job: text, or the reference to a review item, linked to the item `item`. */
 export type MessagePart = { text: string; item?: string };
-
-/** How a write of the app names a review item: "Added review item <id>" (`_review_message` in studies.py). */
-const REVIEW_ITEM = /review item (\S+)/g;
 
 /** The characters of an item text that a reference quotes. */
 const QUOTE_LENGTH = 40;
@@ -113,16 +105,18 @@ function quote(text: string): string {
 /**
  * The text of a job with readable references to the review items of `items` that it names: the
  * kind of the item and the start of its text, instead of its id. An item that no longer exists is
- * "a review item".
+ * "a review item". The server splits the message around the item.
  */
-export function messageParts(message: string, items: readonly ReviewItem[]): MessagePart[] {
+export function messageParts(job: Job, items: readonly ReviewItem[]): MessagePart[] {
+  if (!job.parts) return [{ text: jobText(job) }];
   const parts: MessagePart[] = [];
   let text = "";
-  let last = 0;
-  for (const match of message.matchAll(REVIEW_ITEM)) {
-    text += message.slice(last, match.index);
-    last = match.index + match[0].length;
-    const item = items.find((candidate) => candidate.id === match[1]);
+  for (const part of job.parts) {
+    if ("text" in part) {
+      text += part.text;
+      continue;
+    }
+    const item = items.find((candidate) => candidate.id === part.item);
     if (!item) {
       text += "a review item";
       continue;
@@ -131,7 +125,6 @@ export function messageParts(message: string, items: readonly ReviewItem[]): Mes
     parts.push({ text: `${KIND_LABELS[item.kind].toLowerCase()} “${quote(item.text)}”`, item: item.id });
     text = "";
   }
-  text += message.slice(last);
   if (text) parts.push({ text });
   return parts;
 }

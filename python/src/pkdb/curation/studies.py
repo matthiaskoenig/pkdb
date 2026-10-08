@@ -11,6 +11,7 @@ import dataclasses
 import hashlib
 import json
 import os
+import re
 import stat
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
@@ -325,21 +326,54 @@ def _sync_result(result: SyncResult) -> dict:
     }
 
 
-def _review_message(payload: dict, result: dict) -> str:
-    """A review action as the activity of the study lists it."""
+# How jobs saved before writes recorded `item` name their review item.
+_LEGACY_ITEM = re.compile(r"review item (\S+)")
+
+
+def _item_reference(item: str) -> str:
+    """How the message of a write job names its review item."""
+    return f"review item {item}"
+
+
+def _review_message(payload: dict, result: dict) -> tuple[str, str | None]:
+    """A review action as the activity of the study lists it, and the review item it names."""
     item = result["item"]["id"] if "item" in result else payload.get("item")
+    reference = _item_reference(item) if item else ""
     match payload["action"]:
         case "add":
-            return f"Added review item {item}"
+            message = f"Added {reference}"
         case "reply":
-            return f"Replied to review item {item}"
+            message = f"Replied to {reference}"
         case "status":
-            return f"Set the review status to {payload['status']}"
+            return f"Set the review status to {payload['status']}", None
         case "acknowledge":
-            return f"Acknowledged warning {payload['code']} with review item {item}"
+            message = f"Acknowledged warning {payload['code']} with {reference}"
         case action:
             done = {"resolve": "Resolved", "dismiss": "Dismissed", "reopen": "Reopened"}
-            return f"{done[action]} review item {item}"
+            message = f"{done[action]} {reference}"
+    return message, item
+
+
+def job_parts(job: dict) -> list[dict] | None:
+    """The text of a write job split around the review item it names, for a link in the activity.
+
+    Jobs saved before writes recorded `item` name the item only in their message.
+    """
+    message = job.get("message", "")
+    item = job.get("item")
+    if item is None and job.get("action") == "write":
+        found = _LEGACY_ITEM.search(message)
+        item = found.group(1) if found else None
+    if item is None:
+        return None
+    before, reference, after = message.partition(_item_reference(item))
+    if not reference:
+        return None
+    return [
+        *([{"text": before}] if before else []),
+        {"item": item},
+        *([{"text": after}] if after else []),
+    ]
 
 
 def _sync_activity(done: str, sync: SyncResult) -> tuple[str, str]:
@@ -429,6 +463,9 @@ class StudiesMixin(EngineState):
                 )
             )
         _unlinked(folder, root)
+        for job in detail["jobs"]:
+            if (parts := job_parts(job)) is not None:
+                job["parts"] = parts
         study: LoadedStudy | None
         try:
             study = _bounded(folder)
@@ -612,7 +649,8 @@ class StudiesMixin(EngineState):
             raise _review_error(
                 validation_issues(error, REVIEW_JSON, review_edit.CODE)
             ) from None
-        self._record_write(identity, _review_message(payload, result))
+        message, item = _review_message(payload, result)
+        self._record_write(identity, message, item=item)
         self._rescan()
         return result
 

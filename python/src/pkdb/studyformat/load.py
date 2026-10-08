@@ -423,7 +423,10 @@ USER_MESSAGE = "Enter a user name."
 
 
 def _plain_message(detail: Mapping, file: str) -> str:
-    """The message of a pydantic error, in plain words for patterns, dates and empty texts."""
+    """The message of a pydantic error, in plain words for patterns, dates and empty texts.
+
+    Errors of validators lose the "Value error, " that pydantic puts before their message.
+    """
     if detail["type"] == "string_pattern_mismatch":
         pattern = (detail.get("ctx") or {}).get("pattern")
         if pattern in PATTERN_MESSAGES:
@@ -436,7 +439,7 @@ def _plain_message(detail: Mapping, file: str) -> str:
             return USER_MESSAGE
         if isinstance(last, int) or last == "text":
             return TEXT_MESSAGE
-    return detail["msg"]
+    return detail["msg"].removeprefix("Value error, ")
 
 
 def validation_issues(
@@ -445,7 +448,9 @@ def validation_issues(
     """Extract validation issues from a Pydantic ValidationError.
 
     Returns a list of ValidationIssue objects from the error details,
-    respecting the issue cap as today.
+    respecting the issue cap as today. The message names the field, and
+    `context["detail"]` is the message without it, for a form that shows it
+    at the field.
     """
     issues = []
     cap = IssueCap()
@@ -453,12 +458,14 @@ def validation_issues(
         if not cap.admit(code):
             continue
         path = ".".join(str(part) for part in detail["loc"])
+        plain = _plain_message(detail, file)
         issues.append(
             make_issue(
                 code,
-                f"{path or file}: {_plain_message(detail, file)}",
+                f"{path or file}: {plain}",
                 file=file,
                 field=path or None,
+                context={"detail": plain},
             )
         )
     issues.extend(

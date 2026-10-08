@@ -8,10 +8,14 @@ import openpyxl
 import pytest
 from curation_contract import check_contract
 
+import pkdb.studyformat.review_edit as review_edit
 from pkdb.cache import bundled_vocabulary
 from pkdb.curation.engine import CurationEngine
+from pkdb.studyformat.issues import make_issue
+from pkdb.studyformat.metadata import MetadataError
 from pkdb.studyformat.sync import NEW_TABLE_KINDS, conflict_data, sync_study
 from pkdb.studyformat.tables import TABLES
+from pkdb.studyformat.validation import validate_folder
 
 FIXTURE = Path(__file__).resolve().parents[2] / "tools" / "curation_testing" / "fixture"
 DEMO = "caffeine/Demo2020"
@@ -149,3 +153,109 @@ def test_source_contract(workspace, engine_on):
         ("caf_plasma_200mg", True),
     }
     check_contract("source-fig1", view)
+
+
+ITEM = "01M3A00000000000000000000Z"
+QUESTION = "Is the 4 h point read from the figure?"
+# A write job and a canceled job of Demo2020 as part C saved them in state.json.
+PART_C_JOBS = [
+    {
+        "id": "legacy-write",
+        "study_id": DEMO,
+        "study_name": "Demo2020",
+        "action": "write",
+        "status": "succeeded",
+        "created_at": "2026-10-01T10:00:00+00:00",
+        "message": "Added review item 01M2FC4AG038NKRKAYDXR834N3",
+        "automatic": False,
+        "report_id": None,
+    },
+    {
+        "id": "legacy-canceled",
+        "study_id": DEMO,
+        "study_name": "Demo2020",
+        "action": "validate",
+        "status": "canceled",
+        "created_at": "2026-10-01T09:00:00+00:00",
+        "message": "Queued",
+        "automatic": True,
+        "report_id": None,
+    },
+]
+
+
+def test_messages_contract(workspace, engine_on, monkeypatch):
+    """The suggestion of each kind, the jobs of writes with their review item, also as part C
+    saved them, and the issues of a refused study.json."""
+    folder = workspace / DEMO
+    vocabulary = bundled_vocabulary()
+    _replace(
+        folder / "timecourses_Fig1.tsv",
+        "\tFig1\tcaf_plasma_100mg\tall\t",
+        "\tFig1\tcaf_plasma_100mg\tal\t",
+    )
+    term = next(
+        issue
+        for issue in validate_folder(
+            workspace / "caffeine/Draft2021", vocabulary
+        ).issues
+        if issue.code == "unknown_substance"
+    )
+    name = next(
+        issue
+        for issue in validate_folder(folder, vocabulary).issues
+        if issue.code == "unknown_reference"
+    )
+    hint = make_issue(
+        "unit_dimension",
+        "mg cannot be converted to a unit of concentration",
+        file="outputs_Tab2.tsv",
+        line=2,
+        header="unit",
+        hint="Units of concentration; amounts of a substance convert with its molar mass.",
+        candidates=["mg/l", "g/l"],
+    )
+    engine = engine_on(workspace, {"jobs": PART_C_JOBS})
+    monkeypatch.setattr(review_edit, "new_ulid", lambda: ITEM)
+    detail = engine.study_detail(DEMO)
+    engine.review_action(
+        DEMO,
+        {
+            "action": "add",
+            "revision": detail["review"]["revision"],
+            "kind": "question",
+            "text": QUESTION,
+        },
+    )
+    metadata = {
+        **detail["metadata"]["value"],
+        "creator": "demo curator",
+        "reference": {},
+    }
+    with pytest.raises(MetadataError) as refused:
+        engine.write_metadata(DEMO, detail["metadata"]["revision"], metadata)
+    detail = engine.study_detail(DEMO)
+    check_contract(
+        "messages",
+        {
+            "suggestions": [
+                issue.suggestions[0].model_dump(mode="json")
+                for issue in (term, name, hint)
+            ],
+            "items": [
+                {"id": item["id"], "kind": item["kind"], "text": item["text"]}
+                for item in detail["review"]["value"]["items"]
+            ],
+            "jobs": [
+                {
+                    key: job[key]
+                    for key in ("action", "status", "message", "item", "parts")
+                    if key in job
+                }
+                for job in detail["jobs"]
+            ],
+            "metadata_issues": [
+                issue.model_dump(mode="json") for issue in refused.value.issues
+            ],
+        },
+    )

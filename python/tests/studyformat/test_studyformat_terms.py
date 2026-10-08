@@ -1,5 +1,7 @@
 import pytest
 
+from pkdb.studyformat import format_folder, validate_folder
+from pkdb.studyformat.issues import CANDIDATES, FIX, VOCABULARY, make_issue
 from pkdb.studyformat.load import load_study
 from pkdb.studyformat.terms import check_terms, vocabulary_terms
 
@@ -350,3 +352,36 @@ def test_measurement_without_unit(make_study, valid_files, tsv, sf_vocabulary):
     assert [issue.code for issue in check_terms(study, sf_vocabulary)] == [
         "missing_unit"
     ]
+
+
+def test_suggestions_name_their_kind():
+    choices = make_issue("unknown_reference", "No row.", candidates=["all"])
+    assert [(s.kind, s.candidates) for s in choices.suggestions] == [
+        (CANDIDATES, ["all"])
+    ]
+    hint = make_issue(
+        "unit_dimension", "No unit.", hint="Units of cmax.", candidates=["mg/l"]
+    )
+    assert hint.suggestions[0].kind == FIX
+    term = make_issue(
+        "unknown_tissue",
+        "Unknown.",
+        hint="Caveat.",
+        candidates=["plasma"],
+        suggestion=VOCABULARY,
+    )
+    assert term.suggestions[0].kind == VOCABULARY
+
+
+def test_an_unknown_term_suggests_spellings_of_the_vocabulary(
+    make_study, valid_files, sf_vocabulary
+):
+    outputs = valid_files["outputs_Tab2.tsv"].replace("plasma", "plasm")
+    folder = make_study({**valid_files, "outputs_Tab2.tsv": outputs})
+    assert format_folder(folder).ok
+    [issue] = [
+        i
+        for i in validate_folder(folder, sf_vocabulary).issues
+        if i.code == "unknown_tissue"
+    ]
+    assert issue.suggestions[0].kind == VOCABULARY

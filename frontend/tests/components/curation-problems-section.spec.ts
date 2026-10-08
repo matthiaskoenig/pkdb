@@ -8,15 +8,16 @@ import type {
   Job,
   Snapshot,
   StudyDetail,
+  Suggestion,
   TablesResult,
   ValidationIssue,
 } from "../../src/curation-app/api/types";
 import { formatTime } from "../../src/curation-app/overview";
-import { DID_YOU_MEAN } from "../../src/curation-app/problems";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
+import messagesFixture from "../fixtures/curation-contract/messages.json";
 import { json, reviewItem, roster, snapshot, studyDetail } from "../unit/curation-fixtures";
 import {
   button,
@@ -42,12 +43,22 @@ const ROUNDED = "01JA33A1B2C3D4E5F6G7H8J9K0";
 const SMOKERS = "01JA34B1C2D3E4F5G6H7J8K9M0";
 const ADDED = "01JA40A1B2C3D4E5F6G7H8J9K0";
 
+// Suggestions of the library: the spellings of an unknown substance and the candidates of an
+// unknown subject group (python/tests/test_curation_contract.py).
+const [termSuggestion, groupSuggestion] = messagesFixture.suggestions as Suggestion[];
 const unknownGroup: ValidationIssue = {
   code: "unknown_reference",
   severity: "error",
-  message: "subjects.tsv has no row named 'smoker'",
+  message: "subjects.tsv has no row named 'al'",
   source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 3, column: "E", cell: "E3", header: "group" },
-  suggestions: [{ kind: "fix", message: DID_YOU_MEAN, candidates: ["smokers", "all"] }],
+  suggestions: [groupSuggestion!],
+};
+const unknownSubstance: ValidationIssue = {
+  code: "unknown_substance",
+  severity: "error",
+  message: "Unknown substance: cafeine",
+  source: { file: "outputs_Tab2.tsv", sheet: "outputs_Tab2", row: 2, column: "H", cell: "H2", header: "substance" },
+  suggestions: [termSuggestion!],
 };
 const unitDimension: ValidationIssue = {
   code: "unit_dimension",
@@ -369,11 +380,12 @@ describe("issues", () => {
 
     const group = problem("unknown_reference");
     expect(group.get(".problem-severity").text()).toBe("Error");
-    expect(group.get(".problem-message").text()).toBe("subjects.tsv has no row named 'smoker'");
+    expect(group.get(".problem-message").text()).toBe("subjects.tsv has no row named 'al'");
     expect(group.get(".problem-location").text()).toBe("line 3 · group · sheet cell outputs_Tab2!E3");
     // Each candidate is a chip of its own.
     expect(group.get(".problem-suggestion-lead").text()).toBe("Did you mean:");
-    expect(group.findAll(".problem-candidate").map((item) => item.text())).toEqual(["smokers", "all"]);
+    expect(group.findAll(".problem-candidate").map((item) => item.text())).toEqual(["all"]);
+    expect(group.find(".problem-suggestion-note").exists()).toBe(false);
 
     const unit = problem("unit_dimension");
     expect(unit.get(".problem-suggestion-lead").text()).toBe(
@@ -384,6 +396,14 @@ describe("issues", () => {
     expect(problem("outside_range").get(".problem-severity").text()).toBe("Warning");
     // An issue of a whole file names no location below the file.
     expect(problem("digitized_mismatch").find(".problem-location").exists()).toBe(false);
+  });
+
+  it("offers the spellings of an unknown term with their caveat after them", async () => {
+    await mountSection(withProblems({ problems: [unknownSubstance], counts: { errors: 1, warnings: 0 } }));
+    const term = problem("unknown_substance");
+    expect(term.get(".problem-suggestion-lead").text()).toBe("Did you mean:");
+    expect(term.findAll(".problem-candidate").map((item) => item.text())).toEqual(termSuggestion!.candidates);
+    expect(term.get(".problem-suggestion-note").text()).toBe("Candidates are spelling suggestions, not equivalent terms.");
   });
 
   it("renders a long list in steps, so that the first issues show at once", async () => {

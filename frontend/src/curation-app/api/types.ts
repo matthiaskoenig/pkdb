@@ -354,6 +354,9 @@ export type JobStatus =
   | "unknown"
   | "reviewed";
 
+/** A part of the message of a job: text, or the review item that the message names. */
+export type JobMessagePart = { text: string } | { item: string };
+
 export interface Job {
   id: string;
   study_id: string;
@@ -365,6 +368,10 @@ export interface Job {
   stage?: string;
   created_at: string;
   message: string;
+  /** The review item that a write of the app named. */
+  item?: string;
+  /** The message split around the review item it names, from the server. */
+  parts?: JobMessagePart[];
   automatic: boolean;
   endpoint?: string;
   persistence?: string;

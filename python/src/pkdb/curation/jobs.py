@@ -56,6 +56,10 @@ def maybe_sent(job: dict) -> bool:
     return job.get("action") == "upload" and job.get("stage") not in UNSENT_STAGES
 
 
+#: The message of a queued job that the curator canceled, and of one that earlier versions
+#: canceled while keeping its message "Queued".
+CANCELED_BEFORE_START = "Canceled before it started"
+
 #: The action of a job in a sentence.
 ACTION_NAMES = {
     "validate": "validation",
@@ -237,8 +241,11 @@ class JobsMixin(EngineState):
         kept, finished = self._partition_history()
         self.jobs = sorted(kept + finished[-100:], key=lambda j: j["created_at"])
 
-    def _record_write(self, identity, message, status="succeeded"):
-        """List a write of the app in the activity of the study; it starts nothing."""
+    def _record_write(self, identity, message, status="succeeded", item=None):
+        """List a write of the app in the activity of the study; it starts nothing.
+
+        `item` is the review item that the message names, which the activity links.
+        """
         with self.lock:
             self._remember(
                 {
@@ -250,6 +257,7 @@ class JobsMixin(EngineState):
                     "status": status,
                     "created_at": now(),
                     "message": message,
+                    **({"item": item} if item else {}),
                     "automatic": False,
                     "report_id": None,
                 }
@@ -805,7 +813,7 @@ class JobsMixin(EngineState):
         with self.lock:
             for identifier, job in list(self.queue.items()):
                 if job["id"] in ids:
-                    job.update(status="canceled", message="Canceled before starting")
+                    job.update(status="canceled", message=CANCELED_BEFORE_START)
                     self.queue.pop(identifier)
                     if row := self._row_of(identifier):
                         row["_pending"] = False

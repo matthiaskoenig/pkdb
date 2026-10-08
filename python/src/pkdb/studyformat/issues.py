@@ -172,6 +172,12 @@ REPEATED_ISSUES = 10
 LISTED = f"the first {REPEATED_ISSUES} are listed"
 # The message of a suggestion that only lists candidates.
 DID_YOU_MEAN = "Did you mean one of these?"
+# The kinds of the suggestion of an issue: a hint with optional candidates, such as lines to add;
+# candidates alone, after DID_YOU_MEAN; and the spelling suggestions of an unknown vocabulary term,
+# whose hint is a caveat, as the domain layer names them.
+FIX = "fix"
+CANDIDATES = "did_you_mean"
+VOCABULARY = "check_vocabulary"
 
 
 class IssueCap:
@@ -213,6 +219,7 @@ def make_issue(
     severity: Literal["error", "warning"] | None = None,
     hint: str | None = None,
     candidates: Iterable[str] = (),
+    suggestion: str | None = None,
     **details,
 ) -> ValidationIssue:
     """Create a validation issue at an optional file, line and column.
@@ -220,8 +227,9 @@ def make_issue(
     An issue of a TSV file is located at its line, and its sheet is the file
     name without `.tsv`. An issue found in the workbook names the workbook as
     `file` and its `sheet`, and `line` is the sheet row. A hint or candidates
-    add a suggestion. The severity defaults to warning for warning codes and to
-    error otherwise.
+    add a suggestion of the kind `suggestion`, by default FIX with a hint and
+    CANDIDATES without. The severity defaults to warning for warning codes and
+    to error otherwise.
     """
     source = None
     if file is not None:
@@ -240,7 +248,7 @@ def make_issue(
     suggestions = (
         [
             Suggestion(
-                kind="fix",
+                kind=suggestion or (FIX if hint else CANDIDATES),
                 message=hint or DID_YOU_MEAN,
                 candidates=candidates,
             )

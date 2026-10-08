@@ -9,7 +9,7 @@ import {
   saveFile,
   uploadUrl,
 } from "../../src/curation-app/activity";
-import type { Job, ReviewItem } from "../../src/curation-app/api/types";
+import type { Job, JobMessagePart, ReviewItem } from "../../src/curation-app/api/types";
 
 function job(changes: Partial<Job> = {}): Job {
   return {
@@ -43,8 +43,6 @@ describe("jobText", () => {
     delete unstaged.stage;
     expect(jobText(unstaged)).toBe("Running");
     expect(jobText(job({ status: "invalid", message: "Validation found problems" }))).toBe("Validation found problems");
-    // Saved by an earlier version, which kept the message of a queued job when it canceled it.
-    expect(jobText(job({ status: "canceled", message: "Queued" }))).toBe("Canceled before it started");
     expect(jobText(job({ status: "canceled", message: "Replaced by a newer validation" }))).toBe(
       "Replaced by a newer validation",
     );
@@ -107,20 +105,53 @@ describe("messageParts", () => {
     thread: [],
   };
 
+  /** A write of the app as the server sends it: its message split around the item it names. */
+  function write(message: string, parts: JobMessagePart[]): Job {
+    return job({ action: "write", message, item: ID, parts, report_id: null });
+  }
+
   it("names a review item by its kind and a short quote of its text, linked to it", () => {
-    expect(messageParts(`Added review item ${ID}`, [question])).toEqual([
+    expect(messageParts(write(`Added review item ${ID}`, [{ text: "Added " }, { item: ID }]), [question])).toEqual([
       { text: "Added the " },
       { text: "question “Is the dose of 150 mg the caffeine base…”", item: ID },
     ]);
-    expect(messageParts(`Acknowledged warning unknown_unit with review item ${ID}`, [{ ...question, kind: "issue", text: "Unit  as\nprinted" }])).toEqual([
+    const acknowledged = write(`Acknowledged warning unknown_unit with review item ${ID}`, [
+      { text: "Acknowledged warning unknown_unit with " },
+      { item: ID },
+    ]);
+    expect(messageParts(acknowledged, [{ ...question, kind: "issue", text: "Unit  as\nprinted" }])).toEqual([
       { text: "Acknowledged warning unknown_unit with the " },
       { text: "issue “Unit as printed”", item: ID },
     ]);
   });
 
+  it("keeps the text after the item", () => {
+    const parts = [{ text: "Replied to " }, { item: ID }, { text: " twice" }];
+    expect(messageParts(write(`Replied to review item ${ID} twice`, parts), [question])).toEqual([
+      { text: "Replied to the " },
+      { text: "question “Is the dose of 150 mg the caffeine base…”", item: ID },
+      { text: " twice" },
+    ]);
+  });
+
   it("says a review item when the item no longer exists, and keeps other messages", () => {
-    expect(messageParts(`Resolved review item ${ID}`, [])).toEqual([{ text: "Resolved a review item" }]);
-    expect(messageParts("Saved study.json", [question])).toEqual([{ text: "Saved study.json" }]);
+    const resolved = write(`Resolved review item ${ID}`, [{ text: "Resolved " }, { item: ID }]);
+    expect(messageParts(resolved, [])).toEqual([{ text: "Resolved a review item" }]);
+    expect(messageParts(job({ action: "write", message: "Saved study.json" }), [question])).toEqual([
+      { text: "Saved study.json" },
+    ]);
+  });
+
+  it("reads only the parts of the server, never review items in the message", () => {
+    expect(messageParts(job({ status: "failed", message: `Could not read review item ${ID}` }), [question])).toEqual([
+      { text: `Could not read review item ${ID}` },
+    ]);
+  });
+
+  it("says what a running job does", () => {
+    expect(messageParts(job({ status: "running", stage: "validate", message: "Queued" }), [question])).toEqual([
+      { text: "Validating" },
+    ]);
   });
 });
 

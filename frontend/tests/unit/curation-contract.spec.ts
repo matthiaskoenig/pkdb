@@ -5,19 +5,26 @@
 import { describe, expect, it } from "vitest";
 import type {
   ConflictData,
+  Job,
   ReviewItem,
   SourceView,
+  Suggestion,
   TableEntry,
   TablePreview,
   TargetMatch,
+  ValidationIssue,
 } from "../../src/curation-app/api/types";
 import { isSourceView, isTablePreview, isTargetMatch } from "../../src/curation-app/api/types";
+import { jobText, messageParts } from "../../src/curation-app/activity";
 import { itemsWithoutRows, targetLines, targetMatch } from "../../src/curation-app/grid";
+import { issueMessage } from "../../src/curation-app/metadata";
 import { legendEntries, overlayTraces } from "../../src/curation-app/overlay";
+import { suggestionView } from "../../src/curation-app/problems";
 import { matchText } from "../../src/curation-app/review";
 import { isRawTable, railCounts, tableFiles } from "../../src/curation-app/study";
 import { NEW_TABLE_KINDS, TABLE_KINDS } from "../../src/curation-app/tableKinds";
 import { conflictView } from "../../src/curation-app/tables";
+import messagesFixture from "../fixtures/curation-contract/messages.json";
 import sourceFixture from "../fixtures/curation-contract/source-fig1.json";
 import tablePreviewFixture from "../fixtures/curation-contract/table-preview.json";
 import tablesFixture from "../fixtures/curation-contract/tables.json";
@@ -136,5 +143,41 @@ describe("source view contract", () => {
 
   it("lists each series once in the legend", () => {
     expect(legendEntries(view, "overlay", false).map((entry) => entry.series)).toEqual(["caf_plasma_100mg", "caf_plasma_200mg"]);
+  });
+});
+
+describe("messages contract", () => {
+  const ITEM = "01M3A00000000000000000000Z";
+  const QUESTION = "Is the 4 h point read from the figure?";
+  const PART_C_ITEM = "01M2FC4AG038NKRKAYDXR834N3";
+
+  it("shows each kind of suggestion", () => {
+    const [term, name, hint] = contract<Suggestion[]>(messagesFixture.suggestions);
+    expect(suggestionView(term!)).toEqual({ lead: "Did you mean:", candidates: expect.any(Array), note: term!.message });
+    expect(suggestionView(term!).candidates).toContain("caffeine");
+    expect(suggestionView(name!)).toEqual({ lead: "Did you mean:", candidates: ["all"], note: null });
+    expect(suggestionView(hint!)).toEqual({ lead: hint!.message, candidates: ["mg/l", "g/l"], note: null });
+  });
+
+  it("links the review item of a change in the app, also in a job saved by part C", () => {
+    const items = messagesFixture.items.map((entry) => reviewItem(contract<Partial<ReviewItem>>(entry)));
+    const jobs = contract<Job[]>(messagesFixture.jobs);
+    const added = jobs.find((job) => job.item === ITEM)!;
+    expect(messageParts(added, items)).toEqual([{ text: "Added the " }, { text: `question “${QUESTION}”`, item: ITEM }]);
+    const saved = jobs.find((job) => job.message.endsWith(PART_C_ITEM))!;
+    expect(saved.item).toBeUndefined();
+    expect(messageParts(saved, items)[1]?.item).toBe(PART_C_ITEM);
+    expect(jobText(jobs.find((job) => job.status === "canceled")!)).toBe("Canceled before it started");
+  });
+
+  it("shows the message of a field without the field", () => {
+    const issues = contract<ValidationIssue[]>(messagesFixture.metadata_issues);
+    expect(issues.map((issue) => issue.field)).toEqual(["reference", "creator"]);
+    for (const issue of issues) {
+      const text = issueMessage(issue);
+      expect(text).not.toBe("");
+      expect(text.startsWith(`${issue.field}:`)).toBe(false);
+      expect(text.startsWith("Value error")).toBe(false);
+    }
   });
 });

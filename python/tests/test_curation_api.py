@@ -1290,6 +1290,18 @@ def test_app_writes_are_listed_in_the_activity(api, sf_vocabulary, monkeypatch):
     assert [job["message"] for job in saved if job["action"] == "write"][0] == (
         "Saved study.json"
     )
+    by_message = {job["message"]: job for job in writes}
+    assert by_message[f"Added review item {item}"]["item"] == item
+    assert by_message[f"Added review item {item}"]["parts"] == [
+        {"text": "Added "},
+        {"item": item},
+    ]
+    assert by_message[f"Resolved review item {item}"]["parts"] == [
+        {"text": "Resolved "},
+        {"item": item},
+    ]
+    assert "item" not in by_message["Saved study.json"]
+    assert "parts" not in by_message["Saved study.json"]
 
 
 def test_detail_has_the_reference_and_the_state_of_the_row(api):

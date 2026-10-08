@@ -10,6 +10,7 @@ import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
 import { useStudyStore } from "../../src/curation-app/stores/study";
 import { NOTICE_MS } from "../../src/curation-app/study";
+import messagesFixture from "../fixtures/curation-contract/messages.json";
 import { fullStudyMetadata, json, roster, snapshot, studyDetail, studyMetadata } from "../unit/curation-fixtures";
 import {
   button,
@@ -119,8 +120,10 @@ function leaveDialog(): Promise<void> {
   return vi.waitFor(() => expect(buttons("Stay")).toHaveLength(1));
 }
 
-function issue(field: string | null, message: string): ValidationIssue {
-  return { code: "invalid_study_json", severity: "error", message, field };
+/** An issue of study.json as the library gives it: the message names the field, the detail does not. */
+function issue(field: string | null, detail: string): ValidationIssue {
+  if (field === null) return { code: "invalid_study_json", severity: "error", message: detail, field };
+  return { code: "invalid_study_json", severity: "error", message: `${field}: ${detail}`, field, context: { detail } };
 }
 
 beforeEach(() => {
@@ -497,9 +500,9 @@ describe("saving", () => {
           {
             error: "Invalid study.json",
             issues: [
-              issue("reference.doi", "reference.doi: String should match pattern '^10\\.\\d{4,9}/\\S+$'"),
-              issue("curators.0.rating", "curators.0.rating: Input should be less than or equal to 5"),
-              issue("format", "format: Input should be 2"),
+              issue("reference.doi", "String should match pattern '^10\\.\\d{4,9}/\\S+$'"),
+              issue("curators.0.rating", "Input should be less than or equal to 5"),
+              issue("format", "Input should be 2"),
             ],
           },
           { status: 422 },
@@ -515,6 +518,20 @@ describe("saving", () => {
     expect(failure).toContain("study.json was not saved. Fix the marked fields.");
     expect(failure).toContain("format: Input should be 2");
     expect(saveBar().exists()).toBe(true);
+  });
+
+  it("shows the messages of the library at their fields without the field", async () => {
+    // A refusal of the local server: a creator with a space and a reference without identifiers.
+    const refused = messagesFixture.metadata_issues as ValidationIssue[];
+    await mountSection(studyDetail(), {
+      [`POST ${METADATA}`]: () => json({ error: "Invalid study.json", issues: refused }, { status: 422 }),
+    });
+    await field("PMID").setValue("");
+    await click("Save");
+
+    expect(messagesOf(field("PMID"))).toBe("Give a pmid or a doi, or remove reference for a manual reference");
+    expect(messagesOf(page().get(".creator-field").element)).toBe("A user name has no spaces.");
+    expect(page().get(".metadata-failure").text()).toContain("study.json was not saved. Fix the marked fields.");
   });
 
   it("reloads a study.json changed on disk, keeps the edits on top and saves over the new revision", async () => {

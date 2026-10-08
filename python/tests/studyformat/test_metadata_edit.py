@@ -161,6 +161,21 @@ def test_other_messages_stay_those_of_pydantic(valid_study):
     }
 
 
+def test_issues_of_a_document_carry_their_message_without_the_field(valid_study):
+    patch = {"creator": "Jane Doe", "reference": {"pmid": None}}
+    with pytest.raises(MetadataError) as error:
+        patch_metadata(valid_study, patch, None)
+    found = {
+        issue.field: (issue.message, issue.context) for issue in error.value.issues
+    }
+    assert found["creator"] == (
+        "creator: A user name has no spaces.",
+        {"detail": "A user name has no spaces."},
+    )
+    plain = "Give a pmid or a doi, or remove reference for a manual reference"
+    assert found["reference"] == (f"reference: {plain}", {"detail": plain})
+
+
 def test_missing_file_is_a_metadata_error(tmp_path):
     with pytest.raises(MetadataError) as error:
         read_metadata(tmp_path)
