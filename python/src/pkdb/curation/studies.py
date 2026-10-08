@@ -11,7 +11,6 @@ import dataclasses
 import hashlib
 import json
 import os
-import re
 import stat
 from collections.abc import Callable, Iterator
 from contextlib import contextmanager
@@ -326,10 +325,6 @@ def _sync_result(result: SyncResult) -> dict:
     }
 
 
-# How jobs saved before writes recorded `item` name their review item.
-_LEGACY_ITEM = re.compile(r"review item (\S+)")
-
-
 def _item_reference(item: str) -> str:
     """How the message of a write job names its review item."""
     return f"review item {item}"
@@ -357,16 +352,12 @@ def _review_message(payload: dict, result: dict) -> tuple[str, str | None]:
 def job_parts(job: dict) -> list[dict] | None:
     """The text of a write job split around the review item it names, for a link in the activity.
 
-    Jobs saved before writes recorded `item` name the item only in their message.
+    The engine gives jobs saved before writes recorded `item` theirs when it loads them.
     """
-    message = job.get("message", "")
     item = job.get("item")
-    if item is None and job.get("action") == "write":
-        found = _LEGACY_ITEM.search(message)
-        item = found.group(1) if found else None
     if item is None:
         return None
-    before, reference, after = message.partition(_item_reference(item))
+    before, reference, after = job["message"].partition(_item_reference(item))
     if not reference:
         return None
     return [

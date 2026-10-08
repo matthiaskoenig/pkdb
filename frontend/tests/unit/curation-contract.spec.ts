@@ -164,8 +164,9 @@ describe("messages contract", () => {
     const jobs = contract<Job[]>(messagesFixture.jobs);
     const added = jobs.find((job) => job.item === ITEM)!;
     expect(messageParts(added, items)).toEqual([{ text: "Added the " }, { text: `question “${QUESTION}”`, item: ITEM }]);
+    // pkdb curate gave the job saved without its item the item of its message when it started.
     const saved = jobs.find((job) => job.message.endsWith(PART_C_ITEM))!;
-    expect(saved.item).toBeUndefined();
+    expect(saved.item).toBe(PART_C_ITEM);
     expect(messageParts(saved, items)[1]?.item).toBe(PART_C_ITEM);
     expect(jobText(jobs.find((job) => job.status === "canceled")!)).toBe("Canceled before it started");
   });

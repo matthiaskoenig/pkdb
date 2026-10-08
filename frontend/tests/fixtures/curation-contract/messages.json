@@ -81,6 +81,7 @@
       "action": "write",
       "status": "succeeded",
       "message": "Added review item 01M2FC4AG038NKRKAYDXR834N3",
+      "item": "01M2FC4AG038NKRKAYDXR834N3",
       "parts": [
         {
           "text": "Added "

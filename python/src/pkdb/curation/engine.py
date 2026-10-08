@@ -2,6 +2,7 @@
 
 import json
 import os
+import re
 import threading
 from pathlib import Path
 
@@ -34,6 +35,10 @@ from pkdb.identity import IdentityError
 from pkdb.update import newer
 
 __all__ = ["CurationEngine", "WorkspaceError", "fingerprint", "folder_kind", "now"]
+
+# How write jobs saved before they recorded `item` name their review item in the message,
+# "Added review item <id>" (`_item_reference` in studies.py).
+SAVED_ITEM = re.compile(r"review item (\S+)")
 
 
 class CurationEngine(
@@ -120,10 +125,17 @@ class CurationEngine(
             ):
                 # Saved before problems found had a status of their own.
                 job["status"] = "invalid"
-            elif job.get("status") == "canceled" and job.get("message") == "Queued":
-                # Saved by earlier versions, which kept the message of a queued job when
-                # canceling it.
+            elif job.get("status") == "canceled" and job.get("message") in {
+                # Earlier versions kept the message of a queued job when canceling it, and
+                # named a job that the curator canceled in other words.
+                "Queued",
+                "Canceled before starting",
+            }:
                 job["message"] = CANCELED_BEFORE_START
+            if job.get("action") == "write" and "item" not in job:
+                # Saved before writes recorded the review item that their message names.
+                if found := SAVED_ITEM.search(job.get("message", "")):
+                    job["item"] = found.group(1)
         self.modes = saved.get("modes", {})
         self.recent_workspaces = [
             item for item in saved.get("recent_workspaces", []) if isinstance(item, str)
