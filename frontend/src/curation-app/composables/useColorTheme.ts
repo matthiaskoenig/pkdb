@@ -4,9 +4,9 @@ import type { ThemeChoice } from "../api/types";
 import { useOverviewStore } from "../stores/overview";
 
 /**
- * Where the browser keeps the theme that the curator chose in the header, until the state of the
- * local server is there. The server keeps the choice: the browser forgets it, as `pkdb curate`
- * starts on another port, and so another origin, every time.
+ * Where the browser keeps the theme that the curator chose in the header, for a page without the
+ * theme of the local server. The server keeps the choice and puts it into index.html: the
+ * browser forgets it, as `pkdb curate` starts on another port, and so another origin, every time.
  */
 export const THEME_STORAGE_KEY = "pkdb.curation.theme";
 
@@ -31,6 +31,28 @@ function store(choice: ThemeChoice): void {
   }
 }
 
+/** Whether `value` names a theme choice. */
+function isChoice(value: unknown): value is ThemeChoice {
+  return value === "light" || value === "dark" || value === "system";
+}
+
+/**
+ * The theme of the state of `pkdb curate`, which it puts into the `pkdb-theme` meta tag of
+ * index.html; null without one, as on the development server.
+ */
+export function servedTheme(): ThemeChoice | null {
+  const content = document.querySelector<HTMLMetaElement>('meta[name="pkdb-theme"]')?.content;
+  return isChoice(content) ? content : null;
+}
+
+/**
+ * The theme of the first paint, before the state of the local server is loaded: the one that
+ * index.html brings, else the one that this browser kept, else the theme of the system.
+ */
+export function initialTheme(): ThemeChoice {
+  return servedTheme() ?? storedChoice() ?? "system";
+}
+
 function systemTheme(): "light" | "dark" {
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
@@ -46,11 +68,11 @@ export function useColorTheme() {
   }
 
   /**
-   * Apply the choice that this browser kept, then the one of the local server once its state is
-   * there, and again whenever it changes there, such as from another tab.
+   * Apply the theme of the first paint (`initialTheme`), then the one of the state of the local
+   * server once it is loaded, and again whenever it changes there, such as from another tab.
    */
   function restore(): void {
-    void theme.change(storedChoice() ?? "system");
+    void theme.change(initialTheme());
     watch(
       () => overview.snapshot?.theme,
       (choice) => {

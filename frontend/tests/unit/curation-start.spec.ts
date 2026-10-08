@@ -71,6 +71,21 @@ describe("start", () => {
     },
   );
 
+  it("paints first with the theme that index.html brings, before the state loads", async () => {
+    // A new port has an empty storage; pkdb curate put the saved theme into the page.
+    localStorage.clear();
+    const meta = Object.assign(document.createElement("meta"), { name: "pkdb-theme", content: "dark" });
+    document.head.append(meta);
+    try {
+      // The state never arrives in this test.
+      vi.spyOn(globalThis, "fetch").mockImplementation(() => new Promise<Response>(() => undefined));
+      app = await start(target);
+      expect(target.querySelector(".v-application")?.classList).toContain("v-theme--dark");
+    } finally {
+      meta.remove();
+    }
+  });
+
   it("mounts the app when the session cannot be created", async () => {
     window.history.replaceState(null, "", "/#token=used");
     vi.spyOn(globalThis, "fetch").mockRejectedValue(new TypeError("Failed to fetch"));

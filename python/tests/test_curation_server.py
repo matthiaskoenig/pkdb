@@ -22,6 +22,7 @@ def local_server(tmp_path, monkeypatch):
     assets = tmp_path / "static"
     assets.mkdir()
     (assets / "index.html").write_text(
+        '<meta name="pkdb-theme" content="__PKDB_THEME__">'
         '<h1>Local curation</h1><style nonce="__PKDB_NONCE__"></style>'
     )
     (assets / "app.js").write_text("console.log('loaded')")
@@ -336,6 +337,24 @@ def test_index_gets_a_fresh_style_nonce_per_response(local_server):
     assert status == 200
     assert _style_src(headers) == "style-src 'self'"
     assert "unsafe-inline" not in headers["Content-Security-Policy"]
+
+
+def test_index_carries_the_theme_of_the_state_for_the_first_paint(local_server):
+    server, engine = local_server
+    # A new port is a new origin without the choice in its storage: the page brings it.
+    for theme in ("dark", "light", "system"):
+        engine.theme = theme
+        status, headers, data = request(server, "GET", "/")
+        assert status == 200
+        assert f'<meta name="pkdb-theme" content="{theme}">'.encode() in data
+        assert "unsafe-inline" not in headers["Content-Security-Policy"]
+    # Only the three themes reach the page.
+    engine.theme = '"><script>alert(1)</script>'
+    data = request(server, "GET", "/")[2]
+    assert b'<meta name="pkdb-theme" content="system">' in data
+    assert b"<script>" not in data
+    del engine.theme
+    assert b'content="system"' in request(server, "GET", "/")[2]
 
 
 def test_open_path_runs_the_recording_command(tmp_path, monkeypatch):

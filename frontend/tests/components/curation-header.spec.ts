@@ -8,7 +8,7 @@ import { VApp } from "vuetify/components";
 import App from "../../src/curation-app/App.vue";
 import AppHeader from "../../src/curation-app/components/AppHeader.vue";
 import StatusBanner from "../../src/curation-app/components/StatusBanner.vue";
-import { useColorTheme } from "../../src/curation-app/composables/useColorTheme";
+import { initialTheme, servedTheme, useColorTheme } from "../../src/curation-app/composables/useColorTheme";
 import type { ConnectionStatus } from "../../src/curation-app/api/types";
 import { ApiError } from "../../src/curation-app/api/client";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
@@ -491,6 +491,25 @@ describe("useColorTheme", () => {
 
   it("follows the system without a choice", () => {
     expect(mountRestored().system()).toBe(true);
+  });
+
+  it("starts with the theme that pkdb curate put into the page, over the one of this browser", () => {
+    const meta = Object.assign(document.createElement("meta"), { name: "pkdb-theme", content: "dark" });
+    document.head.append(meta);
+    try {
+      localStorage.setItem(THEME_KEY, "light");
+      expect(initialTheme()).toBe("dark");
+      meta.content = "system";
+      expect(initialTheme()).toBe("system");
+      // The development server leaves the placeholder: the browser's choice counts then.
+      meta.content = "__PKDB_THEME__";
+      expect(servedTheme()).toBeNull();
+      expect(initialTheme()).toBe("light");
+      localStorage.clear();
+      expect(initialTheme()).toBe("system");
+    } finally {
+      meta.remove();
+    }
   });
 
   it("applies the theme that the local server keeps over the one of this browser", async () => {

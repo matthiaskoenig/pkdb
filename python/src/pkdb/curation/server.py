@@ -13,6 +13,7 @@ from urllib.parse import unquote, urlsplit
 from pkdb.curation.engine import WorkspaceError
 from pkdb.curation.jobs import ResumeRefused
 from pkdb.curation.metadata import roster
+from pkdb.curation.state import THEMES
 from pkdb.curation.studies import AmbiguousStudy, UnsafeFile
 from pkdb.identity import IdentityError, UserMismatch
 from pkdb.references import ReferenceError
@@ -27,6 +28,9 @@ DRAIN_LIMIT = 4 * MAX_BODY
 ASSETS = Path(__file__).parent / "static"
 AVATARS = Path(__file__).parent / "avatars"
 NONCE_PLACEHOLDER = b"__PKDB_NONCE__"
+# The theme of the state in the `pkdb-theme` meta tag of index.html, which the app reads before
+# it mounts, so that its first paint has the theme that the curator chose.
+THEME_PLACEHOLDER = b"__PKDB_THEME__"
 
 
 def _csp(nonce: str | None) -> str:
@@ -257,7 +261,10 @@ class Handler(BaseHTTPRequestHandler):
         data, nonce = asset.read_bytes(), None
         if root is ASSETS and asset == (ASSETS / "index.html").resolve():
             nonce = secrets.token_urlsafe(16)
-            data = data.replace(NONCE_PLACEHOLDER, nonce.encode())
+            theme = getattr(self.server.engine, "theme", None)
+            data = data.replace(NONCE_PLACEHOLDER, nonce.encode()).replace(
+                THEME_PLACEHOLDER, (theme if theme in THEMES else "system").encode()
+            )
         self._reply(200, data, content_type=content_type, nonce=nonce)
 
     def do_POST(self):

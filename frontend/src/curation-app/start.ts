@@ -3,6 +3,7 @@ import { createPinia, type Pinia } from "pinia";
 import type { Router } from "vue-router";
 import App from "./App.vue";
 import { bootstrap, launchToken } from "./api/session";
+import { initialTheme } from "./composables/useColorTheme";
 import { cspNonce } from "./csp";
 import { makeRouter } from "./router";
 import { useOverviewStore } from "./stores/overview";
@@ -43,7 +44,8 @@ export async function start(target: string | Element): Promise<VueApp> {
   const app = createApp(App)
     .use(pinia)
     .use(router)
-    .use(makeVuetify({ cspNonce: cspNonce() }));
+    // The theme of the first paint; the state of the local server may change it later.
+    .use(makeVuetify({ cspNonce: cspNonce(), defaultTheme: initialTheme() }));
   app.mount(target);
   return app;
 }

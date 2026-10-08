@@ -51,8 +51,13 @@ import {
 } from "vuetify/components";
 import { Ripple } from "vuetify/directives";
 import { aliases, fa } from "vuetify/iconsets/fa";
-/** The website theme; `cspNonce` lets a page with a strict CSP keep Vuetify's runtime styles. */
-export function makeVuetify(options: { cspNonce?: string | undefined } = {}) {
+/**
+ * The website theme; `cspNonce` lets a page with a strict CSP keep Vuetify's runtime styles, and
+ * `defaultTheme` sets the theme of the first paint (light by default).
+ */
+export function makeVuetify(
+  options: { cspNonce?: string | undefined; defaultTheme?: "light" | "dark" | "system" } = {},
+) {
   return createVuetify({
     components: {
       VAlert,
@@ -105,7 +110,7 @@ export function makeVuetify(options: { cspNonce?: string | undefined } = {}) {
     theme: {
       // exactOptionalPropertyTypes: Vuetify accepts no explicit undefined.
       ...(options.cspNonce ? { cspNonce: options.cspNonce } : {}),
-      defaultTheme: "light",
+      defaultTheme: options.defaultTheme ?? "light",
       themes: {
         light: {
           colors: {

@@ -144,3 +144,37 @@ test("a dialog returns the keyboard focus to the control that opened it", async 
   await expect(dialog).toBeHidden();
   await expect(connection).toBeFocused();
 });
+
+test("the theme that the curator chose paints first on a page without stored choice", async ({ app, page }) => {
+  await page.emulateMedia({ colorScheme: "light" });
+  const application = page.locator(".v-application");
+  await expect(application).toHaveClass(/(^| )v-theme--light( |$)/);
+  await page.getByRole("button", { name: "Toggle color theme" }).click();
+  await expect(application).toHaveClass(/(^| )v-theme--dark( |$)/);
+  // pkdb curate keeps the choice and puts it into index.html.
+  await expect
+    .poll(async () => (await page.request.get(`${app.server.origin}/`)).text())
+    .toMatch(/<meta name="pkdb-theme" content="dark"/);
+
+  // As after a restart on another port: the storage of the origin is empty.
+  await page.evaluate(() => localStorage.clear());
+  await page.addInitScript(() => {
+    const observer = new MutationObserver(() => {
+      const element = document.querySelector(".v-application");
+      if (!element) return;
+      document.documentElement.dataset.firstTheme = [...element.classList].find((name) => name.startsWith("v-theme--"));
+      observer.disconnect();
+    });
+    observer.observe(document, { childList: true, subtree: true });
+  });
+  await page.reload();
+  await expect(application).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("data-first-theme", "v-theme--dark");
+
+  // Back to the theme of the system, for the other tests of the file.
+  await page.getByRole("button", { name: "Toggle color theme" }).click();
+  await expect(application).toHaveClass(/(^| )v-theme--light( |$)/);
+  await expect
+    .poll(async () => (await page.request.get(`${app.server.origin}/`)).text())
+    .toMatch(/<meta name="pkdb-theme" content="system"/);
+});
