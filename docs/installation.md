@@ -199,6 +199,8 @@ The test database uses temporary container storage. Tests create isolated schema
 
 Image lifecycle and backup/restore tests live in `backend/system_tests`. They require Docker, a built image selected by `PKDB_TEST_IMAGE`, and the test database URL. CI runs these tests on Python 3.14 and 3.15. Corpus tests require explicitly configured source data and are not part of the default suite.
 
+`PKDB_STUDY_CORPUS=<pkdb_data>/studies uv run --locked pytest -q tests/test_migration_corpus.py` converts named studies of pkdb_data in a dry run on copies, and `PKDB_MIGRATION_FULL=1` adds the whole corpus.
+
 ## Migrations
 
 Commit Alembic migrations in `backend/alembic/versions/`. Compose applies them before starting the API. The ASGI application itself does not mutate database schemas. For native development, set `PKDB_DATABASE_URL`, change into `backend/`, and run `uv run alembic upgrade head`. Check model/schema agreement with `uv run alembic check`.

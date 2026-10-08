@@ -1,0 +1,82 @@
+"""Results of a migration run, shared by the converter, the gate, the runner and the report."""
+
+from typing import Literal
+
+from pydantic import BaseModel, ConfigDict, Field
+
+Outcome = Literal["identical", "intended", "mismatch", "invalid_v1", "not_converted"]
+
+
+class NotConverted(Exception):
+    """The converter cannot write a study; `code` names the reason in the report."""
+
+    def __init__(self, code: str, message: str):
+        super().__init__(message)
+        self.code = code
+        self.message = message
+
+
+class Model(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+
+class Decision(Model):
+    """Something a person should check by hand, such as a converted dosing schedule."""
+
+    kind: str
+    detail: str
+
+
+class Change(Model):
+    """An intended change of the conversion, counted per kind with a few examples."""
+
+    kind: str
+    count: int
+    examples: list[str] = Field(default_factory=list)
+
+
+class Difference(Model):
+    """A difference between the v1 study (A) and the converted study (B)."""
+
+    path: str
+    a: str
+    b: str
+
+
+class StudyResult(Model):
+    study: str
+    outcome: Outcome
+    reason: str | None = None
+    changes: list[Change] = Field(default_factory=list)
+    differences: list[Difference] = Field(default_factory=list)
+    issues: list[str] = Field(default_factory=list)
+    decisions: list[Decision] = Field(default_factory=list)
+    written: bool = False
+
+
+class PaperMove(Model):
+    """A folder without study.json moved to papers/."""
+
+    source: str
+    target: str
+    files: list[str]
+    workbook: bool
+
+
+class RegistryFindings(Model):
+    double_identifiers: dict[str, list[str]] = Field(default_factory=dict)
+    missing_paths: list[str] = Field(default_factory=list)
+    deleted: bool = False
+
+
+class MigrationReport(Model):
+    dry_run: bool
+    # The run stopped before it finished, for example by Ctrl-C or a failed swap.
+    interrupted: bool = False
+    warnings: list[str] = Field(default_factory=list)
+    studies: list[StudyResult] = Field(default_factory=list)
+    skipped: list[str] = Field(default_factory=list)
+    papers: list[PaperMove] = Field(default_factory=list)
+    removed_empty: list[str] = Field(default_factory=list)
+    recovered: list[str] = Field(default_factory=list)
+    registry: RegistryFindings = Field(default_factory=RegistryFindings)

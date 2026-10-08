@@ -36,6 +36,7 @@ nav = [
     { "Internal data model" = "data-model.md" },
     { "Local setup and development server" = "installation.md" },
     { "Local upload testing" = "local-upload-testing.md" },
+    { "Study format 2 cutover" = "study-format-2-cutover.md" },
     { "Account administration" = "administration.md" },
     { "Vocabulary definitions" = "vocabulary.md" },
     { "Deployment" = "deployment.md" },
