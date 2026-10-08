@@ -191,8 +191,14 @@ def test_an_invalid_converted_study_is_a_mismatch(tmp_path, sf_vocabulary):
     rewrite(v2 / "outputs_Tab2.tsv", "measurement", "unknown")
     result = judge(v1, v2, sf_vocabulary)
     assert result.outcome == "mismatch"
+    # The curator reads what to fix: the code, the cell and the message.
+    assert result.issues == ["unknown_measurement"]
     assert [(d.path, d.a, d.b) for d in result.differences] == [
-        ("validation", "valid", "unknown_measurement")
+        (
+            "validation outputs_Tab2.tsv:E2 unknown_measurement",
+            "valid",
+            "Unknown measurement: unknown",
+        )
     ]
 
 
@@ -406,6 +412,57 @@ def test_an_image_that_the_conversion_drops_is_a_mismatch(tmp_path, sf_vocabular
         ),
         ("characteristica[all sex sample mean M]", "missing", "count 2"),
     ]
+
+
+def test_a_retired_calculation_is_an_intended_change(tmp_path, sf_vocabulary):
+    # A geometric mean reported as a median: only the calculation is retired.
+    median = {key: v for key, v in OUTPUT.items() if key not in ("mean", "sd")}
+    output = {**median, "median": "col==mean", "calculation_type": "geometric mean"}
+    v1 = v1_study(tmp_path / "v1", with_outputs(output, TIMECOURSE), SHEETS, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.count) for c in result.changes] == [("retired_calculation", 1)]
+
+
+def test_a_renamed_timecourse_label_is_an_intended_change(tmp_path, sf_vocabulary):
+    study = with_outputs(OUTPUT, {**TIMECOURSE, "label": "drug, plasma"})
+    v1 = v1_study(tmp_path / "v1", study, SHEETS, IMAGES)
+    result = judge(v1, converted(tmp_path, v1), sf_vocabulary)
+    assert result.outcome == "intended", result.differences
+    assert [(c.kind, c.examples) for c in result.changes] == [
+        ("label_renamed", ["'drug, plasma' to drug_plasma"])
+    ]
+
+
+def test_curator_rows_of_a_sheet_without_image_are_identical(tmp_path, sf_vocabulary):
+    group = {
+        "source": "TabGroups",
+        "name": "col==name",
+        "count": "col==count",
+        "characteristica": [
+            {"measurement_type": "species", "choice": "Homo sapiens"},
+            {"measurement_type": "healthy", "choice": "Y"},
+            {"measurement_type": "sex", "choice": "M"},
+        ],
+    }
+    study = {**STUDY, "groupset": {"groups": [group]}}
+    sheets = {**SHEETS, "TabGroups": [["name", "count"], ["all", 2]]}
+    v1 = v1_study(tmp_path / "v1", study, sheets, ("TabA", "Tab2", "Fig1"))
+    v2 = converted(tmp_path, v1)
+    assert "\tText\t" in (v2 / "characteristica.tsv").read_text()
+    result = judge(v1, v2, sf_vocabulary)
+    assert result.outcome == "identical", result.differences
+
+
+def test_an_error_bar_below_zero_keeps_the_spread(tmp_path, sf_vocabulary):
+    sheets = {
+        **SHEETS,
+        "Tab2": [["mean", "sd", "lower"], [2.5, Formula("=ABS(C3-A3)", 2.75), -0.25]],
+    }
+    v1 = v1_study(tmp_path / "v1", STUDY, sheets, IMAGES)
+    v2 = converted(tmp_path, v1)
+    assert "\t2.75\t" in (v2 / "outputs_Tab2.tsv").read_text()
+    assert judge(v1, v2, sf_vocabulary).outcome == "identical"
 
 
 def test_a_dropped_output_label_is_an_intended_change(tmp_path, sf_vocabulary):

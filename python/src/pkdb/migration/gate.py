@@ -15,9 +15,10 @@ from typing import NamedTuple
 
 from pkdb.domain.vocabulary import Vocabulary
 from pkdb.migration.model import Change, Difference, StudyResult
+from pkdb.migration.rows import label_name
 from pkdb.preparation import PreparedBundle, prepare
 from pkdb.schemas.study import CanonicalStudy, Observation, Statistics
-from pkdb.schemas.validation import StudyValidationError
+from pkdb.schemas.validation import StudyValidationError, ValidationIssue
 from pkdb.studyformat.formatter import format_folder
 from pkdb.studyformat.text import format_number
 
@@ -212,6 +213,7 @@ class _Normalizer:
         self.labels = _scatter_labels(study)
         self.groups = {group.name for group in study.groups}
         self.images: dict[str, str] = {}
+        self.renamed: dict[str, str] = {}
 
     def image(self, image: str | None) -> str | None:
         """The image file; format 1 keeps the image of a characteristic as written."""
@@ -241,23 +243,23 @@ class _Normalizer:
         return key
 
     def geometric(self, key: Key, statistics: Statistics) -> tuple[Key, Statistics]:
-        """A geometric mean that format 1 wrote as `mean` moves to `gmean`.
+        """Format 2 retired the calculation `geometric mean`: gmean says it.
 
-        Format 2 retired the calculation `geometric mean`, so the converter
-        leaves it empty and `prepare` fills `sample mean` for a group's record.
+        The converter leaves the calculation empty, and `prepare` fills
+        `sample mean` for a group's record. A geometric mean that format 1
+        wrote as `mean` moves to `gmean`.
         """
-        if (
-            key.calculation_type != GEOMETRIC_MEAN
-            or statistics.mean is None
-            or statistics.gmean is not None
-        ):
+        if key.calculation_type != GEOMETRIC_MEAN:
             return key, statistics
-        self.changes.add("gmean", described(key))
         of_group = key.group is not None or (
             key.table == "characteristica" and key.subject in self.groups
         )
-        key = key._replace(calculation_type=GROUP_CALCULATION if of_group else None)
-        return key, statistics.model_copy(
+        retired = key._replace(calculation_type=GROUP_CALCULATION if of_group else None)
+        if statistics.mean is None or statistics.gmean is not None:
+            self.changes.add("retired_calculation", described(key))
+            return retired, statistics
+        self.changes.add("gmean", described(key))
+        return retired, statistics.model_copy(
             update={"gmean": statistics.mean, "mean": None}
         )
 
@@ -277,6 +279,11 @@ class _Normalizer:
         elif scatter is None and key.label and key.output_type == "output":
             self.changes.add("output_label", described(key))
             key = key._replace(label=None)
+        elif key.label and key.output_type == "timecourse":
+            name = label_name(key.label)
+            if name != key.label:
+                self.renamed[key.label] = name
+                key = key._replace(label=name)
         return key
 
     def __call__(self, key: Key, statistics: Statistics) -> tuple[Key, Statistics]:
@@ -294,6 +301,8 @@ class _Normalizer:
         for old, new in self.labels.items():
             if old != new:
                 self.changes.add("scatter_label", f"{old} to {new}")
+        for old, new in self.renamed.items():
+            self.changes.add("label_renamed", f"{old!r} to {new}")
 
 
 def _records(
@@ -595,11 +604,33 @@ def _errors(bundle: PreparedBundle) -> list[str]:
     return sorted({i.code for i in bundle.report.issues if i.severity == "error"})
 
 
-def _invalid(study: str, path: str, codes: Iterable[str]) -> StudyResult:
+def _where(issue: ValidationIssue) -> str:
+    """The file and cell, else row, of an issue, such as `outputs_Tab2.tsv:E2`."""
+    source = issue.source
+    if source is None:
+        return ""
+    if source.cell:
+        return f"{source.file}:{source.cell}"
+    if source.row is not None:
+        return f"{source.file}:{source.row}"
+    return source.file
+
+
+def _invalid(study: str, check: str, issues: Iterable[ValidationIssue]) -> StudyResult:
+    """A converted study that format 2 refuses, with the errors a curator fixes."""
+    errors = [issue for issue in issues if issue.severity == "error"]
     return StudyResult(
         study=study,
         outcome="mismatch",
-        differences=[Difference(path=path, a="valid", b=", ".join(sorted(codes)))],
+        issues=sorted({issue.code for issue in errors}),
+        differences=[
+            Difference(
+                path=" ".join(part for part in (check, _where(i), i.code) if part),
+                a="valid",
+                b=i.message,
+            )
+            for i in errors[:MAX_DIFFERENCES]
+        ],
     )
 
 
@@ -615,8 +646,7 @@ def judge(v1: Path, converted: Path, vocabulary: Vocabulary) -> StudyResult:
         return StudyResult(study=study, outcome="invalid_v1", issues=errors)
     formatted = format_folder(converted, check=True)
     if not formatted.ok:
-        codes = {i.code for i in formatted.issues if i.severity == "error"}
-        return _invalid(study, "format", codes)
+        return _invalid(study, "format", formatted.issues)
     if formatted.changes:
         return StudyResult(
             study=study,
@@ -628,9 +658,9 @@ def judge(v1: Path, converted: Path, vocabulary: Vocabulary) -> StudyResult:
     try:
         b = prepare(converted, vocabulary=vocabulary)
     except StudyValidationError as error:
-        return _invalid(study, "validation", {i.code for i in error.report.issues})
-    if errors := _errors(b):
-        return _invalid(study, "validation", errors)
+        return _invalid(study, "validation", error.report.issues)
+    if _errors(b):
+        return _invalid(study, "validation", b.report.issues)
     changes, differences = compare(a.study, b.study)
     if differences:
         return StudyResult(
