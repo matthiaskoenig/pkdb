@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, useId, watch } from "vue";
 import { VAlert, VBtn, VChip, VChipGroup } from "vuetify/components";
-import { isNoUser } from "../api/client";
 import type { AcknowledgedWarning, Profile, ValidationIssue } from "../api/types";
 import AcknowledgeDialog from "../components/AcknowledgeDialog.vue";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import ProblemItem from "../components/ProblemItem.vue";
 import UserHint from "../components/UserHint.vue";
+import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
 import { sectionHeading } from "../composables/useReturnFocus";
 import { formatTime, plural } from "../overview";
@@ -28,16 +28,12 @@ import { targetText } from "../review";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import {
-  actionFailure,
   dataTableFiles,
   knownProfiles,
-  messageOf,
   profileOf,
   sectionRoute,
   tableFiles,
   tablesOutcome,
-  userHint,
-  type ActionFailure,
 } from "../study";
 
 /**
@@ -220,30 +216,11 @@ function afterAcknowledge(): HTMLElement | null | undefined {
 
 // Open tables and files
 
-/** The action that runs: `tables`, `validate` or the file that opens; one at a time. */
-const busy = ref<string | null>(null);
-/** Whether an action runs or an acknowledgement is written; one write at a time. */
-const working = computed(() => busy.value !== null || acknowledging.value);
-/** The failure of the last action; it stays until it is dismissed or the next action starts. */
-const failure = ref<ActionFailure | null>(null);
-/** What to do when the last action needed a user. */
-const userText = ref<string | null>(null);
-
-async function run(action: string, work: () => Promise<string>): Promise<void> {
-  if (working.value) return;
-  busy.value = action;
-  failure.value = null;
-  userText.value = null;
-  announce("");
-  try {
-    announce(await work());
-  } catch (caught) {
-    if (isNoUser(caught)) userText.value = userHint(caught);
-    else failure.value = actionFailure(messageOf(caught));
-  } finally {
-    busy.value = null;
-  }
-}
+/**
+ * The action that runs: `tables`, `validate` or the file that opens; one at a time, and none
+ * while an acknowledgement is written.
+ */
+const { busy, working, failure, userText, run } = useAction<string>(announce, () => acknowledging.value);
 
 function openTables(): Promise<void> {
   return run("tables", async () => {
@@ -463,51 +440,10 @@ function openFile(file: string): Promise<void> {
   flex-direction: column;
   gap: 16px;
 }
-/* A file is a card: its name in a bar, then its issues apart by a line. */
-.problem-group {
-  overflow: hidden;
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 8px;
-  background-color: rgb(var(--v-theme-surface));
-}
-.problem-group-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 44px;
-  padding: 6px 12px;
-  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  background-color: rgba(var(--v-theme-on-surface), 0.04);
-}
-/* The counts go below a long file name, and Open stays at the end of the bar. */
-.problem-group-title {
-  display: flex;
-  flex: 1 1 auto;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 2px 12px;
-  min-width: 0;
-}
-.problem-file {
-  margin: 0;
-  font-size: 0.9375rem;
-  font-weight: 600;
-  line-height: 1.4;
-  overflow-wrap: anywhere;
-}
-.problem-group-counts {
-  font-size: 0.8125rem;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
 /* The text of the button lines up with the end of the bar. */
 .problem-open {
   flex: 0 0 auto;
   margin-inline-end: -8px;
-}
-.problem-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
 }
 .acknowledged {
   display: flex;

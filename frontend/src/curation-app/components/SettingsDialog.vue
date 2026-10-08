@@ -15,6 +15,7 @@ import {
 } from "vuetify/components";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { useOverviewStore, type Settings } from "../stores/overview";
+import { messageOf } from "../study";
 
 const open = defineModel<boolean>({ default: false });
 const props = defineProps<{
@@ -68,7 +69,7 @@ async function removeKey(): Promise<void> {
     await overview.configure({ api_key: "" });
     apiKey.value = "";
   } catch (caught) {
-    error.value = caught instanceof Error ? caught.message : String(caught);
+    error.value = messageOf(caught);
   } finally {
     removing.value = false;
   }
@@ -87,7 +88,7 @@ async function submit(): Promise<void> {
     await overview.configure(settings);
     open.value = false;
   } catch (caught) {
-    error.value = caught instanceof Error ? caught.message : String(caught);
+    error.value = messageOf(caught);
   } finally {
     busy.value = false;
   }

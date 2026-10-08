@@ -4,13 +4,15 @@ import { useRoute, useRouter } from "vue-router";
 import { VAlert, VBtn, VProgressLinear, VTab, VTabs } from "vuetify/components";
 import type { SourceSummary, SourceView } from "../api/types";
 import MappedRows from "../components/MappedRows.vue";
+import ProblemItem from "../components/ProblemItem.vue";
 import SourceOverlay from "../components/SourceOverlay.vue";
 import TableGrid from "../components/TableGrid.vue";
 import { useLoaded } from "../composables/useLoaded";
 import { rawTable } from "../grid";
 import { drawsOnImage, plottedSeries } from "../overlay";
-import { location, SEVERITY_LABELS, tableQuery } from "../problems";
+import { groupByFile, groupCounts, locationKey, validatesAfterWrite } from "../problems";
 import { sourceProblems } from "../sources";
+import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import { sectionRoute, tableFiles } from "../study";
 
@@ -24,6 +26,7 @@ import { sectionRoute, tableFiles } from "../study";
  * clicked mapped point or row opens the Tables section at its file and line.
  */
 const study = useStudyStore();
+const overview = useOverviewStore();
 const route = useRoute();
 const router = useRouter();
 const id = useId();
@@ -78,14 +81,16 @@ const unmatchedNote = computed(() => {
 const alt = computed(() => `${selected.value?.source ?? ""} of ${identity.value}`);
 
 const tables = computed(() => new Set(detail.value ? tableFiles(detail.value) : []));
-/** The problems of the files of the source, with the route to the cell of a problem in a table. */
-const problems = computed(() => {
-  if (!view.value || !selected.value || !detail.value) return [];
-  return sourceProblems(detail.value.problems, selected.value, view.value).map((issue) => {
-    const query = tables.value.has(issue.source?.file ?? "") ? tableQuery(issue) : null;
-    return { issue, route: query ? sectionRoute(identity.value, "tables", query) : null };
-  });
-});
+/** The problems of the files of the source by file, in the order of the Problems section. */
+const problemGroups = computed(() =>
+  view.value && selected.value && detail.value
+    ? groupByFile(sourceProblems(detail.value.problems, selected.value, view.value))
+    : [],
+);
+/** Whether the local server validates the study after a write, for the mark of an acknowledged warning. */
+const automatic = computed(() =>
+  detail.value ? validatesAfterWrite(detail.value.mode, overview.snapshot ?? null) : true,
+);
 
 /** A clicked mapped point opens its row in the Tables section. */
 function showRow(row: { file: string; line: number }): void {
@@ -206,29 +211,37 @@ function showRow(row: { file: string; line: number }): void {
             <p v-else class="field-note">No rows of the tables name {{ view.source }} as their source.</p>
           </section>
 
-          <section v-if="problems.length" class="source-block source-problems" :aria-labelledby="`${id}-problems`">
+          <section v-if="problemGroups.length" class="source-block source-problems" :aria-labelledby="`${id}-problems`">
             <h3 :id="`${id}-problems`" class="source-heading">Problems</h3>
-            <ul class="source-problem-list">
-              <li v-for="({ issue, route: cell }, index) in problems" :key="index" class="source-problem">
-                <div class="problem-head">
-                  <i
-                    :class="[
-                      issue.severity === 'error' ? 'fas fa-circle-xmark' : 'fas fa-triangle-exclamation',
-                      `source-problem-icon--${issue.severity}`,
-                    ]"
-                    class="source-problem-icon"
-                    aria-hidden="true"
-                  ></i>
-                  <span class="d-sr-only">{{ SEVERITY_LABELS[issue.severity] }}</span>
-                  <code class="problem-code">{{ issue.code }}</code>
-                  <span class="source-problem-location">{{ location(issue) }}</span>
-                  <RouterLink v-if="cell" :to="cell" class="source-problem-link">
-                    Show in table
-                  </RouterLink>
+            <!-- As in the Problems section: by file, the files with errors first. -->
+            <section
+              v-for="(group, groupIndex) in problemGroups"
+              :key="group.file ?? ''"
+              class="problem-group"
+              :aria-labelledby="`${id}-file-${groupIndex}`"
+            >
+              <div class="problem-group-head">
+                <div class="problem-group-title">
+                  <h4 :id="`${id}-file-${groupIndex}`" class="problem-file">{{ group.file }}</h4>
+                  <span class="problem-group-counts">{{ groupCounts(group.issues) }}</span>
                 </div>
-                <p class="problem-message">{{ issue.message }}</p>
-              </li>
-            </ul>
+              </div>
+              <ul class="problem-list">
+                <ProblemItem
+                  v-for="(issue, index) in group.issues"
+                  :key="index"
+                  :issue="issue"
+                  :study="identity"
+                  :id-base="`${id}-problem-${groupIndex}-${index}`"
+                  :showable="tables.has(group.file ?? '')"
+                  :pending="study.acknowledgedKeys.includes(locationKey(issue))"
+                  :automatic="automatic"
+                  :disabled="false"
+                  :validating="false"
+                  :offers-acknowledge="false"
+                />
+              </ul>
+            </section>
           </section>
         </template>
       </div>
@@ -318,35 +331,5 @@ function showRow(row: { file: string; line: number }): void {
 .source-missing-hint {
   font-size: 0.875rem;
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-}
-.source-problem-list {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 8px;
-}
-.source-problem {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 12px;
-}
-.source-problem + .source-problem {
-  border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-.source-problem-icon--error {
-  color: rgb(var(--v-theme-error));
-}
-.source-problem-icon--warning {
-  color: rgb(var(--v-theme-warning));
-}
-.source-problem-location {
-  font-size: 0.8125rem;
-  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
-  overflow-wrap: anywhere;
-}
-.source-problem-link {
-  font-size: 0.875rem;
 }
 </style>

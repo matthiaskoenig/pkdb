@@ -5,6 +5,12 @@
 import type { RouteLocationRaw } from "vue-router";
 import type { ApiError } from "./api/client";
 import type { IssueState, People, Profile, Release, StudyDetail, StudySummary, TablesResult } from "./api/types";
+import {
+  DATA_TABLE_KINDS,
+  SOURCE_TABLE_KINDS,
+  TABLE_KIND_LABELS,
+  type SourceTableKind,
+} from "./tableKinds";
 
 /** The sections of the study page in the order of the rail. */
 export const SECTIONS = ["metadata", "review", "problems", "sources", "tables", "activity"] as const;
@@ -52,8 +58,8 @@ export function sectionRoute(id: string, section: Section, query: Record<string,
 const SOURCE = /^(?:Text|(?:Tab|Fig)[A-Za-z0-9_-]+)$/;
 /** A paper table, the only source of a raw table. */
 const RAW_SOURCE = /^Tab[A-Za-z0-9_-]+$/;
-const DATA_TABLE = /^(?:subjects|interventions|characteristica)\.tsv$/;
-const SOURCE_TABLE = /^(?:outputs|timecourses|scatters)_(.+)\.tsv$/;
+const DATA_TABLE = new RegExp(`^(?:${DATA_TABLE_KINDS.join("|")})\\.tsv$`);
+const SOURCE_TABLE = new RegExp(`^(?:${SOURCE_TABLE_KINDS.join("|")})_(.+)\\.tsv$`);
 
 /** The files of the data tables and the raw tables of a study, in the order of its files. */
 export function tableFiles(detail: Pick<StudyDetail, "id" | "files">): string[] {
@@ -170,21 +176,40 @@ export function tablesOutcome(result: TablesResult): ActionFailure | null {
 
 // People
 
-/** The profiles of the roster and of the people of the study who are not in it, by user name. */
+/**
+ * Profiles by user name, matched without regard to case as the local server matches them
+ * (`curation/metadata.py`): a `study.json` may spell a user name otherwise than the roster. The
+ * first profile of a user name wins. Look a user up with `findProfile` or `profileOf`.
+ */
+export function profileMap(profiles: Iterable<Profile>): Map<string, Profile> {
+  const map = new Map<string, Profile>();
+  for (const profile of profiles) {
+    const key = profile.username.toLowerCase();
+    if (!map.has(key)) map.set(key, profile);
+  }
+  return map;
+}
+
+/** The profiles of the roster and of the people of the study who are not in it (`profileMap`). */
 export function knownProfiles(roster: readonly Profile[], people: People | null | undefined): Map<string, Profile> {
-  const profiles = new Map<string, Profile>(roster.map((profile) => [profile.username, profile]));
-  for (const profile of [
+  return profileMap([
+    ...roster,
     ...(people?.creator ? [people.creator] : []),
     ...(people?.curators.map((curator) => curator.profile) ?? []),
     ...(people?.collaborators ?? []),
-  ])
-    if (!profiles.has(profile.username)) profiles.set(profile.username, profile);
-  return profiles;
+  ]);
+}
+
+/** The profile of `user` in a `profileMap`, whatever the case of the name. */
+export function findProfile(profiles: ReadonlyMap<string, Profile>, user: string): Profile | undefined {
+  return profiles.get(user.toLowerCase());
 }
 
 /** The profile of `user`, or a profile with the user name alone for someone unknown. */
 export function profileOf(profiles: ReadonlyMap<string, Profile>, user: string): Profile {
-  return profiles.get(user) ?? { username: user, display_name: user, title: null, affiliation: null, avatar_url: null };
+  return (
+    findProfile(profiles, user) ?? { username: user, display_name: user, title: null, affiliation: null, avatar_url: null }
+  );
 }
 
 // Paths
@@ -216,12 +241,10 @@ export function duplicateHeading(folders: number): string {
 const SHEET_NAME_LIMIT = 31;
 
 /** The kind of a new table: a table of mapped data split by source, or the raw table of a paper table. */
-export type NewTableKind = "outputs" | "timecourses" | "scatters" | "raw";
+export type NewTableKind = SourceTableKind | "raw";
 
 export const NEW_TABLE_KINDS: readonly { value: NewTableKind; label: string }[] = [
-  { value: "outputs", label: "Outputs" },
-  { value: "timecourses", label: "Timecourses" },
-  { value: "scatters", label: "Scatters" },
+  ...SOURCE_TABLE_KINDS.map((kind) => ({ value: kind, label: TABLE_KIND_LABELS[kind] })),
   { value: "raw", label: "Raw table" },
 ];
 

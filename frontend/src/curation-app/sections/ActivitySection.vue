@@ -28,12 +28,14 @@ import { ApiError } from "../api/client";
 import type { Job } from "../api/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import RetryDialog from "../components/RetryDialog.vue";
+import UserHint from "../components/UserHint.vue";
+import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
 import { useReturnFocus } from "../composables/useReturnFocus";
 import { formatTime, plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
-import { actionFailure, messageOf, sectionRoute, type ActionFailure } from "../study";
+import { actionFailure, messageOf, sectionRoute } from "../study";
 
 /**
  * The jobs of the study in the current workspace, newest first: validations and uploads of the
@@ -80,34 +82,13 @@ const clearText = computed(
     "unknown outcome, and the last upload and the current report of each study stay.",
 );
 
-/** The running action. One action runs at a time, so that feedback never mixes. */
-const busy = ref<string | null>(null);
-const working = computed(() => busy.value !== null);
-/** The failure of the last action; it stays until it is dismissed or the next action starts. */
-const failure = ref<ActionFailure | null>(null);
+/** The running action: one at a time, so that feedback never mixes. */
+const { busy, working, failure, userText, run } = useAction<string>(announce);
 const confirming = ref(false);
 const retrying = ref(false);
 /** Takes the focus after a dialog when the control that opened it is gone. */
 const activityList = () => root.value?.querySelector<HTMLElement>(".activity-list, .activity-empty");
 useReturnFocus(confirming, activityList);
-
-async function run(
-  action: string,
-  work: () => Promise<string>,
-  explain: (caught: unknown) => ActionFailure = (caught) => actionFailure(messageOf(caught)),
-): Promise<void> {
-  if (working.value) return;
-  busy.value = action;
-  failure.value = null;
-  announce("");
-  try {
-    announce(await work());
-  } catch (caught) {
-    failure.value = explain(caught);
-  } finally {
-    busy.value = null;
-  }
-}
 
 /**
  * Keep the keyboard focus in the section when the control that had it goes away: on the element
@@ -219,6 +200,7 @@ async function retried(): Promise<void> {
     </div>
 
     <ActionFailureAlert v-if="failure" :failure="failure" :study="identity" @close="failure = null" />
+    <UserHint v-else-if="userText" :text="userText" />
     <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
     <span role="status" aria-live="polite" class="activity-notice">{{ notice }}</span>
 

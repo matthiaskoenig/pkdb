@@ -1,6 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Page } from "@playwright/test";
+import { columnLetters } from "../../src/curation-app/columns.ts";
 import { expect, runTool, setAutomaticActions, test } from "./fixtures.ts";
 
 const TABLE = "timecourses_Fig1.tsv";
@@ -26,19 +27,10 @@ function editTable(workspace: string, line: number, column: string, value: strin
   writeFileSync(join(workspace, "caffeine/Demo2020", TABLE), rows.map((cells) => `${cells.join("\t")}\n`).join(""));
 }
 
-/** The spreadsheet name of the column at `index`: A for 0, Z for 25, AA for 26. */
-function columnName(index: number): string {
-  let name = "";
-  for (let number = index + 1; number > 0; number = Math.floor((number - 1) / 26)) {
-    name = String.fromCharCode("A".charCodeAt(0) + ((number - 1) % 26)) + name;
-  }
-  return name;
-}
-
 /** Change a cell of the workbook with openpyxl, as a spreadsheet program saves it. */
 async function editWorkbook(workspace: string, line: number, column: string, value: string): Promise<void> {
   // The sheet has the rows and columns of the table: line 6 is row 6, the header is row 1.
-  const cell = `${columnName(readTable(workspace)[0]!.indexOf(column))}${line}`;
+  const cell = `${columnLetters(readTable(workspace)[0]!.indexOf(column))}${line}`;
   const workbook = join(workspace, "caffeine/Demo2020/Demo2020.xlsx");
   await runTool("edit_workbook.py", workbook, SHEET, cell, value);
 }

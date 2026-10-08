@@ -227,9 +227,23 @@ export function uploadBlocker(snapshot: Snapshot): string | null {
   return "Your PK-DB account cannot upload studies.";
 }
 
+/**
+ * `url` when it is a web page, else null: a link from the local server or a study file goes into
+ * an `href` only with `http:` or `https:`.
+ */
+export function webUrl(url: string | null | undefined): string | null {
+  if (!url) return null;
+  try {
+    return ["https:", "http:"].includes(new URL(url).protocol) ? url : null;
+  } catch {
+    return null;
+  }
+}
+
 /** The GitHub page of an issue: its URL, else the issue of the configured repository. */
 export function issueUrl(row: Pick<StudyRow, "issue" | "summary">, repository: string): string | null {
-  if (row.issue?.url) return row.issue.url;
+  const own = webUrl(row.issue?.url);
+  if (own) return own;
   const number = row.issue?.number ?? row.summary.issue;
   if (number === undefined || number === null || !/^[\w.-]+\/[\w.-]+$/.test(repository)) return null;
   return `https://github.com/${repository}/issues/${number}`;

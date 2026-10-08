@@ -181,7 +181,7 @@ describe("overlayTraces", () => {
   });
 
   it("keeps the colors for paper in the dark theme, as the marks sit on the image", () => {
-    const { layout, traces } = overlayTraces(figure(), null, { dark: true, colors: DARK });
+    const { layout, traces } = overlayTraces(figure(), null, { dark: true, colors: DARK, font: "Inter, sans-serif" });
     expect(trace(traces, "raw drug_plasma").marker?.color).toBe("#1a2b3c");
     expect(layout.hoverlabel).toEqual(
       expect.objectContaining({ bgcolor: "#192b31", font: expect.objectContaining({ color: "#ffffff" }) }),
@@ -263,10 +263,11 @@ describe("plotTraces", () => {
   });
 
   it("uses the dark steps of the colors on the dark surface", () => {
-    const { traces, layout } = plotTraces(plain, null, { dark: true, colors: DARK });
+    const { traces, layout } = plotTraces(plain, null, { dark: true, colors: DARK, font: "Inter, sans-serif" });
     expect(trace(traces, "plot drug_plasma").marker?.color).toBe("#4d5e6f");
     expect(layout.paper_bgcolor).toBe("#192b31");
-    expect(layout.font).toEqual(expect.objectContaining({ color: "#ffffff" }));
+    expect(layout.font).toEqual({ color: "#ffffff", family: "Inter, sans-serif" });
+    expect(layout.hoverlabel.font.family).toBe("Inter, sans-serif");
   });
 
   it("fades the other series when a series is emphasized", () => {

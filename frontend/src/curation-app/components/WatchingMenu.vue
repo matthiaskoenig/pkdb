@@ -3,6 +3,7 @@ import { computed, ref, watch } from "vue";
 import { VAlert, VBtn, VCard, VChip, VMenu } from "vuetify/components";
 import type { Snapshot } from "../api/types";
 import { useOverviewStore } from "../stores/overview";
+import { messageOf } from "../study";
 
 type Anchor = "bottom end" | "bottom";
 
@@ -36,7 +37,7 @@ async function toggle(): Promise<void> {
     if (props.snapshot.paused) await overview.resume();
     else await overview.pause(true);
   } catch (caught) {
-    error.value = caught instanceof Error ? caught.message : String(caught);
+    error.value = messageOf(caught);
   } finally {
     busy.value = false;
   }

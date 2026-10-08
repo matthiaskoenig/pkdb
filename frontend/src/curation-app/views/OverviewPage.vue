@@ -27,9 +27,11 @@ import {
   type StatusChip,
   type StudySort,
 } from "../overview";
+import { useNotice } from "../composables/useNotice";
 import { useDialogStore } from "../stores/dialogs";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
+import { messageOf, profileMap } from "../study";
 
 const overview = useOverviewStore();
 const dialogs = useDialogStore();
@@ -78,7 +80,8 @@ const selected = ref<string[]>([]);
 const mode = ref<SaveMode>("validate");
 const busy = ref<"validate" | "mode" | null>(null);
 const error = ref<string | null>(null);
-const notice = ref("");
+/** The notice of the last action that succeeded; it disappears after a few seconds. */
+const { notice, announce } = useNotice();
 
 /** The selected studies in the order of the table. */
 const chosen = computed(() => {
@@ -99,9 +102,7 @@ const modeItems = computed(() =>
 );
 
 // The notice of an action belongs to the selection that it acted on.
-watch(selected, () => {
-  notice.value = "";
-});
+watch(selected, () => announce(""));
 
 // Upload on save needs an upload permission; without it the choice falls back to Validate.
 watch(blocker, (value) => {
@@ -114,20 +115,16 @@ watch(shown, (rows) => {
   if (selected.value.some((id) => !visible.has(id))) selected.value = selected.value.filter((id) => visible.has(id));
 });
 
-function messageOf(caught: unknown): string {
-  return caught instanceof Error ? caught.message : String(caught);
-}
-
 async function run(kind: "validate" | "mode", action: () => Promise<string>): Promise<void> {
   busy.value = kind;
   error.value = null;
-  notice.value = "";
+  announce("");
   // Every change of the selection makes a new list.
   const selection = selected.value;
   try {
     const text = await action();
     // A notice about studies that are no longer the selection would mislead.
-    if (selected.value === selection) notice.value = text;
+    if (selected.value === selection) announce(text);
   } catch (caught) {
     error.value = messageOf(caught);
   } finally {
@@ -156,7 +153,7 @@ const upload = ref<{ open: boolean; studies: StudyRow[]; action: "upload" | "ena
 
 function review(action: "upload" | "enable"): void {
   error.value = null;
-  notice.value = "";
+  announce("");
   upload.value = { open: true, studies: chosen.value, action };
 }
 
@@ -171,10 +168,11 @@ function applyMode(): Promise<void> | void {
 }
 
 function uploaded(count: number): void {
-  notice.value =
+  announce(
     upload.value.action === "upload"
       ? `Upload queued for ${plural(count, "study", "studies")}.`
-      : modeNotice("upload", count);
+      : modeNotice("upload", count),
+  );
 }
 
 // Uploads with an unknown outcome
@@ -205,7 +203,7 @@ onMounted(() => {
     .curators()
     .then(
       (list) => {
-        profiles.value = new Map(list.map((profile) => [profile.username.toLowerCase(), profile]));
+        profiles.value = profileMap(list);
       },
       () => undefined,
     );
@@ -365,7 +363,7 @@ const format1Notice = computed(() =>
       v-model="retryOpen"
       :study="retryStudy"
       :fallback-focus="retriedStudy"
-      @done="(row) => (notice = `Upload queued again for ${row.id}.`)"
+      @done="(row) => announce(`Upload queued again for ${row.id}.`)"
     />
   </VContainer>
 </template>

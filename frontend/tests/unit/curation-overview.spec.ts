@@ -14,6 +14,7 @@ import {
   substancesOf,
   SYNC_LABELS,
   uploadBlocker,
+  webUrl,
   type StatusChip,
 } from "../../src/curation-app/overview";
 import { snapshot, studyRow } from "./curation-fixtures";
@@ -254,6 +255,17 @@ describe("labels", () => {
     );
     expect(issueUrl(row("a/b", { issue: { ...issue, url: null } }), "")).toBeNull();
     expect(issueUrl(row("a/b"), "matthiaskoenig/pkdb_data")).toBeNull();
+    // Only a web page is linked, as the Activity links uploads.
+    expect(issueUrl(row("a/b", { issue: { ...issue, url: "javascript:alert(1)" } }), "x/y")).toBe(
+      "https://github.com/x/y/issues/2158",
+    );
+  });
+
+  it("links only web pages", () => {
+    expect(webUrl("https://pk-db.com/data/Example2020")).toBe("https://pk-db.com/data/Example2020");
+    expect(webUrl("http://127.0.0.1:8000/data/Example2020")).toBe("http://127.0.0.1:8000/data/Example2020");
+    for (const url of ["javascript:alert(1)", "data:text/html,x", "file:///etc/passwd", "not a url", "", null, undefined])
+      expect(webUrl(url)).toBeNull();
   });
 
   it("lists the substances in order", () => {

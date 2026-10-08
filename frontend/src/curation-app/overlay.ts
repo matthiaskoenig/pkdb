@@ -26,18 +26,22 @@ const UNKNOWN_COLOR = "#757575";
 /** The opacity of the series beside an emphasized series. */
 export const FADED = 0.2;
 
-/** The fonts of the app (base.css), so that the hover labels and axes read like the page. */
-const FONT = 'Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif';
-
 export type OverlayMode = "overlay" | "plot";
 
-/** The colors of the page theme around the plot. */
+/** The colors and the fonts of the page around the plot, so that the hover labels and axes read like the page. */
 export interface PlotTheme {
   dark: boolean;
   colors: PlotColors;
+  /** The font family of the page, as the browser computes it from base.css. */
+  font: string;
 }
 
-const LIGHT: PlotTheme = { dark: false, colors: plotColors({}) };
+const LIGHT: PlotTheme = { dark: false, colors: plotColors({}), font: "sans-serif" };
+
+/** The font family of the page; `sans-serif` without styles, as in tests. */
+export function pageFont(): string {
+  return getComputedStyle(document.documentElement).fontFamily || "sans-serif";
+}
 
 /** What the hover label and a click read of a point: file, TSV line (null for a digitized point), series, x and y. */
 export type Customdata = [file: string, line: number | null, series: string, x: string, y: string];
@@ -170,8 +174,9 @@ const MAPPED_HOVER = `%{customdata[0]} line %{customdata[1]}${VALUES}`;
 /** The hover text of a digitized point, which has no line. */
 const RAW_HOVER = `%{customdata[0]}${VALUES}`;
 
-function hoverLabel(colors: PlotColors, border: string): HoverLabel {
-  return { bgcolor: colors.surface, bordercolor: border, font: { color: colors.text, family: FONT, size: 13 } };
+function hoverLabel(theme: PlotTheme, border: string): HoverLabel {
+  const { colors } = theme;
+  return { bgcolor: colors.surface, bordercolor: border, font: { color: colors.text, family: theme.font, size: 13 } };
 }
 
 /** The opacity of each series: emphasized or not faded, the others faded. */
@@ -193,8 +198,8 @@ function baseLayout(theme: PlotTheme): Omit<OverlayLayout, "xaxis" | "yaxis" | "
     dragmode: false,
     paper_bgcolor: "rgba(0, 0, 0, 0)",
     plot_bgcolor: "rgba(0, 0, 0, 0)",
-    font: { color: theme.colors.text, family: FONT },
-    hoverlabel: hoverLabel(theme.colors, theme.colors.grid),
+    font: { color: theme.colors.text, family: theme.font },
+    hoverlabel: hoverLabel(theme, theme.colors.grid),
   };
 }
 
@@ -263,7 +268,7 @@ export function overlayTraces(
         marker,
         customdata: points.map(customdata),
         hovertemplate: role === "raw" ? RAW_HOVER : MAPPED_HOVER,
-        hoverlabel: hoverLabel(theme.colors, color(name)),
+        hoverlabel: hoverLabel(theme, color(name)),
       });
     }
   }
@@ -327,7 +332,7 @@ export function plotTraces(view: SourceView, highlight: string | null = null, th
         : {}),
       customdata: rows.map(customdata),
       hovertemplate: MAPPED_HOVER,
-      hoverlabel: hoverLabel(theme.colors, color),
+      hoverlabel: hoverLabel(theme, color),
     };
   });
   // The axes of the first series, as `pkdb plot` labels them.

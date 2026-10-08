@@ -460,6 +460,24 @@ describe("problems", () => {
     expect(link.attributes("href")).toBe("#/studies/caffeine/Example/tables?file=timecourses_Fig1.tsv&line=3&column=mean");
   });
 
+  it("shows the problems as the Problems section does: by file, errors first, without Acknowledge", async () => {
+    const unknown: ValidationIssue = {
+      code: "invalid_digitization",
+      severity: "error",
+      message: "The project has no calibration.",
+      source: { file: "Example_Fig1.wpd.json", path: [] },
+    };
+    await mountSection(detail({ problems: [mismatch, unknown], counts: { errors: 1, warnings: 1 } }));
+    const problems = panel().get(".source-problems");
+    expect(problems.findAll(".problem-file").map((heading) => heading.text())).toEqual([
+      "Example_Fig1.wpd.json",
+      "timecourses_Fig1.tsv",
+    ]);
+    expect(problems.findAll(".problem-severity").map((chip) => chip.text())).toEqual(["Error", "Warning"]);
+    expect(problems.get(".problem-location").text()).toBe("line 3 · mean · sheet cell timecourses_Fig1!F3");
+    expect(problems.findAll("button").filter((control) => control.text() === "Acknowledge")).toHaveLength(0);
+  });
+
   it("lists nothing for a source without problems", async () => {
     await mountSection(detail({ problems: [other], counts: { errors: 0, warnings: 1 } }));
     expect(panel().find(".source-problems").exists()).toBe(false);

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed, ref, useId } from "vue";
 import { VBtn, VCard, VChip, VMenu, VProgressLinear, VSelect, VTooltip } from "vuetify/components";
-import { isNoUser, isRevisionConflict, isValidationError } from "../api/client";
+import { isRevisionConflict, isValidationError } from "../api/client";
 import type { ReviewStatus, StudyDetail } from "../api/types";
+import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
 import {
   activityLabel,
@@ -14,8 +15,8 @@ import {
   SYNC_LABELS,
   SYNC_TONES,
   uploadBlocker,
+  webUrl,
 } from "../overview";
-import { useDialogStore } from "../stores/dialogs";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import {
@@ -34,6 +35,7 @@ import {
 import ActionFailureAlert from "./ActionFailureAlert.vue";
 import AddTableDialog from "./AddTableDialog.vue";
 import UploadDialog from "./UploadDialog.vue";
+import UserHint from "./UserHint.vue";
 
 const props = defineProps<{
   detail: StudyDetail;
@@ -43,18 +45,14 @@ const props = defineProps<{
 
 const study = useStudyStore();
 const overview = useOverviewStore();
-const dialogs = useDialogStore();
 const reasonId = useId();
 
 type Action = "status" | "tables" | "validate" | "folder" | "pdf" | "copy";
 
-/** The running action. One action runs at a time, so that feedback and revisions never mix. */
-const busy = ref<Action | null>(null);
-const working = computed(() => busy.value !== null);
-/** The failure of the last action; it stays until it is dismissed or the next action starts. */
-const failure = ref<ActionFailure | null>(null);
 /** The notice of the last action that succeeded; it disappears after a few seconds. */
 const { notice, announce } = useNotice();
+/** The running action: one at a time, so that feedback and revisions never mix. */
+const { busy, working, failure, userText, run } = useAction<Action>(announce);
 const menu = ref(false);
 const addTable = ref(false);
 const upload = ref(false);
@@ -78,6 +76,7 @@ const pmid = computed(() => {
   return props.detail.metadata.value?.reference?.pmid ?? fromReference ?? null;
 });
 const problems = computed(() => problemLabels(props.detail));
+const lastUploadUrl = computed(() => webUrl(props.detail.last_upload?.url));
 const activity = computed(() => activityLabel(props.detail));
 const pdf = computed(() => `${name.value}.pdf`);
 const hasPdf = computed(() => props.detail.files.includes(pdf.value));
@@ -111,26 +110,6 @@ const uploadReason = computed(() => {
   return uploadBlocker(snapshot);
 });
 const canUpload = computed(() => row.value !== null && uploadReason.value === null && !props.stale);
-
-/** Run an action unless one runs already; a write that needs a user opens the settings. */
-async function run(
-  action: Action,
-  work: () => Promise<string | void>,
-  explain: (caught: unknown) => ActionFailure = (caught) => actionFailure(messageOf(caught)),
-): Promise<void> {
-  if (busy.value !== null) return;
-  busy.value = action;
-  failure.value = null;
-  announce("");
-  try {
-    announce((await work()) ?? "");
-  } catch (caught) {
-    if (isNoUser(caught)) dialogs.openSettings();
-    failure.value = explain(caught);
-  } finally {
-    busy.value = null;
-  }
-}
 
 /** Why the status was not set: approval explains its rule and lists the errors that block it. */
 function statusFailure(caught: unknown): ActionFailure {
@@ -407,7 +386,7 @@ function added(table: string): void {
       </li>
       <li v-if="detail.last_upload" class="fact fact-upload">
         <span class="fact-name">Last upload</span>
-        <a v-if="detail.last_upload.url" :href="detail.last_upload.url" target="_blank" rel="noopener noreferrer">
+        <a v-if="lastUploadUrl" :href="lastUploadUrl" target="_blank" rel="noopener noreferrer">
           {{ formatTime(detail.last_upload.at) }}
         </a>
         <span v-else>{{ formatTime(detail.last_upload.at) }}</span>
@@ -421,6 +400,7 @@ function added(table: string): void {
       class="study-alert"
       @close="failure = null"
     />
+    <UserHint v-else-if="userText" :text="userText" />
     <!-- A live region stays in the page while it is empty, so that screen readers announce its text. -->
     <span role="status" aria-live="polite" class="study-notice">{{ notice }}</span>
 

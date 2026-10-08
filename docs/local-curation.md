@@ -40,7 +40,7 @@ pkdb curate /path/to/pkdb_data
 
 ### User and API key
 
-The app writes `study.json`, `review.json` and the tables as a PK-DB user, as `pkdb study` and `pkdb review` do. Set your user with `--user`, with `PKDB_USER`, or in **Settings**. The header shows the user. Without a user, the header says why writes are refused and offers **Set user**.
+The app writes `study.json`, `review.json` and the tables as a PK-DB user, as `pkdb study` and `pkdb review` do. Set your user with `--user`, with `PKDB_USER`, or in **Settings**. The header shows the user. Without a user, the header says why writes are refused and offers **Set user**. A write that is refused for a missing user shows **Open settings** next to the message.
 
 Uploads need your personal API key (see [Accounts and API keys](authentication.md)). Set `PKDB_API_KEY` before you start the app, or enter the key in **Settings**. The key stays in the memory of the local process: it is never saved and never sent to the browser. Once the server confirmed the key, the app writes as the account of the key. When the key belongs to another account than your user, writes are refused until you correct the user or the key.
 
@@ -143,7 +143,7 @@ The Sources section has a tab for each source of the study: each paper table (`T
 - A figure with a WebPlotDigitizer project `<name>_<source>.wpd.json` shows the digitization on the image: dots for the digitized points, crosses for the mapped rows and lines for their error bars. Hover a point to see its file, TSV line, series and values, and click a cross to show its row in the Tables section. **Data of the plot** lists every point in a table. The series without a dataset in the project are plotted below the image.
 - A figure without a project shows its image and a plot of the mapped rows.
 
-The mapped rows of a source are the rows of its tables `outputs_<source>.tsv`, `timecourses_<source>.tsv` and `scatters_<source>.tsv`, and the rows of `subjects.tsv`, `interventions.tsv` and `characteristica.tsv` whose `source` names it. They are grouped by table, and each line number links to the row in the Tables section. A missing image or raw extraction shows the name of the file to add. The problems of the files of a source are listed at the end.
+The mapped rows of a source are the rows of its tables `outputs_<source>.tsv`, `timecourses_<source>.tsv` and `scatters_<source>.tsv`, and the rows of `subjects.tsv`, `interventions.tsv` and `characteristica.tsv` whose `source` names it. They are grouped by table, and each line number links to the row in the Tables section. A missing image or raw extraction shows the name of the file to add. The problems of the files of a source are listed at the end, by file, as in the Problems section.
 
 ### Tables
 

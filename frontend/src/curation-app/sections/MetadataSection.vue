@@ -44,8 +44,6 @@ import {
   PROVENANCE_LABELS,
   readStudyJson,
   startForm,
-  TABLE_KIND_LABELS,
-  TABLE_KINDS,
   toForm,
   withKind,
   type FieldMark,
@@ -56,6 +54,7 @@ import { issueUrl, plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
 import { knownProfiles, messageOf, NOTICE_MS, releaseLabel, userHint } from "../study";
+import { TABLE_KIND_LABELS, TABLE_KINDS } from "../tableKinds";
 
 /**
  * The form of study.json. Saves are explicit and go over the revision that the form was read

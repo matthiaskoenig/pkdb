@@ -19,24 +19,7 @@ import {
   type TableKind,
   type ValidationIssue,
 } from "./api/types";
-
-export const TABLE_KINDS: readonly TableKind[] = [
-  "subjects",
-  "interventions",
-  "characteristica",
-  "outputs",
-  "timecourses",
-  "scatters",
-];
-
-export const TABLE_KIND_LABELS: Record<TableKind, string> = {
-  subjects: "Subjects",
-  interventions: "Interventions",
-  characteristica: "Characteristica",
-  outputs: "Outputs",
-  timecourses: "Timecourses",
-  scatters: "Scatters",
-};
+import { TABLE_KINDS } from "./tableKinds";
 
 export type ProvenanceKind = Provenance["kind"];
 

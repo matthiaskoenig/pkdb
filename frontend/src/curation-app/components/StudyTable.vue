@@ -15,7 +15,9 @@ import {
   SYNC_TONES,
   type SortKey,
   type StudySort,
+  webUrl,
 } from "../overview";
+import { findProfile } from "../study";
 
 /** The circles of the curators of a row: avatars, or avatars and a count of the others. */
 const CURATOR_SLOTS = 3;
@@ -110,7 +112,7 @@ interface Curator {
 }
 
 function curator(user: string): Curator {
-  const profile = props.profiles.get(user.toLowerCase());
+  const profile = findProfile(props.profiles, user);
   const name = profile?.display_name ?? user;
   const words = name.split(/\s+/).filter(Boolean);
   const initials = (words.length > 1 ? `${words[0]![0]}${words.at(-1)![0]}` : name.slice(0, 1)).toUpperCase();
@@ -141,6 +143,7 @@ const items = computed(() =>
       problems: problemLabels(row),
       activity: activityLabel(row),
       issue: number !== null && url !== null ? { number, url } : null,
+      upload: webUrl(row.last_upload?.url),
     };
   }),
 );
@@ -179,7 +182,7 @@ const items = computed(() =>
     </thead>
     <tbody>
       <tr
-        v-for="{ row, curators, others, hidden, problems, activity, issue } in items"
+        v-for="{ row, curators, others, hidden, problems, activity, issue, upload } in items"
         :key="row.path"
         :data-study="row.duplicate ? undefined : row.id"
         :class="{ 'study-row--link': !row.duplicate, 'study-row--selected': isSelected(row) }"
@@ -309,8 +312,8 @@ const items = computed(() =>
         <td class="cell-mode">{{ MODE_LABELS[row.mode] }}</td>
         <td class="cell-upload">
           <a
-            v-if="row.last_upload?.url"
-            :href="row.last_upload.url"
+            v-if="upload && row.last_upload"
+            :href="upload"
             target="_blank"
             rel="noopener noreferrer"
             :title="`Open ${row.id} in PK-DB`"

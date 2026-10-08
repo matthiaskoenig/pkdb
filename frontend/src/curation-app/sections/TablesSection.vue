@@ -2,7 +2,6 @@
 import { computed, ref, useId } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { VAlert, VBtn, VProgressLinear, VSwitch, VTab, VTabs } from "vuetify/components";
-import { isNoUser } from "../api/client";
 import type { TableResponse } from "../api/types";
 import ActionFailureAlert from "../components/ActionFailureAlert.vue";
 import AddTableDialog from "../components/AddTableDialog.vue";
@@ -10,6 +9,7 @@ import ConflictPanel from "../components/ConflictPanel.vue";
 import TableGrid from "../components/TableGrid.vue";
 import UserHint from "../components/UserHint.vue";
 import { useLoaded } from "../composables/useLoaded";
+import { useAction } from "../composables/useAction";
 import { useNotice } from "../composables/useNotice";
 import { sectionHeading } from "../composables/useReturnFocus";
 import { columnCount, issueCells, itemsWithoutRows, keptColumns, targetLines, visibleColumns } from "../grid";
@@ -17,13 +17,9 @@ import { plural } from "../overview";
 import { useStudyStore } from "../stores/study";
 import { syncAlert, syncOutcome, syncSummary, tableOrder, withoutConflicts, type Side } from "../tables";
 import {
-  actionFailure,
   isRawTable,
-  messageOf,
   tableFiles,
   tablesOutcome,
-  userHint,
-  type ActionFailure,
 } from "../study";
 
 /**
@@ -59,30 +55,8 @@ const conflicted = computed(() => detail.value?.sync.status === "conflict");
 
 type Action = "open" | "sync" | Side;
 
-/** The running action. One action runs at a time, so that feedback and revisions never mix. */
-const busy = ref<Action | null>(null);
-const working = computed(() => busy.value !== null);
-/** The failure of the last action; it stays until it is dismissed or the next action starts. */
-const failure = ref<ActionFailure | null>(null);
-/** What to do when the last action needed a user. */
-const userText = ref<string | null>(null);
+const { busy, working, failure, userText, run } = useAction<Action>(announce);
 const addTable = ref(false);
-
-async function run(action: Action, work: () => Promise<string>): Promise<void> {
-  if (working.value) return;
-  busy.value = action;
-  failure.value = null;
-  userText.value = null;
-  announce("");
-  try {
-    announce(await work());
-  } catch (caught) {
-    if (isNoUser(caught)) userText.value = userHint(caught);
-    else failure.value = actionFailure(messageOf(caught));
-  } finally {
-    busy.value = null;
-  }
-}
 
 /** Open workbook of the conflict panel, which explains the conflicts. */
 function openWorkbook(): Promise<void> {

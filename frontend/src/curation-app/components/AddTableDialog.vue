@@ -17,9 +17,9 @@ import {
 } from "vuetify/components";
 import { isNoUser } from "../api/client";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
-import { useDialogStore } from "../stores/dialogs";
 import { useStudyStore } from "../stores/study";
-import { NEW_TABLE_KINDS, newTable, type NewTableKind } from "../study";
+import { messageOf, NEW_TABLE_KINDS, newTable, userHint, type NewTableKind } from "../study";
+import UserHint from "./UserHint.vue";
 
 const open = defineModel<boolean>({ default: false });
 const props = defineProps<{
@@ -29,7 +29,6 @@ const props = defineProps<{
 const emit = defineEmits<{ added: [table: string] }>();
 
 const study = useStudyStore();
-const dialogs = useDialogStore();
 const titleId = useId();
 useReturnFocus(open, () => props.fallbackFocus?.());
 const kind = ref<NewTableKind>("outputs");
@@ -37,6 +36,8 @@ const source = ref("");
 const busy = ref(false);
 /** Why the table was not added, with the issues of the API. */
 const failure = ref<{ text: string; issues: string[] } | null>(null);
+/** What to do when the write was refused without a user. */
+const userText = ref<string | null>(null);
 
 const table = computed(() => (study.detail ? newTable(study.detail, kind.value, source.value) : null));
 const hint = computed(() =>
@@ -50,11 +51,13 @@ watch(open, (value) => {
   kind.value = "outputs";
   source.value = "";
   failure.value = null;
+  userText.value = null;
 });
 
 // A failure belongs to the table that it was about.
 watch([kind, source], () => {
   failure.value = null;
+  userText.value = null;
 });
 
 async function add(): Promise<void> {
@@ -62,6 +65,7 @@ async function add(): Promise<void> {
   if (!chosen || chosen.problem || busy.value) return;
   busy.value = true;
   failure.value = null;
+  userText.value = null;
   try {
     const result = await study.tablesAction("add", chosen.payload);
     if (result.ok) {
@@ -74,8 +78,8 @@ async function add(): Promise<void> {
       };
     }
   } catch (caught) {
-    if (isNoUser(caught)) dialogs.openSettings();
-    failure.value = { text: caught instanceof Error ? caught.message : String(caught), issues: [] };
+    if (isNoUser(caught)) userText.value = userHint(caught);
+    else failure.value = { text: messageOf(caught), issues: [] };
   } finally {
     busy.value = false;
   }
@@ -136,6 +140,7 @@ async function add(): Promise<void> {
             <li v-for="(message, index) in failure.issues" :key="index">{{ message }}</li>
           </ul>
         </VAlert>
+        <UserHint v-else-if="userText" :text="userText" />
       </VCardText>
       <VCardActions class="dialog-actions">
         <VSpacer />

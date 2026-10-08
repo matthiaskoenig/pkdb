@@ -16,6 +16,7 @@ import type { StudyRow } from "../api/types";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { plural } from "../overview";
 import { useOverviewStore } from "../stores/overview";
+import { messageOf } from "../study";
 
 const open = defineModel<boolean>({ default: false });
 const props = defineProps<{
@@ -51,7 +52,7 @@ async function confirm(): Promise<void> {
     open.value = false;
     emit("done", ids.length);
   } catch (caught) {
-    error.value = caught instanceof Error ? caught.message : String(caught);
+    error.value = messageOf(caught);
   } finally {
     busy.value = false;
   }

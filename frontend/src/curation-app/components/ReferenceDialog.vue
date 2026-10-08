@@ -21,6 +21,7 @@ import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus"
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
 import { useOverviewStore } from "../stores/overview";
 import { useStudyStore } from "../stores/study";
+import { messageOf } from "../study";
 
 /**
  * Corrections of `reference.json` of the open study: the title, the authors, the journal and the
@@ -107,10 +108,6 @@ const identifierText = computed(() =>
     .filter(Boolean)
     .join(" · "),
 );
-
-function messageOf(caught: unknown): string {
-  return caught instanceof Error ? caught.message : String(caught);
-}
 
 function authorName(author: ReferenceAuthor): string {
   if (author.organization) return author.organization;

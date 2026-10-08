@@ -6,32 +6,37 @@ import { acknowledgement, location, locationKey, SEVERITY_LABELS, suggestionView
 import { sectionRoute } from "../study";
 
 /**
- * One issue of the Problems section: severity, code, message, location and suggestions, with
- * Show in table and Acknowledge. A component of its own, so that a long list renders only the
- * issues whose props changed.
+ * One issue of the Problems and the Sources sections: severity, code, message, location and
+ * suggestions, with Show in table and Acknowledge. A component of its own, so that a long list
+ * renders only the issues whose props changed.
  */
-const props = defineProps<{
-  issue: ValidationIssue;
-  /** The identity of the study, for the link to the Tables section. */
-  study: string;
-  /** The start of the ids of the message and the location, unique in the page. */
-  idBase: string;
-  /** Whether the Tables section can show the cell: only tables of the study. */
-  showable: boolean;
-  /** Acknowledged in the app, and the report of the study still lists it. */
-  pending: boolean;
-  /** Whether the local server validates the study after a write, or the curator does. */
-  automatic: boolean;
-  /** Why Acknowledge cannot be used now: review.json cannot be written, or a write runs. */
-  disabled: boolean;
-  /** Whether a validation is being queued. */
-  validating: boolean;
-}>();
+const props = withDefaults(
+  defineProps<{
+    issue: ValidationIssue;
+    /** The identity of the study, for the link to the Tables section. */
+    study: string;
+    /** The start of the ids of the message and the location, unique in the page. */
+    idBase: string;
+    /** Whether the Tables section can show the cell: only tables of the study. */
+    showable: boolean;
+    /** Acknowledged in the app, and the report of the study still lists it. */
+    pending: boolean;
+    /** Whether the local server validates the study after a write, or the curator does. */
+    automatic: boolean;
+    /** Why Acknowledge cannot be used now: review.json cannot be written, or a write runs. */
+    disabled: boolean;
+    /** Whether a validation is being queued. */
+    validating: boolean;
+    /** Whether a warning offers Acknowledge; the Sources section lists the problems without it. */
+    offersAcknowledge?: boolean;
+  }>(),
+  { offersAcknowledge: true },
+);
 const emit = defineEmits<{ acknowledge: []; validate: [] }>();
 
 const where = computed(() => location(props.issue, { file: false }));
 const suggestions = computed(() => (props.issue.suggestions ?? []).map(suggestionView));
-const acknowledgeable = computed(() => acknowledgement(props.issue) !== null);
+const acknowledgeable = computed(() => props.offersAcknowledge && acknowledgement(props.issue) !== null);
 const tableRoute = computed(() => sectionRoute(props.study, "tables", tableQuery(props.issue) ?? {}));
 /** The message and the location describe the actions. */
 const describedBy = computed(() =>

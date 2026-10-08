@@ -4,6 +4,7 @@ import { VBtn, VTextarea } from "vuetify/components";
 import type { Comment, Profile } from "../api/types";
 import { GROW_ROWS, sizesFieldsByContent } from "../fieldSizing";
 import { markMessage, type FieldMark } from "../metadata";
+import { profileOf as knownProfile } from "../study";
 import DiskVersion from "./DiskVersion.vue";
 import PersonAvatar from "./PersonAvatar.vue";
 
@@ -50,9 +51,7 @@ function of(preposition: string): string {
 }
 
 function profileOf(user: string): Profile {
-  return (
-    props.profiles.get(user) ?? { username: user, display_name: user, title: null, affiliation: null, avatar_url: null }
-  );
+  return knownProfile(props.profiles, user);
 }
 
 function setDescription(index: number, value: string): void {

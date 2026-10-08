@@ -14,8 +14,9 @@ import {
 } from "vuetify/components";
 import type { StudyRow } from "../api/types";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
-import { uploadBlocker } from "../overview";
+import { uploadBlocker, webUrl } from "../overview";
 import { useOverviewStore } from "../stores/overview";
+import { messageOf } from "../study";
 
 const open = defineModel<boolean>({ default: false });
 const props = defineProps<{
@@ -47,16 +48,10 @@ const blocker = computed(() => (overview.snapshot ? uploadBlocker(overview.snaps
 /** The publication state of the study on the previous server, for an http or https server only. */
 const inspectUrl = computed(() => {
   const sid = job.value?.sid ?? props.study?.id;
-  if (!previous.value || !sid) return null;
-  let base: URL;
-  try {
-    base = new URL(previous.value);
-  } catch {
-    return null;
-  }
-  if (base.protocol !== "https:" && base.protocol !== "http:") return null;
+  const server = webUrl(previous.value);
+  if (!server || !sid) return null;
   const path = sid.split("/").map(encodeURIComponent).join("/");
-  return `${base.href.replace(/\/+$/, "")}/api/v2/studies/${path}/publication`;
+  return `${new URL(server).href.replace(/\/+$/, "")}/api/v2/studies/${path}/publication`;
 });
 
 watch(open, (value) => {
@@ -76,7 +71,7 @@ async function confirm(): Promise<void> {
     open.value = false;
     emit("done", study);
   } catch (caught) {
-    error.value = caught instanceof Error ? caught.message : String(caught);
+    error.value = messageOf(caught);
   } finally {
     busy.value = false;
   }

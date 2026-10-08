@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { MappedTable, SourceSummary, SourceView, ValidationIssue } from "../../src/curation-app/api/types";
-import { columnLetters, mappedGrid, sourceProblems } from "../../src/curation-app/sources";
+import { columnLetters } from "../../src/curation-app/columns";
+import { mappedGrid, sourceProblems } from "../../src/curation-app/sources";
 
 describe("columnLetters", () => {
   it("names columns as a spreadsheet does", () => {

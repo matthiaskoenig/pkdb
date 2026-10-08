@@ -8,6 +8,7 @@ import {
   defaultSection,
   duplicateFolders,
   duplicateHeading,
+  findProfile,
   folderPath,
   isSection,
   issueLabel,
@@ -15,6 +16,7 @@ import {
   messageOf,
   newTable,
   openItems,
+  profileMap,
   profileOf,
   provenanceLabel,
   railCounts,
@@ -265,6 +267,15 @@ describe("people", () => {
       affiliation: null,
       avatar_url: null,
     });
+  });
+
+  it("matches a user name whatever its case, as the local server does, on every page", () => {
+    // The overview keys the roster with profileMap, the study page with knownProfiles.
+    for (const profiles of [profileMap(roster()), knownProfiles(roster(), null)]) {
+      expect(findProfile(profiles, "MKoenig")?.username).toBe("mkoenig");
+      expect(profileOf(profiles, "MKOENIG").display_name).toBe("Matthias König");
+    }
+    expect(findProfile(profileMap(roster()), "agent-7")).toBeUndefined();
   });
 });
 

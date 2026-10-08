@@ -17,6 +17,7 @@ import {
 import type { Directories, FolderKind } from "../api/types";
 import { useReturnFocus, type FocusTarget } from "../composables/useReturnFocus";
 import { useOverviewStore } from "../stores/overview";
+import { messageOf } from "../study";
 import FolderPath from "./FolderPath.vue";
 import RecentWorkspaces from "./RecentWorkspaces.vue";
 
@@ -40,10 +41,6 @@ let request = 0;
 
 /** The chips of the folders that are more than a folder: a repository and a study. */
 const KIND_LABELS: Partial<Record<FolderKind, string>> = { repository: "Repository", study: "Study" };
-
-function messageOf(caught: unknown): string {
-  return caught instanceof Error ? caught.message : String(caught);
-}
 
 /** What the shown folder is: a repository, a study or a folder with subfolders. */
 const summary = computed(() => {

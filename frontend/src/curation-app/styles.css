@@ -279,6 +279,49 @@ a.brand {
   color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
 }
 
+/* The issues of a file, in the Problems and the Sources sections. */
+/* A file is a card: its name in a bar, then its issues apart by a line. */
+.problem-group {
+  overflow: hidden;
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-radius: 8px;
+  background-color: rgb(var(--v-theme-surface));
+}
+.problem-group-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 6px 12px;
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  background-color: rgba(var(--v-theme-on-surface), 0.04);
+}
+/* The counts go below a long file name, and an action stays at the end of the bar. */
+.problem-group-title {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 12px;
+  min-width: 0;
+}
+.problem-file {
+  margin: 0;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.problem-group-counts {
+  font-size: 0.8125rem;
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+}
+.problem-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
 /* The frame of a figure, a plot or the image of a source: the line and the corners of the tables
    beside them. It sits inside the box, so that frames and tables line up. */
 .figure-frame {

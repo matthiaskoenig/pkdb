@@ -4,6 +4,7 @@ import { VAlert, VBtn, VCard, VMenu } from "vuetify/components";
 import type { Snapshot } from "../api/types";
 import { splitPath } from "../paths";
 import { useOverviewStore } from "../stores/overview";
+import { messageOf } from "../study";
 import FolderPath from "./FolderPath.vue";
 import RecentWorkspaces from "./RecentWorkspaces.vue";
 
@@ -33,7 +34,7 @@ async function run(action: () => Promise<unknown>, { close }: { close: boolean }
     await action();
     if (close) open.value = false;
   } catch (caught) {
-    error.value = caught instanceof Error ? caught.message : String(caught);
+    error.value = messageOf(caught);
   } finally {
     busy.value = false;
   }

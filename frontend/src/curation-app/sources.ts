@@ -1,18 +1,10 @@
 /**
- * The parts of the Sources section: the column letters of a raw table, the mapped rows that it
- * lists and the problems of the files of a source. What a source is and which files it lacks
- * come from the library, in the summaries of the study detail.
+ * The parts of the Sources section: the mapped rows that a source lists and the problems of the
+ * files of a source. What a source is and which files it lacks come from the library, in the
+ * summaries of the study detail.
  */
 import type { MappedTable, SourceSummary, SourceView, TableResponse, ValidationIssue } from "./api/types";
 import { shownColumns } from "./review";
-
-/** The letters of a column of a spreadsheet: A for the first, AA after Z. */
-export function columnLetters(index: number): string {
-  let letters = "";
-  for (let rest = index + 1; rest > 0; rest = Math.floor((rest - 1) / 26))
-    letters = String.fromCharCode(65 + ((rest - 1) % 26)) + letters;
-  return letters;
-}
 
 /** The columns that a list of mapped rows leaves out: every row of a source has them alike. */
 const IMPLIED_COLUMNS = new Set(["study", "source"]);

@@ -9,6 +9,7 @@ import {
   drawsOnImage,
   legendEntries,
   overlayTraces,
+  pageFont,
   plotTraces,
   rowAt,
   type EventPoint,
@@ -45,8 +46,10 @@ const markScale = computed(() => {
   return width && hostWidth.value ? Math.round((hostWidth.value / width) * 20) / 20 : 1;
 });
 const dark = computed(() => theme.current.value.dark);
+/** The font of the page, which the plot uses too. */
+const font = pageFont();
 const plot = computed(() => {
-  const colors = { dark: dark.value, colors: plotColors(theme.current.value.colors) };
+  const colors = { dark: dark.value, colors: plotColors(theme.current.value.colors), font };
   const highlight = props.highlight ?? null;
   return shown.value === "overlay"
     ? overlayTraces(props.view, highlight, colors, markScale.value)

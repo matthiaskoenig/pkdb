@@ -3,7 +3,7 @@
  * writes of the app), the review items that their messages name, and saving a report.
  */
 import type { Job, JobAction, JobStatus, ReviewItem } from "./api/types";
-import type { Tone } from "./overview";
+import { webUrl, type Tone } from "./overview";
 import { KIND_LABELS } from "./review";
 
 export const ACTION_LABELS: Record<JobAction, string> = {
@@ -143,13 +143,7 @@ export function reportFileName(id: string): string {
 
 /** The page of the uploaded study on the server, when it is a web page. */
 export function uploadUrl(job: Job): string | null {
-  const url = job.upload?.url;
-  if (!url) return null;
-  try {
-    return ["https:", "http:"].includes(new URL(url).protocol) ? url : null;
-  } catch {
-    return null;
-  }
+  return webUrl(job.upload?.url);
 }
 
 /**

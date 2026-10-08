@@ -4,7 +4,7 @@
  */
 import type { ReviewItem, TableResponse, ValidationIssue } from "./api/types";
 import { matchingRows } from "./review";
-import { columnLetters } from "./sources";
+import { columnLetters } from "./columns";
 
 // Columns
 

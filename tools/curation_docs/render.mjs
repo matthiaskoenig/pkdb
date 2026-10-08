@@ -8,6 +8,8 @@ import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "../../frontend/node_modules/playwright/index.mjs";
+// Node strips the types of this module, which imports nothing.
+import { columnLetters } from "../../frontend/src/curation-app/columns.ts";
 
 const repository = fileURLToPath(new URL("../../", import.meta.url));
 const launchUrl = process.env.PKDB_CURATION_URL;
@@ -260,15 +262,6 @@ async function setAutomaticActions(page, paused) {
   await page.keyboard.press("Escape");
 }
 
-/** The spreadsheet name of the column at `index`: A for 0, Z for 25, AA for 26. */
-function columnName(index) {
-  let name = "";
-  for (let number = index + 1; number > 0; number = Math.floor((number - 1) / 26)) {
-    name = String.fromCharCode("A".charCodeAt(0) + ((number - 1) % 26)) + name;
-  }
-  return name;
-}
-
 /** Change the mean of a line of the table differently in the workbook and in the TSV file. */
 async function conflict(folder) {
   const path = join(folder, TABLE);
@@ -278,7 +271,7 @@ async function conflict(folder) {
     .map((text) => text.split("\t"));
   const column = rows[0].indexOf("mean");
   // The sheet has the rows and columns of the table: the header is row 1, line 7 is row 7.
-  const cell = `${columnName(column)}${CONFLICT_LINE}`;
+  const cell = `${columnLetters(column)}${CONFLICT_LINE}`;
   // openpyxl saves the workbook as a spreadsheet program does.
   const workbook = join(folder, `${STUDY.split("/")[1]}.xlsx`);
   python("tools/curation_testing/edit_workbook.py", workbook, TABLE.replace(/\.tsv$/, ""), cell, "1.08");

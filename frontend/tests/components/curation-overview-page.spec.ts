@@ -8,6 +8,7 @@ import type { Router } from "vue-router";
 import { makeRouter } from "../../src/curation-app/router";
 import { useDialogStore } from "../../src/curation-app/stores/dialogs";
 import { useOverviewStore } from "../../src/curation-app/stores/overview";
+import { NOTICE_MS } from "../../src/curation-app/study";
 import OverviewPage from "../../src/curation-app/views/OverviewPage.vue";
 import { snapshot, studyRow } from "../unit/curation-fixtures";
 import { button, click, field, focusDialog, page, serve, setViewport } from "./curation-dom";
@@ -188,6 +189,14 @@ describe("OverviewPage", () => {
     expect(other.get(".cell-problems").text()).toBe("1 warning");
   });
 
+  it("links the last upload only to a web page", async () => {
+    const last_upload = { ...harder.last_upload!, url: "javascript:alert(1)" };
+    await mountPage(snapshot({ studies: [{ ...harder, last_upload }] }));
+    const cell = rowOf("caffeine/Harder1988").get(".cell-upload");
+    expect(cell.find("a").exists()).toBe(false);
+    expect(cell.text()).toMatch(/^2026-10-01 \d\d:\d\d$/);
+  });
+
   it("names every sync status", async () => {
     const labels: [SyncStatus, string][] = [
       ["in_sync", "In sync"],
@@ -313,6 +322,22 @@ describe("OverviewPage", () => {
     expect(page().get('[role="status"]').text()).toBe("Validation queued for 1 study.");
     await check("Select caffeine/Harder1988");
     expect(page().get('[role="status"]').text()).toBe("");
+  });
+
+  it("clears the notice after a few seconds, as the notices of the study page", async () => {
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      vi.spyOn(useOverviewStore(), "enqueue").mockResolvedValue();
+      await mountPage(snapshot({ studies: [example, harder] }));
+      await check("Select caffeine/Example");
+      await click("Validate");
+      expect(page().get('[role="status"]').text()).toBe("Validation queued for 1 study.");
+      vi.advanceTimersByTime(NOTICE_MS);
+      await flushPromises();
+      expect(page().get('[role="status"]').text()).toBe("");
+    } finally {
+      vi.useRealTimers();
+    }
   });
 
   it("drops the notice of a request when the selection changed while it ran", async () => {

@@ -6,18 +6,18 @@ import type { ConflictData, SyncState, TableResponse, TableRow, TablesResult } f
 import { columnName } from "./grid";
 import { plural, SYNC_LABELS, SYNC_TONES, type Tone } from "./overview";
 import { actionFailure, isRawTable, type ActionFailure } from "./study";
+import { DATA_TABLE_KINDS, SOURCE_TABLE_KINDS } from "./tableKinds";
 
 // Tables
 
-const DATA_TABLES = ["subjects", "interventions", "characteristica"];
-const SOURCE_TABLES = ["outputs", "timecourses", "scatters"];
-
 /** The rank of a table file in the workbook: data tables, per-source tables, then raw tables. */
 function rank(file: string): number {
-  const data = DATA_TABLES.indexOf(file.replace(/\.tsv$/, ""));
+  const name = file.replace(/\.tsv$/, "");
+  const data = DATA_TABLE_KINDS.findIndex((kind) => kind === name);
   if (data >= 0) return data;
-  const source = SOURCE_TABLES.indexOf(file.slice(0, file.indexOf("_")));
-  return source >= 0 ? DATA_TABLES.length + source : DATA_TABLES.length + SOURCE_TABLES.length;
+  const prefix = file.slice(0, file.indexOf("_"));
+  const source = SOURCE_TABLE_KINDS.findIndex((kind) => kind === prefix);
+  return DATA_TABLE_KINDS.length + (source >= 0 ? source : SOURCE_TABLE_KINDS.length);
 }
 
 /** The table files (`tableFiles`) in the order of the sheets of the workbook. */

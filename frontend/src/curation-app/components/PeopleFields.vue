@@ -34,10 +34,17 @@ function profileOf(user: string): Profile {
   return knownProfile(props.profiles, user);
 }
 
-/** The roster, and the people of the form who are not in it, so that the fields can show them. */
+/**
+ * The roster, and the people of the form who are not in it, so that the fields can show them. A
+ * user name of the form keeps its spelling, also where the roster spells it with other case.
+ */
 const people = computed<Person[]>(() => {
-  const users = [...props.profiles.keys(), creator.value, ...curators.value.map((row) => row.user)];
-  return [...new Set(users.filter(Boolean))].map((user) => {
+  const chosen = [creator.value, ...curators.value.map((row) => row.user)].filter(Boolean);
+  const spelling = new Map(chosen.map((user) => [user.toLowerCase(), user]));
+  const users = [...[...props.profiles.values()].map((profile) => profile.username), ...chosen].map(
+    (user) => spelling.get(user.toLowerCase()) ?? user,
+  );
+  return [...new Set(users)].map((user) => {
     const profile = profileOf(user);
     return { title: profile.display_name, value: user, profile };
   });

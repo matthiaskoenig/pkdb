@@ -108,6 +108,9 @@ const harder: StudyDetail = studyDetail({
   ],
 });
 
+/** The last upload of a study, without its URL. */
+const UPLOAD = { persistence: "replaced" as const, at: "2026-10-01T12:00:00Z", endpoint: "https://beta.pk-db.com" };
+
 const harderRow = studyRow({
   id: "caffeine/Harder1988",
   name: "Harder1988",
@@ -305,6 +308,22 @@ describe("StudyPage", () => {
     expect(facts.findAll(".fact-problems .v-chip").map((chip) => chip.text())).toEqual(["2 errors", "1 warning"]);
   });
 
+  it("links the last upload to its page on PK-DB", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      [`GET ${HARDER}`]: { ...harder, last_upload: { ...UPLOAD, url: "https://beta.pk-db.com/data/Harder1988" } },
+    });
+    expect(page().get(".fact-upload a").attributes("href")).toBe("https://beta.pk-db.com/data/Harder1988");
+  });
+
+  it("links the last upload only to a web page", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      [`GET ${HARDER}`]: { ...harder, last_upload: { ...UPLOAD, url: "javascript:alert(1)" } },
+    });
+    const fact = page().get(".fact-upload");
+    expect(fact.find("a").exists()).toBe(false);
+    expect(fact.get("span:not(.fact-name)").text()).toMatch(/^2026-10-01 \d\d:\d\d$/);
+  });
+
   it("names a study before its first check and without release, issue and AI", async () => {
     const fresh = studyDetail({
       status: "discovered",
@@ -421,15 +440,18 @@ describe("StudyPage", () => {
     );
   });
 
-  it("opens the settings when a write needs a user", async () => {
+  it("asks to set the user when a write needs one, as every section does", async () => {
     const wrapper = await mountPage("/studies/caffeine/Harder1988/review", {
       "POST /local/studies/review": () =>
         json({ error: "no_user", message: "Set your PK-DB username in the settings." }, { status: 403 }),
     });
     await select(wrapper, "Review status").setValue("draft");
     await flushPromises();
+    // The settings do not open by themselves.
+    expect(useDialogStore().settings).toBe(false);
+    expect(page().get(".study-header .user-hint").text()).toContain("Set your PK-DB user in Connection settings.");
+    await click("Open settings");
     expect(useDialogStore().settings).toBe(true);
-    expect(alertText()).toBe("Set your PK-DB username in the settings.");
   });
 
   it("opens the workbook and shows the issues of the sync", async () => {
@@ -627,6 +649,23 @@ describe("StudyPage", () => {
     await click("Add");
     expect(posted("/local/studies/tables")).toEqual([{ study: "caffeine/Harder1988", action: "add", raw: "Tab4" }]);
     expect(dialog().get(".v-alert").text()).toContain("Close the workbook first");
+  });
+
+  it("asks in Add table to set the user when the write needs one", async () => {
+    await mountPage("/studies/caffeine/Harder1988/review", {
+      "POST /local/studies/tables": () =>
+        json({ error: "no_user", message: "Set a user with --user or in the settings." }, { status: 403 }),
+    });
+    await click("More actions");
+    await click("Add table");
+    await field("Source").setValue("Tab3");
+    await flushPromises();
+    await click("Add");
+    // No second dialog opens on top of Add table by itself.
+    expect(useDialogStore().settings).toBe(false);
+    expect(dialog().get(".user-hint").text()).toContain("Set your PK-DB user in Connection settings.");
+    await click("Open settings");
+    expect(useDialogStore().settings).toBe(true);
   });
 
   it("refuses a source that is not a paper table or figure, and an existing table", async () => {
