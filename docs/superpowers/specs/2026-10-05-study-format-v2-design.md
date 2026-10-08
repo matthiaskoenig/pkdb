@@ -242,7 +242,7 @@ Row order (natural sort, so `Tab2` sorts before `Tab10`; remaining ties are brok
 - `status` is `draft`, `in_review` or `approved`. `reviewers` lists the reviewing users.
 - `kind` is `question` (unclear, needs a person), `uncertainty` (low-confidence extraction or digitization) or `issue` (known problem, such as an inconsistency in the paper).
 - `state` is `open`, `resolved` or `dismissed`. `resolved_by` and `resolved` are set when the state leaves `open`.
-- `target` is optional (missing means the whole study). `file` names a table, `rows` is a column-to-value filter that may match several rows (for example a series by `label`), and `column` names a column. A filter survives re-sorting and edits. A `key` instead of `rows` and `column` names a part of a file without rows, such as a dataset of a WebPlotDigitizer project, so that an acknowledgement covers exactly one warning.
+- `target` is optional (missing means the whole study). `file` names a file of the study (a table for `rows` and `column`), `rows` is a column-to-value filter that may match several rows (for example a series by `label`), and `column` names a column. A filter survives re-sorting and edits. A `key` instead of `rows` and `column` names a part of a file without rows, such as a dataset of a WebPlotDigitizer project, so that an acknowledgement covers exactly one warning.
 - `author` is the responsible person. `agent` is set when an AI wrote the item.
 - `acknowledges` names a validation warning code. The validator then no longer reports that warning for the target, unless the item is `dismissed`.
 - `id` is a ULID. Items are sorted by `id`.
