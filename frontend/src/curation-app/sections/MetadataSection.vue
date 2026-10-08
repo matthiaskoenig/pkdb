@@ -1090,8 +1090,9 @@ onBeforeUnmount(() => {
 }
 /* The bar stays in view at the bottom of the window while the form scrolls. */
 .metadata-savebar {
+  --savebar-gap: 12px;
   position: sticky;
-  bottom: 12px;
+  bottom: var(--savebar-gap);
   z-index: 2;
   display: flex;
   flex-direction: column;
@@ -1100,7 +1101,18 @@ onBeforeUnmount(() => {
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
   border-radius: 12px;
   background: rgb(var(--v-theme-surface));
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  /* Above the bar only, where the form scrolls under it; below it is the page. */
+  box-shadow: 0 -6px 16px -6px rgba(0, 0, 0, 0.16);
+}
+/* The page fills the gap below the bar, so that the form scrolls away under the bar rather than
+   showing a cut line below it. */
+.metadata-savebar::after {
+  content: "";
+  position: absolute;
+  inset-inline: -1px;
+  top: calc(100% + 1px);
+  height: var(--savebar-gap);
+  background: rgb(var(--v-theme-background));
 }
 .savebar-row {
   display: flex;
@@ -1150,7 +1162,7 @@ onBeforeUnmount(() => {
     grid-column: 2;
   }
   .metadata-savebar {
-    bottom: 8px;
+    --savebar-gap: 8px;
     padding: 8px 8px 8px 12px;
   }
 }

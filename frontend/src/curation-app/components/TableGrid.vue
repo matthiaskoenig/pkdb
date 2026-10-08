@@ -88,6 +88,16 @@ const viewRows = ref(Math.ceil(VIEW_HEIGHT / ROW_HEIGHT));
 const start = ref(0);
 /** Whether rows scroll below the header, which then needs its background. */
 const scrolled = ref(false);
+/**
+ * Whether more columns follow at the end of the region, which the rows then fade out to, and the
+ * sizes of its scroll bars, which the fade leaves free.
+ */
+const more = ref(false);
+const scrollbars = ref({ x: 0, y: 0 });
+const fade = computed(() => ({
+  "--grid-scrollbar-x": `${scrollbars.value.x}px`,
+  "--grid-scrollbar-y": `${scrollbars.value.y}px`,
+}));
 
 function windowEnd(first: number): number {
   return Math.min(props.table.rows.length, first + viewRows.value + 2 * OVERSCAN + STEP);
@@ -120,6 +130,14 @@ function update(): void {
   const element = region.value;
   if (!element) return;
   scrolled.value = element.scrollTop > 0;
+  more.value = element.scrollLeft + element.clientWidth < element.scrollWidth - 1;
+  if (more.value) {
+    const { borderTopWidth, borderBottomWidth, borderLeftWidth, borderRightWidth } = getComputedStyle(element);
+    scrollbars.value = {
+      x: element.offsetHeight - element.clientHeight - parseFloat(borderTopWidth) - parseFloat(borderBottomWidth),
+      y: element.offsetWidth - element.clientWidth - parseFloat(borderLeftWidth) - parseFloat(borderRightWidth),
+    };
+  }
   if (!virtual.value) return;
   const next = windowStart(element.scrollTop);
   if (next === start.value) return;
@@ -147,8 +165,9 @@ onMounted(() => {
 });
 onBeforeUnmount(() => observer?.disconnect());
 // New rows of the same table keep the scroll position, which the browser shortens to the rows.
+// Other columns, such as hidden empty ones, change the width of the rows.
 watch(
-  () => props.table,
+  [() => props.table, headers],
   () => void nextTick(measure),
 );
 
@@ -274,7 +293,7 @@ watch(
 </script>
 
 <template>
-  <div class="table-grid">
+  <div class="table-grid" :class="{ 'table-grid--more': more }" :style="fade">
     <!-- The rows scroll inside their region, which takes the focus so that a keyboard can scroll it. -->
     <div
       ref="region"
@@ -365,6 +384,23 @@ watch(
 }
 .v-theme--dark .table-grid {
   --grid-amber: #ffb547;
+}
+/* More columns follow: the rows fade out at the end of the region, above the cells and inside its
+   border and scroll bars, so that a cut word shows that the rows scroll. */
+.table-grid--more {
+  position: relative;
+}
+.table-grid--more::after {
+  content: "";
+  position: absolute;
+  inset-block: 1px calc(1px + var(--grid-scrollbar-x, 0px));
+  inset-inline-end: calc(1px + var(--grid-scrollbar-y, 0px));
+  z-index: 2;
+  width: 40px;
+  border-start-end-radius: 7px;
+  border-end-end-radius: 7px;
+  background: linear-gradient(to left, rgb(var(--v-theme-surface)), rgba(var(--v-theme-surface), 0));
+  pointer-events: none;
 }
 /* Rows that open review items target: a tint that lets the shadows of the sides show through,
    and an opaque tint on the line column, which covers the rows that scroll below it. The line

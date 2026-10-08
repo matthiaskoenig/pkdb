@@ -240,6 +240,27 @@ describe("TableGrid with many rows", () => {
     expect(document.activeElement).toBe(line.element);
   });
 
+  it("fades the rows out at the end while more columns follow, inside the scroll bars", async () => {
+    const wrapper = mount(TableGrid, { props: { table: small }, attachTo: document.body });
+    const element = region(wrapper);
+    // jsdom has no layout: a region of 300 of 900 pixels, with scroll bars of 15 pixels.
+    const sizes = { clientWidth: 300, scrollWidth: 900, offsetWidth: 317, clientHeight: 200, offsetHeight: 217 };
+    for (const [name, value] of Object.entries(sizes)) Object.defineProperty(element, name, { configurable: true, value });
+    element.style.border = "1px solid";
+    element.dispatchEvent(new Event("scroll"));
+    await flushPromises();
+    const grid = wrapper.get(".table-grid");
+    expect(grid.classes()).toContain("table-grid--more");
+    expect(grid.attributes("style")).toContain("--grid-scrollbar-x: 15px");
+    expect(grid.attributes("style")).toContain("--grid-scrollbar-y: 15px");
+
+    // Scrolled to the end, the last column shows whole.
+    element.scrollLeft = 600;
+    element.dispatchEvent(new Event("scroll"));
+    await flushPromises();
+    expect(grid.classes()).not.toContain("table-grid--more");
+  });
+
   it("keeps the focus where it is when the same focus comes again, as after a reload", async () => {
     const wrapper = mount(TableGrid, { props: { table: small, focus: { line: 3 } }, attachTo: document.body });
     await flushPromises();

@@ -30,6 +30,8 @@ const HEIGHT = 900;
 /** The heights that show the review item with all its target rows, and the figure with its legend, below the study header. */
 const REVIEW_HEIGHT = 1010;
 const SOURCES_HEIGHT = 1100;
+/** The folder of the copy of the fixture workspace, whose name the header of every image shows. */
+const WORKSPACE = "demo_studies";
 /** The study of the fixture that the screenshots show, and its table of the digitized figure. */
 const STUDY = "caffeine/Demo2020";
 const TABLE = "timecourses_Fig1.tsv";
@@ -71,6 +73,12 @@ async function render() {
 
     await page.goto(launchUrl);
     await page.getByRole("link", { name: "PK-DB Local curation" }).waitFor();
+    const workspace = (await page.getByRole("button", { name: /^Workspace: / }).getAttribute("aria-label")).slice(
+      "Workspace: ".length,
+    );
+    if (workspace.split(/[\\/]/).at(-1) !== WORKSPACE) {
+      throw new Error(`Start pkdb curate on a copy of the fixture workspace in a folder named ${WORKSPACE}.`);
+    }
 
     // Overview, after the first validation of every study, with a study selected for the batch actions.
     const studies = page.getByRole("table", { name: "Studies of the workspace" });
@@ -117,9 +125,6 @@ async function render() {
     // Tables: the panel of a conflict between the workbook and the TSV file, above the table.
     await sections.getByRole("link", { name: /^Tables\b/ }).click();
     await page.getByRole("status").filter({ hasText: /^\s*In sync/ }).waitFor();
-    const workspace = (await page.getByRole("button", { name: /^Workspace: / }).getAttribute("aria-label")).slice(
-      "Workspace: ".length,
-    );
     await setAutomaticActions(page, true);
     await conflict(join(workspace, STUDY));
     await setAutomaticActions(page, false);

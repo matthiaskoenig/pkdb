@@ -375,6 +375,10 @@ const missingLine = computed(() => {
 .tables-hide {
   flex: 0 0 auto;
 }
+/* The label reads as a part of the caption beside it. */
+.tables-hide :deep(.v-label) {
+  font-size: 0.875rem;
+}
 /* The rows fill the window when the page scrolls to them, with the actions, the tabs and the
    caption above them in view below the app bar. */
 .tables-grid {
